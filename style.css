@@ -1075,3 +1075,81 @@ h1 em {
 
   cursor: pointer;
 }
+/* ================================
+   検索タブ
+================================ */
+
+.search-tabs {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 10px;
+  margin-bottom: 14px;
+}
+
+.search-tab {
+  min-height: 54px;
+
+  border: 1px solid #334155;
+
+  background: #0b111b;
+  color: #8e9aaa;
+
+  font-size: 15px;
+  font-weight: 700;
+
+  cursor: pointer;
+
+  transition: 0.2s;
+}
+
+
+/* 指揮官 */
+
+.commander-tab:hover,
+.commander-tab.active {
+  color: #fff;
+
+  border-color: #ff7a18;
+
+  background:
+    rgba(255, 122, 24, 0.12);
+
+  box-shadow:
+    inset 0 -4px 0 #ff7a18;
+}
+
+
+/* ユニオン */
+
+.union-tab:hover,
+.union-tab.active {
+  color: #fff;
+
+  border-color: #3696ff;
+
+  background:
+    rgba(54, 150, 255, 0.12);
+
+  box-shadow:
+    inset 0 -4px 0 #3696ff;
+}
+
+
+/* プルダウン */
+
+#slvFilter,
+#unionRankFilter {
+  width: 100%;
+
+  min-height: 48px;
+
+  padding: 0 14px;
+
+  background: #0b111b;
+
+  color: #fff;
+
+  border: 1px solid #334155;
+
+  font-size: 15px;
+}
