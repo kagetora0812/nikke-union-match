@@ -671,6 +671,205 @@ h1 em {
     font-size: 34px;
 
     letter-spacing: 5px;
+/* =========================================
+   HERO 右側 募集総数
+========================================= */
+
+.hero {
+  display: grid;
+  grid-template-columns: 1fr 1.1fr;
+  gap: 50px;
+  align-items: center;
+}
+
+.hero-left {
+  min-width: 0;
+}
+
+
+/* 総数パネル */
+
+.hero-stats {
+  min-height: 230px;
+
+  border: 2px solid #ff7a18;
+
+  background:
+    linear-gradient(
+      145deg,
+      rgba(15, 21, 31, 0.96),
+      rgba(7, 11, 18, 0.96)
+    );
+
+  display: grid;
+
+  grid-template-columns:
+    1fr 1px 1fr;
+
+  align-items: center;
+
+  gap: 18px;
+
+  padding:
+    30px 24px 52px;
+
+  position: relative;
+
+  box-shadow:
+    0 0 30px rgba(255, 122, 24, 0.08);
+}
+
+
+/* 左右それぞれ */
+
+.hero-stat {
+  text-align: center;
+}
+
+
+.hero-stat-title {
+  font-size: 16px;
+  font-weight: 700;
+
+  margin-bottom: 14px;
+
+  color: #edf2f7;
+}
+
+
+/* 数字 */
+
+.hero-stat-number {
+  display: flex;
+
+  justify-content: center;
+  align-items: flex-end;
+
+  gap: 7px;
+}
+
+
+.hero-stat-number strong {
+  font-family: Rajdhani, sans-serif;
+
+  font-size: 82px;
+
+  line-height: 0.9;
+
+  font-weight: 700;
+}
+
+
+.hero-stat-number span {
+  font-size: 24px;
+
+  font-weight: 700;
+
+  padding-bottom: 8px;
+}
+
+
+/* 指揮官 */
+
+.commander-stat .hero-stat-number strong,
+.commander-stat .hero-stat-number span {
+  color: #ff7a18;
+}
+
+
+/* ユニオン */
+
+.union-stat .hero-stat-number strong,
+.union-stat .hero-stat-number span {
+  color: #3696ff;
+}
+
+
+.hero-stat-sub {
+  color: #8e9aaa;
+
+  font-size: 13px;
+
+  margin-top: 14px;
+}
+
+
+/* 真ん中の線 */
+
+.hero-stat-divider {
+  width: 1px;
+
+  height: 130px;
+
+  background:
+    linear-gradient(
+      transparent,
+      #495568,
+      transparent
+    );
+}
+
+
+/* 最終更新 */
+
+.hero-stat-update {
+  position: absolute;
+
+  bottom: 16px;
+
+  left: 0;
+  right: 0;
+
+  text-align: center;
+
+  color: #8e9aaa;
+
+  font-size: 12px;
+}
+
+
+/* =========================================
+   スマホ
+========================================= */
+
+@media (max-width: 760px) {
+
+  .hero {
+    grid-template-columns: 1fr;
+
+    gap: 28px;
   }
+
+
+  .hero-stats {
+    width: 100%;
+
+    min-height: 200px;
+
+    padding:
+      24px 12px 48px;
+  }
+
+
+  .hero-stat-title {
+    font-size: 12px;
+  }
+
+
+  .hero-stat-number strong {
+    font-size: 58px;
+  }
+
+
+  .hero-stat-number span {
+    font-size: 18px;
+  }
+
+
+  .hero-stat-divider {
+    height: 100px;
+  }
+
+}
 
 }
