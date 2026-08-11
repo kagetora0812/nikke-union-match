@@ -169,7 +169,7 @@ function showPage(name) {
 
   if (name === "list") {
 
-    loadRecruitments();
+    async function const list =();
 
   }
 
@@ -268,6 +268,23 @@ async function loadRecruitments() {
     data,
     error
   } = await query;
+  if (data) {
+  const commanderCount =
+    $("#commanderCount");
+
+  const unionCount =
+    $("#unionCount");
+
+  if (commanderCount) {
+    commanderCount.textContent =
+      data.length;
+  }
+
+  if (unionCount) {
+    unionCount.textContent =
+      "0";
+  }
+}
 
 
   if (error) {
