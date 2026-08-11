@@ -217,13 +217,331 @@ async function loadRecruitments() {
   if (!sb) {
 
     showMessage(
-      "Supabaseの設定がまだです。後ほど設定します。",
+      "Supabaseの設定がありません。",
       "error"
     );
 
     return;
 
   }
+
+
+  const minSlv =
+    Number(
+      $("#slvFilter")?.value || 0
+    );
+
+
+  // ------------------------------
+  // 指揮官
+  // ------------------------------
+
+  let commanderQuery = sb
+    .from("recruitments")
+    .select(
+      "id, commander_name, slv, x_url, created_at, expires_at"
+    )
+    .eq(
+      "status",
+      "open"
+    )
+    .gt(
+      "expires_at",
+      new Date().toISOString()
+    );
+
+
+  if (minSlv) {
+
+    commanderQuery =
+      commanderQuery.gte(
+        "slv",
+        minSlv
+      );
+
+  }
+
+
+  // ------------------------------
+  // ユニオン
+  // ------------------------------
+
+  const unionQuery = sb
+    .from("union_recruitments")
+    .select(
+      "id, union_name, union_rank, x_url, created_at, expires_at"
+    )
+    .eq(
+      "status",
+      "open"
+    )
+    .gt(
+      "expires_at",
+      new Date().toISOString()
+    );
+
+
+  // ------------------------------
+  // 両方読み込み
+  // ------------------------------
+
+  const [
+    commanderResult,
+    unionResult
+  ] = await Promise.all([
+    commanderQuery,
+    unionQuery
+  ]);
+
+
+  if (commanderResult.error) {
+
+    showMessage(
+      `指揮官読み込みエラー：${commanderResult.error.message}`,
+      "error"
+    );
+
+    return;
+
+  }
+
+
+  if (unionResult.error) {
+
+    showMessage(
+      `ユニオン読み込みエラー：${unionResult.error.message}`,
+      "error"
+    );
+
+    return;
+
+  }
+
+
+  const commanders =
+    commanderResult.data || [];
+
+
+  const unions =
+    unionResult.data || [];
+
+
+  // ------------------------------
+  // 上部総数
+  // ------------------------------
+
+  if ($("#commanderCountTop")) {
+
+    $("#commanderCountTop")
+      .textContent =
+      commanders.length;
+
+  }
+
+
+  if ($("#unionCountTop")) {
+
+    $("#unionCountTop")
+      .textContent =
+      unions.length;
+
+  }
+
+
+  if ($("#commanderCount")) {
+
+    $("#commanderCount")
+      .textContent =
+      commanders.length;
+
+  }
+
+
+  if ($("#unionCount")) {
+
+    $("#unionCount")
+      .textContent =
+      unions.length;
+
+  }
+
+
+  if ($("#lastUpdated")) {
+
+    $("#lastUpdated")
+      .textContent =
+      "最終更新：" +
+      new Intl.DateTimeFormat(
+        "ja-JP",
+        {
+          month: "2-digit",
+          day: "2-digit",
+          hour: "2-digit",
+          minute: "2-digit"
+        }
+      ).format(
+        new Date()
+      );
+
+  }
+
+
+  // ------------------------------
+  // 指揮官を共通形式へ
+  // ------------------------------
+
+  const commanderItems =
+    commanders.map(
+      item => ({
+        type: "commander",
+        name: item.commander_name,
+        slv: item.slv,
+        xUrl: item.x_url,
+        createdAt: item.created_at,
+        expiresAt: item.expires_at
+      })
+    );
+
+
+  // ------------------------------
+  // ユニオンを共通形式へ
+  // ------------------------------
+
+  const unionItems =
+    unions.map(
+      item => ({
+        type: "union",
+        name: item.union_name,
+        rank: item.union_rank,
+        xUrl: item.x_url,
+        createdAt: item.created_at,
+        expiresAt: item.expires_at
+      })
+    );
+
+
+  // ------------------------------
+  // 混合して新着順
+  // ------------------------------
+
+  const allItems = [
+    ...commanderItems,
+    ...unionItems
+  ].sort(
+    (a, b) =>
+      new Date(b.createdAt) -
+      new Date(a.createdAt)
+  );
+
+
+  if (allItems.length === 0) {
+
+    empty.classList.remove(
+      "hidden"
+    );
+
+    const p =
+      empty.querySelector("p");
+
+    if (p) {
+      p.textContent =
+        "現在募集中の指揮官・ユニオンはいません。";
+    }
+
+    return;
+
+  }
+
+
+  // ------------------------------
+  // 一覧表示
+  // ------------------------------
+
+  list.innerHTML =
+    allItems.map(
+      item => {
+
+        if (item.type === "commander") {
+
+          return `
+
+            <article class="card commander-card">
+
+              <div class="card-head">
+
+                <span class="recruitment-type">
+                  ● 指揮官
+                </span>
+
+              </div>
+
+
+              <div class="name">
+                ${escapeHtml(item.name)}
+              </div>
+
+
+              <div class="slv">
+                SLV ${escapeHtml(item.slv)}
+              </div>
+
+
+              <a
+                class="x-btn"
+                href="${escapeHtml(item.xUrl)}"
+                target="_blank"
+                rel="noopener noreferrer"
+              >
+                Xで募集記事を見る ↗
+              </a>
+
+            </article>
+
+          `;
+
+        }
+
+
+        return `
+
+          <article class="card union-card">
+
+            <div class="card-head">
+
+              <span class="recruitment-type">
+                ● ユニオン
+              </span>
+
+            </div>
+
+
+            <div class="name">
+              ${escapeHtml(item.name)}
+            </div>
+
+
+            <div class="union-rank">
+              ${escapeHtml(item.rank)}
+            </div>
+
+
+            <a
+              class="x-btn"
+              href="${escapeHtml(item.xUrl)}"
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              Xで募集記事を見る ↗
+            </a>
+
+          </article>
+
+        `;
+
+      }
+    ).join("");
+
+}
 
 
   const minSlv =
