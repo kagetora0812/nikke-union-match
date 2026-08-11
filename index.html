@@ -182,35 +182,109 @@
 
       <form id="registerForm" class="panel">
 
-        <label>
-          指揮官名
+     <form id="registerForm" class="panel">
 
-          <input
-            id="name"
-            maxlength="40"
-            required
-            placeholder="例：KAGETORA"
-          >
+  <label>
+    登録タイプ
 
-        </label>
+    <select id="registrationType">
+      <option value="commander">指揮官</option>
+      <option value="union">ユニオン</option>
+    </select>
 
-
-        <label>
-          SLV
-
-          <input
-            id="slv"
-            type="number"
-            min="1"
-            max="1200"
-            required
-            placeholder="例：350"
-          >
-
-        </label>
+  </label>
 
 
-        <label>
+  <div id="commanderFields">
+
+    <label>
+      指揮官名
+
+      <input
+        id="name"
+        maxlength="40"
+        placeholder="例：KAGETORA"
+      >
+
+    </label>
+
+
+    <label>
+      SLV
+
+      <input
+        id="slv"
+        type="number"
+        min="1"
+        max="1200"
+        placeholder="例：850"
+      >
+
+    </label>
+
+  </div>
+
+
+  <div
+    id="unionFields"
+    class="hidden"
+  >
+
+    <label>
+      ユニオン名
+
+      <input
+        id="unionName"
+        maxlength="40"
+        placeholder="例：○○ユニオン"
+      >
+
+    </label>
+
+
+    <label>
+      ユニオンランク
+
+      <select id="unionRank">
+
+        <option value="チャレンジャー">
+          チャレンジャー
+        </option>
+
+        <option value="ダイヤ">
+          ダイヤ
+        </option>
+
+        <option value="プラチナ">
+          プラチナ
+        </option>
+
+        <option value="ゴールド">
+          ゴールド
+        </option>
+
+        <option value="駆け出しユニオン">
+          駆け出しユニオン
+        </option>
+
+      </select>
+
+    </label>
+
+  </div>
+
+
+  <label>
+    Xの記事URL
+
+    <input
+      id="xUrl"
+      type="url"
+      required
+      placeholder="https://x.com/..."
+    >
+
+  </label>
           Xの記事URL
 
           <input
