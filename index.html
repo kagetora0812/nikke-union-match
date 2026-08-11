@@ -24,29 +24,114 @@
   <main class="container">
 
     <!-- TOP -->
-    <section class="hero">
-      <div class="eyebrow">UNION RECRUITMENT BOARD</div>
+<!-- TOP -->
+<section class="hero">
 
-      <h1>
-        指揮官とユニオンを<br>
-        <em>つなぐ。</em>
-      </h1>
+  <div class="hero-left">
 
-      <p>
-        名前・SLV・X募集記事だけで掲載。<br>
-        やり取りはXのDMで。
-      </p>
+    <div class="eyebrow">
+      UNION RECRUITMENT BOARD
+    </div>
 
-      <div class="hero-actions">
-        <button class="btn primary" data-page="list">
-          募集を探す
-        </button>
+    <h1>
+      指揮官とユニオンを<br>
+      <em>つなぐ。</em>
+    </h1>
 
-        <button class="btn ghost" data-page="register">
-          募集を登録
-        </button>
+    <p>
+      名前・SLV・X募集記事だけで掲載。<br>
+      やり取りはXのDMで。
+    </p>
+
+    <div class="hero-actions">
+
+      <button
+        class="btn primary"
+        data-page="list"
+      >
+        募集を探す
+      </button>
+
+      <button
+        class="btn ghost"
+        data-page="register"
+      >
+        募集を登録
+      </button>
+
+    </div>
+
+  </div>
+
+
+  <!-- 募集総数 -->
+  <div class="hero-stats">
+
+    <!-- 指揮官 -->
+    <div class="hero-stat commander-stat">
+
+      <div class="hero-stat-title">
+        👤 募集指揮官 総数
       </div>
-    </section>
+
+      <div class="hero-stat-number">
+
+        <strong id="commanderCountTop">
+          0
+        </strong>
+
+        <span>
+          名
+        </span>
+
+      </div>
+
+      <div class="hero-stat-sub">
+        現在募集中の指揮官
+      </div>
+
+    </div>
+
+
+    <div class="hero-stat-divider"></div>
+
+
+    <!-- ユニオン -->
+    <div class="hero-stat union-stat">
+
+      <div class="hero-stat-title">
+        🏢 募集ユニオン 総数
+      </div>
+
+      <div class="hero-stat-number">
+
+        <strong id="unionCountTop">
+          0
+        </strong>
+
+        <span>
+          件
+        </span>
+
+      </div>
+
+      <div class="hero-stat-sub">
+        現在募集中のユニオン
+      </div>
+
+    </div>
+
+
+    <div
+      class="hero-stat-update"
+      id="lastUpdated"
+    >
+      最終更新：--
+    </div>
+
+  </div>
+
+</section>
 
 
     <!-- 募集一覧 -->
