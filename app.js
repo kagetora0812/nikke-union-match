@@ -1,15 +1,19 @@
-
 /*
   NIKKE UNION MATCH
-  v1
+  v2
 */
 
-const SUPABASE_URL = "https://igoekrvpgnjberppiawf.supabase.co";
-const SUPABASE_ANON_KEY = "sb_publishable_xSjnNTnh667o9IesU5g5Kw_xcdg9bbh";
+const SUPABASE_URL =
+  "https://igoekrvpgnjberppiawf.supabase.co";
+
+const SUPABASE_ANON_KEY =
+  "sb_publishable_xSjnNTnh667o9IesU5g5Kw_xcdg9bbh";
+
 
 const hasSupabaseConfig =
   !SUPABASE_URL.includes("YOUR_") &&
   !SUPABASE_ANON_KEY.includes("YOUR_");
+
 
 const sb = hasSupabaseConfig
   ? window.supabase.createClient(
@@ -19,9 +23,9 @@ const sb = hasSupabaseConfig
   : null;
 
 
-// --------------------------------
+// ========================================
 // 共通
-// --------------------------------
+// ========================================
 
 const $ = (selector) =>
   document.querySelector(selector);
@@ -47,14 +51,17 @@ function validXUrl(value) {
 
   try {
 
-    const url = new URL(value);
+    const url =
+      new URL(value);
 
     return [
       "x.com",
       "www.x.com",
       "twitter.com",
       "www.twitter.com"
-    ].includes(url.hostname);
+    ].includes(
+      url.hostname
+    );
 
   } catch {
 
@@ -74,7 +81,9 @@ function formatDate(date) {
       month: "2-digit",
       day: "2-digit"
     }
-  ).format(new Date(date));
+  ).format(
+    new Date(date)
+  );
 
 }
 
@@ -87,11 +96,16 @@ function generatePass() {
   const random =
     new Uint32Array(6);
 
-  crypto.getRandomValues(random);
+  crypto.getRandomValues(
+    random
+  );
 
   return Array.from(
     random,
-    number => chars[number % chars.length]
+    number =>
+      chars[
+        number % chars.length
+      ]
   ).join("");
 
 }
@@ -100,7 +114,8 @@ function generatePass() {
 async function sha256(text) {
 
   const data =
-    new TextEncoder().encode(text);
+    new TextEncoder()
+      .encode(text);
 
   const hash =
     await crypto.subtle.digest(
@@ -122,9 +137,9 @@ async function sha256(text) {
 }
 
 
-// --------------------------------
+// ========================================
 // ページ切り替え
-// --------------------------------
+// ========================================
 
 function showPage(name) {
 
@@ -132,7 +147,9 @@ function showPage(name) {
     .querySelectorAll(".page")
     .forEach(page => {
 
-      page.classList.remove("active");
+      page.classList.remove(
+        "active"
+      );
 
     });
 
@@ -142,9 +159,12 @@ function showPage(name) {
       `${name}Page`
     );
 
+
   if (page) {
 
-    page.classList.add("active");
+    page.classList.add(
+      "active"
+    );
 
   }
 
@@ -169,7 +189,7 @@ function showPage(name) {
 
   if (name === "list") {
 
-    async function const list =();
+    loadRecruitments();
 
   }
 
@@ -194,9 +214,134 @@ document
   });
 
 
-// --------------------------------
+// ========================================
+// カウントダウン
+// ========================================
+
+let countdownTimer = null;
+
+
+function getRemainingTime(
+  expiresAt
+) {
+
+  const now =
+    Date.now();
+
+  const expiry =
+    new Date(
+      expiresAt
+    ).getTime();
+
+  const diff =
+    expiry - now;
+
+
+  if (diff <= 0) {
+
+    return {
+      expired: true,
+      text: "掲載終了",
+      className: "danger"
+    };
+
+  }
+
+
+  const totalMinutes =
+    Math.floor(
+      diff / 60000
+    );
+
+
+  const days =
+    Math.floor(
+      totalMinutes / 1440
+    );
+
+
+  const hours =
+    Math.floor(
+      (totalMinutes % 1440) / 60
+    );
+
+
+  const minutes =
+    totalMinutes % 60;
+
+
+  let className = "";
+
+
+  if (days <= 2) {
+
+    className =
+      "danger";
+
+  } else if (days <= 6) {
+
+    className =
+      "warning";
+
+  }
+
+
+  return {
+    expired: false,
+    text:
+      `⏳ 残り ${days}日 ${hours}時間 ${minutes}分`,
+    className
+  };
+
+}
+
+
+function updateCountdowns() {
+
+  document
+    .querySelectorAll(
+      "[data-expires]"
+    )
+    .forEach(element => {
+
+      const result =
+        getRemainingTime(
+          element.dataset.expires
+        );
+
+
+      if (result.expired) {
+
+        const card =
+          element.closest(
+            ".card"
+          );
+
+        if (card) {
+
+          card.remove();
+
+        }
+
+        return;
+
+      }
+
+
+      element.textContent =
+        result.text;
+
+      element.className =
+        `countdown ${result.className}`;
+
+    });
+
+}
+
+
+// ========================================
 // 募集一覧
-// --------------------------------
+// ========================================
 
 async function loadRecruitments() {
 
@@ -205,6 +350,13 @@ async function loadRecruitments() {
 
   const empty =
     $("#emptyState");
+
+
+  if (!list || !empty) {
+
+    return;
+
+  }
 
 
   list.innerHTML = "";
@@ -232,23 +384,26 @@ async function loadRecruitments() {
     );
 
 
-  // ------------------------------
+  // --------------------------------
   // 指揮官
-  // ------------------------------
+  // --------------------------------
 
-  let commanderQuery = sb
-    .from("recruitments")
-    .select(
-      "id, commander_name, slv, x_url, created_at, expires_at"
-    )
-    .eq(
-      "status",
-      "open"
-    )
-    .gt(
-      "expires_at",
-      new Date().toISOString()
-    );
+  let commanderQuery =
+    sb
+      .from(
+        "recruitments"
+      )
+      .select(
+        "id, commander_name, slv, x_url, created_at, expires_at"
+      )
+      .eq(
+        "status",
+        "open"
+      )
+      .gt(
+        "expires_at",
+        new Date().toISOString()
+      );
 
 
   if (minSlv) {
@@ -262,39 +417,45 @@ async function loadRecruitments() {
   }
 
 
-  // ------------------------------
+  // --------------------------------
   // ユニオン
-  // ------------------------------
+  // --------------------------------
 
-  const unionQuery = sb
-    .from("union_recruitments")
-    .select(
-      "id, union_name, union_rank, x_url, created_at, expires_at"
-    )
-    .eq(
-      "status",
-      "open"
-    )
-    .gt(
-      "expires_at",
-      new Date().toISOString()
-    );
+  const unionQuery =
+    sb
+      .from(
+        "union_recruitments"
+      )
+      .select(
+        "id, union_name, union_rank, x_url, created_at, expires_at"
+      )
+      .eq(
+        "status",
+        "open"
+      )
+      .gt(
+        "expires_at",
+        new Date().toISOString()
+      );
 
 
-  // ------------------------------
-  // 両方読み込み
-  // ------------------------------
+  // --------------------------------
+  // 両方取得
+  // --------------------------------
 
   const [
     commanderResult,
     unionResult
-  ] = await Promise.all([
-    commanderQuery,
-    unionQuery
-  ]);
+  ] =
+    await Promise.all([
+      commanderQuery,
+      unionQuery
+    ]);
 
 
-  if (commanderResult.error) {
+  if (
+    commanderResult.error
+  ) {
 
     showMessage(
       `指揮官読み込みエラー：${commanderResult.error.message}`,
@@ -306,7 +467,9 @@ async function loadRecruitments() {
   }
 
 
-  if (unionResult.error) {
+  if (
+    unionResult.error
+  ) {
 
     showMessage(
       `ユニオン読み込みエラー：${unionResult.error.message}`,
@@ -321,59 +484,78 @@ async function loadRecruitments() {
   const commanders =
     commanderResult.data || [];
 
-
   const unions =
     unionResult.data || [];
 
 
-  // ------------------------------
-  // 上部総数
-  // ------------------------------
+  // --------------------------------
+  // 上部の募集総数
+  // --------------------------------
 
-  if ($("#commanderCountTop")) {
+  const commanderCountTop =
+    $("#commanderCountTop");
 
-    $("#commanderCountTop")
-      .textContent =
+  const unionCountTop =
+    $("#unionCountTop");
+
+
+  if (commanderCountTop) {
+
+    commanderCountTop.textContent =
       commanders.length;
 
   }
 
 
-  if ($("#unionCountTop")) {
+  if (unionCountTop) {
 
-    $("#unionCountTop")
-      .textContent =
+    unionCountTop.textContent =
       unions.length;
 
   }
 
 
-  if ($("#commanderCount")) {
+  // 下側に件数表示が残っていても対応
 
-    $("#commanderCount")
-      .textContent =
+  const commanderCount =
+    $("#commanderCount");
+
+  const unionCount =
+    $("#unionCount");
+
+
+  if (commanderCount) {
+
+    commanderCount.textContent =
       commanders.length;
 
   }
 
 
-  if ($("#unionCount")) {
+  if (unionCount) {
 
-    $("#unionCount")
-      .textContent =
+    unionCount.textContent =
       unions.length;
 
   }
 
 
-  if ($("#lastUpdated")) {
+  // --------------------------------
+  // 最終更新
+  // --------------------------------
 
-    $("#lastUpdated")
-      .textContent =
+  const lastUpdated =
+    $("#lastUpdated");
+
+
+  if (lastUpdated) {
+
+    lastUpdated.textContent =
       "最終更新：" +
       new Intl.DateTimeFormat(
         "ja-JP",
         {
+          year: "numeric",
           month: "2-digit",
           day: "2-digit",
           hour: "2-digit",
@@ -386,109 +568,299 @@ async function loadRecruitments() {
   }
 
 
-  // ------------------------------
-  // 指揮官を共通形式へ
-  // ------------------------------
+  // --------------------------------
+  // 指揮官データ
+  // --------------------------------
 
   const commanderItems =
     commanders.map(
       item => ({
-        type: "commander",
-        name: item.commander_name,
-        slv: item.slv,
-        xUrl: item.x_url,
-        createdAt: item.created_at,
-        expiresAt: item.expires_at
+
+        type:
+          "commander",
+
+        id:
+          item.id,
+
+        name:
+          item.commander_name,
+
+        slv:
+          item.slv,
+
+        xUrl:
+          item.x_url,
+
+        createdAt:
+          item.created_at,
+
+        expiresAt:
+          item.expires_at
+
       })
     );
 
 
-  // ------------------------------
-  // ユニオンを共通形式へ
-  // ------------------------------
+  // --------------------------------
+  // ユニオンデータ
+  // --------------------------------
 
   const unionItems =
     unions.map(
       item => ({
-        type: "union",
-        name: item.union_name,
-        rank: item.union_rank,
-        xUrl: item.x_url,
-        createdAt: item.created_at,
-        expiresAt: item.expires_at
+
+        type:
+          "union",
+
+        id:
+          item.id,
+
+        name:
+          item.union_name,
+
+        rank:
+          item.union_rank,
+
+        xUrl:
+          item.x_url,
+
+        createdAt:
+          item.created_at,
+
+        expiresAt:
+          item.expires_at
+
       })
     );
 
 
-  // ------------------------------
-  // 混合して新着順
-  // ------------------------------
+  // --------------------------------
+  // 指揮官・ユニオン混合
+  // --------------------------------
 
   const allItems = [
     ...commanderItems,
     ...unionItems
   ].sort(
     (a, b) =>
-      new Date(b.createdAt) -
-      new Date(a.createdAt)
+      new Date(
+        b.createdAt
+      ) -
+      new Date(
+        a.createdAt
+      )
   );
 
 
-  if (allItems.length === 0) {
+  if (
+    allItems.length === 0
+  ) {
 
     empty.classList.remove(
       "hidden"
     );
 
-    const p =
+
+    const text =
       empty.querySelector("p");
 
-    if (p) {
-      p.textContent =
+
+    if (text) {
+
+      text.textContent =
         "現在募集中の指揮官・ユニオンはいません。";
+
     }
+
 
     return;
 
   }
 
 
-  // ------------------------------
-  // 一覧表示
-  // ------------------------------
+  // --------------------------------
+  // カード生成
+  // --------------------------------
 
   list.innerHTML =
-    allItems.map(
-      item => {
+    allItems
+      .map(
+        item => {
 
-        if (item.type === "commander") {
+          const remaining =
+            getRemainingTime(
+              item.expiresAt
+            );
+
+
+          // ========================
+          // 指揮官
+          // ========================
+
+          if (
+            item.type ===
+            "commander"
+          ) {
+
+            return `
+
+              <article
+                class="card commander-card"
+              >
+
+                <div class="card-head">
+
+                  <span
+                    class="recruitment-type"
+                  >
+                    ● 指揮官
+                  </span>
+
+                  <span class="date">
+                    期限
+                    ${formatDate(
+                      item.expiresAt
+                    )}
+                  </span>
+
+                </div>
+
+
+                <div class="name">
+
+                  ${escapeHtml(
+                    item.name
+                  )}
+
+                </div>
+
+
+                <div class="slv">
+
+                  ${escapeHtml(
+                    item.slv
+                  )}
+
+                  <small>
+                    SLV
+                  </small>
+
+                </div>
+
+
+                <div class="date">
+
+                  登録
+                  ${formatDate(
+                    item.createdAt
+                  )}
+
+                </div>
+
+
+                <div
+                  class="countdown ${remaining.className}"
+                  data-expires="${escapeHtml(
+                    item.expiresAt
+                  )}"
+                >
+
+                  ${remaining.text}
+
+                </div>
+
+
+                <a
+                  class="x-btn"
+                  href="${escapeHtml(
+                    item.xUrl
+                  )}"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                >
+                  Xで募集記事を見る ↗
+                </a>
+
+              </article>
+
+            `;
+
+          }
+
+
+          // ========================
+          // ユニオン
+          // ========================
 
           return `
 
-            <article class="card commander-card">
+            <article
+              class="card union-card"
+            >
 
               <div class="card-head">
 
-                <span class="recruitment-type">
-                  ● 指揮官
+                <span
+                  class="recruitment-type"
+                >
+                  ● ユニオン
+                </span>
+
+                <span class="date">
+                  期限
+                  ${formatDate(
+                    item.expiresAt
+                  )}
                 </span>
 
               </div>
 
 
               <div class="name">
-                ${escapeHtml(item.name)}
+
+                ${escapeHtml(
+                  item.name
+                )}
+
               </div>
 
 
-              <div class="slv">
-                SLV ${escapeHtml(item.slv)}
+              <div class="union-rank">
+
+                ${escapeHtml(
+                  item.rank
+                )}
+
+              </div>
+
+
+              <div class="date">
+
+                登録
+                ${formatDate(
+                  item.createdAt
+                )}
+
+              </div>
+
+
+              <div
+                class="countdown ${remaining.className}"
+                data-expires="${escapeHtml(
+                  item.expiresAt
+                )}"
+              >
+
+                ${remaining.text}
+
               </div>
 
 
               <a
                 class="x-btn"
-                href="${escapeHtml(item.xUrl)}"
+                href="${escapeHtml(
+                  item.xUrl
+                )}"
                 target="_blank"
                 rel="noopener noreferrer"
               >
@@ -500,66 +872,74 @@ async function loadRecruitments() {
           `;
 
         }
+      )
+      .join("");
 
 
-        return `
+  // --------------------------------
+  // カウントダウン開始
+  // --------------------------------
 
-          <article class="card union-card">
-
-            <div class="card-head">
-
-              <span class="recruitment-type">
-                ● ユニオン
-              </span>
-
-            </div>
+  updateCountdowns();
 
 
-            <div class="name">
-              ${escapeHtml(item.name)}
-            </div>
+  if (countdownTimer) {
+
+    clearInterval(
+      countdownTimer
+    );
+
+  }
 
 
-            <div class="union-rank">
-              ${escapeHtml(item.rank)}
-            </div>
-
-
-            <a
-              class="x-btn"
-              href="${escapeHtml(item.xUrl)}"
-              target="_blank"
-              rel="noopener noreferrer"
-            >
-              Xで募集記事を見る ↗
-            </a>
-
-          </article>
-
-        `;
-
-      }
-    ).join("");
+  countdownTimer =
+    setInterval(
+      updateCountdowns,
+      60000
+    );
 
 }
 
-$("#slvFilter")
-  .addEventListener(
+
+// ========================================
+// SLVフィルター
+// ========================================
+
+const slvFilter =
+  $("#slvFilter");
+
+
+if (slvFilter) {
+
+  slvFilter.addEventListener(
     "change",
     loadRecruitments
   );
 
+}
 
-$("#refreshBtn")
-  .addEventListener(
+
+// ========================================
+// 更新ボタン
+// ========================================
+
+const refreshBtn =
+  $("#refreshBtn");
+
+
+if (refreshBtn) {
+
+  refreshBtn.addEventListener(
     "click",
     loadRecruitments
   );
 
+}
 
-// --------------------------------
+
+// ========================================
 // メッセージ
-// --------------------------------
+// ========================================
 
 function showMessage(
   text,
@@ -568,6 +948,14 @@ function showMessage(
 
   const message =
     $("#message");
+
+
+  if (!message) {
+
+    return;
+
+  }
+
 
   message.textContent =
     text;
@@ -578,14 +966,11 @@ function showMessage(
 }
 
 
-// --------------------------------
-// 募集登録
-// --------------------------------
-// --------------------------------
+// ========================================
 // 登録タイプ切り替え
-// --------------------------------
+// ========================================
 
-const registrationType =
+const registrationTypeSelect =
   $("#registrationType");
 
 const commanderFields =
@@ -595,63 +980,109 @@ const unionFields =
   $("#unionFields");
 
 
-if (registrationType) {
+function updateRegistrationFields() {
 
-  registrationType.addEventListener(
-    "change",
-    () => {
+  if (
+    !registrationTypeSelect
+  ) {
 
-      const isUnion =
-        registrationType.value === "union";
+    return;
 
-      if (commanderFields) {
-        commanderFields.classList.toggle(
-          "hidden",
-          isUnion
-        );
-      }
+  }
 
-      if (unionFields) {
-        unionFields.classList.toggle(
-          "hidden",
-          !isUnion
-        );
-      }
 
-      const name =
-        $("#name");
+  const isUnion =
+    registrationTypeSelect.value ===
+    "union";
 
-      const slv =
-        $("#slv");
 
-      const unionName =
-        $("#unionName");
+  if (commanderFields) {
 
-      if (name) {
-        name.required = !isUnion;
-      }
+    commanderFields
+      .classList
+      .toggle(
+        "hidden",
+        isUnion
+      );
 
-      if (slv) {
-        slv.required = !isUnion;
-      }
+  }
 
-      if (unionName) {
-        unionName.required = isUnion;
-      }
 
-    }
-  );
+  if (unionFields) {
+
+    unionFields
+      .classList
+      .toggle(
+        "hidden",
+        !isUnion
+      );
+
+  }
+
+
+  const name =
+    $("#name");
+
+  const slv =
+    $("#slv");
+
+  const unionName =
+    $("#unionName");
+
+
+  if (name) {
+
+    name.required =
+      !isUnion;
+
+  }
+
+
+  if (slv) {
+
+    slv.required =
+      !isUnion;
+
+  }
+
+
+  if (unionName) {
+
+    unionName.required =
+      isUnion;
+
+  }
 
 }
 
 
-// --------------------------------
-// 募集登録
-// --------------------------------
+if (
+  registrationTypeSelect
+) {
 
-$("#registerForm")
-$("#registerForm")
-  .addEventListener(
+  registrationTypeSelect
+    .addEventListener(
+      "change",
+      updateRegistrationFields
+    );
+
+
+  updateRegistrationFields();
+
+}
+
+
+// ========================================
+// 募集登録
+// ========================================
+
+const registerForm =
+  $("#registerForm");
+
+
+if (registerForm) {
+
+  registerForm.addEventListener(
     "submit",
     async event => {
 
@@ -669,169 +1100,181 @@ $("#registerForm")
       }
 
 
-const registrationType =
-  $("#registrationType").value;
-
-const xUrl =
-  $("#xUrl")
-    .value
-    .trim();
+      const registrationType =
+        $("#registrationType")
+          ?.value ||
+        "commander";
 
 
-if (!validXUrl(xUrl)) {
-
-  alert(
-    "Xの記事URLを入力してください。"
-  );
-
-  return;
-
-}
+      const xUrl =
+        $("#xUrl")
+          .value
+          .trim();
 
 
-// --------------------------------
-// ユニオン登録
-// --------------------------------
-
-if (registrationType === "union") {
-
-  const unionName =
-    $("#unionName")
-      .value
-      .trim();
-
-  const unionRank =
-    $("#unionRank")
-      .value;
-
-
-  if (!unionName) {
-
-    alert(
-      "ユニオン名を入力してください。"
-    );
-
-    return;
-
-  }
-
-
-  const pass =
-    generatePass();
-
-
-  const passHash =
-    await sha256(
-      pass
-    );
-
-
-  const {
-    data,
-    error
-  } = await sb.rpc(
-    "create_union_recruitment",
-    {
-      p_union_name:
-        unionName,
-
-      p_union_rank:
-        unionRank,
-
-      p_x_url:
-        xUrl,
-
-      p_pass_hash:
-        passHash
-    }
-  );
-
-
-  if (error) {
-
-    alert(
-      `登録に失敗しました：${error.message}`
-    );
-
-    return;
-
-  }
-
-
-  const result =
-    Array.isArray(data)
-      ? data[0]
-      : data;
-
-
-  $("#passValue")
-    .textContent =
-    pass;
-
-
-  $("#resultId")
-    .textContent =
-    result.id;
-
-
-  $("#resultExpiry")
-    .textContent =
-    formatDate(
-      result.expires_at
-    );
-
-
-  $("#resultModal")
-    .classList
-    .remove("hidden");
-
-
-  event.target.reset();
-
-  return;
-
-}
-
-
-// --------------------------------
-// 指揮官登録
-// --------------------------------
-
-const name =
-  $("#name")
-    .value
-    .trim();
-
-
-const slv =
-  Number(
-    $("#slv").value
-  );
-
-
-if (!name) {
-
-  alert(
-    "指揮官名を入力してください。"
-  );
-
-  return;
-
-}
-
-
-if (!slv || slv < 1 || slv > 1200) {
-
-  alert(
-    "SLVは1～1200で入力してください。"
-  );
-
-  return;
-
-}
+      if (
+        !validXUrl(xUrl)
+      ) {
 
         alert(
           "Xの記事URLを入力してください。"
+        );
+
+        return;
+
+      }
+
+
+      // ============================
+      // ユニオン登録
+      // ============================
+
+      if (
+        registrationType ===
+        "union"
+      ) {
+
+        const unionName =
+          $("#unionName")
+            .value
+            .trim();
+
+
+        const unionRank =
+          $("#unionRank")
+            .value;
+
+
+        if (!unionName) {
+
+          alert(
+            "ユニオン名を入力してください。"
+          );
+
+          return;
+
+        }
+
+
+        const pass =
+          generatePass();
+
+
+        const passHash =
+          await sha256(
+            pass
+          );
+
+
+        const {
+          data,
+          error
+        } =
+          await sb.rpc(
+            "create_union_recruitment",
+            {
+              p_union_name:
+                unionName,
+
+              p_union_rank:
+                unionRank,
+
+              p_x_url:
+                xUrl,
+
+              p_pass_hash:
+                passHash
+            }
+          );
+
+
+        if (error) {
+
+          alert(
+            `登録に失敗しました：${error.message}`
+          );
+
+          return;
+
+        }
+
+
+        const result =
+          Array.isArray(data)
+            ? data[0]
+            : data;
+
+
+        $("#passValue")
+          .textContent =
+          pass;
+
+
+        $("#resultId")
+          .textContent =
+          result.id;
+
+
+        $("#resultExpiry")
+          .textContent =
+          formatDate(
+            result.expires_at
+          );
+
+
+        $("#resultModal")
+          .classList
+          .remove(
+            "hidden"
+          );
+
+
+        event.target.reset();
+
+
+        updateRegistrationFields();
+
+
+        return;
+
+      }
+
+
+      // ============================
+      // 指揮官登録
+      // ============================
+
+      const name =
+        $("#name")
+          .value
+          .trim();
+
+
+      const slv =
+        Number(
+          $("#slv").value
+        );
+
+
+      if (!name) {
+
+        alert(
+          "指揮官名を入力してください。"
+        );
+
+        return;
+
+      }
+
+
+      if (
+        !slv ||
+        slv < 1 ||
+        slv > 1200
+      ) {
+
+        alert(
+          "SLVは1～1200で入力してください。"
         );
 
         return;
@@ -852,22 +1295,23 @@ if (!slv || slv < 1 || slv > 1200) {
       const {
         data,
         error
-      } = await sb.rpc(
-        "create_recruitment",
-        {
-          p_commander_name:
-            name,
+      } =
+        await sb.rpc(
+          "create_recruitment",
+          {
+            p_commander_name:
+              name,
 
-          p_slv:
-            slv,
+            p_slv:
+              slv,
 
-          p_x_url:
-            xUrl,
+            p_x_url:
+              xUrl,
 
-          p_pass_hash:
-            passHash
-        }
-      );
+            p_pass_hash:
+              passHash
+          }
+        );
 
 
       if (error) {
@@ -906,40 +1350,52 @@ if (!slv || slv < 1 || slv > 1200) {
 
       $("#resultModal")
         .classList
-        .remove("hidden");
+        .remove(
+          "hidden"
+        );
 
 
       event.target.reset();
 
+
+      updateRegistrationFields();
+
     }
   );
 
+}
 
-// --------------------------------
+
+// ========================================
 // PASSコピー
-// --------------------------------
+// ========================================
 
-$("#copyPass")
-  .addEventListener(
+const copyPass =
+  $("#copyPass");
+
+
+if (copyPass) {
+
+  copyPass.addEventListener(
     "click",
     async () => {
 
-      await navigator.clipboard.writeText(
-        $("#passValue")
-          .textContent
-      );
+      await navigator
+        .clipboard
+        .writeText(
+          $("#passValue")
+            .textContent
+        );
 
 
-      $("#copyPass")
-        .textContent =
+      copyPass.textContent =
         "コピーしました";
 
 
       setTimeout(
         () => {
 
-          $("#copyPass")
-            .textContent =
+          copyPass.textContent =
             "PASSをコピー";
 
         },
@@ -949,29 +1405,51 @@ $("#copyPass")
     }
   );
 
+}
 
-// --------------------------------
+
+// ========================================
 // モーダル
-// --------------------------------
+// ========================================
 
 function closeModal() {
 
-  $("#resultModal")
-    .classList
-    .add("hidden");
+  const modal =
+    $("#resultModal");
+
+
+  if (modal) {
+
+    modal.classList.add(
+      "hidden"
+    );
+
+  }
 
 }
 
 
-$("#modalClose")
-  .addEventListener(
+const modalClose =
+  $("#modalClose");
+
+
+if (modalClose) {
+
+  modalClose.addEventListener(
     "click",
     closeModal
   );
 
+}
 
-$("#resultDone")
-  .addEventListener(
+
+const resultDone =
+  $("#resultDone");
+
+
+if (resultDone) {
+
+  resultDone.addEventListener(
     "click",
     () => {
 
@@ -984,13 +1462,20 @@ $("#resultDone")
     }
   );
 
+}
 
-// --------------------------------
+
+// ========================================
 // 募集締切
-// --------------------------------
+// ========================================
 
-$("#closeForm")
-  .addEventListener(
+const closeForm =
+  $("#closeForm");
+
+
+if (closeForm) {
+
+  closeForm.addEventListener(
     "submit",
     async event => {
 
@@ -1020,7 +1505,10 @@ $("#closeForm")
           .trim();
 
 
-      if (!id || !pass) {
+      if (
+        !id ||
+        !pass
+      ) {
 
         return;
 
@@ -1036,13 +1524,17 @@ $("#closeForm")
       const {
         data,
         error
-      } = await sb.rpc(
-        "close_recruitment",
-        {
-          p_id: id,
-          p_pass_hash: hash
-        }
-      );
+      } =
+        await sb.rpc(
+          "close_recruitment",
+          {
+            p_id:
+              id,
+
+            p_pass_hash:
+              hash
+          }
+        );
 
 
       if (error) {
@@ -1082,9 +1574,11 @@ $("#closeForm")
     }
   );
 
+}
 
-// --------------------------------
+
+// ========================================
 // 起動
-// --------------------------------
+// ========================================
 
 loadRecruitments();
