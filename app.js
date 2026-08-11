@@ -853,18 +853,30 @@ async function loadRecruitments() {
       commanders;
 
 
-    if (minSlv) {
+if (minSlv) {
 
-      filtered =
-        commanders.filter(
-          item =>
-            Number(
-              item.slv
-            ) >=
-            minSlv
+  filtered =
+    commanders.filter(
+      item => {
+
+        const slv =
+          Number(item.slv);
+
+        // 1000以上
+        if (minSlv === 1000) {
+          return slv >= 1000;
+        }
+
+        // 100刻み
+        return (
+          slv >= minSlv &&
+          slv < minSlv + 100
         );
 
-    }
+      }
+    );
+
+}
 
 
     filtered.sort(
