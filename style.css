@@ -649,6 +649,10 @@ h1 em {
   line-height: 1.7;
 }
 
+/* =========================================
+   既存スマホ設定
+========================================= */
+
 @media (max-width: 480px) {
 
   .hero {
@@ -669,36 +673,65 @@ h1 em {
 
   .pass-box strong {
     font-size: 34px;
-
     letter-spacing: 5px;
+  }
+
+}
+
+
 /* =========================================
-   HERO 右側 募集総数
+   PC画面を広げる
+========================================= */
+
+.container {
+  max-width: 1400px;
+}
+
+
+/* =========================================
+   HERO
 ========================================= */
 
 .hero {
   display: grid;
-  grid-template-columns: 1fr 1.1fr;
-  gap: 50px;
+
+  grid-template-columns:
+    minmax(360px, 0.9fr)
+    minmax(500px, 1.25fr);
+
+  gap: 55px;
+
   align-items: center;
+
+  padding: 52px 0 36px;
+
+  border-bottom: 1px solid var(--line);
+
+  margin-bottom: 28px;
 }
+
 
 .hero-left {
   min-width: 0;
 }
 
 
-/* 総数パネル */
+/* =========================================
+   右側 募集総数パネル
+========================================= */
 
 .hero-stats {
-  min-height: 230px;
+  width: 100%;
+
+  min-height: 270px;
 
   border: 2px solid #ff7a18;
 
   background:
     linear-gradient(
       145deg,
-      rgba(15, 21, 31, 0.96),
-      rgba(7, 11, 18, 0.96)
+      rgba(15, 21, 31, 0.98),
+      rgba(7, 11, 18, 0.98)
     );
 
   display: grid;
@@ -708,19 +741,21 @@ h1 em {
 
   align-items: center;
 
-  gap: 18px;
+  gap: 24px;
 
   padding:
-    30px 24px 52px;
+    34px 30px 58px;
 
   position: relative;
 
   box-shadow:
-    0 0 30px rgba(255, 122, 24, 0.08);
+    0 0 32px rgba(255, 122, 24, 0.10);
 }
 
 
-/* 左右それぞれ */
+/* =========================================
+   指揮官・ユニオン共通
+========================================= */
 
 .hero-stat {
   text-align: center;
@@ -728,40 +763,42 @@ h1 em {
 
 
 .hero-stat-title {
-  font-size: 16px;
+  color: #edf2f7;
+
+  font-size: 17px;
+
   font-weight: 700;
 
-  margin-bottom: 14px;
-
-  color: #edf2f7;
+  margin-bottom: 20px;
 }
 
-
-/* 数字 */
 
 .hero-stat-number {
   display: flex;
 
   justify-content: center;
+
   align-items: flex-end;
 
-  gap: 7px;
+  gap: 8px;
 }
 
 
 .hero-stat-number strong {
-  font-family: Rajdhani, sans-serif;
+  font-family:
+    Rajdhani,
+    sans-serif;
 
-  font-size: 82px;
-
-  line-height: 0.9;
+  font-size: 100px;
 
   font-weight: 700;
+
+  line-height: 0.82;
 }
 
 
 .hero-stat-number span {
-  font-size: 24px;
+  font-size: 27px;
 
   font-weight: 700;
 
@@ -769,56 +806,75 @@ h1 em {
 }
 
 
-/* 指揮官 */
-
-.commander-stat .hero-stat-number strong,
-.commander-stat .hero-stat-number span {
-  color: #ff7a18;
-}
-
-
-/* ユニオン */
-
-.union-stat .hero-stat-number strong,
-.union-stat .hero-stat-number span {
-  color: #3696ff;
-}
-
-
 .hero-stat-sub {
+  margin-top: 20px;
+
   color: #8e9aaa;
 
   font-size: 13px;
-
-  margin-top: 14px;
 }
 
 
-/* 真ん中の線 */
+/* =========================================
+   指揮官 = オレンジ
+========================================= */
+
+.commander-stat
+.hero-stat-number strong,
+
+.commander-stat
+.hero-stat-number span {
+
+  color: #ff7a18;
+
+}
+
+
+/* =========================================
+   ユニオン = ブルー
+========================================= */
+
+.union-stat
+.hero-stat-number strong,
+
+.union-stat
+.hero-stat-number span {
+
+  color: #3696ff;
+
+}
+
+
+/* =========================================
+   真ん中の縦線
+========================================= */
 
 .hero-stat-divider {
   width: 1px;
 
-  height: 130px;
+  height: 150px;
 
   background:
     linear-gradient(
       transparent,
-      #495568,
+      #536174,
       transparent
     );
 }
 
 
-/* 最終更新 */
+/* =========================================
+   最終更新
+========================================= */
 
 .hero-stat-update {
   position: absolute;
 
-  bottom: 16px;
-
   left: 0;
+
   right: 0;
+
+  bottom: 18px;
 
   text-align: center;
 
@@ -829,10 +885,120 @@ h1 em {
 
 
 /* =========================================
+   一覧カード
+   指揮官 = オレンジ
+========================================= */
+
+.card.commander-card {
+  border:
+    1px solid
+    rgba(255, 122, 24, 0.55);
+
+  box-shadow:
+    inset 4px 0 0 #ff7a18;
+}
+
+
+.card.commander-card
+.recruitment-type {
+
+  color: #ff9b32;
+
+  border-color:
+    rgba(255, 122, 24, 0.45);
+
+}
+
+
+/* =========================================
+   一覧カード
+   ユニオン = ブルー
+========================================= */
+
+.card.union-card {
+  border:
+    1px solid
+    rgba(54, 150, 255, 0.55);
+
+  box-shadow:
+    inset 4px 0 0 #3696ff;
+}
+
+
+.card.union-card
+.recruitment-type {
+
+  color: #72b9ff;
+
+  border-color:
+    rgba(54, 150, 255, 0.45);
+
+}
+
+
+.union-rank {
+  color: #72b9ff;
+
+  font-size: 20px;
+
+  font-weight: 700;
+
+  margin-top: 8px;
+}
+
+
+.recruitment-type {
+  display: inline-block;
+
+  padding: 5px 10px;
+
+  border: 1px solid;
+
+  font-size: 11px;
+
+  font-weight: 700;
+}
+
+
+/* =========================================
+   カウントダウン
+========================================= */
+
+.countdown {
+  margin-top: 14px;
+
+  padding-top: 12px;
+
+  border-top:
+    1px solid
+    rgba(255,255,255,.08);
+
+  color: #aab5c4;
+
+  font-size: 12px;
+}
+
+
+.countdown.warning {
+  color: #ffc04d;
+}
+
+
+.countdown.danger {
+  color: #ff6878;
+}
+
+
+/* =========================================
    スマホ
 ========================================= */
 
 @media (max-width: 760px) {
+
+  .container {
+    max-width: 900px;
+  }
+
 
   .hero {
     grid-template-columns: 1fr;
@@ -842,12 +1008,10 @@ h1 em {
 
 
   .hero-stats {
-    width: 100%;
-
-    min-height: 200px;
+    min-height: 210px;
 
     padding:
-      24px 12px 48px;
+      25px 12px 50px;
   }
 
 
@@ -867,9 +1031,7 @@ h1 em {
 
 
   .hero-stat-divider {
-    height: 100px;
+    height: 105px;
   }
-
-}
 
 }
