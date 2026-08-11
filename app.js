@@ -419,7 +419,75 @@ function showMessage(
 // --------------------------------
 // 募集登録
 // --------------------------------
+// --------------------------------
+// 登録タイプ切り替え
+// --------------------------------
 
+const registrationType =
+  $("#registrationType");
+
+const commanderFields =
+  $("#commanderFields");
+
+const unionFields =
+  $("#unionFields");
+
+
+if (registrationType) {
+
+  registrationType.addEventListener(
+    "change",
+    () => {
+
+      const isUnion =
+        registrationType.value === "union";
+
+      if (commanderFields) {
+        commanderFields.classList.toggle(
+          "hidden",
+          isUnion
+        );
+      }
+
+      if (unionFields) {
+        unionFields.classList.toggle(
+          "hidden",
+          !isUnion
+        );
+      }
+
+      const name =
+        $("#name");
+
+      const slv =
+        $("#slv");
+
+      const unionName =
+        $("#unionName");
+
+      if (name) {
+        name.required = !isUnion;
+      }
+
+      if (slv) {
+        slv.required = !isUnion;
+      }
+
+      if (unionName) {
+        unionName.required = isUnion;
+      }
+
+    }
+  );
+
+}
+
+
+// --------------------------------
+// 募集登録
+// --------------------------------
+
+$("#registerForm")
 $("#registerForm")
   .addEventListener(
     "submit",
@@ -439,25 +507,166 @@ $("#registerForm")
       }
 
 
-      const name =
-        $("#name")
-          .value
-          .trim();
+const registrationType =
+  $("#registrationType").value;
+
+const xUrl =
+  $("#xUrl")
+    .value
+    .trim();
 
 
-      const slv =
-        Number(
-          $("#slv").value
-        );
+if (!validXUrl(xUrl)) {
+
+  alert(
+    "Xの記事URLを入力してください。"
+  );
+
+  return;
+
+}
 
 
-      const xUrl =
-        $("#xUrl")
-          .value
-          .trim();
+// --------------------------------
+// ユニオン登録
+// --------------------------------
+
+if (registrationType === "union") {
+
+  const unionName =
+    $("#unionName")
+      .value
+      .trim();
+
+  const unionRank =
+    $("#unionRank")
+      .value;
 
 
-      if (!validXUrl(xUrl)) {
+  if (!unionName) {
+
+    alert(
+      "ユニオン名を入力してください。"
+    );
+
+    return;
+
+  }
+
+
+  const pass =
+    generatePass();
+
+
+  const passHash =
+    await sha256(
+      pass
+    );
+
+
+  const {
+    data,
+    error
+  } = await sb.rpc(
+    "create_union_recruitment",
+    {
+      p_union_name:
+        unionName,
+
+      p_union_rank:
+        unionRank,
+
+      p_x_url:
+        xUrl,
+
+      p_pass_hash:
+        passHash
+    }
+  );
+
+
+  if (error) {
+
+    alert(
+      `登録に失敗しました：${error.message}`
+    );
+
+    return;
+
+  }
+
+
+  const result =
+    Array.isArray(data)
+      ? data[0]
+      : data;
+
+
+  $("#passValue")
+    .textContent =
+    pass;
+
+
+  $("#resultId")
+    .textContent =
+    result.id;
+
+
+  $("#resultExpiry")
+    .textContent =
+    formatDate(
+      result.expires_at
+    );
+
+
+  $("#resultModal")
+    .classList
+    .remove("hidden");
+
+
+  event.target.reset();
+
+  return;
+
+}
+
+
+// --------------------------------
+// 指揮官登録
+// --------------------------------
+
+const name =
+  $("#name")
+    .value
+    .trim();
+
+
+const slv =
+  Number(
+    $("#slv").value
+  );
+
+
+if (!name) {
+
+  alert(
+    "指揮官名を入力してください。"
+  );
+
+  return;
+
+}
+
+
+if (!slv || slv < 1 || slv > 1200) {
+
+  alert(
+    "SLVは1～1200で入力してください。"
+  );
+
+  return;
+
+}
 
         alert(
           "Xの記事URLを入力してください。"
