@@ -1,5 +1,4 @@
 <!doctype html>
-
 <html lang="ja">
 
 <head>
@@ -93,10 +92,10 @@
         </h1>
 
 
-<p>
-  指揮官はSLV、ユニオンはランクから探せる。<br>
-  詳細・やり取りはXの募集記事から。
-</p>
+        <p>
+          指揮官はSLV、ユニオンはランクから探せる。<br>
+          詳細・やり取りはXの募集記事から。
+        </p>
 
 
         <div class="hero-actions">
@@ -134,8 +133,6 @@
       <div class="hero-stats">
 
 
-        <!-- 指揮官 -->
-
         <div class="hero-stat commander-stat">
 
 
@@ -169,8 +166,6 @@
         <div class="hero-stat-divider"></div>
 
 
-
-        <!-- ユニオン -->
 
         <div class="hero-stat union-stat">
 
@@ -243,8 +238,6 @@
           </h2>
 
 
-          <!-- 登録総数 -->
-
           <div class="registration-count">
 
 
@@ -303,7 +296,7 @@
 
 
       <!-- ========================================
-           指揮官 / ユニオン 検索タブ
+           指揮官 / ユニオン検索タブ
       ========================================= -->
 
       <div class="search-tabs">
@@ -477,8 +470,6 @@
 
 
 
-      <!-- メッセージ -->
-
       <div
         id="message"
         class="message hidden"
@@ -487,8 +478,6 @@
 
 
 
-      <!-- 募集カード表示 -->
-
       <div
         id="recruitmentList"
         class="cards"
@@ -496,8 +485,6 @@
       </div>
 
 
-
-      <!-- 募集なし -->
 
       <div
         id="emptyState"
@@ -560,8 +547,6 @@
         class="panel"
       >
 
-
-        <!-- 登録タイプ -->
 
         <label>
 
@@ -703,7 +688,6 @@
 
         <!-- ========================================
              X募集記事
-             指揮官・ユニオン共通
         ========================================= -->
 
         <label>
@@ -723,8 +707,6 @@
 
 
 
-        <!-- 掲載期間 -->
-
         <div class="notice">
 
 
@@ -734,11 +716,8 @@
 
 
           <span>
-
             登録から14日後に自動で掲載終了します。
-
             やり取りはXのDMで行ってください。
-
           </span>
 
 
@@ -793,6 +772,46 @@
       </div>
 
 
+
+      <form
+        id="closeForm"
+        class="panel"
+      >
+
+
+        <label>
+
+          PASS
+
+
+          <input
+            id="closePass"
+            type="text"
+            required
+            minlength="8"
+            maxlength="8"
+            autocomplete="off"
+            autocapitalize="characters"
+            placeholder="登録時に発行された8文字PASS"
+          >
+
+
+        </label>
+
+
+
+        <button
+          class="btn danger wide"
+          type="submit"
+        >
+          募集を締め切る
+        </button>
+
+
+      </form>
+
+
+
       <div class="notice">
 
 
@@ -802,8 +821,8 @@
 
 
         <span>
-        募集を締め切る際に必要です。
-    　　必ず保存してください。
+          募集を締め切る際に必要です。
+          必ず保存してください。
         </span>
 
 
@@ -919,7 +938,7 @@
 
 
         <strong id="passValue">
-          ------
+          --------
         </strong>
 
 
@@ -930,23 +949,6 @@
         >
           PASSをコピー
         </button>
-
-
-      </div>
-
-
-
-      <div class="result-row">
-
-
-        <span>
-          募集ID
-        </span>
-
-
-        <strong id="resultId">
-          -
-        </strong>
 
 
       </div>
@@ -971,11 +973,8 @@
 
 
       <p class="warning">
-
-        PASSと募集IDを必ず保存してください。
-
-        募集締切に必要です。
-
+        PASSを必ず保存してください。
+        募集を締め切る際に必要です。
       </p>
 
 
