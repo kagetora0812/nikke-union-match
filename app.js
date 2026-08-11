@@ -1,7 +1,8 @@
 /*
   NIKKE UNION MATCH
-  v2
+  v3
 */
+
 
 // ========================================
 // Supabase
@@ -86,13 +87,18 @@ function formatDate(date) {
 }
 
 
+// ========================================
+// PASS生成
+// 8文字
+// ========================================
+
 function generatePass() {
 
   const chars =
     "ABCDEFGHJKLMNPQRSTUVWXYZ23456789";
 
   const random =
-    new Uint32Array(6);
+    new Uint32Array(8);
 
   crypto.getRandomValues(
     random
@@ -108,6 +114,10 @@ function generatePass() {
 
 }
 
+
+// ========================================
+// PASSハッシュ
+// ========================================
 
 async function sha256(text) {
 
@@ -180,10 +190,11 @@ async function renderXEmbeds(
     if (retry < 10) {
 
       setTimeout(
-        () =>
+        () => {
           renderXEmbeds(
             retry + 1
-          ),
+          );
+        },
         500
       );
 
@@ -260,7 +271,7 @@ async function renderXEmbeds(
 
 
 // ========================================
-// ページ切り替え
+// ページ切替
 // ========================================
 
 function showPage(name) {
@@ -337,7 +348,7 @@ document
 
 
 // ========================================
-// 検索タブ
+// 指揮官 / ユニオン検索タブ
 // ========================================
 
 let currentSearchType =
@@ -367,52 +378,36 @@ function setSearchType(type) {
     type === "commander";
 
 
-  if (commanderSearchTab) {
-
-    commanderSearchTab
-      .classList
-      .toggle(
-        "active",
-        isCommander
-      );
-
-  }
+  commanderSearchTab
+    ?.classList
+    .toggle(
+      "active",
+      isCommander
+    );
 
 
-  if (unionSearchTab) {
-
-    unionSearchTab
-      .classList
-      .toggle(
-        "active",
-        !isCommander
-      );
-
-  }
+  unionSearchTab
+    ?.classList
+    .toggle(
+      "active",
+      !isCommander
+    );
 
 
-  if (commanderFilterBox) {
-
-    commanderFilterBox
-      .classList
-      .toggle(
-        "hidden",
-        !isCommander
-      );
-
-  }
+  commanderFilterBox
+    ?.classList
+    .toggle(
+      "hidden",
+      !isCommander
+    );
 
 
-  if (unionFilterBox) {
-
-    unionFilterBox
-      .classList
-      .toggle(
-        "hidden",
-        isCommander
-      );
-
-  }
+  unionFilterBox
+    ?.classList
+    .toggle(
+      "hidden",
+      isCommander
+    );
 
 
   loadRecruitments();
@@ -420,32 +415,30 @@ function setSearchType(type) {
 }
 
 
-if (commanderSearchTab) {
+commanderSearchTab
+  ?.addEventListener(
+    "click",
+    () => {
 
-  commanderSearchTab
-    .addEventListener(
-      "click",
-      () =>
-        setSearchType(
-          "commander"
-        )
-    );
+      setSearchType(
+        "commander"
+      );
 
-}
+    }
+  );
 
 
-if (unionSearchTab) {
+unionSearchTab
+  ?.addEventListener(
+    "click",
+    () => {
 
-  unionSearchTab
-    .addEventListener(
-      "click",
-      () =>
-        setSearchType(
-          "union"
-        )
-    );
+      setSearchType(
+        "union"
+      );
 
-}
+    }
+  );
 
 
 // ========================================
@@ -460,16 +453,12 @@ function getRemainingTime(
   expiresAt
 ) {
 
-  const now =
-    Date.now();
-
-  const expiry =
+  const diff =
     new Date(
       expiresAt
-    ).getTime();
-
-  const diff =
-    expiry - now;
+    ).getTime()
+    -
+    Date.now();
 
 
   if (diff <= 0) {
@@ -507,7 +496,8 @@ function getRemainingTime(
     totalMinutes % 60;
 
 
-  let className = "";
+  let className =
+    "";
 
 
   if (days <= 2) {
@@ -565,6 +555,7 @@ function updateCountdowns() {
 
         }
 
+
         return;
 
       }
@@ -578,6 +569,71 @@ function updateCountdowns() {
         `countdown ${result.className}`;
 
     });
+
+}
+
+
+// ========================================
+// 空表示
+// ========================================
+
+function showEmpty(text) {
+
+  const empty =
+    $("#emptyState");
+
+
+  if (!empty) {
+
+    return;
+
+  }
+
+
+  empty.classList.remove(
+    "hidden"
+  );
+
+
+  const p =
+    empty.querySelector("p");
+
+
+  if (p) {
+
+    p.textContent =
+      text;
+
+  }
+
+}
+
+
+// ========================================
+// メッセージ
+// ========================================
+
+function showMessage(
+  text,
+  type = ""
+) {
+
+  const message =
+    $("#message");
+
+
+  if (!message) {
+
+    return;
+
+  }
+
+
+  message.textContent =
+    text;
+
+  message.className =
+    `message ${type}`;
 
 }
 
@@ -602,7 +658,9 @@ async function loadRecruitments() {
   }
 
 
-  list.innerHTML = "";
+  list.innerHTML =
+    "";
+
 
   empty.classList.add(
     "hidden"
@@ -610,7 +668,7 @@ async function loadRecruitments() {
 
 
   // --------------------------------
-  // Supabaseから全件取得
+  // 指揮官取得
   // --------------------------------
 
   const commanderQuery =
@@ -627,9 +685,14 @@ async function loadRecruitments() {
       )
       .gt(
         "expires_at",
-        new Date().toISOString()
+        new Date()
+          .toISOString()
       );
 
+
+  // --------------------------------
+  // ユニオン取得
+  // --------------------------------
 
   const unionQuery =
     sb
@@ -645,7 +708,8 @@ async function loadRecruitments() {
       )
       .gt(
         "expires_at",
-        new Date().toISOString()
+        new Date()
+          .toISOString()
       );
 
 
@@ -695,10 +759,12 @@ async function loadRecruitments() {
 
 
   // ========================================
-  // 上部募集総数
+  // 総数
   // ========================================
 
-  if ($("#commanderCountTop")) {
+  if (
+    $("#commanderCountTop")
+  ) {
 
     $("#commanderCountTop")
       .textContent =
@@ -707,7 +773,9 @@ async function loadRecruitments() {
   }
 
 
-  if ($("#unionCountTop")) {
+  if (
+    $("#unionCountTop")
+  ) {
 
     $("#unionCountTop")
       .textContent =
@@ -716,7 +784,9 @@ async function loadRecruitments() {
   }
 
 
-  if ($("#commanderCount")) {
+  if (
+    $("#commanderCount")
+  ) {
 
     $("#commanderCount")
       .textContent =
@@ -725,7 +795,9 @@ async function loadRecruitments() {
   }
 
 
-  if ($("#unionCount")) {
+  if (
+    $("#unionCount")
+  ) {
 
     $("#unionCount")
       .textContent =
@@ -734,7 +806,13 @@ async function loadRecruitments() {
   }
 
 
-  if ($("#lastUpdated")) {
+  // ========================================
+  // 最終更新
+  // ========================================
+
+  if (
+    $("#lastUpdated")
+  ) {
 
     $("#lastUpdated")
       .textContent =
@@ -755,7 +833,7 @@ async function loadRecruitments() {
 
 
   // ========================================
-  // 指揮官検索
+  // 指揮官一覧
   // ========================================
 
   if (
@@ -766,7 +844,8 @@ async function loadRecruitments() {
     const minSlv =
       Number(
         $("#slvFilter")
-          ?.value || 0
+          ?.value ||
+        0
       );
 
 
@@ -781,7 +860,8 @@ async function loadRecruitments() {
           item =>
             Number(
               item.slv
-            ) >= minSlv
+            ) >=
+            minSlv
         );
 
     }
@@ -791,7 +871,8 @@ async function loadRecruitments() {
       (a, b) =>
         new Date(
           b.created_at
-        ) -
+        )
+        -
         new Date(
           a.created_at
         )
@@ -843,19 +924,23 @@ async function loadRecruitments() {
                   </span>
 
                   <span class="date">
+
                     期限
                     ${formatDate(
                       item.expires_at
                     )}
+
                   </span>
 
                 </div>
 
 
                 <div class="name">
+
                   ${escapeHtml(
                     item.commander_name
                   )}
+
                 </div>
 
 
@@ -878,7 +963,9 @@ async function loadRecruitments() {
                     item.expires_at
                   )}"
                 >
+
                   ${remaining.text}
+
                 </div>
 
 
@@ -920,7 +1007,7 @@ async function loadRecruitments() {
 
 
   // ========================================
-  // ユニオン検索
+  // ユニオン一覧
   // ========================================
 
   if (
@@ -930,7 +1017,8 @@ async function loadRecruitments() {
 
     const selectedRank =
       $("#unionRankFilter")
-        ?.value || "";
+        ?.value ||
+      "";
 
 
     let filtered =
@@ -953,7 +1041,8 @@ async function loadRecruitments() {
       (a, b) =>
         new Date(
           b.created_at
-        ) -
+        )
+        -
         new Date(
           a.created_at
         )
@@ -965,7 +1054,7 @@ async function loadRecruitments() {
     ) {
 
       showEmpty(
-        "このランクで募集中のユニオンはいません。"
+        "現在募集中のユニオンはいません。"
       );
 
       return;
@@ -1005,26 +1094,32 @@ async function loadRecruitments() {
                   </span>
 
                   <span class="date">
+
                     期限
                     ${formatDate(
                       item.expires_at
                     )}
+
                   </span>
 
                 </div>
 
 
                 <div class="name">
+
                   ${escapeHtml(
                     item.union_name
                   )}
+
                 </div>
 
 
                 <div class="union-rank">
+
                   ${escapeHtml(
                     item.union_rank
                   )}
+
                 </div>
 
 
@@ -1034,7 +1129,9 @@ async function loadRecruitments() {
                     item.expires_at
                   )}"
                 >
+
                   ${remaining.text}
+
                 </div>
 
 
@@ -1080,7 +1177,9 @@ async function loadRecruitments() {
   renderXEmbeds();
 
 
-  if (countdownTimer) {
+  if (
+    countdownTimer
+  ) {
 
     clearInterval(
       countdownTimer
@@ -1099,123 +1198,32 @@ async function loadRecruitments() {
 
 
 // ========================================
-// 空表示
-// ========================================
-
-function showEmpty(text) {
-
-  const empty =
-    $("#emptyState");
-
-
-  if (!empty) {
-
-    return;
-
-  }
-
-
-  empty.classList.remove(
-    "hidden"
-  );
-
-
-  const p =
-    empty.querySelector("p");
-
-
-  if (p) {
-
-    p.textContent =
-      text;
-
-  }
-
-}
-
-
-// ========================================
 // フィルター
 // ========================================
 
-const slvFilter =
-  $("#slvFilter");
-
-
-if (slvFilter) {
-
-  slvFilter.addEventListener(
+$("#slvFilter")
+  ?.addEventListener(
     "change",
     loadRecruitments
   );
 
-}
+
+$("#unionRankFilter")
+  ?.addEventListener(
+    "change",
+    loadRecruitments
+  );
 
 
-const unionRankFilter =
-  $("#unionRankFilter");
-
-
-if (unionRankFilter) {
-
-  unionRankFilter
-    .addEventListener(
-      "change",
-      loadRecruitments
-    );
-
-}
-
-
-// ========================================
-// 更新ボタン
-// ========================================
-
-const refreshBtn =
-  $("#refreshBtn");
-
-
-if (refreshBtn) {
-
-  refreshBtn.addEventListener(
+$("#refreshBtn")
+  ?.addEventListener(
     "click",
     loadRecruitments
   );
 
-}
-
 
 // ========================================
-// メッセージ
-// ========================================
-
-function showMessage(
-  text,
-  type = ""
-) {
-
-  const message =
-    $("#message");
-
-
-  if (!message) {
-
-    return;
-
-  }
-
-
-  message.textContent =
-    text;
-
-  message.className =
-    `message ${type}`;
-
-}
-
-
-// ========================================
-// 登録タイプ切り替え
+// 登録タイプ切替
 // ========================================
 
 const registrationTypeSelect =
@@ -1245,28 +1253,20 @@ function updateRegistrationFields() {
     "union";
 
 
-  if (commanderFields) {
-
-    commanderFields
-      .classList
-      .toggle(
-        "hidden",
-        isUnion
-      );
-
-  }
+  commanderFields
+    ?.classList
+    .toggle(
+      "hidden",
+      isUnion
+    );
 
 
-  if (unionFields) {
-
-    unionFields
-      .classList
-      .toggle(
-        "hidden",
-        !isUnion
-      );
-
-  }
+  unionFields
+    ?.classList
+    .toggle(
+      "hidden",
+      !isUnion
+    );
 
 
   const name =
@@ -1305,18 +1305,78 @@ function updateRegistrationFields() {
 }
 
 
-if (
-  registrationTypeSelect
+registrationTypeSelect
+  ?.addEventListener(
+    "change",
+    updateRegistrationFields
+  );
+
+
+updateRegistrationFields();
+
+
+// ========================================
+// 登録完了表示
+// ========================================
+
+function showRegistrationResult(
+  pass,
+  result
 ) {
 
-  registrationTypeSelect
-    .addEventListener(
-      "change",
-      updateRegistrationFields
+  if (
+    $("#passValue")
+  ) {
+
+    $("#passValue")
+      .textContent =
+      pass;
+
+  }
+
+
+  if (
+    $("#resultExpiry")
+  ) {
+
+    $("#resultExpiry")
+      .textContent =
+      formatDate(
+        result.expires_at
+      );
+
+  }
+
+
+  // 古いHTMLに募集ID欄が残っている場合は隠す
+
+  const idElement =
+    $("#resultId");
+
+
+  if (idElement) {
+
+    const row =
+      idElement.closest(
+        ".result-row"
+      );
+
+
+    if (row) {
+
+      row.style.display =
+        "none";
+
+    }
+
+  }
+
+
+  $("#resultModal")
+    ?.classList
+    .remove(
+      "hidden"
     );
-
-
-  updateRegistrationFields();
 
 }
 
@@ -1325,13 +1385,8 @@ if (
 // 募集登録
 // ========================================
 
-const registerForm =
-  $("#registerForm");
-
-
-if (registerForm) {
-
-  registerForm.addEventListener(
+$("#registerForm")
+  ?.addEventListener(
     "submit",
     async event => {
 
@@ -1364,35 +1419,14 @@ if (registerForm) {
 
 
       // ====================================
-      // ユニオン登録
+      // PASS重複時は最大5回まで再生成
       // ====================================
 
-      if (
-        type ===
-        "union"
+      for (
+        let attempt = 0;
+        attempt < 5;
+        attempt++
       ) {
-
-        const unionName =
-          $("#unionName")
-            .value
-            .trim();
-
-
-        const unionRank =
-          $("#unionRank")
-            .value;
-
-
-        if (!unionName) {
-
-          alert(
-            "ユニオン名を入力してください。"
-          );
-
-          return;
-
-        }
-
 
         const pass =
           generatePass();
@@ -1404,18 +1438,157 @@ if (registerForm) {
           );
 
 
+        // ==================================
+        // ユニオン登録
+        // ==================================
+
+        if (
+          type ===
+          "union"
+        ) {
+
+          const unionName =
+            $("#unionName")
+              .value
+              .trim();
+
+
+          const unionRank =
+            $("#unionRank")
+              .value;
+
+
+          if (!unionName) {
+
+            alert(
+              "ユニオン名を入力してください。"
+            );
+
+            return;
+
+          }
+
+
+          const {
+            data,
+            error
+          } =
+            await sb.rpc(
+              "create_union_recruitment",
+              {
+                p_union_name:
+                  unionName,
+
+                p_union_rank:
+                  unionRank,
+
+                p_x_url:
+                  xUrl,
+
+                p_pass_hash:
+                  passHash
+              }
+            );
+
+
+          if (error) {
+
+            if (
+              error.message
+                ?.includes(
+                  "PASS_DUPLICATE"
+                )
+            ) {
+
+              continue;
+
+            }
+
+
+            alert(
+              `登録に失敗しました：${error.message}`
+            );
+
+            return;
+
+          }
+
+
+          const result =
+            Array.isArray(data)
+              ? data[0]
+              : data;
+
+
+          showRegistrationResult(
+            pass,
+            result
+          );
+
+
+          event.target.reset();
+
+          updateRegistrationFields();
+
+          return;
+
+        }
+
+
+        // ==================================
+        // 指揮官登録
+        // ==================================
+
+        const name =
+          $("#name")
+            .value
+            .trim();
+
+
+        const slv =
+          Number(
+            $("#slv").value
+          );
+
+
+        if (!name) {
+
+          alert(
+            "指揮官名を入力してください。"
+          );
+
+          return;
+
+        }
+
+
+        if (
+          !slv ||
+          slv < 1 ||
+          slv > 1200
+        ) {
+
+          alert(
+            "SLVは1～1200で入力してください。"
+          );
+
+          return;
+
+        }
+
+
         const {
           data,
           error
         } =
           await sb.rpc(
-            "create_union_recruitment",
+            "create_recruitment",
             {
-              p_union_name:
-                unionName,
+              p_commander_name:
+                name,
 
-              p_union_rank:
-                unionRank,
+              p_slv:
+                slv,
 
               p_x_url:
                 xUrl,
@@ -1427,6 +1600,18 @@ if (registerForm) {
 
 
         if (error) {
+
+          if (
+            error.message
+              ?.includes(
+                "PASS_DUPLICATE"
+              )
+          ) {
+
+            continue;
+
+          }
+
 
           alert(
             `登録に失敗しました：${error.message}`
@@ -1458,177 +1643,41 @@ if (registerForm) {
       }
 
 
-      // ====================================
-      // 指揮官登録
-      // ====================================
-
-      const name =
-        $("#name")
-          .value
-          .trim();
-
-
-      const slv =
-        Number(
-          $("#slv").value
-        );
-
-
-      if (!name) {
-
-        alert(
-          "指揮官名を入力してください。"
-        );
-
-        return;
-
-      }
-
-
-      if (
-        !slv ||
-        slv < 1 ||
-        slv > 1200
-      ) {
-
-        alert(
-          "SLVは1～1200で入力してください。"
-        );
-
-        return;
-
-      }
-
-
-      const pass =
-        generatePass();
-
-
-      const passHash =
-        await sha256(
-          pass
-        );
-
-
-      const {
-        data,
-        error
-      } =
-        await sb.rpc(
-          "create_recruitment",
-          {
-            p_commander_name:
-              name,
-
-            p_slv:
-              slv,
-
-            p_x_url:
-              xUrl,
-
-            p_pass_hash:
-              passHash
-          }
-        );
-
-
-      if (error) {
-
-        alert(
-          `登録に失敗しました：${error.message}`
-        );
-
-        return;
-
-      }
-
-
-      const result =
-        Array.isArray(data)
-          ? data[0]
-          : data;
-
-
-      showRegistrationResult(
-        pass,
-        result
+      alert(
+        "PASSの発行に失敗しました。もう一度登録してください。"
       );
-
-
-      event.target.reset();
-
-      updateRegistrationFields();
 
     }
   );
-
-}
-
-
-// ========================================
-// 登録完了
-// ========================================
-
-function showRegistrationResult(
-  pass,
-  result
-) {
-
-  $("#passValue")
-    .textContent =
-    pass;
-
-
-  $("#resultId")
-    .textContent =
-    result.id;
-
-
-  $("#resultExpiry")
-    .textContent =
-    formatDate(
-      result.expires_at
-    );
-
-
-  $("#resultModal")
-    .classList
-    .remove(
-      "hidden"
-    );
-
-}
 
 
 // ========================================
 // PASSコピー
 // ========================================
 
-const copyPass =
-  $("#copyPass");
-
-
-if (copyPass) {
-
-  copyPass.addEventListener(
+$("#copyPass")
+  ?.addEventListener(
     "click",
     async () => {
 
-      await navigator.clipboard
+      await navigator
+        .clipboard
         .writeText(
           $("#passValue")
             .textContent
         );
 
 
-      copyPass.textContent =
+      $("#copyPass")
+        .textContent =
         "コピーしました";
 
 
       setTimeout(
         () => {
 
-          copyPass.textContent =
+          $("#copyPass")
+            .textContent =
             "PASSをコピー";
 
         },
@@ -1638,8 +1687,6 @@ if (copyPass) {
     }
   );
 
-}
-
 
 // ========================================
 // モーダル
@@ -1647,17 +1694,11 @@ if (copyPass) {
 
 function closeModal() {
 
-  const modal =
-    $("#resultModal");
-
-
-  if (modal) {
-
-    modal.classList.add(
+  $("#resultModal")
+    ?.classList
+    .add(
       "hidden"
     );
-
-  }
 
 }
 
@@ -1685,39 +1726,29 @@ $("#resultDone")
 
 
 // ========================================
-// 募集締切
-// 指揮官 / ユニオン自動判定
+// PASSだけで募集締切
 // ========================================
 
-const closeForm =
-  $("#closeForm");
-
-
-if (closeForm) {
-
-  closeForm.addEventListener(
+$("#closeForm")
+  ?.addEventListener(
     "submit",
     async event => {
 
       event.preventDefault();
 
 
-      const id =
-        $("#closeId")
-          .value
-          .trim();
-
-
       const pass =
         $("#closePass")
           .value
-          .trim();
+          .trim()
+          .toUpperCase();
 
 
-      if (
-        !id ||
-        !pass
-      ) {
+      if (!pass) {
+
+        alert(
+          "PASSを入力してください。"
+        );
 
         return;
 
@@ -1730,72 +1761,52 @@ if (closeForm) {
         );
 
 
-      // まず指揮官
-      const commanderClose =
+      const {
+        data,
+        error
+      } =
         await sb.rpc(
-          "close_recruitment",
+          "close_recruitment_by_pass",
           {
-            p_id:
-              id,
-
             p_pass_hash:
               hash
           }
         );
 
 
-      if (
-        commanderClose.error
-      ) {
+      if (error) {
 
         console.error(
-          commanderClose.error
+          error
         );
+
+
+        alert(
+          "募集締切処理に失敗しました。"
+        );
+
+        return;
 
       }
 
 
       if (
-        commanderClose.data ===
-        true
+        data ===
+        "commander"
       ) {
 
         alert(
           "指揮官募集を締め切りました。"
         );
 
+
         event.target.reset();
+
 
         showPage(
           "list"
         );
 
-        return;
-
-      }
-
-
-      // ユニオンを確認
-      const unionClose =
-        await sb.rpc(
-          "close_union_recruitment",
-          {
-            p_id:
-              id,
-
-            p_pass_hash:
-              hash
-          }
-        );
-
-
-      if (
-        unionClose.error
-      ) {
-
-        alert(
-          `処理に失敗しました：${unionClose.error.message}`
-        );
 
         return;
 
@@ -1803,19 +1814,22 @@ if (closeForm) {
 
 
       if (
-        unionClose.data ===
-        true
+        data ===
+        "union"
       ) {
 
         alert(
           "ユニオン募集を締め切りました。"
         );
 
+
         event.target.reset();
+
 
         showPage(
           "list"
         );
+
 
         return;
 
@@ -1823,13 +1837,11 @@ if (closeForm) {
 
 
       alert(
-        "募集IDまたはPASSが正しくありません。"
+        "PASSが正しくないか、すでに募集終了しています。"
       );
 
     }
   );
-
-}
 
 
 // ========================================
