@@ -1,390 +1,752 @@
 <!doctype html>
+
 <html lang="ja">
+
 <head>
+
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <meta name="theme-color" content="#080b12">
-  <title>NIKKE UNION MATCH</title>
-  <link rel="stylesheet" href="./style.css">
+
+  <meta
+    name="viewport"
+    content="width=device-width, initial-scale=1.0"
+  >
+
+  <meta
+    name="theme-color"
+    content="#080b12"
+  >
+
+  <title>
+    NIKKE UNION MATCH
+  </title>
+
+  <link
+    rel="stylesheet"
+    href="./style.css"
+  >
+
 </head>
+
 
 <body>
 
+
+  <!-- ========================================
+       ヘッダー
+  ========================================= -->
+
   <header class="topbar">
+
     <div class="brand">
-      <span class="brand-small">NIKKE</span>
-      <span class="brand-main">UNION MATCH</span>
+
+      <span class="brand-small">
+        NIKKE
+      </span>
+
+      <span class="brand-main">
+        UNION MATCH
+      </span>
+
     </div>
 
+
     <div class="status-dot">
-      <span></span> ONLINE
+
+      <span></span>
+
+      ONLINE
+
     </div>
+
   </header>
+
+
 
   <main class="container">
 
-    <!-- TOP -->
-<!-- TOP -->
-<section class="hero">
 
-  <div class="hero-left">
+    <!-- ========================================
+         TOP
+    ========================================= -->
 
-    <div class="eyebrow">
-      UNION RECRUITMENT BOARD
-    </div>
-
-<h1>
-  <span class="hero-title-line1">指揮官とユニオン</span>
-  <span class="hero-title-line2">を<em>つなぐ。</em></span>
-</h1>
-
-    <p>
-      名前・SLV・X募集記事だけで掲載。<br>
-      やり取りはXのDMで。
-    </p>
-
-    <div class="hero-actions">
-
-      <button
-        class="btn primary"
-        data-page="list"
-      >
-        募集を探す
-      </button>
-
-      <button
-        class="btn ghost"
-        data-page="register"
-      >
-        募集を登録
-      </button>
-
-    </div>
-
-  </div>
+    <section class="hero">
 
 
-  <!-- 募集総数 -->
-  <div class="hero-stats">
-
-    <!-- 指揮官 -->
-    <div class="hero-stat commander-stat">
-
-      <div class="hero-stat-title">
-        👤 募集指揮官 総数
-      </div>
-
-      <div class="hero-stat-number">
-
-        <strong id="commanderCountTop">
-          0
-        </strong>
-
-        <span>
-          名
-        </span>
-
-      </div>
-
-      <div class="hero-stat-sub">
-        現在募集中の指揮官
-      </div>
-
-    </div>
+      <div class="hero-left">
 
 
-    <div class="hero-stat-divider"></div>
+        <div class="eyebrow">
+          UNION RECRUITMENT BOARD
+        </div>
 
 
-    <!-- ユニオン -->
-    <div class="hero-stat union-stat">
+        <h1>
 
-      <div class="hero-stat-title">
-        🏢 募集ユニオン 総数
-      </div>
+          <span class="hero-title-line1">
+            指揮官とユニオン
+          </span>
 
-      <div class="hero-stat-number">
+          <span class="hero-title-line2">
+            を<em>つなぐ。</em>
+          </span>
 
-        <strong id="unionCountTop">
-          0
-        </strong>
+        </h1>
 
-        <span>
-          件
-        </span>
+
+        <p>
+
+          名前・SLV・X募集記事だけで掲載。<br>
+
+          やり取りはXのDMで。
+
+        </p>
+
+
+        <div class="hero-actions">
+
+
+          <button
+            class="btn primary"
+            data-page="list"
+            type="button"
+          >
+            募集を探す
+          </button>
+
+
+          <button
+            class="btn ghost"
+            data-page="register"
+            type="button"
+          >
+            募集を登録
+          </button>
+
+
+        </div>
+
 
       </div>
 
-      <div class="hero-stat-sub">
-        現在募集中のユニオン
+
+
+      <!-- ========================================
+           募集総数
+      ========================================= -->
+
+      <div class="hero-stats">
+
+
+        <!-- 指揮官 -->
+
+        <div class="hero-stat commander-stat">
+
+
+          <div class="hero-stat-title">
+            👤 募集指揮官 総数
+          </div>
+
+
+          <div class="hero-stat-number">
+
+            <strong id="commanderCountTop">
+              0
+            </strong>
+
+            <span>
+              名
+            </span>
+
+          </div>
+
+
+          <div class="hero-stat-sub">
+            現在募集中の指揮官
+          </div>
+
+
+        </div>
+
+
+
+        <div class="hero-stat-divider"></div>
+
+
+
+        <!-- ユニオン -->
+
+        <div class="hero-stat union-stat">
+
+
+          <div class="hero-stat-title">
+            🏢 募集ユニオン 総数
+          </div>
+
+
+          <div class="hero-stat-number">
+
+            <strong id="unionCountTop">
+              0
+            </strong>
+
+            <span>
+              件
+            </span>
+
+          </div>
+
+
+          <div class="hero-stat-sub">
+            現在募集中のユニオン
+          </div>
+
+
+        </div>
+
+
+
+        <div
+          class="hero-stat-update"
+          id="lastUpdated"
+        >
+          最終更新：--
+        </div>
+
+
       </div>
 
-    </div>
+
+    </section>
 
 
-    <div
-      class="hero-stat-update"
-      id="lastUpdated"
+
+    <!-- ========================================
+         募集一覧
+    ========================================= -->
+
+    <section
+      id="listPage"
+      class="page active"
     >
-      最終更新：--
-    </div>
 
-  </div>
-
-</section>
-
-
-    <!-- 募集一覧 -->
-    <section id="listPage" class="page active">
 
       <div class="section-head">
 
-        <div>
-          <div class="eyebrow">RECRUITMENTS</div>
-          <h2>募集中の指揮官・ユニオン</h2>
-          <div class="registration-count">
-  <div>
-    <strong id="commanderCount">0</strong>
-    <span>名</span>
-    <small>野良ちしかん</small>
-  </div>
 
-  <div>
-    <strong id="unionCount">0</strong>
-    <span>件</span>
-    <small>登録ユニオン</small>
-  </div>
-</div>
+        <div>
+
+
+          <div class="eyebrow">
+            RECRUITMENTS
+          </div>
+
+
+          <h2>
+            募集中の指揮官・ユニオン
+          </h2>
+
+
+          <!-- 登録総数 -->
+
+          <div class="registration-count">
+
+
+            <div>
+
+              <strong id="commanderCount">
+                0
+              </strong>
+
+              <span>
+                名
+              </span>
+
+              <small>
+                野良ちしかん
+              </small>
+
+            </div>
+
+
+            <div>
+
+              <strong id="unionCount">
+                0
+              </strong>
+
+              <span>
+                件
+              </span>
+
+              <small>
+                登録ユニオン
+              </small>
+
+            </div>
+
+
+          </div>
+
+
         </div>
 
-        <button class="text-btn" id="refreshBtn">
+
+
+        <button
+          class="text-btn"
+          id="refreshBtn"
+          type="button"
+        >
           ↻ 更新
         </button>
 
-      </div>
-
-
-      <!-- SLV検索 -->
-      <div class="filters">
-
-      <label>
-  SLV
-
-  <select id="slvFilter">
-
-    <option value="">
-      すべて
-    </option>
-
-    <option value="200">
-      200以上
-    </option>
-
-    <option value="300">
-      300以上
-    </option>
-
-    <option value="400">
-      400以上
-    </option>
-
-    <option value="500">
-      500以上
-    </option>
-
-    <option value="600">
-      600以上
-    </option>
-
-    <option value="700">
-      700以上
-    </option>
-
-    <option value="800">
-      800以上
-    </option>
-
-    <option value="900">
-      900以上
-    </option>
-
-    <option value="1000">
-      1000以上
-    </option>
-
-    <option value="1100">
-      1100以上
-    </option>
-
-    <option value="1200">
-      1200
-    </option>
-
-  </select>
-
-</label>
 
       </div>
 
 
-      <div id="message" class="message hidden"></div>
 
-      <div id="recruitmentList" class="cards"></div>
+      <!-- ========================================
+           指揮官 / ユニオン 検索タブ
+      ========================================= -->
+
+      <div class="search-tabs">
 
 
-      <div id="emptyState" class="empty hidden">
+        <button
+          id="commanderSearchTab"
+          class="search-tab commander-tab active"
+          type="button"
+        >
+          👤 指揮官を探す
+        </button>
+
+
+        <button
+          id="unionSearchTab"
+          class="search-tab union-tab"
+          type="button"
+        >
+          🏢 ユニオンを探す
+        </button>
+
+
+      </div>
+
+
+
+      <!-- ========================================
+           指揮官検索
+      ========================================= -->
+
+      <div
+        id="commanderFilterBox"
+        class="filters"
+      >
+
+
+        <label>
+
+          SLV
+
+
+          <select id="slvFilter">
+
+
+            <option value="">
+              すべて
+            </option>
+
+
+            <option value="200">
+              200以上
+            </option>
+
+
+            <option value="300">
+              300以上
+            </option>
+
+
+            <option value="400">
+              400以上
+            </option>
+
+
+            <option value="500">
+              500以上
+            </option>
+
+
+            <option value="600">
+              600以上
+            </option>
+
+
+            <option value="700">
+              700以上
+            </option>
+
+
+            <option value="800">
+              800以上
+            </option>
+
+
+            <option value="900">
+              900以上
+            </option>
+
+
+            <option value="1000">
+              1000以上
+            </option>
+
+
+            <option value="1100">
+              1100以上
+            </option>
+
+
+            <option value="1200">
+              1200
+            </option>
+
+
+          </select>
+
+
+        </label>
+
+
+      </div>
+
+
+
+      <!-- ========================================
+           ユニオン検索
+      ========================================= -->
+
+      <div
+        id="unionFilterBox"
+        class="filters hidden"
+      >
+
+
+        <label>
+
+          ユニオンランク
+
+
+          <select id="unionRankFilter">
+
+
+            <option value="">
+              すべて
+            </option>
+
+
+            <option value="チャレンジャー">
+              チャレンジャー
+            </option>
+
+
+            <option value="ダイヤ">
+              ダイヤ
+            </option>
+
+
+            <option value="プラチナ">
+              プラチナ
+            </option>
+
+
+            <option value="ゴールド">
+              ゴールド
+            </option>
+
+
+            <option value="駆け出しユニオン">
+              駆け出しユニオン
+            </option>
+
+
+          </select>
+
+
+        </label>
+
+
+      </div>
+
+
+
+      <!-- メッセージ -->
+
+      <div
+        id="message"
+        class="message hidden"
+      >
+      </div>
+
+
+
+      <!-- 募集カード表示 -->
+
+      <div
+        id="recruitmentList"
+        class="cards"
+      >
+      </div>
+
+
+
+      <!-- 募集なし -->
+
+      <div
+        id="emptyState"
+        class="empty hidden"
+      >
+
 
         <div class="empty-icon">
           ◎
         </div>
 
+
         <p>
-          現在募集中の指揮官はいません。
+          現在募集中の募集はありません。
         </p>
 
+
       </div>
+
 
     </section>
 
 
-    <!-- 募集登録 -->
-    <section id="registerPage" class="page">
+
+    <!-- ========================================
+         募集登録
+    ========================================= -->
+
+    <section
+      id="registerPage"
+      class="page"
+    >
+
 
       <div class="section-head">
 
+
         <div>
+
+
           <div class="eyebrow">
             REGISTER
           </div>
 
+
           <h2>
-            ユニオン募集を登録
+            募集を登録
           </h2>
+
+
         </div>
+
 
       </div>
 
 
-      <form id="registerForm" class="panel">
 
-     <form id="registerForm" class="panel">
-
-  <label>
-    登録タイプ
-
-    <select id="registrationType">
-      <option value="commander">指揮官</option>
-      <option value="union">ユニオン</option>
-    </select>
-
-  </label>
-
-
-  <div id="commanderFields">
-
-    <label>
-      指揮官名
-
-      <input
-        id="name"
-        maxlength="40"
-        placeholder="例：KAGETORA"
+      <form
+        id="registerForm"
+        class="panel"
       >
 
-    </label>
+
+        <!-- 登録タイプ -->
+
+        <label>
+
+          登録タイプ
 
 
-    <label>
-      SLV
-
-      <input
-        id="slv"
-        type="number"
-        min="1"
-        max="1200"
-        placeholder="例：850"
-      >
-
-    </label>
-
-  </div>
+          <select id="registrationType">
 
 
-  <div
-    id="unionFields"
-    class="hidden"
-  >
-
-    <label>
-      ユニオン名
-
-      <input
-        id="unionName"
-        maxlength="40"
-        placeholder="例：○○ユニオン"
-      >
-
-    </label>
+            <option value="commander">
+              指揮官
+            </option>
 
 
-    <label>
-      ユニオンランク
-
-      <select id="unionRank">
-
-        <option value="チャレンジャー">
-          チャレンジャー
-        </option>
-
-        <option value="ダイヤ">
-          ダイヤ
-        </option>
-
-        <option value="プラチナ">
-          プラチナ
-        </option>
-
-        <option value="ゴールド">
-          ゴールド
-        </option>
-
-        <option value="駆け出しユニオン">
-          駆け出しユニオン
-        </option>
-
-      </select>
-
-    </label>
-
-  </div>
+            <option value="union">
+              ユニオン
+            </option>
 
 
-  <label>
-    Xの記事URL
-
-    <input
-      id="xUrl"
-      type="url"
-      required
-      placeholder="https://x.com/..."
-    >
-
-  </label>
+          </select>
 
 
+        </label>
+
+
+
+        <!-- ========================================
+             指揮官入力
+        ========================================= -->
+
+        <div id="commanderFields">
+
+
+          <label>
+
+            指揮官名
+
+
+            <input
+              id="name"
+              maxlength="40"
+              placeholder="例：KAGETORA"
+            >
+
+
+          </label>
+
+
+
+          <label>
+
+            SLV
+
+
+            <input
+              id="slv"
+              type="number"
+              min="1"
+              max="1200"
+              placeholder="例：850"
+            >
+
+
+          </label>
+
+
+        </div>
+
+
+
+        <!-- ========================================
+             ユニオン入力
+        ========================================= -->
+
+        <div
+          id="unionFields"
+          class="hidden"
+        >
+
+
+          <label>
+
+            ユニオン名
+
+
+            <input
+              id="unionName"
+              maxlength="40"
+              placeholder="例：○○ユニオン"
+            >
+
+
+          </label>
+
+
+
+          <label>
+
+            ユニオンランク
+
+
+            <select id="unionRank">
+
+
+              <option value="チャレンジャー">
+                チャレンジャー
+              </option>
+
+
+              <option value="ダイヤ">
+                ダイヤ
+              </option>
+
+
+              <option value="プラチナ">
+                プラチナ
+              </option>
+
+
+              <option value="ゴールド">
+                ゴールド
+              </option>
+
+
+              <option value="駆け出しユニオン">
+                駆け出しユニオン
+              </option>
+
+
+            </select>
+
+
+          </label>
+
+
+        </div>
+
+
+
+        <!-- ========================================
+             X募集記事
+             指揮官・ユニオン共通
+        ========================================= -->
+
+        <label>
+
+          Xの記事URL
+
+
+          <input
+            id="xUrl"
+            type="url"
+            required
+            placeholder="https://x.com/ユーザー名/status/..."
+          >
+
+
+        </label>
+
+
+
+        <!-- 掲載期間 -->
 
         <div class="notice">
+
 
           <strong>
             掲載期間：14日間
           </strong>
 
+
           <span>
+
             登録から14日後に自動で掲載終了します。
+
             やり取りはXのDMで行ってください。
+
           </span>
 
+
         </div>
+
 
 
         <button
@@ -394,35 +756,57 @@
           募集を登録する
         </button>
 
+
       </form>
+
 
     </section>
 
 
-    <!-- 募集締切 -->
-    <section id="managePage" class="page">
+
+    <!-- ========================================
+         募集締切
+    ========================================= -->
+
+    <section
+      id="managePage"
+      class="page"
+    >
+
 
       <div class="section-head">
 
+
         <div>
+
 
           <div class="eyebrow">
             MANAGE
           </div>
 
+
           <h2>
             募集を締め切る
           </h2>
 
+
         </div>
+
 
       </div>
 
 
-      <form id="closeForm" class="panel">
+
+      <form
+        id="closeForm"
+        class="panel"
+      >
+
 
         <label>
+
           募集ID
+
 
           <input
             id="closeId"
@@ -430,11 +814,15 @@
             placeholder="登録完了画面の募集ID"
           >
 
+
         </label>
 
 
+
         <label>
+
           PASS
+
 
           <input
             id="closePass"
@@ -444,7 +832,9 @@
             placeholder="発行されたPASS"
           >
 
+
         </label>
+
 
 
         <button
@@ -454,74 +844,113 @@
           募集を締め切る
         </button>
 
+
       </form>
 
 
+
       <div class="notice">
+
 
         <strong>
           PASSは登録時に一度だけ表示されます。
         </strong>
 
+
         <span>
           紛失した場合、この第1版では再発行できません。
         </span>
 
+
       </div>
 
+
     </section>
+
 
   </main>
 
 
-  <!-- 下部メニュー -->
+
+  <!-- ========================================
+       下部メニュー
+  ========================================= -->
 
   <nav class="bottom-nav">
+
 
     <button
       data-page="list"
       class="nav-btn active"
+      type="button"
     >
-      <span>⌂</span>
+
+      <span>
+        ⌂
+      </span>
+
       募集を見る
+
     </button>
+
 
 
     <button
       data-page="register"
       class="nav-btn"
+      type="button"
     >
-      <span>＋</span>
+
+      <span>
+        ＋
+      </span>
+
       募集登録
+
     </button>
+
 
 
     <button
       data-page="manage"
       class="nav-btn"
+      type="button"
     >
-      <span>▣</span>
+
+      <span>
+        ▣
+      </span>
+
       締切
+
     </button>
+
 
   </nav>
 
 
-  <!-- 登録完了モーダル -->
+
+  <!-- ========================================
+       登録完了モーダル
+  ========================================= -->
 
   <div
     id="resultModal"
     class="modal hidden"
   >
 
+
     <div class="modal-card">
+
 
       <button
         class="modal-close"
         id="modalClose"
+        type="button"
       >
         ×
       </button>
+
 
 
       <div class="eyebrow">
@@ -529,86 +958,125 @@
       </div>
 
 
+
       <h2>
         登録完了
       </h2>
 
 
+
       <div class="pass-box">
+
 
         <span>
           YOUR PASS
         </span>
 
+
         <strong id="passValue">
           ------
         </strong>
 
+
         <button
           id="copyPass"
           class="copy-btn"
+          type="button"
         >
           PASSをコピー
         </button>
 
+
       </div>
 
 
+
       <div class="result-row">
+
 
         <span>
           募集ID
         </span>
 
+
         <strong id="resultId">
           -
         </strong>
 
+
       </div>
 
 
+
       <div class="result-row">
+
 
         <span>
           掲載期限
         </span>
 
+
         <strong id="resultExpiry">
           -
         </strong>
 
+
       </div>
 
 
+
       <p class="warning">
+
         PASSと募集IDを必ず保存してください。
+
         募集締切に必要です。
+
       </p>
+
 
 
       <button
         class="btn primary wide"
         id="resultDone"
+        type="button"
       >
         募集一覧を見る
       </button>
 
+
     </div>
+
 
   </div>
 
 
+
+  <!-- ========================================
+       JavaScript
+  ========================================= -->
+
+
+  <!-- X投稿埋め込み -->
+
+  <script
+    async
+    src="https://platform.twitter.com/widgets.js"
+    charset="utf-8"
+  ></script>
+
+
   <!-- Supabase -->
 
-  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script
+    src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"
+  ></script>
+
 
   <!-- アプリ本体 -->
 
   <script src="./app.js"></script>
-<script
-  async
-  src="https://platform.twitter.com/widgets.js"
-  charset="utf-8"
-></script>
+
+
 </body>
+
 </html>
