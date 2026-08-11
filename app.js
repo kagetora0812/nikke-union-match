@@ -114,8 +114,7 @@ function generatePass() {
 async function sha256(text) {
 
   const data =
-    new TextEncoder()
-      .encode(text);
+    new TextEncoder().encode(text);
 
   const hash =
     await crypto.subtle.digest(
@@ -126,16 +125,105 @@ async function sha256(text) {
   return Array.from(
     new Uint8Array(hash)
   )
-    .map(
-      byte =>
-        byte
-          .toString(16)
-          .padStart(2, "0")
-    )
-    .join("");
+  .map(
+    byte =>
+      byte
+        .toString(16)
+        .padStart(2, "0")
+  )
+  .join("");
 
 }
 
+
+// ========================================
+// X投稿ID取得
+// ========================================
+
+function getXPostId(url) {
+
+  try {
+
+    const parsed =
+      new URL(url);
+
+    const match =
+      parsed.pathname.match(
+        /\/status\/(\d+)/
+      );
+
+    return match
+      ? match[1]
+      : null;
+
+  } catch {
+
+    return null;
+
+  }
+
+}
+
+
+// ========================================
+// X投稿埋め込み
+// ========================================
+
+async function renderXEmbeds() {
+
+  if (
+    !window.twttr ||
+    !window.twttr.widgets
+  ) {
+    return;
+  }
+
+  const targets =
+    document.querySelectorAll(
+      ".x-embed"
+    );
+
+  for (const target of targets) {
+
+    if (
+      target.dataset.loaded === "true"
+    ) {
+      continue;
+    }
+
+    const postId =
+      target.dataset.postId;
+
+    if (!postId) {
+      continue;
+    }
+
+    target.dataset.loaded = "true";
+
+    try {
+
+      await window.twttr.widgets.createTweet(
+        postId,
+        target,
+        {
+          theme: "dark",
+          align: "center",
+          conversation: "none"
+        }
+      );
+
+    } catch (error) {
+
+      console.error(
+        "X投稿表示エラー",
+        error
+      );
+
+    }
+
+  }
+
+}
 
 // ========================================
 // ページ切り替え
@@ -770,16 +858,30 @@ async function loadRecruitments() {
                 </div>
 
 
-                <a
-                  class="x-btn"
-                  href="${escapeHtml(
-                    item.xUrl
-                  )}"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                >
-                  Xで募集記事を見る ↗
-                </a>
+<div class="x-post-area">
+
+  <div
+    class="x-embed"
+    data-post-id="${escapeHtml(
+      getXPostId(
+        item.xUrl
+      ) || ""
+    )}"
+  >
+  </div>
+
+  <a
+    class="x-btn"
+    href="${escapeHtml(
+      item.xUrl
+    )}"
+    target="_blank"
+    rel="noopener noreferrer"
+  >
+    Xで投稿を開く ↗
+  </a>
+
+</div>
 
               </article>
 
@@ -856,18 +958,30 @@ async function loadRecruitments() {
               </div>
 
 
-              <a
-                class="x-btn"
-                href="${escapeHtml(
-                  item.xUrl
-                )}"
-                target="_blank"
-                rel="noopener noreferrer"
-              >
-                Xで募集記事を見る ↗
-              </a>
+<div class="x-post-area">
 
-            </article>
+  <div
+    class="x-embed"
+    data-post-id="${escapeHtml(
+      getXPostId(
+        item.xUrl
+      ) || ""
+    )}"
+  >
+  </div>
+
+  <a
+    class="x-btn"
+    href="${escapeHtml(
+      item.xUrl
+    )}"
+    target="_blank"
+    rel="noopener noreferrer"
+  >
+    Xで投稿を開く ↗
+  </a>
+
+</div>
 
           `;
 
