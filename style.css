@@ -1153,3 +1153,20 @@ h1 em {
 
   font-size: 15px;
 }
+/* ========================================
+   募集件数 指揮官・ユニオン色分け
+======================================== */
+
+/* 指揮官 */
+.registration-count > div:first-child strong,
+.registration-count > div:first-child span,
+.registration-count > div:first-child small {
+  color: #ff6a00;
+}
+
+/* ユニオン */
+.registration-count > div:last-child strong,
+.registration-count > div:last-child span,
+.registration-count > div:last-child small {
+  color: #2196f3;
+}
