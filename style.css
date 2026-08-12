@@ -1170,3 +1170,79 @@ h1 em {
 .registration-count > div:last-child small {
   color: #2196f3;
 }
+/* ========================================
+   ユニオンランク色分け
+======================================== */
+
+.union-rank {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+
+  width: fit-content;
+  margin-top: 8px;
+  padding: 6px 14px;
+
+  border: 1px solid;
+  border-radius: 999px;
+
+  font-weight: 800;
+  font-size: 14px;
+  letter-spacing: 0.04em;
+}
+
+
+/* チャレンジャー：赤 */
+.rank-challenger {
+  color: #ff4d4d;
+  border-color: #ff4d4d;
+  background: rgba(255, 77, 77, 0.12);
+}
+
+
+/* ダイヤ：紫 */
+.rank-diamond {
+  color: #c875ff;
+  border-color: #c875ff;
+  background: rgba(200, 117, 255, 0.12);
+}
+
+
+/* プラチナ：水色 */
+.rank-platinum {
+  color: #62d9ff;
+  border-color: #62d9ff;
+  background: rgba(98, 217, 255, 0.12);
+}
+
+
+/* ゴールド：金 */
+.rank-gold {
+  color: #ffd24a;
+  border-color: #ffd24a;
+  background: rgba(255, 210, 74, 0.12);
+}
+
+
+/* シルバー */
+.rank-silver {
+  color: #d7dde5;
+  border-color: #d7dde5;
+  background: rgba(215, 221, 229, 0.12);
+}
+
+
+/* 駆け出しユニオン：黄緑 */
+.rank-rookie {
+  color: #a8e84a;
+  border-color: #a8e84a;
+  background: rgba(168, 232, 74, 0.12);
+}
+
+
+/* その他 */
+.rank-default {
+  color: #ffffff;
+  border-color: #777777;
+  background: rgba(255, 255, 255, 0.08);
+}
