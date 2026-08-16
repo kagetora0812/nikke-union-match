@@ -106,6 +106,7 @@
   <button
     class="btn primary open-register-modal"
     type="button"
+    onclick="openRegisterModal()"
   >
     募集を登録
   </button>
@@ -605,6 +606,7 @@
     <button
       class="nav-btn open-register-modal"
       type="button"
+      onclick="openRegisterModal()"
     >
 
       <span>
@@ -653,6 +655,7 @@
         class="register-modal-close"
         type="button"
         aria-label="閉じる"
+        onclick="closeRegisterModal()"
       >
         ×
       </button>
@@ -1035,101 +1038,72 @@
 
   <!-- 募集登録ポップアップ制御 -->
   <script>
-    document.addEventListener("DOMContentLoaded", () => {
+    function openRegisterModal() {
 
-      const registerModal =
+      const modal =
         document.getElementById("registerModal");
 
-      const registerModalClose =
-        document.getElementById("registerModalClose");
-
-
-      function openRegisterModal() {
-
-        if (!registerModal) {
-          return;
-        }
-
-        registerModal.classList.remove("hidden");
-        document.body.classList.add("modal-open");
-
+      if (!modal) {
+        return;
       }
 
+      modal.classList.remove("hidden");
+      document.body.classList.add("modal-open");
 
-      function closeRegisterModal() {
+    }
 
-        if (!registerModal) {
-          return;
-        }
 
-        registerModal.classList.add("hidden");
-        document.body.classList.remove("modal-open");
+    function closeRegisterModal() {
 
+      const modal =
+        document.getElementById("registerModal");
+
+      if (!modal) {
+        return;
       }
 
+      modal.classList.add("hidden");
+      document.body.classList.remove("modal-open");
 
-      document
-        .querySelectorAll(".open-register-modal")
-        .forEach(button => {
-
-          button.addEventListener(
-            "click",
-            event => {
-
-              event.preventDefault();
-
-              openRegisterModal();
-
-            },
-            true
-          );
-
-        });
+    }
 
 
-      registerModalClose
-        ?.addEventListener(
-          "click",
-          closeRegisterModal
-        );
+    document.addEventListener(
+      "click",
+      event => {
 
+        const modal =
+          document.getElementById("registerModal");
 
-      registerModal
-        ?.addEventListener(
-          "click",
-          event => {
+        if (
+          modal &&
+          event.target === modal
+        ) {
 
-            if (
-              event.target === registerModal
-            ) {
-
-              closeRegisterModal();
-
-            }
-
-          }
-        );
-
-
-      document.addEventListener(
-        "keydown",
-        event => {
-
-          if (
-            event.key === "Escape" &&
-            registerModal &&
-            !registerModal.classList.contains("hidden")
-          ) {
-
-            closeRegisterModal();
-
-          }
+          closeRegisterModal();
 
         }
-      );
 
-    });
+      }
+    );
+
+
+    document.addEventListener(
+      "keydown",
+      event => {
+
+        if (
+          event.key === "Escape"
+        ) {
+
+          closeRegisterModal();
+
+        }
+
+      }
+    );
   </script>
+
 
   <!-- アプリ本体 -->
 
