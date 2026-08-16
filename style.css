@@ -1350,16 +1350,3 @@ body.modal-open {
 
 }
 
-/* ========================================
-   iPhone 入力時の自動ズーム防止
-======================================== */
-
-@media (max-width: 760px) {
-
-  input,
-  select,
-  textarea {
-    font-size: 16px !important;
-  }
-
-}
