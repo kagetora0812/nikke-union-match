@@ -1374,3 +1374,8 @@ h1 em {
   border-color: var(--accent) !important;
   color: var(--accent2) !important;
 }
+/* 登録・締切ボタンと戻るボタンの間隔 */
+#heroRegisterArea,
+#heroManageArea {
+  margin-top: 28px !important;
+}
