@@ -1247,63 +1247,77 @@ h1 em {
   background: rgba(255, 255, 255, 0.08);
 }
 
+
 /* ========================================
-   かんたん登録案内
+   募集登録画面 追加スタイル
+   ※ポップアップ処理は一切なし
 ======================================== */
 
-.easy-register-box {
-  margin: 0 0 20px;
-  padding: 20px;
+#registerPage {
+  max-width: 760px;
+  margin: 0 auto;
+  padding-bottom: 30px;
+}
 
-  border: 1px solid rgba(255, 122, 24, 0.45);
+.register-section-head {
+  align-items: center;
+}
+
+.register-back-btn {
+  min-height: 44px;
+  padding: 8px 0;
+  font-size: 13px;
+}
+
+.easy-register-box {
+  margin-bottom: 18px;
+  padding: 18px;
+
+  border: 1px solid var(--line);
   border-left: 4px solid var(--accent);
 
   background:
     linear-gradient(
       145deg,
-      rgba(20, 28, 41, 0.92),
-      rgba(11, 16, 24, 0.92)
+      rgba(20, 28, 41, 0.95),
+      rgba(11, 16, 24, 0.95)
     );
-
-  box-shadow:
-    0 10px 30px rgba(0, 0, 0, 0.18);
 }
 
 .easy-register-title {
-  margin-bottom: 14px;
+  display: block;
+  margin-bottom: 12px;
 
   color: #ffffff;
 
-  font-size: 19px;
+  font-size: 18px;
   font-weight: 800;
 }
 
-.easy-register-items {
+.easy-register-list {
   display: grid;
-  gap: 7px;
+  gap: 5px;
 
-  color: #d8e0ea;
+  color: var(--muted);
 
   font-size: 14px;
-  line-height: 1.7;
+  line-height: 1.65;
 }
 
-.easy-register-text {
-  margin-top: 14px;
+.easy-register-copy {
+  margin-top: 13px;
 
   color: var(--accent2);
 
-  font-size: 15px;
+  font-size: 14px;
   font-weight: 800;
 }
 
-.privacy-message {
-  margin-top: 16px;
-  padding: 11px 13px;
+.easy-register-privacy {
+  margin-top: 14px;
+  padding-top: 12px;
 
-  border: 1px solid rgba(84, 227, 155, 0.28);
-
-  background: rgba(84, 227, 155, 0.08);
+  border-top: 1px solid rgba(255, 255, 255, 0.08);
 
   color: #8ff0bd;
 
@@ -1312,26 +1326,54 @@ h1 em {
   line-height: 1.6;
 }
 
-@media (max-width: 600px) {
+/* 登録画面のselectをinputと同じ見た目にする */
+#registerPage .panel select {
+  width: 100%;
+  min-height: 48px;
+  margin-top: 7px;
+  padding: 0 13px;
+
+  background: #0b1018;
+  color: var(--text);
+
+  border: 1px solid var(--line);
+  border-radius: 2px;
+
+  outline: none;
+
+  font-family: inherit;
+  font-size: 16px;
+}
+
+#registerPage .panel select:focus {
+  border-color: var(--accent);
+}
+
+/* iPhone Safariの入力時ズーム対策 */
+@media (max-width: 760px) {
+
+  #registerPage input,
+  #registerPage select,
+  #registerPage textarea {
+    font-size: 16px !important;
+  }
+
+  #registerPage {
+    max-width: none;
+  }
+
+  .register-section-head {
+    align-items: flex-start;
+    gap: 10px;
+  }
 
   .easy-register-box {
-    padding: 16px;
+    padding: 15px;
   }
 
-  .easy-register-title {
-    font-size: 16px;
-  }
-
-  .easy-register-items {
-    font-size: 13px;
-  }
-
-  .easy-register-text {
-    font-size: 14px;
-  }
-
-  .privacy-message {
-    font-size: 12px;
+  .register-panel {
+    padding: 15px;
+    gap: 14px;
   }
 
 }
