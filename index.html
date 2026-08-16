@@ -100,13 +100,10 @@
 
         <div class="hero-actions">
 
-
-<div class="hero-actions">
-
   <button
-    class="btn primary open-register-modal"
+    class="btn primary"
+    data-page="register"
     type="button"
-    onclick="openRegisterModal()"
   >
     募集を登録
   </button>
@@ -382,6 +379,8 @@
 
 </label>
 
+        </label>
+
 
       </div>
 
@@ -485,188 +484,16 @@
 
 
     <!-- ========================================
-         募集締切
+         募集登録
     ========================================= -->
 
     <section
-      id="managePage"
+      id="registerPage"
       class="page"
     >
 
 
-      <div class="section-head">
-
-
-        <div>
-
-
-          <div class="eyebrow">
-            MANAGE
-          </div>
-
-
-          <h2>
-            募集を締め切る
-          </h2>
-
-
-        </div>
-
-
-      </div>
-
-
-
-      <form
-        id="closeForm"
-        class="panel"
-      >
-
-
-        <label>
-
-          PASS
-
-
-          <input
-            id="closePass"
-            type="text"
-            required
-            minlength="8"
-            maxlength="8"
-            autocomplete="off"
-            autocapitalize="characters"
-            placeholder="登録時に発行された8文字PASS"
-          >
-
-
-        </label>
-
-
-
-        <button
-          class="btn danger wide"
-          type="submit"
-        >
-          募集を締め切る
-        </button>
-
-
-      </form>
-
-
-
-      <div class="notice">
-
-
-        <strong>
-          PASSは登録時に一度だけ表示されます。
-        </strong>
-
-
-        <span>
-          募集を締め切る際に必要です。
-          必ず保存してください。
-        </span>
-
-
-      </div>
-
-
-    </section>
-
-
-  </main>
-
-
-
-  <!-- ========================================
-       下部メニュー
-  ========================================= -->
-
-  <nav class="bottom-nav">
-
-
-    <button
-      data-page="list"
-      class="nav-btn active"
-      type="button"
-    >
-
-      <span>
-        ⌂
-      </span>
-
-      募集を見る
-
-    </button>
-
-
-
-    <button
-      class="nav-btn open-register-modal"
-      type="button"
-      onclick="openRegisterModal()"
-    >
-
-      <span>
-        ＋
-      </span>
-
-      募集登録
-
-    </button>
-
-
-
-    <button
-      data-page="manage"
-      class="nav-btn"
-      type="button"
-    >
-
-      <span>
-        ▣
-      </span>
-
-      締切
-
-    </button>
-
-
-  </nav>
-
-
-
-
-  <!-- ========================================
-       募集登録ポップアップ
-  ========================================= -->
-
-  <div
-    id="registerModal"
-    class="register-modal hidden"
-  >
-
-    <div class="register-modal-card">
-
-      <button
-        id="registerModalClose"
-        class="register-modal-close"
-        type="button"
-        aria-label="閉じる"
-        onclick="closeRegisterModal()"
-      >
-        ×
-      </button>
-
-      <section
-        id="registerPage"
-        class="page active register-popup-page"
-      >
-
-
-      <div class="section-head">
+      <div class="section-head register-section-head">
 
 
         <div>
@@ -685,33 +512,45 @@
         </div>
 
 
+        <button
+          class="text-btn register-back-btn"
+          data-page="list"
+          type="button"
+        >
+          ← 募集一覧へ戻る
+        </button>
+
+
       </div>
 
 
-      <!-- ========================================
-           かんたん登録案内
-      ========================================= -->
+      <div class="easy-register-box">
 
-      <div class="notice">
-
-        <strong>
+        <strong class="easy-register-title">
           ✨ 登録はかんたん・約1分！
         </strong>
 
-        <span>
-          ・指揮官名 / ユニオン名<br>
-          ・SLV / ユニオンランク<br>
-          ・Xの募集投稿URL<br><br>
-          これだけで掲載できます！<br><br>
+        <div class="easy-register-list">
+          <div>・指揮官名 / ユニオン名</div>
+          <div>・SLV / ユニオンランク</div>
+          <div>・Xの募集投稿URL</div>
+        </div>
+
+        <div class="easy-register-copy">
+          これだけで掲載できます！
+        </div>
+
+        <div class="easy-register-privacy">
           🔒 メールアドレスなどの個人情報登録は一切不要！
-        </span>
+        </div>
 
       </div>
+
 
 
       <form
         id="registerForm"
-        class="panel"
+        class="panel register-panel"
       >
 
 
@@ -906,12 +745,163 @@
       </form>
 
 
-    
-      </section>
+    </section>
 
-    </div>
 
-  </div>
+
+    <!-- ========================================
+         募集締切
+    ========================================= -->
+
+    <section
+      id="managePage"
+      class="page"
+    >
+
+
+      <div class="section-head">
+
+
+        <div>
+
+
+          <div class="eyebrow">
+            MANAGE
+          </div>
+
+
+          <h2>
+            募集を締め切る
+          </h2>
+
+
+        </div>
+
+
+      </div>
+
+
+
+      <form
+        id="closeForm"
+        class="panel"
+      >
+
+
+        <label>
+
+          PASS
+
+
+          <input
+            id="closePass"
+            type="text"
+            required
+            minlength="8"
+            maxlength="8"
+            autocomplete="off"
+            autocapitalize="characters"
+            placeholder="登録時に発行された8文字PASS"
+          >
+
+
+        </label>
+
+
+
+        <button
+          class="btn danger wide"
+          type="submit"
+        >
+          募集を締め切る
+        </button>
+
+
+      </form>
+
+
+
+      <div class="notice">
+
+
+        <strong>
+          PASSは登録時に一度だけ表示されます。
+        </strong>
+
+
+        <span>
+          募集を締め切る際に必要です。
+          必ず保存してください。
+        </span>
+
+
+      </div>
+
+
+    </section>
+
+
+  </main>
+
+
+
+  <!-- ========================================
+       下部メニュー
+  ========================================= -->
+
+  <nav class="bottom-nav">
+
+
+    <button
+      data-page="list"
+      class="nav-btn active"
+      type="button"
+    >
+
+      <span>
+        ⌂
+      </span>
+
+      募集を見る
+
+    </button>
+
+
+
+    <button
+      data-page="register"
+      class="nav-btn"
+      type="button"
+    >
+
+      <span>
+        ＋
+      </span>
+
+      募集登録
+
+    </button>
+
+
+
+    <button
+      data-page="manage"
+      class="nav-btn"
+      type="button"
+    >
+
+      <span>
+        ▣
+      </span>
+
+      締切
+
+    </button>
+
+
+  </nav>
+
+
 
   <!-- ========================================
        登録完了モーダル
@@ -1033,76 +1023,6 @@
   <script
     src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"
   ></script>
-
-
-
-  <!-- 募集登録ポップアップ制御 -->
-  <script>
-    function openRegisterModal() {
-
-      const modal =
-        document.getElementById("registerModal");
-
-      if (!modal) {
-        return;
-      }
-
-      modal.classList.remove("hidden");
-      document.body.classList.add("modal-open");
-
-    }
-
-
-    function closeRegisterModal() {
-
-      const modal =
-        document.getElementById("registerModal");
-
-      if (!modal) {
-        return;
-      }
-
-      modal.classList.add("hidden");
-      document.body.classList.remove("modal-open");
-
-    }
-
-
-    document.addEventListener(
-      "click",
-      event => {
-
-        const modal =
-          document.getElementById("registerModal");
-
-        if (
-          modal &&
-          event.target === modal
-        ) {
-
-          closeRegisterModal();
-
-        }
-
-      }
-    );
-
-
-    document.addEventListener(
-      "keydown",
-      event => {
-
-        if (
-          event.key === "Escape"
-        ) {
-
-          closeRegisterModal();
-
-        }
-
-      }
-    );
-  </script>
 
 
   <!-- アプリ本体 -->
