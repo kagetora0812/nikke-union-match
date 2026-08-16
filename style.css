@@ -1578,3 +1578,197 @@ h1 em {
 
 }
 
+
+/* ========================================
+   最終レイアウト固定
+   PC・タブレット：タイトル左 / 募集総数右
+   スマホ：縦並び
+======================================== */
+
+/* PC・タブレット */
+@media screen and (min-width: 768px) {
+
+  .container {
+    width: 100%;
+    max-width: 1400px !important;
+    margin: 0 auto !important;
+    padding-left: 18px !important;
+    padding-right: 18px !important;
+  }
+
+  .hero {
+    display: grid !important;
+    grid-template-columns:
+      minmax(0, 0.9fr)
+      minmax(360px, 1.1fr) !important;
+
+    gap: 32px !important;
+    align-items: center !important;
+  }
+
+  .hero-left {
+    min-width: 0 !important;
+    width: auto !important;
+    max-width: none !important;
+  }
+
+  .hero-stats {
+    display: grid !important;
+    width: 100% !important;
+    min-width: 0 !important;
+
+    grid-template-columns:
+      minmax(0, 1fr)
+      1px
+      minmax(0, 1fr) !important;
+
+    align-items: center !important;
+
+    min-height: 240px !important;
+    padding: 28px 18px 54px !important;
+    gap: 16px !important;
+  }
+
+  .hero-stat {
+    min-width: 0 !important;
+  }
+
+  .hero-stat-title {
+    font-size: 14px !important;
+    margin-bottom: 16px !important;
+  }
+
+  .hero-stat-number strong {
+    font-size: clamp(62px, 7vw, 100px) !important;
+  }
+
+  .hero-stat-number span {
+    font-size: clamp(18px, 2vw, 27px) !important;
+  }
+
+  .hero-stat-sub {
+    font-size: 12px !important;
+  }
+
+  .hero-stat-divider {
+    height: 120px !important;
+  }
+
+}
+
+
+/* タブレットだけ少しコンパクト */
+@media screen and (min-width: 768px) and (max-width: 1024px) {
+
+  .hero {
+    grid-template-columns:
+      minmax(0, 0.85fr)
+      minmax(340px, 1.15fr) !important;
+
+    gap: 22px !important;
+  }
+
+  .hero-stats {
+    min-height: 220px !important;
+    padding: 24px 12px 50px !important;
+    gap: 10px !important;
+  }
+
+  .hero-stat-title {
+    font-size: 12px !important;
+  }
+
+  .hero-stat-number strong {
+    font-size: clamp(52px, 6.7vw, 70px) !important;
+  }
+
+  .hero-stat-number span {
+    font-size: 17px !important;
+    padding-bottom: 5px !important;
+  }
+
+  .hero-stat-sub {
+    font-size: 10px !important;
+  }
+
+  .hero-stat-divider {
+    height: 100px !important;
+  }
+
+}
+
+
+/* スマホだけ縦並び */
+@media screen and (max-width: 767px) {
+
+  .hero {
+    display: grid !important;
+    grid-template-columns: 1fr !important;
+    gap: 28px !important;
+  }
+
+  .hero-stats {
+    width: 100% !important;
+  }
+
+}
+
+
+/* 登録・締切を開いた時だけ総数を隠す */
+body.register-mode .hero-stats,
+body.manage-mode .hero-stats {
+  display: none !important;
+}
+
+
+/* 戻るボタンは大きい枠付きで統一 */
+.register-inline-top,
+.manage-inline-top {
+  display: block !important;
+  width: 100% !important;
+  margin: 0 0 18px !important;
+}
+
+.register-back-btn,
+.manage-back-btn {
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+
+  width: 100% !important;
+  min-width: 100% !important;
+
+  height: 52px !important;
+  min-height: 52px !important;
+
+  padding: 0 18px !important;
+
+  background: #111925 !important;
+  color: #ffffff !important;
+
+  border: 1px solid var(--line) !important;
+  border-radius: 3px !important;
+
+  font-size: 16px !important;
+  font-weight: 800 !important;
+}
+
+
+/* iPhone入力時の自動ズーム対策 */
+@media screen and (max-width: 767px) {
+
+  input,
+  select,
+  textarea,
+  #registerPage input,
+  #registerPage select,
+  #registerPage textarea,
+  #managePage input,
+  #managePage select,
+  #managePage textarea {
+    font-size: 16px !important;
+    line-height: 1.4 !important;
+  }
+
+}
+
