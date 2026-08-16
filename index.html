@@ -382,8 +382,6 @@
 
 </label>
 
-        </label>
-
 
       </div>
 
@@ -487,13 +485,184 @@
 
 
     <!-- ========================================
-         募集登録
+         募集締切
     ========================================= -->
 
     <section
-      id="registerPage"
+      id="managePage"
       class="page"
     >
+
+
+      <div class="section-head">
+
+
+        <div>
+
+
+          <div class="eyebrow">
+            MANAGE
+          </div>
+
+
+          <h2>
+            募集を締め切る
+          </h2>
+
+
+        </div>
+
+
+      </div>
+
+
+
+      <form
+        id="closeForm"
+        class="panel"
+      >
+
+
+        <label>
+
+          PASS
+
+
+          <input
+            id="closePass"
+            type="text"
+            required
+            minlength="8"
+            maxlength="8"
+            autocomplete="off"
+            autocapitalize="characters"
+            placeholder="登録時に発行された8文字PASS"
+          >
+
+
+        </label>
+
+
+
+        <button
+          class="btn danger wide"
+          type="submit"
+        >
+          募集を締め切る
+        </button>
+
+
+      </form>
+
+
+
+      <div class="notice">
+
+
+        <strong>
+          PASSは登録時に一度だけ表示されます。
+        </strong>
+
+
+        <span>
+          募集を締め切る際に必要です。
+          必ず保存してください。
+        </span>
+
+
+      </div>
+
+
+    </section>
+
+
+  </main>
+
+
+
+  <!-- ========================================
+       下部メニュー
+  ========================================= -->
+
+  <nav class="bottom-nav">
+
+
+    <button
+      data-page="list"
+      class="nav-btn active"
+      type="button"
+    >
+
+      <span>
+        ⌂
+      </span>
+
+      募集を見る
+
+    </button>
+
+
+
+    <button
+      data-page="register"
+      class="nav-btn"
+      type="button"
+    >
+
+      <span>
+        ＋
+      </span>
+
+      募集登録
+
+    </button>
+
+
+
+    <button
+      data-page="manage"
+      class="nav-btn"
+      type="button"
+    >
+
+      <span>
+        ▣
+      </span>
+
+      締切
+
+    </button>
+
+
+  </nav>
+
+
+
+
+  <!-- ========================================
+       募集登録ポップアップ
+  ========================================= -->
+
+  <div
+    id="registerModal"
+    class="register-modal hidden"
+  >
+
+    <div class="register-modal-card">
+
+      <button
+        id="registerModalClose"
+        class="register-modal-close"
+        type="button"
+        aria-label="閉じる"
+      >
+        ×
+      </button>
+
+      <section
+        id="registerPage"
+        class="page active register-popup-page"
+      >
 
 
       <div class="section-head">
@@ -716,163 +885,12 @@
       </form>
 
 
-    </section>
+    
+      </section>
 
+    </div>
 
-
-    <!-- ========================================
-         募集締切
-    ========================================= -->
-
-    <section
-      id="managePage"
-      class="page"
-    >
-
-
-      <div class="section-head">
-
-
-        <div>
-
-
-          <div class="eyebrow">
-            MANAGE
-          </div>
-
-
-          <h2>
-            募集を締め切る
-          </h2>
-
-
-        </div>
-
-
-      </div>
-
-
-
-      <form
-        id="closeForm"
-        class="panel"
-      >
-
-
-        <label>
-
-          PASS
-
-
-          <input
-            id="closePass"
-            type="text"
-            required
-            minlength="8"
-            maxlength="8"
-            autocomplete="off"
-            autocapitalize="characters"
-            placeholder="登録時に発行された8文字PASS"
-          >
-
-
-        </label>
-
-
-
-        <button
-          class="btn danger wide"
-          type="submit"
-        >
-          募集を締め切る
-        </button>
-
-
-      </form>
-
-
-
-      <div class="notice">
-
-
-        <strong>
-          PASSは登録時に一度だけ表示されます。
-        </strong>
-
-
-        <span>
-          募集を締め切る際に必要です。
-          必ず保存してください。
-        </span>
-
-
-      </div>
-
-
-    </section>
-
-
-  </main>
-
-
-
-  <!-- ========================================
-       下部メニュー
-  ========================================= -->
-
-  <nav class="bottom-nav">
-
-
-    <button
-      data-page="list"
-      class="nav-btn active"
-      type="button"
-    >
-
-      <span>
-        ⌂
-      </span>
-
-      募集を見る
-
-    </button>
-
-
-
-    <button
-      data-page="register"
-      class="nav-btn"
-      type="button"
-    >
-
-      <span>
-        ＋
-      </span>
-
-      募集登録
-
-    </button>
-
-
-
-    <button
-      data-page="manage"
-      class="nav-btn"
-      type="button"
-    >
-
-      <span>
-        ▣
-      </span>
-
-      締切
-
-    </button>
-
-
-  </nav>
-
-
+  </div>
 
   <!-- ========================================
        登録完了モーダル
@@ -995,6 +1013,106 @@
     src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"
   ></script>
 
+
+
+  <!-- 募集登録ポップアップ制御 -->
+  <script>
+    document.addEventListener("DOMContentLoaded", () => {
+
+      const registerModal =
+        document.getElementById("registerModal");
+
+      const registerModalClose =
+        document.getElementById("registerModalClose");
+
+
+      function openRegisterModal() {
+
+        if (!registerModal) {
+          return;
+        }
+
+        registerModal.classList.remove("hidden");
+        document.body.classList.add("modal-open");
+
+      }
+
+
+      function closeRegisterModal() {
+
+        if (!registerModal) {
+          return;
+        }
+
+        registerModal.classList.add("hidden");
+        document.body.classList.remove("modal-open");
+
+      }
+
+
+      document
+        .querySelectorAll('[data-page="register"]')
+        .forEach(button => {
+
+          button.addEventListener(
+            "click",
+            event => {
+
+              event.preventDefault();
+              event.stopImmediatePropagation();
+
+              openRegisterModal();
+
+            },
+            true
+          );
+
+        });
+
+
+      registerModalClose
+        ?.addEventListener(
+          "click",
+          closeRegisterModal
+        );
+
+
+      registerModal
+        ?.addEventListener(
+          "click",
+          event => {
+
+            if (
+              event.target === registerModal
+            ) {
+
+              closeRegisterModal();
+
+            }
+
+          }
+        );
+
+
+      document.addEventListener(
+        "keydown",
+        event => {
+
+          if (
+            event.key === "Escape" &&
+            registerModal &&
+            !registerModal.classList.contains("hidden")
+          ) {
+
+            closeRegisterModal();
+
+          }
+
+        }
+      );
+
+    });
+  </script>
 
   <!-- アプリ本体 -->
 
