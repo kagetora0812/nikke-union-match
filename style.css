@@ -1336,3 +1336,38 @@ h1 em {
 
 }
 
+/* 登録・締切の戻るボタンを統一 */
+.register-back-btn,
+.manage-back-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  width: 100%;
+  min-height: 50px;
+  padding: 12px 16px;
+
+  background: #111925;
+  color: #ffffff;
+
+  border: 1px solid var(--line);
+  border-radius: 3px;
+
+  font-family: inherit;
+  font-size: 16px;
+  font-weight: 800;
+
+  cursor: pointer;
+}
+
+.register-back-btn:hover,
+.manage-back-btn:hover {
+  border-color: var(--accent);
+  color: var(--accent2);
+}
+
+.register-inline-top,
+.manage-inline-top {
+  width: 100%;
+  margin-bottom: 14px;
+}
