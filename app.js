@@ -95,7 +95,7 @@ function formatDate(date) {
 
 
 // ========================================
-// ユニオンランク色分け用
+// ユニオンランク色分け
 // ========================================
 
 function getUnionRankClass(rank) {
@@ -190,6 +190,31 @@ async function sha256(text) {
           .padStart(2, "0")
     )
     .join("");
+
+}
+
+
+// ========================================
+// Supabaseエラーを文字列化
+// ========================================
+
+function getErrorText(error) {
+
+  if (!error) {
+
+    return "";
+
+  }
+
+
+  return [
+    error.message,
+    error.details,
+    error.hint,
+    error.code
+  ]
+    .filter(Boolean)
+    .join(" ");
 
 }
 
@@ -449,7 +474,8 @@ function setSearchType(type) {
 
 
   const isCommander =
-    type === "commander";
+    type ===
+    "commander";
 
 
   commanderSearchTab
@@ -985,8 +1011,6 @@ async function loadRecruitments() {
               );
 
 
-            // 1000以上
-
             if (
               minSlv ===
               1000
@@ -1517,8 +1541,6 @@ function showRegistrationResult(
   }
 
 
-  // 古い募集ID表示が残っていた場合は隠す
-
   const resultId =
     $("#resultId");
 
@@ -1635,8 +1657,6 @@ $("#registerForm")
         }
 
 
-        // PASS重複時のみ再生成
-
         for (
           let attempt = 0;
           attempt < 5;
@@ -1679,15 +1699,20 @@ $("#registerForm")
 
           if (error) {
 
-            // ==============================
+            const errorText =
+              getErrorText(
+                error
+              );
+
+
+            // ==================================
             // 同じユニオン名
-            // ==============================
+            // ==================================
 
             if (
-              error.message
-                ?.includes(
-                  "UNION_NAME_DUPLICATE"
-                )
+              errorText.includes(
+                "UNION_NAME_DUPLICATE"
+              )
             ) {
 
               alert(
@@ -1699,18 +1724,25 @@ $("#registerForm")
             }
 
 
-            // PASS重複なら作り直す
+            // ==================================
+            // PASS重複
+            // ==================================
 
             if (
-              error.message
-                ?.includes(
-                  "PASS_DUPLICATE"
-                )
+              errorText.includes(
+                "PASS_DUPLICATE"
+              )
             ) {
 
               continue;
 
             }
+
+
+            console.error(
+              "ユニオン登録エラー：",
+              error
+            );
 
 
             alert(
@@ -1801,8 +1833,6 @@ $("#registerForm")
       }
 
 
-      // PASS重複時のみ再生成
-
       for (
         let attempt = 0;
         attempt < 5;
@@ -1845,15 +1875,20 @@ $("#registerForm")
 
         if (error) {
 
-          // ================================
+          const errorText =
+            getErrorText(
+              error
+            );
+
+
+          // ==================================
           // 同じ指揮官名
-          // ================================
+          // ==================================
 
           if (
-            error.message
-              ?.includes(
-                "COMMANDER_NAME_DUPLICATE"
-              )
+            errorText.includes(
+              "COMMANDER_NAME_DUPLICATE"
+            )
           ) {
 
             alert(
@@ -1865,18 +1900,25 @@ $("#registerForm")
           }
 
 
-          // PASS重複なら作り直す
+          // ==================================
+          // PASS重複
+          // ==================================
 
           if (
-            error.message
-              ?.includes(
-                "PASS_DUPLICATE"
-              )
+            errorText.includes(
+              "PASS_DUPLICATE"
+            )
           ) {
 
             continue;
 
           }
+
+
+          console.error(
+            "指揮官登録エラー：",
+            error
+          );
 
 
           alert(
@@ -1935,31 +1977,47 @@ $("#copyPass")
         "";
 
 
-      await navigator
-        .clipboard
-        .writeText(
-          pass
+      try {
+
+        await navigator
+          .clipboard
+          .writeText(
+            pass
+          );
+
+
+        const button =
+          $("#copyPass");
+
+
+        if (button) {
+
+          button.textContent =
+            "コピーしました";
+
+
+          setTimeout(
+            () => {
+
+              button.textContent =
+                "PASSをコピー";
+
+            },
+            1500
+          );
+
+        }
+
+      } catch (error) {
+
+        console.error(
+          "PASSコピーエラー",
+          error
         );
 
 
-      const button =
-        $("#copyPass");
-
-
-      if (button) {
-
-        button.textContent =
-          "コピーしました";
-
-
-        setTimeout(
-          () => {
-
-            button.textContent =
-              "PASSをコピー";
-
-          },
-          1500
+        alert(
+          "PASSをコピーできませんでした。手動で保存してください。"
         );
 
       }
@@ -2072,6 +2130,7 @@ $("#closeForm")
       if (error) {
 
         console.error(
+          "募集締切エラー：",
           error
         );
 
