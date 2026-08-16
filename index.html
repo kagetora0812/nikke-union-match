@@ -222,6 +222,9 @@
             <input
               id="name"
               maxlength="40"
+              autocomplete="off"
+              autocapitalize="off"
+              spellcheck="false"
               placeholder="例：KAGETORA"
             >
 
@@ -240,6 +243,8 @@
               type="number"
               min="1"
               max="1200"
+              inputmode="numeric"
+              autocomplete="off"
               placeholder="例：850"
             >
 
@@ -269,6 +274,9 @@
             <input
               id="unionName"
               maxlength="40"
+              autocomplete="off"
+              autocapitalize="off"
+              spellcheck="false"
               placeholder="例：○○ユニオン"
             >
 
@@ -336,6 +344,10 @@
             id="xUrl"
             type="url"
             required
+            inputmode="url"
+            autocomplete="off"
+            autocapitalize="off"
+            spellcheck="false"
             placeholder="https://x.com/ユーザー名/status/..."
           >
 
@@ -803,6 +815,7 @@
             maxlength="8"
             autocomplete="off"
             autocapitalize="characters"
+            spellcheck="false"
             placeholder="登録時に発行された8文字PASS"
           >
 
