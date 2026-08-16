@@ -1461,3 +1461,120 @@ h1 em {
 
 }
 
+
+/* ========================================
+   PC・タブレット 横並び表示を強制
+   601px以上
+======================================== */
+
+@media screen and (min-width: 601px) {
+
+  .container {
+    width: 100%;
+    max-width: 1400px;
+    padding-left: 18px;
+    padding-right: 18px;
+  }
+
+  .hero {
+    display: grid !important;
+    grid-template-columns:
+      minmax(280px, 0.9fr)
+      minmax(360px, 1.25fr) !important;
+
+    gap: clamp(20px, 4vw, 55px) !important;
+    align-items: center !important;
+  }
+
+  .hero-left {
+    min-width: 0 !important;
+  }
+
+  .hero-stats {
+    display: grid !important;
+    grid-template-columns:
+      minmax(0, 1fr)
+      1px
+      minmax(0, 1fr) !important;
+
+    width: 100% !important;
+    min-width: 0 !important;
+  }
+
+  .hero-stat {
+    min-width: 0 !important;
+  }
+
+  .hero-stat-number strong {
+    font-size: clamp(58px, 7vw, 100px) !important;
+  }
+
+  .hero-stat-number span {
+    font-size: clamp(18px, 2.4vw, 27px) !important;
+  }
+
+}
+
+
+/* ========================================
+   タブレット専用調整
+   601px ～ 1024px
+======================================== */
+
+@media screen and (min-width: 601px) and (max-width: 1024px) {
+
+  .hero {
+    grid-template-columns:
+      minmax(250px, 0.82fr)
+      minmax(330px, 1.18fr) !important;
+
+    gap: 20px !important;
+  }
+
+  .hero-stats {
+    min-height: 220px !important;
+    padding: 26px 14px 52px !important;
+    gap: 12px !important;
+  }
+
+  .hero-stat-title {
+    font-size: 13px !important;
+    margin-bottom: 14px !important;
+  }
+
+  .hero-stat-number strong {
+    font-size: clamp(54px, 7vw, 72px) !important;
+  }
+
+  .hero-stat-number span {
+    font-size: 18px !important;
+    padding-bottom: 5px !important;
+  }
+
+  .hero-stat-sub {
+    margin-top: 14px !important;
+    font-size: 11px !important;
+  }
+
+  .hero-stat-divider {
+    height: 110px !important;
+  }
+
+}
+
+
+/* ========================================
+   スマホだけ縦並び
+   600px以下
+======================================== */
+
+@media screen and (max-width: 600px) {
+
+  .hero {
+    display: grid !important;
+    grid-template-columns: 1fr !important;
+    gap: 28px !important;
+  }
+
+}
+
