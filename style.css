@@ -990,10 +990,11 @@ h1 em {
 
 
 /* =========================================
-   スマホ
+   スマホのみ
+   PC・タブレットは従来の横並び表示
 ========================================= */
 
-@media (max-width: 760px) {
+@media (max-width: 600px) {
 
   .container {
     max-width: 900px;
@@ -1332,6 +1333,130 @@ h1 em {
 
   .privacy-message {
     font-size: 12px;
+  }
+
+}
+/* ========================================
+   登録・締切 戻るボタン
+======================================== */
+
+.register-inline-top,
+.manage-inline-top {
+  display: flex !important;
+  width: 100% !important;
+  margin-bottom: 14px !important;
+}
+
+.register-back-btn,
+.manage-back-btn {
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+
+  width: 100% !important;
+  min-height: 50px !important;
+  padding: 12px 16px !important;
+
+  background: #111925 !important;
+  color: #ffffff !important;
+
+  border: 1px solid var(--line) !important;
+  border-radius: 3px !important;
+
+  font-family: inherit !important;
+  font-size: 16px !important;
+  font-weight: 800 !important;
+
+  cursor: pointer;
+}
+
+.register-back-btn:hover,
+.manage-back-btn:hover {
+  border-color: var(--accent) !important;
+  color: var(--accent2) !important;
+}
+/* 登録・締切ボタンと戻るボタンの間隔 */
+#heroRegisterArea,
+#heroManageArea {
+  margin-top: 28px !important;
+}
+
+
+/* ========================================
+   最終調整
+   1) 登録・締切の戻るボタンを大きく統一
+   2) iPhone入力時の自動ズーム対策
+======================================== */
+
+/* 戻るボタン */
+.register-inline-top,
+.manage-inline-top {
+  display: block !important;
+  width: 100% !important;
+  margin: 0 0 18px !important;
+}
+
+.register-back-btn,
+.manage-back-btn {
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+
+  width: 100% !important;
+  min-width: 100% !important;
+
+  height: 52px !important;
+  min-height: 52px !important;
+
+  padding: 0 18px !important;
+
+  background: #111925 !important;
+  color: #ffffff !important;
+
+  border: 1px solid var(--line) !important;
+  border-radius: 3px !important;
+
+  font-family: inherit !important;
+  font-size: 16px !important;
+  font-weight: 800 !important;
+  line-height: 1 !important;
+
+  cursor: pointer !important;
+}
+
+.register-back-btn:hover,
+.manage-back-btn:hover {
+  border-color: var(--accent) !important;
+  color: var(--accent2) !important;
+}
+
+/* 募集・締切ボタンと戻るボタンの間隔 */
+#heroRegisterArea,
+#heroManageArea {
+  margin-top: 28px !important;
+}
+
+/* iPhone / スマホ入力時のSafari自動ズーム対策 */
+@media screen and (max-width: 600px) {
+
+  input,
+  select,
+  textarea,
+  #registerPage input,
+  #registerPage select,
+  #registerPage textarea,
+  #managePage input,
+  #managePage select,
+  #managePage textarea {
+    font-size: 16px !important;
+    line-height: 1.4 !important;
+  }
+
+  .register-back-btn,
+  .manage-back-btn {
+    height: 52px !important;
+    min-height: 52px !important;
+    font-size: 16px !important;
   }
 
 }
