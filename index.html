@@ -110,6 +110,238 @@
 
 </div>
 
+        <!-- 募集登録ボタン直下の登録フォーム -->
+        <div id="heroRegisterArea">
+<section
+      id="registerPage"
+      class="page inline-register-page"
+    >
+
+
+      <div class="section-head">
+
+
+        <div>
+
+
+          <div class="eyebrow">
+            REGISTER
+          </div>
+
+
+          <h2>
+            募集を登録
+          </h2>
+
+
+        </div>
+
+
+      </div>
+
+
+
+      <form
+        id="registerForm"
+        class="panel"
+      >
+
+
+        <label>
+
+          登録タイプ
+
+
+          <select id="registrationType">
+
+
+            <option value="commander">
+              指揮官
+            </option>
+
+
+            <option value="union">
+              ユニオン
+            </option>
+
+
+          </select>
+
+
+        </label>
+
+
+
+        <!-- ========================================
+             指揮官入力
+        ========================================= -->
+
+        <div id="commanderFields">
+
+
+          <label>
+
+            指揮官名
+
+
+            <input
+              id="name"
+              maxlength="40"
+              placeholder="例：KAGETORA"
+            >
+
+
+          </label>
+
+
+
+          <label>
+
+            SLV
+
+
+            <input
+              id="slv"
+              type="number"
+              min="1"
+              max="1200"
+              placeholder="例：850"
+            >
+
+
+          </label>
+
+
+        </div>
+
+
+
+        <!-- ========================================
+             ユニオン入力
+        ========================================= -->
+
+        <div
+          id="unionFields"
+          class="hidden"
+        >
+
+
+          <label>
+
+            ユニオン名
+
+
+            <input
+              id="unionName"
+              maxlength="40"
+              placeholder="例：○○ユニオン"
+            >
+
+
+          </label>
+
+
+
+          <label>
+
+            ユニオンランク
+
+
+            <select id="unionRank">
+
+
+              <option value="チャレンジャー">
+                チャレンジャー
+              </option>
+
+
+              <option value="ダイヤ">
+                ダイヤ
+              </option>
+
+
+              <option value="プラチナ">
+                プラチナ
+              </option>
+
+
+<option value="ゴールド">
+  ゴールド
+</option>
+
+<option value="シルバー">
+  シルバー
+</option>
+
+<option value="駆け出しユニオン">
+  駆け出しユニオン
+</option>
+
+
+            </select>
+
+
+          </label>
+
+
+        </div>
+
+
+
+        <!-- ========================================
+             X募集記事
+        ========================================= -->
+
+        <label>
+
+          Xの記事URL
+
+
+          <input
+            id="xUrl"
+            type="url"
+            required
+            placeholder="https://x.com/ユーザー名/status/..."
+          >
+
+
+        </label>
+
+
+
+        <div class="notice">
+
+
+          <strong>
+            掲載期間：14日間
+          </strong>
+
+
+          <span>
+            登録から14日後に自動で掲載終了します。
+            やり取りはXのDMで行ってください。
+          </span>
+
+
+        </div>
+
+
+
+        <button
+          class="btn primary wide"
+          type="submit"
+        >
+          募集を登録する
+        </button>
+
+
+      </form>
+
+
+    </section>
+        </div>
+
+
 
         </div>
 
@@ -483,271 +715,6 @@
 
 
 
-    <!-- ========================================
-         募集登録
-    ========================================= -->
-
-    <section
-      id="registerPage"
-      class="page"
-    >
-
-
-      <div class="section-head register-section-head">
-
-
-        <div>
-
-
-          <div class="eyebrow">
-            REGISTER
-          </div>
-
-
-          <h2>
-            募集を登録
-          </h2>
-
-
-        </div>
-
-
-        <button
-          class="text-btn register-back-btn"
-          data-page="list"
-          type="button"
-        >
-          ← 募集一覧へ戻る
-        </button>
-
-
-      </div>
-
-
-      <div class="easy-register-box">
-
-        <strong class="easy-register-title">
-          ✨ 登録はかんたん・約1分！
-        </strong>
-
-        <div class="easy-register-list">
-          <div>・指揮官名 / ユニオン名</div>
-          <div>・SLV / ユニオンランク</div>
-          <div>・Xの募集投稿URL</div>
-        </div>
-
-        <div class="easy-register-copy">
-          これだけで掲載できます！
-        </div>
-
-        <div class="easy-register-privacy">
-          🔒 メールアドレスなどの個人情報登録は一切不要！
-        </div>
-
-      </div>
-
-
-
-      <form
-        id="registerForm"
-        class="panel register-panel"
-      >
-
-
-        <label>
-
-          登録タイプ
-
-
-          <select id="registrationType">
-
-
-            <option value="commander">
-              指揮官
-            </option>
-
-
-            <option value="union">
-              ユニオン
-            </option>
-
-
-          </select>
-
-
-        </label>
-
-
-
-        <!-- ========================================
-             指揮官入力
-        ========================================= -->
-
-        <div id="commanderFields">
-
-
-          <label>
-
-            指揮官名
-
-
-            <input
-              id="name"
-              maxlength="40"
-              placeholder="例：KAGETORA"
-            >
-
-
-          </label>
-
-
-
-          <label>
-
-            SLV
-
-
-            <input
-              id="slv"
-              type="number"
-              min="1"
-              max="1200"
-              placeholder="例：850"
-            >
-
-
-          </label>
-
-
-        </div>
-
-
-
-        <!-- ========================================
-             ユニオン入力
-        ========================================= -->
-
-        <div
-          id="unionFields"
-          class="hidden"
-        >
-
-
-          <label>
-
-            ユニオン名
-
-
-            <input
-              id="unionName"
-              maxlength="40"
-              placeholder="例：○○ユニオン"
-            >
-
-
-          </label>
-
-
-
-          <label>
-
-            ユニオンランク
-
-
-            <select id="unionRank">
-
-
-              <option value="チャレンジャー">
-                チャレンジャー
-              </option>
-
-
-              <option value="ダイヤ">
-                ダイヤ
-              </option>
-
-
-              <option value="プラチナ">
-                プラチナ
-              </option>
-
-
-<option value="ゴールド">
-  ゴールド
-</option>
-
-<option value="シルバー">
-  シルバー
-</option>
-
-<option value="駆け出しユニオン">
-  駆け出しユニオン
-</option>
-
-
-            </select>
-
-
-          </label>
-
-
-        </div>
-
-
-
-        <!-- ========================================
-             X募集記事
-        ========================================= -->
-
-        <label>
-
-          Xの記事URL
-
-
-          <input
-            id="xUrl"
-            type="url"
-            required
-            placeholder="https://x.com/ユーザー名/status/..."
-          >
-
-
-        </label>
-
-
-
-        <div class="notice">
-
-
-          <strong>
-            掲載期間：14日間
-          </strong>
-
-
-          <span>
-            登録から14日後に自動で掲載終了します。
-            やり取りはXのDMで行ってください。
-          </span>
-
-
-        </div>
-
-
-
-        <button
-          class="btn primary wide"
-          type="submit"
-        >
-          募集を登録する
-        </button>
-
-
-      </form>
-
-
-    </section>
-
-
 
     <!-- ========================================
          募集締切
@@ -1024,6 +991,32 @@
     src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"
   ></script>
 
+
+
+  <!-- 登録画面レイアウト切替 -->
+  <script>
+    document.addEventListener("DOMContentLoaded", () => {
+
+      document
+        .querySelectorAll("[data-page]")
+        .forEach(button => {
+
+          button.addEventListener(
+            "click",
+            () => {
+
+              document.body.classList.toggle(
+                "register-mode",
+                button.dataset.page === "register"
+              );
+
+            }
+          );
+
+        });
+
+    });
+  </script>
 
   <!-- アプリ本体 -->
 
