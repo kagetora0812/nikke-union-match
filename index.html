@@ -397,6 +397,112 @@
 
 
 
+
+
+        <!-- 募集締切ボタン直下の締切フォーム -->
+        <div id="heroManageArea">
+<section
+      id="managePage"
+      class="page inline-manage-page"
+    >
+
+      <div class="manage-inline-top">
+
+        <button
+          id="manageBackBtn"
+          class="text-btn manage-back-btn"
+          type="button"
+        >
+          ← 戻る
+        </button>
+
+      </div>
+
+
+
+      <div class="section-head">
+
+
+        <div>
+
+
+          <div class="eyebrow">
+            MANAGE
+          </div>
+
+
+          <h2>
+            募集を締め切る
+          </h2>
+
+
+        </div>
+
+
+      </div>
+
+
+
+      <form
+        id="closeForm"
+        class="panel"
+      >
+
+
+        <label>
+
+          PASS
+
+
+          <input
+            id="closePass"
+            type="text"
+            required
+            minlength="8"
+            maxlength="8"
+            autocomplete="off"
+            autocapitalize="characters"
+            spellcheck="false"
+            placeholder="登録時に発行された8文字PASS"
+          >
+
+
+        </label>
+
+
+
+        <button
+          class="btn danger wide"
+          type="submit"
+        >
+          募集を締め切る
+        </button>
+
+
+      </form>
+
+
+
+      <div class="notice">
+
+
+        <strong>
+          PASSは登録時に一度だけ表示されます。
+        </strong>
+
+
+        <span>
+          募集を締め切る際に必要です。
+          必ず保存してください。
+        </span>
+
+
+      </div>
+
+
+    </section>
+        </div>
+
       <!-- ========================================
            募集総数
       ========================================= -->
@@ -762,100 +868,6 @@
 
 
 
-
-    <!-- ========================================
-         募集締切
-    ========================================= -->
-
-    <section
-      id="managePage"
-      class="page"
-    >
-
-
-      <div class="section-head">
-
-
-        <div>
-
-
-          <div class="eyebrow">
-            MANAGE
-          </div>
-
-
-          <h2>
-            募集を締め切る
-          </h2>
-
-
-        </div>
-
-
-      </div>
-
-
-
-      <form
-        id="closeForm"
-        class="panel"
-      >
-
-
-        <label>
-
-          PASS
-
-
-          <input
-            id="closePass"
-            type="text"
-            required
-            minlength="8"
-            maxlength="8"
-            autocomplete="off"
-            autocapitalize="characters"
-            spellcheck="false"
-            placeholder="登録時に発行された8文字PASS"
-          >
-
-
-        </label>
-
-
-
-        <button
-          class="btn danger wide"
-          type="submit"
-        >
-          募集を締め切る
-        </button>
-
-
-      </form>
-
-
-
-      <div class="notice">
-
-
-        <strong>
-          PASSは登録時に一度だけ表示されます。
-        </strong>
-
-
-        <span>
-          募集を締め切る際に必要です。
-          必ず保存してください。
-        </span>
-
-
-      </div>
-
-
-    </section>
-
-
   </main>
 
 
@@ -1041,7 +1053,7 @@
 
 
 
-  <!-- 登録画面レイアウト切替 -->
+  <!-- 登録・締切画面レイアウト切替 -->
   <script>
     document.addEventListener("DOMContentLoaded", () => {
 
@@ -1053,9 +1065,17 @@
             "click",
             () => {
 
+              const page =
+                button.dataset.page;
+
               document.body.classList.toggle(
                 "register-mode",
-                button.dataset.page === "register"
+                page === "register"
+              );
+
+              document.body.classList.toggle(
+                "manage-mode",
+                page === "manage"
               );
 
             }
@@ -1066,7 +1086,6 @@
 
       const registerBackBtn =
         document.getElementById("registerBackBtn");
-
 
       registerBackBtn
         ?.addEventListener(
@@ -1092,8 +1111,37 @@
           }
         );
 
+
+      const manageBackBtn =
+        document.getElementById("manageBackBtn");
+
+      manageBackBtn
+        ?.addEventListener(
+          "click",
+          () => {
+
+            document.body.classList.remove(
+              "manage-mode"
+            );
+
+            const listButton =
+              document.querySelector(
+                '[data-page="list"]'
+              );
+
+            listButton?.click();
+
+            window.scrollTo({
+              top: 0,
+              behavior: "smooth"
+            });
+
+          }
+        );
+
     });
   </script>
+
 
   <!-- アプリ本体 -->
 
