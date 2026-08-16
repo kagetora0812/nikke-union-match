@@ -104,8 +104,7 @@
 <div class="hero-actions">
 
   <button
-    class="btn primary"
-    data-page="register"
+    class="btn primary open-register-modal"
     type="button"
   >
     募集を登録
@@ -604,8 +603,7 @@
 
 
     <button
-      data-page="register"
-      class="nav-btn"
+      class="nav-btn open-register-modal"
       type="button"
     >
 
@@ -1071,7 +1069,7 @@
 
 
       document
-        .querySelectorAll('[data-page="register"]')
+        .querySelectorAll(".open-register-modal")
         .forEach(button => {
 
           button.addEventListener(
@@ -1079,7 +1077,6 @@
             event => {
 
               event.preventDefault();
-              event.stopImmediatePropagation();
 
               openRegisterModal();
 
