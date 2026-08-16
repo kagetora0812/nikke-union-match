@@ -437,19 +437,28 @@ function showPage(name) {
     );
 
 
+ if (name === "list") {
+
+  loadRecruitments();
+
+  requestAnimationFrame(() => {
+
+    const listPage =
+      document.getElementById("listPage");
+
+    listPage?.scrollIntoView({
+      behavior: "smooth",
+      block: "start"
+    });
+
+  });
+
+} else {
+
   window.scrollTo({
     top: 0,
     behavior: "smooth"
   });
-
-
-  if (
-    name === "list"
-  ) {
-
-    loadRecruitments();
-
-  }
 
 }
 
