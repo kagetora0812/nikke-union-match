@@ -117,6 +117,41 @@
       class="page inline-register-page"
     >
 
+      <div class="register-inline-top">
+
+        <button
+          id="registerBackBtn"
+          class="text-btn register-back-btn"
+          type="button"
+        >
+          ← 戻る
+        </button>
+
+      </div>
+
+      <div class="easy-register-box">
+
+        <strong class="easy-register-title">
+          ✨ 登録はかんたん・約1分！
+        </strong>
+
+        <div class="easy-register-list">
+          <div>・指揮官名 / ユニオン名</div>
+          <div>・SLV / ユニオンランク</div>
+          <div>・Xの募集投稿URL</div>
+        </div>
+
+        <div class="easy-register-copy">
+          これだけで掲載できます！
+        </div>
+
+        <div class="easy-register-privacy">
+          🔒 メールアドレスなどの個人情報登録は一切不要！
+        </div>
+
+      </div>
+
+
 
       <div class="section-head">
 
@@ -1014,6 +1049,35 @@
           );
 
         });
+
+
+      const registerBackBtn =
+        document.getElementById("registerBackBtn");
+
+
+      registerBackBtn
+        ?.addEventListener(
+          "click",
+          () => {
+
+            document.body.classList.remove(
+              "register-mode"
+            );
+
+            const listButton =
+              document.querySelector(
+                '[data-page="list"]'
+              );
+
+            listButton?.click();
+
+            window.scrollTo({
+              top: 0,
+              behavior: "smooth"
+            });
+
+          }
+        );
 
     });
   </script>
