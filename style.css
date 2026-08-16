@@ -1246,3 +1246,106 @@ h1 em {
   border-color: #777777;
   background: rgba(255, 255, 255, 0.08);
 }
+
+
+/* ========================================
+   募集登録ポップアップ
+======================================== */
+
+body.modal-open {
+  overflow: hidden;
+}
+
+.register-modal {
+  position: fixed;
+  inset: 0;
+
+  z-index: 60;
+
+  display: grid;
+  place-items: center;
+
+  padding: 18px;
+
+  background: rgba(0, 0, 0, 0.76);
+
+  backdrop-filter: blur(8px);
+}
+
+.register-modal-card {
+  width: min(680px, 100%);
+  max-height: min(88vh, 900px);
+
+  overflow-y: auto;
+
+  position: relative;
+
+  background: #101621;
+
+  border: 1px solid #3b4657;
+
+  box-shadow:
+    0 24px 80px rgba(0, 0, 0, 0.65);
+}
+
+.register-modal-close {
+  position: sticky;
+  top: 10px;
+  z-index: 3;
+
+  float: right;
+
+  width: 42px;
+  height: 42px;
+
+  margin:
+    10px
+    10px
+    -52px
+    0;
+
+  border: 1px solid #3b4657;
+
+  background: rgba(8, 11, 18, 0.95);
+
+  color: #edf2f7;
+
+  font-size: 28px;
+  line-height: 1;
+
+  cursor: pointer;
+}
+
+.register-modal-close:hover {
+  border-color: var(--accent);
+  color: var(--accent2);
+}
+
+.register-popup-page {
+  display: block !important;
+
+  padding: 26px 22px 22px;
+}
+
+.register-popup-page .section-head {
+  padding-right: 48px;
+}
+
+@media (max-width: 600px) {
+
+  .register-modal {
+    padding: 10px;
+    place-items: end center;
+  }
+
+  .register-modal-card {
+    width: 100%;
+    max-height: 92vh;
+  }
+
+  .register-popup-page {
+    padding: 22px 14px 16px;
+  }
+
+}
+
