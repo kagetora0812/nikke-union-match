@@ -1247,104 +1247,91 @@ h1 em {
   background: rgba(255, 255, 255, 0.08);
 }
 
-
 /* ========================================
-   募集登録ポップアップ
+   かんたん登録案内
 ======================================== */
 
-body.modal-open {
-  overflow: hidden;
-}
+.easy-register-box {
+  margin: 0 0 20px;
+  padding: 20px;
 
-.register-modal {
-  position: fixed;
-  inset: 0;
+  border: 1px solid rgba(255, 122, 24, 0.45);
+  border-left: 4px solid var(--accent);
 
-  z-index: 60;
-
-  display: grid;
-  place-items: center;
-
-  padding: 18px;
-
-  background: rgba(0, 0, 0, 0.76);
-
-  backdrop-filter: blur(8px);
-}
-
-.register-modal-card {
-  width: min(680px, 100%);
-  max-height: min(88vh, 900px);
-
-  overflow-y: auto;
-
-  position: relative;
-
-  background: #101621;
-
-  border: 1px solid #3b4657;
+  background:
+    linear-gradient(
+      145deg,
+      rgba(20, 28, 41, 0.92),
+      rgba(11, 16, 24, 0.92)
+    );
 
   box-shadow:
-    0 24px 80px rgba(0, 0, 0, 0.65);
+    0 10px 30px rgba(0, 0, 0, 0.18);
 }
 
-.register-modal-close {
-  position: sticky;
-  top: 10px;
-  z-index: 3;
+.easy-register-title {
+  margin-bottom: 14px;
 
-  float: right;
+  color: #ffffff;
 
-  width: 42px;
-  height: 42px;
-
-  margin:
-    10px
-    10px
-    -52px
-    0;
-
-  border: 1px solid #3b4657;
-
-  background: rgba(8, 11, 18, 0.95);
-
-  color: #edf2f7;
-
-  font-size: 28px;
-  line-height: 1;
-
-  cursor: pointer;
+  font-size: 19px;
+  font-weight: 800;
 }
 
-.register-modal-close:hover {
-  border-color: var(--accent);
+.easy-register-items {
+  display: grid;
+  gap: 7px;
+
+  color: #d8e0ea;
+
+  font-size: 14px;
+  line-height: 1.7;
+}
+
+.easy-register-text {
+  margin-top: 14px;
+
   color: var(--accent2);
+
+  font-size: 15px;
+  font-weight: 800;
 }
 
-.register-popup-page {
-  display: block !important;
+.privacy-message {
+  margin-top: 16px;
+  padding: 11px 13px;
 
-  padding: 26px 22px 22px;
-}
+  border: 1px solid rgba(84, 227, 155, 0.28);
 
-.register-popup-page .section-head {
-  padding-right: 48px;
+  background: rgba(84, 227, 155, 0.08);
+
+  color: #8ff0bd;
+
+  font-size: 13px;
+  font-weight: 700;
+  line-height: 1.6;
 }
 
 @media (max-width: 600px) {
 
-  .register-modal {
-    padding: 10px;
-    place-items: end center;
+  .easy-register-box {
+    padding: 16px;
   }
 
-  .register-modal-card {
-    width: 100%;
-    max-height: 92vh;
+  .easy-register-title {
+    font-size: 16px;
   }
 
-  .register-popup-page {
-    padding: 22px 14px 16px;
+  .easy-register-items {
+    font-size: 13px;
+  }
+
+  .easy-register-text {
+    font-size: 14px;
+  }
+
+  .privacy-message {
+    font-size: 12px;
   }
 
 }
