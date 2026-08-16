@@ -1376,3 +1376,7 @@ h1 em {
 .register-back-btn:active {
   transform: translateY(1px);
 }
+/* 募集登録ボタンと戻るボタンの間隔 */
+#heroRegisterArea {
+  margin-top: 28px !important;
+}
