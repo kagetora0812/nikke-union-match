@@ -1053,7 +1053,7 @@
 
 
 
-  <!-- 登録・締切画面レイアウト切替 -->
+    <!-- 登録・締切画面レイアウト切替 -->
   <script>
     document.addEventListener("DOMContentLoaded", () => {
 
@@ -1084,10 +1084,8 @@
         });
 
 
-      const registerBackBtn =
-        document.getElementById("registerBackBtn");
-
-      registerBackBtn
+      document
+        .getElementById("registerBackBtn")
         ?.addEventListener(
           "click",
           () => {
@@ -1096,26 +1094,16 @@
               "register-mode"
             );
 
-            const listButton =
-              document.querySelector(
-                '[data-page="list"]'
-              );
-
-            listButton?.click();
-
-            window.scrollTo({
-              top: 0,
-              behavior: "smooth"
-            });
+            document
+              .querySelector('[data-page="list"]')
+              ?.click();
 
           }
         );
 
 
-      const manageBackBtn =
-        document.getElementById("manageBackBtn");
-
-      manageBackBtn
+      document
+        .getElementById("manageBackBtn")
         ?.addEventListener(
           "click",
           () => {
@@ -1124,17 +1112,9 @@
               "manage-mode"
             );
 
-            const listButton =
-              document.querySelector(
-                '[data-page="list"]'
-              );
-
-            listButton?.click();
-
-            window.scrollTo({
-              top: 0,
-              behavior: "smooth"
-            });
+            document
+              .querySelector('[data-page="list"]')
+              ?.click();
 
           }
         );
@@ -1143,7 +1123,7 @@
   </script>
 
 
-  <!-- アプリ本体 -->
+<!-- アプリ本体 -->
 
   <script src="./app.js"></script>
 
