@@ -993,7 +993,7 @@ h1 em {
    スマホ
 ========================================= */
 
-@media (max-width: 760px) {
+@media (max-width: 600px) {
 
   .container {
     max-width: 900px;
@@ -1332,6 +1332,274 @@ h1 em {
 
   .privacy-message {
     font-size: 12px;
+  }
+
+}
+
+
+/* ========================================
+   レスポンシブ最終版
+======================================== */
+
+/* ----------------------------------------
+   PC・タブレット
+   左：タイトル / 右：募集総数
+---------------------------------------- */
+@media screen and (min-width: 601px) {
+
+  .container {
+    width: 100%;
+    max-width: 1400px;
+    margin: 0 auto;
+    padding-left: 18px;
+    padding-right: 18px;
+  }
+
+  .hero {
+    display: grid !important;
+    grid-template-columns:
+      minmax(0, 0.86fr)
+      minmax(360px, 1.14fr) !important;
+    gap: 30px !important;
+    align-items: center !important;
+  }
+
+  .hero-left {
+    min-width: 0 !important;
+    width: 100% !important;
+  }
+
+  .hero-stats {
+    display: grid !important;
+    width: 100% !important;
+    min-width: 0 !important;
+
+    grid-template-columns:
+      minmax(0, 1fr)
+      1px
+      minmax(0, 1fr) !important;
+
+    align-items: center !important;
+  }
+
+  .hero-stat {
+    min-width: 0 !important;
+  }
+
+}
+
+/* タブレットは横並びのまま少しコンパクト */
+@media screen and (min-width: 601px) and (max-width: 1024px) {
+
+  .hero {
+    grid-template-columns:
+      minmax(0, 0.9fr)
+      minmax(330px, 1.1fr) !important;
+    gap: 20px !important;
+  }
+
+  h1 {
+    font-size: clamp(42px, 6vw, 56px);
+  }
+
+  .hero-stats {
+    min-height: 220px;
+    padding: 24px 12px 50px;
+    gap: 10px;
+  }
+
+  .hero-stat-title {
+    font-size: 12px;
+    margin-bottom: 14px;
+  }
+
+  .hero-stat-number strong {
+    font-size: clamp(52px, 7vw, 72px);
+  }
+
+  .hero-stat-number span {
+    font-size: 17px;
+    padding-bottom: 5px;
+  }
+
+  .hero-stat-sub {
+    margin-top: 14px;
+    font-size: 10px;
+  }
+
+  .hero-stat-divider {
+    height: 100px;
+  }
+
+}
+
+/* ----------------------------------------
+   スマホ
+---------------------------------------- */
+@media screen and (max-width: 600px) {
+
+  .container {
+    padding-left: 12px;
+    padding-right: 12px;
+  }
+
+  .hero {
+    display: grid !important;
+    grid-template-columns: 1fr !important;
+    gap: 8px !important;
+  }
+
+  .hero-actions {
+    width: calc(100% - 20px) !important;
+    max-width: 360px !important;
+    margin-left: auto !important;
+    margin-right: auto !important;
+  }
+
+  .hero-stats {
+    width: calc(100% - 20px) !important;
+    max-width: 360px !important;
+    margin: 4px auto 0 !important;
+  }
+
+  .hero-stat-title {
+    font-size: 12px;
+  }
+
+  .hero-stat-number strong {
+    font-size: 58px;
+  }
+
+  .hero-stat-number span {
+    font-size: 18px;
+  }
+
+  .hero-stat-divider {
+    height: 105px;
+  }
+
+}
+
+
+/* ========================================
+   登録・締切 ボタン直下表示
+======================================== */
+
+#heroRegisterArea,
+#heroManageArea {
+  display: none;
+}
+
+body.register-mode #heroRegisterArea {
+  display: block;
+  margin-top: 28px;
+}
+
+body.manage-mode #heroManageArea {
+  display: block;
+  margin-top: 28px;
+}
+
+body.register-mode .hero-stats,
+body.manage-mode .hero-stats {
+  display: none !important;
+}
+
+body.register-mode .hero,
+body.manage-mode .hero {
+  grid-template-columns: minmax(0, 760px) !important;
+  justify-content: start !important;
+}
+
+body.register-mode .hero-left,
+body.manage-mode .hero-left {
+  width: 100% !important;
+  max-width: 760px !important;
+}
+
+body.register-mode #registerPage,
+body.manage-mode #managePage {
+  display: block !important;
+  width: 100%;
+  margin: 0;
+  padding: 0 0 24px;
+}
+
+
+/* ========================================
+   登録・締切 戻るボタン
+======================================== */
+
+.register-inline-top,
+.manage-inline-top {
+  display: block !important;
+  width: 100% !important;
+  margin: 0 0 18px !important;
+}
+
+.register-back-btn,
+.manage-back-btn {
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+
+  width: 100% !important;
+  height: 52px !important;
+  min-height: 52px !important;
+
+  padding: 0 18px !important;
+
+  background: #111925 !important;
+  color: #ffffff !important;
+
+  border: 1px solid var(--line) !important;
+  border-radius: 3px !important;
+
+  font-family: inherit !important;
+  font-size: 16px !important;
+  font-weight: 800 !important;
+
+  cursor: pointer;
+}
+
+.register-back-btn:hover,
+.manage-back-btn:hover {
+  border-color: var(--accent) !important;
+  color: var(--accent2) !important;
+}
+
+
+/* ========================================
+   スマホ 登録・締切フォーム幅
+======================================== */
+
+@media screen and (max-width: 600px) {
+
+  body.register-mode #heroRegisterArea,
+  body.manage-mode #heroManageArea {
+    width: calc(100% - 20px) !important;
+    max-width: 360px !important;
+    margin-left: auto !important;
+    margin-right: auto !important;
+    margin-top: 20px !important;
+  }
+
+  body.register-mode .hero-left,
+  body.manage-mode .hero-left {
+    max-width: none !important;
+  }
+
+  input,
+  select,
+  textarea,
+  #registerPage input,
+  #registerPage select,
+  #registerPage textarea,
+  #managePage input,
+  #managePage select,
+  #managePage textarea {
+    font-size: 16px !important;
+    line-height: 1.4 !important;
   }
 
 }
