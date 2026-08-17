@@ -11,6 +11,10 @@
   --accent2: #ffb15c;
   --green: #54e39b;
   --red: #ff5364;
+
+  /* 卒業ちしかん */
+  --graduate: #a8e84a;
+  --graduate2: #c7ff76;
 }
 
 * {
@@ -19,23 +23,34 @@
 
 body {
   margin: 0;
+
   background:
     radial-gradient(
       circle at 50% -10%,
       #1a2434 0,
       #080b12 45%
     );
+
   color: var(--text);
-  font-family: 'Noto Sans JP', sans-serif;
+
+  font-family:
+    'Noto Sans JP',
+    sans-serif;
+
   min-height: 100vh;
+
   padding-bottom: 82px;
 }
 
 body::before {
   content: "";
+
   position: fixed;
+
   inset: 0;
+
   pointer-events: none;
+
   background:
     linear-gradient(
       90deg,
@@ -52,50 +67,90 @@ body::before {
 
 .topbar {
   height: 66px;
-  border-bottom: 1px solid var(--line);
-  background: rgba(8,11,18,.88);
-  backdrop-filter: blur(12px);
+
+  border-bottom:
+    1px solid
+    var(--line);
+
+  background:
+    rgba(8,11,18,.88);
+
+  backdrop-filter:
+    blur(12px);
+
   display: flex;
+
   align-items: center;
-  justify-content: space-between;
-  padding: 0 18px;
+
+  justify-content:
+    space-between;
+
+  padding:
+    0 18px;
+
   position: sticky;
+
   top: 0;
+
   z-index: 20;
 }
 
 .brand {
-  font-family: Rajdhani, sans-serif;
+  font-family:
+    Rajdhani,
+    sans-serif;
+
   display: flex;
-  flex-direction: column;
+
+  flex-direction:
+    column;
+
   line-height: .82;
 }
 
 .brand-small {
   font-size: 11px;
+
   letter-spacing: 4px;
-  color: var(--accent2);
+
+  color:
+    var(--accent2);
 }
 
 .brand-main {
   font-size: 23px;
+
   letter-spacing: 2px;
+
   font-weight: 700;
 }
 
 .status-dot {
-  font: 600 11px Rajdhani;
-  color: var(--muted);
+  font:
+    600 11px Rajdhani;
+
+  color:
+    var(--muted);
+
   letter-spacing: 1px;
 }
 
 .status-dot span {
   display: inline-block;
+
   width: 7px;
+
   height: 7px;
+
   border-radius: 50%;
-  background: var(--green);
-  box-shadow: 0 0 10px var(--green);
+
+  background:
+    var(--green);
+
+  box-shadow:
+    0 0 10px
+    var(--green);
+
   margin-right: 6px;
 }
 
@@ -106,8 +161,11 @@ body::before {
 
 .container {
   max-width: 1400px;
+
   margin: auto;
-  padding: 0 18px;
+
+  padding:
+    0 18px;
 }
 
 
@@ -117,13 +175,22 @@ body::before {
 
 .hero {
   display: grid;
+
   grid-template-columns:
     minmax(360px, .9fr)
     minmax(500px, 1.25fr);
+
   gap: 55px;
+
   align-items: center;
-  padding: 52px 0 36px;
-  border-bottom: 1px solid var(--line);
+
+  padding:
+    52px 0 36px;
+
+  border-bottom:
+    1px solid
+    var(--line);
+
   margin-bottom: 28px;
 }
 
@@ -132,38 +199,63 @@ body::before {
 }
 
 .eyebrow {
-  font: 600 12px Rajdhani;
-  letter-spacing: 2.5px;
-  color: var(--accent2);
+  font:
+    600 12px Rajdhani;
+
+  letter-spacing:
+    2.5px;
+
+  color:
+    var(--accent2);
+
   margin-bottom: 9px;
 }
 
 h1,
 h2 {
-  font-family: Rajdhani, 'Noto Sans JP', sans-serif;
+  font-family:
+    Rajdhani,
+    'Noto Sans JP',
+    sans-serif;
+
   margin: 0;
+
   letter-spacing: .5px;
 }
 
 h1 {
-  font-size: clamp(40px,10vw,70px);
+  font-size:
+    clamp(
+      40px,
+      10vw,
+      70px
+    );
+
   line-height: .94;
 }
 
 h1 em {
   font-style: normal;
-  color: var(--accent);
+
+  color:
+    var(--accent);
 }
 
 .hero p {
-  color: var(--muted);
+  color:
+    var(--muted);
+
   line-height: 1.8;
-  margin: 20px 0 24px;
+
+  margin:
+    20px 0 24px;
 }
 
 .hero-actions {
   display: flex;
+
   gap: 10px;
+
   flex-wrap: wrap;
 }
 
@@ -173,35 +265,66 @@ h1 em {
 ======================================== */
 
 .btn {
-  border: 1px solid var(--line);
-  background: var(--panel2);
-  color: var(--text);
-  padding: 13px 20px;
+  border:
+    1px solid
+    var(--line);
+
+  background:
+    var(--panel2);
+
+  color:
+    var(--text);
+
+  padding:
+    13px 20px;
+
   min-height: 48px;
+
   font-weight: 700;
+
   cursor: pointer;
+
   transition: .2s;
 }
 
 .btn:hover {
-  transform: translateY(-1px);
-  border-color: var(--accent);
+  transform:
+    translateY(-1px);
+
+  border-color:
+    var(--accent);
 }
 
 .btn.primary {
-  background: linear-gradient(135deg,#ff6a00,#d94100);
-  border-color: #ff8c3a;
-  box-shadow: 0 8px 30px rgba(255,100,0,.15);
+  background:
+    linear-gradient(
+      135deg,
+      #ff6a00,
+      #d94100
+    );
+
+  border-color:
+    #ff8c3a;
+
+  box-shadow:
+    0 8px 30px
+    rgba(255,100,0,.15);
 }
 
 .btn.danger {
-  background: #291219;
-  border-color: #63303b;
-  color: #ff8a98;
+  background:
+    #291219;
+
+  border-color:
+    #63303b;
+
+  color:
+    #ff8a98;
 }
 
 .btn.ghost {
-  background: transparent;
+  background:
+    transparent;
 }
 
 .wide {
@@ -228,8 +351,12 @@ h1 em {
 
 .section-head {
   display: flex;
-  justify-content: space-between;
+
+  justify-content:
+    space-between;
+
   align-items: end;
+
   margin-bottom: 18px;
 }
 
@@ -239,9 +366,14 @@ h1 em {
 
 .text-btn {
   background: none;
+
   border: 0;
-  color: var(--accent2);
+
+  color:
+    var(--accent2);
+
   cursor: pointer;
+
   font-weight: 700;
 }
 
@@ -251,35 +383,57 @@ h1 em {
 ======================================== */
 
 .filters {
-  background: rgba(16,22,33,.7);
-  border: 1px solid var(--line);
+  background:
+    rgba(16,22,33,.7);
+
+  border:
+    1px solid
+    var(--line);
+
   padding: 12px;
+
   margin-bottom: 14px;
 }
 
 .filters label,
 .panel label {
   display: block;
-  color: var(--muted);
+
+  color:
+    var(--muted);
+
   font-size: 12px;
+
   font-weight: 700;
 }
 
 .filters select,
 .panel input {
   width: 100%;
+
   margin-top: 7px;
-  background: #0b1018;
-  color: var(--text);
-  border: 1px solid var(--line);
+
+  background:
+    #0b1018;
+
+  color:
+    var(--text);
+
+  border:
+    1px solid
+    var(--line);
+
   padding: 13px;
+
   border-radius: 2px;
+
   outline: none;
 }
 
 .filters select:focus,
 .panel input:focus {
-  border-color: var(--accent);
+  border-color:
+    var(--accent);
 }
 
 
@@ -289,8 +443,13 @@ h1 em {
 
 .cards {
   display: grid;
+
   grid-template-columns:
-    repeat(auto-fit,minmax(260px,1fr));
+    repeat(
+      auto-fit,
+      minmax(260px,1fr)
+    );
+
   gap: 12px;
 }
 
@@ -301,76 +460,131 @@ h1 em {
       var(--panel2),
       var(--panel)
     );
-  border: 1px solid var(--line);
+
+  border:
+    1px solid
+    var(--line);
+
   padding: 18px;
+
   position: relative;
+
   overflow: hidden;
 }
 
 .card::after {
   content: "";
+
   position: absolute;
+
   right: -30px;
+
   top: -30px;
+
   width: 90px;
+
   height: 90px;
-  border: 1px solid rgba(255,122,24,.18);
-  transform: rotate(45deg);
+
+  border:
+    1px solid
+    rgba(255,122,24,.18);
+
+  transform:
+    rotate(45deg);
 }
 
 .card-head {
   display: flex;
-  justify-content: space-between;
+
+  justify-content:
+    space-between;
+
   gap: 10px;
+
   align-items: center;
 }
 
 .state {
   font-size: 11px;
+
   font-weight: 700;
-  color: var(--green);
-  border: 1px solid rgba(84,227,155,.3);
-  padding: 4px 7px;
+
+  color:
+    var(--green);
+
+  border:
+    1px solid
+    rgba(84,227,155,.3);
+
+  padding:
+    4px 7px;
 }
 
 .name {
   font-size: 21px;
+
   font-weight: 700;
-  margin: 12px 0 4px;
+
+  margin:
+    12px 0 4px;
 }
 
 .slv {
-  font: 700 34px Rajdhani;
-  color: var(--accent2);
+  font:
+    700 34px Rajdhani;
+
+  color:
+    var(--accent2);
 }
 
 .slv small {
   font-size: 12px;
-  color: var(--muted);
+
+  color:
+    var(--muted);
+
   margin-left: 5px;
 }
 
 .date {
   font-size: 11px;
-  color: var(--muted);
+
+  color:
+    var(--muted);
+
   margin-top: 10px;
 }
 
 .x-btn {
   display: block;
+
   text-align: center;
+
   text-decoration: none;
+
   margin-top: 15px;
+
   padding: 11px;
-  border: 1px solid #374454;
-  color: var(--text);
+
+  border:
+    1px solid
+    #374454;
+
+  color:
+    var(--text);
+
   font-weight: 700;
-  background: #0b1018;
+
+  background:
+    #0b1018;
 }
 
 .x-btn:hover {
-  border-color: var(--accent);
-  color: var(--accent2);
+  border-color:
+    var(--accent);
+
+  color:
+    var(--accent2);
 }
 
 
@@ -379,26 +593,46 @@ h1 em {
 ======================================== */
 
 .panel {
-  background: rgba(16,22,33,.85);
-  border: 1px solid var(--line);
+  background:
+    rgba(16,22,33,.85);
+
+  border:
+    1px solid
+    var(--line);
+
   padding: 18px;
+
   display: grid;
+
   gap: 16px;
 }
 
 .notice {
-  border-left: 3px solid var(--accent);
-  background: #151b25;
-  padding: 12px 14px;
+  border-left:
+    3px solid
+    var(--accent);
+
+  background:
+    #151b25;
+
+  padding:
+    12px 14px;
+
   display: grid;
+
   gap: 4px;
+
   font-size: 12px;
-  color: var(--muted);
+
+  color:
+    var(--muted);
+
   line-height: 1.6;
 }
 
 .notice strong {
-  color: var(--text);
+  color:
+    var(--text);
 }
 
 
@@ -408,22 +642,33 @@ h1 em {
 
 .message {
   padding: 12px;
-  border: 1px solid var(--line);
+
+  border:
+    1px solid
+    var(--line);
+
   margin-bottom: 14px;
 }
 
 .message.ok {
-  border-color: rgba(84,227,155,.35);
-  color: var(--green);
+  border-color:
+    rgba(84,227,155,.35);
+
+  color:
+    var(--green);
 }
 
 .message.error {
-  border-color: rgba(255,83,100,.35);
-  color: #ff9aa5;
+  border-color:
+    rgba(255,83,100,.35);
+
+  color:
+    #ff9aa5;
 }
 
 .hidden {
-  display: none !important;
+  display:
+    none !important;
 }
 
 
@@ -433,14 +678,24 @@ h1 em {
 
 .empty {
   text-align: center;
-  padding: 55px 20px;
-  color: var(--muted);
-  border: 1px dashed var(--line);
+
+  padding:
+    55px 20px;
+
+  color:
+    var(--muted);
+
+  border:
+    1px dashed
+    var(--line);
 }
 
 .empty-icon {
   font-size: 42px;
-  color: var(--accent);
+
+  color:
+    var(--accent);
+
   margin-bottom: 8px;
 }
 
@@ -451,39 +706,65 @@ h1 em {
 
 .bottom-nav {
   position: fixed;
+
   bottom: 0;
+
   left: 0;
+
   right: 0;
+
   height: 68px;
-  background: rgba(8,11,18,.94);
-  border-top: 1px solid var(--line);
+
+  background:
+    rgba(8,11,18,.94);
+
+  border-top:
+    1px solid
+    var(--line);
+
   display: flex;
+
   justify-content: center;
+
   z-index: 30;
-  backdrop-filter: blur(14px);
+
+  backdrop-filter:
+    blur(14px);
 }
 
 .nav-btn {
   flex: 1;
+
   max-width: 300px;
+
   background: none;
+
   border: 0;
-  color: var(--muted);
+
+  color:
+    var(--muted);
+
   font-size: 11px;
+
   font-weight: 700;
+
   cursor: pointer;
 }
 
 .nav-btn span {
   display: block;
+
   font-size: 21px;
+
   line-height: 20px;
+
   margin-bottom: 3px;
 }
 
 .nav-btn.active,
 .nav-btn:hover {
-  color: var(--accent2);
+  color:
+    var(--accent2);
 }
 
 
@@ -493,80 +774,145 @@ h1 em {
 
 .modal {
   position: fixed;
+
   inset: 0;
-  background: rgba(0,0,0,.72);
+
+  background:
+    rgba(0,0,0,.72);
+
   z-index: 50;
+
   display: grid;
+
   place-items: center;
+
   padding: 18px;
 }
 
 .modal-card {
-  width: min(480px,100%);
-  background: #101621;
-  border: 1px solid #3b4657;
+  width:
+    min(480px,100%);
+
+  background:
+    #101621;
+
+  border:
+    1px solid
+    #3b4657;
+
   padding: 24px;
+
   position: relative;
-  box-shadow: 0 20px 70px #000;
+
+  box-shadow:
+    0 20px 70px #000;
 }
 
 .modal-close {
   position: absolute;
+
   right: 10px;
+
   top: 7px;
+
   background: none;
+
   border: 0;
-  color: var(--muted);
+
+  color:
+    var(--muted);
+
   font-size: 28px;
+
   cursor: pointer;
 }
 
 .pass-box {
-  margin: 18px 0;
+  margin:
+    18px 0;
+
   padding: 20px;
-  background: #090d14;
-  border: 1px solid #3b4657;
+
+  background:
+    #090d14;
+
+  border:
+    1px solid
+    #3b4657;
+
   text-align: center;
 }
 
 .pass-box span {
   display: block;
-  color: var(--muted);
-  font: 600 11px Rajdhani;
+
+  color:
+    var(--muted);
+
+  font:
+    600 11px Rajdhani;
+
   letter-spacing: 2px;
 }
 
 .pass-box strong {
   display: block;
-  font: 700 42px Rajdhani;
+
+  font:
+    700 42px Rajdhani;
+
   letter-spacing: 7px;
-  color: var(--accent2);
-  margin: 4px 0 12px;
+
+  color:
+    var(--accent2);
+
+  margin:
+    4px 0 12px;
 }
 
 .copy-btn {
   background: none;
-  border: 1px solid var(--line);
-  color: var(--text);
-  padding: 7px 12px;
+
+  border:
+    1px solid
+    var(--line);
+
+  color:
+    var(--text);
+
+  padding:
+    7px 12px;
+
   cursor: pointer;
 }
 
 .result-row {
   display: flex;
-  justify-content: space-between;
-  padding: 10px 0;
-  border-bottom: 1px solid var(--line);
+
+  justify-content:
+    space-between;
+
+  padding:
+    10px 0;
+
+  border-bottom:
+    1px solid
+    var(--line);
+
   font-size: 13px;
 }
 
 .result-row span {
-  color: var(--muted);
+  color:
+    var(--muted);
 }
 
 .warning {
   font-size: 12px;
-  color: #ffb0b8;
+
+  color:
+    #ffb0b8;
+
   line-height: 1.7;
 }
 
@@ -577,21 +923,37 @@ h1 em {
 
 .hero-stats {
   width: 100%;
+
   min-height: 270px;
-  border: 2px solid #ff7a18;
+
+  border:
+    2px solid
+    #ff7a18;
+
   background:
     linear-gradient(
       145deg,
       rgba(15,21,31,.98),
       rgba(7,11,18,.98)
     );
+
   display: grid;
-  grid-template-columns: 1fr 1px 1fr;
+
+  grid-template-columns:
+    1fr 1px 1fr;
+
   align-items: center;
+
   gap: 24px;
-  padding: 34px 30px 58px;
+
+  padding:
+    34px 30px 58px;
+
   position: relative;
-  box-shadow: 0 0 32px rgba(255,122,24,.10);
+
+  box-shadow:
+    0 0 32px
+    rgba(255,122,24,.10);
 }
 
 .hero-stat {
@@ -599,51 +961,78 @@ h1 em {
 }
 
 .hero-stat-title {
-  color: #edf2f7;
+  color:
+    #edf2f7;
+
   font-size: 17px;
+
   font-weight: 700;
+
   margin-bottom: 20px;
 }
 
 .hero-stat-number {
   display: flex;
+
   justify-content: center;
+
   align-items: flex-end;
+
   gap: 8px;
 }
 
 .hero-stat-number strong {
-  font-family: Rajdhani,sans-serif;
+  font-family:
+    Rajdhani,
+    sans-serif;
+
   font-size: 100px;
+
   font-weight: 700;
+
   line-height: .82;
 }
 
 .hero-stat-number span {
   font-size: 27px;
+
   font-weight: 700;
+
   padding-bottom: 8px;
 }
 
 .hero-stat-sub {
   margin-top: 20px;
-  color: #8e9aaa;
+
+  color:
+    #8e9aaa;
+
   font-size: 13px;
 }
 
-.commander-stat .hero-stat-number strong,
-.commander-stat .hero-stat-number span {
-  color: #ff7a18;
+.commander-stat
+.hero-stat-number strong,
+
+.commander-stat
+.hero-stat-number span {
+  color:
+    #ff7a18;
 }
 
-.union-stat .hero-stat-number strong,
-.union-stat .hero-stat-number span {
-  color: #3696ff;
+.union-stat
+.hero-stat-number strong,
+
+.union-stat
+.hero-stat-number span {
+  color:
+    #3696ff;
 }
 
 .hero-stat-divider {
   width: 1px;
+
   height: 150px;
+
   background:
     linear-gradient(
       transparent,
@@ -654,11 +1043,18 @@ h1 em {
 
 .hero-stat-update {
   position: absolute;
+
   left: 0;
+
   right: 0;
+
   bottom: 18px;
+
   text-align: center;
-  color: #8e9aaa;
+
+  color:
+    #8e9aaa;
+
   font-size: 12px;
 }
 
@@ -668,30 +1064,54 @@ h1 em {
 ======================================== */
 
 .card.commander-card {
-  border: 1px solid rgba(255,122,24,.55);
-  box-shadow: inset 4px 0 0 #ff7a18;
+  border:
+    1px solid
+    rgba(255,122,24,.55);
+
+  box-shadow:
+    inset 4px 0 0
+    #ff7a18;
 }
 
-.card.commander-card .recruitment-type {
-  color: #ff9b32;
-  border-color: rgba(255,122,24,.45);
+.card.commander-card
+.recruitment-type {
+  color:
+    #ff9b32;
+
+  border-color:
+    rgba(255,122,24,.45);
 }
 
 .card.union-card {
-  border: 1px solid rgba(54,150,255,.55);
-  box-shadow: inset 4px 0 0 #3696ff;
+  border:
+    1px solid
+    rgba(54,150,255,.55);
+
+  box-shadow:
+    inset 4px 0 0
+    #3696ff;
 }
 
-.card.union-card .recruitment-type {
-  color: #72b9ff;
-  border-color: rgba(54,150,255,.45);
+.card.union-card
+.recruitment-type {
+  color:
+    #72b9ff;
+
+  border-color:
+    rgba(54,150,255,.45);
 }
 
 .recruitment-type {
   display: inline-block;
-  padding: 5px 10px;
-  border: 1px solid;
+
+  padding:
+    5px 10px;
+
+  border:
+    1px solid;
+
   font-size: 11px;
+
   font-weight: 700;
 }
 
@@ -702,18 +1122,27 @@ h1 em {
 
 .countdown {
   margin-top: 14px;
+
   padding-top: 12px;
-  border-top: 1px solid rgba(255,255,255,.08);
-  color: #aab5c4;
+
+  border-top:
+    1px solid
+    rgba(255,255,255,.08);
+
+  color:
+    #aab5c4;
+
   font-size: 12px;
 }
 
 .countdown.warning {
-  color: #ffc04d;
+  color:
+    #ffc04d;
 }
 
 .countdown.danger {
-  color: #ff6878;
+  color:
+    #ff6878;
 }
 
 
@@ -724,14 +1153,28 @@ h1 em {
 #unionRank,
 #registrationType {
   width: 100%;
+
   min-height: 48px;
-  padding: 0 14px;
-  background: #0b111b;
-  color: #fff;
-  border: 1px solid #334155;
+
+  padding:
+    0 14px;
+
+  background:
+    #0b111b;
+
+  color:
+    #fff;
+
+  border:
+    1px solid
+    #334155;
+
   border-radius: 0;
+
   font-size: 16px;
+
   font-family: inherit;
+
   cursor: pointer;
 }
 
@@ -742,36 +1185,69 @@ h1 em {
 
 .search-tabs {
   display: grid;
-  grid-template-columns: 1fr 1fr;
+
+  grid-template-columns:
+    1fr 1fr;
+
   gap: 10px;
+
   margin-bottom: 14px;
 }
 
 .search-tab {
   min-height: 54px;
-  border: 1px solid #334155;
-  background: #0b111b;
-  color: #8e9aaa;
+
+  border:
+    1px solid
+    #334155;
+
+  background:
+    #0b111b;
+
+  color:
+    #8e9aaa;
+
   font-size: 15px;
+
   font-weight: 700;
+
   cursor: pointer;
+
   transition: .2s;
 }
 
 .commander-tab:hover,
 .commander-tab.active {
-  color: #fff;
-  border-color: #ff7a18;
-  background: rgba(255,122,24,.12);
-  box-shadow: inset 0 -4px 0 #ff7a18;
+  color:
+    #fff;
+
+  border-color:
+    #ff7a18;
+
+  background:
+    rgba(255,122,24,.12);
+
+  box-shadow:
+    inset
+    0 -4px 0
+    #ff7a18;
 }
 
 .union-tab:hover,
 .union-tab.active {
-  color: #fff;
-  border-color: #3696ff;
-  background: rgba(54,150,255,.12);
-  box-shadow: inset 0 -4px 0 #3696ff;
+  color:
+    #fff;
+
+  border-color:
+    #3696ff;
+
+  background:
+    rgba(54,150,255,.12);
+
+  box-shadow:
+    inset
+    0 -4px 0
+    #3696ff;
 }
 
 
@@ -782,11 +1258,22 @@ h1 em {
 #slvFilter,
 #unionRankFilter {
   width: 100%;
+
   min-height: 48px;
-  padding: 0 14px;
-  background: #0b111b;
-  color: #fff;
-  border: 1px solid #334155;
+
+  padding:
+    0 14px;
+
+  background:
+    #0b111b;
+
+  color:
+    #fff;
+
+  border:
+    1px solid
+    #334155;
+
   font-size: 15px;
 }
 
@@ -795,16 +1282,28 @@ h1 em {
    募集件数
 ======================================== */
 
-.registration-count > div:first-child strong,
-.registration-count > div:first-child span,
-.registration-count > div:first-child small {
-  color: #ff6a00;
+.registration-count
+> div:first-child strong,
+
+.registration-count
+> div:first-child span,
+
+.registration-count
+> div:first-child small {
+  color:
+    #ff6a00;
 }
 
-.registration-count > div:nth-child(2) strong,
-.registration-count > div:nth-child(2) span,
-.registration-count > div:nth-child(2) small {
-  color: #2196f3;
+.registration-count
+> div:nth-child(2) strong,
+
+.registration-count
+> div:nth-child(2) span,
+
+.registration-count
+> div:nth-child(2) small {
+  color:
+    #2196f3;
 }
 
 
@@ -814,58 +1313,105 @@ h1 em {
 
 .union-rank {
   display: inline-flex;
+
   align-items: center;
+
   justify-content: center;
+
   width: fit-content;
+
   margin-top: 8px;
-  padding: 6px 14px;
-  border: 1px solid;
+
+  padding:
+    6px 14px;
+
+  border:
+    1px solid;
+
   border-radius: 999px;
+
   font-weight: 800;
+
   font-size: 14px;
+
   letter-spacing: .04em;
 }
 
 .rank-challenger {
-  color: #ff4d4d;
-  border-color: #ff4d4d;
-  background: rgba(255,77,77,.12);
+  color:
+    #ff4d4d;
+
+  border-color:
+    #ff4d4d;
+
+  background:
+    rgba(255,77,77,.12);
 }
 
 .rank-diamond {
-  color: #c875ff;
-  border-color: #c875ff;
-  background: rgba(200,117,255,.12);
+  color:
+    #c875ff;
+
+  border-color:
+    #c875ff;
+
+  background:
+    rgba(200,117,255,.12);
 }
 
 .rank-platinum {
-  color: #62d9ff;
-  border-color: #62d9ff;
-  background: rgba(98,217,255,.12);
+  color:
+    #62d9ff;
+
+  border-color:
+    #62d9ff;
+
+  background:
+    rgba(98,217,255,.12);
 }
 
 .rank-gold {
-  color: #ffd24a;
-  border-color: #ffd24a;
-  background: rgba(255,210,74,.12);
+  color:
+    #ffd24a;
+
+  border-color:
+    #ffd24a;
+
+  background:
+    rgba(255,210,74,.12);
 }
 
 .rank-silver {
-  color: #d7dde5;
-  border-color: #d7dde5;
-  background: rgba(215,221,229,.12);
+  color:
+    #d7dde5;
+
+  border-color:
+    #d7dde5;
+
+  background:
+    rgba(215,221,229,.12);
 }
 
 .rank-rookie {
-  color: #a8e84a;
-  border-color: #a8e84a;
-  background: rgba(168,232,74,.12);
+  color:
+    #a8e84a;
+
+  border-color:
+    #a8e84a;
+
+  background:
+    rgba(168,232,74,.12);
 }
 
 .rank-default {
-  color: #fff;
-  border-color: #777;
-  background: rgba(255,255,255,.08);
+  color:
+    #fff;
+
+  border-color:
+    #777;
+
+  background:
+    rgba(255,255,255,.08);
 }
 
 
@@ -874,49 +1420,86 @@ h1 em {
 ======================================== */
 
 .easy-register-box {
-  margin: 0 0 20px;
+  margin:
+    0 0 20px;
+
   padding: 20px;
-  border: 1px solid rgba(255,122,24,.45);
-  border-left: 4px solid var(--accent);
+
+  border:
+    1px solid
+    rgba(255,122,24,.45);
+
+  border-left:
+    4px solid
+    var(--accent);
+
   background:
     linear-gradient(
       145deg,
       rgba(20,28,41,.92),
       rgba(11,16,24,.92)
     );
-  box-shadow: 0 10px 30px rgba(0,0,0,.18);
+
+  box-shadow:
+    0 10px 30px
+    rgba(0,0,0,.18);
 }
 
 .easy-register-title {
   margin-bottom: 14px;
-  color: #fff;
+
+  color:
+    #fff;
+
   font-size: 19px;
+
   font-weight: 800;
 }
 
 .easy-register-list {
   display: grid;
+
   gap: 7px;
-  color: #d8e0ea;
+
+  color:
+    #d8e0ea;
+
   font-size: 14px;
+
   line-height: 1.7;
 }
 
 .easy-register-copy {
   margin-top: 14px;
-  color: var(--accent2);
+
+  color:
+    var(--accent2);
+
   font-size: 15px;
+
   font-weight: 800;
 }
 
 .easy-register-privacy {
   margin-top: 16px;
-  padding: 11px 13px;
-  border: 1px solid rgba(84,227,155,.28);
-  background: rgba(84,227,155,.08);
-  color: #8ff0bd;
+
+  padding:
+    11px 13px;
+
+  border:
+    1px solid
+    rgba(84,227,155,.28);
+
+  background:
+    rgba(84,227,155,.08);
+
+  color:
+    #8ff0bd;
+
   font-size: 13px;
+
   font-weight: 700;
+
   line-height: 1.6;
 }
 
@@ -930,35 +1513,64 @@ h1 em {
   display: none;
 }
 
-body.register-mode #heroRegisterArea,
-body.manage-mode #heroManageArea {
+body.register-mode
+#heroRegisterArea,
+
+body.manage-mode
+#heroManageArea {
   display: block;
+
   margin-top: 28px;
 }
 
-body.register-mode .hero-stats,
-body.manage-mode .hero-stats {
-  display: none !important;
+body.register-mode
+.hero-stats,
+
+body.manage-mode
+.hero-stats {
+  display:
+    none !important;
 }
 
-body.register-mode .hero,
-body.manage-mode .hero {
-  grid-template-columns: minmax(0,760px) !important;
-  justify-content: start !important;
+body.register-mode
+.hero,
+
+body.manage-mode
+.hero {
+  grid-template-columns:
+    minmax(0,760px)
+    !important;
+
+  justify-content:
+    start !important;
 }
 
-body.register-mode .hero-left,
-body.manage-mode .hero-left {
-  width: 100% !important;
-  max-width: 760px !important;
+body.register-mode
+.hero-left,
+
+body.manage-mode
+.hero-left {
+  width:
+    100% !important;
+
+  max-width:
+    760px !important;
 }
 
-body.register-mode #registerPage,
-body.manage-mode #managePage {
-  display: block !important;
+body.register-mode
+#registerPage,
+
+body.manage-mode
+#managePage {
+  display:
+    block !important;
+
   width: 100%;
+
   margin: 0;
-  padding: 0 0 24px;
+
+  padding:
+    0 0 24px;
 }
 
 
@@ -968,34 +1580,74 @@ body.manage-mode #managePage {
 
 .register-inline-top,
 .manage-inline-top {
-  display: block !important;
-  width: 100% !important;
-  margin: 0 0 18px !important;
+  display:
+    block !important;
+
+  width:
+    100% !important;
+
+  margin:
+    0 0 18px !important;
 }
 
 .register-back-btn,
 .manage-back-btn {
-  display: flex !important;
-  align-items: center !important;
-  justify-content: center !important;
-  width: 100% !important;
-  height: 52px !important;
-  min-height: 52px !important;
-  padding: 0 18px !important;
-  background: #111925 !important;
-  color: #fff !important;
-  border: 1px solid var(--line) !important;
-  border-radius: 3px !important;
-  font-family: inherit !important;
-  font-size: 16px !important;
-  font-weight: 800 !important;
+  display:
+    flex !important;
+
+  align-items:
+    center !important;
+
+  justify-content:
+    center !important;
+
+  width:
+    100% !important;
+
+  height:
+    52px !important;
+
+  min-height:
+    52px !important;
+
+  padding:
+    0 18px !important;
+
+  background:
+    #111925 !important;
+
+  color:
+    #fff !important;
+
+  border:
+    1px solid
+    var(--line)
+    !important;
+
+  border-radius:
+    3px !important;
+
+  font-family:
+    inherit !important;
+
+  font-size:
+    16px !important;
+
+  font-weight:
+    800 !important;
+
   cursor: pointer;
 }
 
 .register-back-btn:hover,
 .manage-back-btn:hover {
-  border-color: var(--accent) !important;
-  color: var(--accent2) !important;
+  border-color:
+    var(--accent)
+    !important;
+
+  color:
+    var(--accent2)
+    !important;
 }
 
 
@@ -1006,87 +1658,140 @@ body.manage-mode #managePage {
 
 .section-head-actions {
   display: flex;
+
   align-items: center;
-  justify-content: flex-end;
+
+  justify-content:
+    flex-end;
+
   gap: 14px;
+
   margin-left: 24px;
+
   margin-right: 42px;
 }
 
 .graduated-commander-counter {
   display: flex;
+
   flex-direction: row;
+
   align-items: center;
+
   justify-content: center;
 
   min-width: 220px;
-  gap: 12px;
-  padding: 10px 14px;
 
-  border: 1px solid rgba(255,177,92,.45);
+  gap: 12px;
+
+  padding:
+    10px 14px;
+
+  border:
+    1px solid
+    rgba(168,232,74,.55);
 
   background:
     linear-gradient(
       145deg,
-      rgba(255,122,24,.14),
-      rgba(255,177,92,.05)
+      rgba(168,232,74,.15),
+      rgba(199,255,118,.045)
     );
 
   box-shadow:
-    inset 0 -3px 0 rgba(255,177,92,.55);
+    inset
+    0 -3px 0
+    rgba(168,232,74,.58);
 }
 
 .graduated-commander-number {
   display: flex;
+
   flex-direction: row;
+
   align-items: baseline;
+
   justify-content: center;
+
   gap: 3px;
-  flex: 0 0 auto;
+
+  flex:
+    0 0 auto;
 }
 
 .graduated-commander-number strong {
-  color: #ff7a18;
-  font-family: Rajdhani,sans-serif;
+  color:
+    var(--graduate);
+
+  font-family:
+    Rajdhani,
+    sans-serif;
+
   font-size: 62px;
+
   font-weight: 700;
+
   line-height: .9;
-  text-shadow: 0 0 16px rgba(255,177,92,.25);
+
+  text-shadow:
+    0 0 17px
+    rgba(168,232,74,.22);
 }
 
 .graduated-commander-number span {
-  color: #ffb15c;
+  color:
+    var(--graduate2);
+
   font-size: 18px;
+
   font-weight: 800;
 }
 
 .graduated-commander-label {
   display: flex;
+
   flex-direction: column;
+
   align-items: flex-start;
+
   justify-content: center;
+
   gap: 4px;
+
   line-height: 1.2;
 }
 
 .graduated-commander-label strong {
-  color: #fff;
+  color:
+    #eaffca;
+
   font-size: 15px;
+
   font-weight: 800;
+
   white-space: nowrap;
 }
 
 .graduated-commander-label small {
-  color: #ffd09a;
+  color:
+    var(--graduate2);
+
   font-size: 13px;
+
   font-weight: 800;
+
   white-space: nowrap;
 }
 
-.section-head-actions #refreshBtn {
-  flex: 0 0 auto;
+.section-head-actions
+#refreshBtn {
+  flex:
+    0 0 auto;
+
   min-width: 54px;
-  padding: 0 2px 4px;
+
+  padding:
+    0 2px 4px;
 }
 
 
@@ -1098,9 +1803,14 @@ body.manage-mode #managePage {
 
   .container {
     width: 100%;
+
     max-width: 1400px;
-    margin: 0 auto;
+
+    margin:
+      0 auto;
+
     padding-left: 18px;
+
     padding-right: 18px;
   }
 
@@ -1108,6 +1818,7 @@ body.manage-mode #managePage {
     grid-template-columns:
       minmax(0,.86fr)
       minmax(360px,1.14fr);
+
     gap: 30px;
   }
 
@@ -1118,41 +1829,60 @@ body.manage-mode #managePage {
    タブレット
 ======================================== */
 
-@media screen and (min-width: 601px) and (max-width: 1024px) {
+@media screen and
+(min-width: 601px) and
+(max-width: 1024px) {
 
   .hero {
     grid-template-columns:
       minmax(0,.9fr)
       minmax(330px,1.1fr);
+
     gap: 20px;
   }
 
   h1 {
-    font-size: clamp(42px,6vw,56px);
+    font-size:
+      clamp(
+        42px,
+        6vw,
+        56px
+      );
   }
 
   .hero-stats {
     min-height: 220px;
-    padding: 24px 12px 50px;
+
+    padding:
+      24px 12px 50px;
+
     gap: 10px;
   }
 
   .hero-stat-title {
     font-size: 12px;
+
     margin-bottom: 14px;
   }
 
   .hero-stat-number strong {
-    font-size: clamp(52px,7vw,72px);
+    font-size:
+      clamp(
+        52px,
+        7vw,
+        72px
+      );
   }
 
   .hero-stat-number span {
     font-size: 17px;
+
     padding-bottom: 5px;
   }
 
   .hero-stat-sub {
     margin-top: 14px;
+
     font-size: 10px;
   }
 
@@ -1183,13 +1913,23 @@ body.manage-mode #managePage {
 
   .container {
     padding-left: 12px;
+
     padding-right: 12px;
   }
 
+
+  /* HERO */
+
   .hero {
-    display: grid !important;
-    grid-template-columns: 1fr !important;
-    gap: 8px !important;
+    display:
+      grid !important;
+
+    grid-template-columns:
+      1fr !important;
+
+    gap:
+      8px !important;
+
     padding-top: 38px;
   }
 
@@ -1198,18 +1938,36 @@ body.manage-mode #managePage {
   }
 
   .hero-actions {
-    width: calc(100% - 20px) !important;
-    max-width: 360px !important;
-    margin-left: auto !important;
-    margin-right: auto !important;
+    width:
+      calc(100% - 20px)
+      !important;
+
+    max-width:
+      360px !important;
+
+    margin-left:
+      auto !important;
+
+    margin-right:
+      auto !important;
   }
 
   .hero-stats {
-    width: calc(100% - 20px) !important;
-    max-width: 360px !important;
-    margin: 4px auto 0 !important;
+    width:
+      calc(100% - 20px)
+      !important;
+
+    max-width:
+      360px !important;
+
+    margin:
+      4px auto 0
+      !important;
+
     min-height: 210px;
-    padding: 25px 12px 50px;
+
+    padding:
+      25px 12px 50px;
   }
 
   .hero-stat-title {
@@ -1228,14 +1986,22 @@ body.manage-mode #managePage {
     height: 105px;
   }
 
+
+  /* カード */
+
   .cards {
-    grid-template-columns: 1fr;
+    grid-template-columns:
+      1fr;
   }
 
   .pass-box strong {
     font-size: 34px;
+
     letter-spacing: 5px;
   }
+
+
+  /* かんたん登録 */
 
   .easy-register-box {
     padding: 16px;
@@ -1271,8 +2037,11 @@ body.manage-mode #managePage {
   #managePage input,
   #managePage select,
   #managePage textarea {
-    font-size: 16px !important;
-    line-height: 1.4 !important;
+    font-size:
+      16px !important;
+
+    line-height:
+      1.4 !important;
   }
 
 
@@ -1280,36 +2049,55 @@ body.manage-mode #managePage {
      登録・締切フォーム
   ====================================== */
 
-  body.register-mode #heroRegisterArea,
-  body.manage-mode #heroManageArea {
-    width: calc(100% - 20px) !important;
-    max-width: 360px !important;
-    margin-left: auto !important;
-    margin-right: auto !important;
-    margin-top: 20px !important;
+  body.register-mode
+  #heroRegisterArea,
+
+  body.manage-mode
+  #heroManageArea {
+    width:
+      calc(100% - 20px)
+      !important;
+
+    max-width:
+      360px !important;
+
+    margin-left:
+      auto !important;
+
+    margin-right:
+      auto !important;
+
+    margin-top:
+      20px !important;
   }
 
-  body.register-mode .hero-left,
-  body.manage-mode .hero-left {
-    max-width: none !important;
+  body.register-mode
+  .hero-left,
+
+  body.manage-mode
+  .hero-left {
+    max-width:
+      none !important;
   }
 
 
   /* ======================================
-     募集中一覧
-     
-     1段目：
+     募集一覧ヘッダー
+
+     1段目
      RECRUITMENTS
 
-     2段目：
-     募集中の指揮官・ユニオン  ↻更新
+     2段目
+     募集中の指揮官・ユニオン      ↻更新
 
-     3段目：
-     募集件数   卒業ちしかん
+     3段目
+     野良/ユニオン       卒業ちしかん
   ====================================== */
 
-  #listPage .section-head {
-    display: grid !important;
+  #listPage
+  .section-head {
+    display:
+      grid !important;
 
     grid-template-columns:
       minmax(0,1fr)
@@ -1320,43 +2108,71 @@ body.manage-mode #managePage {
       auto
       auto !important;
 
-    column-gap: 8px !important;
-    row-gap: 8px !important;
+    column-gap:
+      8px !important;
 
-    align-items: center !important;
+    row-gap:
+      8px !important;
 
-    width: 100% !important;
+    align-items:
+      center !important;
 
-    margin-bottom: 18px !important;
+    width:
+      100% !important;
+
+    margin:
+      0 0 18px !important;
   }
 
 
-  /* 左側親要素をgridの中身として扱う */
+  /* 左側親要素をグリッドから外す */
 
-  #listPage .section-head > div:first-child {
-    display: contents !important;
+  #listPage
+  .section-head
+  > div:first-child {
+    display:
+      contents !important;
   }
 
 
   /* RECRUITMENTS */
 
-  #listPage .section-head .eyebrow {
-    grid-column: 1 / -1 !important;
-    grid-row: 1 !important;
+  #listPage
+  .section-head
+  .eyebrow {
+    grid-column:
+      1 / 3 !important;
 
-    margin: 0 !important;
+    grid-row:
+      1 !important;
+
+    width:
+      100% !important;
+
+    margin:
+      0 !important;
   }
 
 
   /* 募集中の指揮官・ユニオン */
 
-  #listPage .section-head h2 {
-    grid-column: 1 !important;
-    grid-row: 2 !important;
+  #listPage
+  .section-head
+  h2 {
+    grid-column:
+      1 !important;
 
-    width: 100% !important;
+    grid-row:
+      2 !important;
 
-    margin: 0 !important;
+    width:
+      100% !important;
+
+    min-width:
+      0 !important;
+
+    margin:
+      0 !important;
 
     font-size:
       clamp(
@@ -1365,9 +2181,20 @@ body.manage-mode #managePage {
         27px
       ) !important;
 
-    line-height: 1.15 !important;
+    line-height:
+      1.15 !important;
 
-    white-space: nowrap !important;
+    white-space:
+      nowrap !important;
+  }
+
+
+  /* actions親をグリッドから外す */
+
+  #listPage
+  .section-head-actions {
+    display:
+      contents !important;
   }
 
 
@@ -1376,27 +2203,43 @@ body.manage-mode #managePage {
      見出しと同じ段
   ====================================== */
 
-  #listPage .section-head-actions {
-    display: contents !important;
-  }
+  #listPage
+  #refreshBtn {
+    grid-column:
+      2 !important;
 
-  #listPage #refreshBtn {
-    grid-column: 2 !important;
-    grid-row: 2 !important;
+    grid-row:
+      2 !important;
 
-    justify-self: end !important;
-    align-self: center !important;
+    justify-self:
+      end !important;
 
-    min-width: auto !important;
+    align-self:
+      center !important;
 
-    margin: 0 !important;
-    padding: 2px 0 !important;
+    width:
+      auto !important;
 
-    font-size: 11px !important;
+    min-width:
+      42px !important;
 
-    white-space: nowrap !important;
+    margin:
+      0 !important;
 
-    color: var(--accent2) !important;
+    padding:
+      4px 0 !important;
+
+    font-size:
+      11px !important;
+
+    line-height:
+      1 !important;
+
+    white-space:
+      nowrap !important;
+
+    color:
+      var(--accent2) !important;
   }
 
 
@@ -1405,34 +2248,64 @@ body.manage-mode #managePage {
      左下
   ====================================== */
 
-  #listPage .registration-count {
-    grid-column: 1 !important;
-    grid-row: 3 !important;
+  #listPage
+  .registration-count {
+    grid-column:
+      1 !important;
 
-    display: flex !important;
-    flex-direction: column !important;
+    grid-row:
+      3 !important;
 
-    align-items: flex-start !important;
-    justify-content: center !important;
+    display:
+      flex !important;
 
-    gap: 4px !important;
+    flex-direction:
+      column !important;
 
-    min-width: 0 !important;
+    align-items:
+      flex-start !important;
 
-    margin: 0 !important;
+    justify-content:
+      center !important;
+
+    width:
+      auto !important;
+
+    min-width:
+      0 !important;
+
+    gap:
+      5px !important;
+
+    margin:
+      0 !important;
+
+    padding:
+      0 !important;
   }
 
-  #listPage .registration-count > div {
-    display: flex !important;
+  #listPage
+  .registration-count
+  > div {
+    display:
+      flex !important;
 
-    align-items: baseline !important;
+    align-items:
+      baseline !important;
 
-    gap: 4px !important;
+    gap:
+      4px !important;
 
-    white-space: nowrap !important;
+    margin:
+      0 !important;
+
+    white-space:
+      nowrap !important;
   }
 
-  #listPage .registration-count strong {
+  #listPage
+  .registration-count
+  strong {
     font-size:
       clamp(
         16px,
@@ -1440,13 +2313,22 @@ body.manage-mode #managePage {
         20px
       ) !important;
 
-    line-height: 1 !important;
+    line-height:
+      1 !important;
   }
 
-  #listPage .registration-count span,
-  #listPage .registration-count small {
-    font-size: 11px !important;
-    line-height: 1.2 !important;
+  #listPage
+  .registration-count
+  span,
+
+  #listPage
+  .registration-count
+  small {
+    font-size:
+      11px !important;
+
+    line-height:
+      1.2 !important;
   }
 
 
@@ -1455,459 +2337,264 @@ body.manage-mode #managePage {
      右下
   ====================================== */
 
-  #listPage .graduated-commander-counter {
-    grid-column: 2 !important;
-    grid-row: 3 !important;
+  #listPage
+  .graduated-commander-counter {
+    grid-column:
+      2 !important;
 
-    display: flex !important;
-    flex-direction: row !important;
+    grid-row:
+      3 !important;
 
-    align-items: center !important;
-    justify-content: center !important;
+    justify-self:
+      end !important;
 
-    justify-self: end !important;
+    align-self:
+      center !important;
 
-    width: auto !important;
-    min-width: 160px !important;
+    display:
+      flex !important;
 
-    gap: 7px !important;
+    flex-direction:
+      row !important;
 
-    margin: 0 !important;
+    align-items:
+      center !important;
 
-    padding: 8px 9px !important;
+    justify-content:
+      center !important;
+
+    width:
+      158px !important;
+
+    min-width:
+      158px !important;
+
+    max-width:
+      158px !important;
+
+    min-height:
+      66px !important;
+
+    gap:
+      6px !important;
+
+    margin:
+      0 !important;
+
+    padding:
+      7px 8px !important;
 
     border:
       1px solid
-      rgba(255,177,92,.45) !important;
+      rgba(168,232,74,.55)
+      !important;
 
     background:
       linear-gradient(
         145deg,
-        rgba(255,122,24,.14),
-        rgba(255,177,92,.05)
-      ) !important;
+        rgba(168,232,74,.16),
+        rgba(199,255,118,.05)
+      )
+      !important;
 
     box-shadow:
       inset
       0 -3px 0
-      rgba(255,177,92,.55) !important;
+      rgba(168,232,74,.58)
+      !important;
   }
 
 
   /* 5名 */
 
-  #listPage .graduated-commander-number {
-    display: flex !important;
-    flex-direction: row !important;
+  #listPage
+  .graduated-commander-number {
+    display:
+      flex !important;
 
-    align-items: baseline !important;
-    justify-content: center !important;
+    flex-direction:
+      row !important;
 
-    gap: 2px !important;
+    align-items:
+      baseline !important;
 
-    flex: 0 0 auto !important;
+    justify-content:
+      center !important;
+
+    gap:
+      2px !important;
+
+    flex:
+      0 0 auto !important;
+
+    margin:
+      0 !important;
   }
 
-  #listPage .graduated-commander-number strong {
+  #listPage
+  .graduated-commander-number
+  strong {
+    margin:
+      0 !important;
+
     font-size:
       clamp(
         38px,
         11vw,
-        48px
+        46px
       ) !important;
 
-    line-height: .9 !important;
+    line-height:
+      .9 !important;
 
-    color: #ff7a18 !important;
+    color:
+      var(--graduate)
+      !important;
+
+    text-shadow:
+      0 0 14px
+      rgba(168,232,74,.20);
   }
 
-  #listPage .graduated-commander-number span {
-    font-size: 13px !important;
-
-    line-height: 1 !important;
-
-    color: #ffb15c !important;
-  }
-
-
-  /* 右側2段 */
-
-  #listPage .graduated-commander-label {
-    display: flex !important;
-    flex-direction: column !important;
-
-    align-items: flex-start !important;
-    justify-content: center !important;
-
-    gap: 4px !important;
-
-    min-width: 0 !important;
-  }
-
-  #listPage .graduated-commander-label strong {
-    color: #fff !important;
-
-    font-size: 11px !important;
-    line-height: 1.15 !important;
-
-    white-space: nowrap !important;
-  }
-
-  #listPage .graduated-commander-label small {
-    color: #ffd09a !important;
-
-    font-size: 9px !important;
-    line-height: 1.15 !important;
-
-    white-space: nowrap !important;
-  }
-
-}
-
-
-/* ========================================
-   超小型スマホ
-   320～360px付近
-======================================== */
-
-@media screen and (max-width: 360px) {
-
-  #listPage .section-head h2 {
-    font-size: 19px !important;
-  }
-
-  #listPage .graduated-commander-counter {
-    min-width: 145px !important;
-    gap: 5px !important;
-    padding: 7px 6px !important;
-  }
-
-  #listPage .graduated-commander-number strong {
-    font-size: 38px !important;
-  }
-
-  #listPage .graduated-commander-label strong {
-    font-size: 10px !important;
-  }
-
-  #listPage .graduated-commander-label small {
-    font-size: 8px !important;
-  }
-
-}
-/* ========================================
-   スマホ 募集一覧ヘッダー 完全固定
-======================================== */
-
-@media screen and (max-width: 600px) {
-
-  /* 全体を3行グリッドに固定 */
-  #listPage .section-head {
-    display: grid !important;
-
-    grid-template-columns:
-      minmax(0, 1fr)
-      auto !important;
-
-    grid-template-rows:
-      auto
-      auto
-      auto !important;
-
-    column-gap: 8px !important;
-    row-gap: 8px !important;
-
-    width: 100% !important;
-
-    margin: 0 0 18px !important;
-
-    align-items: center !important;
-  }
-
-
-  /* 左側親要素をグリッドから外す */
-  #listPage .section-head > div:first-child {
-    display: contents !important;
-  }
-
-
-  /* --------------------------------
-     1段目 RECRUITMENTS
-  -------------------------------- */
-
-  #listPage .section-head .eyebrow {
-    grid-column: 1 / 3 !important;
-    grid-row: 1 !important;
-
-    width: 100% !important;
-
-    margin: 0 !important;
-  }
-
-
-  /* --------------------------------
-     2段目
-     見出し             更新
-  -------------------------------- */
-
-  #listPage .section-head h2 {
-    grid-column: 1 !important;
-    grid-row: 2 !important;
-
-    min-width: 0 !important;
-    width: 100% !important;
-
-    margin: 0 !important;
-
-    font-size: 21px !important;
-    line-height: 1.2 !important;
-
-    white-space: nowrap !important;
-
-    overflow: visible !important;
-  }
-
-
-  /* actions親をグリッドから外す */
-  #listPage .section-head-actions {
-    display: contents !important;
-  }
-
-
-  #listPage #refreshBtn {
-    grid-column: 2 !important;
-    grid-row: 2 !important;
-
-    justify-self: end !important;
-    align-self: center !important;
-
-    width: auto !important;
-    min-width: 42px !important;
-
-    margin: 0 !important;
-    padding: 4px 0 !important;
-
-    font-size: 11px !important;
-    line-height: 1 !important;
-
-    white-space: nowrap !important;
-
-    color: #ffb15c !important;
-  }
-
-
-  /* --------------------------------
-     3段目 左
-     野良ちしかん
-     登録ユニオン
-  -------------------------------- */
-
-  #listPage .registration-count {
-    grid-column: 1 !important;
-    grid-row: 3 !important;
-
-    display: flex !important;
-    flex-direction: column !important;
-
-    align-items: flex-start !important;
-    justify-content: center !important;
-
-    width: auto !important;
-    min-width: 0 !important;
-
-    gap: 5px !important;
-
-    margin: 0 !important;
-    padding: 0 !important;
-  }
-
-
-  #listPage .registration-count > div {
-    display: flex !important;
-
-    align-items: baseline !important;
-
-    gap: 4px !important;
-
-    margin: 0 !important;
-
-    white-space: nowrap !important;
-  }
-
-
-  #listPage .registration-count strong {
-    font-size: 18px !important;
-    line-height: 1 !important;
-  }
-
-
-  #listPage .registration-count span {
-    font-size: 11px !important;
-    line-height: 1 !important;
-  }
-
-
-  #listPage .registration-count small {
-    font-size: 11px !important;
-    line-height: 1 !important;
-  }
-
-
-  /* --------------------------------
-     3段目 右
-     卒業ちしかん
-  -------------------------------- */
-
-  #listPage .graduated-commander-counter {
-    grid-column: 2 !important;
-    grid-row: 3 !important;
-
-    justify-self: end !important;
-    align-self: center !important;
-
-    display: flex !important;
-    flex-direction: row !important;
-
-    align-items: center !important;
-    justify-content: center !important;
-
-    width: 158px !important;
-    min-width: 158px !important;
-    max-width: 158px !important;
-
-    height: 66px !important;
-
-    margin: 0 !important;
-
-    padding: 7px 8px !important;
-
-    gap: 6px !important;
-
-    border:
-      1px solid
-      rgba(255, 177, 92, .5) !important;
-
-    background:
-      linear-gradient(
-        145deg,
-        rgba(255, 122, 24, .16),
-        rgba(255, 177, 92, .05)
-      ) !important;
-
-    box-shadow:
-      inset 0 -3px 0
-      rgba(255, 177, 92, .55) !important;
-  }
-
-
-  /* 5名 */
-  #listPage .graduated-commander-number {
-    display: flex !important;
-    flex-direction: row !important;
-
-    align-items: baseline !important;
-
-    gap: 2px !important;
-
-    flex: 0 0 auto !important;
-
-    margin: 0 !important;
-  }
-
-
-  #listPage .graduated-commander-number strong {
-    margin: 0 !important;
-
-    font-size: 42px !important;
-    line-height: .9 !important;
-
-    color: #ff7a18 !important;
-  }
-
-
-  #listPage .graduated-commander-number span {
-    margin: 0 !important;
-    padding: 0 !important;
-
-    font-size: 12px !important;
-    line-height: 1 !important;
-
-    color: #ffb15c !important;
+  #listPage
+  .graduated-commander-number
+  span {
+    margin:
+      0 !important;
+
+    padding:
+      0 !important;
+
+    font-size:
+      12px !important;
+
+    line-height:
+      1 !important;
+
+    color:
+      var(--graduate2)
+      !important;
   }
 
 
   /* ユニオン決定 / 卒業ちしかん */
-  #listPage .graduated-commander-label {
-    display: flex !important;
-    flex-direction: column !important;
 
-    align-items: flex-start !important;
-    justify-content: center !important;
+  #listPage
+  .graduated-commander-label {
+    display:
+      flex !important;
 
-    gap: 4px !important;
+    flex-direction:
+      column !important;
 
-    margin: 0 !important;
+    align-items:
+      flex-start !important;
 
-    min-width: 0 !important;
+    justify-content:
+      center !important;
+
+    gap:
+      4px !important;
+
+    margin:
+      0 !important;
+
+    min-width:
+      0 !important;
   }
 
+  #listPage
+  .graduated-commander-label
+  strong {
+    margin:
+      0 !important;
 
-  #listPage .graduated-commander-label strong {
-    margin: 0 !important;
+    font-size:
+      10px !important;
 
-    font-size: 10px !important;
-    line-height: 1.15 !important;
+    line-height:
+      1.15 !important;
 
-    color: #ffffff !important;
+    color:
+      #edffd1 !important;
 
-    white-space: nowrap !important;
+    white-space:
+      nowrap !important;
   }
 
+  #listPage
+  .graduated-commander-label
+  small {
+    margin:
+      0 !important;
 
-  #listPage .graduated-commander-label small {
-    margin: 0 !important;
+    font-size:
+      9px !important;
 
-    font-size: 9px !important;
-    line-height: 1.15 !important;
+    line-height:
+      1.15 !important;
 
-    color: #ffd09a !important;
+    color:
+      var(--graduate2)
+      !important;
 
-    white-space: nowrap !important;
+    white-space:
+      nowrap !important;
   }
 
 }
 
 
 /* ========================================
-   かなり小さいスマホ
+   小さいスマホ
 ======================================== */
 
 @media screen and (max-width: 360px) {
 
-  #listPage .section-head h2 {
-    font-size: 19px !important;
+  #listPage
+  .section-head
+  h2 {
+    font-size:
+      19px !important;
   }
 
-  #listPage .graduated-commander-counter {
-    width: 145px !important;
-    min-width: 145px !important;
-    max-width: 145px !important;
+  #listPage
+  .graduated-commander-counter {
+    width:
+      145px !important;
 
-    gap: 4px !important;
+    min-width:
+      145px !important;
 
-    padding: 6px !important;
+    max-width:
+      145px !important;
+
+    gap:
+      4px !important;
+
+    padding:
+      6px !important;
   }
 
-  #listPage .graduated-commander-number strong {
-    font-size: 38px !important;
+  #listPage
+  .graduated-commander-number
+  strong {
+    font-size:
+      38px !important;
   }
 
-  #listPage .graduated-commander-label strong {
-    font-size: 9px !important;
+  #listPage
+  .graduated-commander-label
+  strong {
+    font-size:
+      9px !important;
   }
 
-  #listPage .graduated-commander-label small {
-    font-size: 8px !important;
+  #listPage
+  .graduated-commander-label
+  small {
+    font-size:
+      8px !important;
   }
 
 }
