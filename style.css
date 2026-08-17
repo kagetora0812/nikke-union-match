@@ -2525,3 +2525,177 @@ body.manage-mode
   }
 
 }
+/* ========================================
+   卒業ちしかんカウンター
+   数字左・説明右
+======================================== */
+
+.graduated-commander-counter {
+  display: flex !important;
+
+  align-items: center !important;
+
+  justify-content: center !important;
+
+  gap: 12px !important;
+
+  min-width: 220px !important;
+
+  padding: 10px 14px !important;
+
+  text-align: left !important;
+
+  border:
+    1px solid
+    rgba(255, 177, 92, 0.45) !important;
+
+  background:
+    linear-gradient(
+      145deg,
+      rgba(255, 122, 24, 0.14),
+      rgba(255, 177, 92, 0.05)
+    ) !important;
+
+  box-shadow:
+    inset
+    0 -3px 0
+    rgba(255, 177, 92, 0.55) !important;
+}
+
+
+/* 数字 */
+.graduated-commander-number {
+  display: flex !important;
+
+  align-items: flex-end !important;
+
+  justify-content: center !important;
+
+  gap: 4px !important;
+
+  flex:
+    0 0 auto !important;
+}
+
+
+.graduated-commander-number strong {
+  color:
+    #ffb15c !important;
+
+  font-family:
+    Rajdhani,
+    sans-serif !important;
+
+  font-size:
+    62px !important;
+
+  font-weight:
+    700 !important;
+
+  line-height:
+    0.85 !important;
+
+  text-shadow:
+    0 0 16px
+    rgba(255, 177, 92, 0.25);
+}
+
+
+.graduated-commander-number span {
+  color:
+    #ffb15c !important;
+
+  font-size:
+    18px !important;
+
+  font-weight:
+    800 !important;
+
+  padding-bottom:
+    4px !important;
+}
+
+
+/* 右側2段 */
+.graduated-commander-label {
+  display: flex !important;
+
+  flex-direction: column !important;
+
+  justify-content: center !important;
+
+  gap: 4px !important;
+
+  line-height: 1.2 !important;
+}
+
+
+.graduated-commander-label strong {
+  color:
+    #ffffff !important;
+
+  font-size:
+    15px !important;
+
+  font-weight:
+    800 !important;
+
+  white-space:
+    nowrap !important;
+}
+
+
+.graduated-commander-label small {
+  color:
+    #ffd09a !important;
+
+  font-size:
+    13px !important;
+
+  font-weight:
+    800 !important;
+
+  white-space:
+    nowrap !important;
+}
+
+
+/* スマホ */
+@media screen and (max-width: 600px) {
+
+  .graduated-commander-counter {
+    min-width:
+      180px !important;
+
+    gap:
+      8px !important;
+
+    padding:
+      8px 10px !important;
+  }
+
+
+  .graduated-commander-number strong {
+    font-size:
+      50px !important;
+  }
+
+
+  .graduated-commander-number span {
+    font-size:
+      15px !important;
+  }
+
+
+  .graduated-commander-label strong {
+    font-size:
+      12px !important;
+  }
+
+
+  .graduated-commander-label small {
+    font-size:
+      11px !important;
+  }
+
+}
