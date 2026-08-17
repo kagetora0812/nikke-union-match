@@ -259,6 +259,7 @@ async function renderXEmbeds(
     if (!postId) {
       target.innerHTML =
         '<div class="x-embed-error">X投稿を表示できません</div>';
+
       continue;
     }
 
@@ -608,6 +609,55 @@ function showEmpty(text) {
 
 
 // ========================================
+// 卒業ちしかんカウンター
+// PASS締切 + 14日経過をSupabase側で合算
+// ========================================
+
+async function loadGraduatedCommanderCount() {
+  const counter =
+    $("#graduatedCommanderCount");
+
+  if (
+    !counter ||
+    !sb
+  ) {
+    return;
+  }
+
+  const {
+    data,
+    error
+  } =
+    await sb.rpc(
+      "get_graduated_commander_count"
+    );
+
+  if (error) {
+    console.error(
+      "卒業ちしかんカウンター取得エラー",
+      error
+    );
+
+    return;
+  }
+
+  const count =
+    Number(
+      Array.isArray(data)
+        ? data[0]
+        : data
+    );
+
+  if (
+    Number.isFinite(count)
+  ) {
+    counter.textContent =
+      count;
+  }
+}
+
+
+// ========================================
 // 募集一覧
 // ========================================
 
@@ -630,6 +680,7 @@ async function loadRecruitments() {
       "Supabaseの設定がまだです。",
       "error"
     );
+
     return;
   }
 
@@ -639,6 +690,18 @@ async function loadRecruitments() {
   empty.classList.add(
     "hidden"
   );
+
+
+  // ========================================
+  // 卒業ちしかん累計更新
+  //
+  // RPC側で
+  // ・PASS締切
+  // ・14日経過
+  // を合算
+  // ========================================
+
+  await loadGraduatedCommanderCount();
 
 
   const commanderQuery =
@@ -708,6 +771,7 @@ async function loadRecruitments() {
       `指揮官読み込みエラー：${commanderResult.error.message}`,
       "error"
     );
+
     return;
   }
 
@@ -719,6 +783,7 @@ async function loadRecruitments() {
       `ユニオン読み込みエラー：${unionResult.error.message}`,
       "error"
     );
+
     return;
   }
 
@@ -802,7 +867,10 @@ async function loadRecruitments() {
                 item.slv
               );
 
-            if (minSlv === 1000) {
+            if (
+              minSlv ===
+              1000
+            ) {
               return (
                 slv >= 1000 &&
                 slv <= 1200
@@ -836,6 +904,7 @@ async function loadRecruitments() {
       showEmpty(
         "現在募集中の指揮官はいません。"
       );
+
       return;
     }
 
@@ -888,6 +957,7 @@ async function loadRecruitments() {
                   ${escapeHtml(
                     item.slv
                   )}
+
                   <small>
                     SLV
                   </small>
@@ -921,6 +991,7 @@ async function loadRecruitments() {
                     )}"
                   >
                   </div>
+
 
                   <a
                     class="x-btn"
@@ -983,6 +1054,7 @@ async function loadRecruitments() {
       showEmpty(
         "現在募集中のユニオンはいません。"
       );
+
       return;
     }
 
@@ -1073,6 +1145,7 @@ async function loadRecruitments() {
                   >
                   </div>
 
+
                   <a
                     class="x-btn"
                     href="${escapeHtml(
@@ -1096,6 +1169,7 @@ async function loadRecruitments() {
 
 
   updateCountdowns();
+
   renderXEmbeds();
 
 
@@ -1106,6 +1180,7 @@ async function loadRecruitments() {
       countdownTimer
     );
   }
+
 
   countdownTimer =
     setInterval(
@@ -1125,11 +1200,13 @@ $("#slvFilter")
     loadRecruitments
   );
 
+
 $("#unionRankFilter")
   ?.addEventListener(
     "change",
     loadRecruitments
   );
+
 
 $("#refreshBtn")
   ?.addEventListener(
@@ -1150,6 +1227,7 @@ const commanderFields =
 
 const unionFields =
   $("#unionFields");
+
 
 function updateRegistrationFields() {
   if (
@@ -1202,11 +1280,13 @@ function updateRegistrationFields() {
   }
 }
 
+
 registrationTypeSelect
   ?.addEventListener(
     "change",
     updateRegistrationFields
   );
+
 
 updateRegistrationFields();
 
@@ -1274,6 +1354,7 @@ $("#registerForm")
         alert(
           "Supabaseの設定がまだです。"
         );
+
         return;
       }
 
@@ -1295,9 +1376,14 @@ $("#registerForm")
         alert(
           "Xの募集投稿URLを入力してください。\n例：https://x.com/ユーザー名/status/123456789..."
         );
+
         return;
       }
 
+
+      // ========================================
+      // ユニオン登録
+      // ========================================
 
       if (
         registrationType ===
@@ -1316,8 +1402,10 @@ $("#registerForm")
           alert(
             "ユニオン名を入力してください。"
           );
+
           return;
         }
+
 
         for (
           let attempt = 0;
@@ -1353,11 +1441,13 @@ $("#registerForm")
               }
             );
 
+
           if (error) {
             const errorText =
               getErrorText(
                 error
               );
+
 
             if (
               errorText.includes(
@@ -1367,8 +1457,10 @@ $("#registerForm")
               alert(
                 "同じユニオン名ですでに募集中です。"
               );
+
               return;
             }
+
 
             if (
               errorText.includes(
@@ -1378,8 +1470,10 @@ $("#registerForm")
               alert(
                 "Xの投稿URLではありません。募集投稿のURLを入力してください。"
               );
+
               return;
             }
+
 
             if (
               errorText.includes(
@@ -1389,16 +1483,20 @@ $("#registerForm")
               continue;
             }
 
+
             console.error(
               "ユニオン登録エラー",
               error
             );
 
+
             alert(
               `登録に失敗しました：${error.message}`
             );
+
             return;
           }
+
 
           const result =
             Array.isArray(
@@ -1407,23 +1505,34 @@ $("#registerForm")
               ? data[0]
               : data;
 
+
           showRegistrationResult(
             pass,
             result
           );
 
+
           event.target.reset();
+
           updateRegistrationFields();
+
 
           return;
         }
 
+
         alert(
           "PASSの発行に失敗しました。もう一度登録してください。"
         );
+
+
         return;
       }
 
+
+      // ========================================
+      // 指揮官登録
+      // ========================================
 
       const name =
         $("#name")
@@ -1436,12 +1545,15 @@ $("#registerForm")
             ?.value
         );
 
+
       if (!name) {
         alert(
           "指揮官名を入力してください。"
         );
+
         return;
       }
+
 
       if (
         !slv ||
@@ -1451,8 +1563,10 @@ $("#registerForm")
         alert(
           "SLVは1～1200で入力してください。"
         );
+
         return;
       }
+
 
       for (
         let attempt = 0;
@@ -1466,6 +1580,7 @@ $("#registerForm")
           await sha256(
             pass
           );
+
 
         const {
           data,
@@ -1488,11 +1603,13 @@ $("#registerForm")
             }
           );
 
+
         if (error) {
           const errorText =
             getErrorText(
               error
             );
+
 
           if (
             errorText.includes(
@@ -1502,8 +1619,10 @@ $("#registerForm")
             alert(
               "同じ指揮官名ですでに募集中です。"
             );
+
             return;
           }
+
 
           if (
             errorText.includes(
@@ -1513,8 +1632,10 @@ $("#registerForm")
             alert(
               "Xの投稿URLではありません。募集投稿のURLを入力してください。"
             );
+
             return;
           }
+
 
           if (
             errorText.includes(
@@ -1524,16 +1645,21 @@ $("#registerForm")
             continue;
           }
 
+
           console.error(
             "指揮官登録エラー",
             error
           );
 
+
           alert(
             `登録に失敗しました：${error.message}`
           );
+
+
           return;
         }
+
 
         const result =
           Array.isArray(
@@ -1542,16 +1668,21 @@ $("#registerForm")
             ? data[0]
             : data;
 
+
         showRegistrationResult(
           pass,
           result
         );
 
+
         event.target.reset();
+
         updateRegistrationFields();
+
 
         return;
       }
+
 
       alert(
         "PASSの発行に失敗しました。もう一度登録してください。"
@@ -1580,12 +1711,15 @@ $("#copyPass")
             pass
           );
 
+
         const button =
           $("#copyPass");
+
 
         if (button) {
           button.textContent =
             "コピーしました";
+
 
           setTimeout(
             () => {
@@ -1601,6 +1735,7 @@ $("#copyPass")
           "PASSコピーエラー",
           error
         );
+
 
         alert(
           "PASSをコピーできませんでした。手動で保存してください。"
@@ -1622,17 +1757,20 @@ function closeModal() {
     );
 }
 
+
 $("#modalClose")
   ?.addEventListener(
     "click",
     closeModal
   );
 
+
 $("#resultDone")
   ?.addEventListener(
     "click",
     () => {
       closeModal();
+
 
       showPage(
         "list"
@@ -1651,12 +1789,16 @@ $("#closeForm")
     async event => {
       event.preventDefault();
 
+
       if (!sb) {
         alert(
           "Supabaseの設定がまだです。"
         );
+
+
         return;
       }
+
 
       const pass =
         $("#closePass")
@@ -1664,17 +1806,22 @@ $("#closeForm")
           .trim()
           .toUpperCase();
 
+
       if (!pass) {
         alert(
           "PASSを入力してください。"
         );
+
+
         return;
       }
+
 
       const hash =
         await sha256(
           pass
         );
+
 
       const {
         data,
@@ -1688,17 +1835,27 @@ $("#closeForm")
           }
         );
 
+
       if (error) {
         console.error(
           "募集締切エラー",
           error
         );
 
+
         alert(
           "募集締切処理に失敗しました。"
         );
+
+
         return;
       }
+
+
+      // ========================================
+      // 指揮官締切
+      // 卒業ちしかん +1
+      // ========================================
 
       if (
         data ===
@@ -1708,13 +1865,27 @@ $("#closeForm")
           "指揮官募集を締め切りました。"
         );
 
+
         event.target.reset();
+
+
+        // Supabaseから最新卒業人数を再取得
+        await loadGraduatedCommanderCount();
+
 
         showPage(
           "list"
         );
+
+
         return;
       }
+
+
+      // ========================================
+      // ユニオン締切
+      // 卒業ちしかんには加算しない
+      // ========================================
 
       if (
         data ===
@@ -1724,13 +1895,18 @@ $("#closeForm")
           "ユニオン募集を締め切りました。"
         );
 
+
         event.target.reset();
+
 
         showPage(
           "list"
         );
+
+
         return;
       }
+
 
       alert(
         "PASSが正しくないか、すでに募集終了しています。"
