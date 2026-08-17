@@ -19,23 +19,34 @@
 
 body {
   margin: 0;
+
   background:
     radial-gradient(
       circle at 50% -10%,
       #1a2434 0,
       #080b12 45%
     );
+
   color: var(--text);
-  font-family: 'Noto Sans JP', sans-serif;
+
+  font-family:
+    'Noto Sans JP',
+    sans-serif;
+
   min-height: 100vh;
+
   padding-bottom: 82px;
 }
 
 body::before {
   content: "";
+
   position: fixed;
+
   inset: 0;
+
   pointer-events: none;
+
   background:
     linear-gradient(
       90deg,
@@ -45,121 +56,241 @@ body::before {
     );
 }
 
+
+/* ========================================
+   ヘッダー
+======================================== */
+
 .topbar {
   height: 66px;
-  border-bottom: 1px solid var(--line);
-  background: rgba(8,11,18,.88);
-  backdrop-filter: blur(12px);
+
+  border-bottom:
+    1px solid
+    var(--line);
+
+  background:
+    rgba(
+      8,
+      11,
+      18,
+      .88
+    );
+
+  backdrop-filter:
+    blur(12px);
 
   display: flex;
-  align-items: center;
-  justify-content: space-between;
 
-  padding: 0 18px;
+  align-items: center;
+
+  justify-content:
+    space-between;
+
+  padding:
+    0 18px;
 
   position: sticky;
+
   top: 0;
+
   z-index: 20;
 }
 
+
 .brand {
-  font-family: Rajdhani, sans-serif;
+  font-family:
+    Rajdhani,
+    sans-serif;
 
   display: flex;
-  flex-direction: column;
+
+  flex-direction:
+    column;
 
   line-height: .82;
 }
 
+
 .brand-small {
   font-size: 11px;
+
   letter-spacing: 4px;
-  color: var(--accent2);
+
+  color:
+    var(--accent2);
 }
+
 
 .brand-main {
   font-size: 23px;
+
   letter-spacing: 2px;
+
   font-weight: 700;
 }
 
+
 .status-dot {
-  font: 600 11px Rajdhani;
-  color: var(--muted);
+  font:
+    600 11px Rajdhani;
+
+  color:
+    var(--muted);
+
   letter-spacing: 1px;
 }
+
 
 .status-dot span {
   display: inline-block;
 
   width: 7px;
+
   height: 7px;
 
   border-radius: 50%;
 
-  background: var(--green);
+  background:
+    var(--green);
 
-  box-shadow: 0 0 10px var(--green);
+  box-shadow:
+    0 0 10px
+    var(--green);
 
   margin-right: 6px;
 }
 
+
+/* ========================================
+   コンテナ
+======================================== */
+
 .container {
-  max-width: 900px;
+  max-width: 1400px;
+
   margin: auto;
-  padding: 0 18px;
+
+  padding:
+    0 18px;
 }
 
-.hero {
-  padding: 52px 0 36px;
 
-  border-bottom: 1px solid var(--line);
+/* ========================================
+   HERO
+======================================== */
+
+.hero {
+  display: grid;
+
+  grid-template-columns:
+    minmax(360px, 0.9fr)
+    minmax(500px, 1.25fr);
+
+  gap: 55px;
+
+  align-items: center;
+
+  padding:
+    52px 0 36px;
+
+  border-bottom:
+    1px solid
+    var(--line);
 
   margin-bottom: 28px;
 }
 
+
+.hero-left {
+  min-width: 0;
+}
+
+
 .eyebrow {
-  font: 600 12px Rajdhani;
-  letter-spacing: 2.5px;
-  color: var(--accent2);
+  font:
+    600 12px Rajdhani;
+
+  letter-spacing:
+    2.5px;
+
+  color:
+    var(--accent2);
+
   margin-bottom: 9px;
 }
 
+
 h1,
 h2 {
-  font-family: Rajdhani, 'Noto Sans JP', sans-serif;
+  font-family:
+    Rajdhani,
+    'Noto Sans JP',
+    sans-serif;
+
   margin: 0;
+
   letter-spacing: .5px;
 }
 
+
 h1 {
-  font-size: clamp(40px, 10vw, 70px);
+  font-size:
+    clamp(
+      40px,
+      10vw,
+      70px
+    );
+
   line-height: .94;
 }
 
+
 h1 em {
   font-style: normal;
-  color: var(--accent);
+
+  color:
+    var(--accent);
 }
 
+
 .hero p {
-  color: var(--muted);
+  color:
+    var(--muted);
+
   line-height: 1.8;
-  margin: 20px 0 24px;
+
+  margin:
+    20px 0 24px;
 }
+
 
 .hero-actions {
   display: flex;
+
   gap: 10px;
+
   flex-wrap: wrap;
 }
 
-.btn {
-  border: 1px solid var(--line);
-  background: var(--panel2);
-  color: var(--text);
 
-  padding: 13px 20px;
+/* ========================================
+   ボタン
+======================================== */
+
+.btn {
+  border:
+    1px solid
+    var(--line);
+
+  background:
+    var(--panel2);
+
+  color:
+    var(--text);
+
+  padding:
+    13px 20px;
+
   min-height: 48px;
 
   font-weight: 700;
@@ -169,10 +300,15 @@ h1 em {
   transition: .2s;
 }
 
+
 .btn:hover {
-  transform: translateY(-1px);
-  border-color: var(--accent);
+  transform:
+    translateY(-1px);
+
+  border-color:
+    var(--accent);
 }
+
 
 .btn.primary {
   background:
@@ -182,77 +318,127 @@ h1 em {
       #d94100
     );
 
-  border-color: #ff8c3a;
+  border-color:
+    #ff8c3a;
 
   box-shadow:
-    0 8px 30px rgba(255,100,0,.15);
+    0 8px 30px
+    rgba(
+      255,
+      100,
+      0,
+      .15
+    );
 }
+
 
 .btn.danger {
-  background: #291219;
-  border-color: #63303b;
-  color: #ff8a98;
+  background:
+    #291219;
+
+  border-color:
+    #63303b;
+
+  color:
+    #ff8a98;
 }
 
+
 .btn.ghost {
-  background: transparent;
+  background:
+    transparent;
 }
+
 
 .wide {
   width: 100%;
 }
 
+
+/* ========================================
+   PAGE
+======================================== */
+
 .page {
   display: none;
 }
+
 
 .page.active {
   display: block;
 }
 
+
+/* ========================================
+   セクション見出し
+======================================== */
+
 .section-head {
   display: flex;
-  justify-content: space-between;
+
+  justify-content:
+    space-between;
+
   align-items: end;
 
   margin-bottom: 18px;
 }
 
+
 .section-head h2 {
   font-size: 32px;
 }
 
+
 .text-btn {
   background: none;
+
   border: 0;
 
-  color: var(--accent2);
+  color:
+    var(--accent2);
 
   cursor: pointer;
 
   font-weight: 700;
 }
 
-.filters {
-  background: rgba(16,22,33,.7);
 
-  border: 1px solid var(--line);
+/* ========================================
+   フィルター
+======================================== */
+
+.filters {
+  background:
+    rgba(
+      16,
+      22,
+      33,
+      .7
+    );
+
+  border:
+    1px solid
+    var(--line);
 
   padding: 12px;
 
   margin-bottom: 14px;
 }
 
+
 .filters label,
 .panel label {
   display: block;
 
-  color: var(--muted);
+  color:
+    var(--muted);
 
   font-size: 12px;
 
   font-weight: 700;
 }
+
 
 .filters select,
 .panel input {
@@ -260,11 +446,15 @@ h1 em {
 
   margin-top: 7px;
 
-  background: #0b1018;
+  background:
+    #0b1018;
 
-  color: var(--text);
+  color:
+    var(--text);
 
-  border: 1px solid var(--line);
+  border:
+    1px solid
+    var(--line);
 
   padding: 13px;
 
@@ -273,10 +463,17 @@ h1 em {
   outline: none;
 }
 
+
 .filters select:focus,
 .panel input:focus {
-  border-color: var(--accent);
+  border-color:
+    var(--accent);
 }
+
+
+/* ========================================
+   カード
+======================================== */
 
 .cards {
   display: grid;
@@ -284,11 +481,15 @@ h1 em {
   grid-template-columns:
     repeat(
       auto-fit,
-      minmax(260px, 1fr)
+      minmax(
+        260px,
+        1fr
+      )
     );
 
   gap: 12px;
 }
+
 
 .card {
   background:
@@ -298,7 +499,9 @@ h1 em {
       var(--panel)
     );
 
-  border: 1px solid var(--line);
+  border:
+    1px solid
+    var(--line);
 
   padding: 18px;
 
@@ -307,73 +510,106 @@ h1 em {
   overflow: hidden;
 }
 
+
 .card::after {
   content: "";
 
   position: absolute;
 
   right: -30px;
+
   top: -30px;
 
   width: 90px;
+
   height: 90px;
 
-  border: 1px solid rgba(255,122,24,.18);
+  border:
+    1px solid
+    rgba(
+      255,
+      122,
+      24,
+      .18
+    );
 
-  transform: rotate(45deg);
+  transform:
+    rotate(45deg);
 }
+
 
 .card-head {
   display: flex;
 
-  justify-content: space-between;
+  justify-content:
+    space-between;
 
   gap: 10px;
 
   align-items: center;
 }
 
+
 .state {
   font-size: 11px;
 
   font-weight: 700;
 
-  color: var(--green);
+  color:
+    var(--green);
 
-  border: 1px solid rgba(84,227,155,.3);
+  border:
+    1px solid
+    rgba(
+      84,
+      227,
+      155,
+      .3
+    );
 
-  padding: 4px 7px;
+  padding:
+    4px 7px;
 }
+
 
 .name {
   font-size: 21px;
 
   font-weight: 700;
 
-  margin: 12px 0 4px;
+  margin:
+    12px 0 4px;
 }
+
 
 .slv {
-  font: 700 34px Rajdhani;
+  font:
+    700 34px Rajdhani;
 
-  color: var(--accent2);
+  color:
+    var(--accent2);
 }
+
 
 .slv small {
   font-size: 12px;
 
-  color: var(--muted);
+  color:
+    var(--muted);
 
   margin-left: 5px;
 }
 
+
 .date {
   font-size: 11px;
 
-  color: var(--muted);
+  color:
+    var(--muted);
 
   margin-top: 10px;
 }
+
 
 .x-btn {
   display: block;
@@ -386,25 +622,45 @@ h1 em {
 
   padding: 11px;
 
-  border: 1px solid #374454;
+  border:
+    1px solid
+    #374454;
 
-  color: var(--text);
+  color:
+    var(--text);
 
   font-weight: 700;
 
-  background: #0b1018;
+  background:
+    #0b1018;
 }
+
 
 .x-btn:hover {
-  border-color: var(--accent);
+  border-color:
+    var(--accent);
 
-  color: var(--accent2);
+  color:
+    var(--accent2);
 }
 
-.panel {
-  background: rgba(16,22,33,.85);
 
-  border: 1px solid var(--line);
+/* ========================================
+   PANEL
+======================================== */
+
+.panel {
+  background:
+    rgba(
+      16,
+      22,
+      33,
+      .85
+    );
+
+  border:
+    1px solid
+    var(--line);
 
   padding: 18px;
 
@@ -413,12 +669,17 @@ h1 em {
   gap: 16px;
 }
 
+
 .notice {
-  border-left: 3px solid var(--accent);
+  border-left:
+    3px solid
+    var(--accent);
 
-  background: #151b25;
+  background:
+    #151b25;
 
-  padding: 12px 14px;
+  padding:
+    12px 14px;
 
   display: grid;
 
@@ -426,69 +687,123 @@ h1 em {
 
   font-size: 12px;
 
-  color: var(--muted);
+  color:
+    var(--muted);
 
   line-height: 1.6;
 }
 
+
 .notice strong {
-  color: var(--text);
+  color:
+    var(--text);
 }
+
+
+/* ========================================
+   メッセージ
+======================================== */
 
 .message {
   padding: 12px;
 
-  border: 1px solid var(--line);
+  border:
+    1px solid
+    var(--line);
 
   margin-bottom: 14px;
 }
 
-.message.ok {
-  border-color: rgba(84,227,155,.35);
 
-  color: var(--green);
+.message.ok {
+  border-color:
+    rgba(
+      84,
+      227,
+      155,
+      .35
+    );
+
+  color:
+    var(--green);
 }
+
 
 .message.error {
-  border-color: rgba(255,83,100,.35);
+  border-color:
+    rgba(
+      255,
+      83,
+      100,
+      .35
+    );
 
-  color: #ff9aa5;
+  color:
+    #ff9aa5;
 }
+
 
 .hidden {
-  display: none !important;
+  display:
+    none !important;
 }
+
+
+/* ========================================
+   EMPTY
+======================================== */
 
 .empty {
   text-align: center;
 
-  padding: 55px 20px;
+  padding:
+    55px 20px;
 
-  color: var(--muted);
+  color:
+    var(--muted);
 
-  border: 1px dashed var(--line);
+  border:
+    1px dashed
+    var(--line);
 }
+
 
 .empty-icon {
   font-size: 42px;
 
-  color: var(--accent);
+  color:
+    var(--accent);
 
   margin-bottom: 8px;
 }
+
+
+/* ========================================
+   下部メニュー
+======================================== */
 
 .bottom-nav {
   position: fixed;
 
   bottom: 0;
+
   left: 0;
+
   right: 0;
 
   height: 68px;
 
-  background: rgba(8,11,18,.94);
+  background:
+    rgba(
+      8,
+      11,
+      18,
+      .94
+    );
 
-  border-top: 1px solid var(--line);
+  border-top:
+    1px solid
+    var(--line);
 
   display: flex;
 
@@ -496,8 +811,10 @@ h1 em {
 
   z-index: 30;
 
-  backdrop-filter: blur(14px);
+  backdrop-filter:
+    blur(14px);
 }
+
 
 .nav-btn {
   flex: 1;
@@ -508,7 +825,8 @@ h1 em {
 
   border: 0;
 
-  color: var(--muted);
+  color:
+    var(--muted);
 
   font-size: 11px;
 
@@ -516,6 +834,7 @@ h1 em {
 
   cursor: pointer;
 }
+
 
 .nav-btn span {
   display: block;
@@ -527,17 +846,30 @@ h1 em {
   margin-bottom: 3px;
 }
 
+
 .nav-btn.active,
 .nav-btn:hover {
-  color: var(--accent2);
+  color:
+    var(--accent2);
 }
+
+
+/* ========================================
+   モーダル
+======================================== */
 
 .modal {
   position: fixed;
 
   inset: 0;
 
-  background: rgba(0,0,0,.72);
+  background:
+    rgba(
+      0,
+      0,
+      0,
+      .72
+    );
 
   z-index: 50;
 
@@ -548,110 +880,149 @@ h1 em {
   padding: 18px;
 }
 
+
 .modal-card {
-  width: min(480px,100%);
+  width:
+    min(
+      480px,
+      100%
+    );
 
-  background: #101621;
+  background:
+    #101621;
 
-  border: 1px solid #3b4657;
+  border:
+    1px solid
+    #3b4657;
 
   padding: 24px;
 
   position: relative;
 
-  box-shadow: 0 20px 70px #000;
+  box-shadow:
+    0 20px 70px #000;
 }
+
 
 .modal-close {
   position: absolute;
 
   right: 10px;
+
   top: 7px;
 
   background: none;
 
   border: 0;
 
-  color: var(--muted);
+  color:
+    var(--muted);
 
   font-size: 28px;
 
   cursor: pointer;
 }
 
+
 .pass-box {
-  margin: 18px 0;
+  margin:
+    18px 0;
 
   padding: 20px;
 
-  background: #090d14;
+  background:
+    #090d14;
 
-  border: 1px solid #3b4657;
+  border:
+    1px solid
+    #3b4657;
 
   text-align: center;
 }
 
+
 .pass-box span {
   display: block;
 
-  color: var(--muted);
+  color:
+    var(--muted);
 
-  font: 600 11px Rajdhani;
+  font:
+    600 11px Rajdhani;
 
   letter-spacing: 2px;
 }
 
+
 .pass-box strong {
   display: block;
 
-  font: 700 42px Rajdhani;
+  font:
+    700 42px Rajdhani;
 
   letter-spacing: 7px;
 
-  color: var(--accent2);
+  color:
+    var(--accent2);
 
-  margin: 4px 0 12px;
+  margin:
+    4px 0 12px;
 }
+
 
 .copy-btn {
   background: none;
 
-  border: 1px solid var(--line);
+  border:
+    1px solid
+    var(--line);
 
-  color: var(--text);
+  color:
+    var(--text);
 
-  padding: 7px 12px;
+  padding:
+    7px 12px;
 
   cursor: pointer;
 }
 
+
 .result-row {
   display: flex;
 
-  justify-content: space-between;
+  justify-content:
+    space-between;
 
-  padding: 10px 0;
+  padding:
+    10px 0;
 
-  border-bottom: 1px solid var(--line);
+  border-bottom:
+    1px solid
+    var(--line);
 
   font-size: 13px;
 }
 
+
 .result-row span {
-  color: var(--muted);
+  color:
+    var(--muted);
 }
+
 
 .warning {
   font-size: 12px;
 
-  color: #ffb0b8;
+  color:
+    #ffb0b8;
 
   line-height: 1.7;
 }
 
-/* =========================================
+
+/* ========================================
    既存スマホ設定
-========================================= */
+======================================== */
 
 @media (max-width: 480px) {
 
@@ -673,71 +1044,49 @@ h1 em {
 
   .pass-box strong {
     font-size: 34px;
+
     letter-spacing: 5px;
   }
 
 }
 
 
-/* =========================================
-   PC画面を広げる
-========================================= */
-
-.container {
-  max-width: 1400px;
-}
-
-
-/* =========================================
-   HERO
-========================================= */
-
-.hero {
-  display: grid;
-
-  grid-template-columns:
-    minmax(360px, 0.9fr)
-    minmax(500px, 1.25fr);
-
-  gap: 55px;
-
-  align-items: center;
-
-  padding: 52px 0 36px;
-
-  border-bottom: 1px solid var(--line);
-
-  margin-bottom: 28px;
-}
-
-
-.hero-left {
-  min-width: 0;
-}
-
-
-/* =========================================
+/* ========================================
    右側 募集総数パネル
-========================================= */
+======================================== */
 
 .hero-stats {
   width: 100%;
 
   min-height: 270px;
 
-  border: 2px solid #ff7a18;
+  border:
+    2px solid
+    #ff7a18;
 
   background:
     linear-gradient(
       145deg,
-      rgba(15, 21, 31, 0.98),
-      rgba(7, 11, 18, 0.98)
+      rgba(
+        15,
+        21,
+        31,
+        0.98
+      ),
+      rgba(
+        7,
+        11,
+        18,
+        0.98
+      )
     );
 
   display: grid;
 
   grid-template-columns:
-    1fr 1px 1fr;
+    1fr
+    1px
+    1fr;
 
   align-items: center;
 
@@ -749,13 +1098,19 @@ h1 em {
   position: relative;
 
   box-shadow:
-    0 0 32px rgba(255, 122, 24, 0.10);
+    0 0 32px
+    rgba(
+      255,
+      122,
+      24,
+      0.10
+    );
 }
 
 
-/* =========================================
+/* ========================================
    指揮官・ユニオン共通
-========================================= */
+======================================== */
 
 .hero-stat {
   text-align: center;
@@ -763,7 +1118,8 @@ h1 em {
 
 
 .hero-stat-title {
-  color: #edf2f7;
+  color:
+    #edf2f7;
 
   font-size: 17px;
 
@@ -809,45 +1165,44 @@ h1 em {
 .hero-stat-sub {
   margin-top: 20px;
 
-  color: #8e9aaa;
+  color:
+    #8e9aaa;
 
   font-size: 13px;
 }
 
 
-/* =========================================
+/* ========================================
    指揮官 = オレンジ
-========================================= */
+======================================== */
 
 .commander-stat
 .hero-stat-number strong,
 
 .commander-stat
 .hero-stat-number span {
-
-  color: #ff7a18;
-
+  color:
+    #ff7a18;
 }
 
 
-/* =========================================
+/* ========================================
    ユニオン = ブルー
-========================================= */
+======================================== */
 
 .union-stat
 .hero-stat-number strong,
 
 .union-stat
 .hero-stat-number span {
-
-  color: #3696ff;
-
+  color:
+    #3696ff;
 }
 
 
-/* =========================================
+/* ========================================
    真ん中の縦線
-========================================= */
+======================================== */
 
 .hero-stat-divider {
   width: 1px;
@@ -863,9 +1218,9 @@ h1 em {
 }
 
 
-/* =========================================
+/* ========================================
    最終更新
-========================================= */
+======================================== */
 
 .hero-stat-update {
   position: absolute;
@@ -878,66 +1233,88 @@ h1 em {
 
   text-align: center;
 
-  color: #8e9aaa;
+  color:
+    #8e9aaa;
 
   font-size: 12px;
 }
 
 
-/* =========================================
-   一覧カード
-   指揮官 = オレンジ
-========================================= */
+/* ========================================
+   一覧カード 指揮官
+======================================== */
 
 .card.commander-card {
   border:
     1px solid
-    rgba(255, 122, 24, 0.55);
+    rgba(
+      255,
+      122,
+      24,
+      0.55
+    );
 
   box-shadow:
-    inset 4px 0 0 #ff7a18;
+    inset
+    4px 0 0
+    #ff7a18;
 }
 
 
 .card.commander-card
 .recruitment-type {
-
-  color: #ff9b32;
+  color:
+    #ff9b32;
 
   border-color:
-    rgba(255, 122, 24, 0.45);
-
+    rgba(
+      255,
+      122,
+      24,
+      0.45
+    );
 }
 
 
-/* =========================================
-   一覧カード
-   ユニオン = ブルー
-========================================= */
+/* ========================================
+   一覧カード ユニオン
+======================================== */
 
 .card.union-card {
   border:
     1px solid
-    rgba(54, 150, 255, 0.55);
+    rgba(
+      54,
+      150,
+      255,
+      0.55
+    );
 
   box-shadow:
-    inset 4px 0 0 #3696ff;
+    inset
+    4px 0 0
+    #3696ff;
 }
 
 
 .card.union-card
 .recruitment-type {
-
-  color: #72b9ff;
+  color:
+    #72b9ff;
 
   border-color:
-    rgba(54, 150, 255, 0.45);
-
+    rgba(
+      54,
+      150,
+      255,
+      0.45
+    );
 }
 
 
 .union-rank {
-  color: #72b9ff;
+  color:
+    #72b9ff;
 
   font-size: 20px;
 
@@ -950,9 +1327,11 @@ h1 em {
 .recruitment-type {
   display: inline-block;
 
-  padding: 5px 10px;
+  padding:
+    5px 10px;
 
-  border: 1px solid;
+  border:
+    1px solid;
 
   font-size: 11px;
 
@@ -960,9 +1339,9 @@ h1 em {
 }
 
 
-/* =========================================
+/* ========================================
    カウントダウン
-========================================= */
+======================================== */
 
 .countdown {
   margin-top: 14px;
@@ -971,43 +1350,737 @@ h1 em {
 
   border-top:
     1px solid
-    rgba(255,255,255,.08);
+    rgba(
+      255,
+      255,
+      255,
+      .08
+    );
 
-  color: #aab5c4;
+  color:
+    #aab5c4;
 
   font-size: 12px;
 }
 
 
 .countdown.warning {
-  color: #ffc04d;
+  color:
+    #ffc04d;
 }
 
 
 .countdown.danger {
-  color: #ff6878;
+  color:
+    #ff6878;
 }
 
 
-/* =========================================
-   スマホ
-========================================= */
+/* ========================================
+   ユニオンランク
+======================================== */
 
-@media (max-width: 600px) {
+#unionRank {
+  width: 100%;
+
+  min-height: 48px;
+
+  padding:
+    0 14px;
+
+  background:
+    #0b111b;
+
+  color:
+    #ffffff;
+
+  border:
+    1px solid
+    #334155;
+
+  border-radius: 0;
+
+  font-size: 16px;
+
+  font-family: inherit;
+
+  cursor: pointer;
+}
+
+
+#registrationType {
+  width: 100%;
+
+  min-height: 48px;
+
+  padding:
+    0 14px;
+
+  background:
+    #0b111b;
+
+  color:
+    #ffffff;
+
+  border:
+    1px solid
+    #334155;
+
+  border-radius: 0;
+
+  font-size: 16px;
+
+  font-family: inherit;
+
+  cursor: pointer;
+}
+
+
+/* ========================================
+   検索タブ
+======================================== */
+
+.search-tabs {
+  display: grid;
+
+  grid-template-columns:
+    1fr 1fr;
+
+  gap: 10px;
+
+  margin-bottom: 14px;
+}
+
+
+.search-tab {
+  min-height: 54px;
+
+  border:
+    1px solid
+    #334155;
+
+  background:
+    #0b111b;
+
+  color:
+    #8e9aaa;
+
+  font-size: 15px;
+
+  font-weight: 700;
+
+  cursor: pointer;
+
+  transition: 0.2s;
+}
+
+
+.commander-tab:hover,
+.commander-tab.active {
+  color:
+    #fff;
+
+  border-color:
+    #ff7a18;
+
+  background:
+    rgba(
+      255,
+      122,
+      24,
+      0.12
+    );
+
+  box-shadow:
+    inset
+    0 -4px 0
+    #ff7a18;
+}
+
+
+.union-tab:hover,
+.union-tab.active {
+  color:
+    #fff;
+
+  border-color:
+    #3696ff;
+
+  background:
+    rgba(
+      54,
+      150,
+      255,
+      0.12
+    );
+
+  box-shadow:
+    inset
+    0 -4px 0
+    #3696ff;
+}
+
+
+/* ========================================
+   プルダウン
+======================================== */
+
+#slvFilter,
+#unionRankFilter {
+  width: 100%;
+
+  min-height: 48px;
+
+  padding:
+    0 14px;
+
+  background:
+    #0b111b;
+
+  color:
+    #fff;
+
+  border:
+    1px solid
+    #334155;
+
+  font-size: 15px;
+}
+
+
+/* ========================================
+   募集件数
+======================================== */
+
+.registration-count >
+div:first-child strong,
+
+.registration-count >
+div:first-child span,
+
+.registration-count >
+div:first-child small {
+  color:
+    #ff6a00;
+}
+
+
+/* 登録ユニオン = 2番目 */
+
+.registration-count >
+div:nth-child(2) strong,
+
+.registration-count >
+div:nth-child(2) span,
+
+.registration-count >
+div:nth-child(2) small {
+  color:
+    #2196f3;
+}
+
+
+/* ========================================
+   ユニオンランク色分け
+======================================== */
+
+.union-rank {
+  display: inline-flex;
+
+  align-items: center;
+
+  justify-content: center;
+
+  width: fit-content;
+
+  margin-top: 8px;
+
+  padding:
+    6px 14px;
+
+  border:
+    1px solid;
+
+  border-radius: 999px;
+
+  font-weight: 800;
+
+  font-size: 14px;
+
+  letter-spacing:
+    0.04em;
+}
+
+
+.rank-challenger {
+  color:
+    #ff4d4d;
+
+  border-color:
+    #ff4d4d;
+
+  background:
+    rgba(
+      255,
+      77,
+      77,
+      0.12
+    );
+}
+
+
+.rank-diamond {
+  color:
+    #c875ff;
+
+  border-color:
+    #c875ff;
+
+  background:
+    rgba(
+      200,
+      117,
+      255,
+      0.12
+    );
+}
+
+
+.rank-platinum {
+  color:
+    #62d9ff;
+
+  border-color:
+    #62d9ff;
+
+  background:
+    rgba(
+      98,
+      217,
+      255,
+      0.12
+    );
+}
+
+
+.rank-gold {
+  color:
+    #ffd24a;
+
+  border-color:
+    #ffd24a;
+
+  background:
+    rgba(
+      255,
+      210,
+      74,
+      0.12
+    );
+}
+
+
+.rank-silver {
+  color:
+    #d7dde5;
+
+  border-color:
+    #d7dde5;
+
+  background:
+    rgba(
+      215,
+      221,
+      229,
+      0.12
+    );
+}
+
+
+.rank-rookie {
+  color:
+    #a8e84a;
+
+  border-color:
+    #a8e84a;
+
+  background:
+    rgba(
+      168,
+      232,
+      74,
+      0.12
+    );
+}
+
+
+.rank-default {
+  color:
+    #ffffff;
+
+  border-color:
+    #777777;
+
+  background:
+    rgba(
+      255,
+      255,
+      255,
+      0.08
+    );
+}
+
+
+/* ========================================
+   かんたん登録案内
+======================================== */
+
+.easy-register-box {
+  margin:
+    0 0 20px;
+
+  padding: 20px;
+
+  border:
+    1px solid
+    rgba(
+      255,
+      122,
+      24,
+      0.45
+    );
+
+  border-left:
+    4px solid
+    var(--accent);
+
+  background:
+    linear-gradient(
+      145deg,
+      rgba(
+        20,
+        28,
+        41,
+        0.92
+      ),
+      rgba(
+        11,
+        16,
+        24,
+        0.92
+      )
+    );
+
+  box-shadow:
+    0 10px 30px
+    rgba(
+      0,
+      0,
+      0,
+      0.18
+    );
+}
+
+
+.easy-register-title {
+  margin-bottom: 14px;
+
+  color:
+    #ffffff;
+
+  font-size: 19px;
+
+  font-weight: 800;
+}
+
+
+.easy-register-list {
+  display: grid;
+
+  gap: 7px;
+
+  color:
+    #d8e0ea;
+
+  font-size: 14px;
+
+  line-height: 1.7;
+}
+
+
+.easy-register-copy {
+  margin-top: 14px;
+
+  color:
+    var(--accent2);
+
+  font-size: 15px;
+
+  font-weight: 800;
+}
+
+
+.easy-register-privacy {
+  margin-top: 16px;
+
+  padding:
+    11px 13px;
+
+  border:
+    1px solid
+    rgba(
+      84,
+      227,
+      155,
+      0.28
+    );
+
+  background:
+    rgba(
+      84,
+      227,
+      155,
+      0.08
+    );
+
+  color:
+    #8ff0bd;
+
+  font-size: 13px;
+
+  font-weight: 700;
+
+  line-height: 1.6;
+}
+
+
+/* ========================================
+   PC・タブレット
+======================================== */
+
+@media screen and (min-width: 601px) {
 
   .container {
-    max-width: 900px;
+    width: 100%;
+
+    max-width: 1400px;
+
+    margin:
+      0 auto;
+
+    padding-left: 18px;
+
+    padding-right: 18px;
   }
 
 
   .hero {
-    grid-template-columns: 1fr;
+    display:
+      grid !important;
 
-    gap: 28px;
+    grid-template-columns:
+      minmax(
+        0,
+        0.86fr
+      )
+      minmax(
+        360px,
+        1.14fr
+      )
+      !important;
+
+    gap:
+      30px !important;
+
+    align-items:
+      center !important;
+  }
+
+
+  .hero-left {
+    min-width:
+      0 !important;
+
+    width:
+      100% !important;
   }
 
 
   .hero-stats {
+    display:
+      grid !important;
+
+    width:
+      100% !important;
+
+    min-width:
+      0 !important;
+
+    grid-template-columns:
+      minmax(
+        0,
+        1fr
+      )
+      1px
+      minmax(
+        0,
+        1fr
+      )
+      !important;
+
+    align-items:
+      center !important;
+  }
+
+
+  .hero-stat {
+    min-width:
+      0 !important;
+  }
+
+}
+
+
+/* ========================================
+   タブレット
+======================================== */
+
+@media screen and
+(min-width: 601px) and
+(max-width: 1024px) {
+
+  .hero {
+    grid-template-columns:
+      minmax(
+        0,
+        0.9fr
+      )
+      minmax(
+        330px,
+        1.1fr
+      )
+      !important;
+
+    gap:
+      20px !important;
+  }
+
+
+  h1 {
+    font-size:
+      clamp(
+        42px,
+        6vw,
+        56px
+      );
+  }
+
+
+  .hero-stats {
+    min-height: 220px;
+
+    padding:
+      24px 12px 50px;
+
+    gap: 10px;
+  }
+
+
+  .hero-stat-title {
+    font-size: 12px;
+
+    margin-bottom: 14px;
+  }
+
+
+  .hero-stat-number strong {
+    font-size:
+      clamp(
+        52px,
+        7vw,
+        72px
+      );
+  }
+
+
+  .hero-stat-number span {
+    font-size: 17px;
+
+    padding-bottom: 5px;
+  }
+
+
+  .hero-stat-sub {
+    margin-top: 14px;
+
+    font-size: 10px;
+  }
+
+
+  .hero-stat-divider {
+    height: 100px;
+  }
+
+}
+
+
+/* ========================================
+   スマホ
+======================================== */
+
+@media screen and (max-width: 600px) {
+
+  .container {
+    padding-left: 12px;
+
+    padding-right: 12px;
+  }
+
+
+  .hero {
+    display:
+      grid !important;
+
+    grid-template-columns:
+      1fr !important;
+
+    gap:
+      8px !important;
+  }
+
+
+  .hero-actions {
+    width:
+      calc(
+        100% - 20px
+      )
+      !important;
+
+    max-width:
+      360px !important;
+
+    margin-left:
+      auto !important;
+
+    margin-right:
+      auto !important;
+  }
+
+
+  .hero-stats {
+    width:
+      calc(
+        100% - 20px
+      )
+      !important;
+
+    max-width:
+      360px !important;
+
+    margin:
+      4px auto 0
+      !important;
+
     min-height: 210px;
 
     padding:
@@ -1034,448 +2107,29 @@ h1 em {
     height: 105px;
   }
 
-}
-/* =================================
-   ユニオンランク
-================================= */
-
-#unionRank {
-  width: 100%;
-  min-height: 48px;
-  padding: 0 14px;
-
-  background: #0b111b;
-  color: #ffffff;
-
-  border: 1px solid #334155;
-  border-radius: 0;
-
-  font-size: 16px;
-  font-family: inherit;
-
-  cursor: pointer;
-}
-
-
-/* 登録タイプもサイズを統一 */
-
-#registrationType {
-  width: 100%;
-  min-height: 48px;
-  padding: 0 14px;
-
-  background: #0b111b;
-  color: #ffffff;
-
-  border: 1px solid #334155;
-  border-radius: 0;
-
-  font-size: 16px;
-  font-family: inherit;
-
-  cursor: pointer;
-}
-/* ================================
-   検索タブ
-================================ */
-
-.search-tabs {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 10px;
-  margin-bottom: 14px;
-}
-
-.search-tab {
-  min-height: 54px;
-
-  border: 1px solid #334155;
-
-  background: #0b111b;
-  color: #8e9aaa;
-
-  font-size: 15px;
-  font-weight: 700;
-
-  cursor: pointer;
-
-  transition: 0.2s;
-}
-
-
-/* 指揮官 */
-
-.commander-tab:hover,
-.commander-tab.active {
-  color: #fff;
-
-  border-color: #ff7a18;
-
-  background:
-    rgba(255, 122, 24, 0.12);
-
-  box-shadow:
-    inset 0 -4px 0 #ff7a18;
-}
-
-
-/* ユニオン */
-
-.union-tab:hover,
-.union-tab.active {
-  color: #fff;
-
-  border-color: #3696ff;
-
-  background:
-    rgba(54, 150, 255, 0.12);
-
-  box-shadow:
-    inset 0 -4px 0 #3696ff;
-}
-
-
-/* プルダウン */
-
-#slvFilter,
-#unionRankFilter {
-  width: 100%;
-
-  min-height: 48px;
-
-  padding: 0 14px;
-
-  background: #0b111b;
-
-  color: #fff;
-
-  border: 1px solid #334155;
-
-  font-size: 15px;
-}
-/* ========================================
-   募集件数 指揮官・ユニオン色分け
-======================================== */
-
-/* 指揮官 */
-.registration-count > div:first-child strong,
-.registration-count > div:first-child span,
-.registration-count > div:first-child small {
-  color: #ff6a00;
-}
-
-/* ユニオン */
-.registration-count > div:last-child strong,
-.registration-count > div:last-child span,
-.registration-count > div:last-child small {
-  color: #2196f3;
-}
-/* ========================================
-   ユニオンランク色分け
-======================================== */
-
-.union-rank {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-
-  width: fit-content;
-  margin-top: 8px;
-  padding: 6px 14px;
-
-  border: 1px solid;
-  border-radius: 999px;
-
-  font-weight: 800;
-  font-size: 14px;
-  letter-spacing: 0.04em;
-}
-
-
-/* チャレンジャー：赤 */
-.rank-challenger {
-  color: #ff4d4d;
-  border-color: #ff4d4d;
-  background: rgba(255, 77, 77, 0.12);
-}
-
-
-/* ダイヤ：紫 */
-.rank-diamond {
-  color: #c875ff;
-  border-color: #c875ff;
-  background: rgba(200, 117, 255, 0.12);
-}
-
-
-/* プラチナ：水色 */
-.rank-platinum {
-  color: #62d9ff;
-  border-color: #62d9ff;
-  background: rgba(98, 217, 255, 0.12);
-}
-
-
-/* ゴールド：金 */
-.rank-gold {
-  color: #ffd24a;
-  border-color: #ffd24a;
-  background: rgba(255, 210, 74, 0.12);
-}
-
-
-/* シルバー */
-.rank-silver {
-  color: #d7dde5;
-  border-color: #d7dde5;
-  background: rgba(215, 221, 229, 0.12);
-}
-
-
-/* 駆け出しユニオン：黄緑 */
-.rank-rookie {
-  color: #a8e84a;
-  border-color: #a8e84a;
-  background: rgba(168, 232, 74, 0.12);
-}
-
-
-/* その他 */
-.rank-default {
-  color: #ffffff;
-  border-color: #777777;
-  background: rgba(255, 255, 255, 0.08);
-}
-
-/* ========================================
-   かんたん登録案内
-======================================== */
-
-.easy-register-box {
-  margin: 0 0 20px;
-  padding: 20px;
-
-  border: 1px solid rgba(255, 122, 24, 0.45);
-  border-left: 4px solid var(--accent);
-
-  background:
-    linear-gradient(
-      145deg,
-      rgba(20, 28, 41, 0.92),
-      rgba(11, 16, 24, 0.92)
-    );
-
-  box-shadow:
-    0 10px 30px rgba(0, 0, 0, 0.18);
-}
-
-.easy-register-title {
-  margin-bottom: 14px;
-
-  color: #ffffff;
-
-  font-size: 19px;
-  font-weight: 800;
-}
-
-.easy-register-items {
-  display: grid;
-  gap: 7px;
-
-  color: #d8e0ea;
-
-  font-size: 14px;
-  line-height: 1.7;
-}
-
-.easy-register-text {
-  margin-top: 14px;
-
-  color: var(--accent2);
-
-  font-size: 15px;
-  font-weight: 800;
-}
-
-.privacy-message {
-  margin-top: 16px;
-  padding: 11px 13px;
-
-  border: 1px solid rgba(84, 227, 155, 0.28);
-
-  background: rgba(84, 227, 155, 0.08);
-
-  color: #8ff0bd;
-
-  font-size: 13px;
-  font-weight: 700;
-  line-height: 1.6;
-}
-
-@media (max-width: 600px) {
 
   .easy-register-box {
     padding: 16px;
   }
 
+
   .easy-register-title {
     font-size: 16px;
   }
 
-  .easy-register-items {
+
+  .easy-register-list {
     font-size: 13px;
   }
 
-  .easy-register-text {
+
+  .easy-register-copy {
     font-size: 14px;
   }
 
-  .privacy-message {
+
+  .easy-register-privacy {
     font-size: 12px;
-  }
-
-}
-
-
-/* ========================================
-   レスポンシブ最終版
-======================================== */
-
-/* ----------------------------------------
-   PC・タブレット
-   左：タイトル / 右：募集総数
----------------------------------------- */
-@media screen and (min-width: 601px) {
-
-  .container {
-    width: 100%;
-    max-width: 1400px;
-    margin: 0 auto;
-    padding-left: 18px;
-    padding-right: 18px;
-  }
-
-  .hero {
-    display: grid !important;
-    grid-template-columns:
-      minmax(0, 0.86fr)
-      minmax(360px, 1.14fr) !important;
-    gap: 30px !important;
-    align-items: center !important;
-  }
-
-  .hero-left {
-    min-width: 0 !important;
-    width: 100% !important;
-  }
-
-  .hero-stats {
-    display: grid !important;
-    width: 100% !important;
-    min-width: 0 !important;
-
-    grid-template-columns:
-      minmax(0, 1fr)
-      1px
-      minmax(0, 1fr) !important;
-
-    align-items: center !important;
-  }
-
-  .hero-stat {
-    min-width: 0 !important;
-  }
-
-}
-
-/* タブレットは横並びのまま少しコンパクト */
-@media screen and (min-width: 601px) and (max-width: 1024px) {
-
-  .hero {
-    grid-template-columns:
-      minmax(0, 0.9fr)
-      minmax(330px, 1.1fr) !important;
-    gap: 20px !important;
-  }
-
-  h1 {
-    font-size: clamp(42px, 6vw, 56px);
-  }
-
-  .hero-stats {
-    min-height: 220px;
-    padding: 24px 12px 50px;
-    gap: 10px;
-  }
-
-  .hero-stat-title {
-    font-size: 12px;
-    margin-bottom: 14px;
-  }
-
-  .hero-stat-number strong {
-    font-size: clamp(52px, 7vw, 72px);
-  }
-
-  .hero-stat-number span {
-    font-size: 17px;
-    padding-bottom: 5px;
-  }
-
-  .hero-stat-sub {
-    margin-top: 14px;
-    font-size: 10px;
-  }
-
-  .hero-stat-divider {
-    height: 100px;
-  }
-
-}
-
-/* ----------------------------------------
-   スマホ
----------------------------------------- */
-@media screen and (max-width: 600px) {
-
-  .container {
-    padding-left: 12px;
-    padding-right: 12px;
-  }
-
-  .hero {
-    display: grid !important;
-    grid-template-columns: 1fr !important;
-    gap: 8px !important;
-  }
-
-  .hero-actions {
-    width: calc(100% - 20px) !important;
-    max-width: 360px !important;
-    margin-left: auto !important;
-    margin-right: auto !important;
-  }
-
-  .hero-stats {
-    width: calc(100% - 20px) !important;
-    max-width: 360px !important;
-    margin: 4px auto 0 !important;
-  }
-
-  .hero-stat-title {
-    font-size: 12px;
-  }
-
-  .hero-stat-number strong {
-    font-size: 58px;
-  }
-
-  .hero-stat-number span {
-    font-size: 18px;
-  }
-
-  .hero-stat-divider {
-    height: 105px;
   }
 
 }
@@ -1490,39 +2144,77 @@ h1 em {
   display: none;
 }
 
-body.register-mode #heroRegisterArea {
+
+body.register-mode
+#heroRegisterArea {
   display: block;
+
   margin-top: 28px;
 }
 
-body.manage-mode #heroManageArea {
+
+body.manage-mode
+#heroManageArea {
   display: block;
+
   margin-top: 28px;
 }
 
-body.register-mode .hero-stats,
-body.manage-mode .hero-stats {
-  display: none !important;
+
+body.register-mode
+.hero-stats,
+
+body.manage-mode
+.hero-stats {
+  display:
+    none !important;
 }
 
-body.register-mode .hero,
-body.manage-mode .hero {
-  grid-template-columns: minmax(0, 760px) !important;
-  justify-content: start !important;
+
+body.register-mode
+.hero,
+
+body.manage-mode
+.hero {
+  grid-template-columns:
+    minmax(
+      0,
+      760px
+    )
+    !important;
+
+  justify-content:
+    start !important;
 }
 
-body.register-mode .hero-left,
-body.manage-mode .hero-left {
-  width: 100% !important;
-  max-width: 760px !important;
+
+body.register-mode
+.hero-left,
+
+body.manage-mode
+.hero-left {
+  width:
+    100% !important;
+
+  max-width:
+    760px !important;
 }
 
-body.register-mode #registerPage,
-body.manage-mode #managePage {
-  display: block !important;
+
+body.register-mode
+#registerPage,
+
+body.manage-mode
+#managePage {
+  display:
+    block !important;
+
   width: 100%;
+
   margin: 0;
-  padding: 0 0 24px;
+
+  padding:
+    0 0 24px;
 }
 
 
@@ -1532,40 +2224,76 @@ body.manage-mode #managePage {
 
 .register-inline-top,
 .manage-inline-top {
-  display: block !important;
-  width: 100% !important;
-  margin: 0 0 18px !important;
+  display:
+    block !important;
+
+  width:
+    100% !important;
+
+  margin:
+    0 0 18px !important;
 }
+
 
 .register-back-btn,
 .manage-back-btn {
-  display: flex !important;
-  align-items: center !important;
-  justify-content: center !important;
+  display:
+    flex !important;
 
-  width: 100% !important;
-  height: 52px !important;
-  min-height: 52px !important;
+  align-items:
+    center !important;
 
-  padding: 0 18px !important;
+  justify-content:
+    center !important;
 
-  background: #111925 !important;
-  color: #ffffff !important;
+  width:
+    100% !important;
 
-  border: 1px solid var(--line) !important;
-  border-radius: 3px !important;
+  height:
+    52px !important;
 
-  font-family: inherit !important;
-  font-size: 16px !important;
-  font-weight: 800 !important;
+  min-height:
+    52px !important;
+
+  padding:
+    0 18px !important;
+
+  background:
+    #111925 !important;
+
+  color:
+    #ffffff !important;
+
+  border:
+    1px solid
+    var(--line)
+    !important;
+
+  border-radius:
+    3px !important;
+
+  font-family:
+    inherit !important;
+
+  font-size:
+    16px !important;
+
+  font-weight:
+    800 !important;
 
   cursor: pointer;
 }
 
+
 .register-back-btn:hover,
 .manage-back-btn:hover {
-  border-color: var(--accent) !important;
-  color: var(--accent2) !important;
+  border-color:
+    var(--accent)
+    !important;
+
+  color:
+    var(--accent2)
+    !important;
 }
 
 
@@ -1575,19 +2303,40 @@ body.manage-mode #managePage {
 
 @media screen and (max-width: 600px) {
 
-  body.register-mode #heroRegisterArea,
-  body.manage-mode #heroManageArea {
-    width: calc(100% - 20px) !important;
-    max-width: 360px !important;
-    margin-left: auto !important;
-    margin-right: auto !important;
-    margin-top: 20px !important;
+  body.register-mode
+  #heroRegisterArea,
+
+  body.manage-mode
+  #heroManageArea {
+    width:
+      calc(
+        100% - 20px
+      )
+      !important;
+
+    max-width:
+      360px !important;
+
+    margin-left:
+      auto !important;
+
+    margin-right:
+      auto !important;
+
+    margin-top:
+      20px !important;
   }
 
-  body.register-mode .hero-left,
-  body.manage-mode .hero-left {
-    max-width: none !important;
+
+  body.register-mode
+  .hero-left,
+
+  body.manage-mode
+  .hero-left {
+    max-width:
+      none !important;
   }
+
 
   input,
   select,
@@ -1598,9 +2347,181 @@ body.manage-mode #managePage {
   #managePage input,
   #managePage select,
   #managePage textarea {
-    font-size: 16px !important;
-    line-height: 1.4 !important;
+    font-size:
+      16px !important;
+
+    line-height:
+      1.4 !important;
   }
 
 }
 
+
+/* ========================================
+   卒業指揮官カウンター
+======================================== */
+
+.section-head-actions {
+  display: flex;
+
+  align-items: flex-end;
+
+  justify-content:
+    flex-end;
+
+  gap: 18px;
+
+  margin-left: 24px;
+}
+
+
+.graduated-commander-counter {
+  min-width: 150px;
+
+  text-align: right;
+
+  line-height: 1;
+}
+
+
+.graduated-commander-number {
+  display: flex;
+
+  align-items: flex-end;
+
+  justify-content:
+    flex-end;
+
+  gap: 6px;
+}
+
+
+.graduated-commander-number strong {
+  color:
+    #ffb15c;
+
+  font-family:
+    Rajdhani,
+    'Noto Sans JP',
+    sans-serif;
+
+  font-size: 52px;
+
+  font-weight: 700;
+
+  line-height: 0.82;
+}
+
+
+.graduated-commander-number span {
+  color:
+    #ffb15c;
+
+  font-size: 20px;
+
+  font-weight: 800;
+
+  padding-bottom: 4px;
+}
+
+
+.graduated-commander-counter small {
+  display: block;
+
+  margin-top: 9px;
+
+  color:
+    #ffb15c;
+
+  font-size: 14px;
+
+  font-weight: 800;
+
+  white-space: nowrap;
+}
+
+
+.section-head-actions
+#refreshBtn {
+  flex:
+    0 0 auto;
+
+  min-width: 54px;
+
+  padding:
+    0 2px 4px;
+}
+
+
+/* ========================================
+   スマホ 卒業指揮官
+======================================== */
+
+@media screen and (max-width: 600px) {
+
+  #listPage
+  .section-head {
+    align-items:
+      flex-end;
+
+    gap: 8px;
+  }
+
+
+  #listPage
+  .section-head
+  > div:first-child {
+    min-width: 0;
+
+    flex:
+      1 1 auto;
+  }
+
+
+  .section-head-actions {
+    flex:
+      0 0 auto;
+
+    gap: 8px;
+
+    margin-left: 6px;
+
+    align-items:
+      flex-end;
+  }
+
+
+  .graduated-commander-counter {
+    min-width: 92px;
+  }
+
+
+  .graduated-commander-number strong {
+    font-size: 44px;
+  }
+
+
+  .graduated-commander-number span {
+    font-size: 16px;
+
+    padding-bottom: 3px;
+  }
+
+
+  .graduated-commander-counter small {
+    margin-top: 7px;
+
+    font-size: 11px;
+  }
+
+
+  .section-head-actions
+  #refreshBtn {
+    min-width: 38px;
+
+    font-size: 12px;
+
+    padding-bottom: 2px;
+  }
+
+}
