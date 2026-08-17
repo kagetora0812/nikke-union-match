@@ -1595,3 +1595,319 @@ body.manage-mode #managePage {
   }
 
 }
+/* ========================================
+   スマホ 募集一覧ヘッダー 完全固定
+======================================== */
+
+@media screen and (max-width: 600px) {
+
+  /* 全体を3行グリッドに固定 */
+  #listPage .section-head {
+    display: grid !important;
+
+    grid-template-columns:
+      minmax(0, 1fr)
+      auto !important;
+
+    grid-template-rows:
+      auto
+      auto
+      auto !important;
+
+    column-gap: 8px !important;
+    row-gap: 8px !important;
+
+    width: 100% !important;
+
+    margin: 0 0 18px !important;
+
+    align-items: center !important;
+  }
+
+
+  /* 左側親要素をグリッドから外す */
+  #listPage .section-head > div:first-child {
+    display: contents !important;
+  }
+
+
+  /* --------------------------------
+     1段目 RECRUITMENTS
+  -------------------------------- */
+
+  #listPage .section-head .eyebrow {
+    grid-column: 1 / 3 !important;
+    grid-row: 1 !important;
+
+    width: 100% !important;
+
+    margin: 0 !important;
+  }
+
+
+  /* --------------------------------
+     2段目
+     見出し             更新
+  -------------------------------- */
+
+  #listPage .section-head h2 {
+    grid-column: 1 !important;
+    grid-row: 2 !important;
+
+    min-width: 0 !important;
+    width: 100% !important;
+
+    margin: 0 !important;
+
+    font-size: 21px !important;
+    line-height: 1.2 !important;
+
+    white-space: nowrap !important;
+
+    overflow: visible !important;
+  }
+
+
+  /* actions親をグリッドから外す */
+  #listPage .section-head-actions {
+    display: contents !important;
+  }
+
+
+  #listPage #refreshBtn {
+    grid-column: 2 !important;
+    grid-row: 2 !important;
+
+    justify-self: end !important;
+    align-self: center !important;
+
+    width: auto !important;
+    min-width: 42px !important;
+
+    margin: 0 !important;
+    padding: 4px 0 !important;
+
+    font-size: 11px !important;
+    line-height: 1 !important;
+
+    white-space: nowrap !important;
+
+    color: #ffb15c !important;
+  }
+
+
+  /* --------------------------------
+     3段目 左
+     野良ちしかん
+     登録ユニオン
+  -------------------------------- */
+
+  #listPage .registration-count {
+    grid-column: 1 !important;
+    grid-row: 3 !important;
+
+    display: flex !important;
+    flex-direction: column !important;
+
+    align-items: flex-start !important;
+    justify-content: center !important;
+
+    width: auto !important;
+    min-width: 0 !important;
+
+    gap: 5px !important;
+
+    margin: 0 !important;
+    padding: 0 !important;
+  }
+
+
+  #listPage .registration-count > div {
+    display: flex !important;
+
+    align-items: baseline !important;
+
+    gap: 4px !important;
+
+    margin: 0 !important;
+
+    white-space: nowrap !important;
+  }
+
+
+  #listPage .registration-count strong {
+    font-size: 18px !important;
+    line-height: 1 !important;
+  }
+
+
+  #listPage .registration-count span {
+    font-size: 11px !important;
+    line-height: 1 !important;
+  }
+
+
+  #listPage .registration-count small {
+    font-size: 11px !important;
+    line-height: 1 !important;
+  }
+
+
+  /* --------------------------------
+     3段目 右
+     卒業ちしかん
+  -------------------------------- */
+
+  #listPage .graduated-commander-counter {
+    grid-column: 2 !important;
+    grid-row: 3 !important;
+
+    justify-self: end !important;
+    align-self: center !important;
+
+    display: flex !important;
+    flex-direction: row !important;
+
+    align-items: center !important;
+    justify-content: center !important;
+
+    width: 158px !important;
+    min-width: 158px !important;
+    max-width: 158px !important;
+
+    height: 66px !important;
+
+    margin: 0 !important;
+
+    padding: 7px 8px !important;
+
+    gap: 6px !important;
+
+    border:
+      1px solid
+      rgba(255, 177, 92, .5) !important;
+
+    background:
+      linear-gradient(
+        145deg,
+        rgba(255, 122, 24, .16),
+        rgba(255, 177, 92, .05)
+      ) !important;
+
+    box-shadow:
+      inset 0 -3px 0
+      rgba(255, 177, 92, .55) !important;
+  }
+
+
+  /* 5名 */
+  #listPage .graduated-commander-number {
+    display: flex !important;
+    flex-direction: row !important;
+
+    align-items: baseline !important;
+
+    gap: 2px !important;
+
+    flex: 0 0 auto !important;
+
+    margin: 0 !important;
+  }
+
+
+  #listPage .graduated-commander-number strong {
+    margin: 0 !important;
+
+    font-size: 42px !important;
+    line-height: .9 !important;
+
+    color: #ff7a18 !important;
+  }
+
+
+  #listPage .graduated-commander-number span {
+    margin: 0 !important;
+    padding: 0 !important;
+
+    font-size: 12px !important;
+    line-height: 1 !important;
+
+    color: #ffb15c !important;
+  }
+
+
+  /* ユニオン決定 / 卒業ちしかん */
+  #listPage .graduated-commander-label {
+    display: flex !important;
+    flex-direction: column !important;
+
+    align-items: flex-start !important;
+    justify-content: center !important;
+
+    gap: 4px !important;
+
+    margin: 0 !important;
+
+    min-width: 0 !important;
+  }
+
+
+  #listPage .graduated-commander-label strong {
+    margin: 0 !important;
+
+    font-size: 10px !important;
+    line-height: 1.15 !important;
+
+    color: #ffffff !important;
+
+    white-space: nowrap !important;
+  }
+
+
+  #listPage .graduated-commander-label small {
+    margin: 0 !important;
+
+    font-size: 9px !important;
+    line-height: 1.15 !important;
+
+    color: #ffd09a !important;
+
+    white-space: nowrap !important;
+  }
+
+}
+
+
+/* ========================================
+   かなり小さいスマホ
+======================================== */
+
+@media screen and (max-width: 360px) {
+
+  #listPage .section-head h2 {
+    font-size: 19px !important;
+  }
+
+  #listPage .graduated-commander-counter {
+    width: 145px !important;
+    min-width: 145px !important;
+    max-width: 145px !important;
+
+    gap: 4px !important;
+
+    padding: 6px !important;
+  }
+
+  #listPage .graduated-commander-number strong {
+    font-size: 38px !important;
+  }
+
+  #listPage .graduated-commander-label strong {
+    font-size: 9px !important;
+  }
+
+  #listPage .graduated-commander-label small {
+    font-size: 8px !important;
+  }
+
+}
