@@ -1,0 +1,1155 @@
+<!doctype html>
+<html lang="ja">
+
+<head>
+
+  <meta charset="UTF-8">
+
+  <meta
+    name="viewport"
+    content="width=device-width, initial-scale=1.0"
+  >
+
+  <meta
+    name="theme-color"
+    content="#080b12"
+  >
+
+  <title>
+    NIKKE UNION MATCH - 応援クリエイター
+  </title>
+
+
+  <style>
+
+    :root {
+      --bg: #080b12;
+      --panel: #101621;
+      --panel2: #141c29;
+      --line: #2b3545;
+      --text: #edf2f7;
+      --muted: #8e9aaa;
+      --accent: #ff7a18;
+      --accent2: #ffb15c;
+      --green: #8ff0bd;
+      --blue: #3696ff;
+    }
+
+
+    * {
+      box-sizing: border-box;
+    }
+
+
+    body {
+      margin: 0;
+
+      min-height: 100vh;
+
+      background:
+        radial-gradient(
+          circle at 50% -10%,
+          #1a2434 0,
+          #080b12 45%
+        );
+
+      color: var(--text);
+
+      font-family:
+        -apple-system,
+        BlinkMacSystemFont,
+        "Segoe UI",
+        "Noto Sans JP",
+        sans-serif;
+    }
+
+
+    a {
+      color: inherit;
+    }
+
+
+    .hidden {
+      display: none !important;
+    }
+
+
+    /* ========================================
+       ヘッダー
+    ======================================== */
+
+    .topbar {
+      height: 66px;
+
+      padding:
+        0 18px;
+
+      display: flex;
+
+      align-items: center;
+
+      justify-content: space-between;
+
+      border-bottom:
+        1px solid
+        var(--line);
+
+      background:
+        rgba(
+          8,
+          11,
+          18,
+          .92
+        );
+
+      position: sticky;
+
+      top: 0;
+
+      z-index: 20;
+
+      backdrop-filter:
+        blur(12px);
+    }
+
+
+    .brand {
+      display: flex;
+
+      flex-direction: column;
+
+      line-height: .88;
+    }
+
+
+    .brand-small {
+      color:
+        var(--accent2);
+
+      font-size: 10px;
+
+      letter-spacing: 3px;
+    }
+
+
+    .brand-main {
+      font-size: 20px;
+
+      font-weight: 800;
+
+      letter-spacing: 1.5px;
+    }
+
+
+    .status {
+      color:
+        var(--green);
+
+      font-size: 11px;
+
+      font-weight: 800;
+
+      letter-spacing: 1px;
+    }
+
+
+    /* ========================================
+       全体
+    ======================================== */
+
+    .container {
+      width:
+        min(
+          1200px,
+          calc(100% - 24px)
+        );
+
+      margin:
+        0 auto;
+
+      padding:
+        42px 0 70px;
+    }
+
+
+    .eyebrow {
+      color:
+        var(--accent2);
+
+      font-size: 11px;
+
+      font-weight: 800;
+
+      letter-spacing: 2.4px;
+
+      margin-bottom: 8px;
+    }
+
+
+    h1 {
+      margin: 0;
+
+      font-size:
+        clamp(
+          34px,
+          8vw,
+          60px
+        );
+
+      line-height: 1.05;
+    }
+
+
+    .lead {
+      margin:
+        16px 0 0;
+
+      color:
+        var(--muted);
+
+      line-height: 1.8;
+
+      max-width: 680px;
+    }
+
+
+    .top-actions {
+      margin-top: 24px;
+    }
+
+
+    /* ========================================
+       戻るボタン
+    ======================================== */
+
+    .back-btn {
+      display: inline-flex;
+
+      align-items: center;
+
+      justify-content: center;
+
+      min-height: 46px;
+
+      padding:
+        0 18px;
+
+      text-decoration: none;
+
+      border:
+        1px solid
+        var(--line);
+
+      background:
+        #111925;
+
+      color:
+        #fff;
+
+      font-weight: 800;
+    }
+
+
+    .back-btn:hover {
+      border-color:
+        var(--accent);
+
+      color:
+        var(--accent2);
+    }
+
+
+    /* ========================================
+       件数
+    ======================================== */
+
+    .creator-count {
+      margin-top: 30px;
+
+      padding:
+        14px 16px;
+
+      border:
+        1px solid
+        rgba(
+          143,
+          240,
+          189,
+          .32
+        );
+
+      background:
+        rgba(
+          84,
+          227,
+          155,
+          .07
+        );
+
+      color:
+        var(--green);
+
+      font-size: 13px;
+
+      font-weight: 800;
+    }
+
+
+    /* ========================================
+       クリエイター一覧
+    ======================================== */
+
+    .creator-grid {
+      display: grid;
+
+      grid-template-columns:
+        repeat(
+          3,
+          minmax(
+            0,
+            1fr
+          )
+        );
+
+      gap: 16px;
+
+      margin-top: 18px;
+    }
+
+
+    .creator-card {
+      display: flex;
+
+      flex-direction: column;
+
+      min-height: 260px;
+
+      padding: 20px;
+
+      border:
+        1px solid
+        var(--line);
+
+      background:
+        linear-gradient(
+          145deg,
+          rgba(
+            20,
+            28,
+            41,
+            .96
+          ),
+          rgba(
+            11,
+            16,
+            24,
+            .96
+          )
+        );
+
+      position: relative;
+
+      overflow: hidden;
+    }
+
+
+    .creator-card::after {
+      content: "";
+
+      position: absolute;
+
+      width: 90px;
+
+      height: 90px;
+
+      right: -35px;
+
+      top: -35px;
+
+      border:
+        1px solid
+        rgba(
+          143,
+          240,
+          189,
+          .16
+        );
+
+      transform:
+        rotate(45deg);
+
+      pointer-events: none;
+    }
+
+
+    .creator-badge {
+      display: inline-flex;
+
+      align-items: center;
+
+      width: fit-content;
+
+      padding:
+        5px 9px;
+
+      border:
+        1px solid
+        rgba(
+          143,
+          240,
+          189,
+          .35
+        );
+
+      color:
+        var(--green);
+
+      font-size: 10px;
+
+      font-weight: 800;
+    }
+
+
+    .creator-name {
+      margin-top: 16px;
+
+      font-size: 21px;
+
+      font-weight: 800;
+
+      line-height: 1.35;
+
+      word-break:
+        break-word;
+    }
+
+
+    .creator-description {
+      margin-top: 12px;
+
+      color:
+        #cbd4df;
+
+      font-size: 13px;
+
+      line-height: 1.75;
+
+      white-space:
+        pre-wrap;
+
+      flex: 1;
+    }
+
+
+    /* ========================================
+       リンク
+    ======================================== */
+
+    .creator-links {
+      display: grid;
+
+      grid-template-columns:
+        1fr 1fr;
+
+      gap: 8px;
+
+      margin-top: 18px;
+    }
+
+
+    .creator-link {
+      display: flex;
+
+      align-items: center;
+
+      justify-content: center;
+
+      min-height: 44px;
+
+      padding:
+        8px 10px;
+
+      text-decoration: none;
+
+      font-size: 12px;
+
+      font-weight: 800;
+
+      border:
+        1px solid
+        var(--line);
+
+      background:
+        #0b111b;
+    }
+
+
+    .creator-link.youtube {
+      border-color:
+        rgba(
+          255,
+          83,
+          100,
+          .45
+        );
+
+      color:
+        #ff9aa5;
+    }
+
+
+    .creator-link.x {
+      border-color:
+        rgba(
+          54,
+          150,
+          255,
+          .45
+        );
+
+      color:
+        #8cc9ff;
+    }
+
+
+    .creator-link:hover {
+      filter:
+        brightness(1.15);
+    }
+
+
+    .creator-links.single {
+      grid-template-columns:
+        1fr;
+    }
+
+
+    /* ========================================
+       EMPTY / ERROR
+    ======================================== */
+
+    .empty,
+    .error {
+      margin-top: 18px;
+
+      padding: 34px 20px;
+
+      text-align: center;
+
+      border:
+        1px dashed
+        var(--line);
+
+      color:
+        var(--muted);
+    }
+
+
+    .error {
+      color:
+        #ff9aa5;
+
+      border-color:
+        rgba(
+          255,
+          83,
+          100,
+          .32
+        );
+    }
+
+
+    /* ========================================
+       下部
+    ======================================== */
+
+    .bottom-area {
+      margin-top: 34px;
+
+      padding-top: 24px;
+
+      border-top:
+        1px solid
+        var(--line);
+
+      text-align: center;
+    }
+
+
+    .bottom-copy {
+      margin-bottom: 14px;
+
+      color:
+        var(--muted);
+
+      font-size: 12px;
+
+      line-height: 1.7;
+    }
+
+
+    /* ========================================
+       タブレット
+    ======================================== */
+
+    @media screen and
+    (min-width: 601px) and
+    (max-width: 1024px) {
+
+      .creator-grid {
+        grid-template-columns:
+          repeat(
+            2,
+            minmax(
+              0,
+              1fr
+            )
+          );
+      }
+
+    }
+
+
+    /* ========================================
+       スマホ
+    ======================================== */
+
+    @media screen and (max-width: 600px) {
+
+      .container {
+        width:
+          calc(
+            100% - 20px
+          );
+
+        padding-top: 28px;
+      }
+
+
+      h1 {
+        font-size: 36px;
+      }
+
+
+      .lead {
+        font-size: 13px;
+      }
+
+
+      .creator-grid {
+        grid-template-columns:
+          1fr;
+
+        gap: 12px;
+      }
+
+
+      .creator-card {
+        min-height: 0;
+
+        padding: 17px;
+      }
+
+
+      .creator-links {
+        grid-template-columns:
+          1fr;
+      }
+
+
+      .creator-count {
+        font-size: 12px;
+      }
+
+    }
+
+  </style>
+
+</head>
+
+
+<body>
+
+
+  <!-- ========================================
+       ヘッダー
+  ========================================= -->
+
+  <header class="topbar">
+
+    <div class="brand">
+
+      <span class="brand-small">
+        NIKKE
+      </span>
+
+      <span class="brand-main">
+        UNION MATCH
+      </span>
+
+    </div>
+
+
+    <div class="status">
+      CREATOR
+    </div>
+
+  </header>
+
+
+
+  <main class="container">
+
+
+    <!-- ========================================
+         タイトル
+    ========================================= -->
+
+    <div class="eyebrow">
+      SUPPORT CREATORS
+    </div>
+
+
+    <h1>
+      📺 応援クリエイター
+    </h1>
+
+
+    <p class="lead">
+      NIKKE UNION MATCHを応援していただいている
+      NIKKEクリエイター・配信者の皆様をご紹介します✨
+    </p>
+
+
+
+    <div class="top-actions">
+
+      <a
+        class="back-btn"
+        href="./index.html"
+      >
+        ← NIKKE UNION MATCHへ戻る
+      </a>
+
+    </div>
+
+
+
+    <!-- ========================================
+         件数
+    ========================================= -->
+
+    <div
+      id="creatorCount"
+      class="creator-count"
+    >
+      公開クリエイターを読み込み中...
+    </div>
+
+
+
+    <!-- ========================================
+         クリエイター一覧
+    ========================================= -->
+
+    <div
+      id="creatorGrid"
+      class="creator-grid"
+    >
+    </div>
+
+
+
+    <div
+      id="emptyState"
+      class="empty hidden"
+    >
+      現在公開中の応援クリエイターはいません。
+    </div>
+
+
+
+    <div
+      id="errorState"
+      class="error hidden"
+    >
+      クリエイター情報を読み込めませんでした。
+    </div>
+
+
+
+    <!-- ========================================
+         下部
+    ========================================= -->
+
+    <div class="bottom-area">
+
+      <div class="bottom-copy">
+        指揮官とユニオンをつなぐ<br>
+        NIKKE UNION MATCH
+      </div>
+
+      <a
+        class="back-btn"
+        href="./index.html"
+      >
+        アプリへ戻る
+      </a>
+
+    </div>
+
+
+  </main>
+
+
+
+  <!-- ========================================
+       Supabase
+  ========================================= -->
+
+  <script
+    src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"
+  ></script>
+
+
+
+  <script>
+
+    // ========================================
+    // Supabase
+    // ========================================
+
+    const SUPABASE_URL =
+      "https://igoekrvpgnjberppiawf.supabase.co";
+
+    const SUPABASE_ANON_KEY =
+      "sb_publishable_xSjnNTnh667o9IesU5g5Kw_xcdg9bbh";
+
+
+    const sb =
+      window.supabase.createClient(
+        SUPABASE_URL,
+        SUPABASE_ANON_KEY
+      );
+
+
+    // ========================================
+    // 共通
+    // ========================================
+
+    const $ = selector =>
+      document.querySelector(selector);
+
+
+    function escapeHtml(value) {
+
+      return String(
+        value ?? ""
+      ).replace(
+        /[&<>"']/g,
+        char => ({
+          "&": "&amp;",
+          "<": "&lt;",
+          ">": "&gt;",
+          '"': "&quot;",
+          "'": "&#039;"
+        }[char])
+      );
+
+    }
+
+
+    // ========================================
+    // URL確認
+    // ========================================
+
+    function safeUrl(value) {
+
+      if (!value) {
+        return "";
+      }
+
+
+      try {
+
+        const url =
+          new URL(value);
+
+
+        if (
+          url.protocol !==
+            "https:"
+          &&
+          url.protocol !==
+            "http:"
+        ) {
+
+          return "";
+
+        }
+
+
+        return url.href;
+
+      } catch {
+
+        return "";
+
+      }
+
+    }
+
+
+    // ========================================
+    // クリエイター取得
+    //
+    // RLSにより
+    // is_public = true のみ取得される
+    // ========================================
+
+    async function loadCreators() {
+
+      const grid =
+        $("#creatorGrid");
+
+      const empty =
+        $("#emptyState");
+
+      const errorState =
+        $("#errorState");
+
+      const count =
+        $("#creatorCount");
+
+
+      grid.innerHTML =
+        "";
+
+
+      empty.classList.add(
+        "hidden"
+      );
+
+
+      errorState.classList.add(
+        "hidden"
+      );
+
+
+      const {
+        data,
+        error
+      } =
+        await sb
+          .from(
+            "creators"
+          )
+          .select(
+            "id, creator_name, youtube_url, x_url, description, display_order, created_at"
+          )
+          .eq(
+            "is_public",
+            true
+          )
+          .order(
+            "display_order",
+            {
+              ascending:
+                true
+            }
+          )
+          .order(
+            "created_at",
+            {
+              ascending:
+                false
+            }
+          );
+
+
+      if (error) {
+
+        console.error(
+          "クリエイター取得エラー",
+          error
+        );
+
+
+        count.textContent =
+          "公開クリエイター：--";
+
+
+        errorState.classList.remove(
+          "hidden"
+        );
+
+
+        return;
+
+      }
+
+
+      const creators =
+        Array.isArray(data)
+          ? data
+          : [];
+
+
+      count.textContent =
+        `📺 公開クリエイター：${creators.length}名`;
+
+
+      if (
+        creators.length ===
+        0
+      ) {
+
+        empty.classList.remove(
+          "hidden"
+        );
+
+        return;
+
+      }
+
+
+      grid.innerHTML =
+        creators
+          .map(
+            creator => {
+
+              const youtubeUrl =
+                safeUrl(
+                  creator.youtube_url
+                );
+
+
+              const xUrl =
+                safeUrl(
+                  creator.x_url
+                );
+
+
+              const links = [];
+
+
+              if (youtubeUrl) {
+
+                links.push(`
+
+                  <a
+                    class="creator-link youtube"
+                    href="${escapeHtml(
+                      youtubeUrl
+                    )}"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                  >
+                    ▶ YouTubeを見る
+                  </a>
+
+                `);
+
+              }
+
+
+              if (xUrl) {
+
+                links.push(`
+
+                  <a
+                    class="creator-link x"
+                    href="${escapeHtml(
+                      xUrl
+                    )}"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                  >
+                    𝕏を見る
+                  </a>
+
+                `);
+
+              }
+
+
+              const linkClass =
+                links.length === 1
+                  ? "creator-links single"
+                  : "creator-links";
+
+
+              return `
+
+                <article class="creator-card">
+
+
+                  <div class="creator-badge">
+                    ✨ SUPPORT CREATOR
+                  </div>
+
+
+                  <div class="creator-name">
+
+                    ${escapeHtml(
+                      creator.creator_name
+                    )}
+
+                  </div>
+
+
+                  ${
+                    creator.description
+                      ? `
+                        <div class="creator-description">
+                          ${escapeHtml(
+                            creator.description
+                          )}
+                        </div>
+                      `
+                      : `
+                        <div class="creator-description">
+                          NIKKE UNION MATCH
+                          応援クリエイター
+                        </div>
+                      `
+                  }
+
+
+                  ${
+                    links.length
+                      ? `
+                        <div class="${linkClass}">
+                          ${links.join("")}
+                        </div>
+                      `
+                      : ""
+                  }
+
+
+                </article>
+
+              `;
+
+            }
+          )
+          .join("");
+
+    }
+
+
+    // ========================================
+    // 起動
+    // ========================================
+
+    document.addEventListener(
+      "DOMContentLoaded",
+      loadCreators
+    );
+
+  </script>
+
+
+</body>
+
+</html>
