@@ -3167,3 +3167,59 @@ body.manage-mode
 .new-badge {
   flex: 0 0 auto;
 }
+/* ========================================
+   PC版 ユニオン・NEW表示 崩れ修正
+======================================== */
+
+@media screen and (min-width: 601px) {
+
+  .card-head {
+    display: flex !important;
+    align-items: center !important;
+    justify-content: space-between !important;
+    gap: 10px !important;
+  }
+
+
+  .type-with-new {
+    display: flex !important;
+    align-items: center !important;
+    flex-wrap: nowrap !important;
+    gap: 8px !important;
+
+    width: auto !important;
+    min-width: max-content !important;
+  }
+
+
+  .recruitment-type {
+    display: inline-flex !important;
+    align-items: center !important;
+
+    width: auto !important;
+    min-width: max-content !important;
+
+    white-space: nowrap !important;
+
+    flex: 0 0 auto !important;
+  }
+
+
+  .new-badge {
+    flex: 0 0 auto !important;
+
+    white-space: nowrap !important;
+  }
+
+
+  .card-head > .date {
+    flex: 0 0 auto !important;
+
+    margin-left: auto !important;
+
+    white-space: nowrap !important;
+
+    text-align: right !important;
+  }
+
+}
