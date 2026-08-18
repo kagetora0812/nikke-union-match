@@ -2888,34 +2888,24 @@ $("#closeForm")
       // 卒業ちしかん +1
       // ======================================
 
-      if (
-        data ===
-        "commander"
-      ) {
+if (
+  data ===
+  "commander_confirm"
+) {
 
+  const reasonBox =
+    $("#commanderCloseReason");
 
-        alert(
-          "指揮官募集を締め切りました。"
-        );
+  if (reasonBox) {
 
+    reasonBox.hidden =
+      false;
 
-        event.target.reset();
+  }
 
+  return;
 
-        await loadGraduatedCommanderCount();
-
-
-        // ★締切画面を閉じて一覧へ
-
-        showPage(
-          "list"
-        );
-
-
-        return;
-
-      }
-
+}
 
       // ======================================
       // ユニオン締切
@@ -2955,7 +2945,192 @@ $("#closeForm")
     }
   );
 
+// ========================================
+// 指揮官 締切理由
+// ========================================
 
+async function closeCommanderWithReason(
+  reason
+) {
+
+  if (!sb) {
+
+    alert(
+      "Supabaseの設定がまだです。"
+    );
+
+    return;
+
+  }
+
+
+  const pass =
+    $("#closePass")
+      ?.value
+      .trim()
+      .toUpperCase();
+
+
+  if (!pass) {
+
+    alert(
+      "PASSを入力してください。"
+    );
+
+    return;
+
+  }
+
+
+  const hash =
+    await sha256(
+      pass
+    );
+
+
+  const {
+    data,
+    error
+  } =
+    await sb.rpc(
+      "close_commander_recruitment_by_pass",
+      {
+        p_pass_hash:
+          hash,
+
+        p_close_reason:
+          reason
+      }
+    );
+
+
+  if (error) {
+
+    console.error(
+      "指揮官締切理由エラー",
+      error
+    );
+
+
+    alert(
+      "指揮官募集の締切処理に失敗しました。"
+    );
+
+    return;
+
+  }
+
+
+  if (data !== true) {
+
+    alert(
+      "PASSが正しくないか、すでに募集終了しています。"
+    );
+
+    return;
+
+  }
+
+
+  const reasonBox =
+    $("#commanderCloseReason");
+
+
+  if (reasonBox) {
+
+    reasonBox.hidden =
+      true;
+
+  }
+
+
+  $("#closeForm")
+    ?.reset();
+
+
+  if (
+    reason ===
+    "graduated"
+  ) {
+
+    alert(
+      "🎓 ユニオン決定として募集を締め切りました。"
+    );
+
+    await loadGraduatedCommanderCount();
+
+  } else {
+
+    alert(
+      "募集を終了しました。"
+    );
+
+  }
+
+
+  showPage(
+    "list"
+  );
+
+}
+
+
+// ========================================
+// 🎓 ユニオンが決まった
+// ========================================
+
+$("#closeGraduatedBtn")
+  ?.addEventListener(
+    "click",
+    async () => {
+
+      await closeCommanderWithReason(
+        "graduated"
+      );
+
+    }
+  );
+
+
+// ========================================
+// ✖ 募集だけ終了
+// ========================================
+
+$("#closeOnlyBtn")
+  ?.addEventListener(
+    "click",
+    async () => {
+
+      await closeCommanderWithReason(
+        "close_only"
+      );
+
+    }
+  );
+
+
+// ========================================
+// 戻る
+// ========================================
+
+$("#closeReasonCancelBtn")
+  ?.addEventListener(
+    "click",
+    () => {
+
+      const reasonBox =
+        $("#commanderCloseReason");
+
+
+      if (reasonBox) {
+
+        reasonBox.hidden =
+          true;
+
+      }
+
+    }
+  );
 // ========================================
 // 起動
 // ========================================
