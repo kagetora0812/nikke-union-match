@@ -35,6 +35,14 @@ const sb =
 const $ = selector =>
   document.querySelector(selector);
 
+
+// ========================================
+// Xシェア用：直前に登録した募集情報
+// ========================================
+
+let lastRegisteredRecruitment = null;
+
+
 function escapeHtml(value) {
   return String(value ?? "").replace(
     /[&<>"']/g,
@@ -437,6 +445,7 @@ function setSearchType(type) {
   loadRecruitments();
 }
 
+
 commanderSearchTab
   ?.addEventListener(
     "click",
@@ -446,6 +455,7 @@ commanderSearchTab
       );
     }
   );
+
 
 unionSearchTab
   ?.addEventListener(
@@ -464,6 +474,7 @@ unionSearchTab
 
 let countdownTimer =
   null;
+
 
 function getRemainingTime(
   expiresAt
@@ -621,7 +632,7 @@ async function loadGraduatedCommanderCount() {
     !counter ||
     !sb
   ) {
-    return;
+    return null;
   }
 
   const {
@@ -638,7 +649,7 @@ async function loadGraduatedCommanderCount() {
       error
     );
 
-    return;
+    return null;
   }
 
   const count =
@@ -653,7 +664,139 @@ async function loadGraduatedCommanderCount() {
   ) {
     counter.textContent =
       count;
+
+    return count;
   }
+
+  return null;
+}
+
+
+// ========================================
+// Xシェア用：現在募集中のユニオン数を取得
+// ========================================
+
+async function getCurrentUnionCount() {
+  if (!sb) {
+    return 0;
+  }
+
+  const {
+    count,
+    error
+  } =
+    await sb
+      .from(
+        "union_recruitments"
+      )
+      .select(
+        "id",
+        {
+          count: "exact",
+          head: true
+        }
+      )
+      .eq(
+        "status",
+        "open"
+      )
+      .gt(
+        "expires_at",
+        new Date()
+          .toISOString()
+      );
+
+  if (error) {
+    console.error(
+      "登録ユニオン数取得エラー",
+      error
+    );
+
+    return Number(
+      $("#unionCountTop")
+        ?.textContent ||
+      $("#unionCount")
+        ?.textContent ||
+      0
+    );
+  }
+
+  return Number(
+    count || 0
+  );
+}
+
+
+// ========================================
+// Xシェア文を作成
+// ========================================
+
+function buildXShareText(
+  registration,
+  unionCount,
+  graduatedCount
+) {
+  if (!registration) {
+    return "";
+  }
+
+  const commonTop =
+    "🔎 指揮官とユニオンを簡単につなぐマッチングアプリ\n" +
+    "「NIKKE UNION MATCH」に登録しました！\n\n";
+
+  const commonStats =
+    `🏢 現在の登録ユニオン：${unionCount}ユニオン\n` +
+    `🎓 アプリ登録卒業指揮官：${graduatedCount}名\n`;
+
+  const appUrl =
+    "https://x.gd/4tEJo";
+
+
+  // ========================================
+  // 指揮官
+  // ========================================
+
+  if (
+    registration.type ===
+    "commander"
+  ) {
+    return (
+      commonTop +
+
+      "新しい移籍先を探しています🐾\n" +
+      "気になったユニオン様、お声掛けお待ちしています✨\n\n" +
+
+      `👤 指揮官名：${registration.name}\n` +
+      `📊 SLV：${registration.slv}\n` +
+      `𝕏 募集投稿：${registration.xUrl}\n\n` +
+
+      commonStats +
+
+      "👇募集詳細はこちら\n" +
+      appUrl
+    );
+  }
+
+
+  // ========================================
+  // ユニオン
+  // ========================================
+
+  return (
+    commonTop +
+
+    "新しい仲間を募集中です🔥\n" +
+    "ユニオンを探している指揮官様、ぜひ覗いてみてください✨\n\n" +
+
+    `🏢 ユニオン名：${registration.name}\n` +
+    `🏆 ランク：${registration.rank}\n` +
+    `𝕏 募集投稿：${registration.xUrl}\n\n` +
+
+    commonStats +
+
+    "👇募集詳細はこちら\n" +
+    appUrl
+  );
 }
 
 
@@ -691,15 +834,6 @@ async function loadRecruitments() {
     "hidden"
   );
 
-
-  // ========================================
-  // 卒業ちしかん累計更新
-  //
-  // RPC側で
-  // ・PASS締切
-  // ・14日経過
-  // を合算
-  // ========================================
 
   await loadGraduatedCommanderCount();
 
@@ -1264,15 +1398,18 @@ function updateRegistrationFields() {
   const unionName =
     $("#unionName");
 
+
   if (name) {
     name.required =
       !isUnion;
   }
 
+
   if (slv) {
     slv.required =
       !isUnion;
   }
+
 
   if (unionName) {
     unionName.required =
@@ -1307,6 +1444,7 @@ function showRegistrationResult(
       pass;
   }
 
+
   if (
     $("#resultExpiry")
   ) {
@@ -1317,8 +1455,10 @@ function showRegistrationResult(
       );
   }
 
+
   const resultId =
     $("#resultId");
+
 
   if (resultId) {
     const row =
@@ -1326,11 +1466,13 @@ function showRegistrationResult(
         ".result-row"
       );
 
+
     if (row) {
       row.style.display =
         "none";
     }
   }
+
 
   $("#resultModal")
     ?.classList
@@ -1350,6 +1492,7 @@ $("#registerForm")
     async event => {
       event.preventDefault();
 
+
       if (!sb) {
         alert(
           "Supabaseの設定がまだです。"
@@ -1358,15 +1501,18 @@ $("#registerForm")
         return;
       }
 
+
       const registrationType =
         $("#registrationType")
           ?.value ||
         "commander";
 
+
       const xUrl =
         $("#xUrl")
           ?.value
           .trim();
+
 
       if (
         !validXUrl(
@@ -1394,9 +1540,11 @@ $("#registerForm")
             ?.value
             .trim();
 
+
         const unionRank =
           $("#unionRank")
             ?.value;
+
 
         if (!unionName) {
           alert(
@@ -1415,10 +1563,12 @@ $("#registerForm")
           const pass =
             generatePass();
 
+
           const passHash =
             await sha256(
               pass
             );
+
 
           const {
             data,
@@ -1506,6 +1656,14 @@ $("#registerForm")
               : data;
 
 
+          lastRegisteredRecruitment = {
+            type: "union",
+            name: unionName,
+            rank: unionRank,
+            xUrl
+          };
+
+
           showRegistrationResult(
             pass,
             result
@@ -1538,6 +1696,7 @@ $("#registerForm")
         $("#name")
           ?.value
           .trim();
+
 
       const slv =
         Number(
@@ -1575,6 +1734,7 @@ $("#registerForm")
       ) {
         const pass =
           generatePass();
+
 
         const passHash =
           await sha256(
@@ -1669,6 +1829,14 @@ $("#registerForm")
             : data;
 
 
+        lastRegisteredRecruitment = {
+          type: "commander",
+          name,
+          slv,
+          xUrl
+        };
+
+
         showRegistrationResult(
           pass,
           result
@@ -1704,6 +1872,7 @@ $("#copyPass")
           ?.textContent ||
         "";
 
+
       try {
         await navigator
           .clipboard
@@ -1729,6 +1898,7 @@ $("#copyPass")
             1500
           );
         }
+
 
       } catch (error) {
         console.error(
@@ -1769,6 +1939,97 @@ $("#resultDone")
   ?.addEventListener(
     "click",
     () => {
+      closeModal();
+
+
+      showPage(
+        "list"
+      );
+    }
+  );
+
+
+// ========================================
+// Xで募集をシェア
+// ========================================
+
+$("#shareXBtn")
+  ?.addEventListener(
+    "click",
+    async () => {
+
+      if (
+        !lastRegisteredRecruitment
+      ) {
+        alert(
+          "登録情報を取得できませんでした。\n募集一覧から登録内容をご確認ください。"
+        );
+
+        return;
+      }
+
+
+      const shareWindow =
+        window.open(
+          "about:blank",
+          "_blank"
+        );
+
+
+      const [
+        unionCount,
+        graduatedCountResult
+      ] =
+        await Promise.all([
+          getCurrentUnionCount(),
+          loadGraduatedCommanderCount()
+        ]);
+
+
+      const graduatedCount =
+        Number.isFinite(
+          Number(
+            graduatedCountResult
+          )
+        )
+          ? Number(
+              graduatedCountResult
+            )
+          : Number(
+              $("#graduatedCommanderCount")
+                ?.textContent ||
+              0
+            );
+
+
+      const shareText =
+        buildXShareText(
+          lastRegisteredRecruitment,
+          unionCount,
+          graduatedCount
+        );
+
+
+      const shareUrl =
+        "https://twitter.com/intent/tweet?text=" +
+        encodeURIComponent(
+          shareText
+        );
+
+
+      if (shareWindow) {
+        shareWindow.opener =
+          null;
+
+        shareWindow.location.href =
+          shareUrl;
+
+      } else {
+        window.location.href =
+          shareUrl;
+      }
+
+
       closeModal();
 
 
@@ -1852,11 +2113,6 @@ $("#closeForm")
       }
 
 
-      // ========================================
-      // 指揮官締切
-      // 卒業ちしかん +1
-      // ========================================
-
       if (
         data ===
         "commander"
@@ -1869,7 +2125,6 @@ $("#closeForm")
         event.target.reset();
 
 
-        // Supabaseから最新卒業人数を再取得
         await loadGraduatedCommanderCount();
 
 
@@ -1881,11 +2136,6 @@ $("#closeForm")
         return;
       }
 
-
-      // ========================================
-      // ユニオン締切
-      // 卒業ちしかんには加算しない
-      // ========================================
 
       if (
         data ===
