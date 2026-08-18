@@ -771,7 +771,7 @@ function buildXShareText(
 
       commonStats +
 
-      "👇募集詳細\n" +
+      "👇アプリを確認\n" +
       appUrl
     );
   }
@@ -791,7 +791,7 @@ function buildXShareText(
 
     commonStats +
 
-    "👇募集詳細\n" +
+    "👇アプリを確認\n" +
     appUrl
   );
 }
