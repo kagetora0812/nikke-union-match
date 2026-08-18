@@ -69,6 +69,11 @@
     }
 
 
+    button {
+      font: inherit;
+    }
+
+
     .hidden {
       display: none !important;
     }
@@ -186,9 +191,13 @@
     }
 
 
-    h1 {
+    h1,
+    h2 {
       margin: 0;
+    }
 
+
+    h1 {
       font-size:
         clamp(
           34px,
@@ -197,6 +206,18 @@
         );
 
       line-height: 1.05;
+    }
+
+
+    h2 {
+      font-size:
+        clamp(
+          24px,
+          5vw,
+          34px
+        );
+
+      line-height: 1.2;
     }
 
 
@@ -639,6 +660,189 @@
 
 
     /* ========================================
+       応援クリエイター募集
+    ======================================== */
+
+    .creator-recruit-box {
+      margin-top: 34px;
+
+      padding: 24px;
+
+      border:
+        1px solid
+        rgba(
+          143,
+          240,
+          189,
+          .38
+        );
+
+      background:
+        linear-gradient(
+          145deg,
+          rgba(
+            84,
+            227,
+            155,
+            .10
+          ),
+          rgba(
+            20,
+            28,
+            41,
+            .90
+          )
+        );
+    }
+
+
+    .creator-recruit-box p {
+      margin:
+        12px 0 0;
+
+      color:
+        #cbd4df;
+
+      line-height: 1.8;
+
+      font-size: 13px;
+    }
+
+
+    .creator-recruit-actions {
+      display: flex;
+
+      gap: 10px;
+
+      flex-wrap: wrap;
+
+      margin-top: 18px;
+    }
+
+
+    .recruit-x-btn {
+      min-height: 48px;
+
+      padding:
+        0 18px;
+
+      display: inline-flex;
+
+      align-items: center;
+
+      justify-content: center;
+
+      text-decoration: none;
+
+      border:
+        1px solid
+        rgba(
+          54,
+          150,
+          255,
+          .45
+        );
+
+      background:
+        rgba(
+          54,
+          150,
+          255,
+          .10
+        );
+
+      color:
+        #8cc9ff;
+
+      font-weight: 800;
+
+      font-size: 13px;
+    }
+
+
+    /* ========================================
+       Xシェア
+    ======================================== */
+
+    .share-box {
+      margin-top: 18px;
+
+      padding: 24px;
+
+      border:
+        1px solid
+        rgba(
+          255,
+          177,
+          92,
+          .32
+        );
+
+      background:
+        rgba(
+          255,
+          122,
+          24,
+          .06
+        );
+    }
+
+
+    .share-box p {
+      margin:
+        12px 0 0;
+
+      color:
+        var(--muted);
+
+      font-size: 13px;
+
+      line-height: 1.8;
+    }
+
+
+    .share-app-btn {
+      margin-top: 18px;
+
+      min-height: 48px;
+
+      padding:
+        0 18px;
+
+      display: inline-flex;
+
+      align-items: center;
+
+      justify-content: center;
+
+      border:
+        1px solid
+        rgba(
+          255,
+          177,
+          92,
+          .45
+        );
+
+      background:
+        linear-gradient(
+          135deg,
+          #ff6a00,
+          #d94100
+        );
+
+      color:
+        #fff;
+
+      cursor: pointer;
+
+      font-weight: 800;
+
+      font-size: 13px;
+    }
+
+
+    /* ========================================
        下部
     ======================================== */
 
@@ -751,6 +955,26 @@
 
       .creator-count {
         font-size: 12px;
+      }
+
+
+      .creator-recruit-box,
+      .share-box {
+        padding: 18px;
+      }
+
+
+      .creator-recruit-actions {
+        display: grid;
+
+        grid-template-columns:
+          1fr;
+      }
+
+
+      .recruit-x-btn,
+      .share-app-btn {
+        width: 100%;
       }
 
     }
@@ -867,6 +1091,84 @@
     >
       クリエイター情報を読み込めませんでした。
     </div>
+
+
+
+    <!-- ========================================
+         応援クリエイター募集
+    ========================================= -->
+
+    <section class="creator-recruit-box">
+
+      <div class="eyebrow">
+        CREATOR RECRUITMENT
+      </div>
+
+
+      <h2>
+        📣 応援クリエイター募集中！
+      </h2>
+
+
+      <p>
+        NIKKE UNION MATCHを一緒に盛り上げていただける
+        YouTuber・配信者・NIKKEクリエイター様を募集しています✨
+      </p>
+
+
+      <p>
+        掲載をご希望の方は、Xからお気軽にご連絡ください。
+      </p>
+
+
+      <div class="creator-recruit-actions">
+
+        <a
+          class="recruit-x-btn"
+          href="https://x.com/KAGETORA_Z00"
+          target="_blank"
+          rel="noopener noreferrer"
+        >
+          𝕏から掲載を申し込む
+        </a>
+
+      </div>
+
+    </section>
+
+
+
+    <!-- ========================================
+         アプリシェア
+    ========================================= -->
+
+    <section class="share-box">
+
+      <div class="eyebrow">
+        SHARE
+      </div>
+
+
+      <h2>
+        📢 NIKKE UNION MATCHを広める
+      </h2>
+
+
+      <p>
+        指揮官・ユニオンを探している方へ、
+        NIKKE UNION MATCHをシェアしていただけると嬉しいです✨
+      </p>
+
+
+      <button
+        id="shareAppBtn"
+        class="share-app-btn"
+        type="button"
+      >
+        𝕏でアプリをシェア
+      </button>
+
+    </section>
 
 
 
@@ -994,7 +1296,6 @@
 
     // ========================================
     // クリエイター取得
-    //
     // 公開中だけ表示
     // ========================================
 
@@ -1282,6 +1583,48 @@
           .join("");
 
     }
+
+
+    // ========================================
+    // Xでアプリをシェア
+    // ========================================
+
+    $("#shareAppBtn")
+      ?.addEventListener(
+        "click",
+        () => {
+
+          const shareText =
+
+            "🔎 指揮官とユニオンをつなぐマッチングアプリ\n" +
+            "「NIKKE UNION MATCH」\n\n" +
+
+            "📺 応援クリエイターも掲載中！\n\n" +
+
+            "指揮官・ユニオン探しにぜひ✨\n\n" +
+
+            "👇アプリを確認\n" +
+            "https://x.gd/4tEJo";
+
+
+          const shareUrl =
+
+            "https://twitter.com/intent/tweet?text="
+
+            +
+
+            encodeURIComponent(
+              shareText
+            );
+
+
+          window.open(
+            shareUrl,
+            "_blank"
+          );
+
+        }
+      );
 
 
     // ========================================
