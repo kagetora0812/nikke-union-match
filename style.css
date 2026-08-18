@@ -3223,3 +3223,125 @@ body.manage-mode
   }
 
 }
+
+/* ========================================
+   TOP 卒業ちしかん
+======================================== */
+
+.hero-graduate-stat {
+  grid-column: 1 / 4;
+
+  width: 100%;
+
+  margin-top: 6px;
+
+  padding:
+    18px 16px;
+
+  text-align: center;
+
+  border-top:
+    1px solid
+    rgba(
+      143,
+      240,
+      189,
+      .25
+    );
+
+  background:
+    rgba(
+      143,
+      240,
+      189,
+      .04
+    );
+}
+
+
+.hero-graduate-title {
+  color:
+    var(--graduate);
+
+  font-size: 15px;
+
+  font-weight: 800;
+
+  margin-bottom: 6px;
+}
+
+
+.hero-graduate-number {
+  display: flex;
+
+  align-items: baseline;
+
+  justify-content: center;
+
+  gap: 5px;
+}
+
+
+.hero-graduate-number strong {
+  color:
+    var(--graduate);
+
+  font-family:
+    Rajdhani,
+    sans-serif;
+
+  font-size: 52px;
+
+  font-weight: 700;
+
+  line-height: .9;
+}
+
+
+.hero-graduate-number span {
+  color:
+    var(--graduate2);
+
+  font-size: 16px;
+
+  font-weight: 800;
+}
+
+
+.hero-graduate-sub {
+  margin-top: 6px;
+
+  color:
+    #8e9aaa;
+
+  font-size: 11px;
+}
+
+
+/* スマホ */
+
+@media screen and (max-width: 600px) {
+
+  .hero-graduate-stat {
+    grid-column: 1 / 4;
+
+    padding:
+      14px 10px;
+  }
+
+
+  .hero-graduate-number strong {
+    font-size: 42px;
+  }
+
+
+  .hero-graduate-title {
+    font-size: 13px;
+  }
+
+
+  .hero-graduate-sub {
+    font-size: 10px;
+  }
+
+}
