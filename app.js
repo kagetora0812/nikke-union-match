@@ -909,14 +909,12 @@ if (
   )
 ) {
 
-  // 一覧側
-  counter.textContent =
-    count;
+  if (counter) {
 
+    counter.textContent =
+      count;
 
-  // TOP側
-  const topCounter =
-    $("#graduatedCommanderCountTop");
+  }
 
 
   if (topCounter) {
@@ -925,6 +923,11 @@ if (
       count;
 
   }
+
+
+  return count;
+
+}
 
 
   return count;
