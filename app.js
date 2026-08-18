@@ -288,13 +288,13 @@ function getXPostId(url) {
 
 // ========================================
 // X投稿埋め込み
+// 各投稿を独立して読み込む
 // ========================================
 
 async function renderXEmbeds(
   retry = 0
 ) {
 
-  // Xのwidgets.jsがまだ準備できていない場合
   if (
     !window.twttr ||
     !window.twttr.widgets
@@ -323,83 +323,73 @@ async function renderXEmbeds(
     );
 
 
-  for (
-    const target
-    of targets
-  ) {
+  targets.forEach(
+    target => {
 
-    // すでに正常表示できたものは触らない
-    if (
-      target.dataset.loaded ===
-      "true"
-    ) {
-      continue;
-    }
+      if (
+        target.dataset.loaded ===
+        "true"
+      ) {
 
-
-    const postId =
-      target.dataset.postId;
-
-
-    if (!postId) {
-
-      target.innerHTML =
-        '<div class="x-embed-error">X投稿を表示できません</div>';
-
-      continue;
-    }
-
-
-    try {
-
-      // 前回失敗した表示が残っていたら一度空にする
-      target.innerHTML = "";
-
-
-      const tweet =
-        await window.twttr.widgets
-          .createTweet(
-            postId,
-            target,
-            {
-              theme: "dark",
-              align: "center",
-              conversation: "none"
-            }
-          );
-
-
-      // 実際に埋め込み成功した時だけ
-      // 読み込み済みにする
-      if (tweet) {
-
-        target.dataset.loaded =
-          "true";
-
-      } else {
-
-        // X側が表示を返さなかった場合
-        // loadedにはしない
-        delete target.dataset.loaded;
+        return;
 
       }
 
 
-    } catch (error) {
-
-      // 失敗した場合も
-      // 次回再試行できる状態に戻す
-      delete target.dataset.loaded;
+      const postId =
+        target.dataset.postId;
 
 
-      console.error(
-        "X投稿表示エラー",
-        error
-      );
+      if (!postId) {
+
+        target.innerHTML =
+          '<div class="x-embed-error">X投稿を表示できません</div>';
+
+        return;
+
+      }
+
+
+      target.innerHTML = "";
+
+
+      window.twttr.widgets
+        .createTweet(
+          postId,
+          target,
+          {
+            theme: "dark",
+            align: "center",
+            conversation: "none"
+          }
+        )
+        .then(
+          tweet => {
+
+            if (tweet) {
+
+              target.dataset.loaded =
+                "true";
+
+            }
+
+          }
+        )
+        .catch(
+          error => {
+
+            delete target.dataset.loaded;
+
+            console.error(
+              "X投稿表示エラー",
+              error
+            );
+
+          }
+        );
 
     }
-
-  }
+  );
 
 }
 
