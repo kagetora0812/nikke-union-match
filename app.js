@@ -1480,15 +1480,19 @@ const newBadge =
 
                 <div class="card-head">
 
-                  <span
-                    class="recruitment-type"
-                  >
-                    ● 指揮官
-                  </span>
-${newBadge}
+                <div class="type-with-new">
 
-                  <span class="date">
+  <span
+    class="recruitment-type"
+  >
+    ● 指揮官
+  </span>
 
+  ${newBadge}
+
+</div>
+
+<span class="date">
                     期限
 
                     ${formatDate(
@@ -1696,15 +1700,19 @@ const newBadge =
                 <div class="card-head">
 
 
-                  <span
-                    class="recruitment-type"
-                  >
-                    ● ユニオン
-                  </span>
+                <div class="type-with-new">
 
-${newBadge}
+  <span
+    class="recruitment-type"
+  >
+    ● ユニオン
+  </span>
 
-                  <span class="date">
+  ${newBadge}
+
+</div>
+
+<span class="date">
 
                     期限
 
