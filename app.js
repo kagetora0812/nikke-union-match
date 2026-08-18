@@ -294,6 +294,7 @@ async function renderXEmbeds(
   retry = 0
 ) {
 
+  // Xのwidgets.jsがまだ準備できていない場合
   if (
     !window.twttr ||
     !window.twttr.widgets
@@ -303,11 +304,9 @@ async function renderXEmbeds(
 
       setTimeout(
         () => {
-
           renderXEmbeds(
             retry + 1
           );
-
         },
         500
       );
@@ -329,6 +328,7 @@ async function renderXEmbeds(
     of targets
   ) {
 
+    // すでに正常表示できたものは触らない
     if (
       target.dataset.loaded ===
       "true"
@@ -347,32 +347,50 @@ async function renderXEmbeds(
         '<div class="x-embed-error">X投稿を表示できません</div>';
 
       continue;
-
     }
-
-
-    target.dataset.loaded =
-      "true";
 
 
     try {
 
-      await window.twttr.widgets
-        .createTweet(
+      // 前回失敗した表示が残っていたら一度空にする
+      target.innerHTML = "";
 
-          postId,
 
-          target,
+      const tweet =
+        await window.twttr.widgets
+          .createTweet(
+            postId,
+            target,
+            {
+              theme: "dark",
+              align: "center",
+              conversation: "none"
+            }
+          );
 
-          {
-            theme: "dark",
-            align: "center",
-            conversation: "none"
-          }
 
-        );
+      // 実際に埋め込み成功した時だけ
+      // 読み込み済みにする
+      if (tweet) {
+
+        target.dataset.loaded =
+          "true";
+
+      } else {
+
+        // X側が表示を返さなかった場合
+        // loadedにはしない
+        delete target.dataset.loaded;
+
+      }
+
 
     } catch (error) {
+
+      // 失敗した場合も
+      // 次回再試行できる状態に戻す
+      delete target.dataset.loaded;
+
 
       console.error(
         "X投稿表示エラー",
@@ -384,7 +402,6 @@ async function renderXEmbeds(
   }
 
 }
-
 
 // ========================================
 // ページ切替
