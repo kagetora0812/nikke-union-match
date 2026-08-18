@@ -100,297 +100,302 @@
 
         <div class="hero-actions">
 
-  <button
-    class="btn primary"
-    data-page="register"
-    type="button"
-  >
-    募集を登録
-  </button>
+          <button
+            class="btn primary"
+            data-page="register"
+            type="button"
+          >
+            募集を登録
+          </button>
 
-</div>
+        </div>
+
 
         <!-- 募集登録ボタン直下の登録フォーム -->
+
         <div id="heroRegisterArea">
-<section
-      id="registerPage"
-      class="page inline-register-page"
-    >
 
-      <div class="register-inline-top">
-
-        <button
-          id="registerBackBtn"
-          class="text-btn register-back-btn"
-          type="button"
-        >
-          ← 戻る
-        </button>
-
-      </div>
-
-      <div class="easy-register-box">
-
-        <strong class="easy-register-title">
-          ✨ 登録はかんたん・約1分！
-        </strong>
-
-        <div class="easy-register-list">
-          <div>・指揮官名 / ユニオン名</div>
-          <div>・SLV / ユニオンランク</div>
-          <div>・Xの募集投稿URL</div>
-        </div>
-
-        <div class="easy-register-copy">
-          これだけで掲載できます！
-        </div>
-
-        <div class="easy-register-privacy">
-          🔒 メールアドレスなどの個人情報登録は一切不要！
-        </div>
-
-      </div>
-
-
-
-      <div class="section-head">
-
-
-        <div>
-
-
-          <div class="eyebrow">
-            REGISTER
-          </div>
-
-
-          <h2>
-            募集を登録
-          </h2>
-
-
-        </div>
-
-
-      </div>
-
-
-
-      <form
-        id="registerForm"
-        class="panel"
-      >
-
-
-        <label>
-
-          登録タイプ
-
-
-          <select id="registrationType">
-
-
-            <option value="commander">
-              指揮官
-            </option>
-
-
-            <option value="union">
-              ユニオン
-            </option>
-
-
-          </select>
-
-
-        </label>
-
-
-
-        <!-- ========================================
-             指揮官入力
-        ========================================= -->
-
-        <div id="commanderFields">
-
-
-          <label>
-
-            指揮官名
-
-
-            <input
-              id="name"
-              maxlength="40"
-              autocomplete="off"
-              autocapitalize="off"
-              spellcheck="false"
-              placeholder="例：KAGETORA"
-            >
-
-
-          </label>
-
-
-
-          <label>
-
-            SLV
-
-
-            <input
-              id="slv"
-              type="number"
-              min="1"
-              max="1200"
-              inputmode="numeric"
-              autocomplete="off"
-              placeholder="例：850"
-            >
-
-
-          </label>
-
-
-        </div>
-
-
-
-        <!-- ========================================
-             ユニオン入力
-        ========================================= -->
-
-        <div
-          id="unionFields"
-          class="hidden"
-        >
-
-
-          <label>
-
-            ユニオン名
-
-
-            <input
-              id="unionName"
-              maxlength="40"
-              autocomplete="off"
-              autocapitalize="off"
-              spellcheck="false"
-              placeholder="例：○○ユニオン"
-            >
-
-
-          </label>
-
-
-
-          <label>
-
-            ユニオンランク
-
-
-            <select id="unionRank">
-
-
-              <option value="チャレンジャー">
-                チャレンジャー
-              </option>
-
-
-              <option value="ダイヤ">
-                ダイヤ
-              </option>
-
-
-              <option value="プラチナ">
-                プラチナ
-              </option>
-
-
-<option value="ゴールド">
-  ゴールド
-</option>
-
-<option value="シルバー">
-  シルバー
-</option>
-
-<option value="駆け出しユニオン">
-  駆け出しユニオン
-</option>
-
-
-            </select>
-
-
-          </label>
-
-
-        </div>
-
-
-
-        <!-- ========================================
-             X募集記事
-        ========================================= -->
-
-        <label>
-
-          Xの記事URL
-
-
-          <input
-            id="xUrl"
-            type="url"
-            required
-            inputmode="url"
-            autocomplete="off"
-            autocapitalize="off"
-            spellcheck="false"
-            placeholder="https://x.com/ユーザー名/status/..."
+          <section
+            id="registerPage"
+            class="page inline-register-page"
           >
 
 
-        </label>
+            <div class="register-inline-top">
+
+              <button
+                id="registerBackBtn"
+                class="text-btn register-back-btn"
+                type="button"
+              >
+                ← 戻る
+              </button>
+
+            </div>
+
+
+            <div class="easy-register-box">
+
+              <strong class="easy-register-title">
+                ✨ 登録はかんたん・約1分！
+              </strong>
+
+              <div class="easy-register-list">
+                <div>・指揮官名 / ユニオン名</div>
+                <div>・SLV / ユニオンランク</div>
+                <div>・Xの募集投稿URL</div>
+              </div>
+
+              <div class="easy-register-copy">
+                これだけで掲載できます！
+              </div>
+
+              <div class="easy-register-privacy">
+                🔒 メールアドレスなどの個人情報登録は一切不要！
+              </div>
+
+            </div>
 
 
 
-        <div class="notice">
+            <div class="section-head">
 
 
-          <strong>
-            掲載期間：14日間
-          </strong>
+              <div>
 
 
-          <span>
-            登録から14日後に自動で掲載終了します。
-            やり取りはXのDMで行ってください。
-          </span>
+                <div class="eyebrow">
+                  REGISTER
+                </div>
 
+
+                <h2>
+                  募集を登録
+                </h2>
+
+
+              </div>
+
+
+            </div>
+
+
+
+            <form
+              id="registerForm"
+              class="panel"
+            >
+
+
+              <label>
+
+                登録タイプ
+
+
+                <select id="registrationType">
+
+
+                  <option value="commander">
+                    指揮官
+                  </option>
+
+
+                  <option value="union">
+                    ユニオン
+                  </option>
+
+
+                </select>
+
+
+              </label>
+
+
+
+              <!-- ========================================
+                   指揮官入力
+              ========================================= -->
+
+              <div id="commanderFields">
+
+
+                <label>
+
+                  指揮官名
+
+
+                  <input
+                    id="name"
+                    maxlength="40"
+                    autocomplete="off"
+                    autocapitalize="off"
+                    spellcheck="false"
+                    placeholder="例：KAGETORA"
+                  >
+
+
+                </label>
+
+
+
+                <label>
+
+                  SLV
+
+
+                  <input
+                    id="slv"
+                    type="number"
+                    min="1"
+                    max="1200"
+                    inputmode="numeric"
+                    autocomplete="off"
+                    placeholder="例：850"
+                  >
+
+
+                </label>
+
+
+              </div>
+
+
+
+              <!-- ========================================
+                   ユニオン入力
+              ========================================= -->
+
+              <div
+                id="unionFields"
+                class="hidden"
+              >
+
+
+                <label>
+
+                  ユニオン名
+
+
+                  <input
+                    id="unionName"
+                    maxlength="40"
+                    autocomplete="off"
+                    autocapitalize="off"
+                    spellcheck="false"
+                    placeholder="例：○○ユニオン"
+                  >
+
+
+                </label>
+
+
+
+                <label>
+
+                  ユニオンランク
+
+
+                  <select id="unionRank">
+
+
+                    <option value="チャレンジャー">
+                      チャレンジャー
+                    </option>
+
+
+                    <option value="ダイヤ">
+                      ダイヤ
+                    </option>
+
+
+                    <option value="プラチナ">
+                      プラチナ
+                    </option>
+
+
+                    <option value="ゴールド">
+                      ゴールド
+                    </option>
+
+
+                    <option value="シルバー">
+                      シルバー
+                    </option>
+
+
+                    <option value="駆け出しユニオン">
+                      駆け出しユニオン
+                    </option>
+
+
+                  </select>
+
+
+                </label>
+
+
+              </div>
+
+
+
+              <!-- ========================================
+                   X募集記事
+              ========================================= -->
+
+              <label>
+
+                Xの記事URL
+
+
+                <input
+                  id="xUrl"
+                  type="url"
+                  required
+                  inputmode="url"
+                  autocomplete="off"
+                  autocapitalize="off"
+                  spellcheck="false"
+                  placeholder="https://x.com/ユーザー名/status/..."
+                >
+
+
+              </label>
+
+
+
+              <div class="notice">
+
+
+                <strong>
+                  掲載期間：14日間
+                </strong>
+
+
+                <span>
+                  登録から14日後に自動で掲載終了します。
+                  やり取りはXのDMで行ってください。
+                </span>
+
+
+              </div>
+
+
+
+              <button
+                class="btn primary wide"
+                type="submit"
+              >
+                募集を登録する
+              </button>
+
+
+            </form>
+
+
+          </section>
 
         </div>
 
-
-
-        <button
-          class="btn primary wide"
-          type="submit"
-        >
-          募集を登録する
-        </button>
-
-
-      </form>
-
-
-    </section>
-        </div>
-
-
-
-        </div>
 
 
       </div>
@@ -399,109 +404,114 @@
 
 
 
-        <!-- 募集締切ボタン直下の締切フォーム -->
-        <div id="heroManageArea">
-<section
-      id="managePage"
-      class="page inline-manage-page"
-    >
+      <!-- 募集締切ボタン直下の締切フォーム -->
 
-      <div class="manage-inline-top">
+      <div id="heroManageArea">
 
-        <button
-          id="manageBackBtn"
-          class="text-btn manage-back-btn"
-          type="button"
+        <section
+          id="managePage"
+          class="page inline-manage-page"
         >
-          ← 戻る
-        </button>
-
-      </div>
 
 
+          <div class="manage-inline-top">
 
-      <div class="section-head">
+            <button
+              id="manageBackBtn"
+              class="text-btn manage-back-btn"
+              type="button"
+            >
+              ← 戻る
+            </button>
 
-
-        <div>
-
-
-          <div class="eyebrow">
-            MANAGE
           </div>
 
 
-          <h2>
-            募集を締め切る
-          </h2>
+
+          <div class="section-head">
 
 
-        </div>
+            <div>
 
 
-      </div>
+              <div class="eyebrow">
+                MANAGE
+              </div>
+
+
+              <h2>
+                募集を締め切る
+              </h2>
+
+
+            </div>
+
+
+          </div>
 
 
 
-      <form
-        id="closeForm"
-        class="panel"
-      >
-
-
-        <label>
-
-          PASS
-
-
-          <input
-            id="closePass"
-            type="text"
-            required
-            minlength="8"
-            maxlength="8"
-            autocomplete="off"
-            autocapitalize="characters"
-            spellcheck="false"
-            placeholder="登録時に発行された8文字PASS"
+          <form
+            id="closeForm"
+            class="panel"
           >
 
 
-        </label>
+            <label>
+
+              PASS
+
+
+              <input
+                id="closePass"
+                type="text"
+                required
+                minlength="8"
+                maxlength="8"
+                autocomplete="off"
+                autocapitalize="characters"
+                spellcheck="false"
+                placeholder="登録時に発行された8文字PASS"
+              >
+
+
+            </label>
 
 
 
-        <button
-          class="btn danger wide"
-          type="submit"
-        >
-          募集を締め切る
-        </button>
+            <button
+              class="btn danger wide"
+              type="submit"
+            >
+              募集を締め切る
+            </button>
 
 
-      </form>
+          </form>
 
 
 
-      <div class="notice">
+          <div class="notice">
 
 
-        <strong>
-          PASSは登録時に一度だけ表示されます。
-        </strong>
+            <strong>
+              PASSは登録時に一度だけ表示されます。
+            </strong>
 
 
-        <span>
-          募集を締め切る際に必要です。
-          必ず保存してください。
-        </span>
+            <span>
+              募集を締め切る際に必要です。
+              必ず保存してください。
+            </span>
 
+
+          </div>
+
+
+        </section>
 
       </div>
 
-
-    </section>
-        </div>
 
       <!-- ========================================
            募集総数
@@ -661,34 +671,38 @@
 
         <div class="section-head-actions">
 
-        <div class="graduated-commander-counter">
 
-  <div class="graduated-commander-number">
-
-    <strong id="graduatedCommanderCount">
-      5
-    </strong>
-
-    <span>
-      名
-    </span>
-
-  </div>
+          <div class="graduated-commander-counter">
 
 
-  <div class="graduated-commander-label">
+            <div class="graduated-commander-number">
 
-    <strong>
-      ユニオン決定
-    </strong>
+              <strong id="graduatedCommanderCount">
+                5
+              </strong>
 
-    <small>
-      🎓 卒業ちしかん
-    </small>
+              <span>
+                名
+              </span>
 
-  </div>
+            </div>
 
-</div>
+
+            <div class="graduated-commander-label">
+
+              <strong>
+                ユニオン決定
+              </strong>
+
+              <small>
+                🎓 卒業ちしかん
+              </small>
+
+            </div>
+
+
+          </div>
+
 
           <button
             class="text-btn"
@@ -697,6 +711,7 @@
           >
             ↻ 更新
           </button>
+
 
         </div>
 
@@ -745,57 +760,70 @@
 
 
         <label>
-  SLV
 
-  <select id="slvFilter">
+          SLV
 
-    <option value="">
-      すべて
-    </option>
 
-    <option value="100">
-      100～199
-    </option>
+          <select id="slvFilter">
 
-    <option value="200">
-      200～299
-    </option>
 
-    <option value="300">
-      300～399
-    </option>
+            <option value="">
+              すべて
+            </option>
 
-    <option value="400">
-      400～499
-    </option>
 
-    <option value="500">
-      500～599
-    </option>
+            <option value="100">
+              100～199
+            </option>
 
-    <option value="600">
-      600～699
-    </option>
 
-    <option value="700">
-      700～799
-    </option>
+            <option value="200">
+              200～299
+            </option>
 
-    <option value="800">
-      800～899
-    </option>
 
-    <option value="900">
-      900～999
-    </option>
+            <option value="300">
+              300～399
+            </option>
 
-    <option value="1000">
-      1000以上
-    </option>
 
-  </select>
+            <option value="400">
+              400～499
+            </option>
 
-</label>
+
+            <option value="500">
+              500～599
+            </option>
+
+
+            <option value="600">
+              600～699
+            </option>
+
+
+            <option value="700">
+              700～799
+            </option>
+
+
+            <option value="800">
+              800～899
+            </option>
+
+
+            <option value="900">
+              900～999
+            </option>
+
+
+            <option value="1000">
+              1000以上
+            </option>
+
+
+          </select>
+
 
         </label>
 
@@ -827,29 +855,34 @@
             </option>
 
 
-<option value="チャレンジャー">
-  チャレンジャー
-</option>
+            <option value="チャレンジャー">
+              チャレンジャー
+            </option>
 
-<option value="ダイヤ">
-  ダイヤ
-</option>
 
-<option value="プラチナ">
-  プラチナ
-</option>
+            <option value="ダイヤ">
+              ダイヤ
+            </option>
 
-<option value="ゴールド">
-  ゴールド
-</option>
 
-<option value="シルバー">
-  シルバー
-</option>
+            <option value="プラチナ">
+              プラチナ
+            </option>
 
-<option value="駆け出しユニオン">
-  駆け出しユニオン
-</option>
+
+            <option value="ゴールド">
+              ゴールド
+            </option>
+
+
+            <option value="シルバー">
+              シルバー
+            </option>
+
+
+            <option value="駆け出しユニオン">
+              駆け出しユニオン
+            </option>
 
 
           </select>
@@ -1048,13 +1081,45 @@
 
 
 
-      <button
-        class="btn primary wide"
-        id="resultDone"
-        type="button"
-      >
-        募集一覧を見る
-      </button>
+      <!-- ========================================
+           Xシェア
+      ========================================= -->
+
+      <div class="share-choice">
+
+
+        <div class="share-choice-title">
+          📣 Xで募集をシェアしますか？
+        </div>
+
+
+        <div class="share-choice-help">
+          ✨ シェアするとユニオン・指揮官に<br>
+          見つけてもらいやすくなります！
+        </div>
+
+
+
+        <button
+          class="btn primary wide"
+          id="shareXBtn"
+          type="button"
+        >
+          𝕏 シェアする
+        </button>
+
+
+
+        <button
+          class="btn ghost wide"
+          id="resultDone"
+          type="button"
+        >
+          シェアしないで完了
+        </button>
+
+
+      </div>
 
 
     </div>
@@ -1086,77 +1151,100 @@
 
 
 
-    <!-- 登録・締切画面レイアウト切替 -->
+  <!-- 登録・締切画面レイアウト切替 -->
+
   <script>
-    document.addEventListener("DOMContentLoaded", () => {
 
-      document
-        .querySelectorAll("[data-page]")
-        .forEach(button => {
+    document.addEventListener(
+      "DOMContentLoaded",
+      () => {
 
-          button.addEventListener(
+
+        document
+          .querySelectorAll("[data-page]")
+          .forEach(button => {
+
+
+            button.addEventListener(
+              "click",
+              () => {
+
+
+                const page =
+                  button.dataset.page;
+
+
+                document.body.classList.toggle(
+                  "register-mode",
+                  page === "register"
+                );
+
+
+                document.body.classList.toggle(
+                  "manage-mode",
+                  page === "manage"
+                );
+
+
+              }
+            );
+
+
+          });
+
+
+
+        document
+          .getElementById("registerBackBtn")
+          ?.addEventListener(
             "click",
             () => {
 
-              const page =
-                button.dataset.page;
 
-              document.body.classList.toggle(
-                "register-mode",
-                page === "register"
+              document.body.classList.remove(
+                "register-mode"
               );
 
-              document.body.classList.toggle(
-                "manage-mode",
-                page === "manage"
-              );
+
+              document
+                .querySelector('[data-page="list"]')
+                ?.click();
+
 
             }
           );
 
-        });
 
 
-      document
-        .getElementById("registerBackBtn")
-        ?.addEventListener(
-          "click",
-          () => {
-
-            document.body.classList.remove(
-              "register-mode"
-            );
-
-            document
-              .querySelector('[data-page="list"]')
-              ?.click();
-
-          }
-        );
+        document
+          .getElementById("manageBackBtn")
+          ?.addEventListener(
+            "click",
+            () => {
 
 
-      document
-        .getElementById("manageBackBtn")
-        ?.addEventListener(
-          "click",
-          () => {
+              document.body.classList.remove(
+                "manage-mode"
+              );
 
-            document.body.classList.remove(
-              "manage-mode"
-            );
 
-            document
-              .querySelector('[data-page="list"]')
-              ?.click();
+              document
+                .querySelector('[data-page="list"]')
+                ?.click();
 
-          }
-        );
 
-    });
+            }
+          );
+
+
+      }
+    );
+
   </script>
 
 
-<!-- アプリ本体 -->
+
+  <!-- アプリ本体 -->
 
   <script src="./app.js"></script>
 
