@@ -3345,3 +3345,120 @@ body.manage-mode
   }
 
 }
+
+/* ========================================
+   指揮官 締切理由確認
+======================================== */
+
+.commander-close-reason {
+  margin-top: 16px;
+  padding: 16px;
+
+  border: 1px solid rgba(143, 240, 189, 0.35);
+  background: rgba(143, 240, 189, 0.04);
+}
+
+
+/* hidden の時は必ず非表示 */
+
+.commander-close-reason[hidden] {
+  display: none !important;
+}
+
+
+.commander-close-reason-title {
+  margin-bottom: 12px;
+
+  color: #edf2f7;
+
+  font-size: 14px;
+  font-weight: 800;
+}
+
+
+/* 2択ボタン */
+
+.close-reason-btn {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+
+  width: 100%;
+
+  margin-bottom: 10px;
+  padding: 14px 16px;
+
+  border: 1px solid #334155;
+  background: #0b111b;
+
+  text-align: left;
+  cursor: pointer;
+}
+
+
+.close-reason-btn strong {
+  font-size: 14px;
+  font-weight: 900;
+}
+
+
+.close-reason-btn small {
+  margin-top: 5px;
+
+  color: #8e9aaa;
+
+  font-size: 11px;
+  line-height: 1.5;
+}
+
+
+/* ユニオン決定 */
+
+.close-reason-btn.graduated {
+  border-color: rgba(143, 240, 189, 0.55);
+}
+
+.close-reason-btn.graduated strong {
+  color: #8ff0bd;
+}
+
+
+/* 募集だけ終了 */
+
+.close-reason-btn.close-only {
+  border-color: rgba(255, 83, 100, 0.45);
+}
+
+.close-reason-btn.close-only strong {
+  color: #ff6b78;
+}
+
+
+/* PC hover */
+
+@media (hover: hover) {
+
+  .close-reason-btn:hover {
+    transform: translateY(-1px);
+  }
+
+}
+
+
+/* スマホ */
+
+@media screen and (max-width: 600px) {
+
+  .commander-close-reason {
+    padding: 13px;
+  }
+
+  .close-reason-btn {
+    padding: 13px;
+  }
+
+  .close-reason-btn strong {
+    font-size: 13px;
+  }
+
+}
