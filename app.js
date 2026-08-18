@@ -729,6 +729,7 @@ async function getCurrentUnionCount() {
 
 // ========================================
 // Xシェア文を作成
+// 通常Xアカウント向け短縮版
 // ========================================
 
 function buildXShareText(
@@ -741,12 +742,12 @@ function buildXShareText(
   }
 
   const commonTop =
-    "🔎 指揮官とユニオンを簡単につなぐマッチングアプリ\n" +
+    "🔎 指揮官とユニオンをつなぐマッチングアプリ\n" +
     "「NIKKE UNION MATCH」に登録しました！\n\n";
 
   const commonStats =
-    `🏢 現在の登録ユニオン：${unionCount}ユニオン\n` +
-    `🎓 アプリ登録卒業指揮官：${graduatedCount}名\n`;
+    `🏢 登録ユニオン：${unionCount}\n` +
+    `🎓 卒業ちしかん：${graduatedCount}名\n`;
 
   const appUrl =
     "https://x.gd/4tEJo";
@@ -763,16 +764,14 @@ function buildXShareText(
     return (
       commonTop +
 
-      "新しい移籍先を探しています🐾\n" +
-      "気になったユニオン様、お声掛けお待ちしています✨\n\n" +
+      "新しい移籍先を探しています🐾\n\n" +
 
-      `👤 指揮官名：${registration.name}\n` +
-      `📊 SLV：${registration.slv}\n` +
+      `👤 ${registration.name}｜SLV${registration.slv}\n` +
       `𝕏 募集投稿：${registration.xUrl}\n\n` +
 
       commonStats +
 
-      "👇募集詳細はこちら\n" +
+      "👇募集詳細\n" +
       appUrl
     );
   }
@@ -785,20 +784,17 @@ function buildXShareText(
   return (
     commonTop +
 
-    "新しい仲間を募集中です🔥\n" +
-    "ユニオンを探している指揮官様、ぜひ覗いてみてください✨\n\n" +
+    "新しい仲間を募集中🔥\n\n" +
 
-    `🏢 ユニオン名：${registration.name}\n` +
-    `🏆 ランク：${registration.rank}\n` +
+    `🏢 ${registration.name}｜${registration.rank}\n` +
     `𝕏 募集投稿：${registration.xUrl}\n\n` +
 
     commonStats +
 
-    "👇募集詳細はこちら\n" +
+    "👇募集詳細\n" +
     appUrl
   );
 }
-
 
 // ========================================
 // 募集一覧
