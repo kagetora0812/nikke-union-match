@@ -3152,3 +3152,18 @@ body.manage-mode
   }
 
 }
+/* ========================================
+   種別 + NEW
+======================================== */
+
+.type-with-new {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+
+  min-width: 0;
+}
+
+.new-badge {
+  flex: 0 0 auto;
+}
