@@ -481,7 +481,60 @@
 
             </label>
 
+/* ========================================
+   締切理由
+======================================== */
 
+.close-reason-box {
+  display: grid;
+  gap: 10px;
+}
+
+.close-reason-title {
+  color: #edf2f7;
+  font-size: 14px;
+  font-weight: 800;
+}
+
+.close-reason-option {
+  display: flex !important;
+  align-items: flex-start;
+  gap: 10px;
+
+  padding: 14px;
+
+  border: 1px solid #334155;
+  background: #0b111b;
+
+  cursor: pointer;
+}
+
+.close-reason-option input {
+  width: auto !important;
+  margin: 3px 0 0 !important;
+  flex: 0 0 auto;
+}
+
+.close-reason-option span {
+  display: grid;
+  gap: 4px;
+}
+
+.close-reason-option strong {
+  color: #fff;
+  font-size: 14px;
+}
+
+.close-reason-option small {
+  color: #8e9aaa;
+  font-size: 11px;
+  line-height: 1.5;
+}
+
+.close-reason-option:has(input:checked) {
+  border-color: #8ff0bd;
+  background: rgba(143, 240, 189, 0.08);
+}
 
             <button
               class="btn danger wide"
