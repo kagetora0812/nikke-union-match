@@ -322,7 +322,7 @@
 
       flex-direction: column;
 
-      min-height: 260px;
+      min-height: 310px;
 
       padding: 20px;
 
@@ -410,8 +410,87 @@
     }
 
 
+    /* ========================================
+       アイコン
+    ======================================== */
+
+    .creator-icon-wrap {
+      margin-top: 18px;
+
+      display: flex;
+
+      justify-content: center;
+    }
+
+
+    .creator-icon {
+      width: 112px;
+
+      height: 112px;
+
+      border-radius: 50%;
+
+      object-fit: cover;
+
+      border:
+        3px solid
+        rgba(
+          143,
+          240,
+          189,
+          .45
+        );
+
+      background:
+        #141c29;
+
+      box-shadow:
+        0 0 22px
+        rgba(
+          143,
+          240,
+          189,
+          .10
+        );
+    }
+
+
+    .creator-icon-placeholder {
+      width: 112px;
+
+      height: 112px;
+
+      border-radius: 50%;
+
+      display: flex;
+
+      align-items: center;
+
+      justify-content: center;
+
+      border:
+        3px solid
+        rgba(
+          143,
+          240,
+          189,
+          .30
+        );
+
+      background:
+        #141c29;
+
+      color:
+        var(--green);
+
+      font-size: 40px;
+    }
+
+
     .creator-name {
       margin-top: 16px;
+
+      text-align: center;
 
       font-size: 21px;
 
@@ -648,6 +727,19 @@
         min-height: 0;
 
         padding: 17px;
+      }
+
+
+      .creator-icon,
+      .creator-icon-placeholder {
+        width: 96px;
+
+        height: 96px;
+      }
+
+
+      .creator-icon-placeholder {
+        font-size: 34px;
       }
 
 
@@ -903,8 +995,7 @@
     // ========================================
     // クリエイター取得
     //
-    // RLSにより
-    // is_public = true のみ取得される
+    // 公開中だけ表示
     // ========================================
 
     async function loadCreators() {
@@ -945,7 +1036,7 @@
             "creators"
           )
           .select(
-            "id, creator_name, youtube_url, x_url, description, display_order, created_at"
+            "id, creator_name, icon_url, youtube_url, x_url, description, display_order, created_at"
           )
           .eq(
             "is_public",
@@ -1018,6 +1109,12 @@
           .map(
             creator => {
 
+              const iconUrl =
+                safeUrl(
+                  creator.icon_url
+                );
+
+
               const youtubeUrl =
                 safeUrl(
                   creator.youtube_url
@@ -1079,6 +1176,52 @@
                   : "creator-links";
 
 
+              const iconHtml =
+                iconUrl
+                  ? `
+
+                    <div class="creator-icon-wrap">
+
+                      <img
+                        class="creator-icon"
+                        src="${escapeHtml(
+                          iconUrl
+                        )}"
+                        alt="${escapeHtml(
+                          creator.creator_name
+                        )}"
+                        loading="lazy"
+                        onerror="
+                          this.style.display='none';
+                          this.nextElementSibling.style.display='flex';
+                        "
+                      >
+
+                      <div
+                        class="creator-icon-placeholder"
+                        style="display:none;"
+                      >
+                        📺
+                      </div>
+
+                    </div>
+
+                  `
+                  : `
+
+                    <div class="creator-icon-wrap">
+
+                      <div
+                        class="creator-icon-placeholder"
+                      >
+                        📺
+                      </div>
+
+                    </div>
+
+                  `;
+
+
               return `
 
                 <article class="creator-card">
@@ -1087,6 +1230,9 @@
                   <div class="creator-badge">
                     ✨ SUPPORT CREATOR
                   </div>
+
+
+                  ${iconHtml}
 
 
                   <div class="creator-name">
