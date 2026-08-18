@@ -858,20 +858,18 @@ function showEmpty(text) {
 
 async function loadGraduatedCommanderCount() {
 
- const counter =
-  $("#graduatedCommanderCount");
-  
-const topCounter =
-  $("#graduatedCommanderCountTop");
-  
-if (
-  (!counter && !topCounter) ||
-  !sb
-) {
+  const counter =
+    $("#graduatedCommanderCount");
 
-  return null;
+  const topCounter =
+    $("#graduatedCommanderCountTop");
 
-}
+
+  if (!sb) {
+
+    return null;
+
+  }
 
 
   const {
@@ -903,12 +901,18 @@ if (
     );
 
 
-if (
-  Number.isFinite(
-    count
-  )
-) {
+  if (
+    !Number.isFinite(
+      count
+    )
+  ) {
 
+    return null;
+
+  }
+
+
+  // 下側が残っている場合だけ更新
   if (counter) {
 
     counter.textContent =
@@ -917,6 +921,7 @@ if (
   }
 
 
+  // TOP側
   if (topCounter) {
 
     topCounter.textContent =
@@ -926,15 +931,6 @@ if (
 
 
   return count;
-
-}
-
-
-  return count;
-
-}
-
-  return null;
 
 }
 
