@@ -901,19 +901,33 @@ async function loadGraduatedCommanderCount() {
     );
 
 
-  if (
-    Number.isFinite(
-      count
-    )
-  ) {
+if (
+  Number.isFinite(
+    count
+  )
+) {
 
-    counter.textContent =
+  // 一覧側
+  counter.textContent =
+    count;
+
+
+  // TOP側
+  const topCounter =
+    $("#graduatedCommanderCountTop");
+
+
+  if (topCounter) {
+
+    topCounter.textContent =
       count;
-
-    return count;
 
   }
 
+
+  return count;
+
+}
 
   return null;
 
