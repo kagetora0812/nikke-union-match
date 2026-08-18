@@ -1,0 +1,2384 @@
+<!doctype html>
+<html lang="ja">
+
+<head>
+
+  <meta charset="UTF-8">
+
+  <meta
+    name="viewport"
+    content="width=device-width, initial-scale=1.0"
+  >
+
+  <meta
+    name="theme-color"
+    content="#080b12"
+  >
+
+  <title>
+    NIKKE UNION MATCH - CREATOR ADMIN
+  </title>
+
+
+  <style>
+
+    :root {
+      --bg: #080b12;
+      --panel: #101621;
+      --panel2: #141c29;
+      --line: #2b3545;
+      --text: #edf2f7;
+      --muted: #8e9aaa;
+      --accent: #ff7a18;
+      --accent2: #ffb15c;
+      --green: #8ff0bd;
+      --blue: #3696ff;
+      --red: #ff6878;
+    }
+
+
+    * {
+      box-sizing: border-box;
+    }
+
+
+    body {
+      margin: 0;
+
+      min-height: 100vh;
+
+      background:
+        radial-gradient(
+          circle at 50% -10%,
+          #1a2434 0,
+          #080b12 45%
+        );
+
+      color: var(--text);
+
+      font-family:
+        -apple-system,
+        BlinkMacSystemFont,
+        "Segoe UI",
+        "Noto Sans JP",
+        sans-serif;
+    }
+
+
+    button,
+    input,
+    textarea,
+    select {
+      font: inherit;
+    }
+
+
+    .hidden {
+      display: none !important;
+    }
+
+
+    /* ========================================
+       ヘッダー
+    ======================================== */
+
+    .topbar {
+      height: 66px;
+
+      padding:
+        0 18px;
+
+      display: flex;
+
+      align-items: center;
+
+      justify-content: space-between;
+
+      border-bottom:
+        1px solid
+        var(--line);
+
+      background:
+        rgba(
+          8,
+          11,
+          18,
+          .92
+        );
+
+      position: sticky;
+
+      top: 0;
+
+      z-index: 10;
+    }
+
+
+    .brand {
+      display: flex;
+
+      flex-direction: column;
+
+      line-height: .9;
+    }
+
+
+    .brand-small {
+      color: var(--accent2);
+
+      font-size: 10px;
+
+      letter-spacing: 3px;
+    }
+
+
+    .brand-main {
+      font-size: 20px;
+
+      font-weight: 800;
+
+      letter-spacing: 1.5px;
+    }
+
+
+    .admin-badge {
+      color: var(--green);
+
+      font-size: 11px;
+
+      font-weight: 800;
+
+      letter-spacing: 1px;
+    }
+
+
+    /* ========================================
+       全体
+    ======================================== */
+
+    .container {
+      width: min(
+        960px,
+        calc(100% - 24px)
+      );
+
+      margin:
+        0 auto;
+
+      padding:
+        36px 0 70px;
+    }
+
+
+    .eyebrow {
+      color: var(--accent2);
+
+      font-size: 11px;
+
+      font-weight: 800;
+
+      letter-spacing: 2px;
+
+      margin-bottom: 8px;
+    }
+
+
+    h1,
+    h2,
+    h3 {
+      margin: 0;
+    }
+
+
+    h1 {
+      font-size:
+        clamp(
+          30px,
+          7vw,
+          46px
+        );
+
+      line-height: 1.05;
+    }
+
+
+    h2 {
+      font-size:
+        clamp(
+          24px,
+          5vw,
+          34px
+        );
+    }
+
+
+    .lead {
+      margin:
+        12px 0 0;
+
+      color: var(--muted);
+
+      line-height: 1.8;
+    }
+
+
+    .section {
+      margin-top: 28px;
+    }
+
+
+    /* ========================================
+       パネル
+    ======================================== */
+
+    .panel {
+      margin-top: 18px;
+
+      padding: 20px;
+
+      border:
+        1px solid
+        var(--line);
+
+      background:
+        linear-gradient(
+          145deg,
+          rgba(
+            20,
+            28,
+            41,
+            .96
+          ),
+          rgba(
+            11,
+            16,
+            24,
+            .96
+          )
+        );
+
+      box-shadow:
+        0 16px 40px
+        rgba(
+          0,
+          0,
+          0,
+          .18
+        );
+    }
+
+
+    .panel-title {
+      font-size: 18px;
+
+      font-weight: 800;
+
+      margin-bottom: 16px;
+    }
+
+
+    /* ========================================
+       フォーム
+    ======================================== */
+
+    .form-grid {
+      display: grid;
+
+      gap: 16px;
+    }
+
+
+    label {
+      display: block;
+
+      color: var(--muted);
+
+      font-size: 12px;
+
+      font-weight: 800;
+    }
+
+
+    input,
+    textarea,
+    select {
+      width: 100%;
+
+      margin-top: 7px;
+
+      padding:
+        13px 14px;
+
+      border:
+        1px solid
+        #334155;
+
+      background:
+        #0b111b;
+
+      color: #fff;
+
+      outline: none;
+    }
+
+
+    input:focus,
+    textarea:focus,
+    select:focus {
+      border-color: var(--accent);
+    }
+
+
+    textarea {
+      min-height: 110px;
+
+      resize: vertical;
+
+      line-height: 1.6;
+    }
+
+
+    .checkbox-row {
+      display: flex;
+
+      align-items: center;
+
+      gap: 8px;
+
+      color: var(--text);
+
+      font-size: 13px;
+    }
+
+
+    .checkbox-row input {
+      width: auto;
+
+      margin: 0;
+    }
+
+
+    /* ========================================
+       ボタン
+    ======================================== */
+
+    .btn {
+      min-height: 48px;
+
+      padding:
+        12px 18px;
+
+      border:
+        1px solid
+        var(--line);
+
+      background:
+        var(--panel2);
+
+      color: var(--text);
+
+      font-weight: 800;
+
+      cursor: pointer;
+    }
+
+
+    .btn:hover {
+      border-color: var(--accent);
+    }
+
+
+    .btn.primary {
+      background:
+        linear-gradient(
+          135deg,
+          #ff6a00,
+          #d94100
+        );
+
+      border-color:
+        #ff8c3a;
+    }
+
+
+    .btn.green {
+      background:
+        rgba(
+          143,
+          240,
+          189,
+          .10
+        );
+
+      border-color:
+        rgba(
+          143,
+          240,
+          189,
+          .45
+        );
+
+      color: var(--green);
+    }
+
+
+    .btn.blue {
+      background:
+        rgba(
+          54,
+          150,
+          255,
+          .10
+        );
+
+      border-color:
+        rgba(
+          54,
+          150,
+          255,
+          .45
+        );
+
+      color:
+        #86c5ff;
+    }
+
+
+    .btn.danger {
+      background:
+        rgba(
+          255,
+          104,
+          120,
+          .08
+        );
+
+      border-color:
+        rgba(
+          255,
+          104,
+          120,
+          .40
+        );
+
+      color: #ff9ca7;
+    }
+
+
+    .btn.wide {
+      width: 100%;
+    }
+
+
+    .button-row {
+      display: flex;
+
+      gap: 10px;
+
+      flex-wrap: wrap;
+    }
+
+
+    /* ========================================
+       ログイン
+    ======================================== */
+
+    .login-wrap {
+      width:
+        min(
+          520px,
+          100%
+        );
+
+      margin:
+        50px auto 0;
+    }
+
+
+    .login-note {
+      margin-top: 12px;
+
+      color: var(--muted);
+
+      font-size: 12px;
+
+      line-height: 1.7;
+    }
+
+
+    /* ========================================
+       管理画面上部
+    ======================================== */
+
+    .admin-head {
+      display: flex;
+
+      justify-content: space-between;
+
+      align-items: center;
+
+      gap: 14px;
+
+      margin-bottom: 20px;
+    }
+
+
+    .admin-head-actions {
+      display: flex;
+
+      gap: 8px;
+
+      flex-wrap: wrap;
+    }
+
+
+    /* ========================================
+       メッセージ
+    ======================================== */
+
+    .message {
+      margin-top: 14px;
+
+      padding:
+        11px 13px;
+
+      border:
+        1px solid
+        var(--line);
+
+      font-size: 13px;
+
+      line-height: 1.6;
+    }
+
+
+    .message.ok {
+      color: var(--green);
+
+      border-color:
+        rgba(
+          143,
+          240,
+          189,
+          .35
+        );
+    }
+
+
+    .message.error {
+      color: #ff9ca7;
+
+      border-color:
+        rgba(
+          255,
+          104,
+          120,
+          .35
+        );
+    }
+
+
+    /* ========================================
+       クリエイター一覧
+    ======================================== */
+
+    .creator-list {
+      display: grid;
+
+      gap: 12px;
+
+      margin-top: 16px;
+    }
+
+
+    .creator-card {
+      padding: 16px;
+
+      border:
+        1px solid
+        var(--line);
+
+      background:
+        rgba(
+          16,
+          22,
+          33,
+          .90
+        );
+    }
+
+
+    .creator-card-head {
+      display: flex;
+
+      justify-content: space-between;
+
+      align-items: flex-start;
+
+      gap: 14px;
+    }
+
+
+    .creator-name {
+      font-size: 19px;
+
+      font-weight: 800;
+    }
+
+
+    .creator-status {
+      flex:
+        0 0 auto;
+
+      padding:
+        4px 8px;
+
+      border:
+        1px solid;
+
+      font-size: 10px;
+
+      font-weight: 800;
+    }
+
+
+    .creator-status.public {
+      color: var(--green);
+
+      border-color:
+        rgba(
+          143,
+          240,
+          189,
+          .40
+        );
+    }
+
+
+    .creator-status.private {
+      color: #ffc36d;
+
+      border-color:
+        rgba(
+          255,
+          195,
+          109,
+          .40
+        );
+    }
+
+
+    .creator-description {
+      margin-top: 10px;
+
+      color:
+        #cfd8e3;
+
+      font-size: 13px;
+
+      line-height: 1.7;
+
+      white-space: pre-wrap;
+    }
+
+
+    .creator-links {
+      display: flex;
+
+      gap: 8px;
+
+      flex-wrap: wrap;
+
+      margin-top: 12px;
+    }
+
+
+    .creator-links a {
+      text-decoration: none;
+
+      color: #fff;
+
+      border:
+        1px solid
+        #334155;
+
+      padding:
+        7px 10px;
+
+      font-size: 12px;
+    }
+
+
+    .creator-actions {
+      display: flex;
+
+      gap: 8px;
+
+      flex-wrap: wrap;
+
+      margin-top: 14px;
+    }
+
+
+    .creator-actions .btn {
+      min-height: 40px;
+
+      padding:
+        8px 12px;
+
+      font-size: 12px;
+    }
+
+
+    .empty {
+      margin-top: 16px;
+
+      padding: 28px;
+
+      text-align: center;
+
+      border:
+        1px dashed
+        var(--line);
+
+      color: var(--muted);
+    }
+
+
+    /* ========================================
+       スマホ
+    ======================================== */
+
+    @media screen and (max-width: 600px) {
+
+      .container {
+        width:
+          calc(
+            100% - 20px
+          );
+
+        padding-top: 24px;
+      }
+
+
+      .panel {
+        padding: 16px;
+      }
+
+
+      input,
+      textarea,
+      select {
+        font-size:
+          16px !important;
+      }
+
+
+      .admin-head {
+        flex-direction: column;
+
+        align-items: stretch;
+      }
+
+
+      .admin-head-actions {
+        width: 100%;
+      }
+
+
+      .admin-head-actions .btn {
+        flex: 1;
+      }
+
+
+      .creator-card-head {
+        flex-direction: column;
+      }
+
+    }
+
+  </style>
+
+</head>
+
+
+<body>
+
+
+  <!-- ========================================
+       ヘッダー
+  ========================================= -->
+
+  <header class="topbar">
+
+    <div class="brand">
+
+      <span class="brand-small">
+        NIKKE
+      </span>
+
+      <span class="brand-main">
+        UNION MATCH
+      </span>
+
+    </div>
+
+
+    <div class="admin-badge">
+      CREATOR ADMIN
+    </div>
+
+  </header>
+
+
+
+  <main class="container">
+
+
+    <!-- ========================================
+         ログイン画面
+    ========================================= -->
+
+    <section
+      id="loginSection"
+      class="login-wrap"
+    >
+
+
+      <div class="eyebrow">
+        CREATOR ADMIN
+      </div>
+
+
+      <h1>
+        応援クリエイター管理
+      </h1>
+
+
+      <p class="lead">
+        管理PASSを入力してください。
+      </p>
+
+
+      <div class="panel">
+
+
+        <form id="loginForm">
+
+
+          <label>
+
+            管理PASS
+
+            <input
+              id="adminPass"
+              type="password"
+              autocomplete="off"
+              autocapitalize="off"
+              spellcheck="false"
+              required
+              placeholder="管理PASS"
+            >
+
+          </label>
+
+
+          <button
+            class="btn primary wide"
+            type="submit"
+            style="margin-top:16px;"
+          >
+            管理画面を開く
+          </button>
+
+
+        </form>
+
+
+        <div
+          id="loginMessage"
+          class="message hidden"
+        >
+        </div>
+
+
+        <div class="login-note">
+          管理トークンはこのブラウザに保存されます。
+          Supabase側の有効期限は8時間です。
+        </div>
+
+
+      </div>
+
+
+    </section>
+
+
+
+    <!-- ========================================
+         管理画面
+    ========================================= -->
+
+    <section
+      id="adminSection"
+      class="hidden"
+    >
+
+
+      <div class="admin-head">
+
+
+        <div>
+
+          <div class="eyebrow">
+            CREATOR MANAGEMENT
+          </div>
+
+          <h2>
+            📺 応援クリエイター管理
+          </h2>
+
+        </div>
+
+
+        <div class="admin-head-actions">
+
+          <button
+            id="reloadBtn"
+            class="btn blue"
+            type="button"
+          >
+            ↻ 更新
+          </button>
+
+          <button
+            id="logoutBtn"
+            class="btn danger"
+            type="button"
+          >
+            ログアウト
+          </button>
+
+        </div>
+
+
+      </div>
+
+
+
+      <!-- ========================================
+           登録 / 編集フォーム
+      ========================================= -->
+
+      <div class="panel">
+
+
+        <div
+          class="panel-title"
+          id="formTitle"
+        >
+          ＋ クリエイター登録
+        </div>
+
+
+        <form
+          id="creatorForm"
+          class="form-grid"
+        >
+
+
+          <input
+            id="editingId"
+            type="hidden"
+          >
+
+
+          <label>
+
+            クリエイター名
+
+            <input
+              id="creatorName"
+              type="text"
+              maxlength="80"
+              required
+              autocomplete="off"
+              placeholder="例：〇〇チャンネル"
+            >
+
+          </label>
+
+
+          <label>
+
+            YouTube URL
+
+            <input
+              id="youtubeUrl"
+              type="url"
+              inputmode="url"
+              autocomplete="off"
+              placeholder="https://www.youtube.com/..."
+            >
+
+          </label>
+
+
+          <label>
+
+            X URL
+
+            <input
+              id="creatorXUrl"
+              type="url"
+              inputmode="url"
+              autocomplete="off"
+              placeholder="https://x.com/..."
+            >
+
+          </label>
+
+
+          <label>
+
+            紹介文
+
+            <textarea
+              id="creatorDescription"
+              maxlength="300"
+              placeholder="例：NIKKEを中心に配信中！"
+            ></textarea>
+
+          </label>
+
+
+          <label class="checkbox-row">
+
+            <input
+              id="isPublic"
+              type="checkbox"
+              checked
+            >
+
+            公開する
+
+          </label>
+
+
+          <div class="button-row">
+
+            <button
+              id="saveBtn"
+              class="btn primary"
+              type="submit"
+            >
+              クリエイターを登録
+            </button>
+
+
+            <button
+              id="cancelEditBtn"
+              class="btn hidden"
+              type="button"
+            >
+              編集をキャンセル
+            </button>
+
+          </div>
+
+
+        </form>
+
+
+        <div
+          id="adminMessage"
+          class="message hidden"
+        >
+        </div>
+
+
+      </div>
+
+
+
+      <!-- ========================================
+           登録済み一覧
+      ========================================= -->
+
+      <div class="section">
+
+
+        <div class="eyebrow">
+          REGISTERED CREATORS
+        </div>
+
+
+        <h2>
+          登録済みクリエイター
+        </h2>
+
+
+        <div
+          id="creatorList"
+          class="creator-list"
+        >
+        </div>
+
+
+        <div
+          id="creatorEmpty"
+          class="empty hidden"
+        >
+          まだクリエイターは登録されていません。
+        </div>
+
+
+      </div>
+
+
+    </section>
+
+
+  </main>
+
+
+
+  <!-- ========================================
+       Supabase
+  ========================================= -->
+
+  <script
+    src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"
+  ></script>
+
+
+
+  <script>
+
+    // ========================================
+    // Supabase
+    // ========================================
+
+    const SUPABASE_URL =
+      "https://igoekrvpgnjberppiawf.supabase.co";
+
+    const SUPABASE_ANON_KEY =
+      "sb_publishable_xSjnNTnh667o9IesU5g5Kw_xcdg9bbh";
+
+
+    const sb =
+      window.supabase.createClient(
+        SUPABASE_URL,
+        SUPABASE_ANON_KEY
+      );
+
+
+    // ========================================
+    // 共通
+    // ========================================
+
+    const $ = selector =>
+      document.querySelector(selector);
+
+
+    const TOKEN_KEY =
+      "nikke_creator_admin_token";
+
+
+    let creators = [];
+
+
+    function escapeHtml(value) {
+
+      return String(
+        value ?? ""
+      ).replace(
+        /[&<>"']/g,
+        char => ({
+          "&": "&amp;",
+          "<": "&lt;",
+          ">": "&gt;",
+          '"': "&quot;",
+          "'": "&#039;"
+        }[char])
+      );
+
+    }
+
+
+    function showMessage(
+      element,
+      text,
+      type = ""
+    ) {
+
+      if (!element) {
+        return;
+      }
+
+
+      element.textContent =
+        text;
+
+
+      element.className =
+        `message ${type}`;
+
+
+      element.classList.remove(
+        "hidden"
+      );
+
+    }
+
+
+    function clearMessage(
+      element
+    ) {
+
+      if (!element) {
+        return;
+      }
+
+
+      element.textContent =
+        "";
+
+
+      element.className =
+        "message hidden";
+
+    }
+
+
+    function getToken() {
+
+      return localStorage.getItem(
+        TOKEN_KEY
+      );
+
+    }
+
+
+    function saveToken(token) {
+
+      localStorage.setItem(
+        TOKEN_KEY,
+        token
+      );
+
+    }
+
+
+    function clearToken() {
+
+      localStorage.removeItem(
+        TOKEN_KEY
+      );
+
+    }
+
+
+    // ========================================
+    // ログイン表示切替
+    // ========================================
+
+    function showLogin() {
+
+      $("#loginSection")
+        ?.classList
+        .remove(
+          "hidden"
+        );
+
+
+      $("#adminSection")
+        ?.classList
+        .add(
+          "hidden"
+        );
+
+    }
+
+
+    function showAdmin() {
+
+      $("#loginSection")
+        ?.classList
+        .add(
+          "hidden"
+        );
+
+
+      $("#adminSection")
+        ?.classList
+        .remove(
+          "hidden"
+        );
+
+    }
+
+
+    // ========================================
+    // セッション確認
+    // ========================================
+
+    async function validateSavedToken() {
+
+      const token =
+        getToken();
+
+
+      if (!token) {
+
+        showLogin();
+
+        return false;
+
+      }
+
+
+      const {
+        data,
+        error
+      } =
+        await sb.rpc(
+          "creator_admin_token_valid",
+          {
+            p_token:
+              token
+          }
+        );
+
+
+      if (
+        error ||
+        data !== true
+      ) {
+
+        clearToken();
+
+        showLogin();
+
+        return false;
+
+      }
+
+
+      showAdmin();
+
+      return true;
+
+    }
+
+
+    // ========================================
+    // ログイン
+    // ========================================
+
+    $("#loginForm")
+      ?.addEventListener(
+        "submit",
+        async event => {
+
+          event.preventDefault();
+
+
+          clearMessage(
+            $("#loginMessage")
+          );
+
+
+          const pass =
+            $("#adminPass")
+              ?.value
+              .trim();
+
+
+          if (!pass) {
+
+            showMessage(
+              $("#loginMessage"),
+              "管理PASSを入力してください。",
+              "error"
+            );
+
+            return;
+
+          }
+
+
+          const {
+            data,
+            error
+          } =
+            await sb.rpc(
+              "creator_admin_login",
+              {
+                p_pass:
+                  pass
+              }
+            );
+
+
+          if (error) {
+
+            console.error(
+              error
+            );
+
+
+            showMessage(
+              $("#loginMessage"),
+              "ログイン処理に失敗しました。",
+              "error"
+            );
+
+            return;
+
+          }
+
+
+          if (!data) {
+
+            showMessage(
+              $("#loginMessage"),
+              "PASSが違います。",
+              "error"
+            );
+
+            return;
+
+          }
+
+
+          saveToken(
+            data
+          );
+
+
+          $("#adminPass").value =
+            "";
+
+
+          showAdmin();
+
+
+          await loadCreators();
+
+        }
+      );
+
+
+    // ========================================
+    // 一覧取得
+    // ========================================
+
+    async function loadCreators() {
+
+      const token =
+        getToken();
+
+
+      if (!token) {
+
+        showLogin();
+
+        return;
+
+      }
+
+
+      clearMessage(
+        $("#adminMessage")
+      );
+
+
+      const {
+        data,
+        error
+      } =
+        await sb.rpc(
+          "creator_admin_list",
+          {
+            p_token:
+              token
+          }
+        );
+
+
+      if (error) {
+
+        console.error(
+          error
+        );
+
+
+        if (
+          String(
+            error.message
+          ).includes(
+            "ADMIN_SESSION_INVALID"
+          )
+        ) {
+
+          clearToken();
+
+          showLogin();
+
+          return;
+
+        }
+
+
+        showMessage(
+          $("#adminMessage"),
+          "クリエイター一覧を取得できませんでした。",
+          "error"
+        );
+
+        return;
+
+      }
+
+
+      creators =
+        Array.isArray(data)
+          ? data
+          : [];
+
+
+      renderCreators();
+
+    }
+
+
+    // ========================================
+    // 一覧表示
+    // ========================================
+
+    function renderCreators() {
+
+      const list =
+        $("#creatorList");
+
+      const empty =
+        $("#creatorEmpty");
+
+
+      if (
+        !list ||
+        !empty
+      ) {
+        return;
+      }
+
+
+      list.innerHTML =
+        "";
+
+
+      if (
+        creators.length ===
+        0
+      ) {
+
+        empty.classList.remove(
+          "hidden"
+        );
+
+        return;
+
+      }
+
+
+      empty.classList.add(
+        "hidden"
+      );
+
+
+      list.innerHTML =
+        creators
+          .map(
+            creator => {
+
+              const youtubeButton =
+                creator.youtube_url
+                  ? `
+                    <a
+                      href="${escapeHtml(
+                        creator.youtube_url
+                      )}"
+                      target="_blank"
+                      rel="noopener noreferrer"
+                    >
+                      YouTube ↗
+                    </a>
+                  `
+                  : "";
+
+
+              const xButton =
+                creator.x_url
+                  ? `
+                    <a
+                      href="${escapeHtml(
+                        creator.x_url
+                      )}"
+                      target="_blank"
+                      rel="noopener noreferrer"
+                    >
+                      𝕏 ↗
+                    </a>
+                  `
+                  : "";
+
+
+              return `
+
+                <article
+                  class="creator-card"
+                  data-id="${escapeHtml(
+                    creator.id
+                  )}"
+                >
+
+
+                  <div class="creator-card-head">
+
+
+                    <div class="creator-name">
+
+                      ${escapeHtml(
+                        creator.creator_name
+                      )}
+
+                    </div>
+
+
+                    <div
+                      class="creator-status ${
+                        creator.is_public
+                          ? "public"
+                          : "private"
+                      }"
+                    >
+
+                      ${
+                        creator.is_public
+                          ? "公開"
+                          : "非公開"
+                      }
+
+                    </div>
+
+
+                  </div>
+
+
+                  ${
+                    creator.description
+                      ? `
+                        <div class="creator-description">
+                          ${escapeHtml(
+                            creator.description
+                          )}
+                        </div>
+                      `
+                      : ""
+                  }
+
+
+                  ${
+                    youtubeButton ||
+                    xButton
+                      ? `
+                        <div class="creator-links">
+                          ${youtubeButton}
+                          ${xButton}
+                        </div>
+                      `
+                      : ""
+                  }
+
+
+                  <div class="creator-actions">
+
+
+                    <button
+                      class="btn blue edit-btn"
+                      type="button"
+                      data-id="${escapeHtml(
+                        creator.id
+                      )}"
+                    >
+                      編集
+                    </button>
+
+
+                    <button
+                      class="btn green public-btn"
+                      type="button"
+                      data-id="${escapeHtml(
+                        creator.id
+                      )}"
+                    >
+                      ${
+                        creator.is_public
+                          ? "非公開にする"
+                          : "公開する"
+                      }
+                    </button>
+
+
+                    <button
+                      class="btn danger delete-btn"
+                      type="button"
+                      data-id="${escapeHtml(
+                        creator.id
+                      )}"
+                    >
+                      削除
+                    </button>
+
+
+                  </div>
+
+
+                </article>
+
+              `;
+
+            }
+          )
+          .join("");
+
+
+      bindCreatorButtons();
+
+    }
+
+
+    // ========================================
+    // 登録 / 編集保存
+    // ========================================
+
+    $("#creatorForm")
+      ?.addEventListener(
+        "submit",
+        async event => {
+
+          event.preventDefault();
+
+
+          clearMessage(
+            $("#adminMessage")
+          );
+
+
+          const token =
+            getToken();
+
+
+          if (!token) {
+
+            showLogin();
+
+            return;
+
+          }
+
+
+          const id =
+            $("#editingId")
+              ?.value
+              .trim();
+
+
+          const creatorName =
+            $("#creatorName")
+              ?.value
+              .trim();
+
+
+          const youtubeUrl =
+            $("#youtubeUrl")
+              ?.value
+              .trim() ||
+            "";
+
+
+          const xUrl =
+            $("#creatorXUrl")
+              ?.value
+              .trim() ||
+            "";
+
+
+          const description =
+            $("#creatorDescription")
+              ?.value
+              .trim() ||
+            "";
+
+
+          const isPublic =
+            $("#isPublic")
+              ?.checked ===
+            true;
+
+
+          if (!creatorName) {
+
+            showMessage(
+              $("#adminMessage"),
+              "クリエイター名を入力してください。",
+              "error"
+            );
+
+            return;
+
+          }
+
+
+          let result;
+
+
+          // ==================================
+          // 編集
+          // ==================================
+
+          if (id) {
+
+            result =
+              await sb.rpc(
+                "creator_admin_update",
+                {
+
+                  p_token:
+                    token,
+
+                  p_id:
+                    id,
+
+                  p_creator_name:
+                    creatorName,
+
+                  p_youtube_url:
+                    youtubeUrl,
+
+                  p_x_url:
+                    xUrl,
+
+                  p_description:
+                    description,
+
+                  p_is_public:
+                    isPublic
+
+                }
+              );
+
+          }
+
+
+          // ==================================
+          // 新規登録
+          // ==================================
+
+          else {
+
+            result =
+              await sb.rpc(
+                "creator_admin_create",
+                {
+
+                  p_token:
+                    token,
+
+                  p_creator_name:
+                    creatorName,
+
+                  p_youtube_url:
+                    youtubeUrl,
+
+                  p_x_url:
+                    xUrl,
+
+                  p_description:
+                    description,
+
+                  p_is_public:
+                    isPublic
+
+                }
+              );
+
+          }
+
+
+          if (
+            result.error
+          ) {
+
+            console.error(
+              result.error
+            );
+
+
+            if (
+              String(
+                result.error.message
+              ).includes(
+                "ADMIN_SESSION_INVALID"
+              )
+            ) {
+
+              clearToken();
+
+              showLogin();
+
+              return;
+
+            }
+
+
+            showMessage(
+              $("#adminMessage"),
+              id
+                ? "編集に失敗しました。"
+                : "登録に失敗しました。",
+              "error"
+            );
+
+            return;
+
+          }
+
+
+          showMessage(
+            $("#adminMessage"),
+            id
+              ? "クリエイター情報を更新しました。"
+              : "クリエイターを登録しました。",
+            "ok"
+          );
+
+
+          resetForm();
+
+
+          await loadCreators();
+
+        }
+      );
+
+
+    // ========================================
+    // 編集開始
+    // ========================================
+
+    function startEdit(id) {
+
+      const creator =
+        creators.find(
+          item =>
+            item.id === id
+        );
+
+
+      if (!creator) {
+        return;
+      }
+
+
+      $("#editingId").value =
+        creator.id;
+
+
+      $("#creatorName").value =
+        creator.creator_name ||
+        "";
+
+
+      $("#youtubeUrl").value =
+        creator.youtube_url ||
+        "";
+
+
+      $("#creatorXUrl").value =
+        creator.x_url ||
+        "";
+
+
+      $("#creatorDescription").value =
+        creator.description ||
+        "";
+
+
+      $("#isPublic").checked =
+        creator.is_public ===
+        true;
+
+
+      $("#formTitle").textContent =
+        "✏️ クリエイター編集";
+
+
+      $("#saveBtn").textContent =
+        "変更を保存";
+
+
+      $("#cancelEditBtn")
+        ?.classList
+        .remove(
+          "hidden"
+        );
+
+
+      window.scrollTo({
+        top: 0,
+        behavior: "smooth"
+      });
+
+    }
+
+
+    // ========================================
+    // 編集キャンセル
+    // ========================================
+
+    function resetForm() {
+
+      $("#creatorForm")
+        ?.reset();
+
+
+      $("#editingId").value =
+        "";
+
+
+      $("#isPublic").checked =
+        true;
+
+
+      $("#formTitle").textContent =
+        "＋ クリエイター登録";
+
+
+      $("#saveBtn").textContent =
+        "クリエイターを登録";
+
+
+      $("#cancelEditBtn")
+        ?.classList
+        .add(
+          "hidden"
+        );
+
+    }
+
+
+    $("#cancelEditBtn")
+      ?.addEventListener(
+        "click",
+        resetForm
+      );
+
+
+    // ========================================
+    // 公開 / 非公開
+    // ========================================
+
+    async function togglePublic(
+      id
+    ) {
+
+      const creator =
+        creators.find(
+          item =>
+            item.id === id
+        );
+
+
+      if (!creator) {
+        return;
+      }
+
+
+      const token =
+        getToken();
+
+
+      const {
+        error
+      } =
+        await sb.rpc(
+          "creator_admin_set_public",
+          {
+
+            p_token:
+              token,
+
+            p_id:
+              id,
+
+            p_is_public:
+              !creator.is_public
+
+          }
+        );
+
+
+      if (error) {
+
+        console.error(
+          error
+        );
+
+
+        showMessage(
+          $("#adminMessage"),
+          "公開状態を変更できませんでした。",
+          "error"
+        );
+
+        return;
+
+      }
+
+
+      await loadCreators();
+
+    }
+
+
+    // ========================================
+    // 削除
+    // ========================================
+
+    async function deleteCreator(
+      id
+    ) {
+
+      const creator =
+        creators.find(
+          item =>
+            item.id === id
+        );
+
+
+      if (!creator) {
+        return;
+      }
+
+
+      const confirmed =
+        window.confirm(
+          `「${creator.creator_name}」を削除しますか？`
+        );
+
+
+      if (!confirmed) {
+        return;
+      }
+
+
+      const token =
+        getToken();
+
+
+      const {
+        error
+      } =
+        await sb.rpc(
+          "creator_admin_delete",
+          {
+
+            p_token:
+              token,
+
+            p_id:
+              id
+
+          }
+        );
+
+
+      if (error) {
+
+        console.error(
+          error
+        );
+
+
+        showMessage(
+          $("#adminMessage"),
+          "削除できませんでした。",
+          "error"
+        );
+
+        return;
+
+      }
+
+
+      resetForm();
+
+
+      await loadCreators();
+
+    }
+
+
+    // ========================================
+    // 一覧ボタン
+    // ========================================
+
+    function bindCreatorButtons() {
+
+
+      document
+        .querySelectorAll(
+          ".edit-btn"
+        )
+        .forEach(
+          button => {
+
+            button.addEventListener(
+              "click",
+              () => {
+
+                startEdit(
+                  button.dataset.id
+                );
+
+              }
+            );
+
+          }
+        );
+
+
+      document
+        .querySelectorAll(
+          ".public-btn"
+        )
+        .forEach(
+          button => {
+
+            button.addEventListener(
+              "click",
+              () => {
+
+                togglePublic(
+                  button.dataset.id
+                );
+
+              }
+            );
+
+          }
+        );
+
+
+      document
+        .querySelectorAll(
+          ".delete-btn"
+        )
+        .forEach(
+          button => {
+
+            button.addEventListener(
+              "click",
+              () => {
+
+                deleteCreator(
+                  button.dataset.id
+                );
+
+              }
+            );
+
+          }
+        );
+
+    }
+
+
+    // ========================================
+    // 更新
+    // ========================================
+
+    $("#reloadBtn")
+      ?.addEventListener(
+        "click",
+        loadCreators
+      );
+
+
+    // ========================================
+    // ログアウト
+    // ========================================
+
+    $("#logoutBtn")
+      ?.addEventListener(
+        "click",
+        async () => {
+
+          const token =
+            getToken();
+
+
+          if (token) {
+
+            await sb.rpc(
+              "creator_admin_logout",
+              {
+                p_token:
+                  token
+              }
+            );
+
+          }
+
+
+          clearToken();
+
+
+          resetForm();
+
+
+          showLogin();
+
+        }
+      );
+
+
+    // ========================================
+    // 起動
+    // ========================================
+
+    document.addEventListener(
+      "DOMContentLoaded",
+      async () => {
+
+        const valid =
+          await validateSavedToken();
+
+
+        if (valid) {
+
+          await loadCreators();
+
+        }
+
+      }
+    );
+
+  </script>
+
+
+</body>
+
+</html>
