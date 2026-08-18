@@ -373,11 +373,7 @@ async function renderXEmbeds(
 
 function showPage(name) {
 
-
-  // ======================================
-  // 登録・締切表示モード
-  // ======================================
-
+  // 登録・締切モード
   document.body.classList.toggle(
     "register-mode",
     name === "register"
@@ -389,131 +385,97 @@ function showPage(name) {
   );
 
 
-  // ======================================
-  // ページ切替
-  // ======================================
-
+  // 全ページを一旦閉じる
   document
-    .querySelectorAll(
-      ".page"
-    )
-    .forEach(
-      page => {
-
-        page.classList.remove(
-          "active"
-        );
-
-      }
-    );
+    .querySelectorAll(".page")
+    .forEach(page => {
+      page.classList.remove("active");
+    });
 
 
+  // 登録・締切ページも確実に閉じる
+  const registerPage =
+    document.getElementById("registerPage");
+
+  const managePage =
+    document.getElementById("managePage");
+
+  registerPage?.classList.remove("active");
+  managePage?.classList.remove("active");
+
+
+  // 指定ページだけ開く
   const page =
-    document.getElementById(
-      `${name}Page`
-    );
-
+    document.getElementById(`${name}Page`);
 
   if (page) {
-
-    page.classList.add(
-      "active"
-    );
-
+    page.classList.add("active");
   }
 
 
-  // ======================================
-  // 下部ナビ
-  // ======================================
+  // 募集一覧へ戻る時は
+  // 登録・締切を完全に解除
+  if (name === "list") {
 
-  document
-    .querySelectorAll(
-      ".nav-btn"
-    )
-    .forEach(
-      button => {
-
-        button.classList.toggle(
-          "active",
-          button.dataset.page ===
-          name
-        );
-
-      }
+    document.body.classList.remove(
+      "register-mode",
+      "manage-mode"
     );
 
+    registerPage?.classList.remove("active");
+    managePage?.classList.remove("active");
+  }
 
-  // ======================================
+
+  // 下部ナビ
+  document
+    .querySelectorAll(".nav-btn")
+    .forEach(button => {
+
+      button.classList.toggle(
+        "active",
+        button.dataset.page === name
+      );
+
+    });
+
+
   // 募集一覧
-  // ======================================
-
-  if (
-    name ===
-    "list"
-  ) {
+  if (name === "list") {
 
     loadRecruitments();
 
+    setTimeout(() => {
 
-    setTimeout(
-      () => {
+      const listPage =
+        document.getElementById("listPage");
 
-        const listPage =
-          document.getElementById(
-            "listPage"
-          );
+      if (!listPage) {
+        return;
+      }
 
-        if (!listPage) {
-          return;
-        }
+      const headerOffset = 76;
 
+      const targetTop =
+        listPage.getBoundingClientRect().top +
+        window.pageYOffset -
+        headerOffset;
 
-        const headerOffset =
-          76;
+      window.scrollTo({
+        top: Math.max(0, targetTop),
+        behavior: "smooth"
+      });
 
-
-        const targetTop =
-          listPage
-            .getBoundingClientRect()
-            .top
-          +
-          window.pageYOffset
-          -
-          headerOffset;
-
-
-        window.scrollTo({
-
-          top:
-            Math.max(
-              0,
-              targetTop
-            ),
-
-          behavior:
-            "smooth"
-
-        });
-
-      },
-      120
-    );
-
+    }, 120);
 
   } else {
 
     window.scrollTo({
-
       top: 0,
-
-      behavior:
-        "smooth"
-
+      behavior: "smooth"
     });
 
   }
-
 }
 
 
