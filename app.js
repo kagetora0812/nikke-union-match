@@ -114,6 +114,29 @@ function formatDate(date) {
 
 }
 
+// ========================================
+// NEW表示
+// 登録から24時間以内
+// ========================================
+
+function isNewRecruitment(createdAt) {
+
+  const createdTime =
+    new Date(createdAt).getTime();
+
+  if (!Number.isFinite(createdTime)) {
+    return false;
+  }
+
+  const diff =
+    Date.now() - createdTime;
+
+  return (
+    diff >= 0 &&
+    diff < 24 * 60 * 60 * 1000
+  );
+
+}
 
 // ========================================
 // ユニオンランク色分け
@@ -1443,7 +1466,12 @@ async function loadRecruitments() {
                 item.x_url
               );
 
-
+const newBadge =
+  isNewRecruitment(
+    item.created_at
+  )
+    ? '<span class="new-badge">🔥 NEW</span>'
+    : "";
             return `
 
               <article
@@ -1457,7 +1485,7 @@ async function loadRecruitments() {
                   >
                     ● 指揮官
                   </span>
-
+${newBadge}
 
                   <span class="date">
 
@@ -1652,7 +1680,13 @@ async function loadRecruitments() {
                 item.union_rank
               );
 
-
+const newBadge =
+  isNewRecruitment(
+    item.created_at
+  )
+    ? '<span class="new-badge">🔥 NEW</span>'
+    : "";
+            
             return `
 
               <article
@@ -1668,6 +1702,7 @@ async function loadRecruitments() {
                     ● ユニオン
                   </span>
 
+${newBadge}
 
                   <span class="date">
 
