@@ -858,18 +858,21 @@ function showEmpty(text) {
 
 async function loadGraduatedCommanderCount() {
 
-  const counter =
-    $("#graduatedCommanderCount");
+ const counter =
+  $("#graduatedCommanderCount");
+
+const topCounter =
+  $("#graduatedCommanderCountTop");
 
 
-  if (
-    !counter ||
-    !sb
-  ) {
+if (
+  (!counter && !topCounter) ||
+  !sb
+) {
 
-    return null;
+  return null;
 
-  }
+}
 
 
   const {
