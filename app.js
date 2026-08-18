@@ -860,11 +860,10 @@ async function loadGraduatedCommanderCount() {
 
  const counter =
   $("#graduatedCommanderCount");
-
+  
 const topCounter =
   $("#graduatedCommanderCountTop");
-
-
+  
 if (
   (!counter && !topCounter) ||
   !sb
