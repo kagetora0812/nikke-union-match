@@ -3757,3 +3757,47 @@ body .bottom-nav .nav-btn.active:hover {
     background: transparent !important;
   }
 }
+
+/* =========================================================
+   v12.4 DEADLINE NEAR
+   残り24時間以内：NEW風の赤バッジ + 大きめ赤カウント
+   ========================================================= */
+.deadline-badge {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+
+  flex: 0 0 auto;
+
+  padding: 4px 7px;
+
+  border: 1px solid #e13b4f;
+
+  color: #d9273f;
+  background: rgba(225, 59, 79, .10);
+
+  font-size: 10px;
+  font-weight: 900;
+  line-height: 1;
+  letter-spacing: .02em;
+
+  white-space: nowrap;
+}
+
+.countdown.deadline-near {
+  color: #d9273f !important;
+  font-size: 14px !important;
+  font-weight: 900 !important;
+  letter-spacing: .01em;
+}
+
+@media (max-width: 600px) {
+  .deadline-badge {
+    padding: 4px 6px;
+    font-size: 10px;
+  }
+
+  .countdown.deadline-near {
+    font-size: 15px !important;
+  }
+}
