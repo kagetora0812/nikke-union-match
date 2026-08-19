@@ -3517,3 +3517,86 @@ body.manage-mode #managePage {
   color: #3696ff !important;
   background: rgba(54, 150, 255, .08) !important;
 }
+
+
+/* =========================================================
+   v11.2 CACHE-SAFE COMMANDER COLOR FIX
+   ========================================================= */
+
+/* 指揮官カード：ラベルをオレンジで固定 */
+body .card.commander-card .recruitment-type,
+body article.card.commander-card .recruitment-type,
+body .commander-card .type-with-new .recruitment-type {
+  color: #F2A124 !important;
+  border-color: #F2A124 !important;
+  background: rgba(242, 161, 36, .08) !important;
+}
+
+/* 指揮官カード：SLV数字と小さいSLV文字をオレンジで固定 */
+body .card.commander-card .slv,
+body .card.commander-card .slv small,
+body article.card.commander-card .slv,
+body article.card.commander-card .slv small,
+body .card .slv small {
+  color: #F2A124 !important;
+  text-shadow: none !important;
+  -webkit-text-stroke: 0 !important;
+}
+
+/* 指揮官カード枠・左アクセント */
+body .card.commander-card {
+  border-color: #ff7a18 !important;
+}
+
+body .card.commander-card::before {
+  background: #ff7a18 !important;
+}
+
+/* ユニオン側は青を維持 */
+body .card.union-card .recruitment-type,
+body article.card.union-card .recruitment-type {
+  color: #18ABF4 !important;
+  border-color: #18ABF4 !important;
+  background: rgba(24, 171, 244, .08) !important;
+}
+
+
+/* =========================================================
+   v11.3 COMMANDER SLV LABEL COLOR FIX
+   指揮官ラベル = orange
+   SLV数値       = orange
+   small "SLV"   = cyan
+   ========================================================= */
+
+/* SLVの数字はオレンジ */
+body .card.commander-card .slv,
+body article.card.commander-card .slv {
+  color: #F2A124 !important;
+}
+
+/* 数字横の小さい「SLV」だけ水色 */
+body .card.commander-card .slv small,
+body article.card.commander-card .slv small,
+body .card .slv small {
+  color: #18ABF4 !important;
+  text-shadow: none !important;
+  -webkit-text-stroke: 0 !important;
+}
+
+/* =========================================================
+   v11.4 MOBILE HERO TITLE CENTER
+   スマホ版のみメインロゴ2段を中央揃え
+   ========================================================= */
+@media screen and (max-width: 600px) {
+  .hero h1 {
+    text-align: center !important;
+  }
+
+  .hero h1 .hero-title-line1,
+  .hero h1 .hero-title-line2 {
+    width: 100% !important;
+    margin-left: 0 !important;
+    margin-right: 0 !important;
+    text-align: center !important;
+  }
+}
