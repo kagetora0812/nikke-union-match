@@ -3865,3 +3865,73 @@ grid-template-columns:
   }
 
 }
+
+
+/* ========================================
+   HERO STATS 3列 修正版
+======================================== */
+
+.hero-stats {
+  display: grid !important;
+
+  grid-template-columns:
+    minmax(0, 1fr)
+    1px
+    minmax(0, 1fr)
+    1px
+    minmax(0, 1fr) !important;
+
+  align-items: center !important;
+
+  gap: 16px !important;
+
+  min-height: 220px !important;
+
+  padding:
+    28px 24px 48px !important;
+}
+
+
+/* 3つのカウンター */
+.hero-stat {
+  width: 100% !important;
+  min-width: 0 !important;
+
+  text-align: center !important;
+}
+
+
+/* 区切り線 */
+.hero-stat-divider {
+  display: block !important;
+
+  width: 1px !important;
+  height: 110px !important;
+
+  background:
+    linear-gradient(
+      transparent,
+      #9ca3aa,
+      transparent
+    ) !important;
+}
+
+
+/* 成立実績：紫 */
+.graduate-stat .hero-stat-title,
+.graduate-stat .hero-stat-number strong,
+.graduate-stat .hero-stat-number span {
+  color: #A828F0 !important;
+}
+
+
+/* 最終更新 */
+.hero-stat-update {
+  position: absolute !important;
+
+  left: 0 !important;
+  right: 0 !important;
+  bottom: 14px !important;
+
+  text-align: center !important;
+}
