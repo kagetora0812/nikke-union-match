@@ -1,51 +1,51 @@
-@import url("https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@500;600;700;800&family=M+PLUS+1p:wght@400;500;700;800;900&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@500;600;700;800&family=Noto+Sans+JP:wght@500;700;800;900&display=swap");
 
 /* =========================================================
    NIKKE UNION MATCH
-   NIKKE UI REBUILD v2
-   ・白〜ライトグレーのメイン面
-   ・薄い黒 / チャコールの操作ボタン
-   ・選択 / 押下はシアン
-   ・指揮官 = ゴールド / ユニオン = シアン / 成立実績 = パープル
+   NIKKE UI REBUILD v3
+   - cyan unified borders/accent
+   - square / hard-edged UI
+   - angular typography
+   - charcoal buttons -> cyan on hover/active
    ========================================================= */
 
 :root {
-  --bg: #f1f5f7;
+  --bg: #f2f5f7;
   --surface: #ffffff;
-  --surface-2: #e7e9eb;
-  --surface-3: #dfe3e6;
+  --surface-2: #eceff1;
+  --surface-3: #e3e7e9;
 
-  --ink: #27272a;
-  --ink-2: #3d3e42;
-  --ink-3: #4a4b4f;
-  --ink-soft: #5f5f62;
+  --ink: #222428;
+  --ink-2: #34363a;
+  --ink-3: #44464a;
+  --ink-soft: #62666a;
 
-  --text: #27272a;
-  --muted: #7b7d81;
-  --muted-2: #a09fa2;
+  --text: #222428;
+  --muted: #7b8085;
 
   --line: #c8cdd0;
-  --line-dark: #5f6064;
+  --line-strong: #9da4a9;
 
   --cyan: #1ab0f1;
-  --cyan-2: #26b3f4;
-  --cyan-deep: #216284;
+  --cyan-2: #28b8f4;
+  --cyan-dark: #0b8fc8;
 
   --gold: #d89f20;
-  --yellow: #f5b400;
   --purple: #a828f0;
   --purple-2: #c875ff;
 
   --green: #35d78c;
   --red: #ff5364;
 
+  --charcoal: #3d3e42;
+  --charcoal-2: #303135;
+  --charcoal-3: #27282b;
+
   --shadow:
-    0 8px 22px rgba(27, 31, 35, .14);
+    0 6px 18px rgba(26, 31, 36, .14);
 
   --shadow-soft:
-    0 4px 12px rgba(27, 31, 35, .10);
-
-  --cut: 8px;
+    0 3px 10px rgba(26, 31, 36, .10);
 }
 
 
@@ -55,6 +55,7 @@
 
 * {
   box-sizing: border-box;
+  border-radius: 0 !important;
 }
 
 html {
@@ -67,42 +68,39 @@ body {
   padding-bottom: 76px;
 
   color: var(--text);
+
   background:
     linear-gradient(
       180deg,
-      #f7f9fa 0%,
-      var(--bg) 38%,
+      #f8fafb 0%,
+      #f1f4f6 42%,
       #edf1f3 100%
     );
 
-.brand,
-.hero-stat-number strong,
-.hero-graduate-number strong,
-.registration-count strong,
-.graduated-commander-number strong,
-.pass-box strong,
-.status-dot {
   font-family:
-    "Barlow Condensed",
-    "M PLUS 1p",
+    "Noto Sans JP",
     sans-serif;
-}
+
+  font-weight: 700;
 
   -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
 }
 
 body::before {
   content: "";
+
   position: fixed;
   inset: 0;
   z-index: -1;
+
   pointer-events: none;
 
   background:
     linear-gradient(
       135deg,
       transparent 0 67%,
-      rgba(39, 39, 42, .025) 67% 68%,
+      rgba(34, 36, 40, .024) 67% 68%,
       transparent 68% 100%
     );
 }
@@ -146,30 +144,19 @@ textarea:focus-visible {
 
   padding: 0 18px;
 
-  border-bottom: 1px solid #111214;
+  border-bottom: 2px solid var(--cyan);
 
   color: #fff;
+
   background:
     linear-gradient(
       180deg,
-      #242528 0%,
+      #252629 0%,
       #17181b 100%
     );
 
   box-shadow:
-    0 4px 14px rgba(0, 0, 0, .20);
-}
-
-.topbar::after {
-  content: "";
-  position: absolute;
-  left: 0;
-  bottom: -1px;
-
-  width: 86px;
-  height: 3px;
-
-  background: var(--cyan);
+    0 4px 14px rgba(0, 0, 0, .22);
 }
 
 .brand {
@@ -177,36 +164,39 @@ textarea:focus-visible {
   flex-direction: column;
 
   font-family:
-    Rajdhani,
+    "Barlow Condensed",
     "Noto Sans JP",
     sans-serif;
 
-  line-height: .84;
+  line-height: .82;
 }
 
 .brand-small {
-  color: var(--gold);
+  color: var(--cyan);
 
   font-size: 10px;
-  font-weight: 700;
+  font-weight: 800;
+
   letter-spacing: 4px;
 }
 
 .brand-main {
   color: #fff;
 
-  font-size: 24px;
-  font-weight: 700;
-  letter-spacing: 2.5px;
+  font-size: 25px;
+  font-weight: 800;
+
+  letter-spacing: 2.3px;
 }
 
 .status-dot {
   color: #d7dadd;
 
   font:
-    600 11px Rajdhani;
+    700 11px "Barlow Condensed",
+    sans-serif;
 
-  letter-spacing: 1.3px;
+  letter-spacing: 1.4px;
 }
 
 .status-dot span {
@@ -216,8 +206,6 @@ textarea:focus-visible {
   height: 8px;
 
   margin-right: 7px;
-
-  border-radius: 50%;
 
   background: var(--green);
 
@@ -250,14 +238,24 @@ h3,
 .hero-graduate-title,
 .btn,
 .search-tab,
-.nav-btn {
+.nav-btn,
+.recruitment-type,
+.state {
   font-family:
-    "M PLUS 1p",
+    "Noto Sans JP",
     sans-serif;
 
   font-weight: 900;
-  letter-spacing: -0.075em;
-  line-height: .92;
+}
+
+h1,
+h2,
+h3 {
+  margin: 0;
+
+  color: var(--ink);
+
+  letter-spacing: -.06em;
 }
 
 .eyebrow {
@@ -266,9 +264,10 @@ h3,
   color: var(--ink-soft);
 
   font:
-    700 11px Rajdhani;
+    800 11px "Barlow Condensed",
+    sans-serif;
 
-  letter-spacing: 2.4px;
+  letter-spacing: 2.2px;
   text-transform: uppercase;
 }
 
@@ -301,7 +300,9 @@ h3,
   font-size:
     clamp(42px, 5vw, 68px);
 
-  line-height: .95;
+  line-height: .94;
+
+  letter-spacing: -.075em;
 }
 
 .hero-title-line1,
@@ -310,12 +311,12 @@ h3,
 }
 
 .hero h1 em {
-  color: #1AB0F1;
+  color: var(--cyan);
 
   font-style: normal;
 
   text-shadow:
-    0 0 10px rgba(26, 176, 241, .18);
+    0 0 10px rgba(26, 176, 241, .14);
 }
 
 .hero p {
@@ -324,13 +325,14 @@ h3,
   color: var(--ink-soft);
 
   font-size: 14px;
+  font-weight: 700;
+
   line-height: 1.8;
 }
 
 
 /* =========================================================
-   HERO ACTIONS / GENERAL BUTTONS
-   NIKKE: 基本はチャコール、押すとシアン
+   BUTTONS
    ========================================================= */
 
 .hero-actions,
@@ -351,11 +353,11 @@ h3,
 .copy-btn,
 .text-btn {
   transition:
-    background .16s ease,
-    border-color .16s ease,
-    color .16s ease,
-    transform .16s ease,
-    box-shadow .16s ease;
+    background .15s ease,
+    border-color .15s ease,
+    color .15s ease,
+    transform .15s ease,
+    box-shadow .15s ease;
 }
 
 .btn {
@@ -366,6 +368,7 @@ h3,
   border: 1px solid #55575b;
 
   color: #f7f8f9;
+
   background:
     linear-gradient(
       180deg,
@@ -373,12 +376,12 @@ h3,
       #35363a 100%
     );
 
-  font-weight: 800;
+  font-weight: 900;
 
   cursor: pointer;
 
   box-shadow:
-    0 3px 8px rgba(0, 0, 0, .16);
+    0 3px 8px rgba(0, 0, 0, .15);
 }
 
 .btn:hover,
@@ -387,15 +390,16 @@ h3,
   border-color: var(--cyan);
 
   color: #fff;
+
   background:
     linear-gradient(
       180deg,
-      var(--cyan-2) 0%,
-      var(--cyan) 100%
+      var(--cyan-2),
+      var(--cyan)
     );
 
   box-shadow:
-    0 4px 12px rgba(26, 176, 241, .30);
+    0 4px 12px rgba(26, 176, 241, .28);
 
   transform: translateY(-1px);
 }
@@ -403,14 +407,15 @@ h3,
 .btn.primary {
   position: relative;
 
-  border-color: #55575b;
+  border-color: #56585c;
 
   color: #fff;
+
   background:
     linear-gradient(
       180deg,
-      #47484c,
-      #313236
+      #48494d,
+      #34363a
     );
 }
 
@@ -424,13 +429,11 @@ h3,
 
   width: 5px;
 
-  background: var(--gold);
+  background: var(--cyan);
 }
 
 .btn.primary:hover,
 .btn.primary:active {
-  border-color: var(--cyan);
-
   background:
     linear-gradient(
       180deg,
@@ -448,6 +451,7 @@ h3,
   border-color: #68434a;
 
   color: #ffd9de;
+
   background:
     linear-gradient(
       180deg,
@@ -469,7 +473,10 @@ h3,
 }
 
 .btn.ghost {
+  border-color: var(--line-strong);
+
   color: var(--ink);
+
   background: #fff;
 }
 
@@ -497,9 +504,10 @@ h3,
 
   padding: 0 14px;
 
-  border: 1px solid #a7aaad;
+  border: 1px solid #5b5d61;
 
   color: #f6f7f8;
+
   background:
     linear-gradient(
       180deg,
@@ -508,7 +516,7 @@ h3,
     );
 
   font-size: 12px;
-  font-weight: 800;
+  font-weight: 900;
 
   text-decoration: none;
   white-space: nowrap;
@@ -521,6 +529,7 @@ h3,
   border-color: var(--cyan);
 
   color: #fff;
+
   background:
     linear-gradient(
       180deg,
@@ -532,8 +541,6 @@ h3,
 
 /* =========================================================
    HERO STATS
-   3列完全固定
-   指揮官 = GOLD / UNION = CYAN / 成立 = PURPLE
    ========================================================= */
 
 .hero-stats {
@@ -552,19 +559,16 @@ h3,
     1px
     minmax(0, 1fr) !important;
 
-  grid-template-rows:
-    1fr auto;
-
   align-items: stretch;
 
   gap: 0 !important;
 
-  padding:
-    16px 14px 34px;
+  padding: 16px 14px 34px;
 
-  border: 1px solid #c9cdd0;
+  border: 1px solid var(--cyan);
 
   color: var(--ink);
+
   background:
     linear-gradient(
       180deg,
@@ -582,13 +586,12 @@ h3,
   left: 0;
   top: 0;
 
-  width: 72px;
+  width: 92px;
   height: 4px;
 
   background: var(--cyan);
 }
 
-/* 新HTML・旧HTMLの両方に対応 */
 .hero-stat,
 .hero-graduate-stat {
   min-width: 0;
@@ -603,7 +606,6 @@ h3,
   text-align: center;
 }
 
-/* 成立実績が旧HTMLのままでも3列目へ */
 .hero-graduate-stat {
   grid-column: 5 !important;
   grid-row: 1 !important;
@@ -632,13 +634,6 @@ h3,
     ) !important;
 }
 
-/* もしdividerが1本しかない旧HTMLでも視覚上3分割 */
-.hero-stats > .hero-stat:nth-of-type(3),
-.hero-stats > .graduate-stat {
-  border-left:
-    1px solid rgba(185, 190, 194, .55);
-}
-
 .hero-stat-title,
 .hero-graduate-title {
   min-height: 26px;
@@ -654,7 +649,7 @@ h3,
   font-size: 13px;
   font-weight: 900;
 
-  line-height: 1.25;
+  line-height: 1.2;
 }
 
 .hero-stat-number,
@@ -671,15 +666,16 @@ h3,
   margin: 0;
 
   font-family:
-    Rajdhani,
+    "Barlow Condensed",
+    "Noto Sans JP",
     sans-serif;
 
   font-size:
     clamp(54px, 6vw, 78px);
 
-  font-weight: 700;
+  font-weight: 800;
 
-  line-height: .84;
+  line-height: .82;
 }
 
 .hero-stat-number span,
@@ -700,26 +696,24 @@ h3,
 
   font-size: 10px;
 
-  line-height: 1.35;
-
-  white-space: normal;
+  line-height: 1.3;
 }
 
-/* 指揮官 */
+/* commander */
 .commander-stat .hero-stat-title,
 .commander-stat .hero-stat-number strong,
 .commander-stat .hero-stat-number span {
   color: var(--gold);
 }
 
-/* ユニオン */
+/* union */
 .union-stat .hero-stat-title,
 .union-stat .hero-stat-number strong,
 .union-stat .hero-stat-number span {
   color: var(--cyan);
 }
 
-/* 成立実績 : 新旧両対応 */
+/* graduate */
 .graduate-stat .hero-stat-title,
 .graduate-stat .hero-stat-number strong,
 .graduate-stat .hero-stat-number span,
@@ -739,16 +733,15 @@ h3,
   color: var(--muted);
 
   font:
-    600 10px Rajdhani;
-
-  letter-spacing: .25px;
+    700 10px "Barlow Condensed",
+    sans-serif;
 
   text-align: center;
 }
 
 
 /* =========================================================
-   PAGE / SECTION HEAD
+   PAGE / HEADERS
    ========================================================= */
 
 .page {
@@ -772,6 +765,8 @@ h3,
 .section-head h2 {
   font-size:
     clamp(26px, 3vw, 34px);
+
+  line-height: 1.05;
 }
 
 .section-head-actions {
@@ -788,9 +783,10 @@ h3,
   border: 1px solid transparent;
 
   color: var(--ink-soft);
+
   background: transparent;
 
-  font-weight: 800;
+  font-weight: 900;
 
   cursor: pointer;
 }
@@ -800,124 +796,6 @@ h3,
   border-color: var(--cyan);
 
   color: var(--cyan);
-}
-
-
-/* =========================================================
-   LIST HEADER COUNTS
-   ========================================================= */
-
-.registration-count {
-  display: flex;
-  align-items: baseline;
-
-  gap: 14px;
-
-  margin-top: 8px;
-}
-
-.registration-count > div {
-  display: flex;
-  align-items: baseline;
-
-  gap: 4px;
-}
-
-.registration-count strong {
-  font-family:
-    Rajdhani,
-    sans-serif;
-
-  font-size: 24px;
-
-  line-height: 1;
-}
-
-.registration-count span,
-.registration-count small {
-  font-size: 11px;
-  font-weight: 800;
-}
-
-.registration-count > div:first-child strong,
-.registration-count > div:first-child span,
-.registration-count > div:first-child small {
-  color: var(--gold);
-}
-
-.registration-count > div:nth-child(2) strong,
-.registration-count > div:nth-child(2) span,
-.registration-count > div:nth-child(2) small {
-  color: var(--cyan);
-}
-
-
-/* =========================================================
-   LIST HEADER GRADUATED COUNTER
-   ========================================================= */
-
-.graduated-commander-counter {
-  display: flex;
-  align-items: center;
-
-  gap: 8px;
-
-  min-width: 190px;
-
-  padding: 8px 11px;
-
-  border: 1px solid rgba(168, 40, 240, .32);
-
-  background:
-    linear-gradient(
-      180deg,
-      #fff,
-      rgba(168, 40, 240, .045)
-    );
-
-  box-shadow: var(--shadow-soft);
-}
-
-.graduated-commander-number {
-  display: flex;
-  align-items: baseline;
-
-  gap: 3px;
-}
-
-.graduated-commander-number strong {
-  color: var(--purple);
-
-  font:
-    700 46px/.85 Rajdhani;
-}
-
-.graduated-commander-number span {
-  color: var(--purple);
-
-  font-size: 13px;
-  font-weight: 900;
-}
-
-.graduated-commander-label {
-  display: flex;
-  flex-direction: column;
-
-  gap: 2px;
-}
-
-.graduated-commander-label strong {
-  color: var(--ink);
-
-  font-size: 12px;
-  font-weight: 900;
-}
-
-.graduated-commander-label small {
-  color: var(--purple);
-
-  font-size: 9px;
-  font-weight: 800;
 }
 
 
@@ -942,6 +820,7 @@ h3,
   border: 1px solid #56585c;
 
   color: #fff;
+
   background:
     linear-gradient(
       180deg,
@@ -964,6 +843,7 @@ h3,
   border-color: var(--cyan);
 
   color: #fff;
+
   background:
     linear-gradient(
       180deg,
@@ -984,7 +864,7 @@ h3,
   margin-bottom: 14px;
   padding: 12px;
 
-  border: 1px solid var(--line);
+  border: 1px solid var(--cyan);
 
   background: var(--surface);
 
@@ -1017,9 +897,8 @@ h3,
 
   border: 1px solid #b7bcc0;
 
-  border-radius: 0;
-
   color: var(--ink);
+
   background: #fff;
 
   outline: none;
@@ -1038,6 +917,127 @@ h3,
   box-shadow:
     inset
     0 0 0 1px var(--cyan);
+}
+
+
+/* =========================================================
+   LIST HEADER COUNTS
+   ========================================================= */
+
+.registration-count {
+  display: flex;
+  align-items: baseline;
+
+  gap: 14px;
+
+  margin-top: 8px;
+}
+
+.registration-count > div {
+  display: flex;
+  align-items: baseline;
+
+  gap: 4px;
+}
+
+.registration-count strong {
+  font-family:
+    "Barlow Condensed",
+    "Noto Sans JP",
+    sans-serif;
+
+  font-size: 24px;
+  font-weight: 800;
+
+  line-height: 1;
+}
+
+.registration-count span,
+.registration-count small {
+  font-size: 11px;
+  font-weight: 900;
+}
+
+.registration-count > div:first-child strong,
+.registration-count > div:first-child span,
+.registration-count > div:first-child small {
+  color: var(--gold);
+}
+
+.registration-count > div:nth-child(2) strong,
+.registration-count > div:nth-child(2) span,
+.registration-count > div:nth-child(2) small {
+  color: var(--cyan);
+}
+
+
+/* =========================================================
+   GRADUATED COUNTER
+   ========================================================= */
+
+.graduated-commander-counter {
+  display: flex;
+  align-items: center;
+
+  gap: 8px;
+
+  min-width: 190px;
+
+  padding: 8px 11px;
+
+  border: 1px solid var(--cyan);
+
+  background:
+    linear-gradient(
+      180deg,
+      #fff,
+      #f5f8fa
+    );
+
+  box-shadow: var(--shadow-soft);
+}
+
+.graduated-commander-number {
+  display: flex;
+  align-items: baseline;
+
+  gap: 3px;
+}
+
+.graduated-commander-number strong {
+  color: var(--purple);
+
+  font:
+    800 46px/.84 "Barlow Condensed",
+    sans-serif;
+}
+
+.graduated-commander-number span {
+  color: var(--purple);
+
+  font-size: 13px;
+  font-weight: 900;
+}
+
+.graduated-commander-label {
+  display: flex;
+  flex-direction: column;
+
+  gap: 2px;
+}
+
+.graduated-commander-label strong {
+  color: var(--ink);
+
+  font-size: 12px;
+  font-weight: 900;
+}
+
+.graduated-commander-label small {
+  color: var(--purple);
+
+  font-size: 9px;
+  font-weight: 900;
 }
 
 
@@ -1064,9 +1064,10 @@ h3,
 
   padding: 16px;
 
-  border: 1px solid #c6cbd0;
+  border: 1px solid var(--cyan);
 
   color: var(--ink);
+
   background:
     linear-gradient(
       180deg,
@@ -1087,7 +1088,7 @@ h3,
 
   width: 4px;
 
-  background: #777;
+  background: var(--cyan);
 }
 
 .card::after {
@@ -1100,29 +1101,21 @@ h3,
   width: 76px;
   height: 76px;
 
-  border: 1px solid rgba(39, 39, 42, .08);
+  border: 1px solid rgba(26, 176, 241, .16);
 
   transform: rotate(45deg);
 
   pointer-events: none;
 }
 
-.card.commander-card::before {
-  background: var(--gold);
+.card.commander-card,
+.card.union-card {
+  border-color: var(--cyan);
 }
 
+.card.commander-card::before,
 .card.union-card::before {
   background: var(--cyan);
-}
-
-.card.commander-card {
-  border-color:
-    rgba(216, 159, 32, .46);
-}
-
-.card.union-card {
-  border-color:
-    rgba(26, 176, 241, .48);
 }
 
 .card-head {
@@ -1150,9 +1143,11 @@ h3,
 
   padding: 4px 8px;
 
-  border: 1px solid #777;
+  border: 1px solid var(--cyan);
 
-  background: #f7f8f9;
+  color: var(--cyan-dark);
+
+  background: #f4fbfe;
 
   font-size: 10px;
   font-weight: 900;
@@ -1160,27 +1155,21 @@ h3,
   white-space: nowrap;
 }
 
-.commander-card .recruitment-type {
-  border-color:
-    rgba(216, 159, 32, .55);
-
-  color: #a57108;
-}
-
+.commander-card .recruitment-type,
 .union-card .recruitment-type {
-  border-color:
-    rgba(26, 176, 241, .58);
+  border-color: var(--cyan);
 
-  color: #087caf;
+  color: var(--cyan-dark);
 }
 
 .state {
   padding: 4px 7px;
 
-  border: 1px solid rgba(53, 215, 140, .45);
+  border: 1px solid var(--cyan);
 
-  color: #15915c;
-  background: rgba(53, 215, 140, .08);
+  color: var(--cyan-dark);
+
+  background: rgba(26, 176, 241, .08);
 
   font-size: 10px;
   font-weight: 900;
@@ -1199,7 +1188,8 @@ h3,
   color: var(--gold);
 
   font:
-    700 34px Rajdhani;
+    800 34px "Barlow Condensed",
+    sans-serif;
 }
 
 .slv small {
@@ -1222,7 +1212,7 @@ h3,
   margin-top: 12px;
   padding-top: 10px;
 
-  border-top: 1px solid #e0e3e5;
+  border-top: 1px solid #dfe4e7;
 
   color: var(--ink-soft);
 
@@ -1230,7 +1220,7 @@ h3,
 }
 
 .countdown.warning {
-  color: #b97700;
+  color: #9b7300;
 }
 
 .countdown.danger {
@@ -1251,9 +1241,10 @@ h3,
 
   padding: 3px 6px;
 
-  border: 1px solid rgba(168, 40, 240, .62);
+  border: 1px solid var(--purple);
 
   color: #7e18bd;
+
   background: rgba(168, 40, 240, .09);
 
   font-size: 9px;
@@ -1264,7 +1255,7 @@ h3,
 
 
 /* =========================================================
-   X POST
+   X
    ========================================================= */
 
 .x-post-area {
@@ -1278,10 +1269,11 @@ h3,
 .x-embed-error {
   padding: 18px 10px;
 
-  border: 1px dashed #b5b9bc;
+  border: 1px dashed var(--cyan);
 
   color: var(--muted);
-  background: #f3f5f6;
+
+  background: #f3f6f8;
 
   text-align: center;
 }
@@ -1292,9 +1284,10 @@ h3,
   margin-top: 12px;
   padding: 10px;
 
-  border: 1px solid #53555a;
+  border: 1px solid #56585c;
 
   color: #fff;
+
   background:
     linear-gradient(
       180deg,
@@ -1333,12 +1326,10 @@ h3,
 
   border: 1px solid;
 
-  border-radius: 999px;
-
   font-size: 12px;
   font-weight: 900;
 
-  letter-spacing: .03em;
+  letter-spacing: .02em;
 }
 
 .rank-challenger {
@@ -1360,7 +1351,7 @@ h3,
 }
 
 .rank-gold {
-  color: #ad7a00;
+  color: #9b7300;
   border-color: #d89f20;
   background: rgba(216, 159, 32, .09);
 }
@@ -1395,9 +1386,10 @@ h3,
 
   padding: 16px;
 
-  border: 1px solid var(--line);
+  border: 1px solid var(--cyan);
 
   color: var(--ink);
+
   background: #fff;
 
   box-shadow: var(--shadow-soft);
@@ -1413,7 +1405,8 @@ h3,
   border-left: 4px solid var(--cyan);
 
   color: var(--ink-soft);
-  background: #edf7fc;
+
+  background: #edf8fd;
 
   font-size: 11px;
 
@@ -1428,23 +1421,22 @@ h3,
   margin: 0 0 18px;
   padding: 16px;
 
-  border: 1px solid #c8cdd0;
+  border: 1px solid var(--cyan);
   border-left: 5px solid var(--cyan);
 
   color: var(--ink);
+
   background:
     linear-gradient(
       180deg,
       #fff,
-      #f3f5f6
+      #f3f6f8
     );
 
   box-shadow: var(--shadow-soft);
 }
 
 .easy-register-title {
-  display: block;
-
   margin-bottom: 10px;
 
   color: var(--ink);
@@ -1468,7 +1460,7 @@ h3,
 .easy-register-copy {
   margin-top: 10px;
 
-  color: #087caf;
+  color: var(--cyan-dark);
 
   font-size: 13px;
   font-weight: 900;
@@ -1478,13 +1470,14 @@ h3,
   margin-top: 12px;
   padding: 9px 11px;
 
-  border: 1px solid rgba(53, 215, 140, .35);
+  border: 1px solid var(--cyan);
 
-  color: #13794d;
-  background: rgba(53, 215, 140, .06);
+  color: var(--cyan-dark);
+
+  background: rgba(26, 176, 241, .06);
 
   font-size: 11px;
-  font-weight: 800;
+  font-weight: 900;
 }
 
 
@@ -1556,6 +1549,7 @@ body.manage-mode #managePage {
   border: 1px solid #56585c !important;
 
   color: #fff !important;
+
   background:
     linear-gradient(
       180deg,
@@ -1587,9 +1581,9 @@ body.manage-mode #managePage {
   margin-top: 14px;
   padding: 14px;
 
-  border: 1px solid #c8cdd0;
+  border: 1px solid var(--cyan);
 
-  background: #f6f7f8;
+  background: #f6f8f9;
 }
 
 .commander-close-reason[hidden] {
@@ -1618,6 +1612,7 @@ body.manage-mode #managePage {
   border: 1px solid #56585c;
 
   color: #fff;
+
   background:
     linear-gradient(
       180deg,
@@ -1629,7 +1624,7 @@ body.manage-mode #managePage {
 
   cursor: pointer;
 
-  transition: .16s;
+  transition: .15s;
 }
 
 .close-reason-btn:hover,
@@ -1647,7 +1642,7 @@ body.manage-mode #managePage {
 .close-reason-btn small {
   margin-top: 4px;
 
-  color: rgba(255, 255, 255, .78);
+  color: rgba(255, 255, 255, .80);
 
   font-size: 10px;
 
@@ -1671,20 +1666,16 @@ body.manage-mode #managePage {
   margin-bottom: 12px;
   padding: 11px;
 
-  border: 1px solid var(--line);
+  border: 1px solid var(--cyan);
 
   background: #fff;
 }
 
 .message.ok {
-  border-color: rgba(53, 215, 140, .42);
-
   color: #13794d;
 }
 
 .message.error {
-  border-color: rgba(255, 83, 100, .42);
-
   color: #c93748;
 }
 
@@ -1695,10 +1686,11 @@ body.manage-mode #managePage {
 .empty {
   padding: 48px 18px;
 
-  border: 1px dashed #b5bac0;
+  border: 1px dashed var(--cyan);
 
   color: var(--muted);
-  background: #f8f9fa;
+
+  background: #f8fafb;
 
   text-align: center;
 }
@@ -1738,9 +1730,10 @@ body.manage-mode #managePage {
 
   padding: 22px;
 
-  border: 1px solid #bfc4c8;
+  border: 1px solid var(--cyan);
 
   color: var(--ink);
+
   background: #fff;
 
   box-shadow:
@@ -1758,6 +1751,7 @@ body.manage-mode #managePage {
   border: 0;
 
   color: var(--ink-soft);
+
   background: none;
 
   font-size: 26px;
@@ -1769,9 +1763,9 @@ body.manage-mode #managePage {
   margin: 16px 0;
   padding: 18px;
 
-  border: 1px solid #c8cdd0;
+  border: 1px solid var(--cyan);
 
-  background: #f3f5f6;
+  background: #f3f6f8;
 
   text-align: center;
 }
@@ -1782,7 +1776,8 @@ body.manage-mode #managePage {
   color: var(--muted);
 
   font:
-    600 10px Rajdhani;
+    700 10px "Barlow Condensed",
+    sans-serif;
 
   letter-spacing: 2px;
 }
@@ -1795,7 +1790,8 @@ body.manage-mode #managePage {
   color: var(--cyan);
 
   font:
-    700 40px Rajdhani;
+    800 40px "Barlow Condensed",
+    sans-serif;
 
   letter-spacing: 6px;
 }
@@ -1806,7 +1802,8 @@ body.manage-mode #managePage {
   border: 1px solid #56585c;
 
   color: #fff;
-  background: #3d3e42;
+
+  background: var(--charcoal);
 
   cursor: pointer;
 }
@@ -1859,7 +1856,7 @@ body.manage-mode #managePage {
   display: flex;
   justify-content: center;
 
-  border-top: 1px solid #111214;
+  border-top: 2px solid var(--cyan);
 
   background:
     linear-gradient(
@@ -1880,14 +1877,15 @@ body.manage-mode #managePage {
   border: 0;
 
   color: #d0d2d4;
+
   background: transparent;
 
   font-size: 10px;
-  font-weight: 800;
+  font-weight: 900;
 
   cursor: pointer;
 
-  transition: .16s;
+  transition: .15s;
 }
 
 .nav-btn span {
@@ -1907,8 +1905,8 @@ body.manage-mode #managePage {
   background:
     linear-gradient(
       180deg,
-      rgba(26, 176, 241, .94),
-      rgba(26, 176, 241, .74)
+      rgba(26, 176, 241, .95),
+      rgba(26, 176, 241, .78)
     );
 }
 
@@ -1969,7 +1967,6 @@ body.manage-mode #managePage {
 
 /* =========================================================
    MOBILE
-   TOP主要部分を1画面に収まりやすくする
    ========================================================= */
 
 @media screen and (max-width: 600px) {
@@ -2008,11 +2005,7 @@ body.manage-mode #managePage {
     margin: 0 0 12px;
     padding: 16px 0 12px;
 
-    border-bottom: 1px solid var(--line);
-  }
-
-  .hero-left {
-    width: 100%;
+    border-bottom: 1px solid var(--cyan);
   }
 
   .hero .eyebrow {
@@ -2023,7 +2016,7 @@ body.manage-mode #managePage {
     font-size:
       clamp(34px, 10.4vw, 46px);
 
-    line-height: .94;
+    line-height: .93;
   }
 
   .hero p {
@@ -2031,7 +2024,7 @@ body.manage-mode #managePage {
 
     font-size: 10.5px;
 
-    line-height: 1.55;
+    line-height: 1.5;
   }
 
   .hero-actions,
@@ -2045,8 +2038,6 @@ body.manage-mode #managePage {
     gap: 6px;
 
     width: 100%;
-
-    margin: 0;
   }
 
   .main-register-btn,
@@ -2082,23 +2073,19 @@ body.manage-mode #managePage {
       1px
       minmax(0, 1fr) !important;
 
-    grid-template-rows:
-      1fr auto !important;
-
     gap: 0 !important;
 
     margin: 0 !important;
     padding: 8px 3px 24px !important;
 
-    border: 1px solid #c8cdd0;
+    border: 1px solid var(--cyan);
   }
 
   .hero-stat,
   .hero-graduate-stat {
     min-width: 0;
 
-    padding:
-      3px 3px !important;
+    padding: 3px !important;
   }
 
   .hero-graduate-stat {
@@ -2108,12 +2095,8 @@ body.manage-mode #managePage {
 
   .hero-stat-divider {
     min-height: 72px;
-    height: 72px !important;
-  }
 
-  .hero-stats > .hero-stat:nth-of-type(3),
-  .hero-stats > .graduate-stat {
-    border-left: 0;
+    height: 72px !important;
   }
 
   .hero-stat-title,
@@ -2124,7 +2107,7 @@ body.manage-mode #managePage {
 
     font-size: 8.5px !important;
 
-    line-height: 1.15;
+    line-height: 1.1;
 
     white-space: nowrap !important;
   }
@@ -2139,7 +2122,7 @@ body.manage-mode #managePage {
     font-size:
       clamp(31px, 9.7vw, 39px) !important;
 
-    line-height: .84;
+    line-height: .82;
   }
 
   .hero-stat-number span,
@@ -2155,9 +2138,7 @@ body.manage-mode #managePage {
 
     font-size: 6.7px !important;
 
-    line-height: 1.2;
-
-    white-space: normal !important;
+    line-height: 1.15;
   }
 
   .hero-stat-update {
@@ -2175,49 +2156,6 @@ body.manage-mode #managePage {
   .section-head h2 {
     font-size:
       clamp(20px, 6vw, 26px);
-  }
-
-  .section-head-actions {
-    gap: 6px;
-  }
-
-  .registration-count {
-    gap: 8px;
-
-    margin-top: 5px;
-  }
-
-  .registration-count strong {
-    font-size: 19px;
-  }
-
-  .registration-count span,
-  .registration-count small {
-    font-size: 9px;
-  }
-
-  .graduated-commander-counter {
-    min-width: 144px;
-
-    gap: 5px;
-
-    padding: 6px 7px;
-  }
-
-  .graduated-commander-number strong {
-    font-size: 36px;
-  }
-
-  .graduated-commander-number span {
-    font-size: 10px;
-  }
-
-  .graduated-commander-label strong {
-    font-size: 9px;
-  }
-
-  .graduated-commander-label small {
-    font-size: 7px;
   }
 
   .cards {
@@ -2249,13 +2187,6 @@ body.manage-mode #managePage {
   #managePage select,
   #managePage textarea {
     font-size: 16px !important;
-  }
-
-  body.register-mode #heroRegisterArea,
-  body.manage-mode #heroManageArea {
-    width: 100% !important;
-
-    margin-top: 12px !important;
   }
 
 }
