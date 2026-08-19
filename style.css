@@ -3498,7 +3498,7 @@ body.manage-mode #managePage {
 /* SLV */
 .card.commander-card .slv,
 .card.commander-card .slv small {
-  color: #ff9b32 !important;
+  color: #7b8085 !important;
   text-shadow: none !important;
   -webkit-text-stroke: 0 !important;
 }
@@ -3532,13 +3532,19 @@ body .commander-card .type-with-new .recruitment-type {
   background: rgba(242, 161, 36, .08) !important;
 }
 
-/* 指揮官カード：SLV数字と小さいSLV文字をオレンジで固定 */
+/* 指揮官カード：SLV数字はオレンジ */
 body .card.commander-card .slv,
+body article.card.commander-card .slv {
+  color: #F2A124 !important;
+  text-shadow: none !important;
+  -webkit-text-stroke: 0 !important;
+}
+
+/* 数字横の小さいSLV文字は元のグレー */
 body .card.commander-card .slv small,
-body article.card.commander-card .slv,
 body article.card.commander-card .slv small,
 body .card .slv small {
-  color: #F2A124 !important;
+  color: #7b8085 !important;
   text-shadow: none !important;
   -webkit-text-stroke: 0 !important;
 }
@@ -3578,7 +3584,7 @@ body article.card.commander-card .slv {
 body .card.commander-card .slv small,
 body article.card.commander-card .slv small,
 body .card .slv small {
-  color: #18ABF4 !important;
+  color: #7b8085 !important;
   text-shadow: none !important;
   -webkit-text-stroke: 0 !important;
 }
@@ -3656,6 +3662,21 @@ body .card.commander-card .slv small,
 body article.card.commander-card .slv small,
 body .card .slv small {
   color: var(--muted) !important;
+  text-shadow: none !important;
+  -webkit-text-stroke: 0 !important;
+}
+
+
+/* =========================================================
+   v11.8 FINAL SLV LABEL FIX
+   小さい「SLV」は元のグレー #7b8085 に完全固定
+   ========================================================= */
+html body .card .slv > small,
+html body .card.commander-card .slv > small,
+html body article.card.commander-card .slv > small,
+html body .slv small {
+  color: #7b8085 !important;
+  -webkit-text-fill-color: #7b8085 !important;
   text-shadow: none !important;
   -webkit-text-stroke: 0 !important;
 }
