@@ -3468,3 +3468,397 @@ body.manage-mode
   }
 
 }
+
+/* ========================================
+   NIKKE STYLE - TOP FINAL
+   白 / チャコール / 黄 / 青 / 紫
+======================================== */
+
+/* ページ全体 */
+html,
+body {
+  background: #eef0f1;
+}
+
+body {
+  color: #25292c;
+
+  background:
+    linear-gradient(
+      180deg,
+      #f8f9f9 0%,
+      #eef0f1 100%
+    );
+}
+
+/* うっすら中央に入っていた黒背景線を消す */
+body::before {
+  opacity: 0;
+}
+
+
+/* ========================================
+   HEADER
+======================================== */
+
+.topbar {
+  border-bottom: 3px solid #d89f20;
+
+  background:
+    linear-gradient(
+      180deg,
+      #24282b 0%,
+      #171a1c 100%
+    );
+
+  box-shadow:
+    0 3px 12px
+    rgba(0, 0, 0, .22);
+}
+
+.brand-main {
+  color: #ffffff;
+}
+
+.brand-small {
+  color: #d89f20;
+}
+
+.status-dot {
+  color: #d8dde0;
+}
+
+
+/* ========================================
+   TOP HERO
+======================================== */
+
+.hero {
+  color: #25292c;
+
+  border-bottom:
+    1px solid #c8cdd0;
+}
+
+.hero-left {
+  color: #25292c;
+}
+
+.eyebrow {
+  color: #777f84;
+}
+
+h1,
+h2 {
+  color: #25292c;
+}
+
+/* 「つなぐ。」 */
+h1 em {
+  color: #f5b400;
+  font-style: normal;
+}
+
+.hero p {
+  color: #697176;
+}
+
+
+/* ========================================
+   3 COUNTERS
+======================================== */
+
+.hero-stats {
+  border:
+    1px solid #c9ced1;
+
+  color: #25292c;
+
+  background:
+    linear-gradient(
+      145deg,
+      #ffffff,
+      #f3f4f4
+    );
+
+  box-shadow:
+    0 5px 18px
+    rgba(28, 33, 36, .12);
+}
+
+.hero-stat-title {
+  color: #34393c;
+}
+
+/* 指揮官 */
+.commander-stat .hero-stat-number strong,
+.commander-stat .hero-stat-number span {
+  color: #d89f20;
+}
+
+/* ユニオン */
+.union-stat .hero-stat-number strong,
+.union-stat .hero-stat-number span {
+  color: #18a8f0;
+}
+
+/* 成立実績 */
+.hero-graduate-title,
+.hero-graduate-number strong,
+.hero-graduate-number span {
+  color: #a828f0;
+}
+
+.hero-stat-sub,
+.hero-graduate-sub,
+.hero-stat-update {
+  color: #777f84;
+}
+
+.hero-stat-divider {
+  background:
+    linear-gradient(
+      transparent,
+      #aeb5b9,
+      transparent
+    );
+}
+
+.hero-graduate-stat {
+  border-top:
+    1px solid rgba(168, 40, 240, .25);
+
+  background:
+    rgba(168, 40, 240, .035);
+}
+
+
+/* ========================================
+   REGISTER BUTTON
+======================================== */
+
+.main-register-btn {
+  border:
+    1px solid #c88713;
+
+  color: #ffffff;
+
+  background:
+    linear-gradient(
+      135deg,
+      #e9ad28,
+      #c98812
+    );
+
+  box-shadow:
+    0 5px 12px
+    rgba(126, 89, 15, .25);
+}
+
+
+/* ========================================
+   CREATOR
+======================================== */
+
+.creator-link-btn {
+  border:
+    1px solid #a828f0;
+
+  color: #7620ae;
+
+  background: #ffffff;
+
+  box-shadow:
+    0 3px 9px
+    rgba(0, 0, 0, .08);
+}
+
+
+/* ========================================
+   BOTTOM NAV
+======================================== */
+
+.bottom-nav {
+  border-top:
+    2px solid #d89f20;
+
+  background:
+    linear-gradient(
+      180deg,
+      #25292c,
+      #171a1c
+    );
+}
+
+.nav-btn {
+  color: #c5c9cb;
+}
+
+.nav-btn.active,
+.nav-btn:hover {
+  color: #d89f20;
+}
+
+/* ========================================
+   MOBILE TOP - 1 SCREEN
+======================================== */
+
+@media screen and (max-width: 600px) {
+
+  .container {
+    padding-left: 10px;
+    padding-right: 10px;
+  }
+
+  .hero {
+    display: grid !important;
+    grid-template-columns: 1fr !important;
+
+    gap: 8px !important;
+
+    margin: 8px 0 10px;
+
+    padding:
+      12px 10px 10px;
+
+    border:
+      1px solid #c9ced1;
+
+    border-radius: 2px;
+
+    background: #ffffff;
+
+    box-shadow:
+      0 3px 12px
+      rgba(0, 0, 0, .08);
+  }
+
+  h1 {
+    font-size:
+      clamp(35px, 11vw, 46px);
+
+    line-height: .92;
+  }
+
+  .hero p {
+    margin:
+      10px 0 12px;
+
+    font-size: 11px;
+
+    line-height: 1.55;
+  }
+
+
+  /* 登録＋クリエイター */
+
+  .hero-actions,
+  .creator-action-row {
+    display: grid;
+
+    grid-template-columns:
+      1.55fr .85fr;
+
+    gap: 6px;
+  }
+
+  .main-register-btn {
+    min-height: 46px;
+
+    padding: 0 8px;
+
+    font-size: 14px;
+  }
+
+  .creator-link-btn {
+    min-height: 46px;
+
+    padding: 0 6px;
+
+    font-size: 10px;
+  }
+
+
+  /* 3カウンター */
+
+  .hero-stats {
+    grid-template-columns:
+      1fr 1px 1fr;
+
+    gap: 4px;
+
+    min-height: 0;
+
+    padding:
+      10px 5px 29px;
+
+    border-radius: 2px;
+  }
+
+  .hero-stat-title {
+    min-height: 22px;
+
+    margin-bottom: 2px;
+
+    font-size: 9px;
+  }
+
+  .hero-stat-number strong {
+    font-size: 38px;
+  }
+
+  .hero-stat-number span {
+    padding-bottom: 2px;
+
+    font-size: 11px;
+  }
+
+  .hero-stat-sub {
+    margin-top: 4px;
+
+    font-size: 7px;
+  }
+
+  .hero-stat-divider {
+    height: 60px;
+  }
+
+
+  /* 成立実績 */
+
+  .hero-graduate-stat {
+    grid-column: 1 / 4;
+
+    margin-top: 2px;
+
+    padding:
+      6px 4px;
+  }
+
+  .hero-graduate-title {
+    margin-bottom: 1px;
+
+    font-size: 9px;
+  }
+
+  .hero-graduate-number strong {
+    font-size: 29px;
+  }
+
+  .hero-graduate-number span {
+    font-size: 10px;
+  }
+
+  .hero-graduate-sub {
+    margin-top: 1px;
+
+    font-size: 7px;
+  }
+
+  .hero-stat-update {
+    bottom: 6px;
+
+    font-size: 8px;
+  }
+
+}
