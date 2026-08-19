@@ -18,7 +18,7 @@
   <title>
     NIKKE UNION MATCH - 応援クリエイター
   </title>
-  <!-- creators v3: dark / minimal orange / white-blue active buttons -->
+  <!-- creators v6: description alignment fix / plain X button -->
 
 
   <style>
@@ -463,6 +463,7 @@
     }
 
     .creator-name {
+      width: 100%;
       margin-top: 15px;
       color: #fff;
       text-align: center;
@@ -474,15 +475,20 @@
 
     .creator-description {
       flex: 1;
-      margin-top: 10px;
+      width: 100%;
+      margin: 10px auto 0;
+      padding: 0 6px;
       color: #aeb3ba;
       font-size: 12px;
       line-height: 1.7;
-      white-space: pre-wrap;
+      /* テンプレート側のインデント空白は潰し、入力した改行だけ残す */
+      white-space: pre-line;
       text-align: center !important;
+      overflow-wrap: anywhere;
     }
 
     .creator-links {
+      width: 100%;
       display: grid;
       grid-template-columns: 1fr 1fr;
       gap: 7px;
@@ -506,6 +512,12 @@
       font-size: 11px;
       font-weight: 900;
       transition: .18s ease;
+    }
+
+
+    .creator-link.x {
+      font-family: "Zen Kaku Gothic New", sans-serif;
+      letter-spacing: .02em;
     }
 
     .creator-link.youtube:hover,
