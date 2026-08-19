@@ -2896,15 +2896,8 @@ if (
   "commander_confirm"
 ) {
 
-  const reasonBox =
-    $("#commanderCloseReason");
-
-  if (reasonBox) {
-
-    reasonBox.hidden =
-      false;
-
-  }
+  // 指揮官の募集締切 = ユニオン決定として扱う
+  await closeCommanderRecruitment();
 
   return;
 
@@ -2949,12 +2942,11 @@ if (
   );
 
 // ========================================
-// 指揮官 締切理由
+// 指揮官募集を締め切る
+// 締切 = ユニオン決定（成立実績 +1）
 // ========================================
 
-async function closeCommanderWithReason(
-  reason
-) {
+async function closeCommanderRecruitment() {
 
   if (!sb) {
 
@@ -3002,7 +2994,7 @@ async function closeCommanderWithReason(
           hash,
 
         p_close_reason:
-          reason
+          "graduated"
       }
     );
 
@@ -3010,10 +3002,9 @@ async function closeCommanderWithReason(
   if (error) {
 
     console.error(
-      "指揮官締切理由エラー",
+      "指揮官募集締切エラー",
       error
     );
-
 
     alert(
       "指揮官募集の締切処理に失敗しました。"
@@ -3035,40 +3026,16 @@ async function closeCommanderWithReason(
   }
 
 
-  const reasonBox =
-    $("#commanderCloseReason");
-
-
-  if (reasonBox) {
-
-    reasonBox.hidden =
-      true;
-
-  }
-
-
   $("#closeForm")
     ?.reset();
 
 
-  if (
-    reason ===
-    "graduated"
-  ) {
+  alert(
+    "🎓 ユニオン決定として募集を締め切りました。"
+  );
 
-    alert(
-      "🎓 ユニオン決定として募集を締め切りました。"
-    );
 
-    await loadGraduatedCommanderCount();
-
-  } else {
-
-    alert(
-      "募集を終了しました。"
-    );
-
-  }
+  await loadGraduatedCommanderCount();
 
 
   showPage(
@@ -3078,62 +3045,6 @@ async function closeCommanderWithReason(
 }
 
 
-// ========================================
-// 🎓 ユニオンが決まった
-// ========================================
-
-$("#closeGraduatedBtn")
-  ?.addEventListener(
-    "click",
-    async () => {
-
-      await closeCommanderWithReason(
-        "graduated"
-      );
-
-    }
-  );
-
-
-// ========================================
-// ✖ 募集だけ終了
-// ========================================
-
-$("#closeOnlyBtn")
-  ?.addEventListener(
-    "click",
-    async () => {
-
-      await closeCommanderWithReason(
-        "close_only"
-      );
-
-    }
-  );
-
-
-// ========================================
-// 戻る
-// ========================================
-
-$("#closeReasonCancelBtn")
-  ?.addEventListener(
-    "click",
-    () => {
-
-      const reasonBox =
-        $("#commanderCloseReason");
-
-
-      if (reasonBox) {
-
-        reasonBox.hidden =
-          true;
-
-      }
-
-    }
-  );
 // ========================================
 // 起動
 // ========================================
