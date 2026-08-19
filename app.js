@@ -316,14 +316,111 @@ function getXPostId(url) {
 
 // ========================================
 // X投稿埋め込み
+// 各投稿を独立・並列で読み込む
+// 1件が削除済み / Not found でも
+// 他の投稿の読み込みを止めない
 // ========================================
 
-async function renderXEmbeds(
+function renderSingleXEmbed(target) {
+
+  if (!target) {
+    return;
+  }
+
+
+  if (
+    target.dataset.loaded === "true"
+    ||
+    target.dataset.loaded === "loading"
+  ) {
+    return;
+  }
+
+
+  const postId =
+    target.dataset.postId;
+
+
+  if (!postId) {
+
+    target.dataset.loaded =
+      "failed";
+
+    target.innerHTML =
+      '<div class="x-embed-error">X投稿を表示できません</div>';
+
+    return;
+
+  }
+
+
+  target.dataset.loaded =
+    "loading";
+
+
+  try {
+
+    const result =
+      window.twttr.widgets
+        .createTweet(
+
+          postId,
+
+          target,
+
+          {
+            theme: "dark",
+            align: "center",
+            conversation: "none"
+          }
+
+        );
+
+
+    Promise
+      .resolve(result)
+      .then(tweetElement => {
+
+        target.dataset.loaded =
+          tweetElement
+            ? "true"
+            : "failed";
+
+      })
+      .catch(error => {
+
+        target.dataset.loaded =
+          "failed";
+
+        console.error(
+          "X投稿表示エラー",
+          error
+        );
+
+      });
+
+  } catch (error) {
+
+    target.dataset.loaded =
+      "failed";
+
+    console.error(
+      "X投稿表示エラー",
+      error
+    );
+
+  }
+
+}
+
+
+function renderXEmbeds(
   retry = 0
 ) {
 
   if (
-    !window.twttr ||
+    !window.twttr
+    ||
     !window.twttr.widgets
   ) {
 
@@ -352,64 +449,11 @@ async function renderXEmbeds(
     );
 
 
-  for (
-    const target
-    of targets
-  ) {
-
-    if (
-      target.dataset.loaded ===
-      "true"
-    ) {
-      continue;
-    }
-
-
-    const postId =
-      target.dataset.postId;
-
-
-    if (!postId) {
-
-      target.innerHTML =
-        '<div class="x-embed-error">X投稿を表示できません</div>';
-
-      continue;
-
-    }
-
-
-    target.dataset.loaded =
-      "true";
-
-
-    try {
-
-      await window.twttr.widgets
-        .createTweet(
-
-          postId,
-
-          target,
-
-          {
-            theme: "dark",
-            align: "center",
-            conversation: "none"
-          }
-
-        );
-
-    } catch (error) {
-
-      console.error(
-        "X投稿表示エラー",
-        error
-      );
-
-    }
-
-  }
+  // ★ await で1件ずつ待たない。
+  // 全投稿をそれぞれ独立して読み込む。
+  targets.forEach(target => {
+    renderSingleXEmbed(target);
+  });
 
 }
 
