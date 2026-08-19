@@ -3646,3 +3646,16 @@ body .card .slv small {
 body .hero h1 .hero-title-line2 {
   color: var(--charcoal) !important;
 }
+
+
+/* =========================================================
+   v11.7 SLV LABEL COLOR
+   数字横の小さい「SLV」を元のグレーに戻す
+   ========================================================= */
+body .card.commander-card .slv small,
+body article.card.commander-card .slv small,
+body .card .slv small {
+  color: var(--muted) !important;
+  text-shadow: none !important;
+  -webkit-text-stroke: 0 !important;
+}
