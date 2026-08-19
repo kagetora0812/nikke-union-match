@@ -1344,11 +1344,13 @@ h3 {
 
   padding: 3px 6px;
 
-  border: 1px solid var(--purple);
+  border: 1px solid #ff5364;
 
-  color: #7e18bd;
+  color: #ffffff;
 
-  background: rgba(168, 40, 240, .09);
+  background: #ff5364;
+
+  box-shadow: 0 2px 6px rgba(255, 83, 100, .22);
 
   font-size: 9px;
   font-weight: 900;
