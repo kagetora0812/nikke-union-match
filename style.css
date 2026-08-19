@@ -3058,3 +3058,143 @@ body.manage-mode #managePage {
 .commander-card .slv {
   color: var(--cyan) !important;
 }
+
+/* =========================================================
+   v8 TITLE
+   JTCウインZ10系 / スマホ1行
+   ========================================================= */
+
+/* メインタイトル */
+.hero h1 {
+  display: flex;
+  align-items: baseline;
+
+  gap: 0;
+
+  white-space: nowrap;
+
+  font-family:
+    "JTCウインZ10",
+    "Zen Kaku Gothic New",
+    sans-serif !important;
+
+  font-weight: 900;
+
+  letter-spacing: -0.075em;
+  line-height: .92;
+}
+
+
+/* 「指揮官とユニオン」 */
+.hero-title-line1 {
+  display: inline !important;
+
+  color: #222428;
+
+  font-size: .78em;
+
+  white-space: nowrap;
+}
+
+
+/* 「をつなぐ。」 */
+.hero-title-line2 {
+  display: inline !important;
+
+  color: #222428;
+
+  font-size: .76em;
+
+  white-space: nowrap;
+}
+
+
+/* 「つなぐ。」だけ強調 */
+.hero-title-line2 em {
+  color: #18ABF4 !important;
+
+  font-style: normal;
+
+  font-size: 1.34em;
+
+  font-weight: 900;
+
+  letter-spacing: -0.08em;
+
+  white-space: nowrap;
+}
+
+
+/* =========================================================
+   PC
+   ========================================================= */
+
+@media screen and (min-width: 1025px) {
+
+  .hero h1 {
+    font-size: 66px !important;
+  }
+
+}
+
+
+/* =========================================================
+   TABLET
+   ========================================================= */
+
+@media screen and (min-width: 601px) and (max-width: 1024px) {
+
+  .hero h1 {
+    font-size:
+      clamp(43px, 5.5vw, 57px) !important;
+  }
+
+}
+
+
+/* =========================================================
+   MOBILE
+   1行固定
+   ========================================================= */
+
+@media screen and (max-width: 600px) {
+
+  .hero h1 {
+    width: 100%;
+
+    font-size:
+      clamp(30px, 7.8vw, 36px) !important;
+
+    line-height: .9;
+
+    white-space: nowrap;
+
+    overflow: visible;
+  }
+
+  /* 指揮官とユニオン */
+  .hero-title-line1 {
+    font-size: .76em;
+  }
+
+  /* 「を」 */
+  .hero-title-line2 {
+    font-size: .72em;
+  }
+
+  /* つなぐ。 */
+  .hero-title-line2 em {
+    font-size: 1.38em;
+  }
+
+}
+
+
+/* 小さいスマホ */
+@media screen and (max-width: 360px) {
+
+  .hero h1 {
+    font-size: 28px !important;
+  }
+
+}
