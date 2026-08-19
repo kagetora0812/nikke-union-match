@@ -1199,6 +1199,49 @@
 
     }
 
+
+    /* ========================================
+       v4 アイコン画像ファイル選択
+    ======================================== */
+
+    .icon-file-box {
+      margin-top: 8px;
+      padding: 14px;
+      border: 1px dashed #3b4658;
+      background: rgba(11, 17, 27, .72);
+    }
+
+    .icon-file-label {
+      display: block;
+      color: var(--text);
+      font-size: 13px;
+      font-weight: 800;
+    }
+
+    .icon-file-input {
+      width: 100%;
+      margin-top: 9px;
+      padding: 10px;
+      border: 1px solid #334155;
+      background: #0b111b;
+      color: #fff;
+    }
+
+    .icon-file-help {
+      margin-top: 8px;
+      color: var(--muted);
+      font-size: 11px;
+      line-height: 1.65;
+    }
+
+    .icon-file-status {
+      margin-top: 8px;
+      color: var(--green);
+      font-size: 11px;
+      font-weight: 800;
+      line-height: 1.5;
+    }
+
   </style>
 
 </head>
@@ -1611,7 +1654,7 @@
 
           <label>
 
-            アイコン画像URL
+            アイコン画像URL（任意）
 
             <input
               id="iconUrl"
@@ -1622,6 +1665,32 @@
             >
 
           </label>
+
+
+          <div class="icon-file-box">
+
+            <label class="icon-file-label" for="iconFile">
+              📷 JPG / PNG画像を選択
+            </label>
+
+            <input
+              id="iconFile"
+              class="icon-file-input"
+              type="file"
+              accept="image/jpeg,image/png,image/webp,.jpg,.jpeg,.png,.webp"
+            >
+
+            <div class="icon-file-help">
+              JPG・JPEG・PNG・WEBP対応。画像は自動で縮小して保存します。<br>
+              画像を選んだ場合はURL入力より優先されます。
+            </div>
+
+            <div
+              id="iconFileStatus"
+              class="icon-file-status hidden"
+            ></div>
+
+          </div>
 
 
           <div class="icon-preview-wrap">
@@ -1829,6 +1898,8 @@
 
     let creators = [];
 
+    let selectedIconData = "";
+
 
     function escapeHtml(value) {
 
@@ -1923,16 +1994,20 @@
 
     function safeUrl(value) {
 
-      if (!value) {
+      const raw = String(value || "").trim();
+
+      if (!raw) {
         return "";
       }
 
+      // JPG / PNG / WEBP をローカル選択して保存した data URL
+      if (/^data:image\/(?:jpeg|png|webp);base64,/i.test(raw)) {
+        return raw;
+      }
 
       try {
 
-        const url =
-          new URL(value);
-
+        const url = new URL(raw);
 
         if (
           url.protocol !== "https:"
@@ -1942,13 +2017,10 @@
           return "";
         }
 
-
         return url.href;
 
       } catch {
-
         return "";
-
       }
 
     }
@@ -2659,29 +2731,49 @@
 
 
     // ========================================
-    // アイコンプレビュー
+    // アイコンプレビュー / JPG・PNG選択
     // ========================================
+
+    function setIconFileStatus(text = "", isError = false) {
+
+      const status = $("#iconFileStatus");
+
+      if (!status) {
+        return;
+      }
+
+      status.textContent = text;
+
+      if (!text) {
+        status.classList.add("hidden");
+        return;
+      }
+
+      status.classList.remove("hidden");
+      status.style.color = isError
+        ? "#ff9ca7"
+        : "var(--green)";
+
+    }
+
 
     function updateIconPreview() {
 
-      const value =
+      const urlValue =
         $("#iconUrl")
           ?.value
           .trim() ||
         "";
 
-
       const safe =
-        safeUrl(value);
-
+        selectedIconData ||
+        safeUrl(urlValue);
 
       const image =
         $("#iconPreview");
 
-
       const placeholder =
         $("#iconPreviewPlaceholder");
-
 
       if (
         !safe ||
@@ -2691,55 +2783,142 @@
 
         image
           ?.classList
-          .add(
-            "hidden"
-          );
-
+          .add("hidden");
 
         placeholder
           ?.classList
-          .remove(
-            "hidden"
-          );
-
+          .remove("hidden");
 
         return;
 
       }
 
-
       image.onload =
         () => {
-
-          image.classList.remove(
-            "hidden"
-          );
-
-
-          placeholder.classList.add(
-            "hidden"
-          );
-
+          image.classList.remove("hidden");
+          placeholder.classList.add("hidden");
         };
-
 
       image.onerror =
         () => {
-
-          image.classList.add(
-            "hidden"
-          );
-
-
-          placeholder.classList.remove(
-            "hidden"
-          );
-
+          image.classList.add("hidden");
+          placeholder.classList.remove("hidden");
         };
 
+      image.src = safe;
 
-      image.src =
-        safe;
+    }
+
+
+    function readFileAsDataUrl(file) {
+
+      return new Promise((resolve, reject) => {
+
+        const reader = new FileReader();
+
+        reader.onload = () =>
+          resolve(String(reader.result || ""));
+
+        reader.onerror = () =>
+          reject(new Error("FILE_READ_ERROR"));
+
+        reader.readAsDataURL(file);
+
+      });
+
+    }
+
+
+    function loadImageFromDataUrl(dataUrl) {
+
+      return new Promise((resolve, reject) => {
+
+        const img = new Image();
+
+        img.onload = () => resolve(img);
+        img.onerror = () => reject(new Error("IMAGE_LOAD_ERROR"));
+        img.src = dataUrl;
+
+      });
+
+    }
+
+
+    async function makeIconData(file) {
+
+      const allowedTypes = new Set([
+        "image/jpeg",
+        "image/png",
+        "image/webp"
+      ]);
+
+      if (!allowedTypes.has(file.type)) {
+        throw new Error("UNSUPPORTED_IMAGE_TYPE");
+      }
+
+      if (file.size > 8 * 1024 * 1024) {
+        throw new Error("IMAGE_TOO_LARGE");
+      }
+
+      const original =
+        await readFileAsDataUrl(file);
+
+      const img =
+        await loadImageFromDataUrl(original);
+
+      const maxSide = 420;
+      const scale = Math.min(
+        1,
+        maxSide / Math.max(img.naturalWidth, img.naturalHeight)
+      );
+
+      const width = Math.max(
+        1,
+        Math.round(img.naturalWidth * scale)
+      );
+
+      const height = Math.max(
+        1,
+        Math.round(img.naturalHeight * scale)
+      );
+
+      const canvas =
+        document.createElement("canvas");
+
+      canvas.width = width;
+      canvas.height = height;
+
+      const ctx =
+        canvas.getContext("2d");
+
+      if (!ctx) {
+        throw new Error("CANVAS_ERROR");
+      }
+
+      ctx.drawImage(
+        img,
+        0,
+        0,
+        width,
+        height
+      );
+
+      const outputType =
+        file.type === "image/png"
+          ? "image/png"
+          : file.type === "image/webp"
+            ? "image/webp"
+            : "image/jpeg";
+
+      const quality =
+        outputType === "image/png"
+          ? undefined
+          : 0.86;
+
+      return canvas.toDataURL(
+        outputType,
+        quality
+      );
 
     }
 
@@ -2747,7 +2926,72 @@
     $("#iconUrl")
       ?.addEventListener(
         "input",
-        updateIconPreview
+        () => {
+
+          if (selectedIconData) {
+            selectedIconData = "";
+            const fileInput = $("#iconFile");
+            if (fileInput) {
+              fileInput.value = "";
+            }
+            setIconFileStatus("");
+          }
+
+          updateIconPreview();
+
+        }
+      );
+
+
+    $("#iconFile")
+      ?.addEventListener(
+        "change",
+        async event => {
+
+          const file =
+            event.target.files?.[0];
+
+          if (!file) {
+            selectedIconData = "";
+            setIconFileStatus("");
+            updateIconPreview();
+            return;
+          }
+
+          try {
+
+            setIconFileStatus("画像を読み込み中...");
+
+            selectedIconData =
+              await makeIconData(file);
+
+            setIconFileStatus(
+              `✓ ${file.name} を選択しました`
+            );
+
+            updateIconPreview();
+
+          } catch (error) {
+
+            console.error(error);
+            selectedIconData = "";
+            event.target.value = "";
+
+            const message =
+              String(error?.message) === "IMAGE_TOO_LARGE"
+                ? "画像は8MB以下を選択してください。"
+                : "JPG・JPEG・PNG・WEBP画像を選択してください。";
+
+            setIconFileStatus(
+              message,
+              true
+            );
+
+            updateIconPreview();
+
+          }
+
+        }
       );
 
 
@@ -3338,6 +3582,7 @@
 
 
           const iconUrl =
+            selectedIconData ||
             $("#iconUrl")
               ?.value
               .trim() ||
@@ -3550,9 +3795,34 @@
         "";
 
 
-      $("#iconUrl").value =
+      const existingIcon =
         creator.icon_url ||
         "";
+
+
+      if (/^data:image\/(?:jpeg|png|webp);base64,/i.test(existingIcon)) {
+
+        selectedIconData =
+          existingIcon;
+
+        $("#iconUrl").value =
+          "";
+
+        setIconFileStatus(
+          "✓ 保存済みの画像を使用中"
+        );
+
+      } else {
+
+        selectedIconData =
+          "";
+
+        $("#iconUrl").value =
+          existingIcon;
+
+        setIconFileStatus("");
+
+      }
 
 
       $("#youtubeUrl").value =
@@ -3609,6 +3879,12 @@
 
       $("#creatorForm")
         ?.reset();
+
+
+      selectedIconData =
+        "";
+
+      setIconFileStatus("");
 
 
       $("#editingId").value =
