@@ -26,6 +26,11 @@
 
 
   <style>
+    /* Header phrase: remove gap between 「を」 and 「つなぐ。」 */
+    .topbar .brand {
+      gap: 0 !important;
+    }
+
     /* =========================================================
        HERO title balance + width tuning
        - upper line small: NIKKE GODDESS OF VICTORY
@@ -187,6 +192,48 @@
     }
   </style>
 
+
+  <style>
+    /* Header text as one continuous string: no space between を and つなぐ。 */
+    .topbar .brand {
+      display: block !important;
+      line-height: 1 !important;
+      white-space: nowrap !important;
+    }
+
+    .topbar .brand-copy {
+      color: #fff !important;
+      font-family:
+        "JTCウインZ10",
+        "Gothic MB101",
+        "Zen Kaku Gothic New",
+        sans-serif !important;
+      font-size: 14px !important;
+      font-weight: 900 !important;
+      line-height: 1 !important;
+      letter-spacing: -.055em !important;
+      white-space: nowrap !important;
+    }
+
+    .topbar .brand-accent {
+      color: var(--cyan) !important;
+      font: inherit !important;
+      letter-spacing: inherit !important;
+    }
+
+    @media screen and (min-width: 601px) and (max-width: 1024px) {
+      .topbar .brand-copy { font-size: 13px !important; }
+    }
+
+    @media screen and (max-width: 600px) {
+      .topbar .brand-copy { font-size: 12px !important; }
+    }
+
+    @media screen and (max-width: 360px) {
+      .topbar .brand-copy { font-size: 11px !important; }
+    }
+  </style>
+
 </head>
 
 
@@ -200,15 +247,7 @@
   <header class="topbar">
 
     <div class="brand">
-
-      <span class="brand-small">
-        指揮官とユニオンを
-      </span>
-
-      <span class="brand-main">
-        つなぐ。
-      </span>
-
+      <span class="brand-copy">指揮官とユニオンを<span class="brand-accent">つなぐ。</span></span>
     </div>
 
 
