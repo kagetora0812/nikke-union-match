@@ -1,4 +1,4 @@
-@import url("https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@500;600;700;800&family=Noto+Sans+JP:wght@500;700;800;900&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=Teko:wght@500;600;700&family=Zen+Kaku+Gothic+New:wght@500;700;900&display=swap");
 
 /* =========================================================
    NIKKE UNION MATCH
@@ -78,7 +78,7 @@ body {
     );
 
   font-family:
-    "Noto Sans JP",
+    "Zen Kaku Gothic New",
     sans-serif;
 
   font-weight: 700;
@@ -128,6 +128,94 @@ textarea:focus-visible {
 
 
 /* =========================================================
+   NIKKE ANGULAR GEOMETRY
+   丸角ではなく「切り欠き / 面取り」の形
+   ========================================================= */
+
+:root {
+  --cut-sm: 6px;
+  --cut-md: 9px;
+  --cut-lg: 12px;
+}
+
+.btn,
+.creator-link-btn,
+.search-tab,
+.register-back-btn,
+.manage-back-btn,
+.copy-btn,
+.x-btn,
+.close-reason-btn,
+.nav-btn {
+  border-radius: 0 !important;
+
+  clip-path:
+    polygon(
+      var(--cut-sm) 0,
+      100% 0,
+      100% calc(100% - var(--cut-sm)),
+      calc(100% - var(--cut-sm)) 100%,
+      0 100%,
+      0 var(--cut-sm)
+    );
+}
+
+.hero-stats,
+.card,
+.filters,
+.panel,
+.notice,
+.easy-register-box,
+.commander-close-reason,
+.modal-card,
+.pass-box,
+.empty,
+.graduated-commander-counter {
+  border-radius: 0 !important;
+
+  clip-path:
+    polygon(
+      var(--cut-md) 0,
+      100% 0,
+      100% calc(100% - var(--cut-md)),
+      calc(100% - var(--cut-md)) 100%,
+      var(--cut-md) 100%,
+      0 calc(100% - var(--cut-md)),
+      0 var(--cut-md)
+    );
+}
+
+/* 入力欄は操作性優先で四角 */
+input,
+select,
+textarea {
+  border-radius: 0 !important;
+  clip-path: none;
+}
+
+/* ボタンの角をよりNIKKEらしく強調 */
+.main-register-btn,
+.btn.primary {
+  --cut-sm: 8px;
+}
+
+.search-tab.active,
+.btn:active,
+.btn.active,
+.nav-btn.active {
+  clip-path:
+    polygon(
+      8px 0,
+      100% 0,
+      100% calc(100% - 8px),
+      calc(100% - 8px) 100%,
+      0 100%,
+      0 8px
+    );
+}
+
+
+/* =========================================================
    HEADER
    ========================================================= */
 
@@ -164,8 +252,8 @@ textarea:focus-visible {
   flex-direction: column;
 
   font-family:
-    "Barlow Condensed",
-    "Noto Sans JP",
+    "Teko",
+    "Zen Kaku Gothic New",
     sans-serif;
 
   line-height: .82;
@@ -183,17 +271,17 @@ textarea:focus-visible {
 .brand-main {
   color: #fff;
 
-  font-size: 25px;
-  font-weight: 800;
+  font-size: 28px;
+  font-weight: 700;
 
-  letter-spacing: 2.3px;
+  letter-spacing: 1.4px;
 }
 
 .status-dot {
   color: #d7dadd;
 
   font:
-    700 11px "Barlow Condensed",
+    700 11px "Teko",
     sans-serif;
 
   letter-spacing: 1.4px;
@@ -242,7 +330,7 @@ h3,
 .recruitment-type,
 .state {
   font-family:
-    "Noto Sans JP",
+    "Zen Kaku Gothic New",
     sans-serif;
 
   font-weight: 900;
@@ -264,7 +352,7 @@ h3 {
   color: var(--ink-soft);
 
   font:
-    800 11px "Barlow Condensed",
+    800 11px "Teko",
     sans-serif;
 
   letter-spacing: 2.2px;
@@ -666,8 +754,8 @@ h3 {
   margin: 0;
 
   font-family:
-    "Barlow Condensed",
-    "Noto Sans JP",
+    "Teko",
+    "Zen Kaku Gothic New",
     sans-serif;
 
   font-size:
@@ -733,7 +821,7 @@ h3 {
   color: var(--muted);
 
   font:
-    700 10px "Barlow Condensed",
+    700 10px "Teko",
     sans-serif;
 
   text-align: center;
@@ -942,8 +1030,8 @@ h3 {
 
 .registration-count strong {
   font-family:
-    "Barlow Condensed",
-    "Noto Sans JP",
+    "Teko",
+    "Zen Kaku Gothic New",
     sans-serif;
 
   font-size: 24px;
@@ -1008,7 +1096,7 @@ h3 {
   color: var(--purple);
 
   font:
-    800 46px/.84 "Barlow Condensed",
+    800 46px/.84 "Teko",
     sans-serif;
 }
 
@@ -1188,7 +1276,7 @@ h3 {
   color: var(--gold);
 
   font:
-    800 34px "Barlow Condensed",
+    800 34px "Teko",
     sans-serif;
 }
 
@@ -1776,7 +1864,7 @@ body.manage-mode #managePage {
   color: var(--muted);
 
   font:
-    700 10px "Barlow Condensed",
+    700 10px "Teko",
     sans-serif;
 
   letter-spacing: 2px;
@@ -1790,7 +1878,7 @@ body.manage-mode #managePage {
   color: var(--cyan);
 
   font:
-    800 40px "Barlow Condensed",
+    800 40px "Teko",
     sans-serif;
 
   letter-spacing: 6px;
@@ -1905,9 +1993,68 @@ body.manage-mode #managePage {
   background:
     linear-gradient(
       180deg,
-      rgba(26, 176, 241, .95),
-      rgba(26, 176, 241, .78)
+      var(--cyan-2),
+      var(--cyan)
     );
+}
+
+
+
+
+/* =========================================================
+   INDUSTRIAL / SCI-FI LATIN
+   Spaceeland / Industry 系の「細長く硬い」方向
+   ========================================================= */
+
+.brand,
+.status-dot,
+.eyebrow,
+.hero-stat-number strong,
+.hero-graduate-number strong,
+.registration-count strong,
+.graduated-commander-number strong,
+.pass-box strong,
+.pass-box span,
+.slv,
+.hero-stat-update {
+  font-family:
+    "Teko",
+    "Zen Kaku Gothic New",
+    sans-serif;
+}
+
+.brand-main {
+  font-stretch: condensed;
+  text-transform: uppercase;
+}
+
+.eyebrow,
+.status-dot,
+.hero-stat-update {
+  letter-spacing: .08em;
+}
+
+.hero-stat-number strong,
+.hero-graduate-number strong,
+.registration-count strong,
+.graduated-commander-number strong,
+.pass-box strong,
+.slv {
+  letter-spacing: .01em;
+}
+
+/* 日本語見出しは角ゴシックを強く・少し詰める */
+.hero h1,
+.section-head h2,
+.name,
+.easy-register-title,
+.commander-close-reason-title {
+  font-family:
+    "Zen Kaku Gothic New",
+    sans-serif;
+
+  font-weight: 900;
+  letter-spacing: -.07em;
 }
 
 
