@@ -288,7 +288,6 @@ function getXPostId(url) {
 
 // ========================================
 // X投稿埋め込み
-// 各投稿を独立して読み込む
 // ========================================
 
 async function renderXEmbeds(
@@ -304,9 +303,11 @@ async function renderXEmbeds(
 
       setTimeout(
         () => {
+
           renderXEmbeds(
             retry + 1
           );
+
         },
         500
       );
@@ -323,75 +324,67 @@ async function renderXEmbeds(
     );
 
 
-  targets.forEach(
-    target => {
+  for (
+    const target
+    of targets
+  ) {
 
-      if (
-        target.dataset.loaded ===
-        "true"
-      ) {
-
-        return;
-
-      }
-
-
-      const postId =
-        target.dataset.postId;
+    if (
+      target.dataset.loaded ===
+      "true"
+    ) {
+      continue;
+    }
 
 
-      if (!postId) {
-
-        target.innerHTML =
-          '<div class="x-embed-error">X投稿を表示できません</div>';
-
-        return;
-
-      }
+    const postId =
+      target.dataset.postId;
 
 
-      target.innerHTML = "";
+    if (!postId) {
+
+      target.innerHTML =
+        '<div class="x-embed-error">X投稿を表示できません</div>';
+
+      continue;
+
+    }
 
 
-      window.twttr.widgets
+    target.dataset.loaded =
+      "true";
+
+
+    try {
+
+      await window.twttr.widgets
         .createTweet(
+
           postId,
+
           target,
+
           {
             theme: "dark",
             align: "center",
             conversation: "none"
           }
-        )
-        .then(
-          tweet => {
 
-            if (tweet) {
-
-              target.dataset.loaded =
-                "true";
-
-            }
-
-          }
-        )
-        .catch(
-          error => {
-
-            delete target.dataset.loaded;
-
-            console.error(
-              "X投稿表示エラー",
-              error
-            );
-
-          }
         );
 
+    } catch (error) {
+
+      console.error(
+        "X投稿表示エラー",
+        error
+      );
+
     }
-  );
+
+  }
 
 }
+
 
 // ========================================
 // ページ切替
@@ -1541,7 +1534,10 @@ const newBadge =
                     item.slv
                   )}
 
-                  <small>
+                  <small
+                    class="slv-label"
+                    style="color:#7b8085 !important;-webkit-text-fill-color:#7b8085 !important;text-shadow:none !important;-webkit-text-stroke:0 !important;"
+                  >
                     SLV
                   </small>
 
