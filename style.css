@@ -1,65 +1,41 @@
 @import url('https://fonts.googleapis.com/css2?family=Rajdhani:wght@500;600;700&family=Noto+Sans+JP:wght@400;500;700&display=swap');
 
 :root {
-  --bg: #F1F2F2;
-  --panel: #FFFFFF;
-  --panel2: #E8EAEB;
-
-  --line: #C8CDD0;
-
-  --text: #24282B;
-  --muted: #777F84;
-
-  --accent: #D89F20;
-  --accent2: #F5B400;
-
-  --blue: #18A8F0;
-  --purple: #A828F0;
-
-  --green: #54E39B;
-  --red: #FF5364;
-
-  --graduate: #A828F0;
-  --graduate2: #C875FF;
+  --bg: #080b12;
+  --panel: #101621;
+  --panel2: #141c29;
+  --line: #2b3545;
+  --text: #edf2f7;
+  --muted: #8e9aaa;
+  --accent: #ff7a18;
+  --accent2: #ffb15c;
+  --green: #54e39b;
+  --red: #ff5364;
 }
-
 
 * {
   box-sizing: border-box;
 }
 
-
 body {
   margin: 0;
-
   background:
     radial-gradient(
       circle at 50% -10%,
       #1a2434 0,
       #080b12 45%
     );
-
   color: var(--text);
-
-  font-family:
-    'Noto Sans JP',
-    sans-serif;
-
+  font-family: 'Noto Sans JP', sans-serif;
   min-height: 100vh;
-
   padding-bottom: 82px;
 }
 
-
 body::before {
   content: "";
-
   position: fixed;
-
   inset: 0;
-
   pointer-events: none;
-
   background:
     linear-gradient(
       90deg,
@@ -69,242 +45,121 @@ body::before {
     );
 }
 
-
-/* ========================================
-   ヘッダー
-======================================== */
-
 .topbar {
   height: 66px;
-
-  border-bottom:
-    1px solid
-    var(--line);
-
-  background:
-    rgba(
-      8,
-      11,
-      18,
-      .88
-    );
-
-  backdrop-filter:
-    blur(12px);
+  border-bottom: 1px solid var(--line);
+  background: rgba(8,11,18,.88);
+  backdrop-filter: blur(12px);
 
   display: flex;
-
   align-items: center;
+  justify-content: space-between;
 
-  justify-content:
-    space-between;
-
-  padding:
-    0 18px;
+  padding: 0 18px;
 
   position: sticky;
-
   top: 0;
-
   z-index: 20;
 }
 
-
 .brand {
-  font-family:
-    Rajdhani,
-    sans-serif;
+  font-family: Rajdhani, sans-serif;
 
   display: flex;
-
-  flex-direction:
-    column;
+  flex-direction: column;
 
   line-height: .82;
 }
 
-
 .brand-small {
   font-size: 11px;
-
   letter-spacing: 4px;
-
-  color:
-    var(--accent2);
+  color: var(--accent2);
 }
-
 
 .brand-main {
   font-size: 23px;
-
   letter-spacing: 2px;
-
   font-weight: 700;
 }
 
-
 .status-dot {
-  font:
-    600 11px Rajdhani;
-
-  color:
-    var(--muted);
-
+  font: 600 11px Rajdhani;
+  color: var(--muted);
   letter-spacing: 1px;
 }
-
 
 .status-dot span {
   display: inline-block;
 
   width: 7px;
-
   height: 7px;
 
   border-radius: 50%;
 
-  background:
-    var(--green);
+  background: var(--green);
 
-  box-shadow:
-    0 0 10px
-    var(--green);
+  box-shadow: 0 0 10px var(--green);
 
   margin-right: 6px;
 }
 
-
-/* ========================================
-   コンテナ
-======================================== */
-
 .container {
-  max-width: 1400px;
-
+  max-width: 900px;
   margin: auto;
-
-  padding:
-    0 18px;
+  padding: 0 18px;
 }
 
-
-/* ========================================
-   HERO
-======================================== */
-
 .hero {
-  display: grid;
+  padding: 52px 0 36px;
 
-  grid-template-columns:
-    minmax(360px, .9fr)
-    minmax(500px, 1.25fr);
-
-  gap: 55px;
-
-  align-items: center;
-
-  padding:
-    52px 0 36px;
-
-  border-bottom:
-    1px solid
-    var(--line);
+  border-bottom: 1px solid var(--line);
 
   margin-bottom: 28px;
 }
 
-
-.hero-left {
-  min-width: 0;
-}
-
-
 .eyebrow {
-  font:
-    600 12px Rajdhani;
-
-  letter-spacing:
-    2.5px;
-
-  color:
-    var(--accent2);
-
+  font: 600 12px Rajdhani;
+  letter-spacing: 2.5px;
+  color: var(--accent2);
   margin-bottom: 9px;
 }
 
-
 h1,
 h2 {
-  font-family:
-    Rajdhani,
-    'Noto Sans JP',
-    sans-serif;
-
+  font-family: Rajdhani, 'Noto Sans JP', sans-serif;
   margin: 0;
-
   letter-spacing: .5px;
 }
 
-
 h1 {
-  font-size:
-    clamp(
-      40px,
-      10vw,
-      70px
-    );
-
+  font-size: clamp(40px, 10vw, 70px);
   line-height: .94;
 }
 
-
 h1 em {
-  color: #F5B400;
   font-style: normal;
-
-  text-shadow:
-    0 1px 0 rgba(255, 255, 255, .5);
+  color: var(--accent);
 }
-
 
 .hero p {
-  color:
-    var(--muted);
-
+  color: var(--muted);
   line-height: 1.8;
-
-  margin:
-    20px 0 24px;
+  margin: 20px 0 24px;
 }
-
 
 .hero-actions {
   display: flex;
-
   gap: 10px;
-
   flex-wrap: wrap;
 }
 
-
-/* ========================================
-   ボタン
-======================================== */
-
 .btn {
-  border:
-    1px solid
-    var(--line);
+  border: 1px solid var(--line);
+  background: var(--panel2);
+  color: var(--text);
 
-  background:
-    var(--panel2);
-
-  color:
-    var(--text);
-
-  padding:
-    13px 20px;
-
+  padding: 13px 20px;
   min-height: 48px;
 
   font-weight: 700;
@@ -314,15 +169,10 @@ h1 em {
   transition: .2s;
 }
 
-
 .btn:hover {
-  transform:
-    translateY(-1px);
-
-  border-color:
-    var(--accent);
+  transform: translateY(-1px);
+  border-color: var(--accent);
 }
-
 
 .btn.primary {
   background:
@@ -332,127 +182,77 @@ h1 em {
       #d94100
     );
 
-  border-color:
-    #ff8c3a;
+  border-color: #ff8c3a;
 
   box-shadow:
-    0 8px 30px
-    rgba(
-      255,
-      100,
-      0,
-      .15
-    );
+    0 8px 30px rgba(255,100,0,.15);
 }
-
 
 .btn.danger {
-  background:
-    #291219;
-
-  border-color:
-    #63303b;
-
-  color:
-    #ff8a98;
+  background: #291219;
+  border-color: #63303b;
+  color: #ff8a98;
 }
-
 
 .btn.ghost {
-  background:
-    transparent;
+  background: transparent;
 }
-
 
 .wide {
   width: 100%;
 }
 
-
-/* ========================================
-   PAGE
-======================================== */
-
 .page {
   display: none;
 }
-
 
 .page.active {
   display: block;
 }
 
-
-/* ========================================
-   セクション見出し
-======================================== */
-
 .section-head {
   display: flex;
-
-  justify-content:
-    space-between;
-
+  justify-content: space-between;
   align-items: end;
 
   margin-bottom: 18px;
 }
 
-
 .section-head h2 {
   font-size: 32px;
 }
 
-
 .text-btn {
   background: none;
-
   border: 0;
 
-  color:
-    var(--accent2);
+  color: var(--accent2);
 
   cursor: pointer;
 
   font-weight: 700;
 }
 
-
-/* ========================================
-   フィルター
-======================================== */
-
 .filters {
-  background:
-    rgba(
-      16,
-      22,
-      33,
-      .7
-    );
+  background: rgba(16,22,33,.7);
 
-  border:
-    1px solid
-    var(--line);
+  border: 1px solid var(--line);
 
   padding: 12px;
 
   margin-bottom: 14px;
 }
 
-
 .filters label,
 .panel label {
   display: block;
 
-  color:
-    var(--muted);
+  color: var(--muted);
 
   font-size: 12px;
 
   font-weight: 700;
 }
-
 
 .filters select,
 .panel input {
@@ -460,15 +260,11 @@ h1 em {
 
   margin-top: 7px;
 
-  background:
-    #0b1018;
+  background: #0b1018;
 
-  color:
-    var(--text);
+  color: var(--text);
 
-  border:
-    1px solid
-    var(--line);
+  border: 1px solid var(--line);
 
   padding: 13px;
 
@@ -477,17 +273,10 @@ h1 em {
   outline: none;
 }
 
-
 .filters select:focus,
 .panel input:focus {
-  border-color:
-    var(--accent);
+  border-color: var(--accent);
 }
-
-
-/* ========================================
-   カード
-======================================== */
 
 .cards {
   display: grid;
@@ -495,15 +284,11 @@ h1 em {
   grid-template-columns:
     repeat(
       auto-fit,
-      minmax(
-        260px,
-        1fr
-      )
+      minmax(260px, 1fr)
     );
 
   gap: 12px;
 }
-
 
 .card {
   background:
@@ -513,9 +298,7 @@ h1 em {
       var(--panel)
     );
 
-  border:
-    1px solid
-    var(--line);
+  border: 1px solid var(--line);
 
   padding: 18px;
 
@@ -524,106 +307,73 @@ h1 em {
   overflow: hidden;
 }
 
-
 .card::after {
   content: "";
 
   position: absolute;
 
   right: -30px;
-
   top: -30px;
 
   width: 90px;
-
   height: 90px;
 
-  border:
-    1px solid
-    rgba(
-      255,
-      122,
-      24,
-      .18
-    );
+  border: 1px solid rgba(255,122,24,.18);
 
-  transform:
-    rotate(45deg);
+  transform: rotate(45deg);
 }
-
 
 .card-head {
   display: flex;
 
-  justify-content:
-    space-between;
+  justify-content: space-between;
 
   gap: 10px;
 
   align-items: center;
 }
 
-
 .state {
   font-size: 11px;
 
   font-weight: 700;
 
-  color:
-    var(--green);
+  color: var(--green);
 
-  border:
-    1px solid
-    rgba(
-      84,
-      227,
-      155,
-      .3
-    );
+  border: 1px solid rgba(84,227,155,.3);
 
-  padding:
-    4px 7px;
+  padding: 4px 7px;
 }
-
 
 .name {
   font-size: 21px;
 
   font-weight: 700;
 
-  margin:
-    12px 0 4px;
+  margin: 12px 0 4px;
 }
-
 
 .slv {
-  font:
-    700 34px Rajdhani;
+  font: 700 34px Rajdhani;
 
-  color:
-    var(--accent2);
+  color: var(--accent2);
 }
-
 
 .slv small {
   font-size: 12px;
 
-  color:
-    var(--muted);
+  color: var(--muted);
 
   margin-left: 5px;
 }
 
-
 .date {
   font-size: 11px;
 
-  color:
-    var(--muted);
+  color: var(--muted);
 
   margin-top: 10px;
 }
-
 
 .x-btn {
   display: block;
@@ -636,45 +386,25 @@ h1 em {
 
   padding: 11px;
 
-  border:
-    1px solid
-    #374454;
+  border: 1px solid #374454;
 
-  color:
-    var(--text);
+  color: var(--text);
 
   font-weight: 700;
 
-  background:
-    #0b1018;
+  background: #0b1018;
 }
-
 
 .x-btn:hover {
-  border-color:
-    var(--accent);
+  border-color: var(--accent);
 
-  color:
-    var(--accent2);
+  color: var(--accent2);
 }
 
-
-/* ========================================
-   PANEL
-======================================== */
-
 .panel {
-  background:
-    rgba(
-      16,
-      22,
-      33,
-      .85
-    );
+  background: rgba(16,22,33,.85);
 
-  border:
-    1px solid
-    var(--line);
+  border: 1px solid var(--line);
 
   padding: 18px;
 
@@ -683,17 +413,12 @@ h1 em {
   gap: 16px;
 }
 
-
 .notice {
-  border-left:
-    3px solid
-    var(--accent);
+  border-left: 3px solid var(--accent);
 
-  background:
-    #151b25;
+  background: #151b25;
 
-  padding:
-    12px 14px;
+  padding: 12px 14px;
 
   display: grid;
 
@@ -701,123 +426,69 @@ h1 em {
 
   font-size: 12px;
 
-  color:
-    var(--muted);
+  color: var(--muted);
 
   line-height: 1.6;
 }
 
-
 .notice strong {
-  color:
-    var(--text);
+  color: var(--text);
 }
-
-
-/* ========================================
-   メッセージ
-======================================== */
 
 .message {
   padding: 12px;
 
-  border:
-    1px solid
-    var(--line);
+  border: 1px solid var(--line);
 
   margin-bottom: 14px;
 }
 
-
 .message.ok {
-  border-color:
-    rgba(
-      84,
-      227,
-      155,
-      .35
-    );
+  border-color: rgba(84,227,155,.35);
 
-  color:
-    var(--green);
+  color: var(--green);
 }
-
 
 .message.error {
-  border-color:
-    rgba(
-      255,
-      83,
-      100,
-      .35
-    );
+  border-color: rgba(255,83,100,.35);
 
-  color:
-    #ff9aa5;
+  color: #ff9aa5;
 }
-
 
 .hidden {
-  display:
-    none !important;
+  display: none !important;
 }
-
-
-/* ========================================
-   EMPTY
-======================================== */
 
 .empty {
   text-align: center;
 
-  padding:
-    55px 20px;
+  padding: 55px 20px;
 
-  color:
-    var(--muted);
+  color: var(--muted);
 
-  border:
-    1px dashed
-    var(--line);
+  border: 1px dashed var(--line);
 }
-
 
 .empty-icon {
   font-size: 42px;
 
-  color:
-    var(--accent);
+  color: var(--accent);
 
   margin-bottom: 8px;
 }
-
-
-/* ========================================
-   下部メニュー
-======================================== */
 
 .bottom-nav {
   position: fixed;
 
   bottom: 0;
-
   left: 0;
-
   right: 0;
 
   height: 68px;
 
-  background:
-    rgba(
-      8,
-      11,
-      18,
-      .94
-    );
+  background: rgba(8,11,18,.94);
 
-  border-top:
-    1px solid
-    var(--line);
+  border-top: 1px solid var(--line);
 
   display: flex;
 
@@ -825,10 +496,8 @@ h1 em {
 
   z-index: 30;
 
-  backdrop-filter:
-    blur(14px);
+  backdrop-filter: blur(14px);
 }
-
 
 .nav-btn {
   flex: 1;
@@ -839,8 +508,7 @@ h1 em {
 
   border: 0;
 
-  color:
-    var(--muted);
+  color: var(--muted);
 
   font-size: 11px;
 
@@ -848,7 +516,6 @@ h1 em {
 
   cursor: pointer;
 }
-
 
 .nav-btn span {
   display: block;
@@ -860,30 +527,17 @@ h1 em {
   margin-bottom: 3px;
 }
 
-
 .nav-btn.active,
 .nav-btn:hover {
-  color:
-    var(--accent2);
+  color: var(--accent2);
 }
-
-
-/* ========================================
-   モーダル
-======================================== */
 
 .modal {
   position: fixed;
 
   inset: 0;
 
-  background:
-    rgba(
-      0,
-      0,
-      0,
-      .72
-    );
+  background: rgba(0,0,0,.72);
 
   z-index: 50;
 
@@ -894,185 +548,196 @@ h1 em {
   padding: 18px;
 }
 
-
 .modal-card {
-  width:
-    min(
-      480px,
-      100%
-    );
+  width: min(480px,100%);
 
-  background:
-    #101621;
+  background: #101621;
 
-  border:
-    1px solid
-    #3b4657;
+  border: 1px solid #3b4657;
 
   padding: 24px;
 
   position: relative;
 
-  box-shadow:
-    0 20px 70px #000;
+  box-shadow: 0 20px 70px #000;
 }
-
 
 .modal-close {
   position: absolute;
 
   right: 10px;
-
   top: 7px;
 
   background: none;
 
   border: 0;
 
-  color:
-    var(--muted);
+  color: var(--muted);
 
   font-size: 28px;
 
   cursor: pointer;
 }
 
-
 .pass-box {
-  margin:
-    18px 0;
+  margin: 18px 0;
 
   padding: 20px;
 
-  background:
-    #090d14;
+  background: #090d14;
 
-  border:
-    1px solid
-    #3b4657;
+  border: 1px solid #3b4657;
 
   text-align: center;
 }
 
-
 .pass-box span {
   display: block;
 
-  color:
-    var(--muted);
+  color: var(--muted);
 
-  font:
-    600 11px Rajdhani;
+  font: 600 11px Rajdhani;
 
   letter-spacing: 2px;
 }
 
-
 .pass-box strong {
   display: block;
 
-  font:
-    700 42px Rajdhani;
+  font: 700 42px Rajdhani;
 
   letter-spacing: 7px;
 
-  color:
-    var(--accent2);
+  color: var(--accent2);
 
-  margin:
-    4px 0 12px;
+  margin: 4px 0 12px;
 }
-
 
 .copy-btn {
   background: none;
 
-  border:
-    1px solid
-    var(--line);
+  border: 1px solid var(--line);
 
-  color:
-    var(--text);
+  color: var(--text);
 
-  padding:
-    7px 12px;
+  padding: 7px 12px;
 
   cursor: pointer;
 }
 
-
 .result-row {
   display: flex;
 
-  justify-content:
-    space-between;
+  justify-content: space-between;
 
-  padding:
-    10px 0;
+  padding: 10px 0;
 
-  border-bottom:
-    1px solid
-    var(--line);
+  border-bottom: 1px solid var(--line);
 
   font-size: 13px;
 }
 
-
 .result-row span {
-  color:
-    var(--muted);
+  color: var(--muted);
 }
-
 
 .warning {
   font-size: 12px;
 
-  color:
-    #ffb0b8;
+  color: #ffb0b8;
 
   line-height: 1.7;
 }
 
+/* =========================================
+   既存スマホ設定
+========================================= */
 
-/* ========================================
-   募集総数パネル
-======================================== */
+@media (max-width: 480px) {
+
+  .hero {
+    padding-top: 38px;
+  }
+
+  h1 {
+    font-size: 47px;
+  }
+
+  .section-head h2 {
+    font-size: 28px;
+  }
+
+  .cards {
+    grid-template-columns: 1fr;
+  }
+
+  .pass-box strong {
+    font-size: 34px;
+    letter-spacing: 5px;
+  }
+
+}
+
+
+/* =========================================
+   PC画面を広げる
+========================================= */
+
+.container {
+  max-width: 1400px;
+}
+
+
+/* =========================================
+   HERO
+========================================= */
+
+.hero {
+  display: grid;
+
+  grid-template-columns:
+    minmax(360px, 0.9fr)
+    minmax(500px, 1.25fr);
+
+  gap: 55px;
+
+  align-items: center;
+
+  padding: 52px 0 36px;
+
+  border-bottom: 1px solid var(--line);
+
+  margin-bottom: 28px;
+}
+
+
+.hero-left {
+  min-width: 0;
+}
+
+
+/* =========================================
+   右側 募集総数パネル
+========================================= */
 
 .hero-stats {
   width: 100%;
 
   min-height: 270px;
 
-  border:
-    2px solid
-    #ff7a18;
+  border: 2px solid #ff7a18;
 
   background:
     linear-gradient(
       145deg,
-      rgba(
-        15,
-        21,
-        31,
-        .98
-      ),
-      rgba(
-        7,
-        11,
-        18,
-        .98
-      )
+      rgba(15, 21, 31, 0.98),
+      rgba(7, 11, 18, 0.98)
     );
 
   display: grid;
 
-.hero-stats {
   grid-template-columns:
-    1fr
-    1px
-    1fr
-    1px
-    1fr;
+    1fr 1px 1fr;
 
   align-items: center;
 
@@ -1084,15 +749,13 @@ h1 em {
   position: relative;
 
   box-shadow:
-    0 0 32px
-    rgba(
-      255,
-      122,
-      24,
-      .10
-    );
+    0 0 32px rgba(255, 122, 24, 0.10);
 }
 
+
+/* =========================================
+   指揮官・ユニオン共通
+========================================= */
 
 .hero-stat {
   text-align: center;
@@ -1100,8 +763,7 @@ h1 em {
 
 
 .hero-stat-title {
-  color:
-    #edf2f7;
+  color: #edf2f7;
 
   font-size: 17px;
 
@@ -1131,7 +793,7 @@ h1 em {
 
   font-weight: 700;
 
-  line-height: .82;
+  line-height: 0.82;
 }
 
 
@@ -1147,31 +809,45 @@ h1 em {
 .hero-stat-sub {
   margin-top: 20px;
 
-  color:
-    #8e9aaa;
+  color: #8e9aaa;
 
   font-size: 13px;
 }
 
 
-/* 指揮官：NIKKEイエロー */
-.commander-stat .hero-stat-number strong,
-.commander-stat .hero-stat-number span {
-  color: #D89F20;
+/* =========================================
+   指揮官 = オレンジ
+========================================= */
+
+.commander-stat
+.hero-stat-number strong,
+
+.commander-stat
+.hero-stat-number span {
+
+  color: #ff7a18;
+
 }
 
-/* ユニオン：NIKKEブルー */
-.union-stat .hero-stat-number strong,
-.union-stat .hero-stat-number span {
-  color: #18A8F0;
+
+/* =========================================
+   ユニオン = ブルー
+========================================= */
+
+.union-stat
+.hero-stat-number strong,
+
+.union-stat
+.hero-stat-number span {
+
+  color: #3696ff;
+
 }
 
-/* 成立実績：NIKKEパープル */
-.hero-graduate-number strong,
-.hero-graduate-number span {
-  color: #A828F0;
-}
 
+/* =========================================
+   真ん中の縦線
+========================================= */
 
 .hero-stat-divider {
   width: 1px;
@@ -1187,6 +863,10 @@ h1 em {
 }
 
 
+/* =========================================
+   最終更新
+========================================= */
+
 .hero-stat-update {
   position: absolute;
 
@@ -1198,89 +878,81 @@ h1 em {
 
   text-align: center;
 
-  color:
-    #8e9aaa;
+  color: #8e9aaa;
 
   font-size: 12px;
 }
 
 
-/* ========================================
-   指揮官・ユニオンカード
-======================================== */
+/* =========================================
+   一覧カード
+   指揮官 = オレンジ
+========================================= */
 
 .card.commander-card {
   border:
     1px solid
-    rgba(
-      255,
-      122,
-      24,
-      .55
-    );
+    rgba(255, 122, 24, 0.55);
 
   box-shadow:
-    inset
-    4px 0 0
-    #ff7a18;
+    inset 4px 0 0 #ff7a18;
 }
 
 
 .card.commander-card
 .recruitment-type {
-  color:
-    #ff9b32;
+
+  color: #ff9b32;
 
   border-color:
-    rgba(
-      255,
-      122,
-      24,
-      .45
-    );
+    rgba(255, 122, 24, 0.45);
+
 }
 
+
+/* =========================================
+   一覧カード
+   ユニオン = ブルー
+========================================= */
 
 .card.union-card {
   border:
     1px solid
-    rgba(
-      54,
-      150,
-      255,
-      .55
-    );
+    rgba(54, 150, 255, 0.55);
 
   box-shadow:
-    inset
-    4px 0 0
-    #3696ff;
+    inset 4px 0 0 #3696ff;
 }
 
 
 .card.union-card
 .recruitment-type {
-  color:
-    #72b9ff;
+
+  color: #72b9ff;
 
   border-color:
-    rgba(
-      54,
-      150,
-      255,
-      .45
-    );
+    rgba(54, 150, 255, 0.45);
+
+}
+
+
+.union-rank {
+  color: #72b9ff;
+
+  font-size: 20px;
+
+  font-weight: 700;
+
+  margin-top: 8px;
 }
 
 
 .recruitment-type {
   display: inline-block;
 
-  padding:
-    5px 10px;
+  padding: 5px 10px;
 
-  border:
-    1px solid;
+  border: 1px solid;
 
   font-size: 11px;
 
@@ -1288,9 +960,9 @@ h1 em {
 }
 
 
-/* ========================================
+/* =========================================
    カウントダウン
-======================================== */
+========================================= */
 
 .countdown {
   margin-top: 14px;
@@ -1299,1013 +971,43 @@ h1 em {
 
   border-top:
     1px solid
-    rgba(
-      255,
-      255,
-      255,
-      .08
-    );
+    rgba(255,255,255,.08);
 
-  color:
-    #aab5c4;
+  color: #aab5c4;
 
   font-size: 12px;
 }
 
 
 .countdown.warning {
-  color:
-    #ffc04d;
+  color: #ffc04d;
 }
 
 
 .countdown.danger {
-  color:
-    #ff6878;
+  color: #ff6878;
 }
 
 
-/* ========================================
-   登録タイプ・ユニオンランク
-======================================== */
-
-#unionRank,
-#registrationType {
-  width: 100%;
-
-  min-height: 48px;
-
-  padding:
-    0 14px;
-
-  background:
-    #0b111b;
-
-  color:
-    #fff;
-
-  border:
-    1px solid
-    #334155;
-
-  border-radius: 0;
-
-  font-size: 16px;
-
-  font-family: inherit;
-
-  cursor: pointer;
-}
-
-
-/* ========================================
-   検索タブ
-======================================== */
-
-.search-tabs {
-  display: grid;
-
-  grid-template-columns:
-    1fr 1fr;
-
-  gap: 10px;
-
-  margin-bottom: 14px;
-}
-
-
-.search-tab {
-  min-height: 54px;
-
-  border:
-    1px solid
-    #334155;
-
-  background:
-    #0b111b;
-
-  color:
-    #8e9aaa;
-
-  font-size: 15px;
-
-  font-weight: 700;
-
-  cursor: pointer;
-
-  transition: .2s;
-}
-
-
-.commander-tab:hover,
-.commander-tab.active {
-  color:
-    #fff;
-
-  border-color:
-    #ff7a18;
-
-  background:
-    rgba(
-      255,
-      122,
-      24,
-      .12
-    );
-
-  box-shadow:
-    inset
-    0 -4px 0
-    #ff7a18;
-}
-
-
-.union-tab:hover,
-.union-tab.active {
-  color:
-    #fff;
-
-  border-color:
-    #3696ff;
-
-  background:
-    rgba(
-      54,
-      150,
-      255,
-      .12
-    );
-
-  box-shadow:
-    inset
-    0 -4px 0
-    #3696ff;
-}
-
-
-/* ========================================
-   検索プルダウン
-======================================== */
-
-#slvFilter,
-#unionRankFilter {
-  width: 100%;
-
-  min-height: 48px;
-
-  padding:
-    0 14px;
-
-  background:
-    #0b111b;
-
-  color:
-    #fff;
-
-  border:
-    1px solid
-    #334155;
-
-  font-size: 15px;
-}
-
-
-/* ========================================
-   募集件数
-======================================== */
-
-.registration-count
-> div:first-child strong,
-
-.registration-count
-> div:first-child span,
-
-.registration-count
-> div:first-child small {
-  color:
-    #ff6a00;
-}
-
-
-.registration-count
-> div:nth-child(2) strong,
-
-.registration-count
-> div:nth-child(2) span,
-
-.registration-count
-> div:nth-child(2) small {
-  color:
-    #2196f3;
-}
-
-
-/* ========================================
-   ユニオンランク色分け
-======================================== */
-
-.union-rank {
-  display: inline-flex;
-
-  align-items: center;
-
-  justify-content: center;
-
-  width: fit-content;
-
-  margin-top: 8px;
-
-  padding:
-    6px 14px;
-
-  border:
-    1px solid;
-
-  border-radius: 999px;
-
-  font-weight: 800;
-
-  font-size: 14px;
-
-  letter-spacing: .04em;
-}
-
-
-.rank-challenger {
-  color:
-    #ff4d4d;
-
-  border-color:
-    #ff4d4d;
-
-  background:
-    rgba(
-      255,
-      77,
-      77,
-      .12
-    );
-}
-
-
-.rank-diamond {
-  color:
-    #c875ff;
-
-  border-color:
-    #c875ff;
-
-  background:
-    rgba(
-      200,
-      117,
-      255,
-      .12
-    );
-}
-
-
-.rank-platinum {
-  color:
-    #62d9ff;
-
-  border-color:
-    #62d9ff;
-
-  background:
-    rgba(
-      98,
-      217,
-      255,
-      .12
-    );
-}
-
-
-.rank-gold {
-  color:
-    #ffd24a;
-
-  border-color:
-    #ffd24a;
-
-  background:
-    rgba(
-      255,
-      210,
-      74,
-      .12
-    );
-}
-
-
-.rank-silver {
-  color:
-    #d7dde5;
-
-  border-color:
-    #d7dde5;
-
-  background:
-    rgba(
-      215,
-      221,
-      229,
-      .12
-    );
-}
-
-
-.rank-rookie {
-  color:
-    #a8e84a;
-
-  border-color:
-    #a8e84a;
-
-  background:
-    rgba(
-      168,
-      232,
-      74,
-      .12
-    );
-}
-
-
-.rank-default {
-  color:
-    #fff;
-
-  border-color:
-    #777;
-
-  background:
-    rgba(
-      255,
-      255,
-      255,
-      .08
-    );
-}
-
-
-/* ========================================
-   かんたん登録案内
-======================================== */
-
-.easy-register-box {
-  margin:
-    0 0 20px;
-
-  padding: 20px;
-
-  border:
-    1px solid
-    rgba(
-      255,
-      122,
-      24,
-      .45
-    );
-
-  border-left:
-    4px solid
-    var(--accent);
-
-  background:
-    linear-gradient(
-      145deg,
-      rgba(
-        20,
-        28,
-        41,
-        .92
-      ),
-      rgba(
-        11,
-        16,
-        24,
-        .92
-      )
-    );
-
-  box-shadow:
-    0 10px 30px
-    rgba(
-      0,
-      0,
-      0,
-      .18
-    );
-}
-
-
-.easy-register-title {
-  margin-bottom: 14px;
-
-  color:
-    #fff;
-
-  font-size: 19px;
-
-  font-weight: 800;
-}
-
-
-.easy-register-list {
-  display: grid;
-
-  gap: 7px;
-
-  color:
-    #d8e0ea;
-
-  font-size: 14px;
-
-  line-height: 1.7;
-}
-
-
-.easy-register-copy {
-  margin-top: 14px;
-
-  color:
-    var(--accent2);
-
-  font-size: 15px;
-
-  font-weight: 800;
-}
-
-
-.easy-register-privacy {
-  margin-top: 16px;
-
-  padding:
-    11px 13px;
-
-  border:
-    1px solid
-    rgba(
-      84,
-      227,
-      155,
-      .28
-    );
-
-  background:
-    rgba(
-      84,
-      227,
-      155,
-      .08
-    );
-
-  color:
-    #8ff0bd;
-
-  font-size: 13px;
-
-  font-weight: 700;
-
-  line-height: 1.6;
-}
-
-
-/* ========================================
-   登録・締切 ボタン直下表示
-======================================== */
-
-#heroRegisterArea,
-#heroManageArea {
-  display: none;
-}
-
-
-body.register-mode
-#heroRegisterArea,
-
-body.manage-mode
-#heroManageArea {
-  display: block;
-
-  margin-top: 28px;
-}
-
-
-body.register-mode
-.hero-stats,
-
-body.manage-mode
-.hero-stats {
-  display:
-    none !important;
-}
-
-
-body.register-mode
-.hero,
-
-body.manage-mode
-.hero {
-  grid-template-columns:
-    minmax(
-      0,
-      760px
-    )
-    !important;
-
-  justify-content:
-    start !important;
-}
-
-
-body.register-mode
-.hero-left,
-
-body.manage-mode
-.hero-left {
-  width:
-    100% !important;
-
-  max-width:
-    760px !important;
-}
-
-
-body.register-mode
-#registerPage,
-
-body.manage-mode
-#managePage {
-  display:
-    block !important;
-
-  width: 100%;
-
-  margin: 0;
-
-  padding:
-    0 0 24px;
-}
-
-
-/* ========================================
-   登録・締切 戻るボタン
-======================================== */
-
-.register-inline-top,
-.manage-inline-top {
-  display:
-    block !important;
-
-  width:
-    100% !important;
-
-  margin:
-    0 0 18px !important;
-}
-
-
-.register-back-btn,
-.manage-back-btn {
-  display:
-    flex !important;
-
-  align-items:
-    center !important;
-
-  justify-content:
-    center !important;
-
-  width:
-    100% !important;
-
-  height:
-    52px !important;
-
-  min-height:
-    52px !important;
-
-  padding:
-    0 18px !important;
-
-  background:
-    #111925 !important;
-
-  color:
-    #fff !important;
-
-  border:
-    1px solid
-    var(--line)
-    !important;
-
-  border-radius:
-    3px !important;
-
-  font-family:
-    inherit !important;
-
-  font-size:
-    16px !important;
-
-  font-weight:
-    800 !important;
-
-  cursor: pointer;
-}
-
-
-.register-back-btn:hover,
-.manage-back-btn:hover {
-  border-color:
-    var(--accent)
-    !important;
-
-  color:
-    var(--accent2)
-    !important;
-}
-
-
-/* ========================================
-   卒業ちしかん
-   PC・タブレット
-======================================== */
-
-.section-head-actions {
-  display: flex;
-
-  align-items: center;
-
-  justify-content:
-    flex-end;
-
-  gap: 14px;
-
-  margin-left: 24px;
-
-  margin-right: 42px;
-}
-
-
-.graduated-commander-counter {
-  display: flex;
-
-  flex-direction: row;
-
-  align-items: center;
-
-  justify-content: center;
-
-  min-width: 220px;
-
-  gap: 12px;
-
-  padding:
-    10px 14px;
-
-  border:
-    1px solid
-    rgba(
-      143,
-      240,
-      189,
-      .50
-    );
-
-  background:
-    linear-gradient(
-      145deg,
-      rgba(
-        84,
-        227,
-        155,
-        .14
-      ),
-      rgba(
-        143,
-        240,
-        189,
-        .05
-      )
-    );
-
-  box-shadow:
-    inset
-    0 -3px 0
-    rgba(
-      143,
-      240,
-      189,
-      .50
-    );
-}
-
-
-.graduated-commander-number {
-  display: flex;
-
-  flex-direction: row;
-
-  align-items: baseline;
-
-  justify-content: center;
-
-  gap: 3px;
-
-  flex:
-    0 0 auto;
-}
-
-
-.graduated-commander-number strong {
-  color:
-    var(--graduate);
-
-  font-family:
-    Rajdhani,
-    sans-serif;
-
-  font-size: 62px;
-
-  font-weight: 700;
-
-  line-height: .9;
-
-  text-shadow:
-    0 0 17px
-    rgba(
-      143,
-      240,
-      189,
-      .22
-    );
-}
-
-
-.graduated-commander-number span {
-  color:
-    var(--graduate2);
-
-  font-size: 18px;
-
-  font-weight: 800;
-}
-
-
-.graduated-commander-label {
-  display: flex;
-
-  flex-direction: column;
-
-  align-items: flex-start;
-
-  justify-content: center;
-
-  gap: 4px;
-
-  line-height: 1.2;
-}
-
-
-.graduated-commander-label strong {
-  color:
-    #ffffff;
-
-  font-size: 15px;
-
-  font-weight: 800;
-
-  white-space: nowrap;
-}
-
-
-.graduated-commander-label small {
-  color:
-    var(--graduate);
-
-  font-size: 13px;
-
-  font-weight: 800;
-
-  white-space: nowrap;
-}
-
-
-.section-head-actions
-#refreshBtn {
-  flex:
-    0 0 auto;
-
-  min-width: 54px;
-
-  padding:
-    0 2px 4px;
-}
-
-
-/* ========================================
-   PC
-======================================== */
-
-@media screen and (min-width: 1025px) {
-
-  .container {
-    width: 100%;
-
-    max-width: 1400px;
-
-    margin:
-      0 auto;
-
-    padding-left: 18px;
-
-    padding-right: 18px;
-  }
-
-
-  .hero {
-    grid-template-columns:
-      minmax(
-        0,
-        .86fr
-      )
-      minmax(
-        360px,
-        1.14fr
-      );
-
-    gap: 30px;
-  }
-
-}
-
-
-/* ========================================
-   タブレット
-======================================== */
-
-@media screen and
-(min-width: 601px) and
-(max-width: 1024px) {
-
-  .hero {
-    grid-template-columns:
-      minmax(
-        0,
-        .9fr
-      )
-      minmax(
-        330px,
-        1.1fr
-      );
-
-    gap: 20px;
-  }
-
-
-  h1 {
-    font-size:
-      clamp(
-        42px,
-        6vw,
-        56px
-      );
-  }
-
-
-  .hero-stats {
-    min-height: 220px;
-
-    padding:
-      24px 12px 50px;
-
-    gap: 10px;
-  }
-
-
-  .hero-stat-title {
-    font-size: 12px;
-
-    margin-bottom: 14px;
-  }
-
-
-  .hero-stat-number strong {
-    font-size:
-      clamp(
-        52px,
-        7vw,
-        72px
-      );
-  }
-
-
-  .hero-stat-number span {
-    font-size: 17px;
-
-    padding-bottom: 5px;
-  }
-
-
-  .hero-stat-sub {
-    margin-top: 14px;
-
-    font-size: 10px;
-  }
-
-
-  .hero-stat-divider {
-    height: 100px;
-  }
-
-
-  .section-head-actions {
-    margin-right: 15px;
-  }
-
-
-  .graduated-commander-counter {
-    min-width: 200px;
-  }
-
-
-  .graduated-commander-number strong {
-    font-size: 54px;
-  }
-
-}
-
-
-/* ========================================
+/* =========================================
    スマホ
-======================================== */
+========================================= */
 
-@media screen and (max-width: 600px) {
+@media (max-width: 760px) {
 
   .container {
-    padding-left: 12px;
-
-    padding-right: 12px;
+    max-width: 900px;
   }
 
-
-  /* HERO */
 
   .hero {
-    display:
-      grid !important;
+    grid-template-columns: 1fr;
 
-    grid-template-columns:
-      1fr !important;
-
-    gap:
-      8px !important;
-
-    padding-top: 38px;
-  }
-
-
-  h1 {
-    font-size: 47px;
-  }
-
-
-  .hero-actions {
-    width:
-      calc(
-        100% - 20px
-      )
-      !important;
-
-    max-width:
-      360px !important;
-
-    margin-left:
-      auto !important;
-
-    margin-right:
-      auto !important;
+    gap: 28px;
   }
 
 
   .hero-stats {
-    width:
-      calc(
-        100% - 20px
-      )
-      !important;
-
-    max-width:
-      360px !important;
-
-    margin:
-      4px auto 0
-      !important;
-
     min-height: 210px;
 
     padding:
@@ -2332,1675 +1034,305 @@ body.manage-mode
     height: 105px;
   }
 
+}
+/* =================================
+   ユニオンランク
+================================= */
 
-  /* カード */
+#unionRank {
+  width: 100%;
+  min-height: 48px;
+  padding: 0 14px;
 
-  .cards {
-    grid-template-columns:
-      1fr;
-  }
+  background: #0b111b;
+  color: #ffffff;
+
+  border: 1px solid #334155;
+  border-radius: 0;
+
+  font-size: 16px;
+  font-family: inherit;
+
+  cursor: pointer;
+}
 
 
-  .pass-box strong {
-    font-size: 34px;
+/* 登録タイプもサイズを統一 */
 
-    letter-spacing: 5px;
-  }
+#registrationType {
+  width: 100%;
+  min-height: 48px;
+  padding: 0 14px;
+
+  background: #0b111b;
+  color: #ffffff;
+
+  border: 1px solid #334155;
+  border-radius: 0;
+
+  font-size: 16px;
+  font-family: inherit;
+
+  cursor: pointer;
+}
+/* ================================
+   検索タブ
+================================ */
+
+.search-tabs {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 10px;
+  margin-bottom: 14px;
+}
+
+.search-tab {
+  min-height: 54px;
+
+  border: 1px solid #334155;
+
+  background: #0b111b;
+  color: #8e9aaa;
+
+  font-size: 15px;
+  font-weight: 700;
+
+  cursor: pointer;
+
+  transition: 0.2s;
+}
 
 
-  /* かんたん登録 */
+/* 指揮官 */
+
+.commander-tab:hover,
+.commander-tab.active {
+  color: #fff;
+
+  border-color: #ff7a18;
+
+  background:
+    rgba(255, 122, 24, 0.12);
+
+  box-shadow:
+    inset 0 -4px 0 #ff7a18;
+}
+
+
+/* ユニオン */
+
+.union-tab:hover,
+.union-tab.active {
+  color: #fff;
+
+  border-color: #3696ff;
+
+  background:
+    rgba(54, 150, 255, 0.12);
+
+  box-shadow:
+    inset 0 -4px 0 #3696ff;
+}
+
+
+/* プルダウン */
+
+#slvFilter,
+#unionRankFilter {
+  width: 100%;
+
+  min-height: 48px;
+
+  padding: 0 14px;
+
+  background: #0b111b;
+
+  color: #fff;
+
+  border: 1px solid #334155;
+
+  font-size: 15px;
+}
+/* ========================================
+   募集件数 指揮官・ユニオン色分け
+======================================== */
+
+/* 指揮官 */
+.registration-count > div:first-child strong,
+.registration-count > div:first-child span,
+.registration-count > div:first-child small {
+  color: #ff6a00;
+}
+
+/* ユニオン */
+.registration-count > div:last-child strong,
+.registration-count > div:last-child span,
+.registration-count > div:last-child small {
+  color: #2196f3;
+}
+/* ========================================
+   ユニオンランク色分け
+======================================== */
+
+.union-rank {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+
+  width: fit-content;
+  margin-top: 8px;
+  padding: 6px 14px;
+
+  border: 1px solid;
+  border-radius: 999px;
+
+  font-weight: 800;
+  font-size: 14px;
+  letter-spacing: 0.04em;
+}
+
+
+/* チャレンジャー：赤 */
+.rank-challenger {
+  color: #ff4d4d;
+  border-color: #ff4d4d;
+  background: rgba(255, 77, 77, 0.12);
+}
+
+
+/* ダイヤ：紫 */
+.rank-diamond {
+  color: #c875ff;
+  border-color: #c875ff;
+  background: rgba(200, 117, 255, 0.12);
+}
+
+
+/* プラチナ：水色 */
+.rank-platinum {
+  color: #62d9ff;
+  border-color: #62d9ff;
+  background: rgba(98, 217, 255, 0.12);
+}
+
+
+/* ゴールド：金 */
+.rank-gold {
+  color: #ffd24a;
+  border-color: #ffd24a;
+  background: rgba(255, 210, 74, 0.12);
+}
+
+
+/* シルバー */
+.rank-silver {
+  color: #d7dde5;
+  border-color: #d7dde5;
+  background: rgba(215, 221, 229, 0.12);
+}
+
+
+/* 駆け出しユニオン：黄緑 */
+.rank-rookie {
+  color: #a8e84a;
+  border-color: #a8e84a;
+  background: rgba(168, 232, 74, 0.12);
+}
+
+
+/* その他 */
+.rank-default {
+  color: #ffffff;
+  border-color: #777777;
+  background: rgba(255, 255, 255, 0.08);
+}
+
+/* ========================================
+   かんたん登録案内
+======================================== */
+
+.easy-register-box {
+  margin: 0 0 20px;
+  padding: 20px;
+
+  border: 1px solid rgba(255, 122, 24, 0.45);
+  border-left: 4px solid var(--accent);
+
+  background:
+    linear-gradient(
+      145deg,
+      rgba(20, 28, 41, 0.92),
+      rgba(11, 16, 24, 0.92)
+    );
+
+  box-shadow:
+    0 10px 30px rgba(0, 0, 0, 0.18);
+}
+
+.easy-register-title {
+  margin-bottom: 14px;
+
+  color: #ffffff;
+
+  font-size: 19px;
+  font-weight: 800;
+}
+
+.easy-register-items {
+  display: grid;
+  gap: 7px;
+
+  color: #d8e0ea;
+
+  font-size: 14px;
+  line-height: 1.7;
+}
+
+.easy-register-text {
+  margin-top: 14px;
+
+  color: var(--accent2);
+
+  font-size: 15px;
+  font-weight: 800;
+}
+
+.privacy-message {
+  margin-top: 16px;
+  padding: 11px 13px;
+
+  border: 1px solid rgba(84, 227, 155, 0.28);
+
+  background: rgba(84, 227, 155, 0.08);
+
+  color: #8ff0bd;
+
+  font-size: 13px;
+  font-weight: 700;
+  line-height: 1.6;
+}
+
+@media (max-width: 600px) {
 
   .easy-register-box {
     padding: 16px;
   }
 
-
   .easy-register-title {
     font-size: 16px;
   }
 
-
-  .easy-register-list {
+  .easy-register-items {
     font-size: 13px;
   }
 
-
-  .easy-register-copy {
+  .easy-register-text {
     font-size: 14px;
   }
 
-
-  .easy-register-privacy {
+  .privacy-message {
     font-size: 12px;
   }
 
-
-  /* ======================================
-     iPhone入力ズーム防止
-  ====================================== */
-
-  input,
-  select,
-  textarea,
-  #registerPage input,
-  #registerPage select,
-  #registerPage textarea,
-  #managePage input,
-  #managePage select,
-  #managePage textarea {
-    font-size:
-      16px !important;
-
-    line-height:
-      1.4 !important;
-  }
-
-
-  /* ======================================
-     登録・締切フォーム
-  ====================================== */
-
-  body.register-mode
-  #heroRegisterArea,
-
-  body.manage-mode
-  #heroManageArea {
-    width:
-      calc(
-        100% - 20px
-      )
-      !important;
-
-    max-width:
-      360px !important;
-
-    margin-left:
-      auto !important;
-
-    margin-right:
-      auto !important;
-
-    margin-top:
-      20px !important;
-  }
-
-
-  body.register-mode
-  .hero-left,
-
-  body.manage-mode
-  .hero-left {
-    max-width:
-      none !important;
-  }
-
-
-  /* ======================================
-     募集一覧ヘッダー
-
-     1段目
-     RECRUITMENTS
-
-     2段目
-     募集中の指揮官・ユニオン      ↻更新
-
-     3段目
-     野良/ユニオン       卒業ちしかん
-  ====================================== */
-
-  #listPage
-  .section-head {
-    display:
-      grid !important;
-
-    grid-template-columns:
-      minmax(
-        0,
-        1fr
-      )
-      auto !important;
-
-    grid-template-rows:
-      auto
-      auto
-      auto !important;
-
-    column-gap:
-      8px !important;
-
-    row-gap:
-      8px !important;
-
-    align-items:
-      center !important;
-
-    width:
-      100% !important;
-
-    margin:
-      0 0 18px !important;
-  }
-
-
-  /* 左側親要素をグリッドから外す */
-
-  #listPage
-  .section-head
-  > div:first-child {
-    display:
-      contents !important;
-  }
-
-
-  /* RECRUITMENTS */
-
-  #listPage
-  .section-head
-  .eyebrow {
-    grid-column:
-      1 / 3 !important;
-
-    grid-row:
-      1 !important;
-
-    width:
-      100% !important;
-
-    margin:
-      0 !important;
-  }
-
-
-  /* 募集中の指揮官・ユニオン */
-
-  #listPage
-  .section-head
-  h2 {
-    grid-column:
-      1 !important;
-
-    grid-row:
-      2 !important;
-
-    width:
-      100% !important;
-
-    min-width:
-      0 !important;
-
-    margin:
-      0 !important;
-
-    font-size:
-      clamp(
-        20px,
-        6vw,
-        27px
-      ) !important;
-
-    line-height:
-      1.15 !important;
-
-    white-space:
-      nowrap !important;
-  }
-
-
-  /* actions親をグリッドから外す */
-
-  #listPage
-  .section-head-actions {
-    display:
-      contents !important;
-  }
-
-
-  /* ======================================
-     更新
-     見出しと同じ段
-  ====================================== */
-
-  #listPage
-  #refreshBtn {
-    grid-column:
-      2 !important;
-
-    grid-row:
-      2 !important;
-
-    justify-self:
-      end !important;
-
-    align-self:
-      center !important;
-
-    width:
-      auto !important;
-
-    min-width:
-      42px !important;
-
-    margin:
-      0 !important;
-
-    padding:
-      4px 0 !important;
-
-    font-size:
-      11px !important;
-
-    line-height:
-      1 !important;
-
-    white-space:
-      nowrap !important;
-
-    color:
-      var(--accent2) !important;
-  }
-
-
-  /* ======================================
-     野良ちしかん・登録ユニオン
-     左下
-  ====================================== */
-
-  #listPage
-  .registration-count {
-    grid-column:
-      1 !important;
-
-    grid-row:
-      3 !important;
-
-    display:
-      flex !important;
-
-    flex-direction:
-      column !important;
-
-    align-items:
-      flex-start !important;
-
-    justify-content:
-      center !important;
-
-    width:
-      auto !important;
-
-    min-width:
-      0 !important;
-
-    gap:
-      5px !important;
-
-    margin:
-      0 !important;
-
-    padding:
-      0 !important;
-  }
-
-
-  #listPage
-  .registration-count
-  > div {
-    display:
-      flex !important;
-
-    align-items:
-      baseline !important;
-
-    gap:
-      4px !important;
-
-    margin:
-      0 !important;
-
-    white-space:
-      nowrap !important;
-  }
-
-
-  #listPage
-  .registration-count
-  strong {
-    font-size:
-      clamp(
-        16px,
-        5vw,
-        20px
-      ) !important;
-
-    line-height:
-      1 !important;
-  }
-
-
-  #listPage
-  .registration-count
-  span,
-
-  #listPage
-  .registration-count
-  small {
-    font-size:
-      11px !important;
-
-    line-height:
-      1.2 !important;
-  }
-
-
-  /* ======================================
-     卒業ちしかん
-     右下
-  ====================================== */
-
-  #listPage
-  .graduated-commander-counter {
-    grid-column:
-      2 !important;
-
-    grid-row:
-      3 !important;
-
-    justify-self:
-      end !important;
-
-    align-self:
-      center !important;
-
-    display:
-      flex !important;
-
-    flex-direction:
-      row !important;
-
-    align-items:
-      center !important;
-
-    justify-content:
-      center !important;
-
-    width:
-      158px !important;
-
-    min-width:
-      158px !important;
-
-    max-width:
-      158px !important;
-
-    min-height:
-      66px !important;
-
-    gap:
-      6px !important;
-
-    margin:
-      0 !important;
-
-    padding:
-      7px 8px !important;
-
-    border:
-      1px solid
-      rgba(
-        143,
-        240,
-        189,
-        .50
-      )
-      !important;
-
-    background:
-      linear-gradient(
-        145deg,
-        rgba(
-          84,
-          227,
-          155,
-          .14
-        ),
-        rgba(
-          143,
-          240,
-          189,
-          .05
-        )
-      )
-      !important;
-
-    box-shadow:
-      inset
-      0 -3px 0
-      rgba(
-        143,
-        240,
-        189,
-        .50
-      )
-      !important;
-  }
-
-
-  /* 5名 */
-
-  #listPage
-  .graduated-commander-number {
-    display:
-      flex !important;
-
-    flex-direction:
-      row !important;
-
-    align-items:
-      baseline !important;
-
-    justify-content:
-      center !important;
-
-    gap:
-      2px !important;
-
-    flex:
-      0 0 auto !important;
-
-    margin:
-      0 !important;
-  }
-
-
-  #listPage
-  .graduated-commander-number
-  strong {
-    margin:
-      0 !important;
-
-    font-size:
-      clamp(
-        38px,
-        11vw,
-        46px
-      ) !important;
-
-    line-height:
-      .9 !important;
-
-    color:
-      var(--graduate)
-      !important;
-
-    text-shadow:
-      0 0 14px
-      rgba(
-        143,
-        240,
-        189,
-        .20
-      );
-  }
-
-
-  #listPage
-  .graduated-commander-number
-  span {
-    margin:
-      0 !important;
-
-    padding:
-      0 !important;
-
-    font-size:
-      12px !important;
-
-    line-height:
-      1 !important;
-
-    color:
-      var(--graduate2)
-      !important;
-  }
-
-
-  /* ユニオン決定 / 卒業ちしかん */
-
-  #listPage
-  .graduated-commander-label {
-    display:
-      flex !important;
-
-    flex-direction:
-      column !important;
-
-    align-items:
-      flex-start !important;
-
-    justify-content:
-      center !important;
-
-    gap:
-      4px !important;
-
-    margin:
-      0 !important;
-
-    min-width:
-      0 !important;
-  }
-
-
-  #listPage
-  .graduated-commander-label
-  strong {
-    margin:
-      0 !important;
-
-    font-size:
-      10px !important;
-
-    line-height:
-      1.15 !important;
-
-    color:
-      #ffffff !important;
-
-    white-space:
-      nowrap !important;
-  }
-
-
-  #listPage
-  .graduated-commander-label
-  small {
-    margin:
-      0 !important;
-
-    font-size:
-      9px !important;
-
-    line-height:
-      1.15 !important;
-
-    color:
-      var(--graduate)
-      !important;
-
-    white-space:
-      nowrap !important;
-  }
-
 }
 
-
-/* ========================================
-   小さいスマホ
-======================================== */
-
-@media screen and (max-width: 360px) {
-
-  #listPage
-  .section-head
-  h2 {
-    font-size:
-      19px !important;
-  }
-
-
-  #listPage
-  .graduated-commander-counter {
-    width:
-      145px !important;
-
-    min-width:
-      145px !important;
-
-    max-width:
-      145px !important;
-
-    gap:
-      4px !important;
-
-    padding:
-      6px !important;
-  }
-
-
-  #listPage
-  .graduated-commander-number
-  strong {
-    font-size:
-      38px !important;
-  }
-
-
-  #listPage
-  .graduated-commander-label
-  strong {
-    font-size:
-      9px !important;
-  }
-
-
-  #listPage
-  .graduated-commander-label
-  small {
-    font-size:
-      8px !important;
-  }
-
-}
-
-/* ========================================
-   募集登録 ＋ 応援クリエイター
-======================================== */
-
-.creator-action-row {
-  display: flex;
-  align-items: center;
-  gap: 10px;
-}
-
-
-/* ========================================
-   募集登録
-   メインなので大きく表示
-======================================== */
-
-.main-register-btn {
-  min-height: 60px;
-
-  padding:
-    0 36px;
-
-  font-size: 17px;
-
-  font-weight: 900;
-
-  flex: 1.5;
-}
-
-
-/* ========================================
-   応援クリエイター
-   募集登録より小さく表示
-======================================== */
-
-.creator-link-btn {
-  min-height: 46px;
-
-  padding:
-    0 14px;
-
-  display: flex;
-
-  align-items: center;
-
-  justify-content: center;
-
-  align-self: center;
-
-  flex: 0.65;
-
-  text-decoration: none;
-
-  white-space: nowrap;
-
-  border:
-    1px solid
-    rgba(
-      143,
-      240,
-      189,
-      0.45
-    );
-
-  background:
-    rgba(
-      143,
-      240,
-      189,
-      0.08
-    );
-
-  color:
-    #8ff0bd;
-
-  font-size: 12px;
-
-  font-weight: 800;
-}
-
-
-/* ========================================
-   スマホ
-======================================== */
-
-@media screen and (max-width: 600px) {
-
-  .creator-action-row {
-    width: 100%;
-
-    gap: 7px;
-
-    flex-wrap: nowrap;
-  }
-
-
-  /* 募集登録 */
-
-  .main-register-btn {
-    min-height: 56px;
-
-    padding:
-      0 12px;
-
-    font-size: 14px;
-
-    font-weight: 900;
-
-    flex: 1.4;
-
-    white-space: nowrap;
-  }
-
-
-  /* 応援クリエイター */
-
-  .creator-link-btn {
-    min-height: 40px;
-
-    padding:
-      0 7px;
-
-    font-size: 10px;
-
-    font-weight: 800;
-
-    flex: 0.7;
-
-    white-space: nowrap;
-  }
-
-}
-
-/* ========================================
-   🔥 NEW バッジ
-======================================== */
-
-.new-badge {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-
-  padding: 4px 8px;
-
-  border: 1px solid rgba(255, 90, 70, 0.65);
-  background: rgba(255, 90, 70, 0.12);
-
-  color: #ff705f;
-
-  font-size: 11px;
-  font-weight: 900;
-
-  white-space: nowrap;
-
-  box-shadow:
-    0 0 12px rgba(255, 90, 70, 0.15);
-}
-
-
-/* スマホ */
-
-@media screen and (max-width: 600px) {
-
-  .new-badge {
-    padding: 3px 6px;
-    font-size: 9px;
-  }
-
-}
-/* ========================================
-   種別 + NEW
-======================================== */
-
-.type-with-new {
-  display: flex;
-  align-items: center;
-  gap: 7px;
-
-  min-width: 0;
-}
-
-.new-badge {
-  flex: 0 0 auto;
-}
-/* ========================================
-   PC版 ユニオン・NEW表示 崩れ修正
-======================================== */
-
-@media screen and (min-width: 601px) {
-
-  .card-head {
-    display: flex !important;
-    align-items: center !important;
-    justify-content: space-between !important;
-    gap: 10px !important;
-  }
-
-
-  .type-with-new {
-    display: flex !important;
-    align-items: center !important;
-    flex-wrap: nowrap !important;
-    gap: 8px !important;
-
-    width: auto !important;
-    min-width: max-content !important;
-  }
-
-
-  .recruitment-type {
-    display: inline-flex !important;
-    align-items: center !important;
-
-    width: auto !important;
-    min-width: max-content !important;
-
-    white-space: nowrap !important;
-
-    flex: 0 0 auto !important;
-  }
-
-
-  .new-badge {
-    flex: 0 0 auto !important;
-
-    white-space: nowrap !important;
-  }
-
-
-  .card-head > .date {
-    flex: 0 0 auto !important;
-
-    margin-left: auto !important;
-
-    white-space: nowrap !important;
-
-    text-align: right !important;
-  }
-
-}
-
-/* ========================================
-   TOP 卒業ちしかん
-======================================== */
-
-.hero-graduate-stat {
-  grid-column: 1 / 4;
-
-  width: 100%;
-
-  margin-top: 6px;
-
-  padding:
-    18px 16px;
-
-  text-align: center;
-
-  border-top:
-    1px solid
-    rgba(
-      143,
-      240,
-      189,
-      .25
-    );
-
-  background:
-    rgba(
-      143,
-      240,
-      189,
-      .04
-    );
-}
-
-
-.hero-graduate-title {
-  color:
-    var(--graduate);
-
-  font-size: 15px;
-
-  font-weight: 800;
-
-  margin-bottom: 6px;
-}
-
-
-.hero-graduate-number {
-  display: flex;
-
-  align-items: baseline;
-
-  justify-content: center;
-
-  gap: 5px;
-}
-
-
-.hero-graduate-number strong {
-  color:
-    var(--graduate);
-
-  font-family:
-    Rajdhani,
-    sans-serif;
-
-  font-size: 52px;
-
-  font-weight: 700;
-
-  line-height: .9;
-}
-
-
-.hero-graduate-number span {
-  color:
-    var(--graduate2);
-
-  font-size: 16px;
-
-  font-weight: 800;
-}
-
-
-.hero-graduate-sub {
-  margin-top: 6px;
-
-  color:
-    #8e9aaa;
-
-  font-size: 11px;
-}
-
-
-/* スマホ */
-
-@media screen and (max-width: 600px) {
-
-  .hero-graduate-stat {
-    grid-column: 1 / 4;
-
-    padding:
-      14px 10px;
-  }
-
-
-  .hero-graduate-number strong {
-    font-size: 42px;
-  }
-
-
-  .hero-graduate-title {
-    font-size: 13px;
-  }
-
-
-  .hero-graduate-sub {
-    font-size: 10px;
-  }
-
-}
-
-/* ========================================
-   指揮官 締切理由確認
-======================================== */
-
-.commander-close-reason {
-  margin-top: 16px;
-  padding: 16px;
-
-  border: 1px solid rgba(143, 240, 189, 0.35);
-  background: rgba(143, 240, 189, 0.04);
-}
-
-
-/* hidden の時は必ず非表示 */
-
-.commander-close-reason[hidden] {
-  display: none !important;
-}
-
-
-.commander-close-reason-title {
-  margin-bottom: 12px;
-
-  color: #edf2f7;
-
-  font-size: 14px;
-  font-weight: 800;
-}
-
-
-/* 2択ボタン */
-
-.close-reason-btn {
-  display: flex;
-  flex-direction: column;
-  align-items: flex-start;
-
-  width: 100%;
-
-  margin-bottom: 10px;
-  padding: 14px 16px;
-
-  border: 1px solid #334155;
-  background: #0b111b;
-
-  text-align: left;
-  cursor: pointer;
-}
-
-
-.close-reason-btn strong {
-  font-size: 14px;
-  font-weight: 900;
-}
-
-
-.close-reason-btn small {
-  margin-top: 5px;
-
-  color: #8e9aaa;
-
-  font-size: 11px;
-  line-height: 1.5;
-}
-
-
-/* ユニオン決定 */
-
-.close-reason-btn.graduated {
-  border-color: rgba(143, 240, 189, 0.55);
-}
-
-.close-reason-btn.graduated strong {
-  color: #8ff0bd;
-}
-
-
-/* 募集だけ終了 */
-
-.close-reason-btn.close-only {
-  border-color: rgba(255, 83, 100, 0.45);
-}
-
-.close-reason-btn.close-only strong {
-  color: #ff6b78;
-}
-
-
-/* PC hover */
-
-@media (hover: hover) {
-
-  .close-reason-btn:hover {
-    transform: translateY(-1px);
-  }
-
-}
-
-
-/* スマホ */
-
-@media screen and (max-width: 600px) {
-
-  .commander-close-reason {
-    padding: 13px;
-  }
-
-  .close-reason-btn {
-    padding: 13px;
-  }
-
-  .close-reason-btn strong {
-    font-size: 13px;
-  }
-
-}
-
-/* ========================================
-   NIKKE STYLE - TOP FINAL
-   白 / チャコール / 黄 / 青 / 紫
-======================================== */
-
-/* ページ全体 */
-html,
-body {
-  background: #eef0f1;
-}
-
-body {
-  color: #25292c;
-
-  background:
-    linear-gradient(
-      180deg,
-      #f8f9f9 0%,
-      #eef0f1 100%
-    );
-}
-
-/* うっすら中央に入っていた黒背景線を消す */
-body::before {
-  opacity: 0;
-}
-
-
-/* ========================================
-   HEADER
-======================================== */
-
-.topbar {
-  border-bottom: 3px solid #d89f20;
-
-  background:
-    linear-gradient(
-      180deg,
-      #24282b 0%,
-      #171a1c 100%
-    );
-
-  box-shadow:
-    0 3px 12px
-    rgba(0, 0, 0, .22);
-}
-
-.brand-main {
-  color: #ffffff;
-}
-
-.brand-small {
-  color: #d89f20;
-}
-
-.status-dot {
-  color: #d8dde0;
-}
-
-
-/* ========================================
-   TOP HERO
-======================================== */
-
-.hero {
-  color: #25292c;
-
-  border-bottom:
-    1px solid #c8cdd0;
-}
-
-.hero-left {
-  color: #25292c;
-}
-
-.eyebrow {
-  color: #777f84;
-}
-
-h1,
-h2 {
-  color: #25292c;
-}
-
-/* 「つなぐ。」 */
-h1 em {
-  color: #f5b400;
-  font-style: normal;
-}
-
-.hero p {
-  color: #697176;
-}
-
-
-/* ========================================
-   3 COUNTERS
-======================================== */
-
-.hero-stats {
-  border:
-    1px solid #c9ced1;
-
-  color: #25292c;
-
-  background:
-    linear-gradient(
-      145deg,
-      #ffffff,
-      #f3f4f4
-    );
-
-  box-shadow:
-    0 5px 18px
-    rgba(28, 33, 36, .12);
-}
-
-.hero-stat-title {
-  color: #34393c;
-}
-
-/* 指揮官 */
-.commander-stat .hero-stat-number strong,
-.commander-stat .hero-stat-number span {
-  color: #d89f20;
-}
-
-/* ユニオン */
-.union-stat .hero-stat-number strong,
-.union-stat .hero-stat-number span {
-  color: #18a8f0;
-}
-
-/* 成立実績 */
-.hero-graduate-title,
-.hero-graduate-number strong,
-.hero-graduate-number span {
-  color: #a828f0;
-}
-
-.hero-stat-sub,
-.hero-graduate-sub,
-.hero-stat-update {
-  color: #777f84;
-}
-
-.hero-stat-divider {
-  background:
-    linear-gradient(
-      transparent,
-      #aeb5b9,
-      transparent
-    );
-}
-
-.hero-graduate-stat {
-  border-top:
-    1px solid rgba(168, 40, 240, .25);
-
-  background:
-    rgba(168, 40, 240, .035);
-}
-
-
-/* ========================================
-   REGISTER BUTTON
-======================================== */
-
-.main-register-btn {
-  border:
-    1px solid #c88713;
-
-  color: #ffffff;
-
-  background:
-    linear-gradient(
-      135deg,
-      #e9ad28,
-      #c98812
-    );
-
-  box-shadow:
-    0 5px 12px
-    rgba(126, 89, 15, .25);
-}
-
-
-/* ========================================
-   CREATOR
-======================================== */
-
-.creator-link-btn {
-  border:
-    1px solid #a828f0;
-
-  color: #7620ae;
-
-  background: #ffffff;
-
-  box-shadow:
-    0 3px 9px
-    rgba(0, 0, 0, .08);
-}
-
-
-/* ========================================
-   BOTTOM NAV
-======================================== */
-
-.bottom-nav {
-  border-top:
-    2px solid #d89f20;
-
-  background:
-    linear-gradient(
-      180deg,
-      #25292c,
-      #171a1c
-    );
-}
-
-.nav-btn {
-  color: #c5c9cb;
-}
-
-.nav-btn.active,
-.nav-btn:hover {
-  color: #d89f20;
-}
-
-/* ========================================
-   MOBILE TOP - 1 SCREEN
-======================================== */
-
-@media screen and (max-width: 600px) {
-
-  .container {
-    padding-left: 10px;
-    padding-right: 10px;
-  }
-
-  .hero {
-    display: grid !important;
-    grid-template-columns: 1fr !important;
-
-    gap: 8px !important;
-
-    margin: 8px 0 10px;
-
-    padding:
-      12px 10px 10px;
-
-    border:
-      1px solid #c9ced1;
-
-    border-radius: 2px;
-
-    background: #ffffff;
-
-    box-shadow:
-      0 3px 12px
-      rgba(0, 0, 0, .08);
-  }
-
-  h1 {
-    font-size:
-      clamp(35px, 11vw, 46px);
-
-    line-height: .92;
-  }
-
-  .hero p {
-    margin:
-      10px 0 12px;
-
-    font-size: 11px;
-
-    line-height: 1.55;
-  }
-
-
-  /* 登録＋クリエイター */
-
-  .hero-actions,
-  .creator-action-row {
-    display: grid;
-
-    grid-template-columns:
-      1.55fr .85fr;
-
-    gap: 6px;
-  }
-
-  .main-register-btn {
-    min-height: 46px;
-
-    padding: 0 8px;
-
-    font-size: 14px;
-  }
-
-  .creator-link-btn {
-    min-height: 46px;
-
-    padding: 0 6px;
-
-    font-size: 10px;
-  }
-
-
-  /* 3カウンター */
-
-  .hero-stats {
-grid-template-columns:
-  1fr 1px 1fr 1px 1fr;
-
-    gap: 4px;
-
-    min-height: 0;
-
-    padding:
-      10px 5px 29px;
-
-    border-radius: 2px;
-  }
-
-  .hero-stat-title {
-    min-height: 22px;
-
-    margin-bottom: 2px;
-
-    font-size: 9px;
-  }
-
-  .hero-stat-number strong {
-    font-size: 38px;
-  }
-
-  .hero-stat-number span {
-    padding-bottom: 2px;
-
-    font-size: 11px;
-  }
-
-  .hero-stat-sub {
-    margin-top: 4px;
-
-    font-size: 7px;
-  }
-
-  .hero-stat-divider {
-    height: 60px;
-  }
-
-
-  /* 成立実績 */
-
-  .hero-graduate-stat {
-    grid-column: 1 / 4;
-
-    margin-top: 2px;
-
-    padding:
-      6px 4px;
-  }
-
-  .hero-graduate-title {
-    margin-bottom: 1px;
-
-    font-size: 9px;
-  }
-
-  .hero-graduate-number strong {
-    font-size: 29px;
-  }
-
-  .hero-graduate-number span {
-    font-size: 10px;
-  }
-
-  .hero-graduate-sub {
-    margin-top: 1px;
-
-    font-size: 7px;
-  }
-
-  .hero-stat-update {
-    bottom: 6px;
-
-    font-size: 8px;
-  }
-
-}
-
-
-/* ========================================
-   HERO STATS 3列 修正版
-======================================== */
-
-.hero-stats {
-  display: grid !important;
-
-  grid-template-columns:
-    minmax(0, 1fr)
-    1px
-    minmax(0, 1fr)
-    1px
-    minmax(0, 1fr) !important;
-
-  align-items: center !important;
-
-  gap: 16px !important;
-
-  min-height: 220px !important;
-
-  padding:
-    28px 24px 48px !important;
-}
-
-
-/* 3つのカウンター */
-.hero-stat {
-  width: 100% !important;
-  min-width: 0 !important;
-
-  text-align: center !important;
-}
-
-
-/* 区切り線 */
-.hero-stat-divider {
-  display: block !important;
-
-  width: 1px !important;
-  height: 110px !important;
-
-  background:
-    linear-gradient(
-      transparent,
-      #9ca3aa,
-      transparent
-    ) !important;
-}
-
-
-/* 成立実績：紫 */
-.graduate-stat .hero-stat-title,
-.graduate-stat .hero-stat-number strong,
-.graduate-stat .hero-stat-number span {
-  color: #A828F0 !important;
-}
-
-
-/* 最終更新 */
-.hero-stat-update {
-  position: absolute !important;
-
-  left: 0 !important;
-  right: 0 !important;
-  bottom: 14px !important;
-
-  text-align: center !important;
-}
-
-@media screen and (max-width: 600px) {
-
-  .hero-stats {
-    grid-template-columns:
-      minmax(0, 1fr)
-      1px
-      minmax(0, 1fr)
-      1px
-      minmax(0, 1fr) !important;
-
-    gap: 4px !important;
-
-    min-height: 0 !important;
-
-    padding:
-      12px 4px 30px !important;
-  }
-
-
-  .hero-stat-divider {
-    height: 58px !important;
-  }
-
-
-  .hero-stat-title {
-    min-height: 20px !important;
-
-    margin-bottom: 3px !important;
-
-    font-size: 9px !important;
-
-    white-space: nowrap;
-  }
-
-
-  .hero-stat-number {
-    gap: 2px !important;
-  }
-
-
-  .hero-stat-number strong {
-    font-size: 36px !important;
-  }
-
-
-  .hero-stat-number span {
-    padding-bottom: 2px !important;
-
-    font-size: 10px !important;
-  }
-
-
-  .hero-stat-sub {
-    margin-top: 4px !important;
-
-    font-size: 7px !important;
-
-    white-space: nowrap;
-  }
-
-
-  .hero-stat-update {
-    bottom: 6px !important;
-
-    font-size: 8px !important;
-  }
-
-}
