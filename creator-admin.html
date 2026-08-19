@@ -914,11 +914,190 @@
     }
 
 
+
+    /* ========================================
+       統合管理メニュー
+    ======================================== */
+
+    .menu-grid {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 14px;
+      margin-top: 18px;
+    }
+
+    .menu-card {
+      min-height: 150px;
+      padding: 22px;
+      border: 1px solid var(--line);
+      background:
+        linear-gradient(
+          145deg,
+          rgba(20, 28, 41, .96),
+          rgba(11, 16, 24, .96)
+        );
+      color: var(--text);
+      text-align: left;
+      cursor: pointer;
+    }
+
+    .menu-card:hover {
+      border-color: var(--accent);
+    }
+
+    .menu-card.union-menu {
+      border-color: rgba(255, 104, 120, .35);
+    }
+
+    .menu-card.creator-menu {
+      border-color: rgba(143, 240, 189, .35);
+    }
+
+    .menu-card-icon {
+      font-size: 28px;
+      margin-bottom: 12px;
+    }
+
+    .menu-card-title {
+      font-size: 19px;
+      font-weight: 900;
+    }
+
+    .menu-card-copy {
+      margin-top: 8px;
+      color: var(--muted);
+      font-size: 12px;
+      line-height: 1.7;
+    }
+
+    .template-box {
+      margin-top: 18px;
+      padding: 18px;
+      border: 1px solid rgba(255, 177, 92, .34);
+      background: rgba(255, 122, 24, .05);
+    }
+
+    .template-box textarea {
+      min-height: 285px;
+      margin-top: 12px;
+      white-space: pre-wrap;
+      color: #edf2f7;
+      background: #0b111b;
+    }
+
+    .template-note {
+      margin-top: 10px;
+      color: var(--muted);
+      font-size: 11px;
+      line-height: 1.6;
+    }
+
+    .ending-union-count {
+      margin-top: 18px;
+      padding: 12px 14px;
+      border: 1px solid rgba(255, 104, 120, .32);
+      color: #ff9ca7;
+      background: rgba(255, 104, 120, .06);
+      font-size: 13px;
+      font-weight: 800;
+    }
+
+    .ending-union-list {
+      display: grid;
+      gap: 12px;
+      margin-top: 14px;
+    }
+
+    .ending-union-card {
+      padding: 16px;
+      border: 1px solid var(--line);
+      background: rgba(16, 22, 33, .90);
+    }
+
+    .ending-union-head {
+      display: flex;
+      align-items: flex-start;
+      justify-content: space-between;
+      gap: 12px;
+    }
+
+    .ending-union-name {
+      font-size: 19px;
+      font-weight: 900;
+      word-break: break-word;
+    }
+
+    .ending-union-rank {
+      margin-top: 6px;
+      color: #8cc9ff;
+      font-size: 12px;
+      font-weight: 800;
+    }
+
+    .ending-union-deadline {
+      flex: 0 0 auto;
+      color: #ff9ca7;
+      font-size: 11px;
+      font-weight: 900;
+      text-align: right;
+      line-height: 1.5;
+    }
+
+    .ending-union-remaining {
+      margin-top: 12px;
+      padding: 9px 11px;
+      border-left: 3px solid var(--red);
+      background: rgba(255, 104, 120, .06);
+      color: #ff9ca7;
+      font-size: 14px;
+      font-weight: 900;
+    }
+
+    .ending-union-actions {
+      display: flex;
+      gap: 8px;
+      margin-top: 12px;
+      flex-wrap: wrap;
+    }
+
+    .ending-union-actions .btn {
+      min-height: 42px;
+      text-decoration: none;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+    }
+
     /* ========================================
        スマホ
     ======================================== */
 
     @media screen and (max-width: 600px) {
+
+      .menu-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .menu-card {
+        min-height: 128px;
+      }
+
+      .template-box textarea {
+        min-height: 330px;
+      }
+
+      .ending-union-head {
+        flex-direction: column;
+      }
+
+      .ending-union-deadline {
+        text-align: left;
+      }
+
+      .ending-union-actions {
+        display: grid;
+        grid-template-columns: 1fr;
+      }
 
       .container {
         width:
@@ -1009,7 +1188,7 @@
 
 
     <div class="admin-badge">
-      CREATOR ADMIN
+      ADMIN
     </div>
 
   </header>
@@ -1030,12 +1209,12 @@
 
 
       <div class="eyebrow">
-        CREATOR ADMIN
+        NIKKE UNION MATCH ADMIN
       </div>
 
 
       <h1>
-        応援クリエイター管理
+        管理メニュー
       </h1>
 
 
@@ -1100,7 +1279,189 @@
 
 
     <!-- ========================================
-         管理画面
+         管理メニュー
+    ========================================= -->
+
+    <section
+      id="menuSection"
+      class="hidden"
+    >
+
+      <div class="admin-head">
+
+        <div>
+          <div class="eyebrow">
+            ADMIN MENU
+          </div>
+
+          <h2>
+            ⚙ 管理メニュー
+          </h2>
+        </div>
+
+        <div class="admin-head-actions">
+          <button
+            id="menuLogoutBtn"
+            class="btn danger"
+            type="button"
+          >
+            ログアウト
+          </button>
+        </div>
+
+      </div>
+
+      <p class="lead">
+        管理する項目を選んでください。
+      </p>
+
+      <div class="menu-grid">
+
+        <button
+          id="openEndingUnionBtn"
+          class="menu-card union-menu"
+          type="button"
+        >
+          <div class="menu-card-icon">⏰</div>
+          <div class="menu-card-title">
+            募集終了ユニオン
+          </div>
+          <div class="menu-card-copy">
+            24時間以内に掲載終了するユニオンだけを表示し、
+            Xへの連絡と再掲載案内に使います。
+          </div>
+        </button>
+
+        <button
+          id="openCreatorAdminBtn"
+          class="menu-card creator-menu"
+          type="button"
+        >
+          <div class="menu-card-icon">📺</div>
+          <div class="menu-card-title">
+            応援クリエイター管理
+          </div>
+          <div class="menu-card-copy">
+            クリエイターの登録・編集・公開設定・削除を行います。
+          </div>
+        </button>
+
+      </div>
+
+    </section>
+
+
+    <!-- ========================================
+         募集終了ユニオン管理
+    ========================================= -->
+
+    <section
+      id="endingUnionSection"
+      class="hidden"
+    >
+
+      <div class="admin-head">
+
+        <div>
+          <div class="eyebrow">
+            UNION EXPIRY MANAGEMENT
+          </div>
+
+          <h2>
+            ⏰ 募集終了ユニオン
+          </h2>
+        </div>
+
+        <div class="admin-head-actions">
+
+          <button
+            id="backToMenuFromUnionBtn"
+            class="btn"
+            type="button"
+          >
+            ← 管理メニュー
+          </button>
+
+          <button
+            id="reloadEndingUnionBtn"
+            class="btn blue"
+            type="button"
+          >
+            ↻ 更新
+          </button>
+
+        </div>
+
+      </div>
+
+      <p class="lead">
+        掲載期限が24時間以内のユニオン募集だけを表示します。
+      </p>
+
+      <div class="template-box">
+
+        <div class="panel-title">
+          📋 X連絡用の固定文
+        </div>
+
+        <textarea
+          id="contactTemplate"
+          readonly
+        ></textarea>
+
+        <div class="button-row" style="margin-top:12px;">
+          <button
+            id="copyContactBtn"
+            class="btn primary"
+            type="button"
+          >
+            📋 文章をコピー
+          </button>
+        </div>
+
+        <div
+          id="copyMessage"
+          class="message hidden"
+        ></div>
+
+        <div class="template-note">
+          文章をコピーしたあと、各ユニオンの「𝕏 募集投稿を開く」から
+          登録されているXの募集投稿へ移動できます。
+        </div>
+
+      </div>
+
+      <div
+        id="endingUnionCount"
+        class="ending-union-count"
+      >
+        ⏰ 募集終了間近：読み込み中...
+      </div>
+
+      <div
+        id="endingUnionList"
+        class="ending-union-list"
+      ></div>
+
+      <div
+        id="endingUnionEmpty"
+        class="empty hidden"
+      >
+        現在、24時間以内に掲載終了するユニオンはありません。
+      </div>
+
+      <div
+        id="endingUnionError"
+        class="message error hidden"
+      >
+        ユニオン情報を読み込めませんでした。
+      </div>
+
+    </section>
+
+
+    <!-- ========================================
+         応援クリエイター管理
     ========================================= -->
 
     <section
@@ -1126,6 +1487,14 @@
 
 
         <div class="admin-head-actions">
+
+          <button
+            id="backToMenuFromCreatorBtn"
+            class="btn"
+            type="button"
+          >
+            ← 管理メニュー
+          </button>
 
           <button
             id="reloadBtn"
@@ -1543,6 +1912,498 @@
 
 
     // ========================================
+    // 募集終了ユニオン管理
+    // ========================================
+
+    const CONTACT_TEMPLATE =
+      "NIKKE UNION MATCHを管理しているKAGETORAです🙇‍♂️\n" +
+      "この度はご利用いただきありがとうございます✨\n" +
+      "現在掲載中のユニオン募集が、まもなく期限を迎えるためご連絡しました⏰\n\n" +
+      "もし引き続き募集される予定でしたら、お手数ですが再掲載していただけると嬉しいです🙏\n" +
+      "皆さんに使っていただくことで、より多くの指揮官様・ユニオン様につながる場にしていければと思っています😊\n\n" +
+      "▼再掲載はこちら👇\n" +
+      "https://x.gd/4tEJo";
+
+
+    function formatAdminDate(value) {
+
+      if (!value) {
+        return "--";
+      }
+
+      const date =
+        new Date(value);
+
+      if (
+        Number.isNaN(
+          date.getTime()
+        )
+      ) {
+        return "--";
+      }
+
+      return new Intl.DateTimeFormat(
+        "ja-JP",
+        {
+          month: "2-digit",
+          day: "2-digit",
+          hour: "2-digit",
+          minute: "2-digit"
+        }
+      ).format(date);
+
+    }
+
+
+    function getAdminRemainingText(
+      expiresAt
+    ) {
+
+      const diff =
+        new Date(
+          expiresAt
+        ).getTime()
+        -
+        Date.now();
+
+      if (diff <= 0) {
+        return "掲載終了";
+      }
+
+      const totalMinutes =
+        Math.max(
+          0,
+          Math.floor(
+            diff / 60000
+          )
+        );
+
+      const hours =
+        Math.floor(
+          totalMinutes / 60
+        );
+
+      const minutes =
+        totalMinutes % 60;
+
+      return `⚠ 残り ${hours}時間 ${minutes}分`;
+
+    }
+
+
+    async function copyTextToClipboard(
+      textValue
+    ) {
+
+      if (
+        navigator.clipboard &&
+        window.isSecureContext
+      ) {
+
+        await navigator.clipboard.writeText(
+          textValue
+        );
+
+        return;
+      }
+
+      const textarea =
+        document.createElement(
+          "textarea"
+        );
+
+      textarea.value =
+        textValue;
+
+      textarea.style.position =
+        "fixed";
+
+      textarea.style.opacity =
+        "0";
+
+      document.body.appendChild(
+        textarea
+      );
+
+      textarea.focus();
+      textarea.select();
+
+      document.execCommand(
+        "copy"
+      );
+
+      textarea.remove();
+
+    }
+
+
+    async function loadEndingUnions() {
+
+      const list =
+        $("#endingUnionList");
+
+      const empty =
+        $("#endingUnionEmpty");
+
+      const errorBox =
+        $("#endingUnionError");
+
+      const count =
+        $("#endingUnionCount");
+
+      if (
+        !list ||
+        !empty ||
+        !errorBox ||
+        !count
+      ) {
+        return;
+      }
+
+      list.innerHTML =
+        "";
+
+      empty.classList.add(
+        "hidden"
+      );
+
+      errorBox.classList.add(
+        "hidden"
+      );
+
+      count.textContent =
+        "⏰ 募集終了間近：読み込み中...";
+
+
+      const token =
+        getToken();
+
+      if (!token) {
+
+        showLogin();
+
+        return;
+      }
+
+
+      const tokenResult =
+        await sb.rpc(
+          "creator_admin_token_valid",
+          {
+            p_token:
+              token
+          }
+        );
+
+
+      if (
+        tokenResult.error ||
+        tokenResult.data !== true
+      ) {
+
+        clearToken();
+
+        showLogin();
+
+        return;
+      }
+
+
+      const now =
+        new Date();
+
+      const cutoff =
+        new Date(
+          now.getTime()
+          +
+          24 * 60 * 60 * 1000
+        );
+
+
+      const {
+        data,
+        error
+      } =
+        await sb
+          .from(
+            "union_recruitments"
+          )
+          .select(
+            "id, union_name, union_rank, x_url, status, created_at, expires_at"
+          )
+          .eq(
+            "status",
+            "open"
+          )
+          .gt(
+            "expires_at",
+            now.toISOString()
+          )
+          .lte(
+            "expires_at",
+            cutoff.toISOString()
+          )
+          .order(
+            "expires_at",
+            {
+              ascending:
+                true
+            }
+          );
+
+
+      if (error) {
+
+        console.error(
+          "募集終了ユニオン取得エラー",
+          error
+        );
+
+        count.textContent =
+          "⏰ 募集終了間近：--";
+
+        errorBox.textContent =
+          "ユニオン情報を読み込めませんでした。";
+
+        errorBox.classList.remove(
+          "hidden"
+        );
+
+        return;
+      }
+
+
+      const unions =
+        Array.isArray(data)
+          ? data
+          : [];
+
+
+      count.textContent =
+        `⏰ 24時間以内に募集終了：${unions.length}件`;
+
+
+      if (
+        unions.length ===
+        0
+      ) {
+
+        empty.classList.remove(
+          "hidden"
+        );
+
+        return;
+      }
+
+
+      list.innerHTML =
+        unions
+          .map(
+            item => {
+
+              const xUrl =
+                safeUrl(
+                  item.x_url
+                );
+
+              const xButton =
+                xUrl
+                  ? `
+                    <a
+                      class="btn blue"
+                      href="${escapeHtml(
+                        xUrl
+                      )}"
+                      target="_blank"
+                      rel="noopener noreferrer"
+                    >
+                      𝕏 募集投稿を開く ↗
+                    </a>
+                  `
+                  : `
+                    <button
+                      class="btn"
+                      type="button"
+                      disabled
+                    >
+                      X URLなし
+                    </button>
+                  `;
+
+
+              return `
+                <article class="ending-union-card">
+
+                  <div class="ending-union-head">
+
+                    <div>
+                      <div class="ending-union-name">
+                        ${escapeHtml(
+                          item.union_name
+                        )}
+                      </div>
+
+                      <div class="ending-union-rank">
+                        ${escapeHtml(
+                          item.union_rank || "ランク未設定"
+                        )}
+                      </div>
+                    </div>
+
+                    <div class="ending-union-deadline">
+                      掲載終了<br>
+                      ${escapeHtml(
+                        formatAdminDate(
+                          item.expires_at
+                        )
+                      )}
+                    </div>
+
+                  </div>
+
+                  <div
+                    class="ending-union-remaining"
+                    data-admin-expires="${escapeHtml(
+                      item.expires_at
+                    )}"
+                  >
+                    ${escapeHtml(
+                      getAdminRemainingText(
+                        item.expires_at
+                      )
+                    )}
+                  </div>
+
+                  <div class="ending-union-actions">
+                    ${xButton}
+                  </div>
+
+                </article>
+              `;
+
+            }
+          )
+          .join("");
+
+    }
+
+
+    function updateEndingUnionCountdowns() {
+
+      document
+        .querySelectorAll(
+          "[data-admin-expires]"
+        )
+        .forEach(
+          element => {
+
+            element.textContent =
+              getAdminRemainingText(
+                element.dataset.adminExpires
+              );
+
+          }
+        );
+
+    }
+
+
+    setInterval(
+      updateEndingUnionCountdowns,
+      60000
+    );
+
+
+    $("#contactTemplate") &&
+      (
+        $("#contactTemplate").value =
+          CONTACT_TEMPLATE
+      );
+
+
+    $("#copyContactBtn")
+      ?.addEventListener(
+        "click",
+        async () => {
+
+          try {
+
+            await copyTextToClipboard(
+              CONTACT_TEMPLATE
+            );
+
+            showMessage(
+              $("#copyMessage"),
+              "固定文をコピーしました。",
+              "ok"
+            );
+
+          } catch (error) {
+
+            console.error(
+              error
+            );
+
+            showMessage(
+              $("#copyMessage"),
+              "コピーできませんでした。文章を長押ししてコピーしてください。",
+              "error"
+            );
+
+          }
+
+        }
+      );
+
+
+    $("#openEndingUnionBtn")
+      ?.addEventListener(
+        "click",
+        async () => {
+
+          showEndingUnionAdmin();
+
+          await loadEndingUnions();
+
+        }
+      );
+
+
+    $("#openCreatorAdminBtn")
+      ?.addEventListener(
+        "click",
+        async () => {
+
+          showAdmin();
+
+          await loadCreators();
+
+        }
+      );
+
+
+    $("#backToMenuFromUnionBtn")
+      ?.addEventListener(
+        "click",
+        showMenu
+      );
+
+
+    $("#backToMenuFromCreatorBtn")
+      ?.addEventListener(
+        "click",
+        showMenu
+      );
+
+
+    $("#reloadEndingUnionBtn")
+      ?.addEventListener(
+        "click",
+        loadEndingUnions
+      );
+
+
+    // ========================================
     // アイコンプレビュー
     // ========================================
 
@@ -1636,41 +2497,70 @@
 
 
     // ========================================
-    // ログイン表示切替
+    // 画面表示切替
     // ========================================
 
-    function showLogin() {
+    function hideAllAdminSections() {
 
       $("#loginSection")
         ?.classList
-        .remove(
-          "hidden"
-        );
+        .add("hidden");
 
+      $("#menuSection")
+        ?.classList
+        .add("hidden");
+
+      $("#endingUnionSection")
+        ?.classList
+        .add("hidden");
 
       $("#adminSection")
         ?.classList
-        .add(
-          "hidden"
-        );
+        .add("hidden");
+
+    }
+
+
+    function showLogin() {
+
+      hideAllAdminSections();
+
+      $("#loginSection")
+        ?.classList
+        .remove("hidden");
+
+    }
+
+
+    function showMenu() {
+
+      hideAllAdminSections();
+
+      $("#menuSection")
+        ?.classList
+        .remove("hidden");
 
     }
 
 
     function showAdmin() {
 
-      $("#loginSection")
-        ?.classList
-        .add(
-          "hidden"
-        );
-
+      hideAllAdminSections();
 
       $("#adminSection")
         ?.classList
-        .remove(
-          "hidden"
-        );
+        .remove("hidden");
+
+    }
+
+
+    function showEndingUnionAdmin() {
+
+      hideAllAdminSections();
+
+      $("#endingUnionSection")
+        ?.classList
+        .remove("hidden");
 
     }
 
@@ -1721,7 +2611,7 @@
       }
 
 
-      showAdmin();
+      showMenu();
 
       return true;
 
@@ -1817,10 +2707,7 @@
             "";
 
 
-          showAdmin();
-
-
-          await loadCreators();
+          showMenu();
 
         }
       );
@@ -2797,37 +3684,45 @@
     // ログアウト
     // ========================================
 
+    async function logoutAdmin() {
+
+      const token =
+        getToken();
+
+
+      if (token) {
+
+        await sb.rpc(
+          "creator_admin_logout",
+          {
+            p_token:
+              token
+          }
+        );
+
+      }
+
+
+      clearToken();
+
+      resetForm();
+
+      showLogin();
+
+    }
+
+
     $("#logoutBtn")
       ?.addEventListener(
         "click",
-        async () => {
-
-          const token =
-            getToken();
+        logoutAdmin
+      );
 
 
-          if (token) {
-
-            await sb.rpc(
-              "creator_admin_logout",
-              {
-                p_token:
-                  token
-              }
-            );
-
-          }
-
-
-          clearToken();
-
-
-          resetForm();
-
-
-          showLogin();
-
-        }
+    $("#menuLogoutBtn")
+      ?.addEventListener(
+        "click",
+        logoutAdmin
       );
 
 
@@ -2845,7 +3740,7 @@
 
         if (valid) {
 
-          await loadCreators();
+          showMenu();
 
         }
 
