@@ -310,12 +310,12 @@ h3,
 }
 
 .hero h1 em {
-  color: var(--yellow);
+  color: #1AB0F1;
 
   font-style: normal;
 
   text-shadow:
-    0 1px 0 rgba(255, 255, 255, .65);
+    0 0 10px rgba(26, 176, 241, .18);
 }
 
 .hero p {
