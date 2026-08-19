@@ -314,35 +314,50 @@
       left: 0;
       right: 0;
       bottom: 0;
-      height: 2px;
+      height: 3px;
       background: transparent;
       transition: background .12s ease;
       pointer-events: none;
     }
 
-    .back-btn:hover,
-    .creator-link:hover,
-    .recruit-x-btn:hover,
+    /* PCではカーソルを合わせた時だけ白＋シアン */
+    @media (hover: hover) and (pointer: fine) {
+      .back-btn:hover,
+      .creator-link:hover,
+      .recruit-x-btn:hover {
+        border-color: #a9dff6 !important;
+        background: linear-gradient(180deg, #ffffff 0%, #edf4f8 100%) !important;
+        color: #118fc9 !important;
+        box-shadow:
+          0 5px 14px rgba(0,0,0,.24),
+          inset 0 1px 0 rgba(255,255,255,.98),
+          inset 0 -2px 0 rgba(40,185,232,.20);
+      }
+
+      .back-btn:hover::after,
+      .creator-link:hover::after,
+      .recruit-x-btn:hover::after {
+        background: var(--cyan);
+      }
+    }
+
     .back-btn:focus-visible,
     .creator-link:focus-visible,
     .recruit-x-btn:focus-visible,
     .back-btn:active,
     .creator-link:active,
     .recruit-x-btn:active {
-      border-color: #a9dff6 !important;
-      background:
-        linear-gradient(180deg, #ffffff 0%, #edf3f7 100%) !important;
-      color: #168fc7 !important;
+      border-color: #7dd8f5 !important;
+      background: linear-gradient(180deg, #ffffff 0%, #e8f2f7 100%) !important;
+      color: #0c8fc9 !important;
       box-shadow:
-        0 4px 12px rgba(0,0,0,.22),
-        inset 0 1px 0 rgba(255,255,255,.95),
-        inset 0 -2px 0 rgba(40,185,232,.18);
+        0 4px 12px rgba(0,0,0,.24),
+        0 0 0 1px rgba(35,190,235,.12),
+        inset 0 1px 0 rgba(255,255,255,1),
+        inset 0 -3px 0 rgba(35,190,235,.24);
       outline: none;
     }
 
-    .back-btn:hover::after,
-    .creator-link:hover::after,
-    .recruit-x-btn:hover::after,
     .back-btn:focus-visible::after,
     .creator-link:focus-visible::after,
     .recruit-x-btn:focus-visible::after,
@@ -355,7 +370,7 @@
     .back-btn:active,
     .creator-link:active,
     .recruit-x-btn:active {
-      transform: translateY(1px);
+      transform: translateY(1px) scale(.995);
     }
 
     /* ================= LIST ================= */
@@ -435,7 +450,7 @@
     }
 
     .creator-icon-wrap {
-      margin-top: 19px;
+      margin-top: 17px;
       display: flex;
       justify-content: center;
     }
@@ -464,7 +479,7 @@
 
     .creator-name {
       width: 100%;
-      margin-top: 15px;
+      margin-top: 13px;
       color: #fff;
       text-align: center;
       font-size: 18px;
@@ -475,12 +490,12 @@
 
     .creator-description {
       flex: 1;
-      width: 100%;
-      margin: 10px auto 0;
-      padding: 0 6px;
+      width: min(100%, 360px);
+      margin: 9px auto 0;
+      padding: 0 4px;
       color: #aeb3ba;
       font-size: 12px;
-      line-height: 1.7;
+      line-height: 1.72;
       /* テンプレート側のインデント空白は潰し、入力した改行だけ残す */
       white-space: pre-line;
       text-align: center !important;
@@ -491,8 +506,8 @@
       width: 100%;
       display: grid;
       grid-template-columns: 1fr 1fr;
-      gap: 7px;
-      margin-top: 17px;
+      gap: 8px;
+      margin-top: 15px;
     }
 
     .creator-links.single {
@@ -503,8 +518,8 @@
       display: flex;
       align-items: center;
       justify-content: center;
-      min-height: 40px;
-      padding: 7px 9px;
+      min-height: 42px;
+      padding: 8px 10px;
       border: 1px solid #34373e;
       background: #0d0f13;
       color: #d6d9dd;
@@ -687,6 +702,23 @@
 
       .creator-description {
         min-height: 0;
+        width: min(100%, 330px);
+        margin-top: 8px;
+        padding: 0 2px;
+        font-size: 12px;
+        line-height: 1.78;
+      }
+
+      .creator-icon-wrap {
+        margin-top: 15px;
+      }
+
+      .creator-name {
+        margin-top: 12px;
+      }
+
+      .creator-links {
+        margin-top: 14px;
       }
 
       .creator-recruit-box {
