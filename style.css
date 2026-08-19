@@ -3694,3 +3694,56 @@ html body .slv .slv-label {
   -webkit-text-stroke: 0 !important;
   opacity: 1 !important;
 }
+
+
+/* =========================================================
+   v12 BOTTOM NAV FIX
+   - PCでも横幅いっぱいを3等分
+   - 青点灯はactiveの1個だけ
+   - PC hoverでは青点灯させない
+   ========================================================= */
+
+body .bottom-nav {
+  display: grid !important;
+  grid-template-columns: repeat(3, minmax(0, 1fr)) !important;
+  justify-content: stretch !important;
+  align-items: stretch !important;
+  width: 100% !important;
+}
+
+body .bottom-nav .nav-btn {
+  width: 100% !important;
+  max-width: none !important;
+  min-width: 0 !important;
+  flex: none !important;
+  color: #d0d2d4 !important;
+  background: transparent !important;
+}
+
+/* 現在ページだけ青 */
+body .bottom-nav .nav-btn.active,
+body .bottom-nav .nav-btn.active:hover {
+  color: #fff !important;
+  background:
+    linear-gradient(
+      180deg,
+      var(--cyan-2),
+      var(--cyan)
+    ) !important;
+}
+
+/* PCのマウスオーバーは薄く反応するだけ */
+@media (hover: hover) and (pointer: fine) {
+  body .bottom-nav .nav-btn:not(.active):hover {
+    color: #fff !important;
+    background: rgba(255, 255, 255, .07) !important;
+  }
+}
+
+/* スマホはhover残りを完全無効化 */
+@media (hover: none), (pointer: coarse) {
+  body .bottom-nav .nav-btn:not(.active):hover {
+    color: #d0d2d4 !important;
+    background: transparent !important;
+  }
+}
