@@ -479,7 +479,7 @@
       font-size: 12px;
       line-height: 1.7;
       white-space: pre-wrap;
-      text-align: center;
+      text-align: center !important;
     }
 
     .creator-links {
@@ -870,36 +870,33 @@
 
     function safeUrl(value) {
 
-      if (!value) {
+      const raw = String(value || "").trim();
+
+      if (!raw) {
         return "";
       }
 
+      // 管理画面から保存した JPG / PNG / WEBP の data URL を許可
+      if (/^data:image\/(?:jpeg|png|webp);base64,/i.test(raw)) {
+        return raw;
+      }
 
       try {
 
-        const url =
-          new URL(value);
-
+        const url = new URL(raw);
 
         if (
-          url.protocol !==
-            "https:"
+          url.protocol !== "https:"
           &&
-          url.protocol !==
-            "http:"
+          url.protocol !== "http:"
         ) {
-
           return "";
-
         }
-
 
         return url.href;
 
       } catch {
-
         return "";
-
       }
 
     }
@@ -1074,7 +1071,7 @@
                     target="_blank"
                     rel="noopener noreferrer"
                   >
-                    𝕏 X ↗
+                    Xを見る ↗
                   </a>
 
                 `);
