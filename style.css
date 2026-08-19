@@ -3025,3 +3025,36 @@ body.manage-mode #managePage {
     font-size: 34px !important;
   }
 }
+/* =========================================================
+   指揮官カード 最終カラー調整
+   外枠 = 水色
+   指揮官ラベル = 黄色
+   SLV = 水色
+   ========================================================= */
+
+/* 指揮官カードの外枠 */
+.card.commander-card {
+  border-color: var(--cyan) !important;
+}
+
+/* 左側アクセントライン */
+.card.commander-card::before {
+  background: var(--cyan) !important;
+}
+
+/* 右上の装飾ライン */
+.card.commander-card::after {
+  border-color: rgba(26, 176, 241, .18) !important;
+}
+
+/* ● 指揮官だけ黄色 */
+.commander-card .recruitment-type {
+  border-color: var(--yellow) !important;
+  color: var(--yellow-deep) !important;
+  background: rgba(242, 161, 36, .07) !important;
+}
+
+/* SLV数字は水色 */
+.commander-card .slv {
+  color: var(--cyan) !important;
+}
