@@ -3171,3 +3171,349 @@ body.manage-mode #managePage {
       clamp(41px, 12.8vw, 48px) !important;
   }
 }
+
+/* =========================================================
+   v11 FINAL OVERRIDES
+   HEADER: 指揮官とユニオンをつなぐ。 / no visual gap
+   HERO  : NIKKE GODDESS OF VICTORY / UNION MATCH
+   PC    : larger hero balance
+   MOBILE: near edge-to-edge layout
+   ========================================================= */
+
+/* ---------- HEADER ---------- */
+.topbar .brand {
+  display: block !important;
+  max-width: none !important;
+  overflow: visible !important;
+  gap: 0 !important;
+  white-space: nowrap !important;
+  line-height: 1 !important;
+}
+
+/* New one-piece header markup */
+.topbar .brand-copy {
+  display: inline !important;
+  margin: 0 !important;
+  padding: 0 !important;
+
+  color: #fff !important;
+
+  font-family:
+    "JTCウインZ10",
+    "Gothic MB101",
+    "Zen Kaku Gothic New",
+    sans-serif !important;
+
+  font-size: 14px !important;
+  font-weight: 900 !important;
+  line-height: 1 !important;
+  letter-spacing: -.055em !important;
+
+  white-space: nowrap !important;
+}
+
+.topbar .brand-accent {
+  display: inline !important;
+  margin: 0 !important;
+  padding: 0 !important;
+
+  color: var(--cyan) !important;
+
+  font: inherit !important;
+  letter-spacing: inherit !important;
+  line-height: inherit !important;
+
+  white-space: nowrap !important;
+}
+
+/* Compatibility with the older two-span header markup */
+.topbar .brand-small,
+.topbar .brand-main {
+  margin: 0 !important;
+  padding: 0 !important;
+
+  font-family:
+    "JTCウインZ10",
+    "Gothic MB101",
+    "Zen Kaku Gothic New",
+    sans-serif !important;
+
+  font-size: 14px !important;
+  font-weight: 900 !important;
+  line-height: 1 !important;
+  letter-spacing: -.055em !important;
+
+  white-space: nowrap !important;
+}
+
+.topbar .brand-small {
+  color: #fff !important;
+}
+
+.topbar .brand-main {
+  color: var(--cyan) !important;
+}
+
+
+/* ---------- HERO LOGO ---------- */
+.hero h1 {
+  display: block !important;
+
+  width: 100% !important;
+  min-width: 0 !important;
+
+  margin: 0 !important;
+
+  font-family:
+    "Futura PT Condensed",
+    "Industry",
+    "Azonix",
+    "Teko",
+    sans-serif !important;
+
+  font-weight: 800 !important;
+  line-height: .80 !important;
+
+  white-space: nowrap !important;
+}
+
+.hero h1 .hero-title-line1 {
+  display: block !important;
+
+  margin: 0 0 .18em .04em !important;
+
+  color: var(--cyan) !important;
+
+  font-size: clamp(14px, 1.25vw, 20px) !important;
+  font-weight: 900 !important;
+  line-height: 1 !important;
+  letter-spacing: .22em !important;
+
+  white-space: nowrap !important;
+}
+
+.hero h1 .hero-title-line2 {
+  display: block !important;
+
+  margin: 0 !important;
+
+  color: var(--ink) !important;
+
+  font-size: clamp(60px, 7vw, 104px) !important;
+  font-weight: 900 !important;
+  line-height: .82 !important;
+  letter-spacing: -.045em !important;
+
+  white-space: nowrap !important;
+}
+
+.hero-title-line2 em,
+.hero h1 em {
+  color: inherit !important;
+  font: inherit !important;
+  font-style: normal !important;
+  letter-spacing: inherit !important;
+}
+
+
+/* ---------- DESKTOP ---------- */
+@media screen and (min-width: 1025px) {
+  .container {
+    max-width: 1540px !important;
+    padding-left: 28px !important;
+    padding-right: 28px !important;
+  }
+
+  .hero {
+    grid-template-columns:
+      minmax(520px, 1.16fr)
+      minmax(460px, .84fr) !important;
+
+    gap: 38px !important;
+    align-items: start !important;
+  }
+
+  .hero h1 .hero-title-line1 {
+    font-size: clamp(16px, 1.05vw, 22px) !important;
+    letter-spacing: .24em !important;
+  }
+
+  .hero h1 .hero-title-line2 {
+    font-size: clamp(78px, 5.8vw, 112px) !important;
+  }
+
+  .hero-stats {
+    min-height: 240px !important;
+  }
+}
+
+
+/* ---------- TABLET ---------- */
+@media screen and (min-width: 601px) and (max-width: 1024px) {
+  .topbar .brand-copy,
+  .topbar .brand-small,
+  .topbar .brand-main {
+    font-size: 13px !important;
+  }
+
+  .container {
+    max-width: 100% !important;
+    padding-left: 20px !important;
+    padding-right: 20px !important;
+  }
+
+  .hero {
+    grid-template-columns: 1fr !important;
+    gap: 22px !important;
+  }
+
+  .hero h1 .hero-title-line1 {
+    font-size: clamp(14px, 2vw, 18px) !important;
+    letter-spacing: .18em !important;
+  }
+
+  .hero h1 .hero-title-line2 {
+    font-size: clamp(60px, 10vw, 86px) !important;
+  }
+}
+
+
+/* ---------- MOBILE ---------- */
+@media screen and (max-width: 600px) {
+  .topbar {
+    padding-left: 12px !important;
+    padding-right: 12px !important;
+  }
+
+  .topbar .brand {
+    max-width: calc(100vw - 112px) !important;
+    overflow: visible !important;
+  }
+
+  .topbar .brand-copy,
+  .topbar .brand-small,
+  .topbar .brand-main {
+    font-size: 12px !important;
+  }
+
+  .container {
+    width: 100% !important;
+    max-width: none !important;
+    padding-left: 6px !important;
+    padding-right: 6px !important;
+  }
+
+  .hero {
+    grid-template-columns: 1fr !important;
+    gap: 16px !important;
+    padding-top: 12px !important;
+    padding-bottom: 20px !important;
+  }
+
+  .hero-left {
+    width: 100% !important;
+    min-width: 0 !important;
+    padding-left: 6px !important;
+    padding-right: 6px !important;
+  }
+
+  .hero h1 {
+    width: 100% !important;
+  }
+
+  .hero h1 .hero-title-line1 {
+    margin: 0 0 .14em .02em !important;
+
+    font-size: clamp(12px, 3.6vw, 16px) !important;
+    letter-spacing: .16em !important;
+  }
+
+  .hero h1 .hero-title-line2 {
+    font-size: clamp(58px, 15.5vw, 74px) !important;
+    letter-spacing: -.055em !important;
+  }
+
+  .hero-stats,
+  .filters,
+  .card,
+  .panel,
+  .notice,
+  .easy-register-box,
+  .search-tabs {
+    width: 100% !important;
+  }
+}
+
+
+/* ---------- SMALL MOBILE ---------- */
+@media screen and (max-width: 360px) {
+  .topbar .brand-copy,
+  .topbar .brand-small,
+  .topbar .brand-main {
+    font-size: 11px !important;
+  }
+
+  .container {
+    padding-left: 4px !important;
+    padding-right: 4px !important;
+  }
+
+  .hero-left {
+    padding-left: 4px !important;
+    padding-right: 4px !important;
+  }
+
+  .hero h1 .hero-title-line1 {
+    font-size: 11px !important;
+    letter-spacing: .12em !important;
+  }
+
+  .hero h1 .hero-title-line2 {
+    font-size: clamp(50px, 15.2vw, 64px) !important;
+  }
+}
+
+
+/* =========================================================
+   v11.1 COMMANDER COLOR RESTORE
+   指揮官 = orange / ユニオン = blue
+   ========================================================= */
+
+/* 指揮官カードのアクセント */
+.card.commander-card {
+  border-color: #ff7a18 !important;
+}
+
+.card.commander-card::before {
+  background: #ff7a18 !important;
+}
+
+/* ● 指揮官 */
+.card.commander-card .recruitment-type {
+  border-color: #ff7a18 !important;
+  color: #ff9b32 !important;
+  background: rgba(255, 122, 24, .08) !important;
+}
+
+/* SLV */
+.card.commander-card .slv,
+.card.commander-card .slv small {
+  color: #ff9b32 !important;
+  text-shadow: none !important;
+  -webkit-text-stroke: 0 !important;
+}
+
+/* ユニオンはブルーを維持 */
+.card.union-card {
+  border-color: #3696ff !important;
+}
+
+.card.union-card::before {
+  background: #3696ff !important;
+}
+
+.card.union-card .recruitment-type {
+  border-color: #3696ff !important;
+  color: #3696ff !important;
+  background: rgba(54, 150, 255, .08) !important;
+}
