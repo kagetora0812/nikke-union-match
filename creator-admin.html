@@ -1242,6 +1242,95 @@
       line-height: 1.5;
     }
 
+
+    /* ========================================
+       v5 アイコン位置調整
+    ======================================== */
+
+    .icon-crop-editor {
+      padding: 16px;
+      border: 1px solid #334155;
+      background: #0b111b;
+    }
+
+    .icon-crop-title {
+      margin-bottom: 12px;
+      color: var(--text);
+      font-size: 13px;
+      font-weight: 900;
+    }
+
+    .icon-crop-stage {
+      position: relative;
+      width: min(320px, 82vw);
+      aspect-ratio: 1;
+      margin: 0 auto;
+      overflow: hidden;
+      border-radius: 50%;
+      background: #151b25;
+      box-shadow:
+        0 0 0 1px #465164,
+        0 0 0 7px rgba(255,255,255,.025);
+      touch-action: none;
+      user-select: none;
+      cursor: grab;
+    }
+
+    .icon-crop-stage:active {
+      cursor: grabbing;
+    }
+
+    #iconCropCanvas {
+      display: block;
+      width: 100%;
+      height: 100%;
+      touch-action: none;
+    }
+
+    .icon-crop-ring {
+      position: absolute;
+      inset: 0;
+      pointer-events: none;
+      border-radius: 50%;
+      border: 2px solid rgba(40,185,232,.92);
+      box-shadow: inset 0 0 0 1px rgba(255,255,255,.12);
+    }
+
+    .icon-crop-help {
+      margin-top: 13px;
+      color: var(--muted);
+      text-align: center;
+      font-size: 11px;
+      line-height: 1.6;
+    }
+
+    .icon-zoom-row {
+      display: grid;
+      grid-template-columns: auto 1fr auto;
+      align-items: center;
+      gap: 10px;
+      margin-top: 12px;
+      color: var(--muted);
+      font-size: 11px;
+    }
+
+    .icon-zoom-row input[type="range"] {
+      width: 100%;
+      padding: 0;
+      accent-color: var(--cyan);
+    }
+
+    .icon-crop-actions {
+      display: flex;
+      gap: 8px;
+      margin-top: 12px;
+      flex-wrap: wrap;
+    }
+
+    .icon-crop-actions .btn {
+      flex: 1 1 150px;
+    }
+
   </style>
 
 </head>
@@ -1649,28 +1738,13 @@
 
 
           <!-- ========================================
-               アイコン
+               アイコン画像
           ========================================= -->
-
-          <label>
-
-            アイコン画像URL（任意）
-
-            <input
-              id="iconUrl"
-              type="url"
-              inputmode="url"
-              autocomplete="off"
-              placeholder="https://..."
-            >
-
-          </label>
-
 
           <div class="icon-file-box">
 
             <label class="icon-file-label" for="iconFile">
-              📷 JPG / PNG画像を選択
+              📷 アイコン画像を選択
             </label>
 
             <input
@@ -1681,8 +1755,8 @@
             >
 
             <div class="icon-file-help">
-              JPG・JPEG・PNG・WEBP対応。画像は自動で縮小して保存します。<br>
-              画像を選んだ場合はURL入力より優先されます。
+              JPG・JPEG・PNG・WEBP対応。画像を選んだあと、ドラッグで位置調整できます。<br>
+              スマホは1本指で移動、2本指のピンチで拡大・縮小できます。
             </div>
 
             <div
@@ -1692,8 +1766,66 @@
 
           </div>
 
+          <div
+            id="iconCropEditor"
+            class="icon-crop-editor hidden"
+          >
 
-          <div class="icon-preview-wrap">
+            <div class="icon-crop-title">
+              アイコン位置を調整
+            </div>
+
+            <div class="icon-crop-stage">
+              <canvas
+                id="iconCropCanvas"
+                width="320"
+                height="320"
+                aria-label="アイコン切り抜き位置調整"
+              ></canvas>
+              <div class="icon-crop-ring" aria-hidden="true"></div>
+            </div>
+
+            <div class="icon-crop-help">
+              ドラッグで位置移動 ／ ピンチ・スライダーで拡大縮小
+            </div>
+
+            <label class="icon-zoom-row">
+              <span>縮小</span>
+              <input
+                id="iconZoom"
+                type="range"
+                min="1"
+                max="3"
+                step="0.01"
+                value="1"
+              >
+              <span>拡大</span>
+            </label>
+
+            <div class="icon-crop-actions">
+              <button
+                id="iconCropResetBtn"
+                class="btn"
+                type="button"
+              >
+                ↺ 中央に戻す
+              </button>
+
+              <button
+                id="removeIconBtn"
+                class="btn danger"
+                type="button"
+              >
+                画像を外す
+              </button>
+            </div>
+
+          </div>
+
+          <div
+            id="iconPreviewWrap"
+            class="icon-preview-wrap"
+          >
 
             <div
               id="iconPreviewPlaceholder"
@@ -1709,16 +1841,11 @@
             >
 
             <div class="icon-preview-info">
-
-              アイコン画像URLを入力すると
-              ここにプレビュー表示されます。<br>
-
-              正方形の画像がおすすめです。
-
+              現在保存されているアイコンです。<br>
+              新しい画像を選ぶと位置調整画面に切り替わります。
             </div>
 
           </div>
-
 
           <label>
 
@@ -1898,7 +2025,16 @@
 
     let creators = [];
 
+    // アイコン画像状態
     let selectedIconData = "";
+    let existingIconValue = "";
+    let cropSourceImage = null;
+    let cropZoom = 1;
+    let cropOffsetX = 0;
+    let cropOffsetY = 0;
+    let cropBaseScale = 1;
+    const cropPointers = new Map();
+    let cropGesture = null;
 
 
     function escapeHtml(value) {
@@ -2731,7 +2867,7 @@
 
 
     // ========================================
-    // アイコンプレビュー / JPG・PNG選択
+    // アイコン画像選択 / 位置調整
     // ========================================
 
     function setIconFileStatus(text = "", isError = false) {
@@ -2757,53 +2893,48 @@
     }
 
 
+    function setCropEditorVisible(visible) {
+
+      $("#iconCropEditor")
+        ?.classList
+        .toggle("hidden", !visible);
+
+      $("#iconPreviewWrap")
+        ?.classList
+        .toggle("hidden", visible);
+
+    }
+
+
     function updateIconPreview() {
 
-      const urlValue =
-        $("#iconUrl")
-          ?.value
-          .trim() ||
-        "";
+      const image = $("#iconPreview");
+      const placeholder = $("#iconPreviewPlaceholder");
+
+      if (!image || !placeholder) {
+        return;
+      }
 
       const safe =
         selectedIconData ||
-        safeUrl(urlValue);
+        safeUrl(existingIconValue);
 
-      const image =
-        $("#iconPreview");
-
-      const placeholder =
-        $("#iconPreviewPlaceholder");
-
-      if (
-        !safe ||
-        !image ||
-        !placeholder
-      ) {
-
-        image
-          ?.classList
-          .add("hidden");
-
-        placeholder
-          ?.classList
-          .remove("hidden");
-
+      if (!safe) {
+        image.classList.add("hidden");
+        placeholder.classList.remove("hidden");
+        image.removeAttribute("src");
         return;
-
       }
 
-      image.onload =
-        () => {
-          image.classList.remove("hidden");
-          placeholder.classList.add("hidden");
-        };
+      image.onload = () => {
+        image.classList.remove("hidden");
+        placeholder.classList.add("hidden");
+      };
 
-      image.onerror =
-        () => {
-          image.classList.add("hidden");
-          placeholder.classList.remove("hidden");
-        };
+      image.onerror = () => {
+        image.classList.add("hidden");
+        placeholder.classList.remove("hidden");
+      };
 
       image.src = safe;
 
@@ -2813,17 +2944,10 @@
     function readFileAsDataUrl(file) {
 
       return new Promise((resolve, reject) => {
-
         const reader = new FileReader();
-
-        reader.onload = () =>
-          resolve(String(reader.result || ""));
-
-        reader.onerror = () =>
-          reject(new Error("FILE_READ_ERROR"));
-
+        reader.onload = () => resolve(String(reader.result || ""));
+        reader.onerror = () => reject(new Error("FILE_READ_ERROR"));
         reader.readAsDataURL(file);
-
       });
 
     }
@@ -2832,19 +2956,143 @@
     function loadImageFromDataUrl(dataUrl) {
 
       return new Promise((resolve, reject) => {
-
         const img = new Image();
-
         img.onload = () => resolve(img);
         img.onerror = () => reject(new Error("IMAGE_LOAD_ERROR"));
         img.src = dataUrl;
-
       });
 
     }
 
 
-    async function makeIconData(file) {
+    function clamp(value, min, max) {
+      return Math.min(max, Math.max(min, value));
+    }
+
+
+    function getCropCanvas() {
+      return $("#iconCropCanvas");
+    }
+
+
+    function resetCropPosition() {
+
+      cropZoom = 1;
+      cropOffsetX = 0;
+      cropOffsetY = 0;
+
+      const slider = $("#iconZoom");
+      if (slider) {
+        slider.value = "1";
+      }
+
+      drawCropCanvas();
+
+    }
+
+
+    function drawCropCanvas() {
+
+      const canvas = getCropCanvas();
+
+      if (!canvas || !cropSourceImage) {
+        return;
+      }
+
+      const ctx = canvas.getContext("2d");
+
+      if (!ctx) {
+        return;
+      }
+
+      const cw = canvas.width;
+      const ch = canvas.height;
+      const iw = cropSourceImage.naturalWidth;
+      const ih = cropSourceImage.naturalHeight;
+
+      cropBaseScale = Math.max(
+        cw / iw,
+        ch / ih
+      );
+
+      const scale = cropBaseScale * cropZoom;
+      const dw = iw * scale;
+      const dh = ih * scale;
+
+      const maxX = Math.max(0, (dw - cw) / 2);
+      const maxY = Math.max(0, (dh - ch) / 2);
+
+      cropOffsetX = clamp(cropOffsetX, -maxX, maxX);
+      cropOffsetY = clamp(cropOffsetY, -maxY, maxY);
+
+      const x = (cw - dw) / 2 + cropOffsetX;
+      const y = (ch - dh) / 2 + cropOffsetY;
+
+      ctx.clearRect(0, 0, cw, ch);
+      ctx.fillStyle = "#151b25";
+      ctx.fillRect(0, 0, cw, ch);
+      ctx.drawImage(
+        cropSourceImage,
+        x,
+        y,
+        dw,
+        dh
+      );
+
+    }
+
+
+    function exportCroppedIcon() {
+
+      if (!cropSourceImage) {
+        return "";
+      }
+
+      const preview = getCropCanvas();
+
+      if (!preview) {
+        return "";
+      }
+
+      const outputSize = 420;
+      const canvas = document.createElement("canvas");
+      canvas.width = outputSize;
+      canvas.height = outputSize;
+
+      const ctx = canvas.getContext("2d");
+
+      if (!ctx) {
+        return "";
+      }
+
+      const ratio = outputSize / preview.width;
+      const iw = cropSourceImage.naturalWidth;
+      const ih = cropSourceImage.naturalHeight;
+      const scale = cropBaseScale * cropZoom * ratio;
+      const dw = iw * scale;
+      const dh = ih * scale;
+      const x = (outputSize - dw) / 2 + cropOffsetX * ratio;
+      const y = (outputSize - dh) / 2 + cropOffsetY * ratio;
+
+      ctx.fillStyle = "#151b25";
+      ctx.fillRect(0, 0, outputSize, outputSize);
+      ctx.drawImage(
+        cropSourceImage,
+        x,
+        y,
+        dw,
+        dh
+      );
+
+      return canvas.toDataURL(
+        "image/jpeg",
+        0.88
+      );
+
+    }
+
+
+    async function prepareCropFromFile(file) {
 
       const allowedTypes = new Set([
         "image/jpeg",
@@ -2856,91 +3104,26 @@
         throw new Error("UNSUPPORTED_IMAGE_TYPE");
       }
 
-      if (file.size > 8 * 1024 * 1024) {
+      if (file.size > 10 * 1024 * 1024) {
         throw new Error("IMAGE_TOO_LARGE");
       }
 
-      const original =
-        await readFileAsDataUrl(file);
+      const original = await readFileAsDataUrl(file);
+      cropSourceImage = await loadImageFromDataUrl(original);
+      selectedIconData = "";
+      cropZoom = 1;
+      cropOffsetX = 0;
+      cropOffsetY = 0;
 
-      const img =
-        await loadImageFromDataUrl(original);
-
-      const maxSide = 420;
-      const scale = Math.min(
-        1,
-        maxSide / Math.max(img.naturalWidth, img.naturalHeight)
-      );
-
-      const width = Math.max(
-        1,
-        Math.round(img.naturalWidth * scale)
-      );
-
-      const height = Math.max(
-        1,
-        Math.round(img.naturalHeight * scale)
-      );
-
-      const canvas =
-        document.createElement("canvas");
-
-      canvas.width = width;
-      canvas.height = height;
-
-      const ctx =
-        canvas.getContext("2d");
-
-      if (!ctx) {
-        throw new Error("CANVAS_ERROR");
+      const slider = $("#iconZoom");
+      if (slider) {
+        slider.value = "1";
       }
 
-      ctx.drawImage(
-        img,
-        0,
-        0,
-        width,
-        height
-      );
-
-      const outputType =
-        file.type === "image/png"
-          ? "image/png"
-          : file.type === "image/webp"
-            ? "image/webp"
-            : "image/jpeg";
-
-      const quality =
-        outputType === "image/png"
-          ? undefined
-          : 0.86;
-
-      return canvas.toDataURL(
-        outputType,
-        quality
-      );
+      setCropEditorVisible(true);
+      drawCropCanvas();
 
     }
-
-
-    $("#iconUrl")
-      ?.addEventListener(
-        "input",
-        () => {
-
-          if (selectedIconData) {
-            selectedIconData = "";
-            const fileInput = $("#iconFile");
-            if (fileInput) {
-              fileInput.value = "";
-            }
-            setIconFileStatus("");
-          }
-
-          updateIconPreview();
-
-        }
-      );
 
 
     $("#iconFile")
@@ -2948,50 +3131,257 @@
         "change",
         async event => {
 
-          const file =
-            event.target.files?.[0];
+          const file = event.target.files?.[0];
 
           if (!file) {
-            selectedIconData = "";
-            setIconFileStatus("");
-            updateIconPreview();
             return;
           }
 
           try {
 
             setIconFileStatus("画像を読み込み中...");
-
-            selectedIconData =
-              await makeIconData(file);
-
-            setIconFileStatus(
-              `✓ ${file.name} を選択しました`
-            );
-
-            updateIconPreview();
+            await prepareCropFromFile(file);
+            setIconFileStatus(`✓ ${file.name} を選択しました`);
 
           } catch (error) {
 
             console.error(error);
+            cropSourceImage = null;
             selectedIconData = "";
             event.target.value = "";
+            setCropEditorVisible(false);
+            updateIconPreview();
 
             const message =
               String(error?.message) === "IMAGE_TOO_LARGE"
-                ? "画像は8MB以下を選択してください。"
+                ? "画像は10MB以下を選択してください。"
                 : "JPG・JPEG・PNG・WEBP画像を選択してください。";
 
-            setIconFileStatus(
-              message,
-              true
-            );
-
-            updateIconPreview();
+            setIconFileStatus(message, true);
 
           }
 
         }
+      );
+
+
+    $("#iconZoom")
+      ?.addEventListener(
+        "input",
+        event => {
+          cropZoom = clamp(
+            Number(event.target.value) || 1,
+            1,
+            3
+          );
+          drawCropCanvas();
+        }
+      );
+
+
+    $("#iconCropResetBtn")
+      ?.addEventListener(
+        "click",
+        resetCropPosition
+      );
+
+
+    $("#removeIconBtn")
+      ?.addEventListener(
+        "click",
+        () => {
+
+          existingIconValue = "";
+          selectedIconData = "";
+          cropSourceImage = null;
+          cropZoom = 1;
+          cropOffsetX = 0;
+          cropOffsetY = 0;
+          cropPointers.clear();
+          cropGesture = null;
+
+          const input = $("#iconFile");
+          if (input) {
+            input.value = "";
+          }
+
+          setIconFileStatus("画像を外しました。保存するとアイコンなしになります。");
+          setCropEditorVisible(false);
+          updateIconPreview();
+
+        }
+      );
+
+
+    const cropCanvas = getCropCanvas();
+
+    function getTwoPointers() {
+      return Array.from(cropPointers.values()).slice(0, 2);
+    }
+
+    function pointerDistance(a, b) {
+      return Math.hypot(b.x - a.x, b.y - a.y);
+    }
+
+    function pointerCenter(a, b) {
+      return {
+        x: (a.x + b.x) / 2,
+        y: (a.y + b.y) / 2
+      };
+    }
+
+    function beginCropGesture() {
+
+      if (cropPointers.size >= 2) {
+
+        const [a, b] = getTwoPointers();
+        const center = pointerCenter(a, b);
+
+        cropGesture = {
+          mode: "pinch",
+          distance: Math.max(1, pointerDistance(a, b)),
+          zoom: cropZoom,
+          centerX: center.x,
+          centerY: center.y,
+          offsetX: cropOffsetX,
+          offsetY: cropOffsetY
+        };
+
+      } else if (cropPointers.size === 1) {
+
+        const [p] = cropPointers.values();
+
+        cropGesture = {
+          mode: "drag",
+          x: p.x,
+          y: p.y,
+          offsetX: cropOffsetX,
+          offsetY: cropOffsetY
+        };
+
+      } else {
+        cropGesture = null;
+      }
+
+    }
+
+    cropCanvas
+      ?.addEventListener(
+        "pointerdown",
+        event => {
+
+          if (!cropSourceImage) {
+            return;
+          }
+
+          cropCanvas.setPointerCapture?.(event.pointerId);
+          cropPointers.set(event.pointerId, {
+            x: event.clientX,
+            y: event.clientY
+          });
+          beginCropGesture();
+          event.preventDefault();
+
+        }
+      );
+
+    cropCanvas
+      ?.addEventListener(
+        "pointermove",
+        event => {
+
+          if (!cropPointers.has(event.pointerId) || !cropSourceImage) {
+            return;
+          }
+
+          cropPointers.set(event.pointerId, {
+            x: event.clientX,
+            y: event.clientY
+          });
+
+          if (cropPointers.size >= 2) {
+
+            if (cropGesture?.mode !== "pinch") {
+              beginCropGesture();
+            }
+
+            const [a, b] = getTwoPointers();
+            const center = pointerCenter(a, b);
+            const distance = Math.max(1, pointerDistance(a, b));
+            const ratio = distance / Math.max(1, cropGesture.distance);
+
+            cropZoom = clamp(
+              cropGesture.zoom * ratio,
+              1,
+              3
+            );
+
+            cropOffsetX =
+              cropGesture.offsetX +
+              (center.x - cropGesture.centerX);
+
+            cropOffsetY =
+              cropGesture.offsetY +
+              (center.y - cropGesture.centerY);
+
+            const slider = $("#iconZoom");
+            if (slider) {
+              slider.value = String(cropZoom);
+            }
+
+          } else if (
+            cropPointers.size === 1 &&
+            cropGesture?.mode === "drag"
+          ) {
+
+            const [p] = cropPointers.values();
+            cropOffsetX = cropGesture.offsetX + (p.x - cropGesture.x);
+            cropOffsetY = cropGesture.offsetY + (p.y - cropGesture.y);
+
+          }
+
+          drawCropCanvas();
+          event.preventDefault();
+
+        }
+      );
+
+    function finishCropPointer(event) {
+
+      cropPointers.delete(event.pointerId);
+      beginCropGesture();
+
+    }
+
+    cropCanvas?.addEventListener("pointerup", finishCropPointer);
+    cropCanvas?.addEventListener("pointercancel", finishCropPointer);
+    cropCanvas?.addEventListener("lostpointercapture", finishCropPointer);
+
+    cropCanvas
+      ?.addEventListener(
+        "wheel",
+        event => {
+
+          if (!cropSourceImage) {
+            return;
+          }
+
+          event.preventDefault();
+          cropZoom = clamp(
+            cropZoom + (event.deltaY < 0 ? 0.08 : -0.08),
+            1,
+            3
+          );
+
+          const slider = $("#iconZoom");
+          if (slider) {
+            slider.value = String(cropZoom);
+          }
+
+          drawCropCanvas();
+
+        },
+        { passive: false }
       );
 
 
@@ -3581,11 +3971,14 @@
               .trim();
 
 
+          if (cropSourceImage) {
+            selectedIconData =
+              exportCroppedIcon();
+          }
+
           const iconUrl =
             selectedIconData ||
-            $("#iconUrl")
-              ?.value
-              .trim() ||
+            existingIconValue ||
             "";
 
 
@@ -3795,34 +4188,32 @@
         "";
 
 
-      const existingIcon =
+      existingIconValue =
         creator.icon_url ||
         "";
 
+      selectedIconData = "";
+      cropSourceImage = null;
+      cropZoom = 1;
+      cropOffsetX = 0;
+      cropOffsetY = 0;
+      cropPointers.clear();
+      cropGesture = null;
 
-      if (/^data:image\/(?:jpeg|png|webp);base64,/i.test(existingIcon)) {
-
-        selectedIconData =
-          existingIcon;
-
-        $("#iconUrl").value =
-          "";
-
-        setIconFileStatus(
-          "✓ 保存済みの画像を使用中"
-        );
-
-      } else {
-
-        selectedIconData =
-          "";
-
-        $("#iconUrl").value =
-          existingIcon;
-
-        setIconFileStatus("");
-
+      const iconFileInput = $("#iconFile");
+      if (iconFileInput) {
+        iconFileInput.value = "";
       }
+
+      setCropEditorVisible(false);
+
+      setIconFileStatus(
+        existingIconValue
+          ? "✓ 現在の画像を使用中。変更する場合は新しい画像を選択してください。"
+          : ""
+      );
+
+      updateIconPreview();
 
 
       $("#youtubeUrl").value =
@@ -3881,10 +4272,17 @@
         ?.reset();
 
 
-      selectedIconData =
-        "";
+      selectedIconData = "";
+      existingIconValue = "";
+      cropSourceImage = null;
+      cropZoom = 1;
+      cropOffsetX = 0;
+      cropOffsetY = 0;
+      cropPointers.clear();
+      cropGesture = null;
 
       setIconFileStatus("");
+      setCropEditorVisible(false);
 
 
       $("#editingId").value =
