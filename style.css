@@ -2719,3 +2719,309 @@ body.manage-mode #managePage {
   }
 
 }
+/* =========================================================
+   v7 FINAL RESPONSIVE TUNING
+   - mobile hero title slightly smaller
+   - compact TOP vertical spacing
+   - larger counter numerals
+   - denser PC counter
+   - commander cards = yellow accent
+   - card SLV = cyan
+   ========================================================= */
+
+/* Recruitment card color roles */
+.card.commander-card {
+  border-color: var(--yellow) !important;
+}
+
+.card.commander-card::before {
+  background: var(--yellow) !important;
+}
+
+.card.commander-card::after {
+  border-color: rgba(242, 161, 36, .22) !important;
+}
+
+.commander-card .recruitment-type {
+  border-color: var(--yellow) !important;
+  color: var(--yellow-deep) !important;
+  background: rgba(242, 161, 36, .07) !important;
+}
+
+.card.union-card {
+  border-color: var(--cyan) !important;
+}
+
+.card.union-card::before {
+  background: var(--cyan) !important;
+}
+
+.card.union-card::after {
+  border-color: rgba(26, 176, 241, .18) !important;
+}
+
+.union-card .recruitment-type {
+  border-color: var(--cyan) !important;
+  color: var(--cyan-dark) !important;
+  background: rgba(26, 176, 241, .06) !important;
+}
+
+/* SLV is information, so keep it cyan on every recruitment card */
+.card .slv,
+.commander-card .slv,
+.union-card .slv {
+  color: var(--cyan) !important;
+  text-shadow: none !important;
+}
+
+
+/* =========================================================
+   v7 DESKTOP
+   ========================================================= */
+
+@media screen and (min-width: 1025px) {
+
+  .topbar {
+    height: 66px;
+    min-height: 66px;
+  }
+
+  .hero {
+    grid-template-columns:
+      minmax(380px, .80fr)
+      minmax(590px, 1.20fr);
+
+    gap: 28px;
+
+    padding: 25px 0 22px;
+    margin-bottom: 19px;
+  }
+
+  .hero p {
+    margin: 14px 0 16px;
+  }
+
+  .hero-stats {
+    min-height: 204px;
+
+    padding: 13px 12px 31px;
+  }
+
+  .hero-stat,
+  .hero-graduate-stat {
+    padding: 4px 6px !important;
+  }
+
+  .hero-stat-divider,
+  .hero-stats > .hero-stat-divider {
+    height: 68% !important;
+    min-height: 104px !important;
+  }
+
+  .hero-stat-title,
+  .hero-graduate-title {
+    min-height: 22px;
+
+    margin-bottom: 4px;
+
+    font-size: 13px;
+  }
+
+  .hero-stat-number strong,
+  .hero-graduate-number strong {
+    font-size: 82px !important;
+
+    line-height: .78;
+  }
+
+  .hero-stat-number span,
+  .hero-graduate-number span {
+    padding-bottom: 4px;
+
+    font-size: 19px;
+  }
+
+  .hero-stat-sub,
+  .hero-graduate-sub {
+    margin-top: 6px;
+
+    font-size: 10px;
+  }
+
+  .hero-stat-update {
+    bottom: 7px !important;
+  }
+
+  .section-head {
+    margin-bottom: 12px;
+  }
+
+  .search-tabs {
+    margin-bottom: 10px;
+  }
+}
+
+
+/* =========================================================
+   v7 TABLET
+   ========================================================= */
+
+@media screen and (min-width: 601px) and (max-width: 1024px) {
+
+  .hero {
+    gap: 15px;
+
+    padding: 22px 0 18px;
+    margin-bottom: 18px;
+  }
+
+  .hero p {
+    margin: 12px 0 14px;
+  }
+
+  .hero-stats {
+    min-height: 184px;
+
+    padding: 11px 7px 28px;
+  }
+
+  .hero-stat-number strong,
+  .hero-graduate-number strong {
+    font-size:
+      clamp(50px, 6.5vw, 66px) !important;
+  }
+}
+
+
+/* =========================================================
+   v7 MOBILE
+   ========================================================= */
+
+@media screen and (max-width: 600px) {
+
+  .topbar {
+    height: 58px;
+  }
+
+  .brand-main {
+    font-size: 20px;
+  }
+
+  .hero {
+    gap: 7px !important;
+
+    margin: 0 0 10px;
+    padding: 12px 0 10px;
+  }
+
+  /* slightly smaller title so the first view feels less crowded */
+  .hero h1 {
+    font-size:
+      clamp(31px, 9.5vw, 41px) !important;
+
+    line-height: .91;
+
+    letter-spacing: -.075em;
+  }
+
+  .hero p {
+    margin: 8px 0 9px;
+
+    font-size: 10px;
+
+    line-height: 1.45;
+  }
+
+  .main-register-btn,
+  .hero-actions .btn.primary,
+  .creator-link-btn {
+    min-height: 40px;
+  }
+
+  .hero-stats {
+    min-height: 139px !important;
+
+    padding: 7px 3px 23px !important;
+  }
+
+  .hero-stat,
+  .hero-graduate-stat {
+    padding: 2px 3px !important;
+  }
+
+  .hero-stats > .hero-stat-divider,
+  .hero-stat-divider {
+    height: 78px !important;
+    min-height: 78px !important;
+
+    background: #8f979f !important;
+  }
+
+  .hero-stat-title,
+  .hero-graduate-title {
+    min-height: 17px;
+
+    margin-bottom: 1px;
+
+    font-size: 8.3px !important;
+  }
+
+  /* counter numerals enlarged without making the panel taller */
+  .hero-stat-number strong,
+  .hero-graduate-number strong {
+    font-size:
+      clamp(36px, 11.2vw, 46px) !important;
+
+    line-height: .78;
+  }
+
+  .hero-stat-number span,
+  .hero-graduate-number span {
+    padding-bottom: 2px !important;
+
+    font-size: 9.5px !important;
+  }
+
+  .hero-stat-sub,
+  .hero-graduate-sub {
+    margin-top: 3px !important;
+
+    font-size: 6.5px !important;
+  }
+
+  .hero-stat-update {
+    bottom: 4px !important;
+
+    font-size: 7px !important;
+  }
+
+  .section-head {
+    margin-bottom: 9px;
+  }
+
+  .section-head h2 {
+    font-size:
+      clamp(20px, 5.8vw, 25px);
+  }
+
+  .search-tabs {
+    margin-bottom: 9px;
+  }
+}
+
+
+/* =========================================================
+   v7 SMALL MOBILE
+   ========================================================= */
+
+@media screen and (max-width: 360px) {
+
+  .hero h1 {
+    font-size: 30px !important;
+  }
+
+  .hero-stat-number strong,
+  .hero-graduate-number strong {
+    font-size: 34px !important;
+  }
+}
