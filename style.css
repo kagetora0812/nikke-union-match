@@ -1410,6 +1410,7 @@ h3 {
 
 /* =========================================================
    UNION RANK
+   ランクラベルだけ塗りつぶし + 白文字
    ========================================================= */
 
 .union-rank {
@@ -1422,48 +1423,52 @@ h3 {
   margin-top: 7px;
   padding: 5px 12px;
 
-  border: 1px solid;
+  border: 1px solid transparent;
+  border-radius: 999px;
+
+  color: #ffffff;
 
   font-size: 12px;
   font-weight: 900;
 
   letter-spacing: .02em;
+  line-height: 1.2;
 }
 
 .rank-challenger {
-  color: #e14949;
+  color: #ffffff;
   border-color: #e14949;
-  background: rgba(225, 73, 73, .08);
+  background: #e14949;
 }
 
 .rank-diamond {
-  color: #9d46d8;
+  color: #ffffff;
   border-color: #9d46d8;
-  background: rgba(157, 70, 216, .08);
+  background: #9d46d8;
 }
 
 .rank-platinum {
-  color: #159dcf;
+  color: #ffffff;
   border-color: #159dcf;
-  background: rgba(21, 157, 207, .08);
+  background: #159dcf;
 }
 
 .rank-gold {
-  color: #9b7300;
+  color: #ffffff;
   border-color: #d89f20;
-  background: rgba(216, 159, 32, .09);
+  background: #d89f20;
 }
 
 .rank-silver {
-  color: #727980;
+  color: #ffffff;
   border-color: #9ca3a9;
-  background: rgba(156, 163, 169, .09);
+  background: #9ca3a9;
 }
 
 .rank-rookie {
-  color: #679b22;
+  color: #ffffff;
   border-color: #83b641;
-  background: rgba(131, 182, 65, .09);
+  background: #83b641;
 }
 
 .rank-default {
