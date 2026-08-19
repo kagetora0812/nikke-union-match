@@ -1,20 +1,26 @@
 @import url('https://fonts.googleapis.com/css2?family=Rajdhani:wght@500;600;700&family=Noto+Sans+JP:wght@400;500;700&display=swap');
 
 :root {
-  --bg: #080b12;
-  --panel: #101621;
-  --panel2: #141c29;
-  --line: #2b3545;
-  --text: #edf2f7;
-  --muted: #8e9aaa;
-  --accent: #ff7a18;
-  --accent2: #ffb15c;
-  --green: #54e39b;
-  --red: #ff5364;
+  --bg: #F1F2F2;
+  --panel: #FFFFFF;
+  --panel2: #E8EAEB;
 
-  /* 卒業ちしかん */
-  --graduate: #8ff0bd;
-  --graduate2: #b9ffd8;
+  --line: #C8CDD0;
+
+  --text: #24282B;
+  --muted: #777F84;
+
+  --accent: #D89F20;
+  --accent2: #F5B400;
+
+  --blue: #18A8F0;
+  --purple: #A828F0;
+
+  --green: #54E39B;
+  --red: #FF5364;
+
+  --graduate: #A828F0;
+  --graduate2: #C875FF;
 }
 
 
@@ -253,10 +259,11 @@ h1 {
 
 
 h1 em {
+  color: #F5B400;
   font-style: normal;
 
-  color:
-    var(--accent);
+  text-shadow:
+    0 1px 0 rgba(255, 255, 255, .5);
 }
 
 
@@ -1144,23 +1151,22 @@ h1 em {
 }
 
 
-.commander-stat
-.hero-stat-number strong,
-
-.commander-stat
-.hero-stat-number span {
-  color:
-    #ff7a18;
+/* 指揮官：NIKKEイエロー */
+.commander-stat .hero-stat-number strong,
+.commander-stat .hero-stat-number span {
+  color: #D89F20;
 }
 
+/* ユニオン：NIKKEブルー */
+.union-stat .hero-stat-number strong,
+.union-stat .hero-stat-number span {
+  color: #18A8F0;
+}
 
-.union-stat
-.hero-stat-number strong,
-
-.union-stat
-.hero-stat-number span {
-  color:
-    #3696ff;
+/* 成立実績：NIKKEパープル */
+.hero-graduate-number strong,
+.hero-graduate-number span {
+  color: #A828F0;
 }
 
 
