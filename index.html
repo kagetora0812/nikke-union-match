@@ -24,6 +24,42 @@
     href="./style.css"
   >
 
+
+  <style>
+    /* Main title: small upper line + large lower line */
+    .hero h1 .hero-title-line1 {
+      display: block;
+      margin-bottom: 4px;
+      color: var(--cyan);
+      font-size: clamp(14px, 1.65vw, 22px);
+      font-weight: 900;
+      line-height: 1;
+      letter-spacing: .18em;
+      white-space: nowrap;
+    }
+
+    .hero h1 .hero-title-line2 {
+      display: block;
+      color: var(--ink);
+      font-size: clamp(46px, 5.6vw, 76px);
+      font-weight: 900;
+      line-height: .88;
+      letter-spacing: -.055em;
+      white-space: nowrap;
+    }
+
+    @media (max-width: 600px) {
+      .hero h1 .hero-title-line1 {
+        font-size: clamp(13px, 4.1vw, 18px);
+        letter-spacing: .13em;
+      }
+
+      .hero h1 .hero-title-line2 {
+        font-size: clamp(44px, 13vw, 60px);
+      }
+    }
+  </style>
+
 </head>
 
 
@@ -77,11 +113,11 @@
        <h1>
 
   <span class="hero-title-line1">
-    NIKKE /
+    NIKKE GODDESS OF VICTORY
   </span>
 
   <span class="hero-title-line2">
-    <em>UNION MATCH</em>
+    UNION MATCH
   </span>
 
 </h1>
