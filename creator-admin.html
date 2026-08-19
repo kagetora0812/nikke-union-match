@@ -1068,6 +1068,45 @@
       justify-content: center;
     }
 
+
+    .ending-union-card.contacted {
+      opacity: .62;
+      border-color: rgba(143, 240, 189, .28);
+    }
+
+    .ending-union-card.contacted .ending-union-remaining {
+      border-left-color: var(--green);
+      background: rgba(143, 240, 189, .06);
+      color: var(--green);
+    }
+
+    .contacted-badge {
+      display: inline-flex;
+      align-items: center;
+      width: fit-content;
+      margin-top: 8px;
+      padding: 4px 8px;
+      border: 1px solid rgba(143, 240, 189, .42);
+      background: rgba(143, 240, 189, .08);
+      color: var(--green);
+      font-size: 10px;
+      font-weight: 900;
+      letter-spacing: .04em;
+    }
+
+    .contact-storage-note {
+      margin-top: 9px;
+      color: var(--muted);
+      font-size: 11px;
+      line-height: 1.6;
+    }
+
+    .contact-state-btn.done {
+      border-color: rgba(143, 240, 189, .35);
+      background: rgba(143, 240, 189, .08);
+      color: var(--green);
+    }
+
     /* ========================================
        スマホ
     ======================================== */
@@ -1436,6 +1475,10 @@
         class="ending-union-count"
       >
         ⏰ 募集終了間近：読み込み中...
+      </div>
+
+      <div class="contact-storage-note">
+        ✓ 連絡済み状態はこのブラウザに保存されます。再掲載された募集は新しい募集として未連絡になります。
       </div>
 
       <div
@@ -1925,6 +1968,82 @@
       "https://x.gd/4tEJo";
 
 
+    const CONTACTED_UNION_KEY =
+      "nikke_union_admin_contacted_v1";
+
+
+    function getContactedUnionIds() {
+
+      try {
+
+        const saved =
+          JSON.parse(
+            localStorage.getItem(
+              CONTACTED_UNION_KEY
+            ) || "[]"
+          );
+
+        return new Set(
+          Array.isArray(saved)
+            ? saved.map(String)
+            : []
+        );
+
+      } catch {
+
+        return new Set();
+
+      }
+
+    }
+
+
+    function saveContactedUnionIds(setValue) {
+
+      localStorage.setItem(
+        CONTACTED_UNION_KEY,
+        JSON.stringify(
+          Array.from(setValue)
+        )
+      );
+
+    }
+
+
+    function isUnionContacted(id) {
+
+      return getContactedUnionIds()
+        .has(
+          String(id)
+        );
+
+    }
+
+
+    function setUnionContacted(
+      id,
+      contacted
+    ) {
+
+      const ids =
+        getContactedUnionIds();
+
+      const key =
+        String(id);
+
+      if (contacted) {
+        ids.add(key);
+      } else {
+        ids.delete(key);
+      }
+
+      saveContactedUnionIds(
+        ids
+      );
+
+    }
+
+
     function formatAdminDate(value) {
 
       if (!value) {
@@ -2179,8 +2298,24 @@
           : [];
 
 
+      const contactedIds =
+        getContactedUnionIds();
+
+      const contactedCount =
+        unions.filter(
+          item =>
+            contactedIds.has(
+              String(item.id)
+            )
+        ).length;
+
+      const pendingCount =
+        unions.length
+        -
+        contactedCount;
+
       count.textContent =
-        `⏰ 24時間以内に募集終了：${unions.length}件`;
+        `⏰ 24時間以内：${unions.length}件　📨 未連絡 ${pendingCount}件　✓ 連絡済み ${contactedCount}件`;
 
 
       if (
@@ -2196,10 +2331,51 @@
       }
 
 
+      const displayUnions =
+        [...unions]
+          .sort(
+            (a, b) => {
+
+              const aContacted =
+                contactedIds.has(
+                  String(a.id)
+                )
+                  ? 1
+                  : 0;
+
+              const bContacted =
+                contactedIds.has(
+                  String(b.id)
+                )
+                  ? 1
+                  : 0;
+
+              if (
+                aContacted !==
+                bContacted
+              ) {
+                return aContacted - bContacted;
+              }
+
+              return (
+                new Date(a.expires_at)
+                -
+                new Date(b.expires_at)
+              );
+
+            }
+          );
+
+
       list.innerHTML =
-        unions
+        displayUnions
           .map(
             item => {
+
+              const contacted =
+                contactedIds.has(
+                  String(item.id)
+                );
 
               const xUrl =
                 safeUrl(
@@ -2231,8 +2407,48 @@
                   `;
 
 
+              const contactedBadge =
+                contacted
+                  ? `
+                    <div class="contacted-badge">
+                      ✓ 連絡済み
+                    </div>
+                  `
+                  : "";
+
+              const contactStateButton =
+                `
+                  <button
+                    class="btn contact-state-btn ${
+                      contacted
+                        ? "done"
+                        : "green"
+                    }"
+                    type="button"
+                    data-union-id="${escapeHtml(
+                      item.id
+                    )}"
+                    data-contacted="${
+                      contacted
+                        ? "1"
+                        : "0"
+                    }"
+                  >
+                    ${
+                      contacted
+                        ? "↩ 未連絡に戻す"
+                        : "✓ 連絡済みにする"
+                    }
+                  </button>
+                `;
+
+
               return `
-                <article class="ending-union-card">
+                <article class="ending-union-card ${
+                  contacted
+                    ? "contacted"
+                    : ""
+                }">
 
                   <div class="ending-union-head">
 
@@ -2248,6 +2464,8 @@
                           item.union_rank || "ランク未設定"
                         )}
                       </div>
+
+                      ${contactedBadge}
                     </div>
 
                     <div class="ending-union-deadline">
@@ -2276,6 +2494,7 @@
 
                   <div class="ending-union-actions">
                     ${xButton}
+                    ${contactStateButton}
                   </div>
 
                 </article>
@@ -2400,6 +2619,42 @@
       ?.addEventListener(
         "click",
         loadEndingUnions
+      );
+
+
+    $("#endingUnionList")
+      ?.addEventListener(
+        "click",
+        async event => {
+
+          const button =
+            event.target.closest(
+              ".contact-state-btn"
+            );
+
+          if (!button) {
+            return;
+          }
+
+          const id =
+            button.dataset.unionId;
+
+          const currentlyContacted =
+            button.dataset.contacted ===
+            "1";
+
+          if (!id) {
+            return;
+          }
+
+          setUnionContacted(
+            id,
+            !currentlyContacted
+          );
+
+          await loadEndingUnions();
+
+        }
       );
 
 
