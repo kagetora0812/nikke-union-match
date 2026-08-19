@@ -18,967 +18,682 @@
   <title>
     NIKKE UNION MATCH - 応援クリエイター
   </title>
+  <!-- creators v3: dark / minimal orange / white-blue active buttons -->
 
 
   <style>
-
     :root {
-      --bg: #080b12;
-      --panel: #101621;
-      --panel2: #141c29;
-      --line: #2b3545;
-      --text: #edf2f7;
-      --muted: #8e9aaa;
-      --accent: #ff7a18;
-      --accent2: #ffb15c;
-      --green: #8ff0bd;
-      --blue: #3696ff;
+      --bg: #08090c;
+      --bg2: #0d0f13;
+      --panel: #121419;
+      --panel2: #171a20;
+      --panel3: #1d2027;
+      --line: #2b2e35;
+      --line-soft: rgba(255, 255, 255, .07);
+      --text: #f1f2f4;
+      --muted: #969ba3;
+      --muted2: #6f747c;
+      --accent: #28b9e8;
+      --accent2: #8edcff;
+      --orange: #e7a22d;
+      --cyan: #28b9e8;
+      --red: #ff6977;
     }
-
 
     * {
       box-sizing: border-box;
     }
 
+    html {
+      background: var(--bg);
+    }
 
     body {
       margin: 0;
-
       min-height: 100vh;
-
-      background:
-        radial-gradient(
-          circle at 50% -10%,
-          #1a2434 0,
-          #080b12 45%
-        );
-
       color: var(--text);
-
+      background:
+        radial-gradient(circle at 82% 7%, rgba(255,255,255,.045), transparent 24%),
+        linear-gradient(180deg, #0d0f13 0%, #08090c 56%, #07080a 100%);
       font-family:
-        -apple-system,
-        BlinkMacSystemFont,
-        "Segoe UI",
-        "Noto Sans JP",
+        "Gothic MB101",
+        "Zen Kaku Gothic New",
         sans-serif;
+      font-weight: 700;
+      -webkit-font-smoothing: antialiased;
+      text-rendering: optimizeLegibility;
     }
 
+    body::before {
+      content: "";
+      position: fixed;
+      inset: 0;
+      z-index: -1;
+      pointer-events: none;
+      opacity: .32;
+      background:
+        linear-gradient(135deg, transparent 0 74%, rgba(255,255,255,.025) 74% 74.35%, transparent 74.35% 100%);
+    }
 
     a {
       color: inherit;
     }
 
-
     button {
       font: inherit;
     }
-
 
     .hidden {
       display: none !important;
     }
 
-
-    /* ========================================
-       ヘッダー
-    ======================================== */
-
+    /* ================= HEADER ================= */
     .topbar {
-      height: 66px;
-
-      padding:
-        0 18px;
-
+      height: 64px;
+      padding: 0 20px;
       display: flex;
-
       align-items: center;
-
       justify-content: space-between;
-
-      border-bottom:
-        1px solid
-        var(--line);
-
-      background:
-        rgba(
-          8,
-          11,
-          18,
-          .92
-        );
-
       position: sticky;
-
       top: 0;
-
       z-index: 20;
-
-      backdrop-filter:
-        blur(12px);
+      border-bottom: 1px solid var(--line-soft);
+      background: rgba(8, 9, 12, .92);
+      backdrop-filter: blur(14px);
     }
-
 
     .brand {
       display: flex;
-
       flex-direction: column;
-
-      line-height: .88;
+      font-family:
+        "Industry",
+        "Azonix",
+        "Futura PT Condensed",
+        "Teko",
+        "Gothic MB101",
+        "Zen Kaku Gothic New",
+        sans-serif;
+      line-height: .82;
     }
-
 
     .brand-small {
-      color:
-        var(--accent2);
-
-      font-size: 10px;
-
-      letter-spacing: 3px;
+      color: var(--accent);
+      font-size: 9px;
+      font-weight: 800;
+      letter-spacing: 3.7px;
     }
-
 
     .brand-main {
-      font-size: 20px;
-
+      margin-top: 5px;
+      color: #fff;
+      font-size: 23px;
       font-weight: 800;
-
-      letter-spacing: 1.5px;
-    }
-
-
-    .status {
-      color:
-        var(--green);
-
-      font-size: 11px;
-
-      font-weight: 800;
-
       letter-spacing: 1px;
     }
 
-
-    /* ========================================
-       全体
-    ======================================== */
-
-    .container {
-      width:
-        min(
-          1200px,
-          calc(100% - 24px)
-        );
-
-      margin:
-        0 auto;
-
-      padding:
-        42px 0 70px;
+    .status {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      color: #c7cbd0;
+      font: 800 11px "Teko", sans-serif;
+      letter-spacing: 1.6px;
     }
 
+    .status::before {
+      content: "";
+      width: 5px;
+      height: 15px;
+      background: var(--orange);
+      box-shadow: 0 0 8px rgba(231,162,45,.22);
+    }
+
+    /* ================= LAYOUT ================= */
+    .container {
+      width: min(1180px, calc(100% - 28px));
+      margin: 0 auto;
+      padding: 28px 0 46px;
+    }
 
     .eyebrow {
-      color:
-        var(--accent2);
-
-      font-size: 11px;
-
-      font-weight: 800;
-
+      margin-bottom: 7px;
+      color: var(--accent);
+      font: 800 11px "Teko", sans-serif;
       letter-spacing: 2.4px;
-
-      margin-bottom: 8px;
+      text-transform: uppercase;
     }
-
 
     h1,
     h2 {
       margin: 0;
+      color: #fff;
+      font-family:
+        "Gothic MB101",
+        "Zen Kaku Gothic New",
+        sans-serif;
+      font-weight: 900;
+      letter-spacing: -.055em;
     }
 
-
     h1 {
-      font-size:
-        clamp(
-          34px,
-          8vw,
-          60px
-        );
-
+      font-size: clamp(31px, 6vw, 52px);
       line-height: 1.05;
     }
 
-
     h2 {
-      font-size:
-        clamp(
-          24px,
-          5vw,
-          34px
-        );
-
-      line-height: 1.2;
+      font-size: clamp(22px, 4vw, 30px);
+      line-height: 1.15;
     }
-
 
     .lead {
-      margin:
-        16px 0 0;
-
-      color:
-        var(--muted);
-
-      line-height: 1.8;
-
       max-width: 680px;
-    }
-
-
-    .top-actions {
-      margin-top: 24px;
-    }
-
-
-    /* ========================================
-       戻るボタン
-    ======================================== */
-
-    .back-btn {
-      display: inline-flex;
-
-      align-items: center;
-
-      justify-content: center;
-
-      min-height: 46px;
-
-      padding:
-        0 18px;
-
-      text-decoration: none;
-
-      border:
-        1px solid
-        var(--line);
-
-      background:
-        #111925;
-
-      color:
-        #fff;
-
-      font-weight: 800;
-    }
-
-
-    .back-btn:hover {
-      border-color:
-        var(--accent);
-
-      color:
-        var(--accent2);
-    }
-
-
-    /* ========================================
-       件数
-    ======================================== */
-
-    .creator-count {
-      margin-top: 30px;
-
-      padding:
-        14px 16px;
-
-      border:
-        1px solid
-        rgba(
-          143,
-          240,
-          189,
-          .32
-        );
-
-      background:
-        rgba(
-          84,
-          227,
-          155,
-          .07
-        );
-
-      color:
-        var(--green);
-
+      margin: 13px 0 0;
+      color: #b5bac1;
       font-size: 13px;
-
-      font-weight: 800;
+      line-height: 1.8;
     }
 
-
-    /* ========================================
-       クリエイター一覧
-    ======================================== */
-
-    .creator-grid {
-      display: grid;
-
-      grid-template-columns:
-        repeat(
-          3,
-          minmax(
-            0,
-            1fr
-          )
-        );
-
-      gap: 16px;
-
-      margin-top: 18px;
-    }
-
-
-    .creator-card {
-      display: flex;
-
-      flex-direction: column;
-
-      min-height: 310px;
-
-      padding: 20px;
-
-      border:
-        1px solid
-        var(--line);
-
-      background:
-        linear-gradient(
-          145deg,
-          rgba(
-            20,
-            28,
-            41,
-            .96
-          ),
-          rgba(
-            11,
-            16,
-            24,
-            .96
-          )
-        );
-
+    /* ================= HERO ================= */
+    .creator-hero {
       position: relative;
-
       overflow: hidden;
+      min-height: 240px;
+      padding: 32px 34px;
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) auto;
+      align-items: center;
+      gap: 30px;
+      border: 1px solid #292c32;
+      border-top: 3px solid #3a3d43;
+      background:
+        linear-gradient(110deg, #17191e 0%, #111318 56%, #0d0f13 100%);
+      box-shadow: 0 20px 45px rgba(0,0,0,.22);
     }
 
-
-    .creator-card::after {
+    .creator-hero::before,
+    .creator-hero::after {
       content: "";
-
       position: absolute;
-
-      width: 90px;
-
-      height: 90px;
-
-      right: -35px;
-
-      top: -35px;
-
-      border:
-        1px solid
-        rgba(
-          143,
-          240,
-          189,
-          .16
-        );
-
-      transform:
-        rotate(45deg);
-
+      border-radius: 50%;
       pointer-events: none;
     }
 
+    .creator-hero::before {
+      width: 300px;
+      height: 300px;
+      right: -68px;
+      top: -86px;
+      border: 34px solid rgba(255,255,255,.018);
+      box-shadow: 0 0 0 34px rgba(255,255,255,.014), 0 0 0 68px rgba(255,255,255,.010);
+    }
+
+    .creator-hero::after {
+      width: 8px;
+      height: 8px;
+      left: 16px;
+      top: 17px;
+      border-radius: 0;
+      background: var(--orange);
+      box-shadow: 14px 0 0 rgba(40,185,232,.38), 28px 0 0 rgba(255,255,255,.14);
+    }
+
+    .hero-copy,
+    .creator-count-panel {
+      position: relative;
+      z-index: 1;
+    }
+
+    .top-actions {
+      margin-top: 22px;
+    }
+
+    .back-btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      min-height: 42px;
+      padding: 0 15px;
+      border: 1px solid #3a3d43;
+      background: #1a1d22;
+      color: #e2e4e7;
+      text-decoration: none;
+      font-size: 12px;
+      font-weight: 900;
+      transition: .18s ease;
+    }
+
+    .back-btn:hover {
+      border-color: #a9dff6;
+    }
+
+    .creator-count-panel {
+      min-width: 170px;
+      padding: 20px 22px;
+      border-left: 1px solid #33363d;
+      text-align: center;
+    }
+
+    .creator-count-label {
+      color: var(--muted2);
+      font: 800 10px "Teko", sans-serif;
+      letter-spacing: 2px;
+    }
+
+    .creator-count {
+      margin-top: 8px;
+      color: #fff;
+      font-size: 16px;
+      font-weight: 900;
+      white-space: nowrap;
+    }
+
+    /* ================= NIKKE WHITE / BLUE TAP ================= */
+    .back-btn,
+    .creator-link,
+    .recruit-x-btn {
+      -webkit-tap-highlight-color: transparent;
+      position: relative;
+      overflow: hidden;
+      transition:
+        background .12s ease,
+        color .12s ease,
+        border-color .12s ease,
+        box-shadow .12s ease,
+        transform .08s ease;
+    }
+
+    .back-btn::after,
+    .creator-link::after,
+    .recruit-x-btn::after {
+      content: "";
+      position: absolute;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      height: 2px;
+      background: transparent;
+      transition: background .12s ease;
+      pointer-events: none;
+    }
+
+    .back-btn:hover,
+    .creator-link:hover,
+    .recruit-x-btn:hover,
+    .back-btn:focus-visible,
+    .creator-link:focus-visible,
+    .recruit-x-btn:focus-visible,
+    .back-btn:active,
+    .creator-link:active,
+    .recruit-x-btn:active {
+      border-color: #a9dff6 !important;
+      background:
+        linear-gradient(180deg, #ffffff 0%, #edf3f7 100%) !important;
+      color: #168fc7 !important;
+      box-shadow:
+        0 4px 12px rgba(0,0,0,.22),
+        inset 0 1px 0 rgba(255,255,255,.95),
+        inset 0 -2px 0 rgba(40,185,232,.18);
+      outline: none;
+    }
+
+    .back-btn:hover::after,
+    .creator-link:hover::after,
+    .recruit-x-btn:hover::after,
+    .back-btn:focus-visible::after,
+    .creator-link:focus-visible::after,
+    .recruit-x-btn:focus-visible::after,
+    .back-btn:active::after,
+    .creator-link:active::after,
+    .recruit-x-btn:active::after {
+      background: var(--cyan);
+    }
+
+    .back-btn:active,
+    .creator-link:active,
+    .recruit-x-btn:active {
+      transform: translateY(1px);
+    }
+
+    /* ================= LIST ================= */
+    .list-section {
+      margin-top: 30px;
+    }
+
+    .section-title-row {
+      display: flex;
+      align-items: end;
+      justify-content: space-between;
+      gap: 20px;
+      padding: 0 2px 13px;
+      border-bottom: 1px solid var(--line);
+    }
+
+    .creator-grid {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 14px;
+      margin-top: 14px;
+    }
+
+    .creator-card {
+      position: relative;
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+      min-height: 300px;
+      padding: 18px;
+      border: 1px solid #292c32;
+      background:
+        linear-gradient(145deg, #17191e 0%, #111318 100%);
+      box-shadow: 0 8px 24px rgba(0,0,0,.16);
+      transition: transform .18s ease, border-color .18s ease, background .18s ease;
+    }
+
+    .creator-card::before {
+      content: "";
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 64px;
+      height: 3px;
+      background: var(--accent);
+    }
+
+    .creator-card::after {
+      content: "";
+      position: absolute;
+      width: 82px;
+      height: 82px;
+      right: -42px;
+      bottom: -42px;
+      border: 1px solid rgba(255,255,255,.045);
+      transform: rotate(45deg);
+      pointer-events: none;
+    }
+
+    .creator-card:hover {
+      transform: translateY(-2px);
+      border-color: #41444b;
+      background: linear-gradient(145deg, #1a1d22 0%, #121419 100%);
+    }
 
     .creator-badge {
       display: inline-flex;
-
       align-items: center;
-
       width: fit-content;
-
-      padding:
-        5px 9px;
-
-      border:
-        1px solid
-        rgba(
-          143,
-          240,
-          189,
-          .35
-        );
-
-      color:
-        var(--green);
-
-      font-size: 10px;
-
-      font-weight: 800;
+      min-height: 24px;
+      padding: 0 8px;
+      border: 1px solid #34373e;
+      background: #0e1014;
+      color: #aeb3b9;
+      font: 800 9px "Teko", sans-serif;
+      letter-spacing: 1.4px;
     }
-
-
-    /* ========================================
-       アイコン
-    ======================================== */
 
     .creator-icon-wrap {
-      margin-top: 18px;
-
+      margin-top: 19px;
       display: flex;
-
       justify-content: center;
     }
 
+    .creator-icon,
+    .creator-icon-placeholder {
+      width: 92px;
+      height: 92px;
+      border-radius: 50%;
+      border: 2px solid #34373e;
+      background: #202329;
+      box-shadow: 0 0 0 5px rgba(255,255,255,.018);
+    }
 
     .creator-icon {
-      width: 112px;
-
-      height: 112px;
-
-      border-radius: 50%;
-
       object-fit: cover;
-
-      border:
-        3px solid
-        rgba(
-          143,
-          240,
-          189,
-          .45
-        );
-
-      background:
-        #141c29;
-
-      box-shadow:
-        0 0 22px
-        rgba(
-          143,
-          240,
-          189,
-          .10
-        );
     }
-
 
     .creator-icon-placeholder {
-      width: 112px;
-
-      height: 112px;
-
-      border-radius: 50%;
-
       display: flex;
-
       align-items: center;
-
       justify-content: center;
-
-      border:
-        3px solid
-        rgba(
-          143,
-          240,
-          189,
-          .30
-        );
-
-      background:
-        #141c29;
-
-      color:
-        var(--green);
-
-      font-size: 40px;
+      color: var(--accent2);
+      font-size: 32px;
     }
-
 
     .creator-name {
-      margin-top: 16px;
-
+      margin-top: 15px;
+      color: #fff;
       text-align: center;
-
-      font-size: 21px;
-
-      font-weight: 800;
-
+      font-size: 18px;
+      font-weight: 900;
       line-height: 1.35;
-
-      word-break:
-        break-word;
+      word-break: break-word;
     }
-
 
     .creator-description {
-      margin-top: 12px;
-
-      color:
-        #cbd4df;
-
-      font-size: 13px;
-
-      line-height: 1.75;
-
-      white-space:
-        pre-wrap;
-
       flex: 1;
+      margin-top: 10px;
+      color: #aeb3ba;
+      font-size: 12px;
+      line-height: 1.7;
+      white-space: pre-wrap;
+      text-align: center;
     }
-
-
-    /* ========================================
-       リンク
-    ======================================== */
 
     .creator-links {
       display: grid;
-
-      grid-template-columns:
-        1fr 1fr;
-
-      gap: 8px;
-
-      margin-top: 18px;
+      grid-template-columns: 1fr 1fr;
+      gap: 7px;
+      margin-top: 17px;
     }
 
+    .creator-links.single {
+      grid-template-columns: 1fr;
+    }
 
     .creator-link {
       display: flex;
-
       align-items: center;
-
       justify-content: center;
-
-      min-height: 44px;
-
-      padding:
-        8px 10px;
-
+      min-height: 40px;
+      padding: 7px 9px;
+      border: 1px solid #34373e;
+      background: #0d0f13;
+      color: #d6d9dd;
       text-decoration: none;
-
-      font-size: 12px;
-
-      font-weight: 800;
-
-      border:
-        1px solid
-        var(--line);
-
-      background:
-        #0b111b;
+      font-size: 11px;
+      font-weight: 900;
+      transition: .18s ease;
     }
 
-
-    .creator-link.youtube {
-      border-color:
-        rgba(
-          255,
-          83,
-          100,
-          .45
-        );
-
-      color:
-        #ff9aa5;
+    .creator-link.youtube:hover,
+    .creator-link.x:hover {
+      border-color: #a9dff6;
     }
-
-
-    .creator-link.x {
-      border-color:
-        rgba(
-          54,
-          150,
-          255,
-          .45
-        );
-
-      color:
-        #8cc9ff;
-    }
-
-
-    .creator-link:hover {
-      filter:
-        brightness(1.15);
-    }
-
-
-    .creator-links.single {
-      grid-template-columns:
-        1fr;
-    }
-
-
-    /* ========================================
-       EMPTY / ERROR
-    ======================================== */
 
     .empty,
     .error {
-      margin-top: 18px;
-
-      padding: 34px 20px;
-
+      margin-top: 14px;
+      padding: 28px 18px;
+      border: 1px dashed #33363d;
+      color: var(--muted);
       text-align: center;
-
-      border:
-        1px dashed
-        var(--line);
-
-      color:
-        var(--muted);
-    }
-
-
-    .error {
-      color:
-        #ff9aa5;
-
-      border-color:
-        rgba(
-          255,
-          83,
-          100,
-          .32
-        );
-    }
-
-
-    /* ========================================
-       応援クリエイター募集
-    ======================================== */
-
-    .creator-recruit-box {
-      margin-top: 34px;
-
-      padding: 24px;
-
-      border:
-        1px solid
-        rgba(
-          143,
-          240,
-          189,
-          .38
-        );
-
-      background:
-        linear-gradient(
-          145deg,
-          rgba(
-            84,
-            227,
-            155,
-            .10
-          ),
-          rgba(
-            20,
-            28,
-            41,
-            .90
-          )
-        );
-    }
-
-
-    .creator-recruit-box p {
-      margin:
-        12px 0 0;
-
-      color:
-        #cbd4df;
-
-      line-height: 1.8;
-
       font-size: 13px;
     }
 
+    .error {
+      color: #ff9aa5;
+      border-color: rgba(255,105,119,.35);
+    }
+
+    /* ================= RECRUIT ================= */
+    .creator-recruit-box {
+      position: relative;
+      overflow: hidden;
+      margin-top: 30px;
+      padding: 25px 28px;
+      border: 1px solid #30333a;
+      background: linear-gradient(110deg, #15171c 0%, #0f1115 100%);
+    }
+
+    .creator-recruit-box::before {
+      content: "";
+      position: absolute;
+      left: 0;
+      top: 0;
+      bottom: 0;
+      width: 4px;
+      background: var(--accent);
+    }
+
+    .creator-recruit-box p {
+      max-width: 760px;
+      margin: 10px 0 0;
+      color: #aeb3ba;
+      font-size: 13px;
+      line-height: 1.75;
+    }
 
     .creator-recruit-actions {
       display: flex;
-
       gap: 10px;
-
       flex-wrap: wrap;
-
-      margin-top: 18px;
+      margin-top: 17px;
     }
-
 
     .recruit-x-btn {
-      min-height: 48px;
-
-      padding:
-        0 18px;
-
+      min-height: 44px;
+      padding: 0 16px;
       display: inline-flex;
-
       align-items: center;
-
       justify-content: center;
-
+      border: 1px solid #4a4d54;
+      background: #202329;
+      color: #fff;
       text-decoration: none;
-
-      border:
-        1px solid
-        rgba(
-          54,
-          150,
-          255,
-          .45
-        );
-
-      background:
-        rgba(
-          54,
-          150,
-          255,
-          .10
-        );
-
-      color:
-        #8cc9ff;
-
-      font-weight: 800;
-
-      font-size: 13px;
+      font-size: 12px;
+      font-weight: 900;
+      transition: .18s ease;
     }
 
-
-    /* ========================================
-       Xシェア
-    ======================================== */
-
-    .share-box {
-      margin-top: 18px;
-
-      padding: 24px;
-
-      border:
-        1px solid
-        rgba(
-          255,
-          177,
-          92,
-          .32
-        );
-
-      background:
-        rgba(
-          255,
-          122,
-          24,
-          .06
-        );
+    .recruit-x-btn:hover {
+      border-color: #a9dff6;
     }
-
-
-    .share-box p {
-      margin:
-        12px 0 0;
-
-      color:
-        var(--muted);
-
-      font-size: 13px;
-
-      line-height: 1.8;
-    }
-
-
-    .share-app-btn {
-      margin-top: 18px;
-
-      min-height: 48px;
-
-      padding:
-        0 18px;
-
-      display: inline-flex;
-
-      align-items: center;
-
-      justify-content: center;
-
-      border:
-        1px solid
-        rgba(
-          255,
-          177,
-          92,
-          .45
-        );
-
-      background:
-        linear-gradient(
-          135deg,
-          #ff6a00,
-          #d94100
-        );
-
-      color:
-        #fff;
-
-      cursor: pointer;
-
-      font-weight: 800;
-
-      font-size: 13px;
-    }
-
-
-    /* ========================================
-       下部
-    ======================================== */
 
     .bottom-area {
-      margin-top: 34px;
-
-      padding-top: 24px;
-
-      border-top:
-        1px solid
-        var(--line);
-
-      text-align: center;
+      margin-top: 28px;
+      padding: 20px 2px 0;
+      border-top: 1px solid #23262c;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 16px;
     }
-
 
     .bottom-copy {
-      margin-bottom: 14px;
-
-      color:
-        var(--muted);
-
-      font-size: 12px;
-
-      line-height: 1.7;
+      color: #666b72;
+      font: 800 10px "Teko", sans-serif;
+      letter-spacing: 1.5px;
+      line-height: 1.5;
     }
 
-
-    /* ========================================
-       タブレット
-    ======================================== */
-
-    @media screen and
-    (min-width: 601px) and
-    (max-width: 1024px) {
-
+    @media screen and (min-width: 601px) and (max-width: 1024px) {
       .creator-grid {
-        grid-template-columns:
-          repeat(
-            2,
-            minmax(
-              0,
-              1fr
-            )
-          );
+        grid-template-columns: repeat(2, minmax(0, 1fr));
       }
-
     }
-
-
-    /* ========================================
-       スマホ
-    ======================================== */
 
     @media screen and (max-width: 600px) {
+      .topbar {
+        height: 58px;
+        padding: 0 12px;
+      }
+
+      .brand-main {
+        font-size: 20px;
+      }
+
+      .status {
+        font-size: 10px;
+      }
 
       .container {
-        width:
-          calc(
-            100% - 20px
-          );
-
-        padding-top: 28px;
+        width: calc(100% - 16px);
+        padding-top: 12px;
       }
 
+      .creator-hero {
+        min-height: 0;
+        padding: 24px 18px 20px;
+        grid-template-columns: 1fr;
+        gap: 20px;
+      }
+
+      .creator-hero::before {
+        width: 220px;
+        height: 220px;
+        right: -95px;
+        top: -78px;
+        opacity: .7;
+      }
 
       h1 {
-        font-size: 36px;
-      }
-
-
-      .lead {
-        font-size: 13px;
-      }
-
-
-      .creator-grid {
-        grid-template-columns:
-          1fr;
-
-        gap: 12px;
-      }
-
-
-      .creator-card {
-        min-height: 0;
-
-        padding: 17px;
-      }
-
-
-      .creator-icon,
-      .creator-icon-placeholder {
-        width: 96px;
-
-        height: 96px;
-      }
-
-
-      .creator-icon-placeholder {
         font-size: 34px;
       }
 
-
-      .creator-links {
-        grid-template-columns:
-          1fr;
-      }
-
-
-      .creator-count {
+      .lead {
         font-size: 12px;
       }
 
-
-      .creator-recruit-box,
-      .share-box {
-        padding: 18px;
+      .creator-count-panel {
+        min-width: 0;
+        padding: 15px 0 0;
+        border-left: 0;
+        border-top: 1px solid #30333a;
+        text-align: left;
       }
 
-
-      .creator-recruit-actions {
-        display: grid;
-
-        grid-template-columns:
-          1fr;
+      .creator-count {
+        font-size: 14px;
       }
 
+      .section-title-row {
+        align-items: flex-start;
+      }
 
-      .recruit-x-btn,
-      .share-app-btn {
+      .creator-grid {
+        grid-template-columns: 1fr;
+        gap: 10px;
+      }
+
+      .creator-card {
+        min-height: 0;
+        padding: 16px;
+      }
+
+      .creator-description {
+        min-height: 0;
+      }
+
+      .creator-recruit-box {
+        padding: 21px 18px;
+      }
+
+      .recruit-x-btn {
         width: 100%;
       }
 
-    }
+      .bottom-area {
+        flex-direction: column;
+        align-items: stretch;
+      }
 
+      .bottom-copy {
+        text-align: center;
+      }
+
+      .bottom-area .back-btn {
+        width: 100%;
+      }
+    }
   </style>
 
 </head>
@@ -1016,182 +731,74 @@
 
   <main class="container">
 
-
-    <!-- ========================================
-         タイトル
-    ========================================= -->
-
-    <div class="eyebrow">
-      SUPPORT CREATORS
-    </div>
-
-
-    <h1>
-      📺 応援クリエイター
-    </h1>
-
-
-    <p class="lead">
-      NIKKE UNION MATCHを応援していただいている
-      NIKKEクリエイター・配信者の皆様をご紹介します✨
-    </p>
-
-
-
-    <div class="top-actions">
-
-      <a
-        class="back-btn"
-        href="./index.html"
-      >
-        ← NIKKE UNION MATCHへ戻る
-      </a>
-
-    </div>
-
-
-
-    <!-- ========================================
-         件数
-    ========================================= -->
-
-    <div
-      id="creatorCount"
-      class="creator-count"
-    >
-      公開クリエイターを読み込み中...
-    </div>
-
-
-
-    <!-- ========================================
-         クリエイター一覧
-    ========================================= -->
-
-    <div
-      id="creatorGrid"
-      class="creator-grid"
-    >
-    </div>
-
-
-
-    <div
-      id="emptyState"
-      class="empty hidden"
-    >
-      現在公開中の応援クリエイターはいません。
-    </div>
-
-
-
-    <div
-      id="errorState"
-      class="error hidden"
-    >
-      クリエイター情報を読み込めませんでした。
-    </div>
-
-
-
-    <!-- ========================================
-         応援クリエイター募集
-    ========================================= -->
-
-    <section class="creator-recruit-box">
-
-      <div class="eyebrow">
-        CREATOR RECRUITMENT
+    <section class="creator-hero">
+      <div class="hero-copy">
+        <div class="eyebrow">SUPPORT CREATORS</div>
+        <h1>応援クリエイター</h1>
+        <p class="lead">
+          NIKKE UNION MATCHを応援していただいている<br>
+          NIKKEクリエイター・配信者の皆様をご紹介します。
+        </p>
+        <div class="top-actions">
+          <a class="back-btn" href="./index.html">← UNION MATCHへ戻る</a>
+        </div>
       </div>
 
+      <div class="creator-count-panel">
+        <div class="creator-count-label">PUBLIC CREATORS</div>
+        <div id="creatorCount" class="creator-count">
+          公開クリエイターを読み込み中...
+        </div>
+      </div>
+    </section>
 
-      <h2>
-        📣 応援クリエイター募集中！
-      </h2>
+    <section class="list-section">
+      <div class="section-title-row">
+        <div>
+          <div class="eyebrow">CREATOR LIST</div>
+          <h2>クリエイター一覧</h2>
+        </div>
+      </div>
 
+      <div id="creatorGrid" class="creator-grid"></div>
 
+      <div id="emptyState" class="empty hidden">
+        現在公開中の応援クリエイターはいません。
+      </div>
+
+      <div id="errorState" class="error hidden">
+        クリエイター情報を読み込めませんでした。
+      </div>
+    </section>
+
+    <section class="creator-recruit-box">
+      <div class="eyebrow">CREATOR ENTRY</div>
+      <h2>応援クリエイター募集中</h2>
       <p>
         NIKKE UNION MATCHを一緒に盛り上げていただける
-        YouTuber・配信者・NIKKEクリエイター様を募集しています✨
+        YouTuber・配信者・NIKKEクリエイター様を募集しています。
       </p>
-
-
       <p>
         掲載をご希望の方は、Xからお気軽にご連絡ください。
       </p>
-
-
       <div class="creator-recruit-actions">
-
         <a
           class="recruit-x-btn"
           href="https://x.com/KAGETORA_Z00"
           target="_blank"
           rel="noopener noreferrer"
         >
-          𝕏から掲載を申し込む
+          𝕏 掲載について連絡する ↗
         </a>
-
       </div>
-
     </section>
 
-
-
-    <!-- ========================================
-         アプリシェア
-    ========================================= -->
-
-    <section class="share-box">
-
-      <div class="eyebrow">
-        SHARE
-      </div>
-
-
-      <h2>
-        📢 NIKKE UNION MATCHを広める
-      </h2>
-
-
-      <p>
-        指揮官・ユニオンを探している方へ、
-        NIKKE UNION MATCHをシェアしていただけると嬉しいです✨
-      </p>
-
-
-      <button
-        id="shareAppBtn"
-        class="share-app-btn"
-        type="button"
-      >
-        𝕏でアプリをシェア
-      </button>
-
-    </section>
-
-
-
-    <!-- ========================================
-         下部
-    ========================================= -->
-
-    <div class="bottom-area">
-
+    <footer class="bottom-area">
       <div class="bottom-copy">
-        指揮官とユニオンをつなぐ<br>
-        NIKKE UNION MATCH
+        NIKKE UNION MATCH · SUPPORT CREATORS
       </div>
-
-      <a
-        class="back-btn"
-        href="./index.html"
-      >
-        アプリへ戻る
-      </a>
-
-    </div>
-
+      <a class="back-btn" href="./index.html">アプリへ戻る</a>
+    </footer>
 
   </main>
 
@@ -1388,7 +995,7 @@
 
 
       count.textContent =
-        `📺 公開クリエイター：${creators.length}名`;
+        `公開中 ${creators.length}名`;
 
 
       if (
@@ -1443,7 +1050,7 @@
                     target="_blank"
                     rel="noopener noreferrer"
                   >
-                    ▶ YouTubeを見る
+                    YouTube ↗
                   </a>
 
                 `);
@@ -1463,7 +1070,7 @@
                     target="_blank"
                     rel="noopener noreferrer"
                   >
-                    𝕏を見る
+                    𝕏 X ↗
                   </a>
 
                 `);
@@ -1529,7 +1136,7 @@
 
 
                   <div class="creator-badge">
-                    ✨ SUPPORT CREATOR
+                    SUPPORT CREATOR
                   </div>
 
 
@@ -1583,49 +1190,6 @@
           .join("");
 
     }
-
-
-    // ========================================
-    // Xでアプリをシェア
-    // ========================================
-
-    $("#shareAppBtn")
-      ?.addEventListener(
-        "click",
-        () => {
-
-          const shareText =
-
-            "🔎 指揮官とユニオンをつなぐマッチングアプリ\n" +
-            "「NIKKE UNION MATCH」\n\n" +
-
-            "📺 応援クリエイターも掲載中！\n\n" +
-
-            "指揮官・ユニオン探しにぜひ✨\n\n" +
-
-            "👇アプリを確認\n" +
-            "https://x.gd/4tEJo";
-
-
-          const shareUrl =
-
-            "https://twitter.com/intent/tweet?text="
-
-            +
-
-            encodeURIComponent(
-              shareText
-            );
-
-
-          window.open(
-            shareUrl,
-            "_blank"
-          );
-
-        }
-      );
-
 
     // ========================================
     // 起動
