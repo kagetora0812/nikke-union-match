@@ -1,4 +1,4 @@
-@import url("https://fonts.googleapis.com/css2?family=Rajdhani:wght@500;600;700&family=Noto+Sans+JP:wght@400;500;700;800;900&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@500;600;700;800&family=M+PLUS+1p:wght@400;500;700;800;900&display=swap");
 
 /* =========================================================
    NIKKE UNION MATCH
@@ -75,9 +75,18 @@ body {
       #edf1f3 100%
     );
 
+.brand,
+.hero-stat-number strong,
+.hero-graduate-number strong,
+.registration-count strong,
+.graduated-commander-number strong,
+.pass-box strong,
+.status-dot {
   font-family:
-    "Noto Sans JP",
+    "Barlow Condensed",
+    "M PLUS 1p",
     sans-serif;
+}
 
   -webkit-font-smoothing: antialiased;
 }
@@ -236,18 +245,19 @@ textarea:focus-visible {
 
 h1,
 h2,
-h3 {
-  margin: 0;
-
-  color: var(--ink);
-
+h3,
+.hero-stat-title,
+.hero-graduate-title,
+.btn,
+.search-tab,
+.nav-btn {
   font-family:
-    "Noto Sans JP",
-    Rajdhani,
+    "M PLUS 1p",
     sans-serif;
 
   font-weight: 900;
-  letter-spacing: -.045em;
+  letter-spacing: -0.075em;
+  line-height: .92;
 }
 
 .eyebrow {
