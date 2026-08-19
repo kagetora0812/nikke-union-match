@@ -115,11 +115,39 @@ function formatDate(date) {
 }
 
 // ========================================
+// 表示テストモード
+// ?badgeTest=1    → NEW + 締切間近を両方表示
+// ?newTest=1      → NEWだけ強制表示
+// ?deadlineTest=1 → 締切間近だけ強制表示
+// ※本番の判定ロジックには影響しません
+// ========================================
+
+const displayTestParams =
+  new URLSearchParams(
+    window.location.search
+  );
+
+const forceNewBadge =
+  displayTestParams.get("badgeTest") === "1"
+  ||
+  displayTestParams.get("newTest") === "1";
+
+const forceDeadlineBadge =
+  displayTestParams.get("badgeTest") === "1"
+  ||
+  displayTestParams.get("deadlineTest") === "1";
+
+
+// ========================================
 // NEW表示
 // 登録から24時間以内
 // ========================================
 
 function isNewRecruitment(createdAt) {
+
+  if (forceNewBadge) {
+    return true;
+  }
 
   const createdTime =
     new Date(createdAt).getTime();
@@ -657,7 +685,35 @@ function getRemainingTime(
         "掲載終了",
 
       className:
-        "danger"
+        "danger",
+
+      deadlineNear:
+        false
+
+    };
+
+  }
+
+
+  // ======================================
+  // 締切間近 表示テスト
+  // 実際の期限を変更せず、見た目だけ強制表示
+  // ======================================
+  if (forceDeadlineBadge) {
+
+    return {
+
+      expired:
+        false,
+
+      text:
+        "⚠ 残り 23時間 59分",
+
+      className:
+        "deadline-near",
+
+      deadlineNear:
+        true
 
     };
 
@@ -693,6 +749,35 @@ function getRemainingTime(
     60;
 
 
+  // ======================================
+  // 締切間近：残り24時間以内
+  // ======================================
+  const deadlineNear =
+    diff <=
+    24 * 60 * 60 * 1000;
+
+
+  if (deadlineNear) {
+
+    return {
+
+      expired:
+        false,
+
+      text:
+        `⚠ 残り ${hours}時間 ${minutes}分`,
+
+      className:
+        "deadline-near",
+
+      deadlineNear:
+        true
+
+    };
+
+  }
+
+
   let className =
     "";
 
@@ -725,7 +810,10 @@ function getRemainingTime(
     text:
       `⏳ 残り ${days}日 ${hours}時間 ${minutes}分`,
 
-    className
+    className,
+
+    deadlineNear:
+      false
 
   };
 
@@ -775,6 +863,51 @@ function updateCountdowns() {
 
         element.className =
           `countdown ${result.className}`;
+
+
+        // ======================================
+        // 締切間近バッジを1分ごとに同期
+        // ======================================
+        const card =
+          element.closest(
+            ".card"
+          );
+
+        const badgeWrap =
+          card
+            ?.querySelector(
+              ".type-with-new"
+            );
+
+        const currentBadge =
+          badgeWrap
+            ?.querySelector(
+              ".deadline-badge"
+            );
+
+        if (
+          result.deadlineNear
+        ) {
+
+          if (
+            badgeWrap &&
+            !currentBadge
+          ) {
+
+            badgeWrap
+              .insertAdjacentHTML(
+                "beforeend",
+                '<span class="deadline-badge">⚠ 締切間近</span>'
+              );
+
+          }
+
+        } else {
+
+          currentBadge
+            ?.remove();
+
+        }
 
       }
     );
@@ -1487,6 +1620,11 @@ const newBadge =
   )
     ? '<span class="new-badge">🔥 NEW</span>'
     : "";
+
+const deadlineBadge =
+  remaining.deadlineNear
+    ? '<span class="deadline-badge">⚠ 締切間近</span>'
+    : "";
             return `
 
               <article
@@ -1504,6 +1642,7 @@ const newBadge =
   </span>
 
   ${newBadge}
+  ${deadlineBadge}
 
 </div>
 
@@ -1708,6 +1847,11 @@ const newBadge =
   )
     ? '<span class="new-badge">🔥 NEW</span>'
     : "";
+
+const deadlineBadge =
+  remaining.deadlineNear
+    ? '<span class="deadline-badge">⚠ 締切間近</span>'
+    : "";
             
             return `
 
@@ -1727,6 +1871,7 @@ const newBadge =
   </span>
 
   ${newBadge}
+  ${deadlineBadge}
 
 </div>
 
