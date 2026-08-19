@@ -1066,7 +1066,10 @@ h1 em {
 
   display: grid;
 
+.hero-stats {
   grid-template-columns:
+    1fr
+    1px
     1fr
     1px
     1fr;
@@ -3782,8 +3785,8 @@ h1 em {
   /* 3カウンター */
 
   .hero-stats {
-    grid-template-columns:
-      1fr 1px 1fr;
+grid-template-columns:
+  1fr 1px 1fr 1px 1fr;
 
     gap: 4px;
 
