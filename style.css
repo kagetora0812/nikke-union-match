@@ -31,9 +31,9 @@
   --cyan-dark: #0b8fc8;
 
   --gold: #d89f20;
-  --gold: #F8F22E;
-  --yellow: #F8F22E;
-  --yellow-deep: #D6B900;
+  --gold: #F2A124;
+  --yellow: #F2A124;
+  --yellow-deep: #D98912;
 
   --purple: #a828f0;
   --purple-2: #c875ff;
@@ -412,9 +412,6 @@ h3 {
   color: var(--cyan);
 
   font-style: normal;
-
-  text-shadow:
-    0 0 10px rgba(26, 176, 241, .14);
 }
 
 .hero p {
@@ -718,18 +715,13 @@ h3 {
 
 .hero-stat-divider {
   width: 1px !important;
-  height: 100% !important;
+  height: 72% !important;
   min-height: 118px;
 
   align-self: center;
 
-  background:
-    linear-gradient(
-      transparent,
-      #b9bec2 18%,
-      #b9bec2 82%,
-      transparent
-    ) !important;
+  background: #9aa2aa !important;
+  opacity: 1 !important;
 }
 
 .hero-stat-title,
@@ -2140,8 +2132,8 @@ body.manage-mode #managePage {
 
 
 /* =========================================================
-   v5 COMMANDER YELLOW
-   vivid card-line yellow + readability shadow
+   v6 COMMANDER ORANGE
+   NIKKE UI orange / no text outline
    ========================================================= */
 
 .commander-stat .hero-stat-title,
@@ -2152,23 +2144,14 @@ body.manage-mode #managePage {
 .registration-count > div:first-child small,
 .slv {
   color: var(--yellow) !important;
-
-  text-shadow:
-    0 1px 0 rgba(0, 0, 0, .70),
-    0 0 5px rgba(248, 242, 46, .20);
 }
 
-/* light panels need a slightly darker label edge */
-.card .slv {
-  text-shadow:
-    0 1px 0 rgba(0, 0, 0, .38),
-    0 0 4px rgba(248, 242, 46, .16);
-}
+
 
 
 
 /* =========================================================
-   v5 NIKKE BUTTON SHAPE
+   v6 NIKKE BUTTON SHAPE
    ========================================================= */
 
 .btn,
@@ -2249,7 +2232,7 @@ body.manage-mode #managePage {
 
 
 /* =========================================================
-   v5 NIKKE PANEL ACCENT
+   v6 NIKKE PANEL ACCENT
    ========================================================= */
 
 .hero-stats,
@@ -2284,6 +2267,139 @@ body.manage-mode #managePage {
     ) !important;
 
   border-radius: 0 !important;
+}
+
+
+
+/* =========================================================
+   v6 FINAL VISUAL TUNING
+   NIKKE-like hierarchy / cleaner readability
+   ========================================================= */
+
+/* Commander = orange, Union = cyan, Result = purple */
+.commander-stat .hero-stat-title,
+.commander-stat .hero-stat-number strong,
+.commander-stat .hero-stat-number span {
+  color: #F2A124 !important;
+}
+
+.union-stat .hero-stat-title,
+.union-stat .hero-stat-number strong,
+.union-stat .hero-stat-number span {
+  color: #18ABF4 !important;
+}
+
+.hero-graduate-title,
+.hero-graduate-number strong,
+.hero-graduate-number span {
+  color: #A928F2 !important;
+}
+
+/* No outline/glow around text */
+.hero h1 em,
+.commander-stat *,
+.union-stat *,
+.hero-graduate-stat *,
+.slv,
+.brand,
+.section-head,
+.card,
+.btn,
+.search-tab {
+  text-shadow: none !important;
+  -webkit-text-stroke: 0 !important;
+}
+
+/* Make the two vertical dividers clearly visible */
+.hero-stats > .hero-stat-divider {
+  display: block !important;
+  width: 1px !important;
+  height: 72% !important;
+  min-height: 118px !important;
+  align-self: center !important;
+  background: #9AA2AA !important;
+  opacity: 1 !important;
+}
+
+/* PC readability: the previous version was slightly too small */
+@media screen and (min-width: 1025px) {
+  .topbar {
+    min-height: 74px;
+  }
+
+  .brand-small {
+    font-size: 12px;
+  }
+
+  .brand-main {
+    font-size: 28px;
+  }
+
+  .status-dot {
+    font-size: 12px;
+  }
+
+  .hero {
+    grid-template-columns:
+      minmax(390px, .78fr)
+      minmax(620px, 1.22fr);
+    gap: 38px;
+  }
+
+  .hero p {
+    font-size: 15px;
+  }
+
+  .hero-stats {
+    min-height: 238px;
+    padding: 18px 18px 38px;
+  }
+
+  .hero-stat-title,
+  .hero-graduate-title {
+    font-size: 14px;
+  }
+
+  .hero-stat-number strong,
+  .hero-graduate-number strong {
+    font-size: 76px;
+  }
+
+  .hero-stat-number span,
+  .hero-graduate-number span {
+    font-size: 20px;
+  }
+
+  .hero-stat-sub,
+  .hero-graduate-sub {
+    font-size: 11px;
+  }
+
+  .section-head h2 {
+    font-size: 34px;
+  }
+}
+
+/* Recruitment cards: keep accent line cyan; SLV uses commander orange */
+.card {
+  border-color: #28B8F2 !important;
+}
+
+.card .slv {
+  color: #F2A124 !important;
+  text-shadow: none !important;
+}
+
+/* Buttons: charcoal at rest, cyan only for active/hover */
+.btn,
+.creator-link-btn,
+.search-tab,
+.register-back-btn,
+.manage-back-btn,
+.copy-btn,
+.x-btn,
+.close-reason-btn {
+  text-shadow: none !important;
 }
 
 
@@ -2346,6 +2462,15 @@ body.manage-mode #managePage {
    ========================================================= */
 
 @media screen and (max-width: 600px) {
+
+  .hero-stats > .hero-stat-divider {
+    width: 1px !important;
+    height: 76px !important;
+    min-height: 76px !important;
+    background: #8F979F !important;
+    opacity: 1 !important;
+  }
+
 
   body {
     padding-bottom: 68px;
