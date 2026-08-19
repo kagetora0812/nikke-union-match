@@ -3935,3 +3935,72 @@ grid-template-columns:
 
   text-align: center !important;
 }
+
+@media screen and (max-width: 600px) {
+
+  .hero-stats {
+    grid-template-columns:
+      minmax(0, 1fr)
+      1px
+      minmax(0, 1fr)
+      1px
+      minmax(0, 1fr) !important;
+
+    gap: 4px !important;
+
+    min-height: 0 !important;
+
+    padding:
+      12px 4px 30px !important;
+  }
+
+
+  .hero-stat-divider {
+    height: 58px !important;
+  }
+
+
+  .hero-stat-title {
+    min-height: 20px !important;
+
+    margin-bottom: 3px !important;
+
+    font-size: 9px !important;
+
+    white-space: nowrap;
+  }
+
+
+  .hero-stat-number {
+    gap: 2px !important;
+  }
+
+
+  .hero-stat-number strong {
+    font-size: 36px !important;
+  }
+
+
+  .hero-stat-number span {
+    padding-bottom: 2px !important;
+
+    font-size: 10px !important;
+  }
+
+
+  .hero-stat-sub {
+    margin-top: 4px !important;
+
+    font-size: 7px !important;
+
+    white-space: nowrap;
+  }
+
+
+  .hero-stat-update {
+    bottom: 6px !important;
+
+    font-size: 8px !important;
+  }
+
+}
