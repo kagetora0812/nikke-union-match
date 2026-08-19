@@ -543,28 +543,33 @@ h3 {
 }
 
 .btn.danger {
-  border-color: #68434a;
+  border-color: #56585c;
 
-  color: #ffd9de;
+  color: #ffffff;
 
   background:
     linear-gradient(
       180deg,
-      #4a2e34,
-      #342126
+      #48494d,
+      #35363a
     );
 }
 
 .btn.danger:hover,
 .btn.danger:active {
-  border-color: var(--red);
+  border-color: var(--cyan);
+
+  color: #ffffff;
 
   background:
     linear-gradient(
       180deg,
-      #d94758,
-      #b93042
+      var(--cyan-2),
+      var(--cyan)
     );
+
+  box-shadow:
+    0 4px 12px rgba(26, 176, 241, .28);
 }
 
 .btn.ghost {
