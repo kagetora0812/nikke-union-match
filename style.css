@@ -3680,3 +3680,17 @@ html body .slv small {
   text-shadow: none !important;
   -webkit-text-stroke: 0 !important;
 }
+
+
+/* =========================================================
+   v11.9 SLV LABEL — app.js generated element
+   ========================================================= */
+html body .card.commander-card .slv .slv-label,
+html body article.card.commander-card .slv .slv-label,
+html body .slv .slv-label {
+  color: #7b8085 !important;
+  -webkit-text-fill-color: #7b8085 !important;
+  text-shadow: none !important;
+  -webkit-text-stroke: 0 !important;
+  opacity: 1 !important;
+}
