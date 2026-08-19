@@ -3803,3 +3803,43 @@ body .bottom-nav .nav-btn.active:hover {
     font-size: 15px !important;
   }
 }
+
+/* =========================================================
+   v12.7 NEW FIRE VISIBILITY
+   炎アイコンを独立表示して見やすくする
+   ========================================================= */
+.new-badge {
+  gap: 4px;
+  padding: 3px 7px;
+  font-size: 0 !important;
+  line-height: 1;
+}
+
+.new-badge::before {
+  content: "🔥";
+  display: inline-block;
+  flex: 0 0 auto;
+  font-size: 13px;
+  line-height: 1;
+  transform: translateY(-0.5px);
+}
+
+.new-badge::after {
+  content: "NEW";
+  display: inline-block;
+  color: #ffffff;
+  font-size: 10px;
+  font-weight: 900;
+  line-height: 1;
+  letter-spacing: .02em;
+}
+
+@media (max-width: 600px) {
+  .new-badge::before {
+    font-size: 14px;
+  }
+
+  .new-badge::after {
+    font-size: 10px;
+  }
+}
