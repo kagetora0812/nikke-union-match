@@ -3600,3 +3600,49 @@ body .card .slv small {
     text-align: center !important;
   }
 }
+
+
+/* =========================================================
+   v11.5 MOBILE HERO TRUE CENTER
+   文字列そのものを中央配置（100%幅spanではなくmax-content）
+   ========================================================= */
+@media screen and (max-width: 600px) {
+  body .hero-left {
+    width: 100% !important;
+    max-width: none !important;
+  }
+
+  body .hero h1 {
+    width: 100% !important;
+    max-width: none !important;
+    display: flex !important;
+    flex-direction: column !important;
+    align-items: center !important;
+    justify-content: center !important;
+    text-align: center !important;
+  }
+
+  body .hero h1 .hero-title-line1,
+  body .hero h1 .hero-title-line2 {
+    display: block !important;
+    width: max-content !important;
+    max-width: 100% !important;
+    margin-left: auto !important;
+    margin-right: auto !important;
+    text-align: center !important;
+  }
+
+  /* letter-spacingの末尾分で右に寄って見えるのを補正 */
+  body .hero h1 .hero-title-line1 {
+    padding-left: .16em !important;
+  }
+}
+
+
+/* =========================================================
+   v11.6 HERO TITLE COLOR
+   UNION MATCH をボタンと同系統のグレーに変更
+   ========================================================= */
+body .hero h1 .hero-title-line2 {
+  color: var(--charcoal) !important;
+}
