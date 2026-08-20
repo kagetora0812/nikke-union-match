@@ -3937,3 +3937,15 @@ body .bottom-nav .nav-btn.active:hover {
   }
 
 }
+
+/* =========================================================
+   MOBILE TOP REGISTER BUTTON TEXT SIZE
+   「＋ 募集を登録」を「指揮官を探す」と同じ14pxに
+   ========================================================= */
+
+@media (max-width: 600px) {
+  .main-register-btn,
+  .hero-actions .btn.primary {
+    font-size: 14px !important;
+  }
+}
