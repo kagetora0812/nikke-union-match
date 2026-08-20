@@ -76,9 +76,9 @@ body {
   background:
     linear-gradient(
       180deg,
-      #f8fafb 0%,
-      #f1f4f6 42%,
-      #edf1f3 100%
+      #f1f3f5 0%,
+      #eceff2 42%,
+      #e7ebee 100%
     );
 
   font-family:
@@ -87,11 +87,9 @@ body {
     sans-serif;
 
   font-weight: 700;
-
   -webkit-font-smoothing: antialiased;
   text-rendering: optimizeLegibility;
 }
-
 body::before {
   content: "";
 
