@@ -3844,7 +3844,7 @@ body .bottom-nav .nav-btn.active:hover {
 
 /* =========================================================
    CARD NIKKE FLOW
-   名前・SLVの背景をゆっくり横切る
+   名前・SLV背景に大きなNIKKEをゆっくり流す
    ========================================================= */
 
 .card .name {
@@ -3856,7 +3856,7 @@ body .bottom-nav .nav-btn.active:hover {
   content: "NIKKE NIKKE NIKKE NIKKE NIKKE NIKKE";
 
   position: absolute;
-  top: -8px;
+  top: -22px;
   left: 0;
 
   white-space: nowrap;
@@ -3866,12 +3866,16 @@ body .bottom-nav .nav-btn.active:hover {
     "Zen Kaku Gothic New",
     sans-serif;
 
-  font-size: 64px;
+  /* カードの高さギリギリまで大きく */
+  font-size: clamp(88px, 8vw, 112px);
   font-weight: 900;
-  line-height: 1;
+  line-height: .78;
 
-  letter-spacing: .06em;
-  word-spacing: 24px;
+  letter-spacing: .025em;
+  word-spacing: 30px;
+
+  /* 色は全カード共通の薄いグレー */
+  color: rgba(45, 50, 55, .045);
 
   pointer-events: none;
   user-select: none;
@@ -3879,22 +3883,12 @@ body .bottom-nav .nav-btn.active:hover {
   z-index: -1;
 
   animation:
-    nikke-card-flow 14s
+    nikke-card-flow 32s
     linear
     infinite;
 }
 
-/* 指揮官：薄いオレンジ */
-.commander-card .name::before {
-  color: rgba(242, 161, 36, .055);
-}
-
-/* ユニオン：薄いシアン */
-.union-card .name::before {
-  color: rgba(26, 176, 241, .055);
-}
-
-/* 名前・SLV・ランクは必ず前面 */
+/* 名前・SLV・ランクは前面 */
 .card .name,
 .card .slv,
 .card .union-rank {
@@ -3902,27 +3896,38 @@ body .bottom-nav .nav-btn.active:hover {
   z-index: 1;
 }
 
-/* 横方向にゆっくり流す */
+/* ゆっくり右から左へ */
 @keyframes nikke-card-flow {
   0% {
-    transform: translateX(15%);
+    transform: translateX(10%);
   }
 
   100% {
-    transform: translateX(-75%);
+    transform: translateX(-70%);
   }
 }
 
-/* カードごとに少しタイミングをずらす */
+/* カードごとにスタート位置をずらす */
 .card:nth-child(2n) .name::before {
-  animation-delay: -4.5s;
+  animation-delay: -10s;
 }
 
 .card:nth-child(3n) .name::before {
-  animation-delay: -9s;
+  animation-delay: -20s;
 }
 
-/* 動きを減らす設定の端末では停止 */
+/* スマホ */
+@media (max-width: 600px) {
+  .card .name::before {
+    top: -17px;
+    font-size: 88px;
+    word-spacing: 24px;
+
+    animation-duration: 30s;
+  }
+}
+
+/* 動きを減らす設定では停止 */
 @media (prefers-reduced-motion: reduce) {
   .card .name::before {
     animation: none;
