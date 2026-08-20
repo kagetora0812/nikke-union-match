@@ -3937,14 +3937,3 @@ body .bottom-nav .nav-btn.active:hover {
   }
 
 }
-
-/* =========================================================
-   MOBILE BOTTOM NAV TEXT SIZE
-   スマホ下部メニュー文字を見やすく
-   ========================================================= */
-
-@media (max-width: 600px) {
-  body .bottom-nav .nav-btn {
-    font-size: 18px !important;
-  }
-}
