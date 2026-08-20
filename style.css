@@ -3842,3 +3842,90 @@ body .bottom-nav .nav-btn.active:hover {
   }
 }
 
+/* =========================================================
+   CARD NIKKE FLOW
+   名前・SLVの背景をゆっくり横切る
+   ========================================================= */
+
+.card .name {
+  position: relative;
+  isolation: isolate;
+}
+
+.card .name::before {
+  content: "NIKKE NIKKE NIKKE NIKKE NIKKE NIKKE";
+
+  position: absolute;
+  top: -8px;
+  left: 0;
+
+  white-space: nowrap;
+
+  font-family:
+    "Teko",
+    "Zen Kaku Gothic New",
+    sans-serif;
+
+  font-size: 64px;
+  font-weight: 900;
+  line-height: 1;
+
+  letter-spacing: .06em;
+  word-spacing: 24px;
+
+  pointer-events: none;
+  user-select: none;
+
+  z-index: -1;
+
+  animation:
+    nikke-card-flow 14s
+    linear
+    infinite;
+}
+
+/* 指揮官：薄いオレンジ */
+.commander-card .name::before {
+  color: rgba(242, 161, 36, .055);
+}
+
+/* ユニオン：薄いシアン */
+.union-card .name::before {
+  color: rgba(26, 176, 241, .055);
+}
+
+/* 名前・SLV・ランクは必ず前面 */
+.card .name,
+.card .slv,
+.card .union-rank {
+  position: relative;
+  z-index: 1;
+}
+
+/* 横方向にゆっくり流す */
+@keyframes nikke-card-flow {
+  0% {
+    transform: translateX(15%);
+  }
+
+  100% {
+    transform: translateX(-75%);
+  }
+}
+
+/* カードごとに少しタイミングをずらす */
+.card:nth-child(2n) .name::before {
+  animation-delay: -4.5s;
+}
+
+.card:nth-child(3n) .name::before {
+  animation-delay: -9s;
+}
+
+/* 動きを減らす設定の端末では停止 */
+@media (prefers-reduced-motion: reduce) {
+  .card .name::before {
+    animation: none;
+    transform: translateX(0);
+  }
+}
