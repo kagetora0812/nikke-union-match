@@ -3844,7 +3844,7 @@ body .bottom-nav .nav-btn.active:hover {
 
 /* =========================================================
    CARD NIKKE FLOW
-   名前・SLV背景に超大きなNIKKEをゆっくり流す
+   名前・SLV・登録背景にNIKKEをゆっくり流す
    ========================================================= */
 
 .card .name {
@@ -3853,13 +3853,13 @@ body .bottom-nav .nav-btn.active:hover {
 }
 
 .card .name::before {
-  content: "NIKKE NIKKE NIKKE NIKKE NIKKE NIKKE";
+  content: "NIKKE  NIKKE  NIKKE  NIKKE  NIKKE  NIKKE  NIKKE";
 
   position: absolute;
-
-  /* 上側を少し持ち上げる */
-  top: -58px;
+  top: -34px;
   left: 0;
+
+  width: max-content;
 
   white-space: nowrap;
 
@@ -3868,16 +3868,16 @@ body .bottom-nav .nav-btn.active:hover {
     "Zen Kaku Gothic New",
     sans-serif;
 
-  /* 登録付近まで届く超大型文字 */
-  font-size: clamp(190px, 17vw, 235px);
+  /* 大きすぎないバランス */
+  font-size: 150px;
   font-weight: 900;
   line-height: .78;
 
-  letter-spacing: .01em;
-  word-spacing: 48px;
+  letter-spacing: -.01em;
+  word-spacing: 18px;
 
-  /* 背景なのでかなり薄く */
-  color: rgba(45, 50, 55, .028);
+  /* 薄いグレー */
+  color: rgba(45, 50, 55, .030);
 
   pointer-events: none;
   user-select: none;
@@ -3885,7 +3885,55 @@ body .bottom-nav .nav-btn.active:hover {
   z-index: -1;
 
   animation:
-    nikke-card-flow 120s
+    nikke-card-flow 65s
     linear
     infinite;
+}
+
+/* 名前・SLV・ランクは前面 */
+.card .name,
+.card .slv,
+.card .union-rank {
+  position: relative;
+  z-index: 1;
+}
+
+/* NIKKEを右から左へ */
+@keyframes nikke-card-flow {
+  from {
+    transform: translateX(5%);
+  }
+
+  to {
+    transform: translateX(-55%);
+  }
+}
+
+/* カードごとに少し位置をずらす */
+.card:nth-child(2n) .name::before {
+  animation-delay: -20s;
+}
+
+.card:nth-child(3n) .name::before {
+  animation-delay: -40s;
+}
+
+
+/* =========================================================
+   CARD NIKKE FLOW - MOBILE
+   ========================================================= */
+
+@media (max-width: 600px) {
+
+  .card .name::before {
+    top: -32px;
+
+    font-size: 145px;
+
+    letter-spacing: -.01em;
+    word-spacing: 16px;
+
+    animation-duration: 65s;
+  }
+
 }
