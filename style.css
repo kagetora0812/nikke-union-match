@@ -3856,7 +3856,9 @@ body .bottom-nav .nav-btn.active:hover {
   content: "NIKKE NIKKE NIKKE NIKKE NIKKE NIKKE";
 
   position: absolute;
-  top: -42px;
+
+  /* 上側を少し持ち上げる */
+  top: -58px;
   left: 0;
 
   white-space: nowrap;
@@ -3866,73 +3868,24 @@ body .bottom-nav .nav-btn.active:hover {
     "Zen Kaku Gothic New",
     sans-serif;
 
-  /* かなり大きく */
-  font-size: clamp(130px, 13vw, 175px);
+  /* 登録付近まで届く超大型文字 */
+  font-size: clamp(190px, 17vw, 235px);
   font-weight: 900;
-  line-height: .72;
+  line-height: .78;
 
-  letter-spacing: .015em;
-  word-spacing: 42px;
+  letter-spacing: .01em;
+  word-spacing: 48px;
 
-  /* 大きくした分さらに薄く */
-  color: rgba(45, 50, 55, .035);
+  /* 背景なのでかなり薄く */
+  color: rgba(45, 50, 55, .028);
 
   pointer-events: none;
   user-select: none;
 
   z-index: -1;
 
-  /* 超ゆっくり */
   animation:
-    nikke-card-flow 90s
+    nikke-card-flow 120s
     linear
     infinite;
-}
-
-/* 名前・SLV・ランクは前面 */
-.card .name,
-.card .slv,
-.card .union-rank {
-  position: relative;
-  z-index: 1;
-}
-
-/* 右から左へ流す */
-@keyframes nikke-card-flow {
-  0% {
-    transform: translateX(10%);
-  }
-
-  100% {
-    transform: translateX(-70%);
-  }
-}
-
-/* カードごとに開始位置をずらす */
-.card:nth-child(2n) .name::before {
-  animation-delay: -30s;
-}
-
-.card:nth-child(3n) .name::before {
-  animation-delay: -60s;
-}
-
-/* スマホでも大きく・ゆっくり */
-@media (max-width: 600px) {
-  .card .name::before {
-    top: -34px;
-
-    font-size: 135px;
-    word-spacing: 34px;
-
-    animation-duration: 90s;
-  }
-}
-
-/* 動きを減らす設定では停止 */
-@media (prefers-reduced-motion: reduce) {
-  .card .name::before {
-    animation: none;
-    transform: translateX(0);
-  }
 }
