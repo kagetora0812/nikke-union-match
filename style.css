@@ -3841,3 +3841,40 @@ body .bottom-nav .nav-btn.active:hover {
     font-size: 10px;
   }
 }
+
+.card {
+  position: relative;
+  overflow: hidden;
+}
+
+.card::before {
+  content: "NIKKE";
+  position: absolute;
+  top: 10px;
+  right: 8px;
+  bottom: 10px;
+
+  writing-mode: vertical-rl;
+  text-orientation: mixed;
+
+  font-family:
+    "Teko",
+    "Zen Kaku Gothic New",
+    sans-serif;
+
+  font-size: 74px;
+  font-weight: 900;
+  line-height: .82;
+  letter-spacing: .08em;
+
+  color: rgba(40, 45, 50, .028);
+
+  pointer-events: none;
+  user-select: none;
+  z-index: 0;
+}
+
+.card > * {
+  position: relative;
+  z-index: 1;
+}
