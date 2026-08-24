@@ -574,6 +574,41 @@
 
 
     /* ========================================
+       PASS再発行
+    ======================================== */
+
+    .pass-reissue-result {
+      margin-top: 18px;
+      padding: 18px;
+      border: 1px solid rgba(54, 150, 255, .45);
+      background: rgba(54, 150, 255, .08);
+      text-align: center;
+    }
+
+    .pass-reissue-label {
+      color: var(--blue);
+      font-size: 10px;
+      font-weight: 900;
+      letter-spacing: 2px;
+    }
+
+    .pass-reissue-value {
+      margin: 8px 0 14px;
+      color: #fff;
+      font-size: clamp(30px, 8vw, 46px);
+      font-weight: 900;
+      letter-spacing: .14em;
+      font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+    }
+
+    .pass-reissue-note {
+      margin-top: 12px;
+      color: var(--muted);
+      font-size: 12px;
+      line-height: 1.7;
+    }
+
+    /* ========================================
        ログイン
     ======================================== */
 
@@ -1517,6 +1552,177 @@
           </div>
         </button>
 
+        <button
+          id="openPassReissueBtn"
+          class="menu-card"
+          type="button"
+        >
+          <div class="menu-card-icon">🔑</div>
+          <div class="menu-card-title">
+            募集PASS再発行
+          </div>
+          <div class="menu-card-copy">
+            指揮官名＋SLV、またはユニオン名＋ランクから
+            現在募集中のPASSを再発行します。
+          </div>
+        </button>
+
+      </div>
+
+    </section>
+
+
+    <!-- ========================================
+         募集PASS再発行
+    ========================================= -->
+
+    <section
+      id="passReissueSection"
+      class="hidden"
+    >
+
+      <div class="admin-head">
+
+        <div>
+          <div class="eyebrow">
+            PASS REISSUE
+          </div>
+
+          <h2>
+            🔑 募集PASS再発行
+          </h2>
+        </div>
+
+        <div class="admin-head-actions">
+          <button
+            id="backToMenuFromPassReissueBtn"
+            class="btn"
+            type="button"
+          >
+            ← 管理メニュー
+          </button>
+        </div>
+
+      </div>
+
+      <p class="lead">
+        現在募集中の募集だけが対象です。<br>
+        指揮官は「指揮官名＋SLV」、ユニオンは「ユニオン名＋ユニオンランク」で照合します。
+      </p>
+
+      <div class="panel">
+
+        <form
+          id="passReissueForm"
+          class="form-grid"
+        >
+
+          <label>
+            募集タイプ
+            <select id="passReissueType">
+              <option value="commander">指揮官</option>
+              <option value="union">ユニオン</option>
+            </select>
+          </label>
+
+          <div
+            id="passReissueCommanderFields"
+            class="form-grid"
+          >
+            <label>
+              指揮官名
+              <input
+                id="passReissueCommanderName"
+                type="text"
+                maxlength="40"
+                autocomplete="off"
+                autocapitalize="off"
+                spellcheck="false"
+                placeholder="例：KAGETORA"
+              >
+            </label>
+
+            <label>
+              SLV
+              <input
+                id="passReissueSlv"
+                type="number"
+                min="1"
+                max="1200"
+                inputmode="numeric"
+                autocomplete="off"
+                placeholder="例：999"
+              >
+            </label>
+          </div>
+
+          <div
+            id="passReissueUnionFields"
+            class="form-grid hidden"
+          >
+            <label>
+              ユニオン名
+              <input
+                id="passReissueUnionName"
+                type="text"
+                maxlength="40"
+                autocomplete="off"
+                autocapitalize="off"
+                spellcheck="false"
+                placeholder="例：ACTORS"
+              >
+            </label>
+
+            <label>
+              ユニオンランク
+              <select id="passReissueUnionRank">
+                <option value="チャレンジャー">チャレンジャー</option>
+                <option value="ダイヤ">ダイヤ</option>
+                <option value="プラチナ">プラチナ</option>
+                <option value="ゴールド">ゴールド</option>
+                <option value="シルバー">シルバー</option>
+                <option value="駆け出しユニオン">駆け出しユニオン</option>
+              </select>
+            </label>
+          </div>
+
+          <button
+            class="btn primary wide"
+            type="submit"
+          >
+            新しいPASSを発行
+          </button>
+
+        </form>
+
+        <div
+          id="passReissueMessage"
+          class="message hidden"
+        ></div>
+
+        <div
+          id="passReissueResult"
+          class="pass-reissue-result hidden"
+        >
+          <div class="pass-reissue-label">
+            NEW PASS
+          </div>
+          <div
+            id="passReissueValue"
+            class="pass-reissue-value"
+          ></div>
+          <button
+            id="copyPassReissueBtn"
+            class="btn blue wide"
+            type="button"
+          >
+            PASSをコピー
+          </button>
+          <div class="pass-reissue-note">
+            このPASSで今後の募集締切ができます。旧PASSは無効になります。
+          </div>
+        </div>
+
       </div>
 
     </section>
@@ -2154,6 +2360,59 @@
       localStorage.removeItem(
         TOKEN_KEY
       );
+
+    }
+
+
+    // ========================================
+    // 募集PASS再発行用
+    // ========================================
+
+    function generateRecruitmentPass() {
+
+      const chars =
+        "ABCDEFGHJKLMNPQRSTUVWXYZ23456789";
+
+      const random =
+        new Uint32Array(8);
+
+      crypto.getRandomValues(
+        random
+      );
+
+      return Array.from(
+        random,
+        number =>
+          chars[
+            number % chars.length
+          ]
+      ).join("");
+
+    }
+
+
+    async function sha256(text) {
+
+      const data =
+        new TextEncoder()
+          .encode(text);
+
+      const hash =
+        await crypto.subtle.digest(
+          "SHA-256",
+          data
+        );
+
+      return Array.from(
+        new Uint8Array(hash)
+      )
+        .map(
+          byte =>
+            byte
+              .toString(16)
+              .padStart(2, "0")
+        )
+        .join("");
 
     }
 
@@ -2839,6 +3098,13 @@
       );
 
 
+    $("#openPassReissueBtn")
+      ?.addEventListener(
+        "click",
+        showPassReissueAdmin
+      );
+
+
     $("#backToMenuFromUnionBtn")
       ?.addEventListener(
         "click",
@@ -2847,6 +3113,13 @@
 
 
     $("#backToMenuFromCreatorBtn")
+      ?.addEventListener(
+        "click",
+        showMenu
+      );
+
+
+    $("#backToMenuFromPassReissueBtn")
       ?.addEventListener(
         "click",
         showMenu
@@ -3433,6 +3706,10 @@
         ?.classList
         .add("hidden");
 
+      $("#passReissueSection")
+        ?.classList
+        .add("hidden");
+
       $("#adminSection")
         ?.classList
         .add("hidden");
@@ -3480,6 +3757,25 @@
       $("#endingUnionSection")
         ?.classList
         .remove("hidden");
+
+    }
+
+
+    function showPassReissueAdmin() {
+
+      hideAllAdminSections();
+
+      $("#passReissueSection")
+        ?.classList
+        .remove("hidden");
+
+      clearMessage(
+        $("#passReissueMessage")
+      );
+
+      $("#passReissueResult")
+        ?.classList
+        .add("hidden");
 
     }
 
@@ -3630,6 +3926,313 @@
 
         }
       );
+
+
+    // ========================================
+    // 募集PASS再発行
+    // ========================================
+
+    function updatePassReissueFields() {
+
+      const type =
+        $("#passReissueType")
+          ?.value ||
+        "commander";
+
+      const isUnion =
+        type === "union";
+
+      $("#passReissueCommanderFields")
+        ?.classList
+        .toggle(
+          "hidden",
+          isUnion
+        );
+
+      $("#passReissueUnionFields")
+        ?.classList
+        .toggle(
+          "hidden",
+          !isUnion
+        );
+
+      $("#passReissueResult")
+        ?.classList
+        .add("hidden");
+
+      clearMessage(
+        $("#passReissueMessage")
+      );
+
+    }
+
+
+    $("#passReissueType")
+      ?.addEventListener(
+        "change",
+        updatePassReissueFields
+      );
+
+
+    $("#passReissueForm")
+      ?.addEventListener(
+        "submit",
+        async event => {
+
+          event.preventDefault();
+
+          clearMessage(
+            $("#passReissueMessage")
+          );
+
+          $("#passReissueResult")
+            ?.classList
+            .add("hidden");
+
+          const token =
+            getToken();
+
+          if (!token) {
+            showLogin();
+            return;
+          }
+
+          const type =
+            $("#passReissueType")
+              ?.value ||
+            "commander";
+
+          let name = "";
+          let value = "";
+
+          if (type === "commander") {
+
+            name =
+              $("#passReissueCommanderName")
+                ?.value
+                .trim() ||
+              "";
+
+            value =
+              $("#passReissueSlv")
+                ?.value
+                .trim() ||
+              "";
+
+            const slv = Number(value);
+
+            if (
+              !name ||
+              !Number.isInteger(slv) ||
+              slv < 1 ||
+              slv > 1200
+            ) {
+              showMessage(
+                $("#passReissueMessage"),
+                "指揮官名とSLV（1～1200）を入力してください。",
+                "error"
+              );
+              return;
+            }
+
+          } else {
+
+            name =
+              $("#passReissueUnionName")
+                ?.value
+                .trim() ||
+              "";
+
+            value =
+              $("#passReissueUnionRank")
+                ?.value ||
+              "";
+
+            if (!name || !value) {
+              showMessage(
+                $("#passReissueMessage"),
+                "ユニオン名とユニオンランクを入力してください。",
+                "error"
+              );
+              return;
+            }
+
+          }
+
+          for (
+            let attempt = 0;
+            attempt < 5;
+            attempt++
+          ) {
+
+            const newPass =
+              generateRecruitmentPass();
+
+            const newPassHash =
+              await sha256(
+                newPass
+              );
+
+            const {
+              data,
+              error
+            } =
+              await sb.rpc(
+                "admin_reissue_recruitment_pass",
+                {
+                  p_token:
+                    token,
+                  p_type:
+                    type,
+                  p_name:
+                    name,
+                  p_value:
+                    value,
+                  p_new_pass_hash:
+                    newPassHash
+                }
+              );
+
+            if (error) {
+
+              const errorText =
+                String(
+                  error.message ||
+                  error.details ||
+                  ""
+                );
+
+              if (
+                errorText.includes(
+                  "ADMIN_SESSION_INVALID"
+                )
+              ) {
+                clearToken();
+                showLogin();
+                return;
+              }
+
+              if (
+                errorText.includes(
+                  "PASS_DUPLICATE"
+                )
+              ) {
+                continue;
+              }
+
+              if (
+                errorText.includes(
+                  "RECRUITMENT_NOT_FOUND"
+                )
+              ) {
+                showMessage(
+                  $("#passReissueMessage"),
+                  type === "commander"
+                    ? "一致する募集中の指揮官が見つかりません。指揮官名とSLVを確認してください。"
+                    : "一致する募集中のユニオンが見つかりません。ユニオン名とランクを確認してください。",
+                  "error"
+                );
+                return;
+              }
+
+              console.error(
+                "PASS再発行エラー",
+                error
+              );
+
+              showMessage(
+                $("#passReissueMessage"),
+                "PASSを再発行できませんでした。",
+                "error"
+              );
+
+              return;
+            }
+
+            $("#passReissueValue")
+              .textContent =
+              newPass;
+
+            $("#passReissueResult")
+              ?.classList
+              .remove("hidden");
+
+            showMessage(
+              $("#passReissueMessage"),
+              type === "commander"
+                ? "指揮官募集のPASSを再発行しました。"
+                : "ユニオン募集のPASSを再発行しました。",
+              "ok"
+            );
+
+            return;
+
+          }
+
+          showMessage(
+            $("#passReissueMessage"),
+            "PASSの発行に失敗しました。もう一度お試しください。",
+            "error"
+          );
+
+        }
+      );
+
+
+    $("#copyPassReissueBtn")
+      ?.addEventListener(
+        "click",
+        async () => {
+
+          const pass =
+            $("#passReissueValue")
+              ?.textContent
+              .trim() ||
+            "";
+
+          if (!pass) {
+            return;
+          }
+
+          try {
+
+            await copyTextToClipboard(
+              pass
+            );
+
+            const button =
+              $("#copyPassReissueBtn");
+
+            if (button) {
+              button.textContent =
+                "コピーしました";
+
+              setTimeout(
+                () => {
+                  button.textContent =
+                    "PASSをコピー";
+                },
+                1500
+              );
+            }
+
+          } catch (error) {
+
+            console.error(error);
+
+            showMessage(
+              $("#passReissueMessage"),
+              "PASSをコピーできませんでした。手動で保存してください。",
+              "error"
+            );
+
+          }
+
+        }
+      );
+
+
+    updatePassReissueFields();
 
 
     // ========================================
