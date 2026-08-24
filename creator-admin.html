@@ -1879,6 +1879,36 @@
 
           <label>
 
+            UNION MATCH 紹介動画 URL
+
+            <input
+              id="unionMatchVideoUrl"
+              type="url"
+              inputmode="url"
+              autocomplete="off"
+              placeholder="https://www.youtube.com/... または動画URL"
+            >
+
+          </label>
+
+
+          <label>
+
+            UNION MATCH 紹介X投稿 URL
+
+            <input
+              id="unionMatchXUrl"
+              type="url"
+              inputmode="url"
+              autocomplete="off"
+              placeholder="https://x.com/.../status/..."
+            >
+
+          </label>
+
+
+          <label>
+
             紹介文
 
             <textarea
@@ -3792,7 +3822,39 @@
                       target="_blank"
                       rel="noopener noreferrer"
                     >
-                      𝕏 ↗
+                      X ↗
+                    </a>
+                  `
+                  : "";
+
+
+              const unionMatchVideoButton =
+                creator.union_match_video_url
+                  ? `
+                    <a
+                      href="${escapeHtml(
+                        creator.union_match_video_url
+                      )}"
+                      target="_blank"
+                      rel="noopener noreferrer"
+                    >
+                      ▶ 紹介動画 ↗
+                    </a>
+                  `
+                  : "";
+
+
+              const unionMatchXButton =
+                creator.union_match_x_url
+                  ? `
+                    <a
+                      href="${escapeHtml(
+                        creator.union_match_x_url
+                      )}"
+                      target="_blank"
+                      rel="noopener noreferrer"
+                    >
+                      X 紹介投稿 ↗
                     </a>
                   `
                   : "";
@@ -3866,6 +3928,19 @@
                         <div class="creator-links">
                           ${youtubeButton}
                           ${xButton}
+                        </div>
+                      `
+                      : ""
+                  }
+
+
+                  ${
+                    unionMatchVideoButton ||
+                    unionMatchXButton
+                      ? `
+                        <div class="creator-links">
+                          ${unionMatchVideoButton}
+                          ${unionMatchXButton}
                         </div>
                       `
                       : ""
@@ -3996,6 +4071,20 @@
             "";
 
 
+          const unionMatchVideoUrl =
+            $("#unionMatchVideoUrl")
+              ?.value
+              .trim() ||
+            "";
+
+
+          const unionMatchXUrl =
+            $("#unionMatchXUrl")
+              ?.value
+              .trim() ||
+            "";
+
+
           const description =
             $("#creatorDescription")
               ?.value
@@ -4054,6 +4143,12 @@
                   p_x_url:
                     xUrl,
 
+                  p_union_match_video_url:
+                    unionMatchVideoUrl,
+
+                  p_union_match_x_url:
+                    unionMatchXUrl,
+
                   p_description:
                     description,
 
@@ -4091,6 +4186,12 @@
 
                   p_x_url:
                     xUrl,
+
+                  p_union_match_video_url:
+                    unionMatchVideoUrl,
+
+                  p_union_match_x_url:
+                    unionMatchXUrl,
 
                   p_description:
                     description,
@@ -4223,6 +4324,16 @@
 
       $("#creatorXUrl").value =
         creator.x_url ||
+        "";
+
+
+      $("#unionMatchVideoUrl").value =
+        creator.union_match_video_url ||
+        "";
+
+
+      $("#unionMatchXUrl").value =
+        creator.union_match_x_url ||
         "";
 
 
