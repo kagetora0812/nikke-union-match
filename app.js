@@ -1114,6 +1114,76 @@ async function loadGraduatedCommanderCount() {
 
 // ========================================
 // Xシェア用
+// 現在募集中の指揮官数
+// ========================================
+
+async function getCurrentCommanderCount() {
+
+  if (!sb) {
+
+    return 0;
+
+  }
+
+
+  const {
+    count,
+    error
+  } =
+    await sb
+      .from(
+        "recruitments"
+      )
+      .select(
+        "id",
+        {
+          count: "exact",
+          head: true
+        }
+      )
+      .eq(
+        "status",
+        "open"
+      )
+      .gt(
+        "expires_at",
+        new Date()
+          .toISOString()
+      );
+
+
+  if (error) {
+
+    console.error(
+      "登録指揮官数取得エラー",
+      error
+    );
+
+
+    return Number(
+
+      $("#commanderCountTop")
+        ?.textContent
+      ||
+      $("#commanderCount")
+        ?.textContent
+      ||
+      0
+
+    );
+
+  }
+
+
+  return Number(
+    count || 0
+  );
+
+}
+
+
+// ========================================
+// Xシェア用
 // 現在募集中のユニオン数
 // ========================================
 
@@ -1191,6 +1261,7 @@ async function getCurrentUnionCount() {
 
 function buildXShareText(
   registration,
+  commanderCount,
   unionCount,
   graduatedCount
 ) {
@@ -1211,8 +1282,9 @@ function buildXShareText(
   const commonStats =
 
     "📊 現在の登録状況\n" +
-    `🏢 登録ユニオン：${unionCount}\n` +
-    `🎓 卒業ちしかん：${graduatedCount}名\n\n`;
+    `👤 ${commanderCount}名\n` +
+    `🏢 ${unionCount}\n` +
+    `🎓 ${graduatedCount}名\n\n`;
 
 
   const appUrl =
@@ -1232,18 +1304,16 @@ function buildXShareText(
 
       commonTop +
 
-      `👤 指揮官名：${registration.name}\n` +
-
-      `⚡ SLV：${registration.slv}\n\n` +
+      `👤 ${registration.name}\n` +
+      `⚡ ${registration.slv}\n\n` +
 
       commonStats +
 
       "👇 UNION MATCH\n" +
-
       appUrl +
+      "\n\n" +
 
-      "\n\n👇 募集投稿\n" +
-
+      "👇 募集投稿\n" +
       registration.xUrl
 
     );
@@ -1259,18 +1329,16 @@ function buildXShareText(
 
     commonTop +
 
-    `🏢 ユニオン名：${registration.name}\n` +
-
-    `🏆 ユニオンランク：${registration.rank}\n\n` +
+    `🏢 ${registration.name}\n` +
+    `🏆 ${registration.rank}\n\n` +
 
     commonStats +
 
     "👇 UNION MATCH\n" +
-
     appUrl +
+    "\n\n" +
 
-    "\n\n👇 募集投稿\n" +
-
+    "👇 募集投稿\n" +
     registration.xUrl
 
   );
@@ -2884,12 +2952,15 @@ $("#shareXBtn")
 
       const [
 
+        commanderCount,
         unionCount,
         graduatedCountResult
 
       ] =
 
         await Promise.all([
+
+          getCurrentCommanderCount(),
 
           getCurrentUnionCount(),
 
@@ -2931,6 +3002,8 @@ $("#shareXBtn")
         buildXShareText(
 
           lastRegisteredRecruitment,
+
+          commanderCount,
 
           unionCount,
 
