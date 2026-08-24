@@ -540,6 +540,67 @@
       border-color: #a9dff6;
     }
 
+    /* ================= UNION MATCH CONTENT ================= */
+    .creator-match-content {
+      width: 100%;
+      margin-top: 14px;
+      padding-top: 13px;
+      border-top: 1px solid #2d3138;
+    }
+
+    .creator-match-label {
+      margin-bottom: 8px;
+      color: var(--cyan);
+      font-family: "Teko", "Zen Kaku Gothic New", sans-serif;
+      font-size: 11px;
+      font-weight: 900;
+      letter-spacing: .11em;
+      text-align: left;
+    }
+
+    .creator-match-links {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 8px;
+      width: 100%;
+    }
+
+    .creator-match-links.single {
+      grid-template-columns: 1fr;
+    }
+
+    .creator-match-link {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      min-height: 42px;
+      padding: 8px 10px;
+      border: 1px solid rgba(26, 176, 241, .38);
+      background: rgba(26, 176, 241, .055);
+      color: #dcecf4;
+      text-decoration: none;
+      font-size: 10.5px;
+      font-weight: 900;
+      line-height: 1.35;
+      text-align: center;
+      transition: .18s ease;
+    }
+
+    .creator-match-link:hover,
+    .creator-match-link:active {
+      border-color: #a9dff6;
+      background: #f7fbfd;
+      color: #079fd9;
+    }
+
+    @media (hover: none), (pointer: coarse) {
+      .creator-match-link:not(:active):hover {
+        border-color: rgba(26, 176, 241, .38);
+        background: rgba(26, 176, 241, .055);
+        color: #dcecf4;
+      }
+    }
+
     .empty,
     .error {
       margin-top: 14px;
@@ -719,6 +780,14 @@
 
       .creator-links {
         margin-top: 14px;
+      }
+
+      .creator-match-links {
+        grid-template-columns: 1fr;
+      }
+
+      .creator-match-label {
+        text-align: center;
       }
 
       .creator-recruit-box {
@@ -989,7 +1058,7 @@
             "creators"
           )
           .select(
-            "id, creator_name, icon_url, youtube_url, x_url, description, display_order, created_at"
+            "id, creator_name, icon_url, youtube_url, x_url, union_match_video_url, union_match_x_url, description, display_order, created_at"
           )
           .eq(
             "is_public",
@@ -1080,6 +1149,18 @@
                 );
 
 
+              const unionMatchVideoUrl =
+                safeUrl(
+                  creator.union_match_video_url
+                );
+
+
+              const unionMatchXUrl =
+                safeUrl(
+                  creator.union_match_x_url
+                );
+
+
               const links = [];
 
 
@@ -1127,6 +1208,55 @@
                 links.length === 1
                   ? "creator-links single"
                   : "creator-links";
+
+
+              const unionMatchLinks = [];
+
+
+              if (unionMatchVideoUrl) {
+
+                unionMatchLinks.push(`
+
+                  <a
+                    class="creator-match-link video"
+                    href="${escapeHtml(
+                      unionMatchVideoUrl
+                    )}"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                  >
+                    ▶ UNION MATCH 紹介動画
+                  </a>
+
+                `);
+
+              }
+
+
+              if (unionMatchXUrl) {
+
+                unionMatchLinks.push(`
+
+                  <a
+                    class="creator-match-link x"
+                    href="${escapeHtml(
+                      unionMatchXUrl
+                    )}"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                  >
+                    X UNION MATCH 紹介投稿
+                  </a>
+
+                `);
+
+              }
+
+
+              const unionMatchClass =
+                unionMatchLinks.length === 1
+                  ? "creator-match-links single"
+                  : "creator-match-links";
 
 
               const iconHtml =
@@ -1220,6 +1350,25 @@
                       ? `
                         <div class="${linkClass}">
                           ${links.join("")}
+                        </div>
+                      `
+                      : ""
+                  }
+
+
+                  ${
+                    unionMatchLinks.length
+                      ? `
+                        <div class="creator-match-content">
+
+                          <div class="creator-match-label">
+                            UNION MATCH CONTENT
+                          </div>
+
+                          <div class="${unionMatchClass}">
+                            ${unionMatchLinks.join("")}
+                          </div>
+
                         </div>
                       `
                       : ""
