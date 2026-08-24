@@ -1190,9 +1190,7 @@ async function getCurrentUnionCount() {
 // ========================================
 
 function buildXShareText(
-  registration,
-  unionCount,
-  graduatedCount
+  registration
 ) {
 
   if (!registration) {
@@ -1200,22 +1198,6 @@ function buildXShareText(
     return "";
 
   }
-
-
-  const commonTop =
-
-    "🔎 指揮官とユニオンをつなぐマッチングアプリ\n" +
-    "「NIKKE UNION MATCH」に登録しました！\n\n";
-
-
-  const commonStats =
-
-    `🏢 登録ユニオン：${unionCount}\n` +
-    `🎓 卒業ちしかん：${graduatedCount}名\n`;
-
-
-  const appUrl =
-    "https://x.gd/4tEJo";
 
 
   // ======================================
@@ -1229,19 +1211,11 @@ function buildXShareText(
 
     return (
 
-      commonTop +
+      `👤 指揮官名：${registration.name}\n` +
 
-      "新しい移籍先を探しています🐾\n\n" +
+      `⚡ SLV：${registration.slv}\n\n` +
 
-      `👤 ${registration.name}｜SLV${registration.slv}\n` +
-
-      `𝕏 募集投稿：${registration.xUrl}\n\n` +
-
-      commonStats +
-
-      "👇アプリを確認\n" +
-
-      appUrl
+      registration.xUrl
 
     );
 
@@ -1254,19 +1228,11 @@ function buildXShareText(
 
   return (
 
-    commonTop +
+    `🏢 ユニオン名：${registration.name}\n` +
 
-    "新しい仲間を募集中🔥\n\n" +
+    `🏆 ユニオンランク：${registration.rank}\n\n` +
 
-    `🏢 ${registration.name}｜${registration.rank}\n` +
-
-    `𝕏 募集投稿：${registration.xUrl}\n\n` +
-
-    commonStats +
-
-    "👇アプリを確認\n" +
-
-    appUrl
+    registration.xUrl
 
   );
 
@@ -2874,62 +2840,17 @@ $("#shareXBtn")
 
 
       // ======================================
-      // 最新カウンター取得
-      // ======================================
-
-      const [
-
-        unionCount,
-        graduatedCountResult
-
-      ] =
-
-        await Promise.all([
-
-          getCurrentUnionCount(),
-
-          loadGraduatedCommanderCount()
-
-        ]);
-
-
-      const graduatedCount =
-
-        Number.isFinite(
-          Number(
-            graduatedCountResult
-          )
-        )
-
-          ?
-
-          Number(
-            graduatedCountResult
-          )
-
-          :
-
-          Number(
-            $("#graduatedCommanderCount")
-              ?.textContent
-            ||
-            0
-          );
-
-
-      // ======================================
       // X文章
+      // 指揮官名 / ユニオン名
+      // SLV / ユニオンランク
+      // 登録したX募集投稿URL
       // ======================================
 
       const shareText =
 
         buildXShareText(
 
-          lastRegisteredRecruitment,
-
-          unionCount,
-
-          graduatedCount
+          lastRegisteredRecruitment
 
         );
 
