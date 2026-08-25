@@ -1582,6 +1582,169 @@
           </div>
         </button>
 
+        <button
+          id="openXEmbedControlBtn"
+          class="menu-card"
+          type="button"
+        >
+          <div class="menu-card-icon">🙈</div>
+          <div class="menu-card-title">
+            X埋め込みON / OFF
+          </div>
+          <div class="menu-card-copy">
+            X側で「Not found」になる募集だけ、
+            埋め込み表示をOFFにできます。
+          </div>
+        </button>
+
+      </div>
+
+    </section>
+
+
+    <!-- ========================================
+         X埋め込み ON / OFF
+    ========================================= -->
+
+    <section
+      id="xEmbedControlSection"
+      class="hidden"
+    >
+
+      <div class="admin-head">
+
+        <div>
+          <div class="eyebrow">
+            X EMBED CONTROL
+          </div>
+
+          <h2>
+            🙈 X埋め込みON / OFF
+          </h2>
+        </div>
+
+        <div class="admin-head-actions">
+          <button
+            id="backToMenuFromXEmbedControlBtn"
+            class="btn"
+            type="button"
+          >
+            ← 管理メニュー
+          </button>
+        </div>
+
+      </div>
+
+      <p class="lead">
+        X側で「Not found」になる募集だけ埋め込みをOFFにできます。<br>
+        OFFにしても募集自体やX URLは消えず、「Xで投稿を開く」ボタンは残ります。
+      </p>
+
+      <div class="panel">
+
+        <form
+          id="xEmbedControlForm"
+          class="form-grid"
+        >
+
+          <label>
+            募集タイプ
+            <select id="xEmbedControlType">
+              <option value="commander">指揮官</option>
+              <option value="union">ユニオン</option>
+            </select>
+          </label>
+
+          <div
+            id="xEmbedControlCommanderFields"
+            class="form-grid"
+          >
+
+            <label>
+              指揮官名
+              <input
+                id="xEmbedControlCommanderName"
+                type="text"
+                maxlength="40"
+                autocomplete="off"
+                autocapitalize="off"
+                spellcheck="false"
+                placeholder="例：KAGETORA"
+              >
+            </label>
+
+            <label>
+              SLV
+              <input
+                id="xEmbedControlSlv"
+                type="number"
+                min="1"
+                max="1200"
+                inputmode="numeric"
+                autocomplete="off"
+                placeholder="例：999"
+              >
+            </label>
+
+          </div>
+
+          <div
+            id="xEmbedControlUnionFields"
+            class="form-grid hidden"
+          >
+
+            <label>
+              ユニオン名
+              <input
+                id="xEmbedControlUnionName"
+                type="text"
+                maxlength="40"
+                autocomplete="off"
+                autocapitalize="off"
+                spellcheck="false"
+                placeholder="例：ユニオン名"
+              >
+            </label>
+
+            <label>
+              ユニオンランク
+              <select id="xEmbedControlUnionRank">
+                <option value="チャレンジャー">チャレンジャー</option>
+                <option value="ダイヤ">ダイヤ</option>
+                <option value="プラチナ">プラチナ</option>
+                <option value="ゴールド">ゴールド</option>
+                <option value="シルバー">シルバー</option>
+                <option value="駆け出しユニオン">駆け出しユニオン</option>
+              </select>
+            </label>
+
+          </div>
+
+          <div class="button-row">
+            <button
+              id="xEmbedOffBtn"
+              class="btn danger"
+              type="button"
+            >
+              🙈 埋め込みOFF
+            </button>
+
+            <button
+              id="xEmbedOnBtn"
+              class="btn green"
+              type="button"
+            >
+              👁 埋め込みON
+            </button>
+          </div>
+
+        </form>
+
+        <div
+          id="xEmbedControlMessage"
+          class="message hidden"
+        ></div>
+
       </div>
 
     </section>
@@ -1685,7 +1848,7 @@
                 autocomplete="off"
                 autocapitalize="off"
                 spellcheck="false"
-                placeholder="例：呑処ちどりあし"
+                placeholder="例：ユニオン名"
               >
             </label>
 
@@ -1715,12 +1878,22 @@
             >
           </label>
 
-          <button
-            class="btn primary wide"
-            type="submit"
-          >
-            X URLを修正
-          </button>
+          <div class="button-row">
+            <button
+              class="btn primary"
+              type="submit"
+            >
+              X URLを修正
+            </button>
+
+            <button
+              id="xUrlRepairEmbedOffBtn"
+              class="btn danger"
+              type="button"
+            >
+              🙈 埋め込みOFF
+            </button>
+          </div>
 
         </form>
 
@@ -3454,6 +3627,13 @@
       );
 
 
+    $("#openXEmbedControlBtn")
+      ?.addEventListener(
+        "click",
+        showXEmbedControlAdmin
+      );
+
+
     $("#backToMenuFromUnionBtn")
       ?.addEventListener(
         "click",
@@ -3476,6 +3656,13 @@
 
 
     $("#backToMenuFromXUrlRepairBtn")
+      ?.addEventListener(
+        "click",
+        showMenu
+      );
+
+
+    $("#backToMenuFromXEmbedControlBtn")
       ?.addEventListener(
         "click",
         showMenu
@@ -4070,6 +4257,10 @@
         ?.classList
         .add("hidden");
 
+      $("#xEmbedControlSection")
+        ?.classList
+        .add("hidden");
+
       $("#adminSection")
         ?.classList
         .add("hidden");
@@ -4150,6 +4341,21 @@
 
       clearMessage(
         $("#xUrlRepairMessage")
+      );
+
+    }
+
+
+    function showXEmbedControlAdmin() {
+
+      hideAllAdminSections();
+
+      $("#xEmbedControlSection")
+        ?.classList
+        .remove("hidden");
+
+      clearMessage(
+        $("#xEmbedControlMessage")
       );
 
     }
@@ -4304,6 +4510,237 @@
 
 
     // ========================================
+    // X埋め込み ON / OFF
+    // ========================================
+
+    function updateXEmbedControlFields() {
+
+      const type =
+        $("#xEmbedControlType")
+          ?.value ||
+        "commander";
+
+      const isUnion =
+        type === "union";
+
+      $("#xEmbedControlCommanderFields")
+        ?.classList
+        .toggle(
+          "hidden",
+          isUnion
+        );
+
+      $("#xEmbedControlUnionFields")
+        ?.classList
+        .toggle(
+          "hidden",
+          !isUnion
+        );
+
+      clearMessage(
+        $("#xEmbedControlMessage")
+      );
+
+    }
+
+
+    $("#xEmbedControlType")
+      ?.addEventListener(
+        "change",
+        updateXEmbedControlFields
+      );
+
+
+    async function setRecruitmentXEmbedEnabled(enabled) {
+
+      clearMessage(
+        $("#xEmbedControlMessage")
+      );
+
+      const token =
+        getToken();
+
+      if (!token) {
+        showLogin();
+        return;
+      }
+
+      const type =
+        $("#xEmbedControlType")
+          ?.value ||
+        "commander";
+
+      let name = "";
+      let value = "";
+
+      if (type === "commander") {
+
+        name =
+          $("#xEmbedControlCommanderName")
+            ?.value
+            .trim() ||
+          "";
+
+        value =
+          $("#xEmbedControlSlv")
+            ?.value
+            .trim() ||
+          "";
+
+        const slv =
+          Number(value);
+
+        if (
+          !name ||
+          !Number.isInteger(slv) ||
+          slv < 1 ||
+          slv > 1200
+        ) {
+
+          showMessage(
+            $("#xEmbedControlMessage"),
+            "指揮官名とSLV（1～1200）を入力してください。",
+            "error"
+          );
+
+          return;
+
+        }
+
+      } else {
+
+        name =
+          $("#xEmbedControlUnionName")
+            ?.value
+            .trim() ||
+          "";
+
+        value =
+          $("#xEmbedControlUnionRank")
+            ?.value ||
+          "";
+
+        if (!name || !value) {
+
+          showMessage(
+            $("#xEmbedControlMessage"),
+            "ユニオン名とユニオンランクを入力してください。",
+            "error"
+          );
+
+          return;
+
+        }
+
+      }
+
+      const {
+        data,
+        error
+      } =
+        await sb.rpc(
+          "admin_set_recruitment_x_embed",
+          {
+            p_token:
+              token,
+            p_type:
+              type,
+            p_name:
+              name,
+            p_value:
+              value,
+            p_enabled:
+              enabled
+          }
+        );
+
+      if (error) {
+
+        const errorText =
+          String(
+            error.message ||
+            error.details ||
+            ""
+          );
+
+        if (
+          errorText.includes(
+            "ADMIN_SESSION_INVALID"
+          )
+        ) {
+          clearToken();
+          showLogin();
+          return;
+        }
+
+        if (
+          errorText.includes(
+            "RECRUITMENT_NOT_FOUND"
+          )
+        ) {
+
+          showMessage(
+            $("#xEmbedControlMessage"),
+            type === "commander"
+              ? "一致する募集中の指揮官が見つかりません。指揮官名とSLVを確認してください。"
+              : "一致する募集中のユニオンが見つかりません。ユニオン名とランクを確認してください。",
+            "error"
+          );
+
+          return;
+
+        }
+
+        console.error(
+          "X埋め込み設定エラー",
+          error
+        );
+
+        showMessage(
+          $("#xEmbedControlMessage"),
+          "X埋め込み設定を変更できませんでした。",
+          "error"
+        );
+
+        return;
+
+      }
+
+      showMessage(
+        $("#xEmbedControlMessage"),
+        enabled
+          ? "👁 X埋め込みをONにしました。募集一覧を再読み込みすると反映されます。"
+          : "🙈 X埋め込みをOFFにしました。募集一覧では「Xで投稿を開く」だけ表示されます。",
+        "ok"
+      );
+
+    }
+
+
+    $("#xEmbedOffBtn")
+      ?.addEventListener(
+        "click",
+        () =>
+          setRecruitmentXEmbedEnabled(
+            false
+          )
+      );
+
+
+    $("#xEmbedOnBtn")
+      ?.addEventListener(
+        "click",
+        () =>
+          setRecruitmentXEmbedEnabled(
+            true
+          )
+      );
+
+
+    updateXEmbedControlFields();
+
+
+    // ========================================
     // 募集X URL修正
     // ========================================
 
@@ -4345,6 +4782,136 @@
       );
 
 
+    function clearXUrlRepairInputs() {
+
+      const type =
+        $("#xUrlRepairType")
+          ?.value ||
+        "commander";
+
+      const commanderName =
+        $("#xUrlRepairCommanderName");
+
+      const slv =
+        $("#xUrlRepairSlv");
+
+      const unionName =
+        $("#xUrlRepairUnionName");
+
+      const unionRank =
+        $("#xUrlRepairUnionRank");
+
+      const newUrl =
+        $("#xUrlRepairNewUrl");
+
+      if (commanderName) {
+        commanderName.value = "";
+      }
+
+      if (slv) {
+        slv.value = "";
+      }
+
+      if (unionName) {
+        unionName.value = "";
+      }
+
+      if (unionRank) {
+        unionRank.selectedIndex = 0;
+      }
+
+      if (newUrl) {
+        newUrl.value = "";
+      }
+
+      const typeSelect =
+        $("#xUrlRepairType");
+
+      if (typeSelect) {
+        typeSelect.value =
+          type;
+      }
+
+      updateXUrlRepairFields();
+
+    }
+
+
+    function getXUrlRepairTarget() {
+
+      const type =
+        $("#xUrlRepairType")
+          ?.value ||
+        "commander";
+
+      let name = "";
+      let value = "";
+
+      if (type === "commander") {
+
+        name =
+          $("#xUrlRepairCommanderName")
+            ?.value
+            .trim() ||
+          "";
+
+        value =
+          $("#xUrlRepairSlv")
+            ?.value
+            .trim() ||
+          "";
+
+        const slv =
+          Number(value);
+
+        if (
+          !name ||
+          !Number.isInteger(slv) ||
+          slv < 1 ||
+          slv > 1200
+        ) {
+          return {
+            ok: false,
+            type,
+            message:
+              "指揮官名とSLV（1～1200）を入力してください。"
+          };
+        }
+
+      } else {
+
+        name =
+          $("#xUrlRepairUnionName")
+            ?.value
+            .trim() ||
+          "";
+
+        value =
+          $("#xUrlRepairUnionRank")
+            ?.value ||
+          "";
+
+        if (!name || !value) {
+          return {
+            ok: false,
+            type,
+            message:
+              "ユニオン名とユニオンランクを入力してください。"
+          };
+        }
+
+      }
+
+      return {
+        ok: true,
+        type,
+        name,
+        value
+      };
+
+    }
+
+
     $("#xUrlRepairForm")
       ?.addEventListener(
         "submit",
@@ -4364,74 +4931,27 @@
             return;
           }
 
-          const type =
-            $("#xUrlRepairType")
-              ?.value ||
-            "commander";
+          const target =
+            getXUrlRepairTarget();
 
-          let name = "";
-          let value = "";
+          if (!target.ok) {
 
-          if (type === "commander") {
+            showMessage(
+              $("#xUrlRepairMessage"),
+              target.message,
+              "error"
+            );
 
-            name =
-              $("#xUrlRepairCommanderName")
-                ?.value
-                .trim() ||
-              "";
-
-            value =
-              $("#xUrlRepairSlv")
-                ?.value
-                .trim() ||
-              "";
-
-            const slv =
-              Number(value);
-
-            if (
-              !name ||
-              !Number.isInteger(slv) ||
-              slv < 1 ||
-              slv > 1200
-            ) {
-
-              showMessage(
-                $("#xUrlRepairMessage"),
-                "指揮官名とSLV（1～1200）を入力してください。",
-                "error"
-              );
-
-              return;
-
-            }
-
-          } else {
-
-            name =
-              $("#xUrlRepairUnionName")
-                ?.value
-                .trim() ||
-              "";
-
-            value =
-              $("#xUrlRepairUnionRank")
-                ?.value ||
-              "";
-
-            if (!name || !value) {
-
-              showMessage(
-                $("#xUrlRepairMessage"),
-                "ユニオン名とユニオンランクを入力してください。",
-                "error"
-              );
-
-              return;
-
-            }
+            return;
 
           }
+
+          const {
+            type,
+            name,
+            value
+          } =
+            target;
 
           const newUrl =
             $("#xUrlRepairNewUrl")
@@ -4543,21 +5063,133 @@
 
           }
 
-          const savedUrl =
-            data?.x_url ||
-            newUrl;
-
-          const urlInput =
-            $("#xUrlRepairNewUrl");
-
-          if (urlInput) {
-            urlInput.value =
-              savedUrl;
-          }
+          clearXUrlRepairInputs();
 
           showMessage(
             $("#xUrlRepairMessage"),
-            "X URLを修正しました。募集一覧を再読み込みすると反映されます。",
+            "X URLを修正しました。入力内容をクリアしました。",
+            "ok"
+          );
+
+        }
+      );
+
+
+    $("#xUrlRepairEmbedOffBtn")
+      ?.addEventListener(
+        "click",
+        async () => {
+
+          clearMessage(
+            $("#xUrlRepairMessage")
+          );
+
+          const token =
+            getToken();
+
+          if (!token) {
+            showLogin();
+            return;
+          }
+
+          const target =
+            getXUrlRepairTarget();
+
+          if (!target.ok) {
+
+            showMessage(
+              $("#xUrlRepairMessage"),
+              target.message,
+              "error"
+            );
+
+            return;
+
+          }
+
+          const {
+            type,
+            name,
+            value
+          } =
+            target;
+
+          const {
+            error
+          } =
+            await sb.rpc(
+              "admin_set_recruitment_x_embed",
+              {
+                p_token:
+                  token,
+                p_type:
+                  type,
+                p_name:
+                  name,
+                p_value:
+                  value,
+                p_enabled:
+                  false
+              }
+            );
+
+          if (error) {
+
+            const errorText =
+              String(
+                error.message ||
+                error.details ||
+                ""
+              );
+
+            if (
+              errorText.includes(
+                "ADMIN_SESSION_INVALID"
+              )
+            ) {
+              clearToken();
+              showLogin();
+              return;
+            }
+
+            if (
+              errorText.includes(
+                "RECRUITMENT_NOT_FOUND"
+              )
+            ) {
+
+              showMessage(
+                $("#xUrlRepairMessage"),
+                type === "commander"
+                  ? "一致する募集中の指揮官が見つかりません。指揮官名とSLVを確認してください。"
+                  : "一致する募集中のユニオンが見つかりません。ユニオン名とランクを確認してください。",
+                "error"
+              );
+
+              return;
+
+            }
+
+            console.error(
+              "X埋め込みOFFエラー",
+              error
+            );
+
+            showMessage(
+              $("#xUrlRepairMessage"),
+              "埋め込みOFFにできませんでした。",
+              "error"
+            );
+
+            return;
+
+          }
+
+          clearXUrlRepairInputs();
+
+          showMessage(
+            $("#xUrlRepairMessage"),
+            "🙈 X埋め込みをOFFにしました。入力内容をクリアしました。",
             "ok"
           );
 
