@@ -1435,7 +1435,7 @@ async function loadRecruitments() {
         "recruitments"
       )
       .select(
-        "id, commander_name, slv, x_url, created_at, expires_at"
+        "id, commander_name, slv, x_url, x_embed_enabled, created_at, expires_at"
       )
       .eq(
         "status",
@@ -1466,7 +1466,7 @@ async function loadRecruitments() {
         "union_recruitments"
       )
       .select(
-        "id, union_name, union_rank, x_url, created_at, expires_at"
+        "id, union_name, union_rank, x_url, x_embed_enabled, created_at, expires_at"
       )
       .eq(
         "status",
@@ -1851,14 +1851,24 @@ const deadlineBadge =
 
                 <div class="x-post-area">
 
-
-                  <div
-                    class="x-embed"
-                    data-post-id="${escapeHtml(
-                      postId || ""
-                    )}"
-                  >
-                  </div>
+                  ${
+                    item.x_embed_enabled === false
+                      ? `
+                        <div class="x-embed-error">
+                          <strong>🙈 X埋め込み表示はOFFです</strong><br>
+                          <span>下のボタンから募集投稿を確認できます。</span>
+                        </div>
+                      `
+                      : `
+                        <div
+                          class="x-embed"
+                          data-post-id="${escapeHtml(
+                            postId || ""
+                          )}"
+                        >
+                        </div>
+                      `
+                  }
 
 
                   <a
@@ -2077,14 +2087,24 @@ const deadlineBadge =
 
                 <div class="x-post-area">
 
-
-                  <div
-                    class="x-embed"
-                    data-post-id="${escapeHtml(
-                      postId || ""
-                    )}"
-                  >
-                  </div>
+                  ${
+                    item.x_embed_enabled === false
+                      ? `
+                        <div class="x-embed-error">
+                          <strong>🙈 X埋め込み表示はOFFです</strong><br>
+                          <span>下のボタンから募集投稿を確認できます。</span>
+                        </div>
+                      `
+                      : `
+                        <div
+                          class="x-embed"
+                          data-post-id="${escapeHtml(
+                            postId || ""
+                          )}"
+                        >
+                        </div>
+                      `
+                  }
 
 
                   <a
