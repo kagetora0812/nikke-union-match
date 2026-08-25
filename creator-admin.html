@@ -4551,6 +4551,53 @@
       );
 
 
+    function clearXEmbedControlInputs() {
+
+      const typeSelect =
+        $("#xEmbedControlType");
+
+      const currentType =
+        typeSelect?.value ||
+        "commander";
+
+      const commanderName =
+        $("#xEmbedControlCommanderName");
+
+      const slv =
+        $("#xEmbedControlSlv");
+
+      const unionName =
+        $("#xEmbedControlUnionName");
+
+      const unionRank =
+        $("#xEmbedControlUnionRank");
+
+      if (commanderName) {
+        commanderName.value = "";
+      }
+
+      if (slv) {
+        slv.value = "";
+      }
+
+      if (unionName) {
+        unionName.value = "";
+      }
+
+      if (unionRank) {
+        unionRank.selectedIndex = 0;
+      }
+
+      if (typeSelect) {
+        typeSelect.value =
+          currentType;
+      }
+
+      updateXEmbedControlFields();
+
+    }
+
+
     async function setRecruitmentXEmbedEnabled(enabled) {
 
       clearMessage(
@@ -4722,11 +4769,13 @@
 
       }
 
+      clearXEmbedControlInputs();
+
       showMessage(
         $("#xEmbedControlMessage"),
         enabled
-          ? "👁 X埋め込みをONにしました。募集一覧を再読み込みすると反映されます。"
-          : "🙈 X埋め込みをOFFにしました。募集一覧では「Xで投稿を開く」だけ表示されます。",
+          ? "👁 X埋め込みをONにしました。入力内容をクリアしました。"
+          : "🙈 X埋め込みをOFFにしました。入力内容をクリアしました。",
         "ok"
       );
 
