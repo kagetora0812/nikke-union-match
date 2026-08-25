@@ -1567,6 +1567,168 @@
           </div>
         </button>
 
+        <button
+          id="openXUrlRepairBtn"
+          class="menu-card"
+          type="button"
+        >
+          <div class="menu-card-icon">🛠️</div>
+          <div class="menu-card-title">
+            募集X URL修正
+          </div>
+          <div class="menu-card-copy">
+            X投稿が読み込めない募集のURLを、
+            管理画面から差し替えます。
+          </div>
+        </button>
+
+      </div>
+
+    </section>
+
+
+    <!-- ========================================
+         募集X URL修正
+    ========================================= -->
+
+    <section
+      id="xUrlRepairSection"
+      class="hidden"
+    >
+
+      <div class="admin-head">
+
+        <div>
+          <div class="eyebrow">
+            X URL REPAIR
+          </div>
+
+          <h2>
+            🛠️ 募集X URL修正
+          </h2>
+        </div>
+
+        <div class="admin-head-actions">
+          <button
+            id="backToMenuFromXUrlRepairBtn"
+            class="btn"
+            type="button"
+          >
+            ← 管理メニュー
+          </button>
+        </div>
+
+      </div>
+
+      <p class="lead">
+        現在募集中の募集だけが対象です。<br>
+        指揮官は「指揮官名＋SLV」、ユニオンは「ユニオン名＋ユニオンランク」で照合して、
+        登録されているX投稿URLだけを修正します。
+      </p>
+
+      <div class="panel">
+
+        <form
+          id="xUrlRepairForm"
+          class="form-grid"
+        >
+
+          <label>
+            募集タイプ
+            <select id="xUrlRepairType">
+              <option value="commander">指揮官</option>
+              <option value="union">ユニオン</option>
+            </select>
+          </label>
+
+          <div
+            id="xUrlRepairCommanderFields"
+            class="form-grid"
+          >
+            <label>
+              指揮官名
+              <input
+                id="xUrlRepairCommanderName"
+                type="text"
+                maxlength="40"
+                autocomplete="off"
+                autocapitalize="off"
+                spellcheck="false"
+                placeholder="例：KAGETORA"
+              >
+            </label>
+
+            <label>
+              SLV
+              <input
+                id="xUrlRepairSlv"
+                type="number"
+                min="1"
+                max="1200"
+                inputmode="numeric"
+                autocomplete="off"
+                placeholder="例：999"
+              >
+            </label>
+          </div>
+
+          <div
+            id="xUrlRepairUnionFields"
+            class="form-grid hidden"
+          >
+            <label>
+              ユニオン名
+              <input
+                id="xUrlRepairUnionName"
+                type="text"
+                maxlength="40"
+                autocomplete="off"
+                autocapitalize="off"
+                spellcheck="false"
+                placeholder="例：呑処ちどりあし"
+              >
+            </label>
+
+            <label>
+              ユニオンランク
+              <select id="xUrlRepairUnionRank">
+                <option value="チャレンジャー">チャレンジャー</option>
+                <option value="ダイヤ">ダイヤ</option>
+                <option value="プラチナ">プラチナ</option>
+                <option value="ゴールド">ゴールド</option>
+                <option value="シルバー">シルバー</option>
+                <option value="駆け出しユニオン">駆け出しユニオン</option>
+              </select>
+            </label>
+          </div>
+
+          <label>
+            新しいX募集投稿URL
+            <input
+              id="xUrlRepairNewUrl"
+              type="url"
+              inputmode="url"
+              autocomplete="off"
+              autocapitalize="off"
+              spellcheck="false"
+              placeholder="https://x.com/ユーザー名/status/..."
+            >
+          </label>
+
+          <button
+            class="btn primary wide"
+            type="submit"
+          >
+            X URLを修正
+          </button>
+
+        </form>
+
+        <div
+          id="xUrlRepairMessage"
+          class="message hidden"
+        ></div>
+
       </div>
 
     </section>
@@ -2467,6 +2629,43 @@
     }
 
 
+    function validRecruitmentXUrl(value) {
+
+      try {
+
+        const url =
+          new URL(
+            String(value || "").trim()
+          );
+
+        const allowedHost =
+          [
+            "x.com",
+            "www.x.com",
+            "twitter.com",
+            "www.twitter.com"
+          ].includes(
+            url.hostname.toLowerCase()
+          );
+
+        if (!allowedHost) {
+          return false;
+        }
+
+        return /^\/[^/]+\/status\/\d+\/?$/
+          .test(
+            url.pathname
+          );
+
+      } catch {
+
+        return false;
+
+      }
+
+    }
+
+
     // ========================================
     // 募集終了ユニオン管理
     // ========================================
@@ -3248,6 +3447,13 @@
       );
 
 
+    $("#openXUrlRepairBtn")
+      ?.addEventListener(
+        "click",
+        showXUrlRepairAdmin
+      );
+
+
     $("#backToMenuFromUnionBtn")
       ?.addEventListener(
         "click",
@@ -3263,6 +3469,13 @@
 
 
     $("#backToMenuFromPassReissueBtn")
+      ?.addEventListener(
+        "click",
+        showMenu
+      );
+
+
+    $("#backToMenuFromXUrlRepairBtn")
       ?.addEventListener(
         "click",
         showMenu
@@ -3853,6 +4066,10 @@
         ?.classList
         .add("hidden");
 
+      $("#xUrlRepairSection")
+        ?.classList
+        .add("hidden");
+
       $("#adminSection")
         ?.classList
         .add("hidden");
@@ -3919,6 +4136,21 @@
       $("#passReissueResult")
         ?.classList
         .add("hidden");
+
+    }
+
+
+    function showXUrlRepairAdmin() {
+
+      hideAllAdminSections();
+
+      $("#xUrlRepairSection")
+        ?.classList
+        .remove("hidden");
+
+      clearMessage(
+        $("#xUrlRepairMessage")
+      );
 
     }
 
@@ -4069,6 +4301,271 @@
 
         }
       );
+
+
+    // ========================================
+    // 募集X URL修正
+    // ========================================
+
+    function updateXUrlRepairFields() {
+
+      const type =
+        $("#xUrlRepairType")
+          ?.value ||
+        "commander";
+
+      const isUnion =
+        type === "union";
+
+      $("#xUrlRepairCommanderFields")
+        ?.classList
+        .toggle(
+          "hidden",
+          isUnion
+        );
+
+      $("#xUrlRepairUnionFields")
+        ?.classList
+        .toggle(
+          "hidden",
+          !isUnion
+        );
+
+      clearMessage(
+        $("#xUrlRepairMessage")
+      );
+
+    }
+
+
+    $("#xUrlRepairType")
+      ?.addEventListener(
+        "change",
+        updateXUrlRepairFields
+      );
+
+
+    $("#xUrlRepairForm")
+      ?.addEventListener(
+        "submit",
+        async event => {
+
+          event.preventDefault();
+
+          clearMessage(
+            $("#xUrlRepairMessage")
+          );
+
+          const token =
+            getToken();
+
+          if (!token) {
+            showLogin();
+            return;
+          }
+
+          const type =
+            $("#xUrlRepairType")
+              ?.value ||
+            "commander";
+
+          let name = "";
+          let value = "";
+
+          if (type === "commander") {
+
+            name =
+              $("#xUrlRepairCommanderName")
+                ?.value
+                .trim() ||
+              "";
+
+            value =
+              $("#xUrlRepairSlv")
+                ?.value
+                .trim() ||
+              "";
+
+            const slv =
+              Number(value);
+
+            if (
+              !name ||
+              !Number.isInteger(slv) ||
+              slv < 1 ||
+              slv > 1200
+            ) {
+
+              showMessage(
+                $("#xUrlRepairMessage"),
+                "指揮官名とSLV（1～1200）を入力してください。",
+                "error"
+              );
+
+              return;
+
+            }
+
+          } else {
+
+            name =
+              $("#xUrlRepairUnionName")
+                ?.value
+                .trim() ||
+              "";
+
+            value =
+              $("#xUrlRepairUnionRank")
+                ?.value ||
+              "";
+
+            if (!name || !value) {
+
+              showMessage(
+                $("#xUrlRepairMessage"),
+                "ユニオン名とユニオンランクを入力してください。",
+                "error"
+              );
+
+              return;
+
+            }
+
+          }
+
+          const newUrl =
+            $("#xUrlRepairNewUrl")
+              ?.value
+              .trim() ||
+            "";
+
+          if (
+            !validRecruitmentXUrl(
+              newUrl
+            )
+          ) {
+
+            showMessage(
+              $("#xUrlRepairMessage"),
+              "Xの募集投稿URLを入力してください。",
+              "error"
+            );
+
+            return;
+
+          }
+
+          const {
+            data,
+            error
+          } =
+            await sb.rpc(
+              "admin_update_recruitment_x_url",
+              {
+                p_token:
+                  token,
+                p_type:
+                  type,
+                p_name:
+                  name,
+                p_value:
+                  value,
+                p_x_url:
+                  newUrl
+              }
+            );
+
+          if (error) {
+
+            const errorText =
+              String(
+                error.message ||
+                error.details ||
+                ""
+              );
+
+            if (
+              errorText.includes(
+                "ADMIN_SESSION_INVALID"
+              )
+            ) {
+              clearToken();
+              showLogin();
+              return;
+            }
+
+            if (
+              errorText.includes(
+                "RECRUITMENT_NOT_FOUND"
+              )
+            ) {
+
+              showMessage(
+                $("#xUrlRepairMessage"),
+                type === "commander"
+                  ? "一致する募集中の指揮官が見つかりません。指揮官名とSLVを確認してください。"
+                  : "一致する募集中のユニオンが見つかりません。ユニオン名とランクを確認してください。",
+                "error"
+              );
+
+              return;
+
+            }
+
+            if (
+              errorText.includes(
+                "INVALID_X_POST_URL"
+              )
+            ) {
+
+              showMessage(
+                $("#xUrlRepairMessage"),
+                "Xの募集投稿URLではありません。",
+                "error"
+              );
+
+              return;
+
+            }
+
+            console.error(
+              "募集X URL修正エラー",
+              error
+            );
+
+            showMessage(
+              $("#xUrlRepairMessage"),
+              "X URLを修正できませんでした。",
+              "error"
+            );
+
+            return;
+
+          }
+
+          const savedUrl =
+            data?.x_url ||
+            newUrl;
+
+          const urlInput =
+            $("#xUrlRepairNewUrl");
+
+          if (urlInput) {
+            urlInput.value =
+              savedUrl;
+          }
+
+          showMessage(
+            $("#xUrlRepairMessage"),
+            "X URLを修正しました。募集一覧を再読み込みすると反映されます。",
+            "ok"
+          );
+
+        }
+      );
+
+
+    updateXUrlRepairFields();
 
 
     // ========================================
