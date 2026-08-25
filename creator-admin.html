@@ -1788,6 +1788,22 @@
 
         <div class="button-row" style="margin-top:12px;">
           <button
+            id="editContactBtn"
+            class="btn blue"
+            type="button"
+          >
+            ✏️ 固定文を編集
+          </button>
+
+          <button
+            id="saveContactBtn"
+            class="btn green hidden"
+            type="button"
+          >
+            💾 編集内容を保存
+          </button>
+
+          <button
             id="copyContactBtn"
             class="btn primary"
             type="button"
@@ -1802,8 +1818,8 @@
         ></div>
 
         <div class="template-note">
-          文章をコピーしたあと、各ユニオンの「𝕏 募集投稿を開く」から
-          登録されているXの募集投稿へ移動できます。
+          「固定文を編集」から内容を変更できます。保存した文章はこのブラウザに残ります。<br>
+          文章をコピーしたあと、各ユニオンの「𝕏 募集投稿を開く」から募集投稿へ移動できます。
         </div>
 
       </div>
@@ -2455,16 +2471,33 @@
     // 募集終了ユニオン管理
     // ========================================
 
-    const CONTACT_TEMPLATE =
+    const DEFAULT_CONTACT_TEMPLATE =
       "NIKKE UNION MATCH管理のKAGETORAです🙇‍♂️\n" +
       "ご利用ありがとうございます✨\n" +
-      "掲載中のユニオン募集が48時間以内に終了します⏰\n\n" +
-      "もし引き続き募集される予定でしたら、\n" +
-      "お手数ですが再掲載していただけると嬉しいです🙏\n" +
-      "再掲載すると前の募集は自動で締切になるため、\n" +
-      "削除・締切操作は不要です。\n\n" +
+      "募集期限が48時間以内のためご連絡しました⏰\n\n" +
+      "継続募集される場合は、\n" +
+      "再掲載いただけると嬉しいです🙏\n" +
+      "前の募集は自動で締切になるので、\n" +
+      "削除・締切は不要です。\n\n" +
       "▼再掲載\n" +
       "https://x.gd/4tEJo";
+
+
+    const CONTACT_TEMPLATE_KEY =
+      "nikke_union_admin_contact_template_v1";
+
+
+    function getContactTemplate() {
+
+      return (
+        localStorage.getItem(
+          CONTACT_TEMPLATE_KEY
+        )
+        ||
+        DEFAULT_CONTACT_TEMPLATE
+      );
+
+    }
 
 
     const CONTACTED_UNION_KEY =
@@ -3032,10 +3065,111 @@
     );
 
 
-    $("#contactTemplate") &&
-      (
-        $("#contactTemplate").value =
-          CONTACT_TEMPLATE
+    const contactTemplateInput =
+      $("#contactTemplate");
+
+    const editContactBtn =
+      $("#editContactBtn");
+
+    const saveContactBtn =
+      $("#saveContactBtn");
+
+
+    if (contactTemplateInput) {
+
+      contactTemplateInput.value =
+        getContactTemplate();
+
+    }
+
+
+    editContactBtn
+      ?.addEventListener(
+        "click",
+        () => {
+
+          if (!contactTemplateInput) {
+            return;
+          }
+
+          contactTemplateInput.readOnly =
+            false;
+
+          contactTemplateInput.focus();
+
+          editContactBtn.classList.add(
+            "hidden"
+          );
+
+          saveContactBtn
+            ?.classList
+            .remove(
+              "hidden"
+            );
+
+          showMessage(
+            $("#copyMessage"),
+            "固定文を編集できます。編集後に保存してください。",
+            "ok"
+          );
+
+        }
+      );
+
+
+    saveContactBtn
+      ?.addEventListener(
+        "click",
+        () => {
+
+          if (!contactTemplateInput) {
+            return;
+          }
+
+          const text =
+            contactTemplateInput.value
+              .trim();
+
+          if (!text) {
+
+            showMessage(
+              $("#copyMessage"),
+              "固定文が空です。文章を入力してください。",
+              "error"
+            );
+
+            return;
+
+          }
+
+          localStorage.setItem(
+            CONTACT_TEMPLATE_KEY,
+            text
+          );
+
+          contactTemplateInput.value =
+            text;
+
+          contactTemplateInput.readOnly =
+            true;
+
+          saveContactBtn.classList.add(
+            "hidden"
+          );
+
+          editContactBtn
+            ?.classList
+            .remove(
+              "hidden"
+            );
+
+          showMessage(
+            $("#copyMessage"),
+            "固定文を保存しました。",
+            "ok"
+          );
+
+        }
       );
 
 
@@ -3046,8 +3180,15 @@
 
           try {
 
+            const text =
+              contactTemplateInput
+                ?.value
+                .trim()
+              ||
+              getContactTemplate();
+
             await copyTextToClipboard(
-              CONTACT_TEMPLATE
+              text
             );
 
             showMessage(
