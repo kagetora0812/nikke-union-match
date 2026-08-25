@@ -321,6 +321,24 @@ function getXPostId(url) {
 // 他の投稿の読み込みを止めない
 // ========================================
 
+function showXEmbedFallback(target) {
+
+  if (!target) {
+    return;
+  }
+
+  target.dataset.loaded =
+    "failed";
+
+  target.innerHTML =
+    '<div class="x-embed-error">' +
+      '<strong>X投稿を埋め込み表示できません</strong><br>' +
+      '<span>下の「Xで投稿を開く」から確認してください。</span>' +
+    '</div>';
+
+}
+
+
 function renderSingleXEmbed(target) {
 
   if (!target) {
@@ -343,11 +361,9 @@ function renderSingleXEmbed(target) {
 
   if (!postId) {
 
-    target.dataset.loaded =
-      "failed";
-
-    target.innerHTML =
-      '<div class="x-embed-error">X投稿を表示できません</div>';
+    showXEmbedFallback(
+      target
+    );
 
     return;
 
@@ -381,32 +397,42 @@ function renderSingleXEmbed(target) {
       .resolve(result)
       .then(tweetElement => {
 
-        target.dataset.loaded =
-          tweetElement
-            ? "true"
-            : "failed";
+        if (tweetElement) {
+
+          target.dataset.loaded =
+            "true";
+
+          return;
+
+        }
+
+        showXEmbedFallback(
+          target
+        );
 
       })
       .catch(error => {
-
-        target.dataset.loaded =
-          "failed";
 
         console.error(
           "X投稿表示エラー",
           error
         );
 
+        showXEmbedFallback(
+          target
+        );
+
       });
 
   } catch (error) {
 
-    target.dataset.loaded =
-      "failed";
-
     console.error(
       "X投稿表示エラー",
       error
+    );
+
+    showXEmbedFallback(
+      target
     );
 
   }
