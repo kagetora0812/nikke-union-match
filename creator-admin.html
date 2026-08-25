@@ -1636,8 +1636,8 @@
       </div>
 
       <p class="lead">
-        X側で「Not found」になる募集だけ埋め込みをOFFにできます。<br>
-        OFFにしても募集自体やX URLは消えず、「Xで投稿を開く」ボタンは残ります。
+        X側で「Not found」になる募集や、X投稿自体が削除された募集も埋め込みをOFFにできます。<br>
+        X投稿が存在するかどうかは判定条件に使いません。OFFにしても募集データは消えません。
       </p>
 
       <div class="panel">
@@ -4696,9 +4696,25 @@
           error
         );
 
+        const schemaError =
+          errorText.includes(
+            "admin_set_recruitment_x_embed"
+          )
+          ||
+          errorText.includes(
+            "x_embed_enabled"
+          )
+          ||
+          String(
+            error.code ||
+            ""
+          ) === "PGRST202";
+
         showMessage(
           $("#xEmbedControlMessage"),
-          "X埋め込み設定を変更できませんでした。",
+          schemaError
+            ? "X埋め込み管理用SQLが未適用、または古い状態です。最新のSQLをSupabaseでRunしてください。"
+            : "X埋め込み設定を変更できませんでした。対象名・SLV/ランクを確認してください。",
           "error"
         );
 
@@ -5175,9 +5191,25 @@
               error
             );
 
+            const schemaError =
+              errorText.includes(
+                "admin_set_recruitment_x_embed"
+              )
+              ||
+              errorText.includes(
+                "x_embed_enabled"
+              )
+              ||
+              String(
+                error.code ||
+                ""
+              ) === "PGRST202";
+
             showMessage(
               $("#xUrlRepairMessage"),
-              "埋め込みOFFにできませんでした。",
+              schemaError
+                ? "X埋め込み管理用SQLが未適用、または古い状態です。最新のSQLをSupabaseでRunしてください。"
+                : "埋め込みOFFにできませんでした。対象名・SLV/ランクを確認してください。",
               "error"
             );
 
