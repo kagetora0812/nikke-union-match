@@ -21,7 +21,7 @@
 
   <link
     rel="stylesheet"
-    href="./style.css?v=12.7"
+    href="./style.css?v=12.8"
   >
 
 
@@ -311,9 +311,9 @@
 
 </h1>
 
-<p class="hero-description">
+<p>
   名前・SLV・募集記事URLだけで掲載。<br>
-  X・BlablaLink・Discordなど、普段使っている募集記事をそのまま登録できます。<br>
+  X・BlablaLink・Discordなど、普段使っている募集記事をそのまま登録できます。<br><br>
   連絡方法は募集記事の案内に従ってください。
 </p>
 
@@ -582,12 +582,29 @@
                 >
 
                 <small>
-                  X・BlablaLinkなど、募集記事のURLを貼ってください
+                  X・BlablaLink・Discordなど、募集記事のURLを貼ってください
                 </small>
 
 
               </label>
 
+
+              <div id="previewImageField" class="preview-image-field">
+                <label>
+                  募集記事の画像 <span class="optional-label">任意</span>
+
+                  <input
+                    id="previewImage"
+                    type="file"
+                    accept="image/jpeg,image/png,image/webp"
+                  >
+
+                  <small class="preview-file-help">
+                    BlablaLink・Discordなどの募集画面スクリーンショットを追加できます。20MBまで。大きな画像は確認時に自動で最適化されます。未選択でも登録できます。
+                  </small>
+                  <small id="previewImageStatus" class="preview-file-help"></small>
+                </label>
+              </div>
 
 
               <div class="notice">
@@ -610,9 +627,10 @@
 
               <button
                 class="btn primary wide"
+                id="registerPreviewBtn"
                 type="submit"
               >
-                募集を登録する
+                登録内容を確認する
               </button>
 
 
@@ -1160,6 +1178,63 @@
 
 
   <!-- ========================================
+       登録前プレビューモーダル
+  ========================================= -->
+
+  <div
+    id="registrationPreviewModal"
+    class="modal registration-preview-modal hidden"
+  >
+
+    <div class="modal-card registration-preview-modal-card">
+
+      <button
+        class="modal-close"
+        id="registrationPreviewClose"
+        type="button"
+        aria-label="閉じる"
+      >
+        ×
+      </button>
+
+      <div class="eyebrow">
+        PREVIEW
+      </div>
+
+      <h2>
+        登録内容を確認
+      </h2>
+
+      <p class="registration-preview-note">
+        UNION MATCHでの掲載イメージです。問題なければ「この内容で登録」を押してください。
+      </p>
+
+      <div id="registrationPreviewCard"></div>
+
+      <div class="registration-preview-actions">
+        <button
+          id="registrationPreviewBack"
+          class="btn ghost"
+          type="button"
+        >
+          ← 修正する
+        </button>
+
+        <button
+          id="registrationPreviewConfirm"
+          class="btn primary"
+          type="button"
+        >
+          この内容で登録
+        </button>
+      </div>
+
+    </div>
+
+  </div>
+
+
+  <!-- ========================================
        登録完了モーダル
   ========================================= -->
 
@@ -1409,7 +1484,7 @@
 
   <!-- アプリ本体 -->
 
-  <script src="./app.js?v=13.2"></script>
+  <script src="./app.js?v=13.4"></script>
 
 
 </body>
