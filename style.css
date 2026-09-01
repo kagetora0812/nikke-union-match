@@ -3843,3 +3843,106 @@ body .bottom-nav .nav-btn.active:hover {
     font-size: 10px;
   }
 }
+
+/* =========================================================
+   v13.3 登録前プレビュー + 任意募集画像
+   既存デザインは変更せず追加のみ
+   ========================================================= */
+
+.preview-image-field {
+  margin-top: 14px;
+}
+
+.optional-label {
+  display: inline-flex;
+  align-items: center;
+  margin-left: 6px;
+  padding: 2px 7px;
+  border: 1px solid rgba(123, 128, 133, .34);
+  color: #7b8085;
+  font-size: 10px;
+  font-weight: 900;
+  letter-spacing: .08em;
+  vertical-align: middle;
+}
+
+.preview-file-help {
+  display: block;
+  margin-top: 8px;
+  color: #7b8085;
+  font-size: 11px;
+  font-weight: 700;
+  line-height: 1.65;
+}
+
+.registration-preview-modal-card {
+  width: min(720px, calc(100vw - 24px));
+  max-height: calc(100vh - 32px);
+  overflow-y: auto;
+}
+
+.registration-preview-note {
+  margin: 10px 0 18px;
+  color: #7b8085;
+  font-size: 12px;
+  font-weight: 700;
+  line-height: 1.7;
+}
+
+#registrationPreviewCard .card {
+  width: 100%;
+  margin: 0;
+}
+
+.registration-preview-actions {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 10px;
+  margin-top: 18px;
+}
+
+.registration-preview-platform {
+  margin-bottom: 9px;
+  color: #7b8085;
+  font-size: 11px;
+  font-weight: 900;
+  letter-spacing: .04em;
+}
+
+.recruitment-preview-link {
+  display: block;
+  text-decoration: none;
+}
+
+.recruitment-preview-image {
+  display: block;
+  width: 100%;
+  max-height: 420px;
+  object-fit: contain;
+  border: 1px solid rgba(21, 174, 235, .24);
+  background: #0d1014;
+}
+
+.recruitment-preview-empty {
+  display: grid;
+  place-items: center;
+  min-height: 120px;
+  padding: 18px;
+  border: 1px dashed rgba(123, 128, 133, .36);
+  color: #7b8085;
+  font-size: 12px;
+  font-weight: 800;
+  line-height: 1.7;
+  text-align: center;
+}
+
+@media (max-width: 600px) {
+  .registration-preview-actions {
+    grid-template-columns: 1fr;
+  }
+
+  .registration-preview-modal-card {
+    width: calc(100vw - 16px);
+    max-height: calc(100vh - 16px);
+  }
+}
