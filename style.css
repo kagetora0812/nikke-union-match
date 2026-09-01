@@ -3946,3 +3946,28 @@ body .bottom-nav .nav-btn.active:hover {
     max-height: calc(100vh - 16px);
   }
 }
+
+/* =========================================================
+   v13.8 BlablaLink preview side-gap fix
+   ========================================================= */
+
+.recruitment-preview-link {
+  display: block;
+  width: 100%;
+  overflow: hidden;
+}
+
+.recruitment-preview-image {
+  display: block !important;
+  width: 100% !important;
+  height: auto !important;
+
+  max-width: 100% !important;
+  max-height: none !important;
+
+  margin: 0 !important;
+
+  object-fit: initial !important;
+
+  background: transparent !important;
+}
