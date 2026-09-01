@@ -1631,6 +1631,21 @@
         </button>
 
         <button
+          id="openXPromoBtn"
+          class="menu-card"
+          type="button"
+        >
+          <div class="menu-card-icon">📣</div>
+          <div class="menu-card-title">
+            X宣伝
+          </div>
+          <div class="menu-card-copy">
+            登録してくれた指揮官・ユニオンを選び、
+            固定文＋募集情報＋自分のXリンクでそのまま宣伝できます。
+          </div>
+        </button>
+
+        <button
           id="openRecruitmentImageBtn"
           class="menu-card"
           type="button"
@@ -1644,6 +1659,147 @@
             同じ画面からまとめて管理します。
           </div>
         </button>
+
+      </div>
+
+    </section>
+
+
+    <!-- ========================================
+         X宣伝
+         登録済み募集を選択してX投稿文を生成
+    ========================================= -->
+
+    <section
+      id="xPromoSection"
+      class="hidden"
+    >
+
+      <div class="admin-head">
+
+        <div>
+          <div class="eyebrow">
+            X PROMOTION
+          </div>
+
+          <h2>
+            📣 X宣伝
+          </h2>
+        </div>
+
+        <div class="admin-head-actions">
+          <button
+            id="reloadXPromoTargetsBtn"
+            class="btn"
+            type="button"
+          >
+            ↻ 再読込
+          </button>
+
+          <button
+            id="backToMenuFromXPromoBtn"
+            class="btn"
+            type="button"
+          >
+            ← 管理メニュー
+          </button>
+        </div>
+
+      </div>
+
+      <p class="lead">
+        現在募集中の登録から宣伝対象を選ぶだけで、X投稿文を作れます。<br>
+        固定文と自分のXリンクはこのブラウザに保存されます。
+      </p>
+
+      <div class="panel">
+
+        <div class="form-grid">
+
+          <label>
+            宣伝する募集
+            <select id="xPromoTarget">
+              <option value="">読み込み中...</option>
+            </select>
+          </label>
+
+          <div class="recruitment-image-preview-box">
+            <div class="recruitment-image-preview-title">
+              選択中の募集
+            </div>
+            <div id="xPromoTargetInfo" class="recruitment-image-status">対象：--</div>
+            <div id="xPromoTargetUrl" class="recruitment-image-status">募集記事：--</div>
+          </div>
+
+          <label>
+            固定文
+            <textarea
+              id="xPromoFixedText"
+              rows="5"
+              placeholder="例：NIKKE UNION MATCHに新しい募集が登録されました📣✨"
+            ></textarea>
+          </label>
+
+          <label>
+            自分のXリンク（任意）
+            <input
+              id="xPromoOwnXUrl"
+              type="url"
+              inputmode="url"
+              autocomplete="off"
+              autocapitalize="off"
+              spellcheck="false"
+              placeholder="https://x.com/あなたのID"
+            >
+          </label>
+
+          <div class="button-row">
+            <button
+              id="saveXPromoSettingsBtn"
+              class="btn"
+              type="button"
+            >
+              💾 固定文・Xリンクを保存
+            </button>
+          </div>
+
+          <label>
+            X投稿プレビュー
+            <textarea
+              id="xPromoPreview"
+              rows="12"
+              readonly
+            ></textarea>
+          </label>
+
+          <div id="xPromoCharCount" class="recruitment-image-status">
+            文字数：--
+          </div>
+
+          <div class="button-row">
+            <button
+              id="copyXPromoBtn"
+              class="btn"
+              type="button"
+            >
+              📋 宣伝文をコピー
+            </button>
+
+            <button
+              id="openXPromoPostBtn"
+              class="btn primary"
+              type="button"
+            >
+              𝕏 Xで宣伝
+            </button>
+          </div>
+
+          <div
+            id="xPromoMessage"
+            class="message hidden"
+          ></div>
+
+        </div>
 
       </div>
 
@@ -2892,6 +3048,290 @@
 
 
     // ========================================
+    // X宣伝
+    // 登録済み募集 + 固定文 + 自分のXリンク
+    // ========================================
+
+    const X_PROMO_FIXED_TEXT_KEY =
+      "nikke_union_admin_x_promo_fixed_v1";
+
+    const X_PROMO_OWN_X_URL_KEY =
+      "nikke_union_admin_x_promo_own_x_url_v1";
+
+    const X_PROMO_DEFAULT_FIXED_TEXT =
+      "NIKKE UNION MATCHに新しい募集が登録されました📣✨";
+
+    const X_PROMO_APP_URL =
+      "https://x.gd/4tEJo";
+
+    let xPromoItems = [];
+
+
+    function getXPromoFixedText() {
+      return localStorage.getItem(X_PROMO_FIXED_TEXT_KEY)
+        || X_PROMO_DEFAULT_FIXED_TEXT;
+    }
+
+
+    function getXPromoOwnXUrl() {
+      return localStorage.getItem(X_PROMO_OWN_X_URL_KEY)
+        || "";
+    }
+
+
+    function getSelectedXPromoItem() {
+      const key = $("#xPromoTarget")?.value || "";
+      return xPromoItems.find(item => item._promoKey === key) || null;
+    }
+
+
+    function getXPromoItemLabel(item) {
+      if (!item) return "--";
+
+      if (item._promoType === "union") {
+        return `🏢 ${item.union_name || ""} / ${item.union_rank || ""}`;
+      }
+
+      return `👤 ${item.commander_name || ""} / SLV ${item.slv || ""}`;
+    }
+
+
+    function buildXPromoText() {
+      const item = getSelectedXPromoItem();
+      if (!item) return "";
+
+      const fixedText =
+        $("#xPromoFixedText")?.value.trim()
+        || X_PROMO_DEFAULT_FIXED_TEXT;
+
+      const ownXUrl =
+        $("#xPromoOwnXUrl")?.value.trim() || "";
+
+      const parts = [];
+
+      if (fixedText) {
+        parts.push(fixedText);
+      }
+
+      if (item._promoType === "union") {
+        parts.push(
+          `🏢 ${item.union_name || ""}｜${item.union_rank || ""}`
+        );
+      } else {
+        parts.push(
+          `👤 ${item.commander_name || ""}｜SLV${item.slv || ""}`
+        );
+      }
+
+      if (item.x_url) {
+        parts.push(
+          `👇 募集記事\n${item.x_url}`
+        );
+      }
+
+      parts.push(
+        `👇 NIKKE UNION MATCH\n${X_PROMO_APP_URL}`
+      );
+
+      if (ownXUrl) {
+        parts.push(
+          `𝕏 ${ownXUrl}`
+        );
+      }
+
+      return parts.join("\n\n");
+    }
+
+
+    function renderXPromoPreview() {
+      const item = getSelectedXPromoItem();
+      const info = $("#xPromoTargetInfo");
+      const urlInfo = $("#xPromoTargetUrl");
+      const preview = $("#xPromoPreview");
+      const count = $("#xPromoCharCount");
+      const copyButton = $("#copyXPromoBtn");
+      const postButton = $("#openXPromoPostBtn");
+
+      if (info) {
+        info.textContent = `対象：${getXPromoItemLabel(item)}`;
+      }
+
+      if (urlInfo) {
+        urlInfo.textContent = `募集記事：${item?.x_url || "--"}`;
+      }
+
+      const text = buildXPromoText();
+
+      if (preview) {
+        preview.value = text;
+      }
+
+      if (count) {
+        count.textContent = text
+          ? `文字数（目安）：${text.length}`
+          : "文字数：--";
+      }
+
+      if (copyButton) {
+        copyButton.disabled = !text;
+      }
+
+      if (postButton) {
+        postButton.disabled = !text;
+      }
+    }
+
+
+    async function loadXPromoTargets() {
+      clearMessage($("#xPromoMessage"));
+
+      const target = $("#xPromoTarget");
+      if (target) {
+        target.innerHTML = '<option value="">読み込み中...</option>';
+        target.disabled = true;
+      }
+
+      const nowIso = new Date().toISOString();
+
+      const [commanderResult, unionResult] = await Promise.all([
+        sb
+          .from("recruitments")
+          .select("id, commander_name, slv, x_url, created_at, expires_at")
+          .eq("status", "open")
+          .gt("expires_at", nowIso)
+          .order("created_at", { ascending: false }),
+
+        sb
+          .from("union_recruitments")
+          .select("id, union_name, union_rank, x_url, created_at, expires_at")
+          .eq("status", "open")
+          .gt("expires_at", nowIso)
+          .order("created_at", { ascending: false })
+      ]);
+
+      if (commanderResult.error || unionResult.error) {
+        console.error(
+          "X宣伝対象読み込みエラー",
+          commanderResult.error || unionResult.error
+        );
+
+        xPromoItems = [];
+
+        if (target) {
+          target.innerHTML = '<option value="">読み込めませんでした</option>';
+          target.disabled = false;
+        }
+
+        showMessage(
+          $("#xPromoMessage"),
+          "募集中の募集を読み込めませんでした。",
+          "error"
+        );
+
+        renderXPromoPreview();
+        return;
+      }
+
+      const commanders = (commanderResult.data || []).map(item => ({
+        ...item,
+        _promoType: "commander",
+        _promoKey: `commander:${item.id}`
+      }));
+
+      const unions = (unionResult.data || []).map(item => ({
+        ...item,
+        _promoType: "union",
+        _promoKey: `union:${item.id}`
+      }));
+
+      xPromoItems = [...commanders, ...unions]
+        .sort((a, b) => new Date(b.created_at) - new Date(a.created_at));
+
+      if (target) {
+        if (!xPromoItems.length) {
+          target.innerHTML = '<option value="">現在募集中の募集はありません</option>';
+        } else {
+          target.innerHTML = xPromoItems.map(item => {
+            const date = item.created_at
+              ? new Intl.DateTimeFormat("ja-JP", {
+                  month: "2-digit",
+                  day: "2-digit",
+                  hour: "2-digit",
+                  minute: "2-digit"
+                }).format(new Date(item.created_at))
+              : "--";
+
+            return `
+              <option value="${escapeHtml(item._promoKey)}">
+                ${escapeHtml(getXPromoItemLabel(item))} / ${escapeHtml(date)}
+              </option>
+            `;
+          }).join("");
+        }
+
+        target.disabled = false;
+      }
+
+      renderXPromoPreview();
+    }
+
+
+    function loadXPromoSettingsIntoForm() {
+      const fixed = $("#xPromoFixedText");
+      const own = $("#xPromoOwnXUrl");
+
+      if (fixed) fixed.value = getXPromoFixedText();
+      if (own) own.value = getXPromoOwnXUrl();
+    }
+
+
+    function saveXPromoSettings() {
+      const fixedText = $("#xPromoFixedText")?.value.trim() || "";
+      const ownXUrl = $("#xPromoOwnXUrl")?.value.trim() || "";
+
+      if (!fixedText) {
+        showMessage(
+          $("#xPromoMessage"),
+          "固定文を入力してください。",
+          "error"
+        );
+        return;
+      }
+
+      if (ownXUrl) {
+        try {
+          const parsed = new URL(ownXUrl);
+          const host = parsed.hostname.toLowerCase().replace(/^www\./, "");
+          if (
+            parsed.protocol !== "https:"
+            || (host !== "x.com" && host !== "twitter.com")
+          ) {
+            throw new Error("INVALID_X_URL");
+          }
+        } catch {
+          showMessage(
+            $("#xPromoMessage"),
+            "自分のXリンクは https://x.com/... の形式で入力してください。",
+            "error"
+          );
+          return;
+        }
+      }
+
+      localStorage.setItem(X_PROMO_FIXED_TEXT_KEY, fixedText);
+      localStorage.setItem(X_PROMO_OWN_X_URL_KEY, ownXUrl);
+
+      showMessage(
+        $("#xPromoMessage"),
+        "固定文と自分のXリンクを保存しました。",
+        "ok"
+      );
+
+      renderXPromoPreview();
+    }
+
+
+    // ========================================
     // 募集画像管理
     // 20MBまで受付 → 自動最適化 → Storageへ保存
     // ========================================
@@ -3851,13 +4291,20 @@
       }
 
       item.force_preview_image = enabled === true;
+
+      // 強制画像表示はDB側でもX埋め込みをOFFにする。
+      // 自動表示へ戻す場合はX URLならX埋め込みをONへ戻す。
+      if (getAdminRecruitmentPlatform(item.x_url) === "X") {
+        item.x_embed_enabled = enabled === true ? false : true;
+      }
+
       renderCurrentRecruitmentImage();
 
       showMessage(
         $("#recruitmentImageMessage"),
         enabled
-          ? "🖼️ 登録画像を強制表示にしました。X埋め込みより画像を優先します。"
-          : "🔄 自動表示に戻しました。",
+          ? "🖼️ 登録画像を強制表示にしました。X埋め込みも自動でOFFにしました。"
+          : "🔄 自動表示に戻しました。X URLは埋め込みONへ戻しました。",
         "ok"
       );
 
@@ -4872,6 +5319,15 @@
       );
 
 
+    $("#openXPromoBtn")
+      ?.addEventListener(
+        "click",
+        async () => {
+          showXPromoAdmin();
+        }
+      );
+
+
     $("#openRecruitmentImageBtn")
       ?.addEventListener(
         "click",
@@ -4911,6 +5367,94 @@
       ?.addEventListener(
         "click",
         showMenu
+      );
+
+
+    $("#backToMenuFromXPromoBtn")
+      ?.addEventListener(
+        "click",
+        showMenu
+      );
+
+
+    $("#reloadXPromoTargetsBtn")
+      ?.addEventListener(
+        "click",
+        loadXPromoTargets
+      );
+
+
+    $("#xPromoTarget")
+      ?.addEventListener(
+        "change",
+        renderXPromoPreview
+      );
+
+
+    $("#xPromoFixedText")
+      ?.addEventListener(
+        "input",
+        renderXPromoPreview
+      );
+
+
+    $("#xPromoOwnXUrl")
+      ?.addEventListener(
+        "input",
+        renderXPromoPreview
+      );
+
+
+    $("#saveXPromoSettingsBtn")
+      ?.addEventListener(
+        "click",
+        saveXPromoSettings
+      );
+
+
+    $("#copyXPromoBtn")
+      ?.addEventListener(
+        "click",
+        async () => {
+          const text = buildXPromoText();
+          if (!text) return;
+
+          try {
+            await copyTextToClipboard(text);
+            showMessage(
+              $("#xPromoMessage"),
+              "宣伝文をコピーしました。",
+              "ok"
+            );
+          } catch (error) {
+            console.error(error);
+            showMessage(
+              $("#xPromoMessage"),
+              "宣伝文をコピーできませんでした。",
+              "error"
+            );
+          }
+        }
+      );
+
+
+    $("#openXPromoPostBtn")
+      ?.addEventListener(
+        "click",
+        () => {
+          const text = buildXPromoText();
+          if (!text) return;
+
+          const intent =
+            "https://twitter.com/intent/tweet?text="
+            + encodeURIComponent(text);
+
+          window.open(
+            intent,
+            "_blank",
+            "noopener,noreferrer"
+          );
+        }
       );
 
 
@@ -5511,6 +6055,10 @@
         ?.classList
         .add("hidden");
 
+      $("#xPromoSection")
+        ?.classList
+        .add("hidden");
+
       $("#endingUnionSection")
         ?.classList
         .add("hidden");
@@ -5612,6 +6160,24 @@
       clearMessage(
         $("#xUrlRepairMessage")
       );
+
+    }
+
+
+    async function showXPromoAdmin() {
+
+      hideAllAdminSections();
+
+      $("#xPromoSection")
+        ?.classList
+        .remove("hidden");
+
+      clearMessage(
+        $("#xPromoMessage")
+      );
+
+      loadXPromoSettingsIntoForm();
+      await loadXPromoTargets();
 
     }
 
