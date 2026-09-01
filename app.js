@@ -513,6 +513,8 @@ function buildRecruitmentPreviewMedia(
         <div
           class="x-embed"
           data-post-id="${escapeHtml(postId || "")}"
+          data-preview-image-url="${escapeHtml(previewImageUrl || "")}"
+          data-recruitment-url="${escapeHtml(url || "")}"
         ></div>
       `;
     }
@@ -902,11 +904,83 @@ function showXEmbedFallback(target) {
   target.dataset.loaded =
     "failed";
 
+  const previewImageUrl =
+    target.dataset.previewImageUrl || "";
+
+  const recruitmentUrl =
+    target.dataset.recruitmentUrl || "";
+
+  // 管理画面などから登録された画像がある場合は、
+  // X埋め込みが削除済み / Not found / 読み込み失敗でも画像を表示する。
+  if (previewImageUrl) {
+
+    target.innerHTML = `
+      <div class="registration-preview-platform">
+        掲載先：X
+      </div>
+      <a
+        class="recruitment-preview-link"
+        href="${escapeHtml(recruitmentUrl)}"
+        target="_blank"
+        rel="noopener noreferrer"
+      >
+        <img
+          class="recruitment-preview-image"
+          src="${escapeHtml(previewImageUrl)}"
+          alt="X募集記事の登録画像"
+          loading="lazy"
+        >
+      </a>
+    `;
+
+    return;
+  }
+
   target.innerHTML =
     '<div class="x-embed-error">' +
       '<strong>X投稿を埋め込み表示できません</strong><br>' +
       '<span>下の「Xで募集記事を開く」から確認してください。</span>' +
     '</div>';
+
+}
+
+
+// X側は削除済み投稿でも iframe 自体を返して
+// 「Not found」と表示する場合があるため、Promise成功だけでは判定できない。
+// 登録画像がある募集だけ、描画後のiframe高さを見て小さすぎる場合は画像へフォールバックする。
+function checkXEmbedUnavailable(target) {
+
+  if (!target) {
+    return;
+  }
+
+  if (!target.dataset.previewImageUrl) {
+    return;
+  }
+
+  if (target.dataset.loaded !== "true") {
+    return;
+  }
+
+  const iframe =
+    target.querySelector("iframe");
+
+  if (!iframe) {
+    showXEmbedFallback(target);
+    return;
+  }
+
+  const iframeHeight =
+    Math.max(
+      iframe.getBoundingClientRect().height || 0,
+      Number(iframe.getAttribute("height")) || 0
+    );
+
+  // 通常のX投稿埋め込みは十分な高さになる。
+  // 削除済み / Not found の小さいエラーカードだけを画像へ置換する。
+  if (iframeHeight > 0 && iframeHeight < 170) {
+    showXEmbedFallback(target);
+  }
 
 }
 
@@ -973,6 +1047,13 @@ function renderSingleXEmbed(target) {
 
           target.dataset.loaded =
             "true";
+
+          // Xが「Not found」のiframeを返すケースを判定。
+          // iframeの描画完了を待ってから確認する。
+          setTimeout(
+            () => checkXEmbedUnavailable(target),
+            3000
+          );
 
           return;
 
