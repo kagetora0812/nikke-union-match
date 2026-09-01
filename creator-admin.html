@@ -1574,10 +1574,10 @@
         >
           <div class="menu-card-icon">🛠️</div>
           <div class="menu-card-title">
-            募集X URL修正
+            募集記事URL修正
           </div>
           <div class="menu-card-copy">
-            X投稿が読み込めない募集のURLを、
+            登録済みの募集記事URLを、
             管理画面から差し替えます。
           </div>
         </button>
@@ -1726,7 +1726,7 @@
               class="btn danger"
               type="button"
             >
-              🙈 埋め込みOFF
+              🙈 X埋め込みOFF
             </button>
 
             <button
@@ -1751,7 +1751,7 @@
 
 
     <!-- ========================================
-         募集X URL修正
+         募集記事URL修正
     ========================================= -->
 
     <section
@@ -1763,11 +1763,11 @@
 
         <div>
           <div class="eyebrow">
-            X URL REPAIR
+            RECRUITMENT URL REPAIR
           </div>
 
           <h2>
-            🛠️ 募集X URL修正
+            🛠️ 募集記事URL修正
           </h2>
         </div>
 
@@ -1786,7 +1786,7 @@
       <p class="lead">
         現在募集中の募集だけが対象です。<br>
         指揮官は「指揮官名＋SLV」、ユニオンは「ユニオン名＋ユニオンランク」で照合して、
-        登録されているX投稿URLだけを修正します。
+        登録されている募集記事URLだけを修正します。
       </p>
 
       <div class="panel">
@@ -1866,7 +1866,7 @@
           </div>
 
           <label>
-            新しいX募集投稿URL
+            新しい募集記事URL
             <input
               id="xUrlRepairNewUrl"
               type="url"
@@ -1874,7 +1874,7 @@
               autocomplete="off"
               autocapitalize="off"
               spellcheck="false"
-              placeholder="https://x.com/ユーザー名/status/..."
+              placeholder="https://..."
             >
           </label>
 
@@ -1883,7 +1883,7 @@
               class="btn primary"
               type="submit"
             >
-              X URLを修正
+              募集記事URLを修正
             </button>
 
             <button
@@ -1891,7 +1891,7 @@
               class="btn danger"
               type="button"
             >
-              🙈 埋め込みOFF
+              🙈 X埋め込みOFF
             </button>
           </div>
 
@@ -2802,7 +2802,7 @@
     }
 
 
-    function validRecruitmentXUrl(value) {
+    function validRecruitmentUrl(value) {
 
       try {
 
@@ -2811,24 +2811,29 @@
             String(value || "").trim()
           );
 
-        const allowedHost =
-          [
-            "x.com",
-            "www.x.com",
-            "twitter.com",
-            "www.twitter.com"
-          ].includes(
-            url.hostname.toLowerCase()
-          );
-
-        if (!allowedHost) {
+        if (
+          url.protocol !== "https:"
+          &&
+          url.protocol !== "http:"
+        ) {
           return false;
         }
 
-        return /^\/[^/]+\/status\/\d+\/?$/
-          .test(
-            url.pathname
-          );
+        const host =
+          url.hostname
+            .toLowerCase()
+            .replace(/^www\./, "");
+
+        if (
+          host === "x.com"
+          ||
+          host === "twitter.com"
+        ) {
+          return /^\/[^/]+\/status\/\d+\/?$/
+            .test(url.pathname);
+        }
+
+        return true;
 
       } catch {
 
@@ -4806,7 +4811,7 @@
 
 
     // ========================================
-    // 募集X URL修正
+    // 募集記事URL修正
     // ========================================
 
     function updateXUrlRepairFields() {
@@ -5025,14 +5030,14 @@
             "";
 
           if (
-            !validRecruitmentXUrl(
+            !validRecruitmentUrl(
               newUrl
             )
           ) {
 
             showMessage(
               $("#xUrlRepairMessage"),
-              "Xの募集投稿URLを入力してください。",
+              "募集記事URLを入力してください。",
               "error"
             );
 
@@ -5045,7 +5050,7 @@
             error
           } =
             await sb.rpc(
-              "admin_update_recruitment_x_url",
+              "admin_update_recruitment_url",
               {
                 p_token:
                   token,
@@ -5099,13 +5104,17 @@
 
             if (
               errorText.includes(
+                "INVALID_RECRUITMENT_URL"
+              )
+              ||
+              errorText.includes(
                 "INVALID_X_POST_URL"
               )
             ) {
 
               showMessage(
                 $("#xUrlRepairMessage"),
-                "Xの募集投稿URLではありません。",
+                "募集記事URLが正しくありません。",
                 "error"
               );
 
@@ -5114,13 +5123,13 @@
             }
 
             console.error(
-              "募集X URL修正エラー",
+              "募集記事URL修正エラー",
               error
             );
 
             showMessage(
               $("#xUrlRepairMessage"),
-              "X URLを修正できませんでした。",
+              "募集記事URLを修正できませんでした。",
               "error"
             );
 
@@ -5132,7 +5141,7 @@
 
           showMessage(
             $("#xUrlRepairMessage"),
-            "X URLを修正しました。入力内容をクリアしました。",
+            "募集記事URLを修正しました。入力内容をクリアしました。",
             "ok"
           );
 
