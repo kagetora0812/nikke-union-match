@@ -182,6 +182,94 @@ function getRecruitmentButtonLabel(value) {
 
 
 // ========================================
+// BlablaLink 自動キャプチャ
+// 対応URL：/post/detail?...&post_uuid=...
+// ========================================
+
+function isBlablaLinkPostUrl(value) {
+  try {
+    const url = new URL(String(value || "").trim());
+    const host = url.hostname.toLowerCase().replace(/^www\./, "");
+
+    if (
+      host !== "blablalink.com" &&
+      !host.endsWith(".blablalink.com")
+    ) {
+      return false;
+    }
+
+    return (
+      url.pathname === "/post/detail" &&
+      Boolean(url.searchParams.get("post_uuid"))
+    );
+  } catch {
+    return false;
+  }
+}
+
+async function fetchBlablaLinkPreviewFile(value) {
+  if (!isBlablaLinkPostUrl(value)) {
+    throw new Error("INVALID_BLABLALINK_POST_URL");
+  }
+
+  const controller = new AbortController();
+  const timer = setTimeout(() => controller.abort(), 35000);
+
+  try {
+    const response = await fetch(
+      `${SUPABASE_URL}/functions/v1/blablalink-preview`,
+      {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          "apikey": SUPABASE_ANON_KEY,
+          "Authorization": `Bearer ${SUPABASE_ANON_KEY}`
+        },
+        body: JSON.stringify({
+          url: String(value || "").trim()
+        }),
+        signal: controller.signal
+      }
+    );
+
+    if (!response.ok) {
+      let message = `BLABLALINK_PREVIEW_HTTP_${response.status}`;
+      try {
+        const data = await response.json();
+        message = data?.error || data?.message || message;
+      } catch {}
+      throw new Error(message);
+    }
+
+    const contentType = response.headers.get("content-type") || "image/png";
+    if (!contentType.startsWith("image/")) {
+      throw new Error("BLABLALINK_PREVIEW_NOT_IMAGE");
+    }
+
+    const blob = await response.blob();
+    if (!blob.size) {
+      throw new Error("BLABLALINK_PREVIEW_EMPTY");
+    }
+
+    const cleanType = contentType.split(";")[0];
+    const extension =
+      cleanType.includes("webp")
+        ? "webp"
+        : cleanType.includes("jpeg")
+          ? "jpg"
+          : "png";
+
+    return new File(
+      [blob],
+      `blablalink-preview-${Date.now()}.${extension}`,
+      { type: cleanType, lastModified: Date.now() }
+    );
+  } finally {
+    clearTimeout(timer);
+  }
+}
+
+// ========================================
 // 任意募集画像
 // 元画像は20MBまで受付 → ブラウザ側で自動最適化
 // Supabaseへは原則1.8MB以下の画像をアップロード
@@ -2845,10 +2933,16 @@ async function showRegistrationPreview() {
 
   registrationPreviewPreparedFile = null;
 
-  if (previewFile) {
-    const previewButton = $("#registerPreviewBtn");
-    const originalButtonText = previewButton?.textContent || "登録内容を確認する";
+  const platform =
+    getRecruitmentPlatform(xUrl);
 
+  const previewButton = $("#registerPreviewBtn");
+  const originalButtonText =
+    previewButton?.textContent || "登録内容を確認する";
+  const status = $("#previewImageStatus");
+
+  // 手動画像がある場合は手動画像を優先。
+  if (previewFile) {
     if (previewButton) {
       previewButton.disabled = true;
       previewButton.textContent = "画像を自動最適化中...";
@@ -2861,8 +2955,6 @@ async function showRegistrationPreview() {
       registrationPreviewObjectUrl =
         URL.createObjectURL(registrationPreviewPreparedFile);
 
-      const status = $("#previewImageStatus");
-
       if (status) {
         status.textContent =
           previewFile === registrationPreviewPreparedFile
@@ -2872,11 +2964,9 @@ async function showRegistrationPreview() {
     } catch (error) {
       console.error("募集画像の自動最適化エラー", error);
       registrationPreviewPreparedFile = null;
-
       alert(
         "画像を自動最適化できませんでした。\n別のJPG / PNG / WebP画像を選択してください。"
       );
-
       return false;
     } finally {
       if (previewButton) {
@@ -2886,8 +2976,56 @@ async function showRegistrationPreview() {
     }
   }
 
-  const platform =
-    getRecruitmentPlatform(xUrl);
+  // BlablaLink投稿で画像未選択なら、自動キャプチャを試す。
+  if (
+    !previewFile &&
+    platform === "BlablaLink" &&
+    isBlablaLinkPostUrl(xUrl)
+  ) {
+    if (previewButton) {
+      previewButton.disabled = true;
+      previewButton.textContent = "BlablaLinkプレビュー取得中...";
+    }
+
+    if (status) {
+      status.textContent = "BlablaLinkの記事を自動取得しています...";
+    }
+
+    try {
+      const autoPreviewFile =
+        await fetchBlablaLinkPreviewFile(xUrl);
+
+      registrationPreviewPreparedFile =
+        await optimizePreviewImageFile(autoPreviewFile);
+
+      registrationPreviewObjectUrl =
+        URL.createObjectURL(registrationPreviewPreparedFile);
+
+      if (status) {
+        status.textContent =
+          `BlablaLinkから自動取得しました（${formatFileSize(registrationPreviewPreparedFile.size)}）`;
+      }
+    } catch (error) {
+      console.warn("BlablaLink自動プレビュー取得失敗", error);
+      registrationPreviewPreparedFile = null;
+
+      if (registrationPreviewObjectUrl) {
+        URL.revokeObjectURL(registrationPreviewObjectUrl);
+        registrationPreviewObjectUrl = null;
+      }
+
+      // 取得失敗でも登録は止めない。
+      if (status) {
+        status.textContent =
+          "BlablaLinkの自動取得に失敗しました。画像なしでも登録できます。必要なら画像を選択してください。";
+      }
+    } finally {
+      if (previewButton) {
+        previewButton.disabled = false;
+        previewButton.textContent = originalButtonText;
+      }
+    }
+  }
 
   const mediaHtml =
     buildRecruitmentPreviewMedia(
@@ -2973,6 +3111,32 @@ $("#registrationPreviewConfirm")
       registrationPreviewApproved = true;
       closeRegistrationPreview(true);
       $("#registerForm")?.requestSubmit();
+    }
+  );
+
+
+$("#xUrl")
+  ?.addEventListener(
+    "input",
+    () => {
+      registrationPreviewApproved = false;
+      registrationPreviewPreparedFile = null;
+
+      if (registrationPreviewObjectUrl) {
+        URL.revokeObjectURL(registrationPreviewObjectUrl);
+        registrationPreviewObjectUrl = null;
+      }
+
+      const status = $("#previewImageStatus");
+      const selectedFile = $("#previewImage")?.files?.[0] || null;
+
+      if (status && !selectedFile) {
+        const url = $("#xUrl")?.value.trim() || "";
+        status.textContent =
+          isBlablaLinkPostUrl(url)
+            ? "BlablaLink投稿は確認画面で自動プレビューを取得します。画像は任意です。"
+            : "";
+      }
     }
   );
 
