@@ -43,6 +43,11 @@ const $ = selector =>
 
 let lastRegisteredRecruitment = null;
 
+// 登録前プレビューの確定フラグ
+let registrationPreviewApproved = false;
+let registrationPreviewObjectUrl = null;
+let registrationPreviewPreparedFile = null;
+
 
 function escapeHtml(value) {
   return String(value ?? "").replace(
@@ -173,6 +178,390 @@ function getRecruitmentButtonLabel(value) {
   }
 
   return "募集記事を開く ↗";
+}
+
+
+// ========================================
+// 任意募集画像
+// 元画像は20MBまで受付 → ブラウザ側で自動最適化
+// Supabaseへは原則1.8MB以下の画像をアップロード
+// ========================================
+
+const PREVIEW_SOURCE_MAX_BYTES = 20 * 1024 * 1024;
+const PREVIEW_UPLOAD_TARGET_BYTES = 1.8 * 1024 * 1024;
+const PREVIEW_MAX_WIDTH = 1920;
+const PREVIEW_MAX_HEIGHT = 3200;
+const PREVIEW_MAX_PIXELS = 8_000_000;
+
+function formatFileSize(bytes) {
+  if (!Number.isFinite(bytes) || bytes <= 0) {
+    return "0MB";
+  }
+
+  if (bytes < 1024 * 1024) {
+    return `${Math.max(1, Math.round(bytes / 1024))}KB`;
+  }
+
+  return `${(bytes / 1024 / 1024).toFixed(1)}MB`;
+}
+
+function validatePreviewImageFile(file) {
+
+  if (!file) {
+    return true;
+  }
+
+  const allowedTypes =
+    [
+      "image/jpeg",
+      "image/png",
+      "image/webp"
+    ];
+
+  if (!allowedTypes.includes(file.type)) {
+    alert("募集画像は JPG / PNG / WebP を選択してください。");
+    return false;
+  }
+
+  if (file.size > PREVIEW_SOURCE_MAX_BYTES) {
+    alert("募集画像は20MB以下を選択してください。\n大きな画像は選択後に自動で最適化されます。");
+    return false;
+  }
+
+  return true;
+}
+
+function loadPreviewImage(file) {
+  return new Promise((resolve, reject) => {
+    const objectUrl = URL.createObjectURL(file);
+    const image = new Image();
+
+    image.onload = () => {
+      URL.revokeObjectURL(objectUrl);
+      resolve(image);
+    };
+
+    image.onerror = () => {
+      URL.revokeObjectURL(objectUrl);
+      reject(new Error("PREVIEW_IMAGE_DECODE_FAILED"));
+    };
+
+    image.src = objectUrl;
+  });
+}
+
+function canvasToPreviewBlob(canvas, mimeType, quality) {
+  return new Promise(resolve => {
+    canvas.toBlob(resolve, mimeType, quality);
+  });
+}
+
+function getPreviewResizeScale(width, height) {
+  let scale = 1;
+
+  if (width > PREVIEW_MAX_WIDTH) {
+    scale = Math.min(scale, PREVIEW_MAX_WIDTH / width);
+  }
+
+  if (height > PREVIEW_MAX_HEIGHT) {
+    scale = Math.min(scale, PREVIEW_MAX_HEIGHT / height);
+  }
+
+  const pixels = width * height;
+
+  if (pixels > PREVIEW_MAX_PIXELS) {
+    scale = Math.min(
+      scale,
+      Math.sqrt(PREVIEW_MAX_PIXELS / pixels)
+    );
+  }
+
+  return scale;
+}
+
+function drawPreviewImageToCanvas(image, width, height) {
+  const canvas = document.createElement("canvas");
+  canvas.width = Math.max(1, Math.round(width));
+  canvas.height = Math.max(1, Math.round(height));
+
+  const context = canvas.getContext("2d", { alpha: false });
+
+  if (!context) {
+    throw new Error("PREVIEW_CANVAS_UNAVAILABLE");
+  }
+
+  context.imageSmoothingEnabled = true;
+  context.imageSmoothingQuality = "high";
+  context.fillStyle = "#ffffff";
+  context.fillRect(0, 0, canvas.width, canvas.height);
+  context.drawImage(image, 0, 0, canvas.width, canvas.height);
+
+  return canvas;
+}
+
+async function optimizePreviewImageFile(file) {
+  if (!file) {
+    return null;
+  }
+
+  if (!validatePreviewImageFile(file)) {
+    throw new Error("PREVIEW_IMAGE_INVALID");
+  }
+
+  const image = await loadPreviewImage(file);
+  const sourceWidth = image.naturalWidth || image.width;
+  const sourceHeight = image.naturalHeight || image.height;
+
+  if (!sourceWidth || !sourceHeight) {
+    throw new Error("PREVIEW_IMAGE_SIZE_INVALID");
+  }
+
+  const initialScale =
+    getPreviewResizeScale(sourceWidth, sourceHeight);
+
+  // サイズ・解像度とも十分小さいJPEG/WebPは画質を落とさずそのまま使う。
+  if (
+    initialScale === 1 &&
+    file.size <= PREVIEW_UPLOAD_TARGET_BYTES &&
+    (file.type === "image/jpeg" || file.type === "image/webp")
+  ) {
+    return file;
+  }
+
+  let width = Math.max(1, Math.round(sourceWidth * initialScale));
+  let height = Math.max(1, Math.round(sourceHeight * initialScale));
+
+  let bestBlob = null;
+  let bestMimeType = "image/webp";
+
+  // 品質を段階的に下げ、それでも大きければ寸法を少しずつ縮小する。
+  for (let resizeAttempt = 0; resizeAttempt < 7; resizeAttempt++) {
+    const canvas =
+      drawPreviewImageToCanvas(image, width, height);
+
+    for (const quality of [0.90, 0.82, 0.74, 0.66, 0.58]) {
+      let blob =
+        await canvasToPreviewBlob(
+          canvas,
+          "image/webp",
+          quality
+        );
+
+      // WebP出力に対応していない環境ではJPEGへフォールバック。
+      let mimeType = "image/webp";
+
+      if (!blob || blob.type !== "image/webp") {
+        blob =
+          await canvasToPreviewBlob(
+            canvas,
+            "image/jpeg",
+            quality
+          );
+        mimeType = "image/jpeg";
+      }
+
+      if (!blob) {
+        continue;
+      }
+
+      if (!bestBlob || blob.size < bestBlob.size) {
+        bestBlob = blob;
+        bestMimeType = mimeType;
+      }
+
+      if (blob.size <= PREVIEW_UPLOAD_TARGET_BYTES) {
+        const extension =
+          mimeType === "image/webp" ? "webp" : "jpg";
+
+        return new File(
+          [blob],
+          `recruitment-preview-${Date.now()}.${extension}`,
+          {
+            type: mimeType,
+            lastModified: Date.now()
+          }
+        );
+      }
+    }
+
+    width = Math.max(1, Math.round(width * 0.82));
+    height = Math.max(1, Math.round(height * 0.82));
+  }
+
+  if (!bestBlob || bestBlob.size > 3 * 1024 * 1024) {
+    throw new Error("PREVIEW_IMAGE_OPTIMIZE_FAILED");
+  }
+
+  const extension =
+    bestMimeType === "image/webp" ? "webp" : "jpg";
+
+  return new File(
+    [bestBlob],
+    `recruitment-preview-${Date.now()}.${extension}`,
+    {
+      type: bestMimeType,
+      lastModified: Date.now()
+    }
+  );
+}
+
+
+function buildRecruitmentPreviewMedia(
+  url,
+  previewImageUrl = "",
+  xEmbedEnabled = true
+) {
+
+  const platform =
+    getRecruitmentPlatform(url);
+
+  if (platform === "X") {
+
+    const postId =
+      getXPostId(url);
+
+    if (xEmbedEnabled !== false) {
+      return `
+        <div
+          class="x-embed"
+          data-post-id="${escapeHtml(postId || "")}"
+        ></div>
+      `;
+    }
+
+    if (previewImageUrl) {
+      return `
+        <div class="registration-preview-platform">掲載先：X</div>
+        <a
+          class="recruitment-preview-link"
+          href="${escapeHtml(url)}"
+          target="_blank"
+          rel="noopener noreferrer"
+        >
+          <img
+            class="recruitment-preview-image"
+            src="${escapeHtml(previewImageUrl)}"
+            alt="X募集記事の登録画像"
+            loading="lazy"
+          >
+        </a>
+      `;
+    }
+
+    return `
+      <div class="x-embed-error">
+        <strong>🙈 X埋め込み表示はOFFです</strong><br>
+        <span>下のボタンから募集記事を確認できます。</span>
+      </div>
+    `;
+  }
+
+  if (previewImageUrl) {
+    return `
+      <div class="registration-preview-platform">
+        掲載先：${escapeHtml(platform)}
+      </div>
+      <a
+        class="recruitment-preview-link"
+        href="${escapeHtml(url)}"
+        target="_blank"
+        rel="noopener noreferrer"
+      >
+        <img
+          class="recruitment-preview-image"
+          src="${escapeHtml(previewImageUrl)}"
+          alt="${escapeHtml(platform)}募集記事の画像"
+          loading="lazy"
+        >
+      </a>
+    `;
+  }
+
+  return `
+    <div class="registration-preview-platform">
+      掲載先：${escapeHtml(platform)}
+    </div>
+    <div class="recruitment-preview-empty">
+      画像なし（任意）<br>
+      下のボタンから募集記事を確認できます。
+    </div>
+  `;
+}
+
+
+async function uploadRecruitmentPreviewImage(
+  type,
+  recruitmentId,
+  passHash,
+  file
+) {
+
+  if (!file) {
+    return null;
+  }
+
+  const extMap = {
+    "image/jpeg": "jpg",
+    "image/png": "png",
+    "image/webp": "webp"
+  };
+
+  const ext =
+    extMap[file.type] || "jpg";
+
+  const safeType =
+    type === "union"
+      ? "union"
+      : "commander";
+
+  const objectPath =
+    `${safeType}/${recruitmentId}/${Date.now()}.${ext}`;
+
+  const { error: uploadError } =
+    await sb.storage
+      .from("recruitment-previews")
+      .upload(
+        objectPath,
+        file,
+        {
+          cacheControl: "3600",
+          upsert: false,
+          contentType: file.type
+        }
+      );
+
+  if (uploadError) {
+    throw uploadError;
+  }
+
+  const { data: publicData } =
+    sb.storage
+      .from("recruitment-previews")
+      .getPublicUrl(objectPath);
+
+  const publicUrl =
+    publicData?.publicUrl || "";
+
+  if (!publicUrl) {
+    throw new Error("PREVIEW_PUBLIC_URL_FAILED");
+  }
+
+  const { error: attachError } =
+    await sb.rpc(
+      "set_recruitment_preview_image",
+      {
+        p_type: safeType,
+        p_id: recruitmentId,
+        p_pass_hash: passHash,
+        p_preview_image_url: publicUrl
+      }
+    );
+
+  if (attachError) {
+    throw attachError;
+  }
+
+  return publicUrl;
 }
 
 
@@ -1530,7 +1919,7 @@ async function loadRecruitments() {
         "recruitments"
       )
       .select(
-        "id, commander_name, slv, x_url, x_embed_enabled, created_at, expires_at"
+        "id, commander_name, slv, x_url, x_embed_enabled, preview_image_url, created_at, expires_at"
       )
       .eq(
         "status",
@@ -1561,7 +1950,7 @@ async function loadRecruitments() {
         "union_recruitments"
       )
       .select(
-        "id, union_name, union_rank, x_url, x_embed_enabled, created_at, expires_at"
+        "id, union_name, union_rank, x_url, x_embed_enabled, preview_image_url, created_at, expires_at"
       )
       .eq(
         "status",
@@ -1946,38 +2335,11 @@ const deadlineBadge =
 
                 <div class="x-post-area">
 
-                  ${
-                    isXRecruitmentUrl(
-                      item.x_url
-                    )
-                      ? (
-                          item.x_embed_enabled === false
-                            ? `
-                              <div class="x-embed-error">
-                                <strong>🙈 X埋め込み表示はOFFです</strong><br>
-                                <span>下のボタンから募集記事を確認できます。</span>
-                              </div>
-                            `
-                            : `
-                              <div
-                                class="x-embed"
-                                data-post-id="${escapeHtml(
-                                  postId || ""
-                                )}"
-                              >
-                              </div>
-                            `
-                        )
-                      : `
-                          <div class="date">
-                            掲載先：${escapeHtml(
-                              getRecruitmentPlatform(
-                                item.x_url
-                              )
-                            )}
-                          </div>
-                        `
-                  }
+                  ${buildRecruitmentPreviewMedia(
+                    item.x_url,
+                    item.preview_image_url || "",
+                    item.x_embed_enabled
+                  )}
 
 
                   <a
@@ -2200,38 +2562,11 @@ const deadlineBadge =
 
                 <div class="x-post-area">
 
-                  ${
-                    isXRecruitmentUrl(
-                      item.x_url
-                    )
-                      ? (
-                          item.x_embed_enabled === false
-                            ? `
-                              <div class="x-embed-error">
-                                <strong>🙈 X埋め込み表示はOFFです</strong><br>
-                                <span>下のボタンから募集記事を確認できます。</span>
-                              </div>
-                            `
-                            : `
-                              <div
-                                class="x-embed"
-                                data-post-id="${escapeHtml(
-                                  postId || ""
-                                )}"
-                              >
-                              </div>
-                            `
-                        )
-                      : `
-                          <div class="date">
-                            掲載先：${escapeHtml(
-                              getRecruitmentPlatform(
-                                item.x_url
-                              )
-                            )}
-                          </div>
-                        `
-                  }
+                  ${buildRecruitmentPreviewMedia(
+                    item.x_url,
+                    item.preview_image_url || "",
+                    item.x_embed_enabled
+                  )}
 
 
                   <a
@@ -2431,6 +2766,256 @@ updateRegistrationFields();
 
 
 // ========================================
+// 登録前プレビュー
+// ========================================
+
+function closeRegistrationPreview(keepPreparedFile = false) {
+
+  $("#registrationPreviewModal")
+    ?.classList
+    .add("hidden");
+
+  if (registrationPreviewObjectUrl) {
+    URL.revokeObjectURL(registrationPreviewObjectUrl);
+    registrationPreviewObjectUrl = null;
+  }
+
+  if (!keepPreparedFile) {
+    registrationPreviewPreparedFile = null;
+  }
+}
+
+
+async function showRegistrationPreview() {
+
+  const registrationType =
+    $("#registrationType")?.value || "commander";
+
+  const xUrl =
+    $("#xUrl")?.value.trim() || "";
+
+  if (!validRecruitmentUrl(xUrl)) {
+    alert("募集記事URLを入力してください。\nX・BlablaLink・DiscordなどのURLに対応しています。");
+    return false;
+  }
+
+  const previewFile =
+    $("#previewImage")?.files?.[0] || null;
+
+  if (!validatePreviewImageFile(previewFile)) {
+    return false;
+  }
+
+  let name = "";
+  let detail = "";
+  let cardClass = "commander-card";
+  let typeLabel = "● 指揮官";
+
+  if (registrationType === "union") {
+    name = $("#unionName")?.value.trim() || "";
+    detail = $("#unionRank")?.value || "";
+    cardClass = "union-card";
+    typeLabel = "● ユニオン";
+
+    if (!name) {
+      alert("ユニオン名を入力してください。");
+      return false;
+    }
+  } else {
+    name = $("#name")?.value.trim() || "";
+    const slv = Number($("#slv")?.value);
+
+    if (!name) {
+      alert("指揮官名を入力してください。");
+      return false;
+    }
+
+    if (!slv || slv < 1 || slv > 1200) {
+      alert("SLVは1～1200で入力してください。");
+      return false;
+    }
+
+    detail = `${slv} <small class="slv-label" style="color:#7b8085 !important;-webkit-text-fill-color:#7b8085 !important;text-shadow:none !important;-webkit-text-stroke:0 !important;">SLV</small>`;
+  }
+
+  if (registrationPreviewObjectUrl) {
+    URL.revokeObjectURL(registrationPreviewObjectUrl);
+    registrationPreviewObjectUrl = null;
+  }
+
+  registrationPreviewPreparedFile = null;
+
+  if (previewFile) {
+    const previewButton = $("#registerPreviewBtn");
+    const originalButtonText = previewButton?.textContent || "登録内容を確認する";
+
+    if (previewButton) {
+      previewButton.disabled = true;
+      previewButton.textContent = "画像を自動最適化中...";
+    }
+
+    try {
+      registrationPreviewPreparedFile =
+        await optimizePreviewImageFile(previewFile);
+
+      registrationPreviewObjectUrl =
+        URL.createObjectURL(registrationPreviewPreparedFile);
+
+      const status = $("#previewImageStatus");
+
+      if (status) {
+        status.textContent =
+          previewFile === registrationPreviewPreparedFile
+            ? `選択画像：${formatFileSize(previewFile.size)}（そのまま使用できます）`
+            : `自動最適化：${formatFileSize(previewFile.size)} → ${formatFileSize(registrationPreviewPreparedFile.size)}`;
+      }
+    } catch (error) {
+      console.error("募集画像の自動最適化エラー", error);
+      registrationPreviewPreparedFile = null;
+
+      alert(
+        "画像を自動最適化できませんでした。\n別のJPG / PNG / WebP画像を選択してください。"
+      );
+
+      return false;
+    } finally {
+      if (previewButton) {
+        previewButton.disabled = false;
+        previewButton.textContent = originalButtonText;
+      }
+    }
+  }
+
+  const platform =
+    getRecruitmentPlatform(xUrl);
+
+  const mediaHtml =
+    buildRecruitmentPreviewMedia(
+      xUrl,
+      registrationPreviewObjectUrl || "",
+      true
+    );
+
+  const detailHtml =
+    registrationType === "union"
+      ? `<div class="union-rank rank-${escapeHtml(getUnionRankClass(detail))}">${escapeHtml(detail)}</div>`
+      : `<div class="slv">${detail}</div>`;
+
+  const host =
+    $("#registrationPreviewCard");
+
+  if (!host) {
+    return false;
+  }
+
+  host.innerHTML = `
+    <article class="card ${cardClass}">
+      <div class="card-head">
+        <div class="type-with-new">
+          <span class="recruitment-type">${typeLabel}</span>
+          <span class="new-badge">🔥 NEW</span>
+        </div>
+        <span class="date">期限 14日後</span>
+      </div>
+
+      <div class="name">${escapeHtml(name)}</div>
+      ${detailHtml}
+      ${platform === "X" ? '<div class="date">掲載先：X</div>' : ""}
+      <div class="countdown">残り14日</div>
+
+      <div class="x-post-area">
+        ${mediaHtml}
+
+        <a
+          class="x-btn"
+          href="${escapeHtml(xUrl)}"
+          target="_blank"
+          rel="noopener noreferrer"
+        >
+          ${escapeHtml(getRecruitmentButtonLabel(xUrl))}
+        </a>
+      </div>
+    </article>
+  `;
+
+  $("#registrationPreviewModal")
+    ?.classList
+    .remove("hidden");
+
+  if (isXRecruitmentUrl(xUrl)) {
+    setTimeout(renderXEmbeds, 0);
+  }
+
+  return true;
+}
+
+
+$("#registrationPreviewBack")
+  ?.addEventListener("click", () => closeRegistrationPreview(false));
+
+$("#registrationPreviewClose")
+  ?.addEventListener("click", () => closeRegistrationPreview(false));
+
+$("#registrationPreviewModal")
+  ?.addEventListener(
+    "click",
+    event => {
+      if (event.target?.id === "registrationPreviewModal") {
+        closeRegistrationPreview(false);
+      }
+    }
+  );
+
+$("#registrationPreviewConfirm")
+  ?.addEventListener(
+    "click",
+    () => {
+      registrationPreviewApproved = true;
+      closeRegistrationPreview(true);
+      $("#registerForm")?.requestSubmit();
+    }
+  );
+
+
+$("#previewImage")
+  ?.addEventListener(
+    "change",
+    event => {
+      registrationPreviewApproved = false;
+      registrationPreviewPreparedFile = null;
+
+      if (registrationPreviewObjectUrl) {
+        URL.revokeObjectURL(registrationPreviewObjectUrl);
+        registrationPreviewObjectUrl = null;
+      }
+
+      const file = event.target?.files?.[0] || null;
+      const status = $("#previewImageStatus");
+
+      if (!file) {
+        if (status) {
+          status.textContent = "";
+        }
+        return;
+      }
+
+      if (!validatePreviewImageFile(file)) {
+        event.target.value = "";
+        if (status) {
+          status.textContent = "";
+        }
+        return;
+      }
+
+      if (status) {
+        status.textContent =
+          `選択画像：${formatFileSize(file.size)} / 20MBまで（確認時に自動最適化）`;
+      }
+    }
+  );
+
+
+// ========================================
 // 登録結果表示
 // ========================================
 
@@ -2509,6 +3094,16 @@ $("#registerForm")
       event.preventDefault();
 
 
+      if (!registrationPreviewApproved) {
+
+        await showRegistrationPreview();
+        return;
+
+      }
+
+      registrationPreviewApproved = false;
+
+
       if (!sb) {
 
         alert(
@@ -2535,6 +3130,21 @@ $("#registerForm")
           .trim();
 
 
+      const originalPreviewFile =
+        $("#previewImage")
+          ?.files?.[0]
+        ||
+        null;
+
+      const previewFile =
+        registrationPreviewPreparedFile || originalPreviewFile;
+
+
+      if (!validatePreviewImageFile(originalPreviewFile)) {
+        return;
+      }
+
+
       if (
         !validRecruitmentUrl(
           xUrl
@@ -2542,7 +3152,7 @@ $("#registerForm")
       ) {
 
         alert(
-          "募集記事URLを入力してください。\nX・BlablaLinkなどのURLに対応しています。"
+          "募集記事URLを入力してください。\nX・BlablaLink・DiscordなどのURLに対応しています。"
         );
 
         return;
@@ -2712,6 +3322,21 @@ $("#registerForm")
               : data;
 
 
+          if (previewFile && result?.id) {
+            try {
+              await uploadRecruitmentPreviewImage(
+                "union",
+                result.id,
+                passHash,
+                previewFile
+              );
+            } catch (previewError) {
+              console.error("募集画像アップロードエラー", previewError);
+              alert("募集登録は完了しましたが、画像の登録だけ失敗しました。\n募集自体は正常に掲載されています。");
+            }
+          }
+
+
           // ==================================
           // Xシェア用
           // ==================================
@@ -2739,6 +3364,7 @@ $("#registerForm")
 
 
           event.target.reset();
+          registrationPreviewPreparedFile = null;
 
 
           updateRegistrationFields();
@@ -2879,6 +3505,10 @@ $("#registerForm")
 
           if (
             errorText.includes(
+              "INVALID_RECRUITMENT_URL"
+            )
+            ||
+            errorText.includes(
               "INVALID_X_POST_URL"
             )
           ) {
@@ -2928,6 +3558,21 @@ $("#registerForm")
             : data;
 
 
+        if (previewFile && result?.id) {
+          try {
+            await uploadRecruitmentPreviewImage(
+              "commander",
+              result.id,
+              passHash,
+              previewFile
+            );
+          } catch (previewError) {
+            console.error("募集画像アップロードエラー", previewError);
+            alert("募集登録は完了しましたが、画像の登録だけ失敗しました。\n募集自体は正常に掲載されています。");
+          }
+        }
+
+
         // ==================================
         // Xシェア用
         // ==================================
@@ -2953,6 +3598,7 @@ $("#registerForm")
 
 
         event.target.reset();
+        registrationPreviewPreparedFile = null;
 
 
         updateRegistrationFields();
