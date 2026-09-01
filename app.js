@@ -59,39 +59,120 @@ function escapeHtml(value) {
 
 
 // ========================================
-// Xの募集投稿URLだけ許可
+// 募集記事URL
+// X / BlablaLink / Discord / その他のHTTP(S) URLに対応
 // ========================================
 
-function validXUrl(value) {
+function validRecruitmentUrl(value) {
+
   try {
 
     const url =
-      new URL(value);
-
-    const allowedHost =
-      [
-        "x.com",
-        "www.x.com",
-        "twitter.com",
-        "www.twitter.com"
-      ].includes(
-        url.hostname.toLowerCase()
+      new URL(
+        String(value || "").trim()
       );
 
-    if (!allowedHost) {
+    if (
+      url.protocol !== "https:"
+      &&
+      url.protocol !== "http:"
+    ) {
       return false;
     }
 
-    return /^\/[^/]+\/status\/\d+\/?$/
-      .test(
-        url.pathname
-      );
+    const host =
+      url.hostname
+        .toLowerCase()
+        .replace(/^www\./, "");
+
+    if (
+      host === "x.com"
+      ||
+      host === "twitter.com"
+    ) {
+      return /^\/[^/]+\/status\/\d+\/?$/
+        .test(url.pathname);
+    }
+
+    return true;
 
   } catch {
 
     return false;
 
   }
+
+}
+
+
+function getRecruitmentPlatform(value) {
+
+  try {
+
+    const url =
+      new URL(value);
+
+    const host =
+      url.hostname
+        .toLowerCase()
+        .replace(/^www\./, "");
+
+    if (
+      host === "x.com"
+      ||
+      host === "twitter.com"
+    ) {
+      return "X";
+    }
+
+    if (
+      host === "blablalink.com"
+      ||
+      host.endsWith(".blablalink.com")
+    ) {
+      return "BlablaLink";
+    }
+
+    if (
+      host === "discord.gg"
+      ||
+      host === "discord.com"
+      ||
+      host.endsWith(".discord.com")
+    ) {
+      return "Discord";
+    }
+
+    return "その他";
+
+  } catch {
+
+    return "その他";
+
+  }
+
+}
+
+
+function isXRecruitmentUrl(value) {
+  return getRecruitmentPlatform(value) === "X";
+}
+
+
+function getRecruitmentButtonLabel(value) {
+
+  const platform =
+    getRecruitmentPlatform(value);
+
+  if (platform === "X") {
+    return "Xで募集記事を開く ↗";
+  }
+
+  if (platform === "BlablaLink") {
+    return "BlablaLinkで募集記事を開く ↗";
+  }
+
+  return "募集記事を開く ↗";
 }
 
 
@@ -287,14 +368,28 @@ function getErrorText(error) {
 
 // ========================================
 // X投稿ID取得
+// X / Twitter のURLだけ対象
 // ========================================
 
-function getXPostId(url) {
+function getXPostId(value) {
 
   try {
 
     const parsed =
-      new URL(url);
+      new URL(value);
+
+    const host =
+      parsed.hostname
+        .toLowerCase()
+        .replace(/^www\./, "");
+
+    if (
+      host !== "x.com"
+      &&
+      host !== "twitter.com"
+    ) {
+      return null;
+    }
 
     const match =
       parsed.pathname.match(
@@ -333,7 +428,7 @@ function showXEmbedFallback(target) {
   target.innerHTML =
     '<div class="x-embed-error">' +
       '<strong>X投稿を埋め込み表示できません</strong><br>' +
-      '<span>下の「Xで投稿を開く」から確認してください。</span>' +
+      '<span>下の「Xで募集記事を開く」から確認してください。</span>' +
     '</div>';
 
 }
@@ -1852,22 +1947,36 @@ const deadlineBadge =
                 <div class="x-post-area">
 
                   ${
-                    item.x_embed_enabled === false
-                      ? `
-                        <div class="x-embed-error">
-                          <strong>🙈 X埋め込み表示はOFFです</strong><br>
-                          <span>下のボタンから募集投稿を確認できます。</span>
-                        </div>
-                      `
+                    isXRecruitmentUrl(
+                      item.x_url
+                    )
+                      ? (
+                          item.x_embed_enabled === false
+                            ? `
+                              <div class="x-embed-error">
+                                <strong>🙈 X埋め込み表示はOFFです</strong><br>
+                                <span>下のボタンから募集記事を確認できます。</span>
+                              </div>
+                            `
+                            : `
+                              <div
+                                class="x-embed"
+                                data-post-id="${escapeHtml(
+                                  postId || ""
+                                )}"
+                              >
+                              </div>
+                            `
+                        )
                       : `
-                        <div
-                          class="x-embed"
-                          data-post-id="${escapeHtml(
-                            postId || ""
-                          )}"
-                        >
-                        </div>
-                      `
+                          <div class="date">
+                            掲載先：${escapeHtml(
+                              getRecruitmentPlatform(
+                                item.x_url
+                              )
+                            )}
+                          </div>
+                        `
                   }
 
 
@@ -1885,7 +1994,11 @@ const deadlineBadge =
 
                   >
 
-                    Xで投稿を開く ↗
+                    ${escapeHtml(
+                      getRecruitmentButtonLabel(
+                        item.x_url
+                      )
+                    )}
 
                   </a>
 
@@ -2088,22 +2201,36 @@ const deadlineBadge =
                 <div class="x-post-area">
 
                   ${
-                    item.x_embed_enabled === false
-                      ? `
-                        <div class="x-embed-error">
-                          <strong>🙈 X埋め込み表示はOFFです</strong><br>
-                          <span>下のボタンから募集投稿を確認できます。</span>
-                        </div>
-                      `
+                    isXRecruitmentUrl(
+                      item.x_url
+                    )
+                      ? (
+                          item.x_embed_enabled === false
+                            ? `
+                              <div class="x-embed-error">
+                                <strong>🙈 X埋め込み表示はOFFです</strong><br>
+                                <span>下のボタンから募集記事を確認できます。</span>
+                              </div>
+                            `
+                            : `
+                              <div
+                                class="x-embed"
+                                data-post-id="${escapeHtml(
+                                  postId || ""
+                                )}"
+                              >
+                              </div>
+                            `
+                        )
                       : `
-                        <div
-                          class="x-embed"
-                          data-post-id="${escapeHtml(
-                            postId || ""
-                          )}"
-                        >
-                        </div>
-                      `
+                          <div class="date">
+                            掲載先：${escapeHtml(
+                              getRecruitmentPlatform(
+                                item.x_url
+                              )
+                            )}
+                          </div>
+                        `
                   }
 
 
@@ -2121,7 +2248,11 @@ const deadlineBadge =
 
                   >
 
-                    Xで投稿を開く ↗
+                    ${escapeHtml(
+                      getRecruitmentButtonLabel(
+                        item.x_url
+                      )
+                    )}
 
                   </a>
 
@@ -2405,13 +2536,13 @@ $("#registerForm")
 
 
       if (
-        !validXUrl(
+        !validRecruitmentUrl(
           xUrl
         )
       ) {
 
         alert(
-          "Xの募集投稿URLを入力してください。\n例：https://x.com/ユーザー名/status/123456789..."
+          "募集記事URLを入力してください。\nX・BlablaLinkなどのURLに対応しています。"
         );
 
         return;
@@ -2481,7 +2612,7 @@ $("#registerForm")
 
             await sb.rpc(
 
-              "create_union_recruitment",
+              "create_union_recruitment_url",
 
               {
 
@@ -2528,12 +2659,16 @@ $("#registerForm")
 
             if (
               errorText.includes(
+                "INVALID_RECRUITMENT_URL"
+              )
+              ||
+              errorText.includes(
                 "INVALID_X_POST_URL"
               )
             ) {
 
               alert(
-                "Xの投稿URLではありません。募集投稿のURLを入力してください。"
+                "募集記事URLが正しくありません。http:// または https:// から始まるURLを入力してください。"
               );
 
               return;
@@ -2697,7 +2832,7 @@ $("#registerForm")
 
           await sb.rpc(
 
-            "create_recruitment",
+            "create_recruitment_url",
 
             {
 
@@ -2749,7 +2884,7 @@ $("#registerForm")
           ) {
 
             alert(
-              "Xの投稿URLではありません。募集投稿のURLを入力してください。"
+              "募集記事URLが正しくありません。http:// または https:// から始まるURLを入力してください。"
             );
 
             return;
