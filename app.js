@@ -497,11 +497,42 @@ async function optimizePreviewImageFile(file) {
 function buildRecruitmentPreviewMedia(
   url,
   previewImageUrl = "",
-  xEmbedEnabled = true
+  xEmbedEnabled = true,
+  forcePreviewImage = false
 ) {
 
   const platform =
     getRecruitmentPlatform(url);
+
+  // ========================================
+  // 管理画面：強制画像表示
+  // X埋め込みON/OFF・掲載先に関係なく、
+  // 登録画像を最優先で表示する。
+  // ========================================
+  if (
+    forcePreviewImage === true
+    &&
+    previewImageUrl
+  ) {
+    return `
+      <div class="registration-preview-platform">
+        掲載先：${escapeHtml(platform)}
+      </div>
+      <a
+        class="recruitment-preview-link"
+        href="${escapeHtml(url)}"
+        target="_blank"
+        rel="noopener noreferrer"
+      >
+        <img
+          class="recruitment-preview-image"
+          src="${escapeHtml(previewImageUrl)}"
+          alt="${escapeHtml(platform)}募集記事の登録画像"
+          loading="lazy"
+        >
+      </a>
+    `;
+  }
 
   if (platform === "X") {
 
@@ -954,7 +985,10 @@ function checkXEmbedUnavailable(target) {
     return;
   }
 
-  if (!target.dataset.previewImageUrl) {
+  const previewImageUrl =
+    target.dataset.previewImageUrl || "";
+
+  if (!previewImageUrl) {
     return;
   }
 
@@ -970,15 +1004,29 @@ function checkXEmbedUnavailable(target) {
     return;
   }
 
+  const iframeRect =
+    iframe.getBoundingClientRect();
+
   const iframeHeight =
     Math.max(
-      iframe.getBoundingClientRect().height || 0,
+      iframeRect.height || 0,
+      iframe.offsetHeight || 0,
       Number(iframe.getAttribute("height")) || 0
     );
 
-  // 通常のX投稿埋め込みは十分な高さになる。
-  // 削除済み / Not found の小さいエラーカードだけを画像へ置換する。
-  if (iframeHeight > 0 && iframeHeight < 170) {
+  const targetHeight =
+    Math.max(
+      target.getBoundingClientRect().height || 0,
+      target.offsetHeight || 0
+    );
+
+  // Xは削除済み投稿でも「Not found」用iframeを返すことがある。
+  // そのiframeは通常の投稿よりかなり低い。
+  // 管理画面で画像が登録済みなら、小さい埋め込みを画像へ切り替える。
+  const renderedHeight =
+    Math.max(iframeHeight, targetHeight);
+
+  if (renderedHeight <= 260) {
     showXEmbedFallback(target);
   }
 
@@ -1050,10 +1098,13 @@ function renderSingleXEmbed(target) {
 
           // Xが「Not found」のiframeを返すケースを判定。
           // iframeの描画完了を待ってから確認する。
-          setTimeout(
-            () => checkXEmbedUnavailable(target),
-            3000
-          );
+          // Xのiframeは段階的に高さが確定するため複数回確認する。
+          [1200, 3000, 6000].forEach(delay => {
+            setTimeout(
+              () => checkXEmbedUnavailable(target),
+              delay
+            );
+          });
 
           return;
 
@@ -2088,7 +2139,7 @@ async function loadRecruitments() {
         "recruitments"
       )
       .select(
-        "id, commander_name, slv, x_url, x_embed_enabled, preview_image_url, created_at, expires_at"
+        "id, commander_name, slv, x_url, x_embed_enabled, preview_image_url, force_preview_image, created_at, expires_at"
       )
       .eq(
         "status",
@@ -2119,7 +2170,7 @@ async function loadRecruitments() {
         "union_recruitments"
       )
       .select(
-        "id, union_name, union_rank, x_url, x_embed_enabled, preview_image_url, created_at, expires_at"
+        "id, union_name, union_rank, x_url, x_embed_enabled, preview_image_url, force_preview_image, created_at, expires_at"
       )
       .eq(
         "status",
@@ -2507,7 +2558,8 @@ const deadlineBadge =
                   ${buildRecruitmentPreviewMedia(
                     item.x_url,
                     item.preview_image_url || "",
-                    item.x_embed_enabled
+                    item.x_embed_enabled,
+                    item.force_preview_image === true
                   )}
 
 
@@ -2734,7 +2786,8 @@ const deadlineBadge =
                   ${buildRecruitmentPreviewMedia(
                     item.x_url,
                     item.preview_image_url || "",
-                    item.x_embed_enabled
+                    item.x_embed_enabled,
+                    item.force_preview_image === true
                   )}
 
 
