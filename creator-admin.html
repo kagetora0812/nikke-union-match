@@ -1694,7 +1694,7 @@
 
       <p class="lead">
         現在募集中の募集を選び、URL修正・X埋め込みON / OFF・募集画像登録をまとめて管理できます。<br>
-        <strong>X埋め込みがOFFでも募集画像は登録・表示できます。</strong>
+        <strong>「画像を強制表示」をONにすると、X埋め込みより登録画像を最優先で表示します。</strong>
       </p>
 
       <div class="panel">
@@ -1723,6 +1723,7 @@
             <div id="recruitmentManageTargetLabel" class="recruitment-image-status">対象：--</div>
             <div id="recruitmentManagePlatform" class="recruitment-image-status">掲載先：--</div>
             <div id="recruitmentManageEmbedState" class="recruitment-image-status">X埋め込み：--</div>
+            <div id="recruitmentManageForceImageState" class="recruitment-image-status">強制画像表示：--</div>
           </div>
 
           <label>
@@ -1762,10 +1763,26 @@
             >
               👁 X埋め込みON
             </button>
+
+            <button
+              id="recruitmentManageForceImageOnBtn"
+              class="btn primary"
+              type="button"
+            >
+              🖼️ 画像を強制表示
+            </button>
+
+            <button
+              id="recruitmentManageForceImageOffBtn"
+              class="btn"
+              type="button"
+            >
+              🔄 自動表示に戻す
+            </button>
           </div>
 
           <div class="recruitment-image-status">
-            ※ X以外のURLではX埋め込みON / OFFは使用しません。
+            ※ X以外のURLではX埋め込みON / OFFは使用しません。強制画像表示は掲載先に関係なく使えます。
           </div>
 
           <div class="recruitment-image-preview-box">
@@ -3210,23 +3227,98 @@
     }
 
 
+    function getAdminPreviewDisplayUrl(value) {
+
+      const safe = safeUrl(value);
+
+      if (!safe) {
+        return "";
+      }
+
+      // Storage画像を変更した直後でも、ブラウザの古い画像キャッシュを
+      // 掴まないよう管理画面の表示だけキャッシュバスターを付ける。
+      try {
+        const parsed = new URL(safe);
+        parsed.searchParams.set("um_preview", String(Date.now()));
+        return parsed.href;
+      } catch {
+        return safe;
+      }
+
+    }
+
+
+    function showCurrentRecruitmentImage(value) {
+
+      const preview = $("#recruitmentImageCurrentPreview");
+      const empty = $("#recruitmentImageCurrentEmpty");
+      const label = $("#recruitmentImageCurrentLabel");
+      const removeButton = $("#recruitmentImageRemoveBtn");
+      const displayUrl = getAdminPreviewDisplayUrl(value);
+
+      if (!displayUrl) {
+        if (preview) {
+          preview.onload = null;
+          preview.onerror = null;
+          preview.removeAttribute("src");
+          preview.classList.add("hidden");
+        }
+        empty?.classList.remove("hidden");
+        label?.classList.add("hidden");
+        if (removeButton) {
+          removeButton.disabled = true;
+        }
+        return;
+      }
+
+      if (!preview) {
+        return;
+      }
+
+      // srcを入れただけで hidden を外すのではなく、実際に読み込み成功してから表示。
+      preview.classList.add("hidden");
+      empty?.classList.remove("hidden");
+
+      preview.onload = () => {
+        preview.classList.remove("hidden");
+        empty?.classList.add("hidden");
+        label?.classList.remove("hidden");
+      };
+
+      preview.onerror = () => {
+        preview.classList.add("hidden");
+        empty?.classList.remove("hidden");
+        label?.classList.add("hidden");
+        empty && (empty.textContent =
+          "登録画像の読み込みに失敗しました。再読込するか、画像を登録し直してください。");
+      };
+
+      preview.src = displayUrl;
+
+      if (removeButton) {
+        removeButton.disabled = false;
+      }
+
+    }
+
+
     function renderCurrentRecruitmentImage() {
 
       const item = getSelectedRecruitmentImageItem();
       const type = $("#recruitmentImageType")?.value || "commander";
       const identity = getRecruitmentManageTargetIdentity(item, type);
-      const preview = $("#recruitmentImageCurrentPreview");
-      const empty = $("#recruitmentImageCurrentEmpty");
-      const label = $("#recruitmentImageCurrentLabel");
-      const removeButton = $("#recruitmentImageRemoveBtn");
       const urlInput = $("#recruitmentManageUrl");
       const targetLabel = $("#recruitmentManageTargetLabel");
       const platformLabel = $("#recruitmentManagePlatform");
       const embedState = $("#recruitmentManageEmbedState");
+      const forceImageState = $("#recruitmentManageForceImageState");
       const embedOffButton = $("#recruitmentManageXEmbedOffBtn");
       const embedOnButton = $("#recruitmentManageXEmbedOnBtn");
+      const forceImageOnButton = $("#recruitmentManageForceImageOnBtn");
+      const forceImageOffButton = $("#recruitmentManageForceImageOffBtn");
       const urlSaveButton = $("#recruitmentManageUrlSaveBtn");
-      const url = item?.preview_image_url || "";
+      const imageUrl = item?.preview_image_url || "";
+      const forceImageEnabled = item?.force_preview_image === true;
       const recruitmentUrl = item?.x_url || "";
       const platform = getAdminRecruitmentPlatform(recruitmentUrl);
       const isX = platform === "X";
@@ -3250,6 +3342,12 @@
           : "X埋め込み：対象外";
       }
 
+      if (forceImageState) {
+        forceImageState.textContent = item
+          ? `強制画像表示：${forceImageEnabled ? "ON 🖼️" : "OFF / 自動"}`
+          : "強制画像表示：--";
+      }
+
       if (embedOffButton) {
         embedOffButton.disabled = !item || !isX || item?.x_embed_enabled === false;
       }
@@ -3258,31 +3356,28 @@
         embedOnButton.disabled = !item || !isX || item?.x_embed_enabled !== false;
       }
 
+      if (forceImageOnButton) {
+        forceImageOnButton.disabled =
+          !item || !imageUrl || forceImageEnabled;
+      }
+
+      if (forceImageOffButton) {
+        forceImageOffButton.disabled =
+          !item || !forceImageEnabled;
+      }
+
       if (urlSaveButton) {
         urlSaveButton.disabled = !item;
       }
 
-      if (url) {
-        if (preview) {
-          preview.src = url;
-          preview.classList.remove("hidden");
-        }
-        empty?.classList.add("hidden");
-        label?.classList.remove("hidden");
-        if (removeButton) {
-          removeButton.disabled = false;
-        }
-      } else {
-        if (preview) {
-          preview.removeAttribute("src");
-          preview.classList.add("hidden");
-        }
-        empty?.classList.remove("hidden");
-        label?.classList.add("hidden");
-        if (removeButton) {
-          removeButton.disabled = true;
-        }
+      const empty = $("#recruitmentImageCurrentEmpty");
+      if (empty && !imageUrl) {
+        empty.textContent = "現在、募集画像は登録されていません。";
       }
+
+      // BlablaLink自動キャプチャの有無に関係なく、
+      // 管理画面で登録した preview_image_url をそのまま最優先で表示する。
+      showCurrentRecruitmentImage(imageUrl);
 
     }
 
@@ -3322,14 +3417,14 @@
       if (type === "union") {
         query = sb
           .from("union_recruitments")
-          .select("id, union_name, union_rank, x_url, x_embed_enabled, preview_image_url, created_at, expires_at")
+          .select("id, union_name, union_rank, x_url, x_embed_enabled, preview_image_url, force_preview_image, created_at, expires_at")
           .eq("status", "open")
           .gt("expires_at", nowIso)
           .order("created_at", { ascending: false });
       } else {
         query = sb
           .from("recruitments")
-          .select("id, commander_name, slv, x_url, x_embed_enabled, preview_image_url, created_at, expires_at")
+          .select("id, commander_name, slv, x_url, x_embed_enabled, preview_image_url, force_preview_image, created_at, expires_at")
           .eq("status", "open")
           .gt("expires_at", nowIso)
           .order("created_at", { ascending: false });
@@ -3523,6 +3618,11 @@
       }
 
       item.preview_image_url = previewImageUrl || null;
+
+      if (!previewImageUrl) {
+        item.force_preview_image = false;
+      }
+
       renderCurrentRecruitmentImage();
       return true;
 
@@ -3663,6 +3763,101 @@
         enabled
           ? "👁 X埋め込みをONにしました。募集画像はそのまま保持されます。"
           : "🙈 X埋め込みをOFFにしました。募集画像があれば画像表示へ切り替わります。",
+        "ok"
+      );
+
+    }
+
+
+    async function setSelectedRecruitmentForceImage(enabled) {
+
+      clearMessage($("#recruitmentImageMessage"));
+
+      const token = getToken();
+      if (!token) {
+        showLogin();
+        return;
+      }
+
+      const type = $("#recruitmentImageType")?.value || "commander";
+      const item = getSelectedRecruitmentImageItem();
+
+      if (!item?.id) {
+        showMessage(
+          $("#recruitmentImageMessage"),
+          "対象の募集を選択してください。",
+          "error"
+        );
+        return;
+      }
+
+      if (enabled === true && !item.preview_image_url) {
+        showMessage(
+          $("#recruitmentImageMessage"),
+          "先に募集画像を登録してください。",
+          "error"
+        );
+        return;
+      }
+
+      const { error } = await sb.rpc(
+        "admin_set_recruitment_force_image",
+        {
+          p_token: token,
+          p_type: type,
+          p_id: item.id,
+          p_enabled: enabled === true
+        }
+      );
+
+      if (error) {
+        const errorText = String(error.message || error.details || "");
+
+        if (errorText.includes("ADMIN_SESSION_INVALID")) {
+          clearToken();
+          showLogin();
+          return;
+        }
+
+        if (errorText.includes("PREVIEW_IMAGE_REQUIRED")) {
+          showMessage(
+            $("#recruitmentImageMessage"),
+            "先に募集画像を登録してください。",
+            "error"
+          );
+          return;
+        }
+
+        if (
+          errorText.includes("PGRST202") ||
+          errorText.includes("admin_set_recruitment_force_image")
+        ) {
+          showMessage(
+            $("#recruitmentImageMessage"),
+            "強制画像表示用SQLが未適用です。ZIP内のSQLをSupabaseでRunしてください。",
+            "error"
+          );
+          return;
+        }
+
+        showMessage(
+          $("#recruitmentImageMessage"),
+          errorText.includes("RECRUITMENT_NOT_FOUND")
+            ? "対象の募集が見つかりません。再読込してください。"
+            : "強制画像表示を変更できませんでした。",
+          "error"
+        );
+        return;
+      }
+
+      item.force_preview_image = enabled === true;
+      renderCurrentRecruitmentImage();
+
+      showMessage(
+        $("#recruitmentImageMessage"),
+        enabled
+          ? "🖼️ 登録画像を強制表示にしました。X埋め込みより画像を優先します。"
+          : "🔄 自動表示に戻しました。",
         "ok"
       );
 
@@ -5922,6 +6117,20 @@
       );
 
 
+    $("#recruitmentManageForceImageOnBtn")
+      ?.addEventListener(
+        "click",
+        () => setSelectedRecruitmentForceImage(true)
+      );
+
+
+    $("#recruitmentManageForceImageOffBtn")
+      ?.addEventListener(
+        "click",
+        () => setSelectedRecruitmentForceImage(false)
+      );
+
+
     $("#recruitmentImageType")
       ?.addEventListener(
         "change",
@@ -5985,14 +6194,27 @@
               URL.createObjectURL(optimized);
 
             const preview = $("#recruitmentImageNewPreview");
+            const previewBox = $("#recruitmentImageNewPreviewBox");
 
             if (preview) {
+              preview.onload = () => {
+                previewBox?.classList.remove("hidden");
+              };
+
+              preview.onerror = () => {
+                previewBox?.classList.add("hidden");
+                showMessage(
+                  $("#recruitmentImageMessage"),
+                  "選択した画像のプレビューを表示できませんでした。別の画像を選択してください。",
+                  "error"
+                );
+              };
+
               preview.src = recruitmentImagePreparedObjectUrl;
             }
 
-            $("#recruitmentImageNewPreviewBox")
-              ?.classList
-              .remove("hidden");
+            // onload待ちの間も枠自体は先に表示しておく。
+            previewBox?.classList.remove("hidden");
 
             if (status) {
               status.textContent =
@@ -6098,9 +6320,13 @@
               status.className = "recruitment-image-status";
             }
 
+            // 保存成功直後に管理画面へ即反映。
+            item.preview_image_url = publicUrl;
+            renderCurrentRecruitmentImage();
+
             showMessage(
               $("#recruitmentImageMessage"),
-              "🖼️ 募集画像を登録しました。UNION MATCHの募集一覧に反映されます。",
+              "🖼️ 募集画像を登録しました。管理画面にも即反映しました。",
               "ok"
             );
 
