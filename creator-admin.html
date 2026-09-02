@@ -1683,7 +1683,7 @@
           </div>
 
           <h2>
-            📣 X宣伝 <span style="font-size:12px;opacity:.55;">v13.17</span>
+            📣 X宣伝 <span style="font-size:12px;opacity:.55;">v13.18</span>
           </h2>
         </div>
 
@@ -1709,7 +1709,7 @@
 
       <p class="lead">
         現在募集中の登録から宣伝対象を選ぶだけで、X投稿文を自動生成します。<br>
-        募集記事URLはそのまま本文へ挿入。登録画像がある場合は「ワンタッチ投稿」で画像付き共有もできます。
+        「ワンタッチ投稿」はWindowsの共有画面を経由せず、Xの投稿画面を直接開きます。
       </p>
 
       <div class="panel">
@@ -1778,7 +1778,7 @@
 
           <div class="recruitment-image-preview-box">
             <div class="recruitment-image-preview-title">
-              ワンタッチ投稿に使用する画像
+              登録されている募集画像（確認用）
             </div>
 
             <img
@@ -1791,8 +1791,8 @@
               id="xPromoImageEmpty"
               class="recruitment-image-empty"
             >
-              この募集には共有できる登録画像がありません。<br>
-              X募集記事URLは本文にそのまま入ります。
+              この募集には登録画像がありません。<br>
+              X募集記事URLは本文の一番下に入ります。
             </div>
 
             <div id="xPromoImageStatus" class="recruitment-image-status">
@@ -1822,12 +1822,12 @@
               class="btn blue"
               type="button"
             >
-              ⚡ ワンタッチ投稿
+              ⚡ Xへワンタッチ
             </button>
           </div>
 
           <div class="recruitment-image-status">
-            ※ ワンタッチ投稿は端末の共有機能を使用します。画像共有対応端末では登録画像も自動で添付候補に入ります。
+            ※ XのWeb投稿画面では画像の自動添付はできません。募集記事URLは本文末尾へ自動挿入されます。
           </div>
 
           <div
@@ -3100,7 +3100,7 @@
     const X_PROMO_APP_URL =
       "https://x.gd/4tEJo";
 
-    console.info("NIKKE UNION MATCH creator-admin X promo v13.17");
+    console.info("NIKKE UNION MATCH creator-admin X promo v13.18");
 
     let xPromoItems = [];
 
@@ -3219,7 +3219,7 @@
         }
         empty?.classList.add("hidden");
         if (status) {
-          status.textContent = "画像：登録画像をワンタッチ投稿で共有できます。";
+          status.textContent = "画像：登録画像あり（サイト掲載用・確認用）";
         }
       } else {
         if (image) {
@@ -3292,87 +3292,24 @@
     }
 
 
-    async function oneTouchXPromo() {
+    function oneTouchXPromo() {
       const item = getSelectedXPromoItem();
       const text = buildXPromoText();
       if (!item || !text) return;
 
       clearMessage($("#xPromoMessage"));
 
-      const button = $("#oneTouchXPromoBtn");
-      if (button) {
-        button.disabled = true;
-        button.textContent = "準備中...";
-      }
+      // Windowsの共有シートは使わず、必ずXのWeb Intentを直接開く。
+      // これにより「共有」画面ではなくXの投稿作成画面へ遷移する。
+      openXPromoIntent(text);
 
-      try {
-        // 画像付き共有が使える端末では、登録済み募集画像を自動添付候補にする。
-        if (item.preview_image_url && navigator.share && navigator.canShare) {
-          try {
-            const file = await getXPromoShareImageFile(item);
-
-            if (file && navigator.canShare({ files: [file] })) {
-              await navigator.share({
-                text,
-                files: [file]
-              });
-
-              showMessage(
-                $("#xPromoMessage"),
-                "画像と宣伝文を共有画面へ渡しました。Xを選んで投稿してください。",
-                "ok"
-              );
-              return;
-            }
-          } catch (shareImageError) {
-            if (shareImageError?.name === "AbortError") {
-              return;
-            }
-            console.warn("X宣伝画像共有を使用できません", shareImageError);
-          }
-        }
-
-        // 画像がない場合でも、Web Share API対応端末なら本文を共有画面へ渡す。
-        if (navigator.share) {
-          try {
-            await navigator.share({ text });
-            showMessage(
-              $("#xPromoMessage"),
-              "宣伝文を共有画面へ渡しました。Xを選んで投稿してください。",
-              "ok"
-            );
-            return;
-          } catch (shareTextError) {
-            if (shareTextError?.name === "AbortError") {
-              return;
-            }
-            console.warn("Web Shareを使用できません", shareTextError);
-          }
-        }
-
-        // PCなどWeb Share非対応環境では従来のX投稿画面へフォールバック。
-        openXPromoIntent(text);
-        showMessage(
-          $("#xPromoMessage"),
-          item.preview_image_url
-            ? "この端末では画像の自動共有に対応していないため、通常のX投稿画面を開きました。"
-            : "X投稿画面を開きました。",
-          "ok"
-        );
-
-      } catch (error) {
-        console.error("ワンタッチ投稿エラー", error);
-        showMessage(
-          $("#xPromoMessage"),
-          "ワンタッチ投稿を開始できませんでした。通常の「Xで宣伝」をお使いください。",
-          "error"
-        );
-      } finally {
-        if (button) {
-          button.textContent = "⚡ ワンタッチ投稿";
-          button.disabled = !buildXPromoText();
-        }
-      }
+      showMessage(
+        $("#xPromoMessage"),
+        item.preview_image_url
+          ? "Xの投稿画面を開きました。登録画像の自動添付はX Web Intentの仕様上できません。"
+          : "Xの投稿画面を開きました。",
+        "ok"
+      );
     }
 
     function renderXPromoPreview() {
