@@ -1683,7 +1683,7 @@
           </div>
 
           <h2>
-            📣 X宣伝 <span style="font-size:12px;opacity:.55;">v13.15</span>
+            📣 X宣伝 <span style="font-size:12px;opacity:.55;">v13.17</span>
           </h2>
         </div>
 
@@ -1708,8 +1708,8 @@
       </div>
 
       <p class="lead">
-        現在募集中の登録から宣伝対象を選ぶだけで、X投稿文を作れます。<br>
-        固定文と自分のXリンクはこのブラウザに保存されます。
+        現在募集中の登録から宣伝対象を選ぶだけで、X投稿文を自動生成します。<br>
+        募集記事URLはそのまま本文へ挿入。登録画像がある場合は「ワンタッチ投稿」で画像付き共有もできます。
       </p>
 
       <div class="panel">
@@ -1732,11 +1732,11 @@
           </div>
 
           <label>
-            固定文
+            追加文（任意）
             <textarea
               id="xPromoFixedText"
-              rows="5"
-              placeholder="例：NIKKE UNION MATCHに新しい募集が登録されました📣✨"
+              rows="4"
+              placeholder="例：ぜひチェックしてみてください🐾"
             ></textarea>
           </label>
 
@@ -1759,7 +1759,7 @@
               class="btn"
               type="button"
             >
-              💾 固定文・Xリンクを保存
+              💾 追加文・Xリンクを保存
             </button>
           </div>
 
@@ -1774,6 +1774,30 @@
 
           <div id="xPromoCharCount" class="recruitment-image-status">
             文字数：--
+          </div>
+
+          <div class="recruitment-image-preview-box">
+            <div class="recruitment-image-preview-title">
+              ワンタッチ投稿に使用する画像
+            </div>
+
+            <img
+              id="xPromoImagePreview"
+              class="recruitment-image-preview hidden"
+              alt="募集画像"
+            >
+
+            <div
+              id="xPromoImageEmpty"
+              class="recruitment-image-empty"
+            >
+              この募集には共有できる登録画像がありません。<br>
+              X募集記事URLは本文にそのまま入ります。
+            </div>
+
+            <div id="xPromoImageStatus" class="recruitment-image-status">
+              画像：--
+            </div>
           </div>
 
           <div class="button-row">
@@ -1792,6 +1816,18 @@
             >
               𝕏 Xで宣伝
             </button>
+
+            <button
+              id="oneTouchXPromoBtn"
+              class="btn blue"
+              type="button"
+            >
+              ⚡ ワンタッチ投稿
+            </button>
+          </div>
+
+          <div class="recruitment-image-status">
+            ※ ワンタッチ投稿は端末の共有機能を使用します。画像共有対応端末では登録画像も自動で添付候補に入ります。
           </div>
 
           <div
@@ -3053,18 +3089,18 @@
     // ========================================
 
     const X_PROMO_FIXED_TEXT_KEY =
-      "nikke_union_admin_x_promo_fixed_v1";
+      "nikke_union_admin_x_promo_extra_v2";
 
     const X_PROMO_OWN_X_URL_KEY =
       "nikke_union_admin_x_promo_own_x_url_v1";
 
     const X_PROMO_DEFAULT_FIXED_TEXT =
-      "NIKKE UNION MATCHに新しい募集が登録されました📣✨";
+      "";
 
     const X_PROMO_APP_URL =
       "https://x.gd/4tEJo";
 
-    console.info("NIKKE UNION MATCH creator-admin X promo v13.15");
+    console.info("NIKKE UNION MATCH creator-admin X promo v13.17");
 
     let xPromoItems = [];
 
@@ -3098,42 +3134,56 @@
     }
 
 
+    function buildXPromoHeadline(item) {
+      if (!item) return "";
+
+      if (item._promoType === "union") {
+        const name = String(item.union_name || "").trim();
+        const rank = String(item.union_rank || "").trim();
+
+        const detail = rank
+          ? (rank.includes("ユニオン")
+              ? `🏆 ${rank}です！`
+              : `🏆 ${rank}帯のユニオン様です！`)
+          : "🏆 新しい仲間を探しているユニオン様です！";
+
+        return [
+          "🩵 NEW UNION",
+          `🏢 ${name}さんが指揮官を募集中✨`,
+          detail
+        ].join("\n");
+      }
+
+      const name = String(item.commander_name || "").trim();
+      const slv = String(item.slv || "").trim();
+
+      return [
+        "🩵 NEW COMMANDER",
+        `👤 ${name}さんが移籍先ユニオンを探しています✨`,
+        slv
+          ? `📈 SLV${slv}の指揮官様です！`
+          : "📈 移籍先を探している指揮官様です！"
+      ].join("\n");
+    }
+
+
     function buildXPromoText() {
       const item = getSelectedXPromoItem();
       if (!item) return "";
 
-      const fixedText =
-        $("#xPromoFixedText")?.value.trim()
-        || X_PROMO_DEFAULT_FIXED_TEXT;
+      const extraText =
+        $("#xPromoFixedText")?.value.trim() || "";
 
       const ownXUrl =
         $("#xPromoOwnXUrl")?.value.trim() || "";
 
-      const parts = [];
+      const parts = [
+        buildXPromoHeadline(item)
+      ];
 
-      if (fixedText) {
-        parts.push(fixedText);
+      if (extraText) {
+        parts.push(extraText);
       }
-
-      if (item._promoType === "union") {
-        parts.push(
-          `🏢 ${item.union_name || ""}｜${item.union_rank || ""}`
-        );
-      } else {
-        parts.push(
-          `👤 ${item.commander_name || ""}｜SLV${item.slv || ""}`
-        );
-      }
-
-      if (item.x_url) {
-        parts.push(
-          `👇 募集記事\n${item.x_url}`
-        );
-      }
-
-      parts.push(
-        "👇 NIKKE UNION MATCH登録は\nhttps://x.gd/4tEJo"
-      );
 
       if (ownXUrl) {
         parts.push(
@@ -3141,9 +3191,189 @@
         );
       }
 
-      return parts.join("\n\n");
+      parts.push(
+        "👇 NIKKE UNION MATCH\nhttps://x.gd/4tEJo"
+      );
+
+      // Xの募集記事URLは必ず最後に置く。
+      // X側でリンクカード / 投稿プレビューとして扱われる可能性を高めるため、
+      // 「👇 募集記事」などの見出しは付けずURLだけを末尾へ配置する。
+      if (item.x_url) {
+        parts.push(String(item.x_url).trim());
+      }
+
+      return parts.filter(Boolean).join("\n\n");
     }
 
+
+    function renderXPromoImage(item) {
+      const image = $("#xPromoImagePreview");
+      const empty = $("#xPromoImageEmpty");
+      const status = $("#xPromoImageStatus");
+      const imageUrl = String(item?.preview_image_url || "").trim();
+
+      if (imageUrl) {
+        if (image) {
+          image.src = imageUrl;
+          image.classList.remove("hidden");
+        }
+        empty?.classList.add("hidden");
+        if (status) {
+          status.textContent = "画像：登録画像をワンタッチ投稿で共有できます。";
+        }
+      } else {
+        if (image) {
+          image.removeAttribute("src");
+          image.classList.add("hidden");
+        }
+        empty?.classList.remove("hidden");
+        if (status) {
+          status.textContent = item
+            ? "画像：なし（募集記事URLは本文へ挿入します）"
+            : "画像：--";
+        }
+      }
+    }
+
+
+    function openXPromoIntent(text) {
+      const intent =
+        "https://x.com/intent/tweet?text="
+        + encodeURIComponent(text);
+
+      window.open(
+        intent,
+        "_blank",
+        "noopener,noreferrer"
+      );
+    }
+
+
+    function getXPromoImageExtension(mimeType = "") {
+      const type = String(mimeType).toLowerCase();
+      if (type.includes("png")) return "png";
+      if (type.includes("webp")) return "webp";
+      if (type.includes("gif")) return "gif";
+      return "jpg";
+    }
+
+
+    async function getXPromoShareImageFile(item) {
+      const imageUrl = String(item?.preview_image_url || "").trim();
+      if (!imageUrl) return null;
+
+      const response = await fetch(imageUrl, {
+        mode: "cors",
+        cache: "no-store"
+      });
+
+      if (!response.ok) {
+        throw new Error("X_PROMO_IMAGE_FETCH_FAILED");
+      }
+
+      const blob = await response.blob();
+      if (!String(blob.type || "").startsWith("image/")) {
+        throw new Error("X_PROMO_IMAGE_INVALID");
+      }
+
+      const extension = getXPromoImageExtension(blob.type);
+      const safeName = item?._promoType === "union"
+        ? String(item.union_name || "union")
+        : String(item.commander_name || "commander");
+
+      const fileName =
+        `${safeName.replace(/[\\/:*?"<>|]+/g, "_") || "nikke-union-match"}.${extension}`;
+
+      return new File(
+        [blob],
+        fileName,
+        { type: blob.type || "image/jpeg" }
+      );
+    }
+
+
+    async function oneTouchXPromo() {
+      const item = getSelectedXPromoItem();
+      const text = buildXPromoText();
+      if (!item || !text) return;
+
+      clearMessage($("#xPromoMessage"));
+
+      const button = $("#oneTouchXPromoBtn");
+      if (button) {
+        button.disabled = true;
+        button.textContent = "準備中...";
+      }
+
+      try {
+        // 画像付き共有が使える端末では、登録済み募集画像を自動添付候補にする。
+        if (item.preview_image_url && navigator.share && navigator.canShare) {
+          try {
+            const file = await getXPromoShareImageFile(item);
+
+            if (file && navigator.canShare({ files: [file] })) {
+              await navigator.share({
+                text,
+                files: [file]
+              });
+
+              showMessage(
+                $("#xPromoMessage"),
+                "画像と宣伝文を共有画面へ渡しました。Xを選んで投稿してください。",
+                "ok"
+              );
+              return;
+            }
+          } catch (shareImageError) {
+            if (shareImageError?.name === "AbortError") {
+              return;
+            }
+            console.warn("X宣伝画像共有を使用できません", shareImageError);
+          }
+        }
+
+        // 画像がない場合でも、Web Share API対応端末なら本文を共有画面へ渡す。
+        if (navigator.share) {
+          try {
+            await navigator.share({ text });
+            showMessage(
+              $("#xPromoMessage"),
+              "宣伝文を共有画面へ渡しました。Xを選んで投稿してください。",
+              "ok"
+            );
+            return;
+          } catch (shareTextError) {
+            if (shareTextError?.name === "AbortError") {
+              return;
+            }
+            console.warn("Web Shareを使用できません", shareTextError);
+          }
+        }
+
+        // PCなどWeb Share非対応環境では従来のX投稿画面へフォールバック。
+        openXPromoIntent(text);
+        showMessage(
+          $("#xPromoMessage"),
+          item.preview_image_url
+            ? "この端末では画像の自動共有に対応していないため、通常のX投稿画面を開きました。"
+            : "X投稿画面を開きました。",
+          "ok"
+        );
+
+      } catch (error) {
+        console.error("ワンタッチ投稿エラー", error);
+        showMessage(
+          $("#xPromoMessage"),
+          "ワンタッチ投稿を開始できませんでした。通常の「Xで宣伝」をお使いください。",
+          "error"
+        );
+      } finally {
+        if (button) {
+          button.textContent = "⚡ ワンタッチ投稿";
+          button.disabled = !buildXPromoText();
+        }
+      }
+    }
 
     function renderXPromoPreview() {
       const item = getSelectedXPromoItem();
@@ -3153,6 +3383,7 @@
       const count = $("#xPromoCharCount");
       const copyButton = $("#copyXPromoBtn");
       const postButton = $("#openXPromoPostBtn");
+      const oneTouchButton = $("#oneTouchXPromoBtn");
 
       if (info) {
         info.textContent = `対象：${getXPromoItemLabel(item)}`;
@@ -3161,6 +3392,8 @@
       if (urlInfo) {
         urlInfo.textContent = `募集記事：${item?.x_url || "--"}`;
       }
+
+      renderXPromoImage(item);
 
       const text = buildXPromoText();
 
@@ -3181,6 +3414,10 @@
       if (postButton) {
         postButton.disabled = !text;
       }
+
+      if (oneTouchButton) {
+        oneTouchButton.disabled = !text;
+      }
     }
 
 
@@ -3198,14 +3435,14 @@
       const [commanderResult, unionResult] = await Promise.all([
         sb
           .from("recruitments")
-          .select("id, commander_name, slv, x_url, created_at, expires_at")
+          .select("id, commander_name, slv, x_url, preview_image_url, created_at, expires_at")
           .eq("status", "open")
           .gt("expires_at", nowIso)
           .order("created_at", { ascending: false }),
 
         sb
           .from("union_recruitments")
-          .select("id, union_name, union_rank, x_url, created_at, expires_at")
+          .select("id, union_name, union_rank, x_url, preview_image_url, created_at, expires_at")
           .eq("status", "open")
           .gt("expires_at", nowIso)
           .order("created_at", { ascending: false })
@@ -3291,15 +3528,6 @@
       const fixedText = $("#xPromoFixedText")?.value.trim() || "";
       const ownXUrl = $("#xPromoOwnXUrl")?.value.trim() || "";
 
-      if (!fixedText) {
-        showMessage(
-          $("#xPromoMessage"),
-          "固定文を入力してください。",
-          "error"
-        );
-        return;
-      }
-
       if (ownXUrl) {
         try {
           const parsed = new URL(ownXUrl);
@@ -3325,7 +3553,7 @@
 
       showMessage(
         $("#xPromoMessage"),
-        "固定文と自分のXリンクを保存しました。",
+        "追加文と自分のXリンクを保存しました。",
         "ok"
       );
 
@@ -5446,17 +5674,15 @@
         () => {
           const text = buildXPromoText();
           if (!text) return;
-
-          const intent =
-            "https://twitter.com/intent/tweet?text="
-            + encodeURIComponent(text);
-
-          window.open(
-            intent,
-            "_blank",
-            "noopener,noreferrer"
-          );
+          openXPromoIntent(text);
         }
+      );
+
+
+    $("#oneTouchXPromoBtn")
+      ?.addEventListener(
+        "click",
+        oneTouchXPromo
       );
 
 
