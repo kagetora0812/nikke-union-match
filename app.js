@@ -4195,6 +4195,35 @@ function resetManageImageState() {
 }
 
 
+function resetManageActionMenu() {
+
+  $("#managePrimaryActions")
+    ?.classList
+    .remove("hidden");
+
+  $("#manageEditActionChoices")
+    ?.classList
+    .add("hidden");
+}
+
+
+function showManageEditActionChoices() {
+
+  if (!loadedManagedRecruitment) {
+    alert("先にPASSから募集内容を呼び出してください。");
+    return;
+  }
+
+  $("#managePrimaryActions")
+    ?.classList
+    .add("hidden");
+
+  $("#manageEditActionChoices")
+    ?.classList
+    .remove("hidden");
+}
+
+
 function clearLoadedManageRecruitment() {
 
   loadedManagedRecruitment = null;
@@ -4202,6 +4231,7 @@ function clearLoadedManageRecruitment() {
   loadedManagePassHash = "";
 
   resetManageImageState();
+  resetManageActionMenu();
 
   $("#manageLoadedPanel")
     ?.classList
@@ -4478,6 +4508,7 @@ async function loadRecruitmentForManage() {
       .add("hidden");
 
     resetManageImageState();
+    resetManageActionMenu();
     renderLoadedManageRecruitment();
 
     setTimeout(() => {
@@ -4534,6 +4565,34 @@ $("#closePass")
   );
 
 
+$("#openManageActionBtn")
+  ?.addEventListener(
+    "click",
+    showManageEditActionChoices
+  );
+
+
+$("#backManageActionBtn")
+  ?.addEventListener(
+    "click",
+    () => {
+      resetManageImageState();
+
+      $("#manageEditPanel")
+        ?.classList
+        .add("hidden");
+
+      resetManageActionMenu();
+
+      $("#manageLoadedPanel")
+        ?.scrollIntoView({
+          behavior: "smooth",
+          block: "start"
+        });
+    }
+  );
+
+
 $("#openManageEditBtn")
   ?.addEventListener(
     "click",
@@ -4556,6 +4615,14 @@ $("#cancelManageEditBtn")
       $("#manageEditPanel")
         ?.classList
         .add("hidden");
+
+      $("#managePrimaryActions")
+        ?.classList
+        .add("hidden");
+
+      $("#manageEditActionChoices")
+        ?.classList
+        .remove("hidden");
 
       $("#manageLoadedPanel")
         ?.scrollIntoView({
