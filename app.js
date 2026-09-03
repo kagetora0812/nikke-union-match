@@ -48,13 +48,12 @@ let registrationPreviewApproved = false;
 let registrationPreviewObjectUrl = null;
 let registrationPreviewPreparedFile = null;
 
-// PASS編集・再掲載・締切
+// PASS再編集・再延長
 let loadedManagedRecruitment = null;
 let loadedManagePass = "";
 let loadedManagePassHash = "";
 let manageEditPreparedFile = null;
 let manageEditObjectUrl = null;
-let manageOperationMode = "";
 
 
 
@@ -514,15 +513,14 @@ function buildRecruitmentPreviewMedia(
     getRecruitmentPlatform(url);
 
   // ========================================
-  // 管理画面：強制画像表示
-  // X埋め込みON/OFF・掲載先に関係なく、
-  // 登録画像を最優先で表示する。
+  // v13.17 画像優先表示
+  // 登録画像がある場合は、掲載先やX埋め込み設定に関係なく
+  // 必ず登録画像を最優先で表示する。
+  // BlablaLinkの自動キャプチャは画像未選択時だけ取得されるため、
+  // 手動画像を登録した場合はその画像がそのまま優先される。
+  // forcePreviewImage は旧データ互換のため引数として残す。
   // ========================================
-  if (
-    forcePreviewImage === true
-    &&
-    previewImageUrl
-  ) {
+  if (previewImageUrl) {
     return `
       <div class="registration-preview-platform">
         掲載先：${escapeHtml(platform)}
@@ -543,6 +541,7 @@ function buildRecruitmentPreviewMedia(
     `;
   }
 
+  // 登録画像が無いXだけ、X埋め込みを表示する。
   if (platform === "X") {
 
     const postId =
@@ -553,28 +552,9 @@ function buildRecruitmentPreviewMedia(
         <div
           class="x-embed"
           data-post-id="${escapeHtml(postId || "")}"
-          data-preview-image-url="${escapeHtml(previewImageUrl || "")}"
+          data-preview-image-url=""
           data-recruitment-url="${escapeHtml(url || "")}"
         ></div>
-      `;
-    }
-
-    if (previewImageUrl) {
-      return `
-        <div class="registration-preview-platform">掲載先：X</div>
-        <a
-          class="recruitment-preview-link"
-          href="${escapeHtml(url)}"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <img
-            class="recruitment-preview-image"
-            src="${escapeHtml(previewImageUrl)}"
-            alt="X募集記事の登録画像"
-            loading="lazy"
-          >
-        </a>
       `;
     }
 
@@ -586,27 +566,7 @@ function buildRecruitmentPreviewMedia(
     `;
   }
 
-  if (previewImageUrl) {
-    return `
-      <div class="registration-preview-platform">
-        掲載先：${escapeHtml(platform)}
-      </div>
-      <a
-        class="recruitment-preview-link"
-        href="${escapeHtml(url)}"
-        target="_blank"
-        rel="noopener noreferrer"
-      >
-        <img
-          class="recruitment-preview-image"
-          src="${escapeHtml(previewImageUrl)}"
-          alt="${escapeHtml(platform)}募集記事の画像"
-          loading="lazy"
-        >
-      </a>
-    `;
-  }
-
+  // BlablaLink / Discord / その他で画像が無い場合。
   return `
     <div class="registration-preview-platform">
       掲載先：${escapeHtml(platform)}
@@ -618,81 +578,6 @@ function buildRecruitmentPreviewMedia(
   `;
 }
 
-
-async function uploadRecruitmentPreviewImage(
-  type,
-  recruitmentId,
-  passHash,
-  file
-) {
-
-  if (!file) {
-    return null;
-  }
-
-  const extMap = {
-    "image/jpeg": "jpg",
-    "image/png": "png",
-    "image/webp": "webp"
-  };
-
-  const ext =
-    extMap[file.type] || "jpg";
-
-  const safeType =
-    type === "union"
-      ? "union"
-      : "commander";
-
-  const objectPath =
-    `${safeType}/${recruitmentId}/${Date.now()}.${ext}`;
-
-  const { error: uploadError } =
-    await sb.storage
-      .from("recruitment-previews")
-      .upload(
-        objectPath,
-        file,
-        {
-          cacheControl: "3600",
-          upsert: false,
-          contentType: file.type
-        }
-      );
-
-  if (uploadError) {
-    throw uploadError;
-  }
-
-  const { data: publicData } =
-    sb.storage
-      .from("recruitment-previews")
-      .getPublicUrl(objectPath);
-
-  const publicUrl =
-    publicData?.publicUrl || "";
-
-  if (!publicUrl) {
-    throw new Error("PREVIEW_PUBLIC_URL_FAILED");
-  }
-
-  const { error: attachError } =
-    await sb.rpc(
-      "set_recruitment_preview_image",
-      {
-        p_type: safeType,
-        p_id: recruitmentId,
-        p_pass_hash: passHash,
-        p_preview_image_url: publicUrl
-      }
-    );
-
-  if (attachError) {
-    throw attachError;
-  }
-
-  return publicUrl;
-}
 
 
 // ========================================
@@ -1244,12 +1129,6 @@ function showPage(name) {
 
   if (page) {
     page.classList.add("active");
-  }
-
-
-  // 募集管理を開いた時は、必ず最初の「編集 / 締切」選択から始める
-  if (name === "manage") {
-    resetManageOperationChoice(true);
   }
 
 
@@ -4206,7 +4085,7 @@ $("#shareXBtn")
 
 
 // ========================================
-// PASSで募集を編集・再掲載・締切
+// PASSで募集を再編集・再延長・締切
 // ========================================
 
 function resetManageImageState() {
@@ -4268,97 +4147,6 @@ function clearLoadedManageRecruitment() {
   $("#manageEditPanel")
     ?.classList
     .add("hidden");
-}
-
-
-// ========================================
-// 募集管理 2段階UI
-// STEP1: 編集 / 締切
-// STEP2: 編集なら「そのまま延長 / 再編集」
-// ========================================
-
-function resetManageOperationChoice(clearPass = true) {
-
-  manageOperationMode = "";
-  clearLoadedManageRecruitment();
-
-  if (clearPass) {
-    $("#closeForm")?.reset();
-  }
-
-  $("#manageChoicePanel")
-    ?.classList
-    .remove("hidden");
-
-  $("#closeForm")
-    ?.classList
-    .add("hidden");
-
-  $("#managePassNotice")
-    ?.classList
-    .add("hidden");
-}
-
-
-function openManageOperation(mode) {
-
-  if (mode !== "edit" && mode !== "close") {
-    return;
-  }
-
-  manageOperationMode = mode;
-  clearLoadedManageRecruitment();
-
-  $("#manageChoicePanel")
-    ?.classList
-    .add("hidden");
-
-  $("#closeForm")
-    ?.classList
-    .remove("hidden");
-
-  $("#managePassNotice")
-    ?.classList
-    .remove("hidden");
-
-  const editMode =
-    mode === "edit";
-
-  $("#manageEditActionButtons")
-    ?.classList
-    .toggle("hidden", !editMode);
-
-  $("#manageCloseActionButtons")
-    ?.classList
-    .toggle("hidden", editMode);
-
-  const eyebrow =
-    $("#manageActionEyebrow");
-
-  const title =
-    $("#manageActionTitle");
-
-  const guide =
-    $("#manageActionGuide");
-
-  const notice =
-    $("#managePassNoticeText");
-
-  if (editMode) {
-    if (eyebrow) eyebrow.textContent = "EDIT";
-    if (title) title.textContent = "編集";
-    if (guide) guide.textContent = "PASSを入力して、編集方法を選んでください。";
-    if (notice) notice.textContent = "「そのまま延長」または「内容を再編集」を選べます。";
-  } else {
-    if (eyebrow) eyebrow.textContent = "CLOSE";
-    if (title) title.textContent = "募集を締切";
-    if (guide) guide.textContent = "PASSを入力して、締切ボタンを押してください。";
-    if (notice) notice.textContent = "締切すると募集一覧から非表示になります。";
-  }
-
-  setTimeout(() => {
-    $("#closePass")?.focus();
-  }, 50);
 }
 
 
@@ -4549,7 +4337,7 @@ function normalizeManagePass() {
 }
 
 
-async function loadRecruitmentForManage(action = "view", sourceButton = null) {
+async function loadRecruitmentForManage() {
 
   if (!sb) {
     alert("Supabaseの設定がまだです。");
@@ -4568,22 +4356,14 @@ async function loadRecruitmentForManage(action = "view", sourceButton = null) {
     await sha256(pass);
 
   const button =
-    sourceButton ||
     $("#loadManageRecruitmentBtn");
 
   const originalText =
-    button?.textContent || "PASSを確認";
+    button?.textContent || "🔑 募集内容を呼び出す";
 
   if (button) {
     button.disabled = true;
-    button.textContent =
-      action === "edit"
-        ? "編集内容を確認中..."
-        : action === "renew"
-          ? "再掲載内容を確認中..."
-          : action === "close"
-            ? "締切内容を確認中..."
-            : "募集内容を確認中...";
+    button.textContent = "募集内容を確認中...";
   }
 
   try {
@@ -4637,21 +4417,6 @@ async function loadRecruitmentForManage(action = "view", sourceButton = null) {
     resetManageImageState();
     renderLoadedManageRecruitment();
 
-    if (action === "edit") {
-      populateManageEditForm();
-      return;
-    }
-
-    if (action === "renew") {
-      await renewLoadedRecruitment();
-      return;
-    }
-
-    if (action === "close") {
-      await closeLoadedRecruitment();
-      return;
-    }
-
     setTimeout(() => {
       $("#manageLoadedPanel")
         ?.scrollIntoView({
@@ -4670,78 +4435,12 @@ async function loadRecruitmentForManage(action = "view", sourceButton = null) {
 }
 
 
-$("#manageChooseEditBtn")
-  ?.addEventListener(
-    "click",
-    () => {
-      openManageOperation("edit");
-    }
-  );
-
-
-$("#manageChooseCloseBtn")
-  ?.addEventListener(
-    "click",
-    () => {
-      openManageOperation("close");
-    }
-  );
-
-
-$("#manageChoiceBackBtn")
-  ?.addEventListener(
-    "click",
-    () => {
-      resetManageOperationChoice(false);
-    }
-  );
-
-
 $("#closeForm")
   ?.addEventListener(
     "submit",
-    event => {
+    async event => {
       event.preventDefault();
-
-      if (manageOperationMode === "edit") {
-        alert("「そのまま14日延長」または「内容を再編集」を選んでください。");
-      }
-    }
-  );
-
-
-$("#manageDirectEditBtn")
-  ?.addEventListener(
-    "click",
-    async event => {
-      await loadRecruitmentForManage(
-        "edit",
-        event.currentTarget
-      );
-    }
-  );
-
-
-$("#manageDirectRenewBtn")
-  ?.addEventListener(
-    "click",
-    async event => {
-      await loadRecruitmentForManage(
-        "renew",
-        event.currentTarget
-      );
-    }
-  );
-
-
-$("#manageDirectCloseBtn")
-  ?.addEventListener(
-    "click",
-    async event => {
-      await loadRecruitmentForManage(
-        "close",
-        event.currentTarget
-      );
+      await loadRecruitmentForManage();
     }
   );
 
@@ -4777,7 +4476,7 @@ $("#openManageEditBtn")
     "click",
     () => {
       if (!loadedManagedRecruitment) {
-        alert("先にPASSを入力してください。");
+        alert("先にPASSから募集内容を呼び出してください。");
         return;
       }
 
@@ -4794,13 +4493,8 @@ $("#cancelManageEditBtn")
       $("#manageEditPanel")
         ?.classList
         .add("hidden");
+
       $("#manageLoadedPanel")
-        ?.classList
-        .add("hidden");
-
-      openManageOperation("edit");
-
-      $("#closeForm")
         ?.scrollIntoView({
           behavior: "smooth",
           block: "start"
@@ -4908,7 +4602,7 @@ $("#manageRemoveImage")
 
       if (status) {
         status.textContent =
-          "現在の登録画像を削除して再掲載します。";
+          "現在の登録画像を削除して再登録します。";
       }
     }
   );
@@ -4935,7 +4629,7 @@ async function prepareManageEditImage() {
     $("#manageEditPreviewBtn");
 
   const originalText =
-    button?.textContent || "再掲載内容を確認する";
+    button?.textContent || "再登録内容を確認する";
 
   if (button) {
     button.disabled = true;
@@ -4979,7 +4673,7 @@ async function prepareManageEditImage() {
 
   } catch (error) {
 
-    console.error("再掲載画像最適化エラー", error);
+    console.error("再登録画像最適化エラー", error);
     manageEditPreparedFile = null;
 
     alert(
@@ -5074,7 +4768,7 @@ async function showManageEditPreview() {
     loadedManagedRecruitment;
 
   if (!item) {
-    alert("先にPASSを入力してください。");
+    alert("先にPASSから募集内容を呼び出してください。");
     return;
   }
 
@@ -5218,8 +4912,8 @@ function showManageResult(mode, result) {
   if ($("#manageResultTitle")) {
     $("#manageResultTitle").textContent =
       isRenew
-        ? "再掲載が完了しました！"
-        : "再掲載が完了しました！";
+        ? "再延長が完了しました！"
+        : "再登録が完了しました！";
   }
 
   if ($("#manageResultSummary")) {
@@ -5285,7 +4979,7 @@ $("#manageCopyPass")
           }, 1500);
         }
       } catch (error) {
-        console.error("再掲載PASSコピーエラー", error);
+        console.error("再登録PASSコピーエラー", error);
         alert("PASSをコピーできませんでした。手動で保存してください。");
       }
     }
@@ -5304,80 +4998,77 @@ $("#manageResultDone")
   );
 
 
-async function renewLoadedRecruitment() {
-
-  if (
-    !loadedManagedRecruitment
-    ||
-    !loadedManagePassHash
-  ) {
-    alert("先にPASSを入力してください。");
-    return;
-  }
-
-  const ok =
-    window.confirm(
-      "募集内容は変更せず、そのまま掲載期限を本日から14日間に延長します。\n\n・一覧の一番上へ移動\n・NEW表示が復活\n・PASSは前回と同じ\n・現在の掲載は重複して残りません\n\n14日延長しますか？"
-    );
-
-  if (!ok) {
-    return;
-  }
-
-  const button =
-    $("#renewUnchangedBtn");
-
-  const originalText =
-    button?.textContent || "🔄 そのまま14日延長";
-
-  if (button) {
-    button.disabled = true;
-    button.textContent = "再掲載中...";
-  }
-
-  try {
-
-    const {
-      data,
-      error
-    } =
-      await sb.rpc(
-        "renew_recruitment_by_pass",
-        {
-          p_pass_hash:
-            loadedManagePassHash
-        }
-      );
-
-    if (error) {
-      console.error("再掲載エラー", error);
-      alert("再掲載に失敗しました。PASSを確認してもう一度お試しください。");
-      return;
-    }
-
-    loadedManagedRecruitment = {
-      ...loadedManagedRecruitment,
-      ...data,
-      status: "open"
-    };
-
-    renderLoadedManageRecruitment();
-    showManageResult("renew", data);
-
-  } finally {
-
-    if (button) {
-      button.disabled = false;
-      button.textContent = originalText;
-    }
-  }
-}
-
-
 $("#renewUnchangedBtn")
   ?.addEventListener(
     "click",
-    renewLoadedRecruitment
+    async () => {
+
+      if (
+        !loadedManagedRecruitment
+        ||
+        !loadedManagePassHash
+      ) {
+        alert("先にPASSから募集内容を呼び出してください。");
+        return;
+      }
+
+      const ok =
+        window.confirm(
+          "募集内容は変更せず、掲載期限を本日から14日間に更新します。\n\n・一覧の一番上へ移動\n・NEW表示が復活\n・PASSは前回と同じ\n\n再延長しますか？"
+        );
+
+      if (!ok) {
+        return;
+      }
+
+      const button =
+        $("#renewUnchangedBtn");
+
+      const originalText =
+        button?.textContent || "🔄 内容そのままで14日再延長";
+
+      if (button) {
+        button.disabled = true;
+        button.textContent = "再延長中...";
+      }
+
+      try {
+
+        const {
+          data,
+          error
+        } =
+          await sb.rpc(
+            "renew_recruitment_by_pass",
+            {
+              p_pass_hash:
+                loadedManagePassHash
+            }
+          );
+
+        if (error) {
+          console.error("再延長エラー", error);
+          alert("再延長に失敗しました。PASSを確認してもう一度お試しください。");
+          return;
+        }
+
+        loadedManagedRecruitment = {
+          ...loadedManagedRecruitment,
+          ...data,
+          status: "open"
+        };
+
+        renderLoadedManageRecruitment();
+        showManageResult("renew", data);
+
+      } finally {
+
+        if (button) {
+          button.disabled = false;
+          button.textContent = originalText;
+        }
+      }
+    }
   );
 
 
@@ -5391,7 +5082,7 @@ $("#managePreviewConfirm")
         ||
         !loadedManagePassHash
       ) {
-        alert("PASS情報を取得できませんでした。もう一度PASSを入力してください。");
+        alert("PASS情報を取得できませんでした。もう一度呼び出してください。");
         return;
       }
 
@@ -5432,11 +5123,11 @@ $("#managePreviewConfirm")
         $("#managePreviewConfirm");
 
       const originalText =
-        button?.textContent || "🔥 この内容で再掲載";
+        button?.textContent || "🔥 この内容で再登録";
 
       if (button) {
         button.disabled = true;
-        button.textContent = "再掲載中...";
+        button.textContent = "再登録中...";
       }
 
       try {
@@ -5463,7 +5154,7 @@ $("#managePreviewConfirm")
 
         if (error) {
 
-          console.error("PASS再掲載エラー", error);
+          console.error("PASS再登録エラー", error);
 
           const errorText =
             getErrorText(error);
@@ -5477,7 +5168,7 @@ $("#managePreviewConfirm")
           } else if (errorText.includes("PASS_NOT_FOUND")) {
             alert("PASSが正しくありません。");
           } else {
-            alert("再掲載に失敗しました。もう一度お試しください。");
+            alert("再登録に失敗しました。もう一度お試しください。");
           }
 
           return;
@@ -5500,9 +5191,9 @@ $("#managePreviewConfirm")
                 manageEditPreparedFile
               );
           } catch (previewError) {
-            console.error("再掲載画像アップロードエラー", previewError);
+            console.error("再登録画像アップロードエラー", previewError);
             alert(
-              "再掲載は完了しましたが、画像の差し替えだけ失敗しました。\n募集自体は14日間で正常に再掲載されています。"
+              "再登録は完了しましたが、画像の差し替えだけ失敗しました。\n募集自体は14日間で正常に再登録されています。"
             );
           }
         }
@@ -5560,13 +5251,13 @@ async function closeLoadedRecruitment() {
     ||
     !loadedManagePassHash
   ) {
-    alert("先にPASSを入力してください。");
+    alert("先にPASSから募集内容を呼び出してください。");
     return;
   }
 
   const ok =
     window.confirm(
-      "この募集を締め切りますか？\n\n※ 再掲載ではありません。募集一覧から非表示になります。"
+      "この募集を締め切りますか？\n\n※ 再延長・再登録ではありません。募集一覧から非表示になります。"
     );
 
   if (!ok) {
