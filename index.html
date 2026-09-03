@@ -257,6 +257,155 @@
     }
   </style>
 
+
+  <style id="pass-reregister-v1316">
+    .manage-loaded-panel,
+    .manage-edit-panel {
+      margin-top: 18px;
+    }
+
+    .manage-loaded-head {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      gap: 12px;
+    }
+
+    .manage-loaded-head h3,
+    .manage-edit-panel h3 {
+      margin: 0;
+      font-size: 24px;
+    }
+
+    .manage-status-chip {
+      flex: 0 0 auto;
+      padding: 6px 9px;
+      border: 1px solid var(--cyan);
+      color: var(--cyan);
+      font-size: 11px;
+      font-weight: 900;
+    }
+
+    .manage-current-grid {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 10px;
+      margin-top: 16px;
+    }
+
+    .manage-current-grid > div,
+    .manage-current-url,
+    .manage-fixed-name {
+      padding: 13px;
+      border: 1px solid rgba(255,255,255,.12);
+      background: rgba(0,0,0,.18);
+    }
+
+    .manage-current-grid span,
+    .manage-current-url span,
+    .manage-fixed-name span,
+    .manage-current-image-box > span {
+      display: block;
+      margin-bottom: 5px;
+      color: #8f98a5;
+      font-size: 11px;
+      font-weight: 800;
+    }
+
+    .manage-current-grid strong,
+    .manage-fixed-name strong {
+      display: block;
+      font-size: 16px;
+    }
+
+    .manage-current-url {
+      margin-top: 10px;
+      word-break: break-all;
+    }
+
+    .manage-current-url a {
+      color: var(--cyan);
+      font-size: 12px;
+    }
+
+    .manage-current-image-box {
+      margin-top: 12px;
+      padding: 12px;
+      border: 1px solid rgba(255,255,255,.12);
+      background: rgba(0,0,0,.18);
+    }
+
+    .manage-current-image-box img {
+      display: block;
+      width: 100%;
+      max-height: 480px;
+      object-fit: contain;
+      background: #080b12;
+    }
+
+    .manage-action-stack {
+      display: grid;
+      gap: 10px;
+      margin-top: 16px;
+    }
+
+    .manage-renew-note,
+    .manage-result-new-note,
+    .manage-result-summary {
+      margin-top: 14px;
+      color: #aab3bf;
+      font-size: 12px;
+      line-height: 1.7;
+    }
+
+    .manage-renew-note strong,
+    .manage-result-new-note {
+      color: #ffb15c;
+      font-weight: 900;
+    }
+
+    .manage-fixed-name {
+      margin: 16px 0;
+    }
+
+    .manage-fixed-name small {
+      display: block;
+      margin-top: 5px;
+      color: #8f98a5;
+    }
+
+    .manage-remove-image-row {
+      display: flex !important;
+      align-items: center;
+      gap: 8px;
+      margin-top: 12px;
+      color: #ff9ca7 !important;
+    }
+
+    .manage-remove-image-row input {
+      width: auto !important;
+      margin: 0 !important;
+    }
+
+    .manage-same-pass-warning {
+      border-left-color: var(--cyan) !important;
+    }
+
+    #manageResultDone {
+      margin-top: 18px;
+    }
+
+    @media screen and (max-width: 600px) {
+      .manage-current-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .manage-loaded-head {
+        flex-direction: column;
+      }
+    }
+  </style>
+
 </head>
 
 
@@ -313,7 +462,7 @@
 
 <p>
   名前・SLV・募集記事URLだけで掲載。<br>
-  X・BlablaLink・Discordなど、普段使っている募集記事をそのまま登録できます。<br>
+  X・BlablaLink・Discordなど、普段使っている募集記事をそのまま登録できます。<br><br>
   連絡方法は募集記事の案内に従ってください。
 </p>
 
@@ -649,7 +798,7 @@
 
 
 
-      <!-- 募集締切ボタン直下の締切フォーム -->
+      <!-- PASSで再編集・再延長・締切 -->
 
       <div id="heroManageArea">
 
@@ -657,7 +806,6 @@
           id="managePage"
           class="page inline-manage-page"
         >
-
 
           <div class="manage-inline-top">
 
@@ -671,41 +819,29 @@
 
           </div>
 
-
-
           <div class="section-head">
 
-
             <div>
-
 
               <div class="eyebrow">
                 MANAGE
               </div>
 
-
               <h2>
-                募集を締め切る
+                PASSで再編集・再延長
               </h2>
-
 
             </div>
 
-
           </div>
-
-
 
           <form
             id="closeForm"
             class="panel"
           >
 
-
             <label>
-
               PASS
-
 
               <input
                 id="closePass"
@@ -718,38 +854,203 @@
                 spellcheck="false"
                 placeholder="登録時に発行された8文字PASS"
               >
-
-
             </label>
 
-
-
             <button
-              class="btn danger wide"
+              class="btn primary wide"
+              id="loadManageRecruitmentBtn"
               type="submit"
             >
-              募集を締め切る
+              🔑 募集内容を呼び出す
             </button>
-
 
           </form>
 
-<div class="notice">
-
+          <div class="notice manage-pass-notice">
 
             <strong>
-              PASSは登録時に一度だけ表示されます。
+              PASSは前回のものをそのまま使用します。
             </strong>
 
-
             <span>
-              募集を締め切る際に必要です。
-              必ず保存してください。
+              内容そのままの14日再延長、SLV・ユニオンランク・募集記事URL・画像の変更、募集締切ができます。
             </span>
-
 
           </div>
 
+          <div
+            id="manageLoadedPanel"
+            class="panel manage-loaded-panel hidden"
+          >
+
+            <div class="manage-loaded-head">
+              <div>
+                <div class="eyebrow">CURRENT RECRUITMENT</div>
+                <h3 id="manageCurrentName">--</h3>
+              </div>
+              <span id="manageCurrentStatus" class="manage-status-chip">--</span>
+            </div>
+
+            <div class="manage-current-grid">
+              <div>
+                <span>現在の内容</span>
+                <strong id="manageCurrentDetail">--</strong>
+              </div>
+              <div>
+                <span>現在の期限</span>
+                <strong id="manageCurrentExpiry">--</strong>
+              </div>
+            </div>
+
+            <div class="manage-current-url">
+              <span>募集記事URL</span>
+              <a
+                id="manageCurrentUrl"
+                href="#"
+                target="_blank"
+                rel="noopener noreferrer"
+              >--</a>
+            </div>
+
+            <div id="manageCurrentImageBox" class="manage-current-image-box hidden">
+              <span>現在の登録画像</span>
+              <img id="manageCurrentImage" alt="現在の募集画像">
+            </div>
+
+            <div class="manage-action-stack">
+
+              <button
+                id="renewUnchangedBtn"
+                class="btn primary wide"
+                type="button"
+              >
+                🔄 内容そのままで14日再延長
+              </button>
+
+              <button
+                id="openManageEditBtn"
+                class="btn wide"
+                type="button"
+              >
+                ✏️ 内容を編集して再登録
+              </button>
+
+              <button
+                id="closeLoadedRecruitmentBtn"
+                class="btn danger wide"
+                type="button"
+              >
+                募集を締め切る
+              </button>
+
+            </div>
+
+            <div class="manage-renew-note">
+              再延長・再登録すると、掲載期限は本日から14日間に更新され、一覧の一番上へ移動して <strong>🔥 NEW</strong> 表示も復活します。
+            </div>
+
+          </div>
+
+          <div
+            id="manageEditPanel"
+            class="panel manage-edit-panel hidden"
+          >
+
+            <div class="eyebrow">EDIT & REREGISTER</div>
+            <h3>募集内容を編集</h3>
+
+            <div class="manage-fixed-name">
+              <span id="manageEditNameLabel">指揮官名</span>
+              <strong id="manageEditName">--</strong>
+              <small>※ 名前は変更できません</small>
+            </div>
+
+            <div id="manageCommanderEditFields">
+              <label>
+                SLV
+                <input
+                  id="manageEditSlv"
+                  type="number"
+                  min="1"
+                  max="1200"
+                  inputmode="numeric"
+                  autocomplete="off"
+                >
+              </label>
+            </div>
+
+            <div id="manageUnionEditFields" class="hidden">
+              <label>
+                ユニオンランク
+                <select id="manageEditUnionRank">
+                  <option value="チャレンジャー">チャレンジャー</option>
+                  <option value="ダイヤ">ダイヤ</option>
+                  <option value="プラチナ">プラチナ</option>
+                  <option value="ゴールド">ゴールド</option>
+                  <option value="シルバー">シルバー</option>
+                  <option value="駆け出しユニオン">駆け出しユニオン</option>
+                </select>
+              </label>
+            </div>
+
+            <label>
+              募集記事URL
+              <input
+                id="manageEditUrl"
+                type="url"
+                inputmode="url"
+                autocomplete="off"
+                autocapitalize="off"
+                spellcheck="false"
+                placeholder="https://..."
+              >
+              <small>X・BlablaLink・DiscordなどのURLに対応しています</small>
+            </label>
+
+            <label>
+              新しい募集画像 <span class="optional-label">任意</span>
+              <input
+                id="manageEditImage"
+                type="file"
+                accept="image/jpeg,image/png,image/webp"
+              >
+              <small id="manageEditImageStatus" class="preview-file-help">
+                未選択なら現在の画像をそのまま使用します。20MBまで。選択画像は自動で最適化されます。
+              </small>
+            </label>
+
+            <label class="manage-remove-image-row">
+              <input id="manageRemoveImage" type="checkbox">
+              現在の登録画像を削除する
+            </label>
+
+            <div
+              id="manageEditSelectedImageBox"
+              class="manage-current-image-box hidden"
+            >
+              <span>差し替え画像プレビュー</span>
+              <img id="manageEditSelectedImage" alt="差し替え画像プレビュー">
+            </div>
+
+            <div class="manage-action-stack">
+              <button
+                id="manageEditPreviewBtn"
+                class="btn primary wide"
+                type="button"
+              >
+                再登録内容を確認する
+              </button>
+
+              <button
+                id="cancelManageEditBtn"
+                class="btn ghost wide"
+                type="button"
+              >
+                ← 編集をやめる
+              </button>
+            </div>
+
+          </div>
 
         </section>
 
@@ -1168,7 +1469,7 @@
         ▣
       </span>
 
-      締切
+      募集管理
 
     </button>
 
@@ -1314,7 +1615,7 @@
 
       <p class="warning">
         PASSを必ず保存してください。
-        募集を締め切る際に必要です。
+        次回の編集・再延長・締切に必要です。
       </p>
 
 
@@ -1365,6 +1666,125 @@
 
   </div>
 
+
+
+  <!-- ========================================
+       PASS再登録プレビューモーダル
+  ========================================= -->
+
+  <div
+    id="managePreviewModal"
+    class="modal registration-preview-modal hidden"
+  >
+
+    <div class="modal-card registration-preview-modal-card">
+
+      <button
+        class="modal-close"
+        id="managePreviewClose"
+        type="button"
+        aria-label="閉じる"
+      >
+        ×
+      </button>
+
+      <div class="eyebrow">REREGISTER PREVIEW</div>
+
+      <h2>再登録内容を確認</h2>
+
+      <p class="registration-preview-note">
+        再登録すると掲載期限が本日から14日間になり、一覧の一番上へ移動してNEW表示が復活します。
+      </p>
+
+      <div id="managePreviewCard"></div>
+
+      <div class="registration-preview-actions">
+        <button
+          id="managePreviewBack"
+          class="btn ghost"
+          type="button"
+        >
+          ← 修正する
+        </button>
+
+        <button
+          id="managePreviewConfirm"
+          class="btn primary"
+          type="button"
+        >
+          🔥 この内容で再登録
+        </button>
+      </div>
+
+    </div>
+
+  </div>
+
+
+  <!-- ========================================
+       PASS再登録 / 再延長 完了モーダル
+  ========================================= -->
+
+  <div
+    id="manageResultModal"
+    class="modal hidden"
+  >
+
+    <div class="modal-card">
+
+      <button
+        class="modal-close"
+        id="manageResultClose"
+        type="button"
+      >
+        ×
+      </button>
+
+      <div class="eyebrow">REREGISTRATION COMPLETE</div>
+
+      <h2 id="manageResultTitle">再登録完了</h2>
+
+      <p id="manageResultSummary" class="manage-result-summary">
+        掲載期限を本日から14日間に更新しました。
+      </p>
+
+      <div class="pass-box">
+        <span>YOUR PASS</span>
+        <strong id="manageResultPass">--------</strong>
+        <button
+          id="manageCopyPass"
+          class="copy-btn"
+          type="button"
+        >
+          PASSをコピー
+        </button>
+      </div>
+
+      <p class="warning manage-same-pass-warning">
+        ※ PASSは前回と同じです。<br>
+        次回の編集・再延長・締切にも、このPASSをそのまま使用してください。
+      </p>
+
+      <div class="result-row">
+        <span>新しい掲載期限</span>
+        <strong id="manageResultExpiry">-</strong>
+      </div>
+
+      <div class="manage-result-new-note">
+        🔥 一覧の一番上へ移動し、NEW表示も復活しています。
+      </div>
+
+      <button
+        id="manageResultDone"
+        class="btn primary wide"
+        type="button"
+      >
+        募集一覧を確認する
+      </button>
+
+    </div>
+
+  </div>
 
 
   <!-- ========================================
@@ -1484,7 +1904,7 @@
 
   <!-- アプリ本体 -->
 
-  <script src="./app.js?v=13.11"></script>
+  <script src="./app.js?v=13.16"></script>
 
 
 </body>
