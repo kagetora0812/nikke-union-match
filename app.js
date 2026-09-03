@@ -2885,6 +2885,47 @@ updateRegistrationFields();
 // 登録前プレビュー
 // ========================================
 
+function clearInitialPreviewImageSelection(showMessage = true) {
+
+  const input =
+    $("#previewImage");
+
+  if (input) {
+    input.value = "";
+  }
+
+  registrationPreviewApproved = false;
+  registrationPreviewPreparedFile = null;
+
+  if (registrationPreviewObjectUrl) {
+    URL.revokeObjectURL(registrationPreviewObjectUrl);
+    registrationPreviewObjectUrl = null;
+  }
+
+  $("#previewImageClearBtn")
+    ?.classList
+    .add("hidden");
+
+  const status =
+    $("#previewImageStatus");
+
+  if (status) {
+    const url =
+      $("#xUrl")?.value.trim() || "";
+
+    if (isBlablaLinkPostUrl(url)) {
+      status.textContent =
+        "選択画像を取り消しました。確認画面ではBlablaLinkの自動プレビューを取得します。";
+    } else {
+      status.textContent =
+        showMessage
+          ? "選択画像を取り消しました。画像なしでも登録できます。"
+          : "";
+    }
+  }
+}
+
+
 function closeRegistrationPreview(keepPreparedFile = false) {
 
   $("#registrationPreviewModal")
@@ -3185,6 +3226,10 @@ $("#previewImage")
       const status = $("#previewImageStatus");
 
       if (!file) {
+        $("#previewImageClearBtn")
+          ?.classList
+          .add("hidden");
+
         if (status) {
           status.textContent = "";
         }
@@ -3193,16 +3238,34 @@ $("#previewImage")
 
       if (!validatePreviewImageFile(file)) {
         event.target.value = "";
+
+        $("#previewImageClearBtn")
+          ?.classList
+          .add("hidden");
+
         if (status) {
           status.textContent = "";
         }
         return;
       }
 
+      $("#previewImageClearBtn")
+        ?.classList
+        .remove("hidden");
+
       if (status) {
         status.textContent =
           `選択画像：${formatFileSize(file.size)} / 20MBまで（確認時に自動最適化）`;
       }
+    }
+  );
+
+
+$("#previewImageClearBtn")
+  ?.addEventListener(
+    "click",
+    () => {
+      clearInitialPreviewImageSelection(true);
     }
   );
 
@@ -3556,7 +3619,7 @@ $("#registerForm")
 
 
           event.target.reset();
-          registrationPreviewPreparedFile = null;
+          clearInitialPreviewImageSelection(false);
 
 
           updateRegistrationFields();
@@ -3790,7 +3853,7 @@ $("#registerForm")
 
 
         event.target.reset();
-        registrationPreviewPreparedFile = null;
+        clearInitialPreviewImageSelection(false);
 
 
         updateRegistrationFields();
