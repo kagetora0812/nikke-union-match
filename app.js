@@ -581,6 +581,87 @@ function buildRecruitmentPreviewMedia(
 
 
 // ========================================
+// 募集画像アップロード
+// ========================================
+
+async function uploadRecruitmentPreviewImage(
+  type,
+  recruitmentId,
+  passHash,
+  file
+) {
+
+  if (!file) {
+    return null;
+  }
+
+  const extMap = {
+    "image/jpeg": "jpg",
+    "image/png": "png",
+    "image/webp": "webp"
+  };
+
+  const ext =
+    extMap[file.type] || "jpg";
+
+  const safeType =
+    type === "union"
+      ? "union"
+      : "commander";
+
+  const objectPath =
+    `${safeType}/${recruitmentId}/${Date.now()}.${ext}`;
+
+  const { error: uploadError } =
+    await sb.storage
+      .from("recruitment-previews")
+      .upload(
+        objectPath,
+        file,
+        {
+          cacheControl: "3600",
+          upsert: false,
+          contentType: file.type
+        }
+      );
+
+  if (uploadError) {
+    throw uploadError;
+  }
+
+  const { data: publicData } =
+    sb.storage
+      .from("recruitment-previews")
+      .getPublicUrl(objectPath);
+
+  const publicUrl =
+    publicData?.publicUrl || "";
+
+  if (!publicUrl) {
+    throw new Error("PREVIEW_PUBLIC_URL_FAILED");
+  }
+
+  const { error: attachError } =
+    await sb.rpc(
+      "set_recruitment_preview_image",
+      {
+        p_type: safeType,
+        p_id: recruitmentId,
+        p_pass_hash: passHash,
+        p_preview_image_url: publicUrl
+      }
+    );
+
+  if (attachError) {
+    throw attachError;
+  }
+
+  return publicUrl;
+}
+
+
+
+// ========================================
 // 日付
 // ========================================
 
