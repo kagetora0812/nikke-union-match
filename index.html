@@ -193,35 +193,55 @@
   
 
     /* =========================================================
-       v13.18 初回画像取消 / 締切ボタン強調
+       v13.19 募集管理フロー / 赤ボタン統一
+       - サイト既存の赤 var(--red) = #ff5364 を使用
        ========================================================= */
 
     #previewImageClearBtn {
       width: 100%;
       margin-top: 10px;
-      min-height: 42px;
-      border: 1px solid #69717b !important;
-      background: #f4f6f8 !important;
-      color: #30353b !important;
+      min-height: 44px;
+      border: 1px solid var(--red, #ff5364) !important;
+      background: var(--red, #ff5364) !important;
+      color: #fff !important;
       font-weight: 900;
+      box-shadow: 0 7px 18px rgba(255,83,100,.24) !important;
     }
 
-    #previewImageClearBtn:hover {
-      border-color: #40464d !important;
-      background: #e9edf1 !important;
+    #previewImageClearBtn:hover,
+    #previewImageClearBtn:active {
+      border-color: #ff7180 !important;
+      background: #e94759 !important;
+      color: #fff !important;
     }
 
     #closeLoadedRecruitmentBtn {
-      background: #d91f2f !important;
-      border-color: #ff4d5d !important;
+      background: var(--red, #ff5364) !important;
+      border-color: var(--red, #ff5364) !important;
       color: #fff !important;
-      box-shadow: 0 0 0 1px rgba(217,31,47,.14), 0 7px 18px rgba(217,31,47,.22) !important;
+      box-shadow: 0 7px 18px rgba(255,83,100,.24) !important;
     }
 
-    #closeLoadedRecruitmentBtn:hover {
-      background: #b91322 !important;
-      border-color: #ff6a77 !important;
+    #closeLoadedRecruitmentBtn:hover,
+    #closeLoadedRecruitmentBtn:active {
+      background: #e94759 !important;
+      border-color: #ff7180 !important;
       color: #fff !important;
+    }
+
+    .manage-edit-choice-panel {
+      margin-top: 16px;
+      padding: 14px;
+      border: 1px solid rgba(0,177,255,.28);
+      background: rgba(0,177,255,.04);
+    }
+
+    .manage-edit-choice-title {
+      margin-bottom: 10px;
+      color: var(--cyan);
+      font-size: 12px;
+      font-weight: 900;
+      letter-spacing: .08em;
     }
 </style>
 
@@ -869,7 +889,7 @@
               </div>
 
               <h2>
-                PASSで再編集・再延長
+                PASSで編集・締切
               </h2>
 
             </div>
@@ -914,7 +934,7 @@
             </strong>
 
             <span>
-              内容そのままの14日再延長、SLV・ユニオンランク・募集記事URL・画像の変更、募集締切ができます。
+              PASSで募集を呼び出した後、「編集」または「締切」を選べます。編集では、内容そのままの14日再延長・再編集ができます。
             </span>
 
           </div>
@@ -958,27 +978,23 @@
               <img id="manageCurrentImage" alt="現在の募集画像">
             </div>
 
-            <div class="manage-action-stack">
+            <!-- まず「編集 / 締切」の2択 -->
+            <div
+              id="managePrimaryActions"
+              class="manage-action-stack"
+            >
 
               <button
-                id="renewUnchangedBtn"
+                id="openManageActionBtn"
                 class="btn primary wide"
                 type="button"
               >
-                🔄 内容そのままで14日再延長
-              </button>
-
-              <button
-                id="openManageEditBtn"
-                class="btn wide"
-                type="button"
-              >
-                ✏️ 内容を編集して再登録
+                ✏️ 編集
               </button>
 
               <button
                 id="closeLoadedRecruitmentBtn"
-                class="btn danger wide"
+                class="btn wide"
                 type="button"
               >
                 募集を締め切る
@@ -986,8 +1002,48 @@
 
             </div>
 
-            <div class="manage-renew-note">
-              再延長・再登録すると、掲載期限は本日から14日間に更新され、一覧の一番上へ移動して <strong>🔥 NEW</strong> 表示も復活します。
+            <!-- 「編集」を押した時だけ、延長 / 再編集を表示 -->
+            <div
+              id="manageEditActionChoices"
+              class="manage-edit-choice-panel hidden"
+            >
+
+              <div class="manage-edit-choice-title">
+                編集方法を選んでください
+              </div>
+
+              <div class="manage-action-stack">
+
+                <button
+                  id="renewUnchangedBtn"
+                  class="btn primary wide"
+                  type="button"
+                >
+                  🔄 内容そのままで14日再延長
+                </button>
+
+                <button
+                  id="openManageEditBtn"
+                  class="btn wide"
+                  type="button"
+                >
+                  ✏️ 内容を編集して再登録
+                </button>
+
+                <button
+                  id="backManageActionBtn"
+                  class="text-btn wide"
+                  type="button"
+                >
+                  ← 編集／締切に戻る
+                </button>
+
+              </div>
+
+              <div class="manage-renew-note">
+                再延長・再登録すると、掲載期限は本日から14日間に更新され、一覧の一番上へ移動して <strong>🔥 NEW</strong> 表示も復活します。
+              </div>
+
             </div>
 
           </div>
@@ -1945,7 +2001,7 @@
 
   <!-- アプリ本体 -->
 
-  <script src="./app.js?v=13.18"></script>
+  <script src="./app.js?v=13.19"></script>
 
 
 </body>
