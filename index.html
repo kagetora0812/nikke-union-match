@@ -749,7 +749,7 @@
                   >
 
                   <small class="preview-file-help">
-                    BlablaLink・Discordなどの募集画面スクリーンショットを追加できます。20MBまで。大きな画像は確認時に自動で最適化されます。未選択でも登録できます。
+                    画像を選択した場合は登録画像を最優先で表示します。BlablaLinkは画像未選択時のみ自動取得します。20MBまで。大きな画像は確認時に自動で最適化されます。
                   </small>
                   <small id="previewImageStatus" class="preview-file-help"></small>
                 </label>
@@ -798,7 +798,7 @@
 
 
 
-      <!-- 募集管理：最初に「編集 / 締切」を選ぶ -->
+      <!-- PASSで再編集・再延長・締切 -->
 
       <div id="heroManageArea">
 
@@ -828,75 +828,17 @@
               </div>
 
               <h2>
-                募集管理
+                PASSで再編集・再延長
               </h2>
 
             </div>
 
           </div>
 
-          <!-- STEP 1：まず編集か締切かを選択 -->
-          <div
-            id="manageChoicePanel"
-            class="panel"
-          >
-
-            <strong>
-              したい操作を選んでください。
-            </strong>
-
-            <div class="manage-action-stack" style="margin-top:16px;">
-
-              <button
-                id="manageChooseEditBtn"
-                class="btn primary wide"
-                type="button"
-              >
-                ✏️ 編集
-              </button>
-
-              <button
-                id="manageChooseCloseBtn"
-                class="btn danger wide"
-                type="button"
-              >
-                ⛔ 締切
-              </button>
-
-            </div>
-
-          </div>
-
-          <!-- STEP 2：選んだ操作に必要なPASSを入力 -->
           <form
             id="closeForm"
-            class="panel hidden"
+            class="panel"
           >
-
-            <button
-              id="manageChoiceBackBtn"
-              class="text-btn"
-              type="button"
-              style="margin-bottom:14px;"
-            >
-              ← 操作選択に戻る
-            </button>
-
-            <div class="eyebrow" id="manageActionEyebrow">
-              EDIT
-            </div>
-
-            <h3 id="manageActionTitle">
-              編集
-            </h3>
-
-            <p
-              id="manageActionGuide"
-              class="lead"
-              style="margin-top:6px;"
-            >
-              PASSを入力して、編集方法を選んでください。
-            </p>
 
             <label>
               PASS
@@ -914,74 +856,24 @@
               >
             </label>
 
-            <!-- 編集を選んだ時だけ表示 -->
-            <div
-              id="manageEditActionButtons"
-              class="manage-action-stack"
-            >
-
-              <button
-                id="manageDirectRenewBtn"
-                class="btn primary wide"
-                type="button"
-              >
-                🔄 そのまま14日延長
-              </button>
-
-              <button
-                id="manageDirectEditBtn"
-                class="btn wide"
-                type="button"
-              >
-                ✏️ 内容を再編集
-              </button>
-
-              <div class="manage-renew-note">
-                どちらも掲載期限が本日から14日間になり、一覧の上部へ再掲載されます。
-              </div>
-
-            </div>
-
-            <!-- 締切を選んだ時だけ表示 -->
-            <div
-              id="manageCloseActionButtons"
-              class="manage-action-stack hidden"
-            >
-
-              <button
-                id="manageDirectCloseBtn"
-                class="btn danger wide"
-                type="button"
-              >
-                ⛔ この募集を締切
-              </button>
-
-            </div>
-
-            <!-- Enterキー用。通常は表示しない -->
             <button
-              class="hidden"
+              class="btn primary wide"
               id="loadManageRecruitmentBtn"
               type="submit"
-              tabindex="-1"
-              aria-hidden="true"
             >
-              PASSを確認
+              🔑 募集内容を呼び出す
             </button>
 
           </form>
 
-          <div
-            id="managePassNotice"
-            class="notice manage-pass-notice hidden"
-          >
+          <div class="notice manage-pass-notice">
 
             <strong>
-              PASSは前回発行されたものをそのまま使用できます。
+              PASSは前回のものをそのまま使用します。
             </strong>
 
-            <span id="managePassNoticeText">
-              編集では「そのまま延長」か「内容を再編集」を選べます。
+            <span>
+              内容そのままの14日再延長、SLV・ユニオンランク・募集記事URL・画像の変更、募集締切ができます。
             </span>
 
           </div>
@@ -1025,8 +917,36 @@
               <img id="manageCurrentImage" alt="現在の募集画像">
             </div>
 
+            <div class="manage-action-stack">
+
+              <button
+                id="renewUnchangedBtn"
+                class="btn primary wide"
+                type="button"
+              >
+                🔄 内容そのままで14日再延長
+              </button>
+
+              <button
+                id="openManageEditBtn"
+                class="btn wide"
+                type="button"
+              >
+                ✏️ 内容を編集して再登録
+              </button>
+
+              <button
+                id="closeLoadedRecruitmentBtn"
+                class="btn danger wide"
+                type="button"
+              >
+                募集を締め切る
+              </button>
+
+            </div>
+
             <div class="manage-renew-note">
-              延長・再編集すると、掲載期限は本日から14日間に更新され、一覧の一番上へ移動して <strong>🔥 NEW</strong> 表示も復活します。現在の掲載は更新されるため、重複して残りません。
+              再延長・再登録すると、掲載期限は本日から14日間に更新され、一覧の一番上へ移動して <strong>🔥 NEW</strong> 表示も復活します。
             </div>
 
           </div>
@@ -1118,7 +1038,7 @@
                 class="btn primary wide"
                 type="button"
               >
-                再掲載内容を確認する
+                再登録内容を確認する
               </button>
 
               <button
@@ -1695,7 +1615,7 @@
 
       <p class="warning">
         PASSを必ず保存してください。
-        次回の編集・再掲載・締切に必要です。
+        次回の編集・再延長・締切に必要です。
       </p>
 
 
@@ -1749,7 +1669,7 @@
 
 
   <!-- ========================================
-       PASS再掲載プレビューモーダル
+       PASS再登録プレビューモーダル
   ========================================= -->
 
   <div
@@ -1770,10 +1690,10 @@
 
       <div class="eyebrow">REREGISTER PREVIEW</div>
 
-      <h2>再掲載内容を確認</h2>
+      <h2>再登録内容を確認</h2>
 
       <p class="registration-preview-note">
-        再掲載すると掲載期限が本日から14日間になり、一覧の一番上へ移動してNEW表示が復活します。
+        再登録すると掲載期限が本日から14日間になり、一覧の一番上へ移動してNEW表示が復活します。
       </p>
 
       <div id="managePreviewCard"></div>
@@ -1792,7 +1712,7 @@
           class="btn primary"
           type="button"
         >
-          🔥 この内容で再掲載
+          🔥 この内容で再登録
         </button>
       </div>
 
@@ -1802,7 +1722,7 @@
 
 
   <!-- ========================================
-       PASS再掲載 完了モーダル
+       PASS再登録 / 再延長 完了モーダル
   ========================================= -->
 
   <div
@@ -1822,7 +1742,7 @@
 
       <div class="eyebrow">REREGISTRATION COMPLETE</div>
 
-      <h2 id="manageResultTitle">再掲載完了</h2>
+      <h2 id="manageResultTitle">再登録完了</h2>
 
       <p id="manageResultSummary" class="manage-result-summary">
         掲載期限を本日から14日間に更新しました。
@@ -1842,7 +1762,7 @@
 
       <p class="warning manage-same-pass-warning">
         ※ PASSは前回と同じです。<br>
-        次回の編集・再掲載・締切にも、このPASSをそのまま使用してください。
+        次回の編集・再延長・締切にも、このPASSをそのまま使用してください。
       </p>
 
       <div class="result-row">
@@ -1984,7 +1904,7 @@
 
   <!-- アプリ本体 -->
 
-  <script src="./app.js?v=13.16"></script>
+  <script src="./app.js?v=13.17"></script>
 
 
 </body>
