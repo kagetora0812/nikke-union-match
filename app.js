@@ -48,6 +48,14 @@ let registrationPreviewApproved = false;
 let registrationPreviewObjectUrl = null;
 let registrationPreviewPreparedFile = null;
 
+// PASS再編集・再延長
+let loadedManagedRecruitment = null;
+let loadedManagePass = "";
+let loadedManagePassHash = "";
+let manageEditPreparedFile = null;
+let manageEditObjectUrl = null;
+
+
 
 function escapeHtml(value) {
   return String(value ?? "").replace(
@@ -4191,250 +4199,1254 @@ $("#shareXBtn")
 
 
 // ========================================
-// PASSだけで募集締切
+// PASSで募集を再編集・再延長・締切
 // ========================================
+
+function resetManageImageState() {
+
+  manageEditPreparedFile = null;
+
+  if (manageEditObjectUrl) {
+    URL.revokeObjectURL(manageEditObjectUrl);
+    manageEditObjectUrl = null;
+  }
+
+  const fileInput =
+    $("#manageEditImage");
+
+  if (fileInput) {
+    fileInput.value = "";
+  }
+
+  const status =
+    $("#manageEditImageStatus");
+
+  if (status) {
+    status.textContent =
+      "未選択なら現在の画像をそのまま使用します。20MBまで。選択画像は自動で最適化されます。";
+  }
+
+  $("#manageEditSelectedImageBox")
+    ?.classList
+    .add("hidden");
+
+  const selectedPreview =
+    $("#manageEditSelectedImage");
+
+  if (selectedPreview) {
+    selectedPreview.removeAttribute("src");
+  }
+
+  const removeCheckbox =
+    $("#manageRemoveImage");
+
+  if (removeCheckbox) {
+    removeCheckbox.checked = false;
+  }
+}
+
+
+function clearLoadedManageRecruitment() {
+
+  loadedManagedRecruitment = null;
+  loadedManagePass = "";
+  loadedManagePassHash = "";
+
+  resetManageImageState();
+
+  $("#manageLoadedPanel")
+    ?.classList
+    .add("hidden");
+
+  $("#manageEditPanel")
+    ?.classList
+    .add("hidden");
+}
+
+
+function getManagedRecruitmentStatus(item) {
+
+  if (!item) {
+    return "--";
+  }
+
+  const expiresTime =
+    new Date(item.expires_at).getTime();
+
+  if (item.status !== "open") {
+    return "締切済み";
+  }
+
+  if (
+    Number.isFinite(expiresTime)
+    &&
+    expiresTime <= Date.now()
+  ) {
+    return "期限切れ";
+  }
+
+  return "募集中";
+}
+
+
+function renderLoadedManageRecruitment() {
+
+  const item =
+    loadedManagedRecruitment;
+
+  if (!item) {
+    $("#manageLoadedPanel")
+      ?.classList
+      .add("hidden");
+    return;
+  }
+
+  const isUnion =
+    item.type === "union";
+
+  const name =
+    String(item.name || "");
+
+  const detail =
+    isUnion
+      ? String(item.union_rank || "")
+      : `SLV ${Number(item.slv || 0)}`;
+
+  if ($("#manageCurrentName")) {
+    $("#manageCurrentName").textContent =
+      `${isUnion ? "🏢" : "👤"} ${name}`;
+  }
+
+  if ($("#manageCurrentDetail")) {
+    $("#manageCurrentDetail").textContent =
+      detail;
+  }
+
+  if ($("#manageCurrentExpiry")) {
+    $("#manageCurrentExpiry").textContent =
+      item.expires_at
+        ? formatDate(item.expires_at)
+        : "--";
+  }
+
+  if ($("#manageCurrentStatus")) {
+    $("#manageCurrentStatus").textContent =
+      getManagedRecruitmentStatus(item);
+  }
+
+  const urlLink =
+    $("#manageCurrentUrl");
+
+  if (urlLink) {
+    urlLink.textContent =
+      item.x_url || "--";
+
+    if (item.x_url) {
+      urlLink.href = item.x_url;
+    } else {
+      urlLink.removeAttribute("href");
+    }
+  }
+
+  const imageBox =
+    $("#manageCurrentImageBox");
+
+  const image =
+    $("#manageCurrentImage");
+
+  if (
+    item.preview_image_url
+    &&
+    imageBox
+    &&
+    image
+  ) {
+    image.src =
+      item.preview_image_url;
+    imageBox.classList.remove("hidden");
+  } else {
+    imageBox?.classList.add("hidden");
+    image?.removeAttribute("src");
+  }
+
+  $("#manageLoadedPanel")
+    ?.classList
+    .remove("hidden");
+}
+
+
+function populateManageEditForm() {
+
+  const item =
+    loadedManagedRecruitment;
+
+  if (!item) {
+    return;
+  }
+
+  resetManageImageState();
+
+  const isUnion =
+    item.type === "union";
+
+  if ($("#manageEditNameLabel")) {
+    $("#manageEditNameLabel").textContent =
+      isUnion
+        ? "ユニオン名"
+        : "指揮官名";
+  }
+
+  if ($("#manageEditName")) {
+    $("#manageEditName").textContent =
+      item.name || "--";
+  }
+
+  $("#manageCommanderEditFields")
+    ?.classList
+    .toggle("hidden", isUnion);
+
+  $("#manageUnionEditFields")
+    ?.classList
+    .toggle("hidden", !isUnion);
+
+  if (!isUnion && $("#manageEditSlv")) {
+    $("#manageEditSlv").value =
+      String(item.slv || "");
+  }
+
+  if (isUnion && $("#manageEditUnionRank")) {
+    $("#manageEditUnionRank").value =
+      item.union_rank || "プラチナ";
+  }
+
+  if ($("#manageEditUrl")) {
+    $("#manageEditUrl").value =
+      item.x_url || "";
+  }
+
+  $("#manageEditPanel")
+    ?.classList
+    .remove("hidden");
+
+  setTimeout(() => {
+    $("#manageEditPanel")
+      ?.scrollIntoView({
+        behavior: "smooth",
+        block: "start"
+      });
+  }, 50);
+}
+
+
+function normalizeManagePass() {
+
+  return (
+    $("#closePass")
+      ?.value
+      .trim()
+      .toUpperCase()
+    ||
+    ""
+  );
+}
+
+
+async function loadRecruitmentForManage() {
+
+  if (!sb) {
+    alert("Supabaseの設定がまだです。");
+    return;
+  }
+
+  const pass =
+    normalizeManagePass();
+
+  if (pass.length !== 8) {
+    alert("登録時に発行された8文字PASSを入力してください。");
+    return;
+  }
+
+  const passHash =
+    await sha256(pass);
+
+  const button =
+    $("#loadManageRecruitmentBtn");
+
+  const originalText =
+    button?.textContent || "🔑 募集内容を呼び出す";
+
+  if (button) {
+    button.disabled = true;
+    button.textContent = "募集内容を確認中...";
+  }
+
+  try {
+
+    const {
+      data,
+      error
+    } =
+      await sb.rpc(
+        "get_recruitment_by_pass_for_reregister",
+        {
+          p_pass_hash: passHash
+        }
+      );
+
+    if (error) {
+      console.error("PASS募集取得エラー", error);
+
+      const errorText =
+        getErrorText(error);
+
+      if (
+        errorText.includes("Could not find the function")
+        ||
+        errorText.includes("PGRST202")
+      ) {
+        alert(
+          "PASS再編集機能のSQLがまだ反映されていません。\nsupabase_pass_reregister.sql を先に実行してください。"
+        );
+        return;
+      }
+
+      alert("募集内容を読み込めませんでした。");
+      return;
+    }
+
+    if (!data) {
+      clearLoadedManageRecruitment();
+      alert("PASSが正しくありません。もう一度確認してください。");
+      return;
+    }
+
+    loadedManagedRecruitment = data;
+    loadedManagePass = pass;
+    loadedManagePassHash = passHash;
+
+    $("#manageEditPanel")
+      ?.classList
+      .add("hidden");
+
+    resetManageImageState();
+    renderLoadedManageRecruitment();
+
+    setTimeout(() => {
+      $("#manageLoadedPanel")
+        ?.scrollIntoView({
+          behavior: "smooth",
+          block: "start"
+        });
+    }, 50);
+
+  } finally {
+
+    if (button) {
+      button.disabled = false;
+      button.textContent = originalText;
+    }
+  }
+}
+
 
 $("#closeForm")
   ?.addEventListener(
     "submit",
     async event => {
-
-
       event.preventDefault();
-
-
-      if (!sb) {
-
-        alert(
-          "Supabaseの設定がまだです。"
-        );
-
-        return;
-
-      }
-
-
-      const pass =
-
-        $("#closePass")
-          ?.value
-          .trim()
-          .toUpperCase();
-
-
-      if (!pass) {
-
-        alert(
-          "PASSを入力してください。"
-        );
-
-        return;
-
-      }
-
-
-      const hash =
-
-        await sha256(
-          pass
-        );
-
-
-      const {
-        data,
-        error
-      } =
-
-        await sb.rpc(
-
-          "close_recruitment_by_pass",
-
-          {
-
-            p_pass_hash:
-              hash
-
-          }
-
-        );
-
-
-      if (error) {
-
-
-        console.error(
-          "募集締切エラー",
-          error
-        );
-
-
-        alert(
-          "募集締切処理に失敗しました。"
-        );
-
-
-        return;
-
-      }
-
-
-      // ======================================
-      // 指揮官締切
-      // 卒業ちしかん +1
-      // ======================================
-
-if (
-  data ===
-  "commander_confirm"
-) {
-
-  // 指揮官の募集締切 = ユニオン決定として扱う
-  await closeCommanderRecruitment();
-
-  return;
-
-}
-
-      // ======================================
-      // ユニオン締切
-      // 卒業カウンターには入れない
-      // ======================================
-
-      if (
-        data ===
-        "union"
-      ) {
-
-
-        alert(
-          "ユニオン募集を締め切りました。"
-        );
-
-
-        event.target.reset();
-
-
-        // ★締切画面を閉じて一覧へ
-
-        showPage(
-          "list"
-        );
-
-
-        return;
-
-      }
-
-
-      alert(
-        "PASSが正しくないか、すでに募集終了しています。"
-      );
-
+      await loadRecruitmentForManage();
     }
   );
 
-// ========================================
-// 指揮官募集を締め切る
-// 締切 = ユニオン決定（成立実績 +1）
-// ========================================
 
-async function closeCommanderRecruitment() {
+$("#closePass")
+  ?.addEventListener(
+    "input",
+    event => {
 
-  if (!sb) {
+      const normalized =
+        String(event.target?.value || "")
+          .toUpperCase()
+          .replace(/[^A-Z0-9]/g, "")
+          .slice(0, 8);
 
-    alert(
-      "Supabaseの設定がまだです。"
-    );
+      if (event.target) {
+        event.target.value = normalized;
+      }
 
-    return;
+      if (
+        loadedManagePass
+        &&
+        normalized !== loadedManagePass
+      ) {
+        clearLoadedManageRecruitment();
+      }
+    }
+  );
 
+
+$("#openManageEditBtn")
+  ?.addEventListener(
+    "click",
+    () => {
+      if (!loadedManagedRecruitment) {
+        alert("先にPASSから募集内容を呼び出してください。");
+        return;
+      }
+
+      populateManageEditForm();
+    }
+  );
+
+
+$("#cancelManageEditBtn")
+  ?.addEventListener(
+    "click",
+    () => {
+      resetManageImageState();
+      $("#manageEditPanel")
+        ?.classList
+        .add("hidden");
+
+      $("#manageLoadedPanel")
+        ?.scrollIntoView({
+          behavior: "smooth",
+          block: "start"
+        });
+    }
+  );
+
+
+$("#manageEditImage")
+  ?.addEventListener(
+    "change",
+    event => {
+
+      manageEditPreparedFile = null;
+
+      if (manageEditObjectUrl) {
+        URL.revokeObjectURL(manageEditObjectUrl);
+        manageEditObjectUrl = null;
+      }
+
+      const file =
+        event.target?.files?.[0] || null;
+
+      const status =
+        $("#manageEditImageStatus");
+
+      if (!file) {
+        $("#manageEditSelectedImageBox")
+          ?.classList
+          .add("hidden");
+
+        if (status) {
+          status.textContent =
+            "未選択なら現在の画像をそのまま使用します。20MBまで。選択画像は自動で最適化されます。";
+        }
+        return;
+      }
+
+      if (!validatePreviewImageFile(file)) {
+        event.target.value = "";
+        $("#manageEditSelectedImageBox")
+          ?.classList
+          .add("hidden");
+        return;
+      }
+
+      const remove =
+        $("#manageRemoveImage");
+
+      if (remove) {
+        remove.checked = false;
+      }
+
+      manageEditObjectUrl =
+        URL.createObjectURL(file);
+
+      const preview =
+        $("#manageEditSelectedImage");
+
+      if (preview) {
+        preview.src = manageEditObjectUrl;
+      }
+
+      $("#manageEditSelectedImageBox")
+        ?.classList
+        .remove("hidden");
+
+      if (status) {
+        status.textContent =
+          `選択画像：${formatFileSize(file.size)} / 20MBまで（確認時に自動最適化）`;
+      }
+    }
+  );
+
+
+$("#manageRemoveImage")
+  ?.addEventListener(
+    "change",
+    event => {
+
+      if (!event.target?.checked) {
+        return;
+      }
+
+      manageEditPreparedFile = null;
+
+      if (manageEditObjectUrl) {
+        URL.revokeObjectURL(manageEditObjectUrl);
+        manageEditObjectUrl = null;
+      }
+
+      const fileInput =
+        $("#manageEditImage");
+
+      if (fileInput) {
+        fileInput.value = "";
+      }
+
+      $("#manageEditSelectedImageBox")
+        ?.classList
+        .add("hidden");
+
+      const status =
+        $("#manageEditImageStatus");
+
+      if (status) {
+        status.textContent =
+          "現在の登録画像を削除して再登録します。";
+      }
+    }
+  );
+
+
+async function prepareManageEditImage() {
+
+  const inputFile =
+    $("#manageEditImage")
+      ?.files?.[0]
+    ||
+    null;
+
+  if (!inputFile) {
+    manageEditPreparedFile = null;
+    return null;
   }
 
+  if (!validatePreviewImageFile(inputFile)) {
+    return null;
+  }
 
-  const pass =
-    $("#closePass")
+  const button =
+    $("#manageEditPreviewBtn");
+
+  const originalText =
+    button?.textContent || "再登録内容を確認する";
+
+  if (button) {
+    button.disabled = true;
+    button.textContent = "画像を自動最適化中...";
+  }
+
+  try {
+
+    manageEditPreparedFile =
+      await optimizePreviewImageFile(inputFile);
+
+    if (manageEditObjectUrl) {
+      URL.revokeObjectURL(manageEditObjectUrl);
+    }
+
+    manageEditObjectUrl =
+      URL.createObjectURL(manageEditPreparedFile);
+
+    const preview =
+      $("#manageEditSelectedImage");
+
+    if (preview) {
+      preview.src = manageEditObjectUrl;
+    }
+
+    $("#manageEditSelectedImageBox")
+      ?.classList
+      .remove("hidden");
+
+    const status =
+      $("#manageEditImageStatus");
+
+    if (status) {
+      status.textContent =
+        inputFile === manageEditPreparedFile
+          ? `選択画像：${formatFileSize(inputFile.size)}（そのまま使用できます）`
+          : `自動最適化：${formatFileSize(inputFile.size)} → ${formatFileSize(manageEditPreparedFile.size)}`;
+    }
+
+    return manageEditPreparedFile;
+
+  } catch (error) {
+
+    console.error("再登録画像最適化エラー", error);
+    manageEditPreparedFile = null;
+
+    alert(
+      "画像を自動最適化できませんでした。\n別のJPG / PNG / WebP画像を選択してください。"
+    );
+
+    return null;
+
+  } finally {
+
+    if (button) {
+      button.disabled = false;
+      button.textContent = originalText;
+    }
+  }
+}
+
+
+function getManageEditValues() {
+
+  const item =
+    loadedManagedRecruitment;
+
+  if (!item) {
+    return null;
+  }
+
+  const url =
+    $("#manageEditUrl")
       ?.value
       .trim()
-      .toUpperCase();
+    ||
+    "";
 
-
-  if (!pass) {
-
+  if (!validRecruitmentUrl(url)) {
     alert(
-      "PASSを入力してください。"
+      "募集記事URLが正しくありません。\nX・BlablaLink・DiscordなどのURLを入力してください。"
     );
-
-    return;
-
+    return null;
   }
 
+  if (item.type === "commander") {
 
-  const hash =
-    await sha256(
-      pass
+    const slv =
+      Number(
+        $("#manageEditSlv")
+          ?.value
+      );
+
+    if (
+      !Number.isInteger(slv)
+      ||
+      slv < 1
+      ||
+      slv > 1200
+    ) {
+      alert("SLVは1～1200で入力してください。");
+      return null;
+    }
+
+    return {
+      type: "commander",
+      slv,
+      unionRank: null,
+      url
+    };
+  }
+
+  const unionRank =
+    $("#manageEditUnionRank")
+      ?.value
+    ||
+    "";
+
+  if (!unionRank) {
+    alert("ユニオンランクを選択してください。");
+    return null;
+  }
+
+  return {
+    type: "union",
+    slv: null,
+    unionRank,
+    url
+  };
+}
+
+
+async function showManageEditPreview() {
+
+  const item =
+    loadedManagedRecruitment;
+
+  if (!item) {
+    alert("先にPASSから募集内容を呼び出してください。");
+    return;
+  }
+
+  const values =
+    getManageEditValues();
+
+  if (!values) {
+    return;
+  }
+
+  const inputFile =
+    $("#manageEditImage")
+      ?.files?.[0]
+    ||
+    null;
+
+  if (inputFile) {
+    const prepared =
+      await prepareManageEditImage();
+
+    if (!prepared) {
+      return;
+    }
+  }
+
+  const removeImage =
+    $("#manageRemoveImage")
+      ?.checked === true;
+
+  const previewImageUrl =
+    manageEditPreparedFile
+      ? manageEditObjectUrl
+      : removeImage
+        ? ""
+        : item.preview_image_url || "";
+
+  const isUnion =
+    item.type === "union";
+
+  const detailHtml =
+    isUnion
+      ? `<div class="union-rank rank-${escapeHtml(getUnionRankClass(values.unionRank))}">${escapeHtml(values.unionRank)}</div>`
+      : `<div class="slv">${escapeHtml(values.slv)}<small class="slv-label" style="color:#7b8085 !important;-webkit-text-fill-color:#7b8085 !important;text-shadow:none !important;-webkit-text-stroke:0 !important;"> SLV</small></div>`;
+
+  const mediaHtml =
+    buildRecruitmentPreviewMedia(
+      values.url,
+      previewImageUrl,
+      item.x_embed_enabled !== false,
+      item.force_preview_image === true && Boolean(previewImageUrl)
     );
 
+  const host =
+    $("#managePreviewCard");
+
+  if (!host) {
+    return;
+  }
+
+  host.innerHTML = `
+    <article class="card ${isUnion ? "union-card" : "commander-card"}">
+      <div class="card-head">
+        <div class="type-with-new">
+          <span class="recruitment-type">${isUnion ? "● ユニオン" : "● 指揮官"}</span>
+          <span class="new-badge">🔥 NEW</span>
+        </div>
+        <span class="date">期限 14日後</span>
+      </div>
+
+      <div class="name">${escapeHtml(item.name || "")}</div>
+      ${detailHtml}
+      <div class="countdown">残り14日</div>
+
+      <div class="x-post-area">
+        ${mediaHtml}
+
+        <a
+          class="x-btn"
+          href="${escapeHtml(values.url)}"
+          target="_blank"
+          rel="noopener noreferrer"
+        >
+          ${escapeHtml(getRecruitmentButtonLabel(values.url))}
+        </a>
+      </div>
+    </article>
+  `;
+
+  $("#managePreviewModal")
+    ?.classList
+    .remove("hidden");
+
+  if (isXRecruitmentUrl(values.url)) {
+    setTimeout(renderXEmbeds, 0);
+  }
+}
+
+
+$("#manageEditPreviewBtn")
+  ?.addEventListener(
+    "click",
+    showManageEditPreview
+  );
+
+
+function closeManagePreview() {
+  $("#managePreviewModal")
+    ?.classList
+    .add("hidden");
+}
+
+
+$("#managePreviewBack")
+  ?.addEventListener(
+    "click",
+    closeManagePreview
+  );
+
+$("#managePreviewClose")
+  ?.addEventListener(
+    "click",
+    closeManagePreview
+  );
+
+$("#managePreviewModal")
+  ?.addEventListener(
+    "click",
+    event => {
+      if (event.target?.id === "managePreviewModal") {
+        closeManagePreview();
+      }
+    }
+  );
+
+
+function showManageResult(mode, result) {
+
+  const isRenew =
+    mode === "renew";
+
+  if ($("#manageResultTitle")) {
+    $("#manageResultTitle").textContent =
+      isRenew
+        ? "再延長が完了しました！"
+        : "再登録が完了しました！";
+  }
+
+  if ($("#manageResultSummary")) {
+    $("#manageResultSummary").textContent =
+      isRenew
+        ? "募集内容は変更せず、掲載期限を本日から14日間に更新しました。"
+        : "編集内容を反映し、掲載期限を本日から14日間に更新しました。";
+  }
+
+  if ($("#manageResultPass")) {
+    $("#manageResultPass").textContent =
+      loadedManagePass || "--------";
+  }
+
+  if ($("#manageResultExpiry")) {
+    $("#manageResultExpiry").textContent =
+      result?.expires_at
+        ? formatDate(result.expires_at)
+        : "14日後";
+  }
+
+  $("#manageResultModal")
+    ?.classList
+    .remove("hidden");
+}
+
+
+function closeManageResult() {
+  $("#manageResultModal")
+    ?.classList
+    .add("hidden");
+}
+
+
+$("#manageResultClose")
+  ?.addEventListener(
+    "click",
+    closeManageResult
+  );
+
+
+$("#manageCopyPass")
+  ?.addEventListener(
+    "click",
+    async () => {
+
+      const pass =
+        $("#manageResultPass")
+          ?.textContent
+        ||
+        "";
+
+      try {
+        await navigator.clipboard.writeText(pass);
+
+        const button =
+          $("#manageCopyPass");
+
+        if (button) {
+          button.textContent = "コピーしました";
+          setTimeout(() => {
+            button.textContent = "PASSをコピー";
+          }, 1500);
+        }
+      } catch (error) {
+        console.error("再登録PASSコピーエラー", error);
+        alert("PASSをコピーできませんでした。手動で保存してください。");
+      }
+    }
+  );
+
+
+$("#manageResultDone")
+  ?.addEventListener(
+    "click",
+    () => {
+      closeManageResult();
+      clearLoadedManageRecruitment();
+      $("#closeForm")?.reset();
+      showPage("list");
+    }
+  );
+
+
+$("#renewUnchangedBtn")
+  ?.addEventListener(
+    "click",
+    async () => {
+
+      if (
+        !loadedManagedRecruitment
+        ||
+        !loadedManagePassHash
+      ) {
+        alert("先にPASSから募集内容を呼び出してください。");
+        return;
+      }
+
+      const ok =
+        window.confirm(
+          "募集内容は変更せず、掲載期限を本日から14日間に更新します。\n\n・一覧の一番上へ移動\n・NEW表示が復活\n・PASSは前回と同じ\n\n再延長しますか？"
+        );
+
+      if (!ok) {
+        return;
+      }
+
+      const button =
+        $("#renewUnchangedBtn");
+
+      const originalText =
+        button?.textContent || "🔄 内容そのままで14日再延長";
+
+      if (button) {
+        button.disabled = true;
+        button.textContent = "再延長中...";
+      }
+
+      try {
+
+        const {
+          data,
+          error
+        } =
+          await sb.rpc(
+            "renew_recruitment_by_pass",
+            {
+              p_pass_hash:
+                loadedManagePassHash
+            }
+          );
+
+        if (error) {
+          console.error("再延長エラー", error);
+          alert("再延長に失敗しました。PASSを確認してもう一度お試しください。");
+          return;
+        }
+
+        loadedManagedRecruitment = {
+          ...loadedManagedRecruitment,
+          ...data,
+          status: "open"
+        };
+
+        renderLoadedManageRecruitment();
+        showManageResult("renew", data);
+
+      } finally {
+
+        if (button) {
+          button.disabled = false;
+          button.textContent = originalText;
+        }
+      }
+    }
+  );
+
+
+$("#managePreviewConfirm")
+  ?.addEventListener(
+    "click",
+    async () => {
+
+      if (
+        !loadedManagedRecruitment
+        ||
+        !loadedManagePassHash
+      ) {
+        alert("PASS情報を取得できませんでした。もう一度呼び出してください。");
+        return;
+      }
+
+      const values =
+        getManageEditValues();
+
+      if (!values) {
+        closeManagePreview();
+        return;
+      }
+
+      const inputFile =
+        $("#manageEditImage")
+          ?.files?.[0]
+        ||
+        null;
+
+      if (
+        inputFile
+        &&
+        !manageEditPreparedFile
+      ) {
+        const prepared =
+          await prepareManageEditImage();
+
+        if (!prepared) {
+          return;
+        }
+      }
+
+      const removeImage =
+        !manageEditPreparedFile
+        &&
+        $("#manageRemoveImage")
+          ?.checked === true;
+
+      const button =
+        $("#managePreviewConfirm");
+
+      const originalText =
+        button?.textContent || "🔥 この内容で再登録";
+
+      if (button) {
+        button.disabled = true;
+        button.textContent = "再登録中...";
+      }
+
+      try {
+
+        const {
+          data,
+          error
+        } =
+          await sb.rpc(
+            "reregister_recruitment_by_pass",
+            {
+              p_pass_hash:
+                loadedManagePassHash,
+              p_slv:
+                values.slv,
+              p_union_rank:
+                values.unionRank,
+              p_x_url:
+                values.url,
+              p_remove_preview_image:
+                removeImage
+            }
+          );
+
+        if (error) {
+
+          console.error("PASS再登録エラー", error);
+
+          const errorText =
+            getErrorText(error);
+
+          if (errorText.includes("INVALID_SLV")) {
+            alert("SLVは1～1200で入力してください。");
+          } else if (errorText.includes("INVALID_UNION_RANK")) {
+            alert("ユニオンランクが正しくありません。");
+          } else if (errorText.includes("INVALID_RECRUITMENT_URL")) {
+            alert("募集記事URLが正しくありません。");
+          } else if (errorText.includes("PASS_NOT_FOUND")) {
+            alert("PASSが正しくありません。");
+          } else {
+            alert("再登録に失敗しました。もう一度お試しください。");
+          }
+
+          return;
+        }
+
+        let uploadedImageUrl =
+          data?.preview_image_url || "";
+
+        if (
+          manageEditPreparedFile
+          &&
+          data?.id
+        ) {
+          try {
+            uploadedImageUrl =
+              await uploadRecruitmentPreviewImage(
+                loadedManagedRecruitment.type,
+                data.id,
+                loadedManagePassHash,
+                manageEditPreparedFile
+              );
+          } catch (previewError) {
+            console.error("再登録画像アップロードエラー", previewError);
+            alert(
+              "再登録は完了しましたが、画像の差し替えだけ失敗しました。\n募集自体は14日間で正常に再登録されています。"
+            );
+          }
+        }
+
+        loadedManagedRecruitment = {
+          ...loadedManagedRecruitment,
+          ...data,
+          type: loadedManagedRecruitment.type,
+          name: loadedManagedRecruitment.name,
+          x_url: values.url,
+          slv: values.type === "commander" ? values.slv : loadedManagedRecruitment.slv,
+          union_rank: values.type === "union" ? values.unionRank : loadedManagedRecruitment.union_rank,
+          preview_image_url: uploadedImageUrl,
+          force_preview_image:
+            removeImage
+              ? false
+              : loadedManagedRecruitment.force_preview_image,
+          status: "open"
+        };
+
+        closeManagePreview();
+        $("#manageEditPanel")
+          ?.classList
+          .add("hidden");
+
+        renderLoadedManageRecruitment();
+        showManageResult("edit", data);
+
+        resetManageImageState();
+
+      } finally {
+
+        if (button) {
+          button.disabled = false;
+          button.textContent = originalText;
+        }
+      }
+    }
+  );
+
+
+// ========================================
+// PASSで募集締切（従来機能を維持）
+// ========================================
+
+async function closeLoadedRecruitment() {
+
+  if (!sb) {
+    alert("Supabaseの設定がまだです。");
+    return;
+  }
+
+  if (
+    !loadedManagedRecruitment
+    ||
+    !loadedManagePassHash
+  ) {
+    alert("先にPASSから募集内容を呼び出してください。");
+    return;
+  }
+
+  const ok =
+    window.confirm(
+      "この募集を締め切りますか？\n\n※ 再延長・再登録ではありません。募集一覧から非表示になります。"
+    );
+
+  if (!ok) {
+    return;
+  }
 
   const {
     data,
     error
   } =
     await sb.rpc(
-      "close_commander_recruitment_by_pass",
+      "close_recruitment_by_pass",
       {
         p_pass_hash:
-          hash,
-
-        p_close_reason:
-          "graduated"
+          loadedManagePassHash
       }
     );
 
-
   if (error) {
-
-    console.error(
-      "指揮官募集締切エラー",
-      error
-    );
-
-    alert(
-      "指揮官募集の締切処理に失敗しました。"
-    );
-
+    console.error("募集締切エラー", error);
+    alert("募集締切処理に失敗しました。");
     return;
-
   }
 
+  if (data === "commander_confirm") {
 
-  if (data !== true) {
+    const {
+      data: commanderClosed,
+      error: commanderError
+    } =
+      await sb.rpc(
+        "close_commander_recruitment_by_pass",
+        {
+          p_pass_hash:
+            loadedManagePassHash,
+          p_close_reason:
+            "graduated"
+        }
+      );
 
-    alert(
-      "PASSが正しくないか、すでに募集終了しています。"
-    );
+    if (commanderError) {
+      console.error("指揮官募集締切エラー", commanderError);
+      alert("指揮官募集の締切処理に失敗しました。");
+      return;
+    }
 
+    if (commanderClosed !== true) {
+      alert("PASSが正しくないか、すでに募集終了しています。");
+      return;
+    }
+
+    alert("🎓 ユニオン決定として募集を締め切りました。");
+    await loadGraduatedCommanderCount();
+
+  } else if (data === "union") {
+
+    alert("ユニオン募集を締め切りました。");
+
+  } else {
+
+    alert("PASSが正しくないか、すでに募集終了しています。");
     return;
-
   }
 
-
-  $("#closeForm")
-    ?.reset();
-
-
-  alert(
-    "🎓 ユニオン決定として募集を締め切りました。"
-  );
-
-
-  await loadGraduatedCommanderCount();
-
-
-  showPage(
-    "list"
-  );
-
+  clearLoadedManageRecruitment();
+  $("#closeForm")?.reset();
+  showPage("list");
 }
+
+
+$("#closeLoadedRecruitmentBtn")
+  ?.addEventListener(
+    "click",
+    closeLoadedRecruitment
+  );
 
 
 // ========================================
