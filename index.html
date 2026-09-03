@@ -190,7 +190,40 @@
         font-size: clamp(50px, 15.2vw, 64px);
       }
     }
-  </style>
+  
+
+    /* =========================================================
+       v13.18 初回画像取消 / 締切ボタン強調
+       ========================================================= */
+
+    #previewImageClearBtn {
+      width: 100%;
+      margin-top: 10px;
+      min-height: 42px;
+      border: 1px solid #69717b !important;
+      background: #f4f6f8 !important;
+      color: #30353b !important;
+      font-weight: 900;
+    }
+
+    #previewImageClearBtn:hover {
+      border-color: #40464d !important;
+      background: #e9edf1 !important;
+    }
+
+    #closeLoadedRecruitmentBtn {
+      background: #d91f2f !important;
+      border-color: #ff4d5d !important;
+      color: #fff !important;
+      box-shadow: 0 0 0 1px rgba(217,31,47,.14), 0 7px 18px rgba(217,31,47,.22) !important;
+    }
+
+    #closeLoadedRecruitmentBtn:hover {
+      background: #b91322 !important;
+      border-color: #ff6a77 !important;
+      color: #fff !important;
+    }
+</style>
 
 
   <style>
@@ -752,6 +785,14 @@
                     画像を選択した場合は登録画像を最優先で表示します。BlablaLinkは画像未選択時のみ自動取得します。20MBまで。大きな画像は確認時に自動で最適化されます。
                   </small>
                   <small id="previewImageStatus" class="preview-file-help"></small>
+
+                  <button
+                    id="previewImageClearBtn"
+                    class="btn hidden"
+                    type="button"
+                  >
+                    ✕ 選択画像を取り消す
+                  </button>
                 </label>
               </div>
 
@@ -1904,7 +1945,7 @@
 
   <!-- アプリ本体 -->
 
-  <script src="./app.js?v=13.17"></script>
+  <script src="./app.js?v=13.18"></script>
 
 
 </body>
