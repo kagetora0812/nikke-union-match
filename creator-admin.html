@@ -3393,8 +3393,11 @@
         "👇 NIKKE UNION MATCH\nhttps://x.gd/4tEJo"
       );
 
-      // 募集記事URLは宣伝本文へ自動追加しない。
-      // デフォルトは NEW見出し + 募集情報 + UNION MATCH URL のみ。
+      // 募集記事URLは見出しを付けず、宣伝文のいちばん最後へURLだけ追加。
+      if (item.x_url) {
+        parts.push(String(item.x_url).trim());
+      }
+
       return parts.filter(Boolean).join("\n\n");
     }
 
