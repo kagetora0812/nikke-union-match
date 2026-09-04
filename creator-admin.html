@@ -1429,6 +1429,77 @@
       line-height: 1.6;
     }
 
+
+    /* ========================================
+       アクセス解析
+    ======================================== */
+
+    .access-stats-grid {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 12px;
+      margin-top: 16px;
+    }
+
+    .access-stat-card {
+      padding: 18px;
+      border: 1px solid var(--line);
+      background: #0b111b;
+    }
+
+    .access-stat-label {
+      color: var(--muted);
+      font-size: 11px;
+      font-weight: 900;
+      letter-spacing: .05em;
+    }
+
+    .access-stat-value {
+      margin-top: 7px;
+      color: #fff;
+      font-size: clamp(26px, 5vw, 38px);
+      font-weight: 900;
+      line-height: 1;
+    }
+
+    .access-stat-sub {
+      margin-top: 8px;
+      color: #86c5ff;
+      font-size: 11px;
+      font-weight: 800;
+    }
+
+    .access-daily-table {
+      width: 100%;
+      margin-top: 16px;
+      border-collapse: collapse;
+      font-size: 12px;
+    }
+
+    .access-daily-table th,
+    .access-daily-table td {
+      padding: 11px 9px;
+      border-bottom: 1px solid var(--line);
+      text-align: right;
+    }
+
+    .access-daily-table th:first-child,
+    .access-daily-table td:first-child {
+      text-align: left;
+    }
+
+    .access-daily-table th {
+      color: var(--muted);
+      font-size: 10px;
+      letter-spacing: .04em;
+    }
+
+    @media screen and (max-width: 600px) {
+      .access-stats-grid {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+      }
+    }
+
   </style>
 
 </head>
@@ -1660,10 +1731,138 @@
           </div>
         </button>
 
+
+        <button
+          id="openAccessStatsBtn"
+          class="menu-card"
+          type="button"
+        >
+          <div class="menu-card-icon">📊</div>
+          <div class="menu-card-title">
+            アクセス解析
+          </div>
+          <div class="menu-card-copy">
+            UNION MATCHのPV・ユニーク訪問数を確認します。
+          </div>
+        </button>
+
       </div>
 
     </section>
 
+
+
+    <!-- ========================================
+         アクセス解析
+    ========================================= -->
+
+    <section
+      id="accessStatsSection"
+      class="hidden"
+    >
+
+      <div class="admin-head">
+
+        <div>
+          <div class="eyebrow">
+            ACCESS ANALYTICS
+          </div>
+
+          <h2>
+            📊 アクセス解析
+          </h2>
+        </div>
+
+        <div class="admin-head-actions">
+          <button
+            id="reloadAccessStatsBtn"
+            class="btn"
+            type="button"
+          >
+            ↻ 再読込
+          </button>
+
+          <button
+            id="backToMenuFromAccessStatsBtn"
+            class="btn"
+            type="button"
+          >
+            ← 管理メニュー
+          </button>
+        </div>
+
+      </div>
+
+      <p class="lead">
+        NIKKE UNION MATCH本体へのアクセスを集計します。<br>
+        ユニーク数は同じブラウザを同一訪問者として数える目安です。
+      </p>
+
+      <div class="panel">
+
+        <div class="access-stats-grid">
+
+          <div class="access-stat-card">
+            <div class="access-stat-label">今日のPV</div>
+            <div id="accessTodayPv" class="access-stat-value">--</div>
+            <div id="accessTodayUnique" class="access-stat-sub">ユニーク --</div>
+          </div>
+
+          <div class="access-stat-card">
+            <div class="access-stat-label">昨日のPV</div>
+            <div id="accessYesterdayPv" class="access-stat-value">--</div>
+            <div id="accessYesterdayUnique" class="access-stat-sub">ユニーク --</div>
+          </div>
+
+          <div class="access-stat-card">
+            <div class="access-stat-label">直近7日PV</div>
+            <div id="access7dPv" class="access-stat-value">--</div>
+            <div id="access7dUnique" class="access-stat-sub">ユニーク --</div>
+          </div>
+
+          <div class="access-stat-card">
+            <div class="access-stat-label">直近30日PV</div>
+            <div id="access30dPv" class="access-stat-value">--</div>
+            <div id="access30dUnique" class="access-stat-sub">ユニーク --</div>
+          </div>
+
+          <div class="access-stat-card">
+            <div class="access-stat-label">累計PV</div>
+            <div id="accessTotalPv" class="access-stat-value">--</div>
+            <div id="accessTotalUnique" class="access-stat-sub">ユニーク --</div>
+          </div>
+
+        </div>
+
+        <div class="panel-title" style="margin-top:24px;">
+          直近7日の日別アクセス
+        </div>
+
+        <div style="overflow-x:auto;">
+          <table class="access-daily-table">
+            <thead>
+              <tr>
+                <th>日付</th>
+                <th>PV</th>
+                <th>ユニーク</th>
+              </tr>
+            </thead>
+            <tbody id="accessDailyRows">
+              <tr>
+                <td colspan="3">読み込み中...</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <div
+          id="accessStatsMessage"
+          class="message hidden"
+        ></div>
+
+      </div>
+
+    </section>
 
     <!-- ========================================
          X宣伝
@@ -1683,7 +1882,7 @@
           </div>
 
           <h2>
-            📣 X宣伝 <span style="font-size:12px;opacity:.55;">v13.18</span>
+            📣 X宣伝 <span style="font-size:12px;opacity:.55;">v13.15</span>
           </h2>
         </div>
 
@@ -1708,8 +1907,8 @@
       </div>
 
       <p class="lead">
-        現在募集中の登録から宣伝対象を選ぶだけで、X投稿文を自動生成します。<br>
-        「ワンタッチ投稿」はWindowsの共有画面を経由せず、Xの投稿画面を直接開きます。
+        現在募集中の登録から宣伝対象を選ぶだけで、X投稿文を作れます。<br>
+        固定文と自分のXリンクはこのブラウザに保存されます。
       </p>
 
       <div class="panel">
@@ -1732,11 +1931,11 @@
           </div>
 
           <label>
-            追加文（任意）
+            固定文
             <textarea
               id="xPromoFixedText"
-              rows="4"
-              placeholder="例：ぜひチェックしてみてください🐾"
+              rows="5"
+              placeholder="例：NIKKE UNION MATCHに新しい募集が登録されました📣✨"
             ></textarea>
           </label>
 
@@ -1759,7 +1958,7 @@
               class="btn"
               type="button"
             >
-              💾 追加文・Xリンクを保存
+              💾 固定文・Xリンクを保存
             </button>
           </div>
 
@@ -1774,30 +1973,6 @@
 
           <div id="xPromoCharCount" class="recruitment-image-status">
             文字数：--
-          </div>
-
-          <div class="recruitment-image-preview-box">
-            <div class="recruitment-image-preview-title">
-              登録されている募集画像（確認用）
-            </div>
-
-            <img
-              id="xPromoImagePreview"
-              class="recruitment-image-preview hidden"
-              alt="募集画像"
-            >
-
-            <div
-              id="xPromoImageEmpty"
-              class="recruitment-image-empty"
-            >
-              この募集には登録画像がありません。<br>
-              X募集記事URLは本文の一番下に入ります。
-            </div>
-
-            <div id="xPromoImageStatus" class="recruitment-image-status">
-              画像：--
-            </div>
           </div>
 
           <div class="button-row">
@@ -1816,18 +1991,6 @@
             >
               𝕏 Xで宣伝
             </button>
-
-            <button
-              id="oneTouchXPromoBtn"
-              class="btn blue"
-              type="button"
-            >
-              ⚡ Xへワンタッチ
-            </button>
-          </div>
-
-          <div class="recruitment-image-status">
-            ※ XのWeb投稿画面では画像の自動添付はできません。募集記事URLは本文末尾へ自動挿入されます。
           </div>
 
           <div
@@ -3089,18 +3252,18 @@
     // ========================================
 
     const X_PROMO_FIXED_TEXT_KEY =
-      "nikke_union_admin_x_promo_extra_v2";
+      "nikke_union_admin_x_promo_fixed_v1";
 
     const X_PROMO_OWN_X_URL_KEY =
       "nikke_union_admin_x_promo_own_x_url_v1";
 
     const X_PROMO_DEFAULT_FIXED_TEXT =
-      "";
+      "NIKKE UNION MATCHに新しい募集が登録されました📣✨";
 
     const X_PROMO_APP_URL =
       "https://x.gd/4tEJo";
 
-    console.info("NIKKE UNION MATCH creator-admin X promo v13.18");
+    console.info("NIKKE UNION MATCH creator-admin X promo v13.15");
 
     let xPromoItems = [];
 
@@ -3134,56 +3297,42 @@
     }
 
 
-    function buildXPromoHeadline(item) {
-      if (!item) return "";
-
-      if (item._promoType === "union") {
-        const name = String(item.union_name || "").trim();
-        const rank = String(item.union_rank || "").trim();
-
-        const detail = rank
-          ? (rank.includes("ユニオン")
-              ? `🏆 ${rank}です！`
-              : `🏆 ${rank}帯のユニオン様です！`)
-          : "🏆 新しい仲間を探しているユニオン様です！";
-
-        return [
-          "🩵 NEW UNION",
-          `🏢 ${name}さんが指揮官を募集中✨`,
-          detail
-        ].join("\n");
-      }
-
-      const name = String(item.commander_name || "").trim();
-      const slv = String(item.slv || "").trim();
-
-      return [
-        "🩵 NEW COMMANDER",
-        `👤 ${name}さんが移籍先ユニオンを探しています✨`,
-        slv
-          ? `📈 SLV${slv}の指揮官様です！`
-          : "📈 移籍先を探している指揮官様です！"
-      ].join("\n");
-    }
-
-
     function buildXPromoText() {
       const item = getSelectedXPromoItem();
       if (!item) return "";
 
-      const extraText =
-        $("#xPromoFixedText")?.value.trim() || "";
+      const fixedText =
+        $("#xPromoFixedText")?.value.trim()
+        || X_PROMO_DEFAULT_FIXED_TEXT;
 
       const ownXUrl =
         $("#xPromoOwnXUrl")?.value.trim() || "";
 
-      const parts = [
-        buildXPromoHeadline(item)
-      ];
+      const parts = [];
 
-      if (extraText) {
-        parts.push(extraText);
+      if (fixedText) {
+        parts.push(fixedText);
       }
+
+      if (item._promoType === "union") {
+        parts.push(
+          `🏢 ${item.union_name || ""}｜${item.union_rank || ""}`
+        );
+      } else {
+        parts.push(
+          `👤 ${item.commander_name || ""}｜SLV${item.slv || ""}`
+        );
+      }
+
+      if (item.x_url) {
+        parts.push(
+          `👇 募集記事\n${item.x_url}`
+        );
+      }
+
+      parts.push(
+        "👇 NIKKE UNION MATCH登録は\nhttps://x.gd/4tEJo"
+      );
 
       if (ownXUrl) {
         parts.push(
@@ -3191,126 +3340,9 @@
         );
       }
 
-      parts.push(
-        "👇 NIKKE UNION MATCH\nhttps://x.gd/4tEJo"
-      );
-
-      // Xの募集記事URLは必ず最後に置く。
-      // X側でリンクカード / 投稿プレビューとして扱われる可能性を高めるため、
-      // 「👇 募集記事」などの見出しは付けずURLだけを末尾へ配置する。
-      if (item.x_url) {
-        parts.push(String(item.x_url).trim());
-      }
-
-      return parts.filter(Boolean).join("\n\n");
+      return parts.join("\n\n");
     }
 
-
-    function renderXPromoImage(item) {
-      const image = $("#xPromoImagePreview");
-      const empty = $("#xPromoImageEmpty");
-      const status = $("#xPromoImageStatus");
-      const imageUrl = String(item?.preview_image_url || "").trim();
-
-      if (imageUrl) {
-        if (image) {
-          image.src = imageUrl;
-          image.classList.remove("hidden");
-        }
-        empty?.classList.add("hidden");
-        if (status) {
-          status.textContent = "画像：登録画像あり（サイト掲載用・確認用）";
-        }
-      } else {
-        if (image) {
-          image.removeAttribute("src");
-          image.classList.add("hidden");
-        }
-        empty?.classList.remove("hidden");
-        if (status) {
-          status.textContent = item
-            ? "画像：なし（募集記事URLは本文へ挿入します）"
-            : "画像：--";
-        }
-      }
-    }
-
-
-    function openXPromoIntent(text) {
-      const intent =
-        "https://x.com/intent/tweet?text="
-        + encodeURIComponent(text);
-
-      window.open(
-        intent,
-        "_blank",
-        "noopener,noreferrer"
-      );
-    }
-
-
-    function getXPromoImageExtension(mimeType = "") {
-      const type = String(mimeType).toLowerCase();
-      if (type.includes("png")) return "png";
-      if (type.includes("webp")) return "webp";
-      if (type.includes("gif")) return "gif";
-      return "jpg";
-    }
-
-
-    async function getXPromoShareImageFile(item) {
-      const imageUrl = String(item?.preview_image_url || "").trim();
-      if (!imageUrl) return null;
-
-      const response = await fetch(imageUrl, {
-        mode: "cors",
-        cache: "no-store"
-      });
-
-      if (!response.ok) {
-        throw new Error("X_PROMO_IMAGE_FETCH_FAILED");
-      }
-
-      const blob = await response.blob();
-      if (!String(blob.type || "").startsWith("image/")) {
-        throw new Error("X_PROMO_IMAGE_INVALID");
-      }
-
-      const extension = getXPromoImageExtension(blob.type);
-      const safeName = item?._promoType === "union"
-        ? String(item.union_name || "union")
-        : String(item.commander_name || "commander");
-
-      const fileName =
-        `${safeName.replace(/[\\/:*?"<>|]+/g, "_") || "nikke-union-match"}.${extension}`;
-
-      return new File(
-        [blob],
-        fileName,
-        { type: blob.type || "image/jpeg" }
-      );
-    }
-
-
-    function oneTouchXPromo() {
-      const item = getSelectedXPromoItem();
-      const text = buildXPromoText();
-      if (!item || !text) return;
-
-      clearMessage($("#xPromoMessage"));
-
-      // Windowsの共有シートは使わず、必ずXのWeb Intentを直接開く。
-      // これにより「共有」画面ではなくXの投稿作成画面へ遷移する。
-      openXPromoIntent(text);
-
-      showMessage(
-        $("#xPromoMessage"),
-        item.preview_image_url
-          ? "Xの投稿画面を開きました。登録画像の自動添付はX Web Intentの仕様上できません。"
-          : "Xの投稿画面を開きました。",
-        "ok"
-      );
-    }
 
     function renderXPromoPreview() {
       const item = getSelectedXPromoItem();
@@ -3320,7 +3352,6 @@
       const count = $("#xPromoCharCount");
       const copyButton = $("#copyXPromoBtn");
       const postButton = $("#openXPromoPostBtn");
-      const oneTouchButton = $("#oneTouchXPromoBtn");
 
       if (info) {
         info.textContent = `対象：${getXPromoItemLabel(item)}`;
@@ -3329,8 +3360,6 @@
       if (urlInfo) {
         urlInfo.textContent = `募集記事：${item?.x_url || "--"}`;
       }
-
-      renderXPromoImage(item);
 
       const text = buildXPromoText();
 
@@ -3351,10 +3380,6 @@
       if (postButton) {
         postButton.disabled = !text;
       }
-
-      if (oneTouchButton) {
-        oneTouchButton.disabled = !text;
-      }
     }
 
 
@@ -3372,14 +3397,14 @@
       const [commanderResult, unionResult] = await Promise.all([
         sb
           .from("recruitments")
-          .select("id, commander_name, slv, x_url, preview_image_url, created_at, expires_at")
+          .select("id, commander_name, slv, x_url, created_at, expires_at")
           .eq("status", "open")
           .gt("expires_at", nowIso)
           .order("created_at", { ascending: false }),
 
         sb
           .from("union_recruitments")
-          .select("id, union_name, union_rank, x_url, preview_image_url, created_at, expires_at")
+          .select("id, union_name, union_rank, x_url, created_at, expires_at")
           .eq("status", "open")
           .gt("expires_at", nowIso)
           .order("created_at", { ascending: false })
@@ -3465,6 +3490,15 @@
       const fixedText = $("#xPromoFixedText")?.value.trim() || "";
       const ownXUrl = $("#xPromoOwnXUrl")?.value.trim() || "";
 
+      if (!fixedText) {
+        showMessage(
+          $("#xPromoMessage"),
+          "固定文を入力してください。",
+          "error"
+        );
+        return;
+      }
+
       if (ownXUrl) {
         try {
           const parsed = new URL(ownXUrl);
@@ -3490,7 +3524,7 @@
 
       showMessage(
         $("#xPromoMessage"),
-        "追加文と自分のXリンクを保存しました。",
+        "固定文と自分のXリンクを保存しました。",
         "ok"
       );
 
@@ -5502,6 +5536,13 @@
       );
 
 
+    $("#openAccessStatsBtn")
+      ?.addEventListener(
+        "click",
+        showAccessStatsAdmin
+      );
+
+
     $("#openXEmbedControlBtn")
       ?.addEventListener(
         "click",
@@ -5541,6 +5582,20 @@
       ?.addEventListener(
         "click",
         showMenu
+      );
+
+
+    $("#backToMenuFromAccessStatsBtn")
+      ?.addEventListener(
+        "click",
+        showMenu
+      );
+
+
+    $("#reloadAccessStatsBtn")
+      ?.addEventListener(
+        "click",
+        loadAccessStats
       );
 
 
@@ -5611,15 +5666,17 @@
         () => {
           const text = buildXPromoText();
           if (!text) return;
-          openXPromoIntent(text);
+
+          const intent =
+            "https://twitter.com/intent/tweet?text="
+            + encodeURIComponent(text);
+
+          window.open(
+            intent,
+            "_blank",
+            "noopener,noreferrer"
+          );
         }
-      );
-
-
-    $("#oneTouchXPromoBtn")
-      ?.addEventListener(
-        "click",
-        oneTouchXPromo
       );
 
 
@@ -6224,6 +6281,10 @@
         ?.classList
         .add("hidden");
 
+      $("#accessStatsSection")
+        ?.classList
+        .add("hidden");
+
       $("#endingUnionSection")
         ?.classList
         .add("hidden");
@@ -6325,6 +6386,192 @@
       clearMessage(
         $("#xUrlRepairMessage")
       );
+
+    }
+
+
+    function formatAccessNumber(value) {
+      return new Intl.NumberFormat("ja-JP").format(
+        Number(value || 0)
+      );
+    }
+
+
+    function setAccessStatsLoading() {
+      [
+        "#accessTodayPv",
+        "#accessYesterdayPv",
+        "#access7dPv",
+        "#access30dPv",
+        "#accessTotalPv"
+      ].forEach(selector => {
+        const element = $(selector);
+        if (element) element.textContent = "--";
+      });
+
+      [
+        "#accessTodayUnique",
+        "#accessYesterdayUnique",
+        "#access7dUnique",
+        "#access30dUnique",
+        "#accessTotalUnique"
+      ].forEach(selector => {
+        const element = $(selector);
+        if (element) element.textContent = "ユニーク --";
+      });
+
+      const rows = $("#accessDailyRows");
+      if (rows) {
+        rows.innerHTML = '<tr><td colspan="3">読み込み中...</td></tr>';
+      }
+    }
+
+
+    async function loadAccessStats() {
+
+      clearMessage(
+        $("#accessStatsMessage")
+      );
+
+      setAccessStatsLoading();
+
+      const token =
+        getToken();
+
+      if (!token) {
+        showLogin();
+        return;
+      }
+
+      const {
+        data,
+        error
+      } =
+        await sb.rpc(
+          "admin_get_site_access_stats",
+          {
+            p_token:
+              token
+          }
+        );
+
+      if (error) {
+
+        const errorText =
+          String(
+            error.message
+            || error.details
+            || ""
+          );
+
+        if (
+          errorText.includes(
+            "ADMIN_SESSION_INVALID"
+          )
+        ) {
+          clearToken();
+          showLogin();
+          return;
+        }
+
+        console.error(
+          "アクセス解析取得エラー",
+          error
+        );
+
+        showMessage(
+          $("#accessStatsMessage"),
+          "アクセス解析を読み込めませんでした。Supabaseのアクセス解析SQLを実行済みか確認してください。",
+          "error"
+        );
+
+        return;
+      }
+
+      const stats =
+        data || {};
+
+      const setText = (selector, value) => {
+        const element = $(selector);
+        if (element) {
+          element.textContent =
+            formatAccessNumber(value);
+        }
+      };
+
+      const setUnique = (selector, value) => {
+        const element = $(selector);
+        if (element) {
+          element.textContent =
+            `ユニーク ${formatAccessNumber(value)}`;
+        }
+      };
+
+      setText("#accessTodayPv", stats.today_pv);
+      setUnique("#accessTodayUnique", stats.today_unique);
+
+      setText("#accessYesterdayPv", stats.yesterday_pv);
+      setUnique("#accessYesterdayUnique", stats.yesterday_unique);
+
+      setText("#access7dPv", stats.last_7_days_pv);
+      setUnique("#access7dUnique", stats.last_7_days_unique);
+
+      setText("#access30dPv", stats.last_30_days_pv);
+      setUnique("#access30dUnique", stats.last_30_days_unique);
+
+      setText("#accessTotalPv", stats.total_pv);
+      setUnique("#accessTotalUnique", stats.total_unique);
+
+      const rows =
+        $("#accessDailyRows");
+
+      const daily =
+        Array.isArray(stats.daily)
+          ? stats.daily
+          : [];
+
+      if (rows) {
+
+        if (!daily.length) {
+          rows.innerHTML =
+            '<tr><td colspan="3">まだアクセスデータがありません。</td></tr>';
+        } else {
+          rows.innerHTML =
+            daily
+              .map(item => {
+                const rawDate =
+                  String(item.date || "");
+
+                const label =
+                  /^\d{4}-\d{2}-\d{2}$/.test(rawDate)
+                    ? rawDate.slice(5).replace("-", "/")
+                    : rawDate;
+
+                return `
+                  <tr>
+                    <td>${escapeHtml(label)}</td>
+                    <td>${formatAccessNumber(item.pv)}</td>
+                    <td>${formatAccessNumber(item.unique)}</td>
+                  </tr>
+                `;
+              })
+              .join("");
+        }
+
+      }
+
+    }
+
+
+    async function showAccessStatsAdmin() {
+
+      hideAllAdminSections();
+
+      $("#accessStatsSection")
+        ?.classList
+        .remove("hidden");
+
+      await loadAccessStats();
 
     }
 
