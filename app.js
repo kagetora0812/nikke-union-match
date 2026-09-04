@@ -29,6 +29,98 @@ const sb =
 
 
 // ========================================
+// アクセス解析
+// 管理画面でPV / ユニーク数を確認するため、
+// 公開サイトを開いた時に1回だけ記録します。
+// ========================================
+
+const ACCESS_VISITOR_KEY =
+  "nikke_union_match_visitor_v1";
+
+
+function getOrCreateAccessVisitorId() {
+
+  try {
+
+    let visitorId =
+      localStorage.getItem(
+        ACCESS_VISITOR_KEY
+      );
+
+    if (visitorId) {
+      return visitorId;
+    }
+
+    if (
+      window.crypto
+      &&
+      typeof window.crypto.randomUUID === "function"
+    ) {
+      visitorId =
+        window.crypto.randomUUID();
+    } else {
+      visitorId =
+        `v-${Date.now()}-${Math.random().toString(36).slice(2)}-${Math.random().toString(36).slice(2)}`;
+    }
+
+    localStorage.setItem(
+      ACCESS_VISITOR_KEY,
+      visitorId
+    );
+
+    return visitorId;
+
+  } catch {
+
+    // localStorageが使えない場合でもサイト本体は止めない
+    return `temp-${Date.now()}-${Math.random().toString(36).slice(2)}`;
+
+  }
+
+}
+
+
+async function recordSiteAccess() {
+
+  if (!sb) {
+    return;
+  }
+
+  try {
+
+    const visitorId =
+      getOrCreateAccessVisitorId();
+
+    const { error } =
+      await sb.rpc(
+        "record_site_visit",
+        {
+          p_visitor_id:
+            visitorId
+        }
+      );
+
+    if (error) {
+      console.debug(
+        "アクセス記録をスキップしました。",
+        error.message || error
+      );
+    }
+
+  } catch (error) {
+
+    // 解析失敗で本体機能を止めない
+    console.debug(
+      "アクセス記録エラー",
+      error
+    );
+
+  }
+
+}
+
+
+// ========================================
 // 共通
 // ========================================
 
@@ -5549,6 +5641,9 @@ $("#closeLoadedRecruitmentBtn")
 // ========================================
 // 起動
 // ========================================
+
+// アクセス解析は失敗しても本体へ影響させない
+recordSiteAccess();
 
 setSearchType(
   "commander"
