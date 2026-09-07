@@ -459,6 +459,116 @@
     }
   </style>
 
+
+  <style id="v13-24-current-mobile-register-visible">
+    /* =========================================================
+       v13.24 CURRENT BASE
+       スマホ登録確認モーダル：
+       ブラウザ下部に「この内容で登録」が埋もれないようにする。
+       ※ registrationPreviewModal のみに限定。既存機能・他モーダルは変更しない。
+       ========================================================= */
+    @media screen and (max-width: 600px) {
+      #registrationPreviewModal {
+        padding:
+          max(6px, env(safe-area-inset-top))
+          6px
+          max(6px, env(safe-area-inset-bottom)) !important;
+      }
+
+      #registrationPreviewModal .registration-preview-modal-card {
+        width: calc(100vw - 12px) !important;
+
+        height: calc(100vh - 12px);
+        height: calc(100dvh - 12px);
+
+        max-height: calc(100vh - 12px) !important;
+        max-height: calc(100dvh - 12px) !important;
+
+        display: flex !important;
+        flex-direction: column !important;
+
+        padding: 16px 14px 0 !important;
+        overflow: hidden !important;
+      }
+
+      #registrationPreviewModal .registration-preview-note {
+        flex: 0 0 auto;
+        margin: 8px 0 10px !important;
+      }
+
+      #registrationPreviewCard {
+        flex: 1 1 auto;
+        min-height: 0;
+        overflow-y: auto;
+        overscroll-behavior: contain;
+        -webkit-overflow-scrolling: touch;
+        padding-bottom: 8px;
+      }
+
+      #registrationPreviewModal .registration-preview-actions {
+        flex: 0 0 auto;
+
+        display: grid !important;
+        grid-template-columns:
+          minmax(0, .82fr)
+          minmax(0, 1.18fr) !important;
+        gap: 8px !important;
+
+        margin: 10px -14px 0 !important;
+        padding:
+          10px 14px
+          calc(10px + env(safe-area-inset-bottom)) !important;
+
+        border-top:
+          1px solid
+          rgba(26, 176, 241, .45);
+
+        background:
+          rgba(255, 255, 255, .985);
+
+        box-shadow:
+          0 -8px 22px
+          rgba(0, 0, 0, .12);
+      }
+
+      #registrationPreviewModal .registration-preview-actions .btn {
+        width: 100% !important;
+        min-width: 0 !important;
+        min-height: 54px !important;
+        margin: 0 !important;
+        padding: 10px 8px !important;
+        font-size: 13px !important;
+        line-height: 1.2 !important;
+      }
+
+      #registrationPreviewBack {
+        border-color: #686b70 !important;
+        color: #222428 !important;
+        background: #ffffff !important;
+      }
+
+      #registrationPreviewConfirm {
+        border-color: var(--cyan, #1ab0f1) !important;
+        color: #ffffff !important;
+
+        background:
+          linear-gradient(
+            180deg,
+            var(--cyan-2, #28b8f4) 0%,
+            var(--cyan, #1ab0f1) 100%
+          ) !important;
+
+        box-shadow:
+          0 6px 16px
+          rgba(26, 176, 241, .28) !important;
+      }
+
+      #registrationPreviewConfirm::before {
+        background: #ffffff !important;
+      }
+    }
+  </style>
+
 </head>
 
 
