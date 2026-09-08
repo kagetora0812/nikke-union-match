@@ -569,6 +569,247 @@
     }
   </style>
 
+
+  <style id="hero-stats-two-column-v1">
+    /* =========================================================
+       TOP STATS v1
+       3分割 → 2分割
+       左：指揮官（募集中 / 成立実績）
+       右：ユニオン（募集中 / 総登録）
+       ※ hero-stats 配下のみに限定
+       ========================================================= */
+
+    .hero-stats.hero-stats-two-column {
+      display: grid !important;
+      grid-template-columns: minmax(0, 1fr) 1px minmax(0, 1fr) !important;
+      align-items: stretch !important;
+      gap: 0 !important;
+      min-height: 240px !important;
+      padding: 36px 28px 34px !important;
+    }
+
+    .hero-stats-two-column .hero-stat-group {
+      position: relative;
+      min-width: 0;
+      display: flex;
+      flex-direction: column;
+      justify-content: flex-start;
+    }
+
+    .hero-stats-two-column .hero-stat-divider {
+      display: block !important;
+      width: 1px !important;
+      height: auto !important;
+      align-self: stretch !important;
+      margin: 12px 20px 24px !important;
+      background: rgba(86, 94, 104, .45) !important;
+    }
+
+    .hero-stats-two-column .hero-stat-group-title {
+      margin: 0 0 8px;
+      text-align: center;
+      font-size: 14px;
+      font-weight: 900;
+      letter-spacing: .03em;
+      line-height: 1.2;
+    }
+
+    .hero-stats-two-column .commander-group .hero-stat-group-title {
+      color: var(--gold, #f4a21c);
+    }
+
+    .hero-stats-two-column .union-group .hero-stat-group-title {
+      color: var(--cyan, #1ab0f1);
+    }
+
+    .hero-stats-two-column .hero-stat-stage {
+      position: relative;
+      height: 132px;
+      margin: 0 12px;
+    }
+
+    .hero-stats-two-column .hero-stat-mini {
+      position: absolute;
+      width: min(46%, 180px);
+    }
+
+    .hero-stats-two-column .hero-stat-mini.top {
+      top: 5px;
+      left: 0;
+      text-align: left;
+    }
+
+    .hero-stats-two-column .hero-stat-mini.bottom {
+      right: 0;
+      bottom: 0;
+      text-align: right;
+    }
+
+    .hero-stats-two-column .hero-stat-mini-label {
+      margin-bottom: 3px;
+      color: var(--muted, #737b86);
+      font-size: 10px;
+      font-weight: 900;
+      line-height: 1.3;
+      white-space: nowrap;
+    }
+
+    .hero-stats-two-column .hero-stat-mini-number {
+      display: flex;
+      align-items: flex-end;
+      gap: 5px;
+      line-height: .85;
+    }
+
+    .hero-stats-two-column .hero-stat-mini.bottom .hero-stat-mini-number {
+      justify-content: flex-end;
+    }
+
+    .hero-stats-two-column .hero-stat-mini-number strong {
+      margin: 0;
+      font-family:
+        "Industry",
+        "Azonix",
+        "Futura PT Condensed",
+        "Teko",
+        "Gothic MB101",
+        "Zen Kaku Gothic New",
+        sans-serif;
+      font-size: clamp(46px, 4.7vw, 68px);
+      font-weight: 900;
+      line-height: .82;
+    }
+
+    .hero-stats-two-column .hero-stat-mini-number span {
+      padding-bottom: 5px;
+      font-size: 15px;
+      font-weight: 900;
+      line-height: 1;
+      white-space: nowrap;
+    }
+
+    .hero-stats-two-column .hero-stat-slash {
+      position: absolute;
+      left: 50%;
+      top: 54%;
+      transform: translate(-50%, -50%) rotate(-7deg);
+      color: rgba(107, 116, 128, .66);
+      font-size: 34px;
+      font-weight: 400;
+      line-height: 1;
+      pointer-events: none;
+    }
+
+    /* 指揮官：募集中 = オレンジ */
+    .hero-stats-two-column .commander-open strong,
+    .hero-stats-two-column .commander-open span {
+      color: var(--gold, #f4a21c);
+    }
+
+    /* 指揮官：成立実績 = 紫 */
+    .hero-stats-two-column .commander-graduated strong,
+    .hero-stats-two-column .commander-graduated span {
+      color: var(--purple, #a70ee9);
+    }
+
+    /* ユニオン：募集中 = 青 */
+    .hero-stats-two-column .union-open strong,
+    .hero-stats-two-column .union-open span {
+      color: var(--cyan, #1ab0f1);
+    }
+
+    /* ユニオン：総登録 = 緑 */
+    .hero-stats-two-column .union-total strong,
+    .hero-stats-two-column .union-total span {
+      color: var(--green, #39b978);
+    }
+
+    .hero-stats-two-column .hero-stat-update {
+      grid-column: 1 / -1 !important;
+      position: absolute !important;
+      left: 0 !important;
+      right: 0 !important;
+      bottom: 9px !important;
+    }
+
+    @media screen and (max-width: 600px) {
+      .hero-stats.hero-stats-two-column {
+        grid-template-columns: minmax(0, 1fr) 1px minmax(0, 1fr) !important;
+        min-height: 205px !important;
+        padding: 26px 8px 28px !important;
+      }
+
+      .hero-stats-two-column .hero-stat-divider {
+        margin: 8px 6px 22px !important;
+      }
+
+      .hero-stats-two-column .hero-stat-group-title {
+        margin-bottom: 5px;
+        font-size: 11px;
+      }
+
+      .hero-stats-two-column .hero-stat-stage {
+        height: 116px;
+        margin: 0 3px;
+      }
+
+      .hero-stats-two-column .hero-stat-mini {
+        width: 48%;
+      }
+
+      .hero-stats-two-column .hero-stat-mini-label {
+        font-size: 8.5px;
+        letter-spacing: -.02em;
+      }
+
+      .hero-stats-two-column .hero-stat-mini-number {
+        gap: 3px;
+      }
+
+      .hero-stats-two-column .hero-stat-mini-number strong {
+        font-size: clamp(34px, 10vw, 46px);
+      }
+
+      .hero-stats-two-column .hero-stat-mini-number span {
+        padding-bottom: 4px;
+        font-size: 11px;
+      }
+
+      .hero-stats-two-column .hero-stat-slash {
+        top: 53%;
+        font-size: 26px;
+      }
+
+      .hero-stats-two-column .union-total .hero-stat-mini-label {
+        white-space: normal;
+      }
+
+      .hero-stats-two-column .union-total .hero-stat-mini-number span {
+        font-size: 9px;
+      }
+    }
+
+    @media screen and (max-width: 360px) {
+      .hero-stats.hero-stats-two-column {
+        padding-left: 5px !important;
+        padding-right: 5px !important;
+      }
+
+      .hero-stats-two-column .hero-stat-divider {
+        margin-left: 3px !important;
+        margin-right: 3px !important;
+      }
+
+      .hero-stats-two-column .hero-stat-mini-number strong {
+        font-size: 32px;
+      }
+
+      .hero-stats-two-column .hero-stat-mini-label {
+        font-size: 8px;
+      }
+    }
+  </style>
+
 </head>
 
 
@@ -1275,27 +1516,35 @@
            募集総数
       ========================================= -->
 
-<div class="hero-stats">
+<div class="hero-stats hero-stats-two-column">
 
-  <!-- 指揮官 -->
-  <div class="hero-stat commander-stat">
+  <!-- 指揮官：募集中 / 成立実績 -->
+  <div class="hero-stat-group commander-group">
 
-    <div class="hero-stat-title">
+    <div class="hero-stat-group-title">
       👤 指揮官
     </div>
 
-    <div class="hero-stat-number">
-      <strong id="commanderCountTop">
-        0
-      </strong>
+    <div class="hero-stat-stage">
 
-      <span>
-        名
-      </span>
-    </div>
+      <div class="hero-stat-mini top commander-open">
+        <div class="hero-stat-mini-label">募集中</div>
+        <div class="hero-stat-mini-number">
+          <strong id="commanderCountTop">0</strong>
+          <span>名</span>
+        </div>
+      </div>
 
-    <div class="hero-stat-sub">
-      募集中
+      <div class="hero-stat-slash" aria-hidden="true">／</div>
+
+      <div class="hero-stat-mini bottom commander-graduated">
+        <div class="hero-stat-mini-label">成立実績</div>
+        <div class="hero-stat-mini-number">
+          <strong id="graduatedCommanderCountTop">0</strong>
+          <span>名</span>
+        </div>
+      </div>
+
     </div>
 
   </div>
@@ -1304,52 +1553,33 @@
   <div class="hero-stat-divider"></div>
 
 
-  <!-- ユニオン -->
-  <div class="hero-stat union-stat">
+  <!-- ユニオン：募集中 / 総登録 -->
+  <div class="hero-stat-group union-group">
 
-    <div class="hero-stat-title">
+    <div class="hero-stat-group-title">
       🏢 ユニオン
     </div>
 
-    <div class="hero-stat-number">
-      <strong id="unionCountTop">
-        0
-      </strong>
+    <div class="hero-stat-stage">
 
-      <span>
-        件
-      </span>
-    </div>
+      <div class="hero-stat-mini top union-open">
+        <div class="hero-stat-mini-label">募集中ユニオン</div>
+        <div class="hero-stat-mini-number">
+          <strong id="unionCountTop">0</strong>
+          <span>件</span>
+        </div>
+      </div>
 
-    <div class="hero-stat-sub">
-      募集中
-    </div>
+      <div class="hero-stat-slash" aria-hidden="true">／</div>
 
-  </div>
+      <div class="hero-stat-mini bottom union-total">
+        <div class="hero-stat-mini-label">総登録ユニオン</div>
+        <div class="hero-stat-mini-number">
+          <strong id="totalUnionCountTop">0</strong>
+          <span>ユニオン</span>
+        </div>
+      </div>
 
-
-  <div class="hero-stat-divider"></div>
-
-
-  <!-- 成立実績 -->
-  <div class="hero-stat graduate-stat">
-
-    <div class="hero-stat-title">
-      🎓 成立実績
-    </div>
-
-    <div class="hero-stat-number">
-      <strong id="graduatedCommanderCountTop">
-        0
-      </strong>
-
-      <span>
-        名
-      </span>
-    </div>
-
-    <div class="hero-stat-sub">
-      募集終了・移籍先決定
     </div>
 
   </div>
@@ -2119,6 +2349,224 @@
   <!-- アプリ本体 -->
 
   <script src="./app.js?v=13.21"></script>
+
+
+  <script id="total-union-count-v2">
+    /* =========================================================
+       総登録ユニオン数
+       - 既存app.jsには手を入れない
+       - まず集計RPCを使用（大量登録向け・1回の軽い問い合わせ）
+       - RPC未導入時のみ既存テーブルから安全にフォールバック
+       ========================================================= */
+
+    async function loadTotalUnionCountTop() {
+
+      const target =
+        document.getElementById("totalUnionCountTop");
+
+      if (
+        !target
+        ||
+        typeof sb === "undefined"
+        ||
+        !sb
+      ) {
+        return;
+      }
+
+      try {
+
+        /* 大量登録時はこちらを優先 */
+        const rpcResult =
+          await sb.rpc(
+            "get_total_union_count"
+          );
+
+        if (!rpcResult.error) {
+
+          const rpcCount =
+            Number(
+              Array.isArray(rpcResult.data)
+                ? rpcResult.data[0]
+                : rpcResult.data
+            );
+
+          if (Number.isFinite(rpcCount)) {
+            target.textContent =
+              String(rpcCount);
+            return;
+          }
+        }
+
+        /* RPC未導入時だけフォールバック */
+        const pageSize = 1000;
+        let from = 0;
+        const rows = [];
+
+        while (true) {
+
+          let result =
+            await sb
+              .from("union_recruitments")
+              .select("union_identity_id,union_name")
+              .order("created_at", { ascending: true })
+              .range(from, from + pageSize - 1);
+
+          if (result.error) {
+
+            const fallback =
+              await sb
+                .from("union_recruitments")
+                .select("union_name")
+                .order("created_at", { ascending: true })
+                .range(from, from + pageSize - 1);
+
+            if (fallback.error) {
+              throw fallback.error;
+            }
+
+            result = fallback;
+          }
+
+          const page =
+            Array.isArray(result.data)
+              ? result.data
+              : [];
+
+          rows.push(...page);
+
+          if (page.length < pageSize) {
+            break;
+          }
+
+          from += pageSize;
+        }
+
+        const identities =
+          new Set();
+
+        const identityNames =
+          new Set();
+
+        const legacyNames =
+          new Set();
+
+        const normalizeName =
+          value =>
+            String(value || "")
+              .trim()
+              .replace(/\s+/g, " ")
+              .toLocaleLowerCase("ja-JP");
+
+        rows.forEach(row => {
+
+          const identity =
+            String(
+              row?.union_identity_id || ""
+            ).trim();
+
+          const name =
+            normalizeName(
+              row?.union_name
+            );
+
+          if (identity) {
+
+            identities.add(identity);
+
+            if (name) {
+              identityNames.add(name);
+            }
+
+            return;
+          }
+
+          if (name) {
+            legacyNames.add(name);
+          }
+
+        });
+
+        let legacyOnlyCount = 0;
+
+        legacyNames.forEach(name => {
+          if (!identityNames.has(name)) {
+            legacyOnlyCount++;
+          }
+        });
+
+        target.textContent =
+          String(
+            identities.size +
+            legacyOnlyCount
+          );
+
+      } catch (error) {
+
+        console.error(
+          "総登録ユニオン数取得エラー",
+          error
+        );
+
+        /* この追加表示だけ失敗しても既存サイトは止めない */
+        target.textContent = "--";
+      }
+    }
+
+
+    window.addEventListener(
+      "load",
+      () => {
+        loadTotalUnionCountTop();
+      }
+    );
+
+
+    /* 新規登録・再掲載後に募集中件数が変わった場合も再取得 */
+    document.addEventListener(
+      "DOMContentLoaded",
+      () => {
+
+        const openUnionCounter =
+          document.getElementById(
+            "unionCountTop"
+          );
+
+        if (!openUnionCounter) {
+          return;
+        }
+
+        let timer = null;
+
+        const observer =
+          new MutationObserver(
+            () => {
+
+              clearTimeout(timer);
+
+              timer =
+                setTimeout(
+                  () => {
+                    loadTotalUnionCountTop();
+                  },
+                  250
+                );
+            }
+          );
+
+        observer.observe(
+          openUnionCounter,
+          {
+            childList: true,
+            characterData: true,
+            subtree: true
+          }
+        );
+
+      }
+    );
+  </script>
+
 
 
 </body>
