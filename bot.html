@@ -154,6 +154,25 @@
       text-shadow:0 0 14px rgba(40,185,232,.12);
     }
 
+    .union-required-note {
+      margin:14px 0 0;
+      padding:14px 16px;
+      border:1px solid rgba(40,185,232,.46);
+      border-left:4px solid var(--accent);
+      background:linear-gradient(90deg,rgba(40,185,232,.12),rgba(40,185,232,.035));
+      color:#dfeff7;
+      font-size:12px;
+      line-height:1.75;
+    }
+    .union-required-note strong { color:var(--accent2); }
+    .union-required-note .required-title {
+      display:block;
+      margin-bottom:4px;
+      color:#79d9f6;
+      font-size:13px;
+      font-weight:900;
+    }
+
     .reassurance-box {
       margin-top:16px;
       padding:20px 22px;
@@ -274,7 +293,7 @@
     <section class="bot-hero">
       <div class="hero-copy">
         <div class="eyebrow">UNION MATCH DISCORD BOT</div>
-        <h1>募集を、Discordでもっとラクに。</h1>
+        <h1>Discordでもっとラクに。</h1>
         <p class="lead">
           新しい指揮官募集のお知らせ、自分のユニオン募集の期限通知、再掲載までサポート。<br>
           3人のキャラクターから選べて、AIとの会話やサーバーごとの名前・画像変更もできます。
@@ -295,6 +314,13 @@
         </div>
       </div>
     </section>
+
+    <div class="union-required-note">
+      <span class="required-title">⚠️ ユニオン連携には、UNION MATCHへの登録が必要です</span>
+      <strong>期限通知・BOTからのPASS不要再掲載など、自分のユニオン募集と連携する機能</strong>を使うには、先にUNION MATCHでユニオン募集を登録してください。
+      登録時に発行されるPASSを <code>/setup</code> から最初の1回だけ入力します。
+      BOTの招待・キャラクター設定・AI会話は、ユニオン登録前でもテストできます。
+    </div>
 
     <section class="reassurance-box">
       <div class="eyebrow">TRY IT SAFELY</div>
@@ -336,7 +362,7 @@
         <article class="step">
           <div class="step-no">3</div>
           <h3>ユニオンを1回だけ連携</h3>
-          <p>UNION MATCHでユニオン登録時に発行された<strong>PASSを最初の1回だけ</strong>入力すると、期限通知・再掲載が使えます。</p>
+          <p><strong>先にUNION MATCHへユニオン募集を登録</strong>し、発行されたPASSを<strong>最初の1回だけ</strong>入力すると、期限通知・再掲載が使えます。</p>
         </article>
         <article class="step">
           <div class="step-no">4</div>
