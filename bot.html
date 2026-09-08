@@ -326,6 +326,352 @@
       .bottom-area { flex-direction:column; align-items:stretch; text-align:center; }
     }
   </style>
+
+  <style id="desktop-reading-balance-v15">
+    /* =========================================================
+       PC版 読みやすさ調整 v15
+       - 851px以上だけに適用
+       - スマホ用CSS・既存機能・HTML構造は変更しない
+       - 小見出しは控えめ、本文/重要情報を一段大きく
+       ========================================================= */
+    @media (min-width: 851px) {
+
+      /* 全体：余白は活かしつつ、情報密度を落とさず読みやすく */
+      .container {
+        width: min(1200px, calc(100% - 36px));
+        padding-top: 30px;
+      }
+
+      .section {
+        padding: 30px 28px;
+        margin-top: 18px;
+      }
+
+      /* 大見出しは一段強く */
+      h2 {
+        font-size: clamp(29px, 2.55vw, 35px);
+        line-height: 1.16;
+      }
+
+      h3 {
+        font-size: 19px;
+        line-height: 1.3;
+        letter-spacing: -.03em;
+      }
+
+      /* 英字の補助見出しは小さめのまま */
+      .eyebrow {
+        font-size: 11px;
+        letter-spacing: 2.6px;
+      }
+
+      .section-head {
+        margin-bottom: 22px;
+      }
+
+      .section-note {
+        max-width: 620px;
+        font-size: 12.5px;
+        line-height: 1.72;
+      }
+
+      /* HERO */
+      .bot-hero {
+        min-height: 300px;
+        padding: 38px 36px;
+        grid-template-columns: minmax(0, 1fr) 360px;
+        gap: 34px;
+      }
+
+      .bot-hero h1 {
+        font-size: clamp(39px, 3.35vw, 46px);
+        line-height: 1.06;
+      }
+
+      .lead {
+        max-width: 760px;
+        font-size: 14.5px;
+        line-height: 1.88;
+      }
+
+      .hero-side {
+        padding-left: 28px;
+      }
+
+      .hero-mini {
+        font-size: 10.5px;
+      }
+
+      .hero-feature {
+        gap: 14px;
+        margin-top: 16px;
+      }
+
+      .hero-feature div {
+        gap: 11px;
+        font-size: 14px;
+        line-height: 1.65;
+      }
+
+      .hero-feature b {
+        font-size: 16px;
+        line-height: 1.4;
+      }
+
+      .top-actions {
+        margin-top: 23px;
+        gap: 10px;
+      }
+
+      .action-btn {
+        min-height: 47px;
+        padding: 0 18px;
+        font-size: 13px;
+      }
+
+      /* 利用条件：重要なのでしっかり見せる */
+      .union-required-note-large {
+        padding: 18px 20px;
+      }
+
+      .union-required-note-large .required-title {
+        font-size: 20px;
+        line-height: 1.45;
+      }
+
+      /* 導入不安向け */
+      .reassurance-box {
+        padding: 25px 26px;
+      }
+
+      .reassurance-box h2 {
+        font-size: clamp(27px, 2.35vw, 33px);
+      }
+
+      .reassurance-box p {
+        font-size: 13.5px;
+        line-height: 1.82;
+      }
+
+      .privacy-note {
+        padding: 13px 14px;
+        font-size: 12.5px;
+        line-height: 1.75;
+      }
+
+      .reassurance-points {
+        gap: 10px;
+        margin-top: 15px;
+      }
+
+      .reassurance-point {
+        padding: 14px 14px;
+        font-size: 12.5px;
+        line-height: 1.72;
+      }
+
+      /* 4ステップ：固定高の余白を文字サイズに回す */
+      .steps {
+        gap: 12px;
+      }
+
+      .step {
+        min-height: 198px;
+        padding: 20px 18px;
+      }
+
+      .step-no {
+        width: 30px;
+        height: 30px;
+        margin-bottom: 14px;
+        font-size: 18px;
+      }
+
+      .step h3 {
+        margin-bottom: 10px;
+      }
+
+      .step p {
+        font-size: 13px;
+        line-height: 1.76;
+      }
+
+      /* キャラクター */
+      .character-grid {
+        gap: 14px;
+      }
+
+      .character-visual {
+        height: 205px;
+      }
+
+      .character-body {
+        padding: 18px 18px 20px;
+      }
+
+      .character-tag {
+        font-size: 10.5px;
+      }
+
+      .character-name {
+        font-size: 23px;
+      }
+
+      .character-desc {
+        margin-top: 8px;
+        font-size: 13px;
+        line-height: 1.72;
+      }
+
+      .character-call {
+        margin-top: 12px;
+        padding-top: 11px;
+        font-size: 12.5px;
+        line-height: 1.6;
+      }
+
+      /* 機能カード：ここは読ませたいので本文を大きめに */
+      .feature-grid {
+        gap: 12px;
+      }
+
+      .feature-card {
+        padding: 20px 20px 21px;
+      }
+
+      .feature-card .icon {
+        font-size: 24px;
+      }
+
+      .feature-card h3 {
+        margin-top: 8px;
+        font-size: 20px;
+      }
+
+      .feature-card p {
+        margin-top: 9px;
+        font-size: 13.5px;
+        line-height: 1.78;
+      }
+
+      /* 普通の言葉で操作 / 会話例 */
+      .talk-box {
+        gap: 12px;
+      }
+
+      .talk-card {
+        padding: 20px;
+      }
+
+      .talk-card h3 {
+        margin-bottom: 12px;
+        font-size: 19px;
+      }
+
+      .chat-example {
+        margin-top: 8px;
+        padding: 11px 13px;
+        font-size: 13.5px;
+        line-height: 1.68;
+      }
+
+      .chat-note {
+        margin-top: 11px;
+        font-size: 12.5px;
+        line-height: 1.7;
+      }
+
+      /* コマンド一覧：PCで特に小さかった部分 */
+      .command-list {
+        gap: 9px;
+      }
+
+      .command-row {
+        grid-template-columns: 165px minmax(0, 1fr) auto;
+        gap: 15px;
+        padding: 14px 14px;
+      }
+
+      code {
+        font-size: 13.5px;
+      }
+
+      .command-desc {
+        font-size: 13px;
+        line-height: 1.68;
+      }
+
+      .copy-command {
+        min-width: 92px;
+        min-height: 38px;
+        padding: 0 12px;
+        font-size: 11.5px;
+      }
+
+      .recommended {
+        padding: 3px 7px;
+        font-size: 9.5px;
+      }
+
+      /* 再掲載 */
+      .relist-flow {
+        gap: 12px;
+      }
+
+      .relist-card {
+        padding: 20px;
+      }
+
+      .relist-label {
+        font-size: 15px;
+      }
+
+      .relist-card p {
+        margin-top: 9px;
+        font-size: 13.5px;
+        line-height: 1.76;
+      }
+
+      /* 注意書き：補助情報なので本文より少し小さめ */
+      .notice {
+        padding: 15px 16px;
+        font-size: 12.5px;
+        line-height: 1.76;
+      }
+
+      .bottom-area {
+        font-size: 10.5px;
+      }
+    }
+
+    /* 大きめPCでは余白をさらに文字へ回す */
+    @media (min-width: 1180px) {
+      .section {
+        padding-left: 32px;
+        padding-right: 32px;
+      }
+
+      .step p,
+      .character-desc,
+      .command-desc {
+        font-size: 13.5px;
+      }
+
+      .feature-card p,
+      .relist-card p {
+        font-size: 14px;
+      }
+
+      .chat-example {
+        font-size: 14px;
+      }
+
+      .hero-feature div {
+        font-size: 14.5px;
+      }
+    }
+  </style>
+
 </head>
 <body>
   <header class="topbar">
