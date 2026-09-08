@@ -147,6 +147,26 @@ let loadedManagePassHash = "";
 let manageEditPreparedFile = null;
 let manageEditObjectUrl = null;
 
+// ========================================
+// Discord BOT経由 再掲載モード
+// ?discord_republish=... の一時トークンを使用
+// ========================================
+
+const DISCORD_REPUBLISH_PARAM =
+  "discord_republish";
+
+let discordRepublishRawToken =
+  "";
+
+let discordRepublishTokenHash =
+  "";
+
+let discordRepublishMode =
+  false;
+
+let discordRepublishInfo =
+  null;
+
 
 
 function escapeHtml(value) {
@@ -916,6 +936,199 @@ async function sha256(text) {
     )
     .join("");
 
+}
+
+
+// ========================================
+// Discord BOT経由 再掲載モード初期化
+// ========================================
+
+function getDiscordRepublishTokenFromUrl() {
+
+  const params =
+    new URLSearchParams(
+      window.location.search
+    );
+
+  const queryToken =
+    params.get(
+      DISCORD_REPUBLISH_PARAM
+    );
+
+  if (queryToken) {
+    return String(queryToken).trim();
+  }
+
+  const hashText =
+    String(
+      window.location.hash || ""
+    )
+      .replace(/^#/, "");
+
+  const hashParams =
+    new URLSearchParams(
+      hashText
+    );
+
+  return String(
+    hashParams.get(
+      DISCORD_REPUBLISH_PARAM
+    )
+    ||
+    ""
+  ).trim();
+}
+
+
+function showDiscordRepublishBanner(info) {
+
+  const form =
+    $("#registerForm");
+
+  if (!form) {
+    return;
+  }
+
+  let banner =
+    $("#discordRepublishBanner");
+
+  if (!banner) {
+
+    banner =
+      document.createElement(
+        "div"
+      );
+
+    banner.id =
+      "discordRepublishBanner";
+
+    banner.style.cssText =
+      "margin:0 0 18px;padding:14px 16px;border:1px solid #2ecc71;border-radius:12px;background:rgba(46,204,113,.10);line-height:1.7;font-weight:700;";
+
+    form.prepend(
+      banner
+    );
+  }
+
+  const guildName =
+    info?.guild_name
+    ||
+    "連携Discord";
+
+  banner.textContent =
+    `✅ Discord BOT経由の再掲載モードです。${guildName} のユニオン募集として連携を引き継ぎます。既存PASSの入力は不要です。`;
+}
+
+
+async function initializeDiscordRepublishMode() {
+
+  const rawToken =
+    getDiscordRepublishTokenFromUrl();
+
+  if (!rawToken) {
+    return;
+  }
+
+  if (!sb) {
+    return;
+  }
+
+  try {
+
+    const tokenHash =
+      await sha256(
+        rawToken
+      );
+
+    const {
+      data,
+      error
+    } =
+      await sb.rpc(
+        "validate_discord_union_republish_token",
+        {
+          p_token_hash:
+            tokenHash
+        }
+      );
+
+    if (error) {
+      throw error;
+    }
+
+    const info =
+      Array.isArray(data)
+        ? data[0]
+        : data;
+
+    if (!info?.valid) {
+
+      alert(
+        "Discord BOTの再掲載リンクが無効か、有効期限が切れています。Discordからもう一度『BOTから再掲載』を押してください。"
+      );
+
+      return;
+    }
+
+    discordRepublishRawToken =
+      rawToken;
+
+    discordRepublishTokenHash =
+      tokenHash;
+
+    discordRepublishMode =
+      true;
+
+    discordRepublishInfo =
+      info;
+
+    if (
+      registrationTypeSelect
+    ) {
+
+      registrationTypeSelect.value =
+        "union";
+
+      registrationTypeSelect.disabled =
+        true;
+    }
+
+    updateRegistrationFields();
+
+    const unionNameInput =
+      $("#unionName");
+
+    if (
+      unionNameInput
+      &&
+      !unionNameInput.value
+      &&
+      info.current_union_name
+    ) {
+
+      unionNameInput.value =
+        info.current_union_name;
+    }
+
+    showDiscordRepublishBanner(
+      info
+    );
+
+    showPage(
+      "register"
+    );
+
+  } catch (error) {
+
+    console.error(
+      "Discord BOT再掲載モード確認エラー",
+      error
+    );
+
+    alert(
+      "Discord BOTの再掲載リンクを確認できませんでした。時間を置いてもう一度お試しください。"
+    );
+  }
 }
 
 
@@ -3643,31 +3856,52 @@ $("#registerForm")
             );
 
 
+          const rpcName =
+            discordRepublishMode
+              ? "create_union_recruitment_from_discord"
+              : "create_union_recruitment_url";
+
+          const rpcParams =
+            discordRepublishMode
+              ? {
+                  p_token_hash:
+                    discordRepublishTokenHash,
+
+                  p_union_name:
+                    unionName,
+
+                  p_union_rank:
+                    unionRank,
+
+                  p_x_url:
+                    xUrl,
+
+                  p_pass_hash:
+                    passHash
+                }
+              : {
+                  p_union_name:
+                    unionName,
+
+                  p_union_rank:
+                    unionRank,
+
+                  p_x_url:
+                    xUrl,
+
+                  p_pass_hash:
+                    passHash
+                };
+
+
           const {
             data,
             error
           } =
 
             await sb.rpc(
-
-              "create_union_recruitment_url",
-
-              {
-
-                p_union_name:
-                  unionName,
-
-                p_union_rank:
-                  unionRank,
-
-                p_x_url:
-                  xUrl,
-
-                p_pass_hash:
-                  passHash
-
-              }
-
+              rpcName,
+              rpcParams
             );
 
 
@@ -3678,6 +3912,21 @@ $("#registerForm")
               getErrorText(
                 error
               );
+
+
+            if (
+              errorText.includes(
+                "DISCORD_REPUBLISH_TOKEN_INVALID"
+              )
+            ) {
+
+              alert(
+                "Discord BOTの再掲載リンクの有効期限が切れました。Discordからもう一度『BOTから再掲載』を押してください。"
+              );
+
+              return;
+
+            }
 
 
             if (
@@ -3789,6 +4038,47 @@ $("#registerForm")
             pass,
             result
           );
+
+
+          if (discordRepublishMode) {
+
+            discordRepublishMode =
+              false;
+
+            discordRepublishRawToken =
+              "";
+
+            discordRepublishTokenHash =
+              "";
+
+            discordRepublishInfo =
+              null;
+
+            if (registrationTypeSelect) {
+              registrationTypeSelect.disabled = false;
+            }
+
+            $("#discordRepublishBanner")
+              ?.remove();
+
+            const cleanUrl =
+              new URL(
+                window.location.href
+              );
+
+            cleanUrl.searchParams.delete(
+              DISCORD_REPUBLISH_PARAM
+            );
+
+            cleanUrl.hash =
+              "";
+
+            window.history.replaceState(
+              {},
+              "",
+              cleanUrl.toString()
+            );
+          }
 
 
           event.target.reset();
@@ -5648,3 +5938,7 @@ recordSiteAccess();
 setSearchType(
   "commander"
 );
+
+// Discord BOT経由の再掲載リンクなら、
+// トークン確認後にユニオン登録画面へ自動で切り替える。
+initializeDiscordRepublishMode();
