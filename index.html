@@ -575,102 +575,90 @@
 
 
 
-  <style id="hero-stats-responsive-v10">
+  <style id="hero-stats-impact-v12">
     /* =========================================================
-       TOP STATS v10
-       PC：上下2段 / 各段を枠の中央へ
-       SP：左右2カラム / 各カラムを上下中央へ
+       TOP STATS v12
+       PC / SP 共通：左右2カラム
+       主役＝募集中の大きな数字
+       補助数字＝タイトルと同サイズ・同系色
        ========================================================= */
 
-    .hero-stats.hero-stats-responsive {
+    .hero-stats.hero-stats-impact {
       position: relative !important;
-      display: flex !important;
-      flex-direction: column !important;
+      display: grid !important;
+      grid-template-columns: 1fr 1px 1fr !important;
       align-items: stretch !important;
       gap: 0 !important;
-      min-height: auto !important;
-      padding: 16px 26px 34px !important;
+      min-height: 220px !important;
+      padding: 24px 26px 34px !important;
     }
 
-    /* ---------------- PC ---------------- */
-
-    .hero-stats-responsive .hero-stat-row {
-      display: grid !important;
-      grid-template-columns: 110px minmax(0, 390px) !important;
-      justify-content: center !important;
+    .hero-stats-impact .hero-impact-row {
+      display: flex !important;
+      flex-direction: column !important;
       align-items: center !important;
-      column-gap: 14px !important;
-      width: 100% !important;
-      min-height: 102px !important;
-      margin: 0 !important;
-      padding: 8px 0 !important;
-    }
-
-    .hero-stats-responsive .hero-stat-row-title {
-      position: static !important;
-      transform: none !important;
-      width: auto !important;
-      margin: 0 !important;
+      justify-content: center !important;
+      min-width: 0 !important;
+      min-height: 150px !important;
+      padding: 8px 18px !important;
       text-align: center !important;
-      font-size: 16px !important;
-      font-weight: 900 !important;
-      line-height: 1.2 !important;
-      letter-spacing: .02em !important;
-      white-space: nowrap !important;
     }
 
-    .hero-stats-responsive .commander-row .hero-stat-row-title {
+    .hero-stats-impact .hero-impact-heading {
+      display: flex !important;
+      align-items: baseline !important;
+      justify-content: center !important;
+      flex-wrap: wrap !important;
+      gap: 8px !important;
+      margin-bottom: 7px !important;
+      font-size: 17px !important;
+      font-weight: 900 !important;
+      line-height: 1.25 !important;
+      letter-spacing: .02em !important;
+    }
+
+    .hero-stats-impact .commander-impact .hero-impact-heading {
       color: var(--gold, #f4a21c) !important;
     }
 
-    .hero-stats-responsive .union-row .hero-stat-row-title {
+    .hero-stats-impact .union-impact .hero-impact-heading {
       color: var(--cyan, #1ab0f1) !important;
     }
 
-    .hero-stats-responsive .hero-stat-summary {
-      width: 100% !important;
-      margin: 0 !important;
-      display: grid !important;
-      grid-template-rows: auto auto !important;
-      row-gap: 6px !important;
+    .hero-stats-impact .hero-impact-sub {
+      color: currentColor !important;
+      font-size: 1em !important;
+      font-weight: 900 !important;
+      opacity: .84 !important;
+      white-space: nowrap !important;
     }
 
-    .hero-stats-responsive .hero-stat-summary-labels,
-    .hero-stats-responsive .hero-stat-summary-values {
-      display: grid !important;
-      grid-template-columns: minmax(0, 1fr) 26px minmax(0, 1fr) !important;
-      align-items: center !important;
-      width: 100% !important;
+    .hero-stats-impact .hero-impact-sub strong {
+      margin-left: 2px !important;
+      color: currentColor !important;
+      font-size: 1em !important;
+      font-weight: 950 !important;
     }
 
-    .hero-stats-responsive .hero-stat-summary-labels {
+    .hero-stats-impact .hero-impact-label {
+      margin: 1px 0 3px !important;
       color: var(--muted, #737b86) !important;
-      font-size: 12px !important;
+      font-size: 11px !important;
       font-weight: 900 !important;
       line-height: 1.2 !important;
-      text-align: center !important;
+      letter-spacing: .02em !important;
     }
 
-    .hero-stats-responsive .hero-stat-summary-sep {
-      display: flex !important;
-      align-items: center !important;
-      justify-content: center !important;
-      color: rgba(115, 123, 134, .72) !important;
-      font-size: 15px !important;
-      font-weight: 900 !important;
-      line-height: 1 !important;
-    }
-
-    .hero-stats-responsive .hero-stat-value {
+    .hero-stats-impact .hero-impact-number {
       display: flex !important;
       align-items: flex-end !important;
       justify-content: center !important;
-      gap: 5px !important;
+      gap: 6px !important;
       min-width: 0 !important;
-      line-height: .82 !important;
+      line-height: .78 !important;
     }
 
-    .hero-stats-responsive .hero-stat-value strong {
+    .hero-stats-impact .hero-impact-number strong {
       margin: 0 !important;
       font-family:
         "Industry",
@@ -680,48 +668,42 @@
         "Gothic MB101",
         "Zen Kaku Gothic New",
         sans-serif !important;
-      font-size: clamp(60px, 5vw, 76px) !important;
+      font-size: clamp(80px, 7vw, 100px) !important;
       font-weight: 900 !important;
-      line-height: .79 !important;
-      letter-spacing: -.035em !important;
+      line-height: .76 !important;
+      letter-spacing: -.045em !important;
     }
 
-    .hero-stats-responsive .hero-stat-value span {
-      padding-bottom: 6px !important;
-      font-size: 16px !important;
+    .hero-stats-impact .hero-impact-number span {
+      padding-bottom: 7px !important;
+      font-size: 19px !important;
       font-weight: 900 !important;
       line-height: 1 !important;
       white-space: nowrap !important;
     }
 
-    .hero-stats-responsive .commander-open strong,
-    .hero-stats-responsive .commander-open span {
+    .hero-stats-impact .commander-impact .hero-impact-number strong,
+    .hero-stats-impact .commander-impact .hero-impact-number span {
       color: var(--gold, #f4a21c) !important;
     }
 
-    .hero-stats-responsive .commander-graduated strong,
-    .hero-stats-responsive .commander-graduated span {
-      color: var(--purple, #a70ee9) !important;
-    }
-
-    .hero-stats-responsive .union-open strong,
-    .hero-stats-responsive .union-open span {
+    .hero-stats-impact .union-impact .hero-impact-number strong,
+    .hero-stats-impact .union-impact .hero-impact-number span {
       color: var(--cyan, #1ab0f1) !important;
     }
 
-    .hero-stats-responsive .union-total strong,
-    .hero-stats-responsive .union-total span {
-      color: var(--green, #32c875) !important;
+    /* 中央の縦線 */
+    .hero-stats-impact .hero-impact-divider {
+      display: block !important;
+      width: 1px !important;
+      height: auto !important;
+      align-self: stretch !important;
+      margin: 12px 0 22px !important;
+      background: rgba(90, 98, 108, .28) !important;
     }
 
-    .hero-stats-responsive .hero-stat-row-divider {
-      width: min(100%, 500px) !important;
-      height: 1px !important;
-      margin: 0 auto !important;
-      background: rgba(90, 98, 108, .22) !important;
-    }
-
-    .hero-stats-responsive .hero-stat-update {
+    .hero-stats-impact .hero-stat-update {
+      grid-column: 1 / -1 !important;
       position: absolute !important;
       left: 0 !important;
       right: 0 !important;
@@ -730,110 +712,71 @@
       text-align: center !important;
     }
 
-    /* ---------------- Smartphone ---------------- */
-
     @media screen and (max-width: 600px) {
-      .hero-stats.hero-stats-responsive {
-        display: grid !important;
-        grid-template-columns: 1fr 1fr !important;
-        grid-template-rows: 1fr auto !important;
-        align-items: stretch !important;
-        padding: 10px 6px 6px !important;
-        min-height: 156px !important;
+      .hero-stats.hero-stats-impact {
+        grid-template-columns: 1fr 1px 1fr !important;
+        min-height: 154px !important;
+        padding: 12px 6px 28px !important;
       }
 
-      .hero-stats-responsive .hero-stat-row {
-        display: flex !important;
-        flex-direction: column !important;
-        align-items: center !important;
-        justify-content: center !important;
-        width: 100% !important;
-        min-height: 118px !important;
-        padding: 3px 7px !important;
-        gap: 8px !important;
+      .hero-stats-impact .hero-impact-row {
+        min-height: 112px !important;
+        padding: 5px 5px !important;
       }
 
-      .hero-stats-responsive .commander-row {
-        border-right: 1px solid rgba(90, 98, 108, .24) !important;
+      .hero-stats-impact .hero-impact-heading {
+        gap: 4px !important;
+        margin-bottom: 4px !important;
+        font-size: 12px !important;
+        white-space: nowrap !important;
       }
 
-      .hero-stats-responsive .hero-stat-row-title {
-        margin: 0 !important;
-        font-size: 13px !important;
-      }
-
-      .hero-stats-responsive .hero-stat-summary {
-        width: 100% !important;
-        row-gap: 5px !important;
-      }
-
-      .hero-stats-responsive .hero-stat-summary-labels,
-      .hero-stats-responsive .hero-stat-summary-values {
-        grid-template-columns: minmax(0, 1fr) 14px minmax(0, 1fr) !important;
-      }
-
-      .hero-stats-responsive .hero-stat-summary-labels {
+      .hero-stats-impact .hero-impact-label {
         font-size: 8.5px !important;
       }
 
-      .hero-stats-responsive .hero-stat-summary-sep {
-        font-size: 10px !important;
+      .hero-stats-impact .hero-impact-number {
+        gap: 3px !important;
       }
 
-      .hero-stats-responsive .hero-stat-value {
-        gap: 2px !important;
+      .hero-stats-impact .hero-impact-number strong {
+        font-size: clamp(48px, 13.5vw, 62px) !important;
       }
 
-      .hero-stats-responsive .hero-stat-value strong {
-        font-size: clamp(43px, 11.5vw, 53px) !important;
+      .hero-stats-impact .hero-impact-number span {
+        padding-bottom: 5px !important;
+        font-size: 11px !important;
       }
 
-      .hero-stats-responsive .hero-stat-value span {
-        padding-bottom: 4px !important;
-        font-size: 10px !important;
+      .hero-stats-impact .hero-impact-divider {
+        margin: 8px 0 18px !important;
       }
 
-      .hero-stats-responsive .hero-stat-row-divider {
-        display: none !important;
-      }
-
-      /* 最終更新を独立した最下段にして、青い下線のすぐ上へ */
-      .hero-stats-responsive .hero-stat-update {
-        grid-column: 1 / -1 !important;
-        grid-row: 2 !important;
-        position: static !important;
-        align-self: end !important;
-        margin: 1px 0 0 !important;
-        padding: 0 0 2px !important;
+      .hero-stats-impact .hero-stat-update {
+        bottom: 5px !important;
         font-size: 8px !important;
         line-height: 1 !important;
-        text-align: center !important;
       }
     }
 
     @media screen and (max-width: 380px) {
-      .hero-stats.hero-stats-responsive {
-        min-height: 150px !important;
+      .hero-stats.hero-stats-impact {
+        min-height: 148px !important;
         padding-left: 4px !important;
         padding-right: 4px !important;
       }
 
-      .hero-stats-responsive .hero-stat-row {
-        min-height: 113px !important;
-        padding-left: 4px !important;
-        padding-right: 4px !important;
+      .hero-stats-impact .hero-impact-heading {
+        gap: 3px !important;
+        font-size: 11px !important;
       }
 
-      .hero-stats-responsive .hero-stat-summary-labels {
-        font-size: 7.8px !important;
+      .hero-stats-impact .hero-impact-number strong {
+        font-size: clamp(44px, 13vw, 56px) !important;
       }
 
-      .hero-stats-responsive .hero-stat-value strong {
-        font-size: clamp(39px, 10.8vw, 47px) !important;
-      }
-
-      .hero-stats-responsive .hero-stat-value span {
-        font-size: 9px !important;
+      .hero-stats-impact .hero-impact-number span {
+        font-size: 10px !important;
       }
     }
   </style>
@@ -1544,65 +1487,54 @@
            募集総数
       ========================================= -->
 
-<div class="hero-stats hero-stats-responsive">
+<div class="hero-stats hero-stats-impact">
 
-  <div class="hero-stat-row commander-row">
+  <!-- 指揮官 -->
+  <div class="hero-impact-row commander-impact">
 
-    <div class="hero-stat-row-title">
-      👤 指揮官
+    <div class="hero-impact-heading">
+      <span>👤 指揮官</span>
+      <span class="hero-impact-sub">
+        / 成立 <strong id="graduatedCommanderCountTop">0</strong>
+      </span>
     </div>
 
-    <div class="hero-stat-summary">
-      <div class="hero-stat-summary-labels">
-        <span>募集中</span>
-        <span class="hero-stat-summary-sep">｜</span>
-        <span>成立実績</span>
-      </div>
+    <div class="hero-impact-label">
+      募集中
+    </div>
 
-      <div class="hero-stat-summary-values">
-        <div class="hero-stat-value commander-open">
-          <strong id="commanderCountTop">0</strong>
-          <span>名</span>
-        </div>
-        <div></div>
-        <div class="hero-stat-value commander-graduated">
-          <strong id="graduatedCommanderCountTop">0</strong>
-          <span>名</span>
-        </div>
-      </div>
+    <div class="hero-impact-number">
+      <strong id="commanderCountTop">0</strong>
+      <span>名</span>
     </div>
 
   </div>
 
-  <div class="hero-stat-row-divider"></div>
 
-  <div class="hero-stat-row union-row">
+  <div class="hero-impact-divider"></div>
 
-    <div class="hero-stat-row-title">
-      🏢 ユニオン
+
+  <!-- ユニオン -->
+  <div class="hero-impact-row union-impact">
+
+    <div class="hero-impact-heading">
+      <span>🏢 ユニオン</span>
+      <span class="hero-impact-sub">
+        / 登録 <strong id="totalUnionCountTop">0</strong>
+      </span>
     </div>
 
-    <div class="hero-stat-summary">
-      <div class="hero-stat-summary-labels">
-        <span>募集中</span>
-        <span class="hero-stat-summary-sep">｜</span>
-        <span>登録中</span>
-      </div>
+    <div class="hero-impact-label">
+      募集中
+    </div>
 
-      <div class="hero-stat-summary-values">
-        <div class="hero-stat-value union-open">
-          <strong id="unionCountTop">0</strong>
-          <span>件</span>
-        </div>
-        <div></div>
-        <div class="hero-stat-value union-total">
-          <strong id="totalUnionCountTop">0</strong>
-          <span>件</span>
-        </div>
-      </div>
+    <div class="hero-impact-number">
+      <strong id="unionCountTop">0</strong>
+      <span>件</span>
     </div>
 
   </div>
+
 
   <div
     class="hero-stat-update"
