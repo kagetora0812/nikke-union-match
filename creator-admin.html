@@ -1908,7 +1908,7 @@
 
       <p class="lead">
         現在募集中の登録から宣伝対象を選ぶだけで、X投稿文を自動生成します。<br>
-        「ワンタッチ投稿」はWindowsの共有画面を経由せず、Xの投稿画面を直接開きます。
+        Discordの管理通知にある「📣 この募集を宣伝」から開くと、対象を自動選択してここへ直行します。
       </p>
 
       <div class="panel">
@@ -3302,6 +3302,57 @@
 
     let xPromoItems = [];
 
+    // Discord管理通知からの「この募集を宣伝」直通
+    const X_PROMO_DEEP_LINK = (() => {
+      const params = new URLSearchParams(window.location.search);
+      const promo = params.get("promo") === "1";
+      const type = String(params.get("promo_type") || "").trim();
+      const id = String(params.get("promo_id") || "").trim();
+
+      if (
+        !promo
+        || !["commander", "union"].includes(type)
+        || !id
+      ) {
+        return null;
+      }
+
+      return {
+        type,
+        id,
+        key: `${type}:${id}`
+      };
+    })();
+
+    let xPromoDeepLinkHandled = false;
+
+    function hasXPromoDeepLink() {
+      return Boolean(
+        X_PROMO_DEEP_LINK
+        && !xPromoDeepLinkHandled
+      );
+    }
+
+    function clearXPromoDeepLinkFromUrl() {
+      try {
+        const url = new URL(window.location.href);
+        url.searchParams.delete("promo");
+        url.searchParams.delete("promo_type");
+        url.searchParams.delete("promo_id");
+
+        window.history.replaceState(
+          {},
+          "",
+          `${url.pathname}${url.search}${url.hash}`
+        );
+      } catch (error) {
+        console.warn(
+          "X宣伝直通URLの整理をスキップ",
+          error
+        );
+      }
+    }
+
 
     function getXPromoFixedText() {
       return localStorage.getItem(X_PROMO_FIXED_TEXT_KEY)
@@ -3642,6 +3693,46 @@
         }
 
         target.disabled = false;
+      }
+
+      // Discord管理通知から開いた場合は、その募集を自動選択。
+      if (
+        target
+        && hasXPromoDeepLink()
+      ) {
+        const matched =
+          xPromoItems.find(
+            item =>
+              item._promoKey ===
+              X_PROMO_DEEP_LINK.key
+          );
+
+        if (matched) {
+          target.value =
+            X_PROMO_DEEP_LINK.key;
+
+          xPromoDeepLinkHandled =
+            true;
+
+          clearXPromoDeepLinkFromUrl();
+
+          showMessage(
+            $("#xPromoMessage"),
+            "📣 Discord通知から開いた募集を選択しました。このまま宣伝できます。",
+            "ok"
+          );
+        } else {
+          xPromoDeepLinkHandled =
+            true;
+
+          clearXPromoDeepLinkFromUrl();
+
+          showMessage(
+            $("#xPromoMessage"),
+            "指定された募集が見つかりませんでした。掲載終了・再掲載済みの可能性があります。",
+            "error"
+          );
+        }
       }
 
       renderXPromoPreview();
@@ -6928,7 +7019,11 @@
             "";
 
 
-          showMenu();
+          if (hasXPromoDeepLink()) {
+            await showXPromoAdmin();
+          } else {
+            showMenu();
+          }
 
         }
       );
@@ -9490,7 +9585,11 @@
 
         if (valid) {
 
-          showMenu();
+          if (hasXPromoDeepLink()) {
+            await showXPromoAdmin();
+          } else {
+            showMenu();
+          }
 
         }
 
