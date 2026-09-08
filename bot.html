@@ -87,6 +87,7 @@
     .eyebrow { margin-bottom:7px; color:var(--accent); font:800 11px "Teko",sans-serif; letter-spacing:2.4px; text-transform:uppercase; }
     h1,h2,h3 { margin:0; color:#fff; font-weight:900; letter-spacing:-.045em; }
     h1 { font-size:clamp(31px,6vw,52px); line-height:1.05; }
+    .bot-hero h1 { font-size:clamp(28px,3.2vw,42px); white-space:nowrap; letter-spacing:-.055em; }
     h2 { font-size:clamp(22px,4vw,30px); line-height:1.15; }
     h3 { font-size:17px; }
     .lead { max-width:730px; margin:13px 0 0; color:#b5bac1; font-size:13px; line-height:1.9; }
@@ -147,6 +148,35 @@
     .section { margin-top:16px; padding:25px 24px; border:1px solid #292c32; background:linear-gradient(180deg,#14171c,#0f1115); }
     .section-head { display:flex; justify-content:space-between; gap:18px; align-items:flex-end; margin-bottom:18px; }
     .section-note { max-width:600px; color:var(--muted); font-size:11px; line-height:1.7; text-align:right; }
+    .section-note.cyan-note {
+      color:var(--accent2);
+      font-weight:900;
+      text-shadow:0 0 14px rgba(40,185,232,.12);
+    }
+
+    .reassurance-box {
+      margin-top:16px;
+      padding:20px 22px;
+      border:1px solid #2b596c;
+      border-left:4px solid var(--accent);
+      background:linear-gradient(135deg,rgba(40,185,232,.075),rgba(18,20,25,.96) 45%,#101217 100%);
+    }
+    .reassurance-box h2 { font-size:clamp(20px,3.8vw,28px); }
+    .reassurance-box p { margin:10px 0 0; color:#b9c4ca; font-size:12px; line-height:1.85; }
+    .reassurance-box strong { color:#fff; }
+    .privacy-note {
+      margin-top:12px;
+      padding:11px 12px;
+      border:1px solid rgba(142,220,255,.22);
+      background:rgba(40,185,232,.055);
+      color:#aee8ff;
+      font-size:11px;
+      line-height:1.75;
+    }
+    .privacy-note strong { color:#e8f8ff; }
+    .reassurance-points { margin-top:13px; display:grid; grid-template-columns:repeat(3,minmax(0,1fr)); gap:8px; }
+    .reassurance-point { padding:11px 12px; border:1px solid rgba(142,220,255,.18); background:rgba(8,16,20,.42); color:#c9d7dd; font-size:11px; line-height:1.65; }
+    .reassurance-point b { color:var(--accent2); }
 
     .steps { display:grid; grid-template-columns:repeat(4,minmax(0,1fr)); gap:10px; }
     .step { position:relative; min-height:186px; padding:18px 16px; border:1px solid var(--line); background:var(--panel2); }
@@ -212,12 +242,15 @@
       .container { width:min(100% - 18px,1180px); padding-top:14px; }
       .bot-hero { padding:22px 16px 18px; }
       h1 { font-size:34px; }
+      .bot-hero h1 { font-size:clamp(16.5px,4.8vw,20px); white-space:nowrap; letter-spacing:-.06em; }
       .lead { font-size:11.5px; }
       .top-actions { display:grid; grid-template-columns:1fr; }
       .action-btn { width:100%; }
       .section { padding:19px 14px; }
       .section-head { display:block; }
       .section-note { margin-top:7px; text-align:left; }
+      .reassurance-box { padding:17px 14px; }
+      .reassurance-points { grid-template-columns:1fr; }
       .steps,.character-grid,.feature-grid,.talk-box,.relist-flow { grid-template-columns:1fr; }
       .step { min-height:0; }
       .character-visual { height:210px; }
@@ -263,6 +296,24 @@
       </div>
     </section>
 
+    <section class="reassurance-box">
+      <div class="eyebrow">TRY IT SAFELY</div>
+      <h2>BOT導入がちょっと不安な方へ</h2>
+      <p>
+        今使っているユニオンDiscordへ、いきなりBOTを入れる必要はありません。
+        まずは<strong>新しくテスト用のDiscordサーバーを1つ作って、そこへBOTを招待</strong>して試せます。
+        通知・AI会話・キャラ変更・名前や画像の変更を実際に確認して、納得してから本番サーバーへ導入すればOKです。
+      </p>
+      <div class="privacy-note">
+        🔒 <strong>連携用PASSはBOT側に保存しません。</strong> PASSは連携確認に使うだけです。AI会話は、BOTをメンションして送った内容を返信生成に利用します。
+      </div>
+      <div class="reassurance-points">
+        <div class="reassurance-point">🧪 <b>まずはテスト</b><br>自分だけの専用サーバーで気軽に試せます。</div>
+        <div class="reassurance-point">⚙️ <b>最初だけ設定</b><br>難しい設定は不要。管理者が最初に設定すれば、あとはBOTが自動で通知します。</div>
+        <div class="reassurance-point">✅ <b>納得してから本番へ</b><br>使い心地を確認してから、普段のユニオンDiscordへ導入できます。</div>
+      </div>
+    </section>
+
     <section class="section" id="install">
       <div class="section-head">
         <div>
@@ -301,7 +352,7 @@
           <div class="eyebrow">CHARACTERS</div>
           <h2>選べる3キャラクター</h2>
         </div>
-        <div class="section-note">キャラごとにBOTの名前・画像を保存できます。切り替えると、そのキャラ専用の設定へ自動で切り替わります。</div>
+        <div class="section-note cyan-note">キャラごとにBOTの名前・画像を保存できます。切り替えると、そのキャラ専用の設定へ自動で切り替わります。</div>
       </div>
 
       <div class="character-grid">
@@ -353,7 +404,7 @@
           <div class="eyebrow">EASY CONTROL</div>
           <h2>コマンドが分からなくても使える</h2>
         </div>
-        <div class="section-note">キャラクター変更は、BOTをメンションして普通の言葉で話しかけてもOK。</div>
+        <div class="section-note cyan-note">キャラクター変更は、BOTをメンションして普通の言葉で話しかけてもOK。</div>
       </div>
       <div class="talk-box">
         <div class="talk-card">
