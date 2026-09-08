@@ -173,7 +173,10 @@
     .feature-card p { margin:7px 0 0; color:#9ea3aa; font-size:11.5px; line-height:1.75; }
 
     .command-list { display:grid; gap:7px; }
-    .command-row { display:grid; grid-template-columns:150px minmax(0,1fr); gap:12px; align-items:center; padding:11px 12px; border:1px solid var(--line); background:#15181d; }
+    .command-row { display:grid; grid-template-columns:150px minmax(0,1fr) auto; gap:12px; align-items:center; padding:11px 12px; border:1px solid var(--line); background:#15181d; }
+    .copy-command { min-width:86px; min-height:34px; padding:0 10px; border:1px solid #3d6678; background:#101a20; color:#aee8ff; font-size:10.5px; font-weight:900; cursor:pointer; }
+    .copy-command:hover { border-color:var(--accent); background:#122631; color:#fff; }
+    .copy-command.copied { border-color:#2f946a; background:#10291f; color:#8ff3c4; }
     code { color:#91defd; font-family:Consolas,"SFMono-Regular",monospace; font-size:12px; font-weight:800; }
     .command-desc { color:#aeb3ba; font-size:11.5px; line-height:1.6; }
     .recommended { color:#081018; background:var(--accent); padding:2px 6px; margin-left:6px; font-size:9px; font-weight:900; }
@@ -218,7 +221,9 @@
       .steps,.character-grid,.feature-grid,.talk-box,.relist-flow { grid-template-columns:1fr; }
       .step { min-height:0; }
       .character-visual { height:210px; }
-      .command-row { grid-template-columns:1fr; gap:4px; }
+      .command-row { grid-template-columns:1fr auto; gap:6px 8px; }
+      .command-row .command-desc { grid-column:1 / -1; }
+      .copy-command { min-width:78px; min-height:32px; }
       .bottom-area { flex-direction:column; align-items:stretch; text-align:center; }
     }
   </style>
@@ -244,7 +249,6 @@
         <div class="top-actions">
           <!-- 招待URLが確定したら href を差し替え -->
           <a class="action-btn primary disabled" id="botInviteBtn" href="#install" aria-disabled="true">🤖 BOTを導入する（招待リンク準備中）</a>
-          <a class="action-btn" href="#install">📖 導入方法を見る</a>
           <a class="action-btn" href="./index.html">← UNION MATCHへ戻る</a>
         </div>
       </div>
@@ -377,15 +381,15 @@
           <div class="eyebrow">COMMANDS</div>
           <h2>主なコマンド</h2>
         </div>
-        <div class="section-note">迷ったら <code>/setup</code> と <code>/botprofiles</code> の2つを覚えておけばOK。</div>
+        <div class="section-note">迷ったら <code>/setup</code> と <code>/botprofiles</code> の2つを覚えておけばOK。右のボタンでそのままコピーできます。</div>
       </div>
       <div class="command-list">
-        <div class="command-row"><code>/setup</code><div class="command-desc">通知先・キャラクター・話し方を設定。ユニオンPASS連携もここから。<span class="recommended">最初に使う</span></div></div>
-        <div class="command-row"><code>/botprofiles</code><div class="command-desc">3キャラの名前・画像をボタンで設定。1人だけでも、3人まとめてでも変更できます。<span class="recommended">おすすめ</span></div></div>
-        <div class="command-row"><code>/botname</code><div class="command-desc">現在選択中のキャラクターのBOT名を変更します。</div></div>
-        <div class="command-row"><code>/botimage</code><div class="command-desc">現在選択中のキャラクターのBOT画像を変更します。</div></div>
-        <div class="command-row"><code>/botreset</code><div class="command-desc">現在選択中のキャラクターを標準名・標準画像へ戻します。</div></div>
-        <div class="command-row"><code>/guide</code><div class="command-desc">Discord内でBOTの使い方をもう一度表示します。</div></div>
+        <div class="command-row"><code>/setup</code><div class="command-desc">通知先・キャラクター・話し方を設定。ユニオンPASS連携もここから。<span class="recommended">最初に使う</span></div><button class="copy-command" type="button" data-copy="/setup">📋 コピー</button></div>
+        <div class="command-row"><code>/botprofiles</code><div class="command-desc">3キャラの名前・画像をボタンで設定。1人だけでも、3人まとめてでも変更できます。<span class="recommended">おすすめ</span></div><button class="copy-command" type="button" data-copy="/botprofiles">📋 コピー</button></div>
+        <div class="command-row"><code>/botname</code><div class="command-desc">現在選択中のキャラクターのBOT名を変更します。</div><button class="copy-command" type="button" data-copy="/botname">📋 コピー</button></div>
+        <div class="command-row"><code>/botimage</code><div class="command-desc">現在選択中のキャラクターのBOT画像を変更します。</div><button class="copy-command" type="button" data-copy="/botimage">📋 コピー</button></div>
+        <div class="command-row"><code>/botreset</code><div class="command-desc">現在選択中のキャラクターを標準名・標準画像へ戻します。</div><button class="copy-command" type="button" data-copy="/botreset">📋 コピー</button></div>
+        <div class="command-row"><code>/guide</code><div class="command-desc">Discord内でBOTの使い方をもう一度表示します。</div><button class="copy-command" type="button" data-copy="/guide">📋 コピー</button></div>
       </div>
     </section>
 
@@ -449,5 +453,45 @@
       inviteBtn.rel = "noopener noreferrer";
     }
   </script>
+
+  <script>
+    document.querySelectorAll(".copy-command").forEach((button) => {
+      button.addEventListener("click", async () => {
+        const text = button.dataset.copy || "";
+        if (!text) return;
+
+        const original = button.textContent;
+
+        try {
+          if (navigator.clipboard && window.isSecureContext) {
+            await navigator.clipboard.writeText(text);
+          } else {
+            const input = document.createElement("textarea");
+            input.value = text;
+            input.setAttribute("readonly", "");
+            input.style.position = "fixed";
+            input.style.opacity = "0";
+            document.body.appendChild(input);
+            input.select();
+            document.execCommand("copy");
+            input.remove();
+          }
+
+          button.textContent = "✓ コピー済み";
+          button.classList.add("copied");
+          window.setTimeout(() => {
+            button.textContent = original;
+            button.classList.remove("copied");
+          }, 1400);
+        } catch (error) {
+          button.textContent = "コピー失敗";
+          window.setTimeout(() => {
+            button.textContent = original;
+          }, 1400);
+        }
+      });
+    });
+  </script>
+
 </body>
 </html>
