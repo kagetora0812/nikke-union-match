@@ -226,6 +226,7 @@
     .copy-command { min-width:86px; min-height:34px; padding:0 10px; border:1px solid #3d6678; background:#101a20; color:#aee8ff; font-size:10.5px; font-weight:900; cursor:pointer; }
     .copy-command:hover { border-color:var(--accent); background:#122631; color:#fff; }
     .copy-command.copied { border-color:#2f946a; background:#10291f; color:#8ff3c4; }
+    .profile-copy { margin-top:12px; }
     code { color:#91defd; font-family:Consolas,"SFMono-Regular",monospace; font-size:12px; font-weight:800; }
     .command-desc { color:#aeb3ba; font-size:11.5px; line-height:1.6; }
     .recommended { color:#081018; background:var(--accent); padding:2px 6px; margin-left:6px; font-size:9px; font-weight:900; }
@@ -316,27 +317,24 @@
     </section>
 
     <div class="union-required-note">
-      <span class="required-title">⚠️ ユニオン連携には、UNION MATCHへの登録が必要です</span>
-      <strong>期限通知・BOTからのPASS不要再掲載など、自分のユニオン募集と連携する機能</strong>を使うには、先にUNION MATCHでユニオン募集を登録してください。
-      登録時に発行されるPASSを <code>/setup</code> から最初の1回だけ入力します。
-      BOTの招待・キャラクター設定・AI会話は、ユニオン登録前でもテストできます。
+      <span class="required-title">⚠️ 利用にはUNION MATCHへのユニオン登録が必要です</span>
+      ユニオン募集を登録後、<code>/setup</code> でPASSを1回入力すると利用できます。
     </div>
 
     <section class="reassurance-box">
-      <div class="eyebrow">TRY IT SAFELY</div>
+      <div class="eyebrow">CHOOSE YOUR STYLE</div>
       <h2>BOT導入がちょっと不安な方へ</h2>
       <p>
-        今使っているユニオンDiscordへ、いきなりBOTを入れる必要はありません。
-        まずは<strong>新しくテスト用のDiscordサーバーを1つ作って、そこへBOTを招待</strong>して試せます。
-        通知・AI会話・キャラ変更・名前や画像の変更を実際に確認して、納得してから本番サーバーへ導入すればOKです。
+        利用方法は<strong>2パターン</strong>。普段使っているユニオンDiscordに導入しても、
+        BOT専用の別サーバーで運用してもOKです。
       </p>
       <div class="privacy-note">
         🔒 <strong>連携用PASSはBOT側に保存しません。</strong> PASSは連携確認に使うだけです。AI会話は、BOTをメンションして送った内容を返信生成に利用します。
       </div>
       <div class="reassurance-points">
-        <div class="reassurance-point">🧪 <b>まずはテスト</b><br>自分だけの専用サーバーで気軽に試せます。</div>
-        <div class="reassurance-point">⚙️ <b>最初だけ設定</b><br>難しい設定は不要。管理者が最初に設定すれば、あとはBOTが自動で通知します。</div>
-        <div class="reassurance-point">✅ <b>納得してから本番へ</b><br>使い心地を確認してから、普段のユニオンDiscordへ導入できます。</div>
+        <div class="reassurance-point">🧪 <b>本サーバーへの導入が不安な方</b><br>BOT専用のDiscordサーバーを新しく作り、必要なメンバーだけ招待して利用できます。普段のユニオンDiscordにBOTを入れる必要はありません。</div>
+        <div class="reassurance-point">🏠 <b>本番サーバーで使う方</b><br>普段のユニオンDiscordに「UNION MATCH通知用チャンネル」を1つ作ってBOTを導入するのがおすすめ。通知を専用チャンネルにまとめて運用できます。</div>
+        <div class="reassurance-point">🔑 <b>どちらも設定は最初だけ</b><br>UNION MATCHにユニオン登録後、<code>/setup</code> でPASSを1回入力すれば連携できます。</div>
       </div>
     </section>
 
@@ -447,6 +445,7 @@
             <div class="icon">🪪</div>
             <h3><code>/botprofiles</code></h3>
             <p>カイリ・セバスチャン・なつきをボタンで選択。名前変更・画像変更・標準に戻す、さらに3人まとめて設定もできます。</p>
+            <button class="copy-command profile-copy" type="button" data-copy="/botprofiles">📋 コピー</button>
           </div>
         </div>
       </div>
