@@ -145,6 +145,7 @@ textarea:focus-visible {
 
 .btn,
 .creator-link-btn,
+.bot-link-btn,
 .search-tab,
 .register-back-btn,
 .manage-back-btn,
@@ -442,6 +443,7 @@ h3 {
 
 .btn,
 .creator-link-btn,
+.bot-link-btn,
 .search-tab,
 .register-back-btn,
 .manage-back-btn,
@@ -593,8 +595,9 @@ h3 {
   font-weight: 900;
 }
 
-.creator-link-btn {
-  flex: .8;
+.creator-link-btn,
+.bot-link-btn {
+  flex: .52;
 
   min-height: 46px;
 
@@ -625,7 +628,9 @@ h3 {
 }
 
 .creator-link-btn:hover,
-.creator-link-btn:active {
+.creator-link-btn:active,
+.bot-link-btn:hover,
+.bot-link-btn:active {
   border-color: var(--cyan);
 
   color: #fff;
@@ -2168,6 +2173,7 @@ body.manage-mode #managePage {
 
 .btn,
 .creator-link-btn,
+.bot-link-btn,
 .search-tab,
 .register-back-btn,
 .manage-back-btn,
@@ -2191,6 +2197,7 @@ body.manage-mode #managePage {
 
 .btn,
 .creator-link-btn,
+.bot-link-btn,
 .search-tab,
 .register-back-btn,
 .manage-back-btn,
@@ -2212,6 +2219,8 @@ body.manage-mode #managePage {
 .btn.active,
 .creator-link-btn:hover,
 .creator-link-btn:active,
+.bot-link-btn:hover,
+.bot-link-btn:active,
 .search-tab:hover,
 .search-tab:active,
 .search-tab.active,
@@ -2405,6 +2414,7 @@ body.manage-mode #managePage {
 /* Buttons: charcoal at rest, cyan only for active/hover */
 .btn,
 .creator-link-btn,
+.bot-link-btn,
 .search-tab,
 .register-back-btn,
 .manage-back-btn,
@@ -2543,35 +2553,26 @@ body.manage-mode #managePage {
   .hero-actions,
   .creator-action-row {
     display: grid;
-
-    grid-template-columns:
-      minmax(0, 1.15fr)
-      minmax(0, 1fr);
-
+    grid-template-columns: repeat(2, minmax(0, 1fr));
     gap: 6px;
-
     width: 100%;
   }
 
   .main-register-btn,
   .hero-actions .btn.primary {
+    grid-column: 1 / -1;
     width: 100%;
-
     min-height: 42px;
-
     padding: 0 8px;
-
     font-size: 11px;
   }
 
-  .creator-link-btn {
+  .creator-link-btn,
+  .bot-link-btn {
     width: 100%;
-
-    min-height: 42px;
-
-    padding: 0 6px;
-
-    font-size: 9.5px;
+    min-height: 38px;
+    padding: 0 5px;
+    font-size: 9px;
   }
 
   .hero-stats {
@@ -3970,4 +3971,70 @@ body .bottom-nav .nav-btn.active:hover {
   object-fit: initial !important;
 
   background: transparent !important;
+}
+
+
+/* =========================================================
+   DISCORD BOT ENTRY BUTTON
+   Creator buttonと同じ配色。TOPでは2つを小さく並べる。
+   ========================================================= */
+.bot-link-btn {
+  flex: .52;
+  min-height: 46px;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  padding:0 12px;
+  border:1px solid #5b5d61;
+  color:#f6f7f8;
+  background:linear-gradient(180deg,#48494d,#35363a);
+  font-size:12px;
+  font-weight:900;
+  text-decoration:none;
+  white-space:nowrap;
+  box-shadow:var(--shadow-soft);
+}
+.bot-link-btn:hover,
+.bot-link-btn:active {
+  border-color:var(--cyan) !important;
+  color:#fff !important;
+  background:linear-gradient(180deg,var(--cyan-2),var(--cyan));
+}
+@media (max-width:600px) {
+  .hero-actions.creator-action-row {
+    display:grid;
+    grid-template-columns:repeat(2,minmax(0,1fr));
+    gap:6px;
+    width:100%;
+  }
+  .hero-actions.creator-action-row .main-register-btn {
+    grid-column:1/-1;
+  }
+  .hero-actions.creator-action-row .creator-link-btn,
+  .hero-actions.creator-action-row .bot-link-btn {
+    width:100%;
+    min-height:38px;
+    padding:0 5px;
+    font-size:9px;
+  }
+}
+
+
+/* =========================================================
+   TOP HERO DESCRIPTION - mobile readability
+   ========================================================= */
+.hero-description span {
+  display: block;
+}
+
+@media (max-width: 600px) {
+  .hero .hero-description {
+    margin: 12px 0 14px !important;
+    font-size: 12px !important;
+    line-height: 1.65 !important;
+  }
+
+  .hero-description span + span {
+    margin-top: 3px;
+  }
 }
