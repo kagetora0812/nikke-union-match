@@ -573,52 +573,46 @@
 
 
 
-  <style id="hero-stats-two-row-v5">
+
+  <style id="hero-stats-two-row-v6">
     /* =========================================================
-       TOP STATS v5
-       PC / スマホ共通：上下2段
-       数字を最優先で大きく、枠の中央に整列
+       TOP STATS v6
+       既存3カラムCSSの影響を完全に打ち消し、
+       指揮官 / ユニオンを上下2段で中央配置。
+       数字を主役にする。
        ========================================================= */
 
     .hero-stats.hero-stats-two-row {
       display: grid !important;
-      grid-template-rows: 1fr 1px 1fr !important;
+      grid-template-columns: 1fr !important;
+      grid-template-rows: minmax(0, 1fr) 1px minmax(0, 1fr) !important;
       gap: 0 !important;
-      min-height: 252px !important;
-      padding: 22px 34px 30px !important;
+      align-items: stretch !important;
+      min-height: 270px !important;
+      padding: 22px 30px 30px !important;
     }
 
     .hero-stats-two-row .hero-stat-row {
-      display: grid;
-      grid-template-columns:
-        minmax(125px, .8fr)
-        minmax(0, 1fr)
-        1px
-        minmax(0, 1fr);
-      align-items: center;
+      width: min(100%, 560px);
+      margin: 0 auto;
+      display: grid !important;
+      grid-template-columns: 1fr !important;
+      grid-template-rows: auto 1fr !important;
+      align-items: center !important;
+      justify-items: stretch !important;
       min-width: 0;
-      column-gap: 22px;
-    }
-
-    .hero-stats-two-row .hero-stat-row-divider {
-      width: 100%;
-      height: 1px;
-      background: rgba(90, 98, 108, .28);
-    }
-
-    .hero-stats-two-row .hero-stat-mid-divider {
-      width: 1px;
-      height: 68px;
-      justify-self: center;
-      background: rgba(90, 98, 108, .34);
+      padding: 5px 0;
     }
 
     .hero-stats-two-row .hero-stat-row-title {
-      text-align: center;
-      font-size: 16px;
+      grid-column: 1 !important;
+      grid-row: 1 !important;
+      margin: 0 0 4px !important;
+      text-align: center !important;
+      font-size: 15px;
       font-weight: 900;
-      letter-spacing: .025em;
       line-height: 1.2;
+      letter-spacing: .02em;
       white-space: nowrap;
     }
 
@@ -630,15 +624,58 @@
       color: var(--cyan, #1ab0f1);
     }
 
+    /* row直下の「指標2つ＋中央線」を同じ行に固定 */
     .hero-stats-two-row .hero-stat-metric {
+      grid-row: 2 !important;
       min-width: 0;
       text-align: center;
+      align-self: center;
+    }
+
+    .hero-stats-two-row .hero-stat-metric:first-of-type {
+      grid-column: 1 !important;
+    }
+
+    /* 内部レイアウトは擬似的に3分割へ */
+    .hero-stats-two-row .hero-stat-row {
+      position: relative;
+    }
+
+    .hero-stats-two-row .hero-stat-row::after {
+      content: "";
+      position: absolute;
+      left: 50%;
+      top: 41px;
+      bottom: 12px;
+      width: 1px;
+      transform: translateX(-50%);
+      background: rgba(90, 98, 108, .34);
+    }
+
+    /* metricを左右50%に配置 */
+    .hero-stats-two-row .hero-stat-metric {
+      width: 50%;
+    }
+
+    .hero-stats-two-row .hero-stat-metric:nth-of-type(1) {
+      justify-self: start;
+      padding-right: 18px;
+    }
+
+    .hero-stats-two-row .hero-stat-metric:nth-of-type(2) {
+      justify-self: end;
+      padding-left: 18px;
+    }
+
+    /* 旧HTMLに残る中央線要素は非表示（擬似要素で中央を正確に出す） */
+    .hero-stats-two-row .hero-stat-mid-divider {
+      display: none !important;
     }
 
     .hero-stats-two-row .hero-stat-metric-label {
-      margin-bottom: 4px;
+      margin-bottom: 2px;
       color: var(--muted, #737b86);
-      font-size: 11px;
+      font-size: 10.5px;
       font-weight: 900;
       line-height: 1.3;
       white-space: nowrap;
@@ -649,7 +686,7 @@
       align-items: flex-end;
       justify-content: center;
       gap: 5px;
-      line-height: .84;
+      line-height: .82;
     }
 
     .hero-stats-two-row .hero-stat-metric-number strong {
@@ -662,15 +699,15 @@
         "Gothic MB101",
         "Zen Kaku Gothic New",
         sans-serif;
-      font-size: clamp(58px, 5vw, 76px);
+      font-size: clamp(58px, 5.2vw, 78px);
       font-weight: 900;
-      line-height: .82;
-      letter-spacing: -.03em;
+      line-height: .80;
+      letter-spacing: -.035em;
     }
 
     .hero-stats-two-row .hero-stat-metric-number span {
       padding-bottom: 6px;
-      font-size: 16px;
+      font-size: 15px;
       font-weight: 900;
       line-height: 1;
       white-space: nowrap;
@@ -696,44 +733,55 @@
       color: var(--green, #32c875);
     }
 
+    .hero-stats-two-row .hero-stat-row-divider {
+      width: min(100%, 560px);
+      height: 1px;
+      margin: 0 auto;
+      background: rgba(90, 98, 108, .22);
+    }
+
     .hero-stats-two-row .hero-stat-update {
       position: absolute !important;
       left: 0 !important;
       right: 0 !important;
-      bottom: 8px !important;
-      text-align: center;
+      bottom: 7px !important;
+      text-align: center !important;
     }
 
     /* =========================================================
        SMARTPHONE
-       上下2段を維持しつつ、数字を大きく見せる
+       枠を大きくしすぎず、数字はしっかり目立たせる
        ========================================================= */
     @media screen and (max-width: 600px) {
       .hero-stats.hero-stats-two-row {
-        min-height: 220px !important;
-        padding: 15px 8px 24px !important;
+        min-height: 228px !important;
+        padding: 13px 6px 22px !important;
       }
 
       .hero-stats-two-row .hero-stat-row {
-        grid-template-columns:
-          72px
-          minmax(0, 1fr)
-          1px
-          minmax(0, 1fr);
-        column-gap: 7px;
+        width: 100%;
+        padding: 3px 0;
       }
 
       .hero-stats-two-row .hero-stat-row-title {
+        margin-bottom: 2px !important;
         font-size: 11px;
-        white-space: normal;
       }
 
-      .hero-stats-two-row .hero-stat-mid-divider {
-        height: 50px;
+      .hero-stats-two-row .hero-stat-row::after {
+        top: 30px;
+        bottom: 8px;
+      }
+
+      .hero-stats-two-row .hero-stat-metric:nth-of-type(1) {
+        padding-right: 8px;
+      }
+
+      .hero-stats-two-row .hero-stat-metric:nth-of-type(2) {
+        padding-left: 8px;
       }
 
       .hero-stats-two-row .hero-stat-metric-label {
-        margin-bottom: 2px;
         font-size: 8.5px;
       }
 
@@ -742,7 +790,7 @@
       }
 
       .hero-stats-two-row .hero-stat-metric-number strong {
-        font-size: clamp(39px, 11.5vw, 50px);
+        font-size: clamp(40px, 12vw, 50px);
       }
 
       .hero-stats-two-row .hero-stat-metric-number span {
@@ -750,42 +798,27 @@
         font-size: 10px;
       }
 
+      .hero-stats-two-row .hero-stat-row-divider {
+        width: calc(100% - 12px);
+      }
+
       .hero-stats-two-row .hero-stat-update {
-        bottom: 5px !important;
+        bottom: 4px !important;
         font-size: 8px !important;
       }
     }
 
     @media screen and (max-width: 360px) {
       .hero-stats.hero-stats-two-row {
-        min-height: 212px !important;
-        padding-left: 5px !important;
-        padding-right: 5px !important;
-      }
-
-      .hero-stats-two-row .hero-stat-row {
-        grid-template-columns:
-          64px
-          minmax(0, 1fr)
-          1px
-          minmax(0, 1fr);
-        column-gap: 5px;
-      }
-
-      .hero-stats-two-row .hero-stat-row-title {
-        font-size: 10px;
-      }
-
-      .hero-stats-two-row .hero-stat-metric-label {
-        font-size: 7.8px;
+        min-height: 218px !important;
       }
 
       .hero-stats-two-row .hero-stat-metric-number strong {
-        font-size: 36px;
+        font-size: 38px;
       }
 
-      .hero-stats-two-row .hero-stat-metric-number span {
-        font-size: 9px;
+      .hero-stats-two-row .hero-stat-metric-label {
+        font-size: 8px;
       }
     }
   </style>
