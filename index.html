@@ -570,13 +570,15 @@
   </style>
 
 
-  <style id="hero-stats-two-column-v1">
+
+  <style id="hero-stats-two-column-v3">
     /* =========================================================
-       TOP STATS v1
-       3分割 → 2分割
-       左：指揮官（募集中 / 成立実績）
-       右：ユニオン（募集中 / 総登録）
-       ※ hero-stats 配下のみに限定
+       TOP STATS v3
+       - 2分割は維持
+       - 数字を中央寄せにして左右の空白を減らす
+       - 上下のズレは「少しだけ」
+       - スラッシュを2つの数字の間に置く
+       - 右下は「現在登録ユニオン」
        ========================================================= */
 
     .hero-stats.hero-stats-two-column {
@@ -585,11 +587,10 @@
       align-items: stretch !important;
       gap: 0 !important;
       min-height: 240px !important;
-      padding: 36px 28px 34px !important;
+      padding: 34px 30px 34px !important;
     }
 
     .hero-stats-two-column .hero-stat-group {
-      position: relative;
       min-width: 0;
       display: flex;
       flex-direction: column;
@@ -601,16 +602,16 @@
       width: 1px !important;
       height: auto !important;
       align-self: stretch !important;
-      margin: 12px 20px 24px !important;
-      background: rgba(86, 94, 104, .45) !important;
+      margin: 14px 18px 26px !important;
+      background: rgba(90, 98, 108, .42) !important;
     }
 
     .hero-stats-two-column .hero-stat-group-title {
-      margin: 0 0 8px;
+      margin: 0 0 13px;
       text-align: center;
-      font-size: 14px;
+      font-size: 15px;
       font-weight: 900;
-      letter-spacing: .03em;
+      letter-spacing: .025em;
       line-height: 1.2;
     }
 
@@ -622,33 +623,37 @@
       color: var(--cyan, #1ab0f1);
     }
 
+    /* 3カラム：左数値 / スラッシュ / 右数値 */
     .hero-stats-two-column .hero-stat-stage {
-      position: relative;
-      height: 132px;
-      margin: 0 12px;
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) 34px minmax(0, 1fr);
+      align-items: center;
+      width: min(100%, 420px);
+      min-height: 120px;
+      margin: 0 auto;
     }
 
     .hero-stats-two-column .hero-stat-mini {
-      position: absolute;
-      width: min(46%, 180px);
+      position: static !important;
+      width: auto !important;
+      min-width: 0;
+      text-align: center !important;
     }
 
+    /* ユーザー希望：上下はほんの少しだけずらす */
     .hero-stats-two-column .hero-stat-mini.top {
-      top: 5px;
-      left: 0;
-      text-align: left;
+      transform: translateY(-9px);
     }
 
     .hero-stats-two-column .hero-stat-mini.bottom {
-      right: 0;
-      bottom: 0;
-      text-align: right;
+      transform: translateY(10px);
     }
 
     .hero-stats-two-column .hero-stat-mini-label {
-      margin-bottom: 3px;
+      min-height: 18px;
+      margin-bottom: 4px;
       color: var(--muted, #737b86);
-      font-size: 10px;
+      font-size: 11px;
       font-weight: 900;
       line-height: 1.3;
       white-space: nowrap;
@@ -657,12 +662,9 @@
     .hero-stats-two-column .hero-stat-mini-number {
       display: flex;
       align-items: flex-end;
+      justify-content: center !important;
       gap: 5px;
       line-height: .85;
-    }
-
-    .hero-stats-two-column .hero-stat-mini.bottom .hero-stat-mini-number {
-      justify-content: flex-end;
     }
 
     .hero-stats-two-column .hero-stat-mini-number strong {
@@ -675,25 +677,25 @@
         "Gothic MB101",
         "Zen Kaku Gothic New",
         sans-serif;
-      font-size: clamp(46px, 4.7vw, 68px);
+      font-size: clamp(48px, 4.4vw, 66px);
       font-weight: 900;
       line-height: .82;
     }
 
     .hero-stats-two-column .hero-stat-mini-number span {
       padding-bottom: 5px;
-      font-size: 15px;
+      font-size: 14px;
       font-weight: 900;
       line-height: 1;
       white-space: nowrap;
     }
 
     .hero-stats-two-column .hero-stat-slash {
-      position: absolute;
-      left: 50%;
-      top: 54%;
-      transform: translate(-50%, -50%) rotate(-7deg);
-      color: rgba(107, 116, 128, .66);
+      position: static !important;
+      transform: none !important;
+      align-self: center;
+      justify-self: center;
+      color: rgba(120, 130, 143, .70);
       font-size: 34px;
       font-weight: 400;
       line-height: 1;
@@ -718,10 +720,10 @@
       color: var(--cyan, #1ab0f1);
     }
 
-    /* ユニオン：総登録 = 緑 */
+    /* ユニオン：現在登録 = 緑 */
     .hero-stats-two-column .union-total strong,
     .hero-stats-two-column .union-total span {
-      color: var(--green, #39b978);
+      color: var(--green, #32c875);
     }
 
     .hero-stats-two-column .hero-stat-update {
@@ -734,50 +736,53 @@
 
     @media screen and (max-width: 600px) {
       .hero-stats.hero-stats-two-column {
-        grid-template-columns: minmax(0, 1fr) 1px minmax(0, 1fr) !important;
         min-height: 205px !important;
-        padding: 26px 8px 28px !important;
+        padding: 25px 8px 29px !important;
       }
 
       .hero-stats-two-column .hero-stat-divider {
-        margin: 8px 6px 22px !important;
+        margin: 8px 5px 24px !important;
       }
 
       .hero-stats-two-column .hero-stat-group-title {
-        margin-bottom: 5px;
+        margin-bottom: 8px;
         font-size: 11px;
       }
 
       .hero-stats-two-column .hero-stat-stage {
-        height: 116px;
-        margin: 0 3px;
+        grid-template-columns: minmax(0, 1fr) 22px minmax(0, 1fr);
+        min-height: 108px;
       }
 
-      .hero-stats-two-column .hero-stat-mini {
-        width: 48%;
+      .hero-stats-two-column .hero-stat-mini.top {
+        transform: translateY(-6px);
+      }
+
+      .hero-stats-two-column .hero-stat-mini.bottom {
+        transform: translateY(7px);
       }
 
       .hero-stats-two-column .hero-stat-mini-label {
+        min-height: 15px;
+        margin-bottom: 2px;
         font-size: 8.5px;
-        letter-spacing: -.02em;
       }
 
       .hero-stats-two-column .hero-stat-mini-number {
-        gap: 3px;
+        gap: 2px;
       }
 
       .hero-stats-two-column .hero-stat-mini-number strong {
-        font-size: clamp(34px, 10vw, 46px);
+        font-size: clamp(31px, 9vw, 43px);
       }
 
       .hero-stats-two-column .hero-stat-mini-number span {
         padding-bottom: 4px;
-        font-size: 11px;
+        font-size: 10px;
       }
 
       .hero-stats-two-column .hero-stat-slash {
-        top: 53%;
-        font-size: 26px;
+        font-size: 23px;
       }
 
       .hero-stats-two-column .union-total .hero-stat-mini-label {
@@ -785,7 +790,7 @@
       }
 
       .hero-stats-two-column .union-total .hero-stat-mini-number span {
-        font-size: 9px;
+        font-size: 8.5px;
       }
     }
 
@@ -795,17 +800,16 @@
         padding-right: 5px !important;
       }
 
-      .hero-stats-two-column .hero-stat-divider {
-        margin-left: 3px !important;
-        margin-right: 3px !important;
+      .hero-stats-two-column .hero-stat-stage {
+        grid-template-columns: minmax(0, 1fr) 18px minmax(0, 1fr);
       }
 
       .hero-stats-two-column .hero-stat-mini-number strong {
-        font-size: 32px;
+        font-size: 30px;
       }
 
       .hero-stats-two-column .hero-stat-mini-label {
-        font-size: 8px;
+        font-size: 7.7px;
       }
     }
   </style>
@@ -1573,7 +1577,7 @@
       <div class="hero-stat-slash" aria-hidden="true">／</div>
 
       <div class="hero-stat-mini bottom union-total">
-        <div class="hero-stat-mini-label">総登録ユニオン</div>
+        <div class="hero-stat-mini-label">現在登録ユニオン</div>
         <div class="hero-stat-mini-number">
           <strong id="totalUnionCountTop">0</strong>
           <span>ユニオン</span>
@@ -2351,12 +2355,14 @@
   <script src="./app.js?v=13.21"></script>
 
 
-  <script id="total-union-count-v2">
+
+  <script id="current-union-count-v3">
     /* =========================================================
-       総登録ユニオン数
-       - 既存app.jsには手を入れない
-       - まず集計RPCを使用（大量登録向け・1回の軽い問い合わせ）
-       - RPC未導入時のみ既存テーブルから安全にフォールバック
+       現在登録ユニオン数
+       - 過去の掲載履歴はカウントしない
+       - 現在有効なユニオンだけを対象
+       - 同一ユニオンの再掲載は固定IDで1件にまとめる
+       - 将来の「募集休止(paused)」にも対応できる設計
        ========================================================= */
 
     async function loadTotalUnionCountTop() {
@@ -2376,10 +2382,10 @@
 
       try {
 
-        /* 大量登録時はこちらを優先 */
+        /* SQLを入れている環境では、軽い集計RPCを優先 */
         const rpcResult =
           await sb.rpc(
-            "get_total_union_count"
+            "get_current_registered_union_count"
           );
 
         if (!rpcResult.error) {
@@ -2398,34 +2404,25 @@
           }
         }
 
-        /* RPC未導入時だけフォールバック */
+        /* RPC未導入時の安全なフォールバック */
         const pageSize = 1000;
         let from = 0;
         const rows = [];
+        const nowIso =
+          new Date().toISOString();
 
         while (true) {
 
           let result =
             await sb
               .from("union_recruitments")
-              .select("union_identity_id,union_name")
-              .order("created_at", { ascending: true })
+              .select("union_identity_id,union_name,status,expires_at,created_at")
+              .in("status", ["open", "paused"])
+              .order("created_at", { ascending: false })
               .range(from, from + pageSize - 1);
 
           if (result.error) {
-
-            const fallback =
-              await sb
-                .from("union_recruitments")
-                .select("union_name")
-                .order("created_at", { ascending: true })
-                .range(from, from + pageSize - 1);
-
-            if (fallback.error) {
-              throw fallback.error;
-            }
-
-            result = fallback;
+            throw result.error;
           }
 
           const page =
@@ -2442,15 +2439,6 @@
           from += pageSize;
         }
 
-        const identities =
-          new Set();
-
-        const identityNames =
-          new Set();
-
-        const legacyNames =
-          new Set();
-
         const normalizeName =
           value =>
             String(value || "")
@@ -2458,57 +2446,70 @@
               .replace(/\s+/g, " ")
               .toLocaleLowerCase("ja-JP");
 
+        /*
+          最新行だけを見る。
+          open は期限内のみ登録中。
+          paused は将来の募集休止機能用で、期限に関係なく登録中扱い。
+        */
+        const seen =
+          new Set();
+
+        let count = 0;
+
         rows.forEach(row => {
 
-          const identity =
+          const key =
             String(
               row?.union_identity_id || ""
-            ).trim();
-
-          const name =
+            ).trim()
+            ||
             normalizeName(
               row?.union_name
             );
 
-          if (identity) {
-
-            identities.add(identity);
-
-            if (name) {
-              identityNames.add(name);
-            }
-
+          if (
+            !key
+            ||
+            seen.has(key)
+          ) {
             return;
           }
 
-          if (name) {
-            legacyNames.add(name);
+          seen.add(key);
+
+          const status =
+            String(
+              row?.status || ""
+            );
+
+          const isCurrent =
+            status === "paused"
+            ||
+            (
+              status === "open"
+              &&
+              row?.expires_at
+              &&
+              row.expires_at > nowIso
+            );
+
+          if (isCurrent) {
+            count++;
           }
 
-        });
-
-        let legacyOnlyCount = 0;
-
-        legacyNames.forEach(name => {
-          if (!identityNames.has(name)) {
-            legacyOnlyCount++;
-          }
         });
 
         target.textContent =
-          String(
-            identities.size +
-            legacyOnlyCount
-          );
+          String(count);
 
       } catch (error) {
 
         console.error(
-          "総登録ユニオン数取得エラー",
+          "現在登録ユニオン数取得エラー",
           error
         );
 
-        /* この追加表示だけ失敗しても既存サイトは止めない */
+        /* 追加表示だけ失敗しても本体は止めない */
         target.textContent = "--";
       }
     }
@@ -2522,7 +2523,6 @@
     );
 
 
-    /* 新規登録・再掲載後に募集中件数が変わった場合も再取得 */
     document.addEventListener(
       "DOMContentLoaded",
       () => {
