@@ -1,0 +1,453 @@
+<!doctype html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="theme-color" content="#08090c">
+  <title>NIKKE UNION MATCH - Discord BOT</title>
+  <meta name="description" content="NIKKE UNION MATCH Discord BOTの導入方法・コマンド・キャラクター設定・通知機能の案内ページです。">
+
+  <style>
+    @import url("https://fonts.googleapis.com/css2?family=Teko:wght@500;600;700&family=Zen+Kaku+Gothic+New:wght@500;700;900&display=swap");
+
+    :root {
+      --bg:#08090c;
+      --bg2:#0d0f13;
+      --panel:#121419;
+      --panel2:#171a20;
+      --panel3:#1d2027;
+      --line:#2b2e35;
+      --line-soft:rgba(255,255,255,.07);
+      --text:#f1f2f4;
+      --muted:#969ba3;
+      --muted2:#6f747c;
+      --accent:#28b9e8;
+      --accent2:#8edcff;
+      --orange:#e7a22d;
+      --cyan:#28b9e8;
+      --red:#ff6977;
+      --green:#35d78c;
+      --purple:#b66cff;
+    }
+
+    * { box-sizing:border-box; }
+    html { background:var(--bg); scroll-behavior:smooth; }
+    body {
+      margin:0;
+      min-height:100vh;
+      color:var(--text);
+      background:
+        radial-gradient(circle at 82% 7%, rgba(255,255,255,.045), transparent 24%),
+        linear-gradient(180deg,#0d0f13 0%,#08090c 56%,#07080a 100%);
+      font-family:"Gothic MB101","Zen Kaku Gothic New",sans-serif;
+      font-weight:700;
+      -webkit-font-smoothing:antialiased;
+      text-rendering:optimizeLegibility;
+    }
+
+    body::before {
+      content:"";
+      position:fixed;
+      inset:0;
+      z-index:-1;
+      pointer-events:none;
+      opacity:.32;
+      background:linear-gradient(135deg,transparent 0 74%,rgba(255,255,255,.025) 74% 74.35%,transparent 74.35% 100%);
+    }
+
+    a { color:inherit; }
+    button { font:inherit; }
+
+    .topbar {
+      height:64px;
+      padding:0 20px;
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      position:sticky;
+      top:0;
+      z-index:20;
+      border-bottom:1px solid var(--line-soft);
+      background:rgba(8,9,12,.92);
+      backdrop-filter:blur(14px);
+    }
+
+    .brand {
+      display:flex;
+      flex-direction:column;
+      font-family:"Futura PT Condensed","Industry","Azonix","Teko",sans-serif;
+      line-height:.82;
+    }
+    .brand-small { color:var(--accent); font-size:9px; font-weight:800; letter-spacing:3.7px; }
+    .brand-main { margin-top:5px; color:#fff; font-size:23px; font-weight:800; letter-spacing:-.035em; line-height:.82; }
+    .status { display:inline-flex; align-items:center; gap:8px; color:#c7cbd0; font:800 11px "Teko",sans-serif; letter-spacing:1.6px; }
+    .status::before { content:""; width:5px; height:15px; background:var(--accent); box-shadow:0 0 8px rgba(40,185,232,.25); }
+
+    .container { width:min(1180px,calc(100% - 28px)); margin:0 auto; padding:28px 0 46px; }
+    .eyebrow { margin-bottom:7px; color:var(--accent); font:800 11px "Teko",sans-serif; letter-spacing:2.4px; text-transform:uppercase; }
+    h1,h2,h3 { margin:0; color:#fff; font-weight:900; letter-spacing:-.045em; }
+    h1 { font-size:clamp(31px,6vw,52px); line-height:1.05; }
+    h2 { font-size:clamp(22px,4vw,30px); line-height:1.15; }
+    h3 { font-size:17px; }
+    .lead { max-width:730px; margin:13px 0 0; color:#b5bac1; font-size:13px; line-height:1.9; }
+
+    .bot-hero {
+      position:relative;
+      overflow:hidden;
+      min-height:270px;
+      padding:32px 34px;
+      display:grid;
+      grid-template-columns:minmax(0,1fr) 330px;
+      align-items:center;
+      gap:30px;
+      border:1px solid #292c32;
+      border-top:3px solid #3a3d43;
+      background:linear-gradient(110deg,#17191e 0%,#111318 56%,#0d0f13 100%);
+      box-shadow:0 20px 45px rgba(0,0,0,.22);
+    }
+    .bot-hero::before {
+      content:"";
+      position:absolute;
+      width:330px;
+      height:330px;
+      right:-74px;
+      top:-100px;
+      border:34px solid rgba(40,185,232,.035);
+      box-shadow:0 0 0 34px rgba(255,255,255,.014),0 0 0 68px rgba(255,255,255,.009);
+      border-radius:50%;
+      pointer-events:none;
+    }
+    .hero-copy,.hero-side { position:relative; z-index:1; }
+    .hero-side { border-left:1px solid #30333a; padding-left:25px; }
+    .hero-mini { color:#7f858d; font:800 10px "Teko",sans-serif; letter-spacing:2px; }
+    .hero-feature { margin-top:12px; display:grid; gap:9px; }
+    .hero-feature div { display:flex; gap:8px; align-items:flex-start; color:#d7dade; font-size:12px; line-height:1.55; }
+    .hero-feature b { color:var(--accent2); }
+
+    .top-actions { margin-top:20px; display:flex; flex-wrap:wrap; gap:8px; }
+    .action-btn {
+      min-height:44px;
+      padding:0 16px;
+      display:inline-flex;
+      align-items:center;
+      justify-content:center;
+      border:1px solid #5b5d61;
+      color:#f6f7f8;
+      background:linear-gradient(180deg,#48494d,#35363a);
+      font-size:12px;
+      font-weight:900;
+      text-decoration:none;
+      clip-path:polygon(8px 0,calc(100% - 8px) 0,100% 8px,100% calc(100% - 8px),calc(100% - 8px) 100%,8px 100%,0 calc(100% - 8px),0 8px);
+      cursor:pointer;
+    }
+    .action-btn.primary { border-color:#287da0; background:linear-gradient(180deg,#28b9e8,#148dbb); }
+    .action-btn:hover { border-color:var(--accent); background:linear-gradient(180deg,#2cc5ff,#159cca); }
+    .action-btn.disabled { opacity:.55; cursor:not-allowed; }
+
+    .section { margin-top:16px; padding:25px 24px; border:1px solid #292c32; background:linear-gradient(180deg,#14171c,#0f1115); }
+    .section-head { display:flex; justify-content:space-between; gap:18px; align-items:flex-end; margin-bottom:18px; }
+    .section-note { max-width:600px; color:var(--muted); font-size:11px; line-height:1.7; text-align:right; }
+
+    .steps { display:grid; grid-template-columns:repeat(4,minmax(0,1fr)); gap:10px; }
+    .step { position:relative; min-height:186px; padding:18px 16px; border:1px solid var(--line); background:var(--panel2); }
+    .step-no { width:28px; height:28px; display:grid; place-items:center; margin-bottom:13px; color:#081018; background:var(--accent); font:900 17px "Teko",sans-serif; }
+    .step h3 { margin-bottom:8px; }
+    .step p { margin:0; color:#a9aeb5; font-size:11.5px; line-height:1.75; }
+    .step strong { color:#fff; }
+
+    .character-grid { display:grid; grid-template-columns:repeat(3,minmax(0,1fr)); gap:12px; }
+    .character-card { overflow:hidden; border:1px solid var(--line); background:var(--panel2); }
+    .character-visual { position:relative; height:190px; display:grid; place-items:center; overflow:hidden; background:linear-gradient(145deg,#181b21,#0e1014); border-bottom:1px solid var(--line); }
+    .character-visual img { width:100%; height:100%; object-fit:cover; display:none; }
+    .character-fallback { position:absolute; inset:0; display:grid; place-items:center; font-size:72px; background:radial-gradient(circle at 50% 42%,rgba(40,185,232,.10),transparent 52%); }
+    .character-body { padding:15px 16px 17px; }
+    .character-tag { color:var(--accent); font:800 10px "Teko",sans-serif; letter-spacing:1.7px; }
+    .character-name { margin-top:3px; color:#fff; font-size:20px; font-weight:900; }
+    .character-desc { margin-top:7px; color:#9da2aa; font-size:11.5px; line-height:1.7; }
+    .character-call { margin-top:10px; padding-top:9px; border-top:1px solid var(--line); color:#dfe2e6; font-size:11px; }
+
+    .feature-grid { display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); gap:10px; }
+    .feature-card { padding:17px; border:1px solid var(--line); background:var(--panel2); }
+    .feature-card .icon { font-size:21px; }
+    .feature-card h3 { margin-top:7px; }
+    .feature-card p { margin:7px 0 0; color:#9ea3aa; font-size:11.5px; line-height:1.75; }
+
+    .command-list { display:grid; gap:7px; }
+    .command-row { display:grid; grid-template-columns:150px minmax(0,1fr); gap:12px; align-items:center; padding:11px 12px; border:1px solid var(--line); background:#15181d; }
+    code { color:#91defd; font-family:Consolas,"SFMono-Regular",monospace; font-size:12px; font-weight:800; }
+    .command-desc { color:#aeb3ba; font-size:11.5px; line-height:1.6; }
+    .recommended { color:#081018; background:var(--accent); padding:2px 6px; margin-left:6px; font-size:9px; font-weight:900; }
+
+    .talk-box { display:grid; grid-template-columns:minmax(0,1fr) minmax(0,1fr); gap:10px; }
+    .talk-card { padding:17px; border:1px solid var(--line); background:var(--panel2); }
+    .talk-card h3 { margin-bottom:10px; }
+    .chat-example { margin-top:7px; padding:9px 11px; border-left:3px solid var(--accent); background:#0d1014; color:#dfe3e7; font-size:11.5px; line-height:1.65; }
+    .chat-note { margin-top:9px; color:#8d939b; font-size:10.5px; line-height:1.65; }
+
+    .relist-flow { display:grid; grid-template-columns:1fr 1fr; gap:10px; }
+    .relist-card { padding:17px; border:1px solid var(--line); background:var(--panel2); }
+    .relist-card.green { border-left:4px solid var(--green); }
+    .relist-card.red { border-left:4px solid var(--red); }
+    .relist-label { font-size:13px; font-weight:900; color:#fff; }
+    .relist-card p { margin:8px 0 0; color:#9ea3aa; font-size:11.5px; line-height:1.75; }
+
+    .notice { margin-top:12px; padding:13px 14px; border:1px solid #314a56; background:rgba(40,185,232,.055); color:#b8d9e7; font-size:11px; line-height:1.75; }
+    .notice strong { color:#fff; }
+
+    .bottom-area { margin-top:18px; padding:18px 0 0; display:flex; justify-content:space-between; align-items:center; gap:12px; color:#686e75; font:800 10px "Teko",sans-serif; letter-spacing:1.6px; }
+    .bottom-area .action-btn { min-height:38px; }
+
+    @media (max-width:850px) {
+      .bot-hero { grid-template-columns:1fr; min-height:0; padding:25px 20px 22px; gap:20px; }
+      .hero-side { border-left:0; border-top:1px solid #30333a; padding:15px 0 0; }
+      .steps { grid-template-columns:repeat(2,minmax(0,1fr)); }
+    }
+
+    @media (max-width:600px) {
+      .topbar { height:58px; padding:0 14px; }
+      .brand-main { font-size:20px; }
+      .container { width:min(100% - 18px,1180px); padding-top:14px; }
+      .bot-hero { padding:22px 16px 18px; }
+      h1 { font-size:34px; }
+      .lead { font-size:11.5px; }
+      .top-actions { display:grid; grid-template-columns:1fr; }
+      .action-btn { width:100%; }
+      .section { padding:19px 14px; }
+      .section-head { display:block; }
+      .section-note { margin-top:7px; text-align:left; }
+      .steps,.character-grid,.feature-grid,.talk-box,.relist-flow { grid-template-columns:1fr; }
+      .step { min-height:0; }
+      .character-visual { height:210px; }
+      .command-row { grid-template-columns:1fr; gap:4px; }
+      .bottom-area { flex-direction:column; align-items:stretch; text-align:center; }
+    }
+  </style>
+</head>
+<body>
+  <header class="topbar">
+    <div class="brand">
+      <span class="brand-small">NIKKE</span>
+      <span class="brand-main">UNION MATCH</span>
+    </div>
+    <div class="status">DISCORD BOT</div>
+  </header>
+
+  <main class="container">
+    <section class="bot-hero">
+      <div class="hero-copy">
+        <div class="eyebrow">UNION MATCH DISCORD BOT</div>
+        <h1>募集を、Discordでもっとラクに。</h1>
+        <p class="lead">
+          新しい指揮官募集のお知らせ、自分のユニオン募集の期限通知、再掲載までサポート。<br>
+          3人のキャラクターから選べて、AIとの会話やサーバーごとの名前・画像変更もできます。
+        </p>
+        <div class="top-actions">
+          <!-- 招待URLが確定したら href を差し替え -->
+          <a class="action-btn primary disabled" id="botInviteBtn" href="#install" aria-disabled="true">🤖 BOTを導入する（招待リンク準備中）</a>
+          <a class="action-btn" href="#install">📖 導入方法を見る</a>
+          <a class="action-btn" href="./index.html">← UNION MATCHへ戻る</a>
+        </div>
+      </div>
+      <div class="hero-side">
+        <div class="hero-mini">BOT FEATURES</div>
+        <div class="hero-feature">
+          <div>🔔 <span><b>新規募集通知</b><br>新しい指揮官募集をDiscordへ。</span></div>
+          <div>⏰ <span><b>期限通知</b><br>48時間・24時間・1時間・掲載終了をお知らせ。</span></div>
+          <div>🔄 <span><b>PASS不要再掲載</b><br>BOT経由ならDiscord連携をそのまま継続。</span></div>
+          <div>💬 <span><b>AIキャラ会話</b><br>メンションして普通に話しかけるだけ。</span></div>
+        </div>
+      </div>
+    </section>
+
+    <section class="section" id="install">
+      <div class="section-head">
+        <div>
+          <div class="eyebrow">GET STARTED</div>
+          <h2>BOTの導入は4ステップ</h2>
+        </div>
+        <div class="section-note">難しい設定は不要。サーバー管理者が最初に設定すれば、あとはBOTが自動で通知します。</div>
+      </div>
+      <div class="steps">
+        <article class="step">
+          <div class="step-no">1</div>
+          <h3>BOTをサーバーへ追加</h3>
+          <p>DiscordサーバーへNIKKE UNION MATCH BOTを招待します。<strong>サーバー管理権限を持つ方</strong>が行ってください。</p>
+        </article>
+        <article class="step">
+          <div class="step-no">2</div>
+          <h3><code>/setup</code> を実行</h3>
+          <p>通知を受け取りたいチャンネルで実行。キャラクターと話し方をボタンで選びます。</p>
+        </article>
+        <article class="step">
+          <div class="step-no">3</div>
+          <h3>ユニオンを1回だけ連携</h3>
+          <p>UNION MATCHでユニオン登録時に発行された<strong>PASSを最初の1回だけ</strong>入力すると、期限通知・再掲載が使えます。</p>
+        </article>
+        <article class="step">
+          <div class="step-no">4</div>
+          <h3>あとはBOTにおまかせ</h3>
+          <p>新しい指揮官募集や期限を自動通知。メンションすればAIキャラとの会話やキャラ変更もできます。</p>
+        </article>
+      </div>
+    </section>
+
+    <section class="section">
+      <div class="section-head">
+        <div>
+          <div class="eyebrow">CHARACTERS</div>
+          <h2>選べる3キャラクター</h2>
+        </div>
+        <div class="section-note">キャラごとにBOTの名前・画像を保存できます。切り替えると、そのキャラ専用の設定へ自動で切り替わります。</div>
+      </div>
+
+      <div class="character-grid">
+        <article class="character-card">
+          <div class="character-visual">
+            <div class="character-fallback">🌹</div>
+            <img src="./bot-avatars/kairi.png" alt="カイリ" onload="this.style.display='block';this.previousElementSibling.style.display='none';">
+          </div>
+          <div class="character-body">
+            <div class="character-tag">TSUNDERE</div>
+            <div class="character-name">🌹 カイリ</div>
+            <div class="character-desc">強気だけど面倒見のいいツンデレ。やさしめ・王道・強めから話し方を選べます。</div>
+            <div class="character-call">呼び方：<strong>あんた</strong></div>
+          </div>
+        </article>
+
+        <article class="character-card">
+          <div class="character-visual">
+            <div class="character-fallback">🎩</div>
+            <img src="./bot-avatars/sebastian.png" alt="セバスチャン" onload="this.style.display='block';this.previousElementSibling.style.display='none';">
+          </div>
+          <div class="character-body">
+            <div class="character-tag">BUTLER</div>
+            <div class="character-name">🎩 セバスチャン</div>
+            <div class="character-desc">落ち着いた男性執事。やさしめ・王道・ユーモアから話し方を選べます。</div>
+            <div class="character-call">呼び方：<strong>指揮官様</strong></div>
+          </div>
+        </article>
+
+        <article class="character-card">
+          <div class="character-visual">
+            <div class="character-fallback">😈</div>
+            <img src="./bot-avatars/natsuki.png" alt="なつき" onload="this.style.display='block';this.previousElementSibling.style.display='none';">
+          </div>
+          <div class="character-body">
+            <div class="character-tag">LITTLE SISTER</div>
+            <div class="character-name">😈 なつき</div>
+            <div class="character-desc">生意気でからかい好きな妹キャラ。やさしめ・王道・強めから選べます。</div>
+            <div class="character-call">呼び方：<strong>おにいちゃん</strong></div>
+          </div>
+        </article>
+      </div>
+      <div class="notice"><strong>📷 キャラ画像について：</strong> <code>bot-avatars/kairi.png</code> / <code>sebastian.png</code> / <code>natsuki.png</code> を置くと、このページにそのまま表示されます。画像がない間はアイコン表示になります。</div>
+    </section>
+
+    <section class="section">
+      <div class="section-head">
+        <div>
+          <div class="eyebrow">EASY CONTROL</div>
+          <h2>コマンドが分からなくても使える</h2>
+        </div>
+        <div class="section-note">キャラクター変更は、BOTをメンションして普通の言葉で話しかけてもOK。</div>
+      </div>
+      <div class="talk-box">
+        <div class="talk-card">
+          <h3>💬 普通に話しかける</h3>
+          <div class="chat-example">@カイリ 今日のユニレどう？</div>
+          <div class="chat-example">@カイリ キャラ入れ替えたい</div>
+          <div class="chat-example">@カイリ セバスチャンに変えて</div>
+          <div class="chat-example">@セバスチャン なつきにかえて</div>
+          <div class="chat-note">※ Discordで「@」を入力し、候補からBOTを選んで青いメンションにして送信してください。</div>
+        </div>
+        <div class="talk-card">
+          <h3>🎭 ボタンで設定</h3>
+          <div class="feature-card">
+            <div class="icon">🪪</div>
+            <h3><code>/botprofiles</code></h3>
+            <p>カイリ・セバスチャン・なつきをボタンで選択。名前変更・画像変更・標準に戻す、さらに3人まとめて設定もできます。</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="section">
+      <div class="section-head">
+        <div>
+          <div class="eyebrow">COMMANDS</div>
+          <h2>主なコマンド</h2>
+        </div>
+        <div class="section-note">迷ったら <code>/setup</code> と <code>/botprofiles</code> の2つを覚えておけばOK。</div>
+      </div>
+      <div class="command-list">
+        <div class="command-row"><code>/setup</code><div class="command-desc">通知先・キャラクター・話し方を設定。ユニオンPASS連携もここから。<span class="recommended">最初に使う</span></div></div>
+        <div class="command-row"><code>/botprofiles</code><div class="command-desc">3キャラの名前・画像をボタンで設定。1人だけでも、3人まとめてでも変更できます。<span class="recommended">おすすめ</span></div></div>
+        <div class="command-row"><code>/botname</code><div class="command-desc">現在選択中のキャラクターのBOT名を変更します。</div></div>
+        <div class="command-row"><code>/botimage</code><div class="command-desc">現在選択中のキャラクターのBOT画像を変更します。</div></div>
+        <div class="command-row"><code>/botreset</code><div class="command-desc">現在選択中のキャラクターを標準名・標準画像へ戻します。</div></div>
+        <div class="command-row"><code>/guide</code><div class="command-desc">Discord内でBOTの使い方をもう一度表示します。</div></div>
+      </div>
+    </section>
+
+    <section class="section">
+      <div class="section-head">
+        <div>
+          <div class="eyebrow">NOTIFICATIONS</div>
+          <h2>募集通知・期限通知・再掲載</h2>
+        </div>
+        <div class="section-note">UNION MATCHと連携することで、募集管理をDiscordから確認できます。</div>
+      </div>
+      <div class="feature-grid">
+        <article class="feature-card"><div class="icon">🔔</div><h3>新しい指揮官募集</h3><p>UNION MATCHへ新しい指揮官が登録されたら、設定したDiscordチャンネルへキャラ口調で通知します。</p></article>
+        <article class="feature-card"><div class="icon">⏰</div><h3>ユニオン募集の期限</h3><p>自分のユニオン募集を連携すると、残り48時間・24時間・1時間・掲載終了をBOTがお知らせします。</p></article>
+        <article class="feature-card"><div class="icon">🧠</div><h3>AIキャラクター会話</h3><p>BOTをメンションして自由に会話。キャラクターと話し方の設定に合わせた返答をします。</p></article>
+        <article class="feature-card"><div class="icon">🎨</div><h3>サーバーごとの見た目</h3><p>同じBOTでも、Discordサーバーごとにキャラの名前・画像をカスタマイズできます。</p></article>
+      </div>
+
+      <div class="relist-flow" style="margin-top:10px;">
+        <article class="relist-card green">
+          <div class="relist-label">🟢 BOTから再掲載｜PASS不要</div>
+          <p>期限通知のボタンからUNION MATCHを開けば、Discordとの連携をそのまま引き継いで再掲載できます。</p>
+        </article>
+        <article class="relist-card red">
+          <div class="relist-label">🔴 サイトで既に再掲載｜🔑PASS要入力</div>
+          <p>サイトを直接開いて再掲載した場合は、新しい募集のPASSを1回入力してDiscord連携を更新します。</p>
+        </article>
+      </div>
+    </section>
+
+    <section class="section">
+      <div class="eyebrow">IMPORTANT</div>
+      <h2>最初に知っておくこと</h2>
+      <div class="notice" style="margin-top:15px;">
+        ・BOTの初期設定・キャラ変更・名前/画像変更・ユニオン連携は、基本的に<strong>サーバー管理者向け</strong>です。<br>
+        ・ユニオンPASSは連携確認に使うだけで、BOTに平文保存しません。<br>
+        ・ユニオンを連携していないDiscordサーバーには、そのユニオン専用の期限通知は届きません。<br>
+        ・NIKKE UNION MATCH Discord BOTは非公式ファンBOTです。
+      </div>
+    </section>
+
+    <footer class="bottom-area">
+      <div>NIKKE UNION MATCH · DISCORD BOT</div>
+      <div style="display:flex;gap:8px;flex-wrap:wrap;">
+        <a class="action-btn" href="./creators.html">📺 応援クリエイター</a>
+        <a class="action-btn" href="./index.html">UNION MATCHへ戻る</a>
+      </div>
+    </footer>
+  </main>
+
+  <script>
+    // 招待URLが確定したらここへ設定する。
+    const BOT_INVITE_URL = "";
+    const inviteBtn = document.getElementById("botInviteBtn");
+    if (BOT_INVITE_URL && inviteBtn) {
+      inviteBtn.href = BOT_INVITE_URL;
+      inviteBtn.textContent = "🤖 BOTをDiscordへ追加する";
+      inviteBtn.classList.remove("disabled");
+      inviteBtn.removeAttribute("aria-disabled");
+      inviteBtn.target = "_blank";
+      inviteBtn.rel = "noopener noreferrer";
+    }
+  </script>
+</body>
+</html>
