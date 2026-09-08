@@ -575,12 +575,11 @@
 
 
 
-  <style id="hero-stats-responsive-v9">
+  <style id="hero-stats-responsive-v10">
     /* =========================================================
-       TOP STATS v9
-       PC：上下2段
-       SP：左右2カラム
-       数字を主役にし、枠の中心軸を揃える
+       TOP STATS v10
+       PC：上下2段 / 各段を枠の中央へ
+       SP：左右2カラム / 各カラムを上下中央へ
        ========================================================= */
 
     .hero-stats.hero-stats-responsive {
@@ -590,32 +589,30 @@
       align-items: stretch !important;
       gap: 0 !important;
       min-height: auto !important;
-      padding: 18px 32px 34px !important;
+      padding: 16px 26px 34px !important;
     }
 
     /* ---------------- PC ---------------- */
 
     .hero-stats-responsive .hero-stat-row {
-      position: relative !important;
-      display: flex !important;
-      align-items: center !important;
+      display: grid !important;
+      grid-template-columns: 110px minmax(0, 390px) !important;
       justify-content: center !important;
+      align-items: center !important;
+      column-gap: 14px !important;
       width: 100% !important;
-      min-height: 108px !important;
+      min-height: 102px !important;
       margin: 0 !important;
-      padding: 10px 0 !important;
+      padding: 8px 0 !important;
     }
 
-    /* タイトルは左側に独立。数字ブロック自体は枠全体の中央に固定 */
     .hero-stats-responsive .hero-stat-row-title {
-      position: absolute !important;
-      left: 32px !important;
-      top: 50% !important;
-      transform: translateY(-50%) !important;
-      width: 140px !important;
+      position: static !important;
+      transform: none !important;
+      width: auto !important;
       margin: 0 !important;
       text-align: center !important;
-      font-size: 17px !important;
+      font-size: 16px !important;
       font-weight: 900 !important;
       line-height: 1.2 !important;
       letter-spacing: .02em !important;
@@ -631,24 +628,24 @@
     }
 
     .hero-stats-responsive .hero-stat-summary {
-      width: min(100%, 430px) !important;
-      margin: 0 auto !important;
+      width: 100% !important;
+      margin: 0 !important;
       display: grid !important;
       grid-template-rows: auto auto !important;
-      row-gap: 7px !important;
+      row-gap: 6px !important;
     }
 
     .hero-stats-responsive .hero-stat-summary-labels,
     .hero-stats-responsive .hero-stat-summary-values {
       display: grid !important;
-      grid-template-columns: minmax(0, 1fr) 34px minmax(0, 1fr) !important;
+      grid-template-columns: minmax(0, 1fr) 26px minmax(0, 1fr) !important;
       align-items: center !important;
       width: 100% !important;
     }
 
     .hero-stats-responsive .hero-stat-summary-labels {
       color: var(--muted, #737b86) !important;
-      font-size: 13px !important;
+      font-size: 12px !important;
       font-weight: 900 !important;
       line-height: 1.2 !important;
       text-align: center !important;
@@ -659,7 +656,7 @@
       align-items: center !important;
       justify-content: center !important;
       color: rgba(115, 123, 134, .72) !important;
-      font-size: 17px !important;
+      font-size: 15px !important;
       font-weight: 900 !important;
       line-height: 1 !important;
     }
@@ -683,7 +680,7 @@
         "Gothic MB101",
         "Zen Kaku Gothic New",
         sans-serif !important;
-      font-size: clamp(62px, 5vw, 78px) !important;
+      font-size: clamp(60px, 5vw, 76px) !important;
       font-weight: 900 !important;
       line-height: .79 !important;
       letter-spacing: -.035em !important;
@@ -691,7 +688,7 @@
 
     .hero-stats-responsive .hero-stat-value span {
       padding-bottom: 6px !important;
-      font-size: 17px !important;
+      font-size: 16px !important;
       font-weight: 900 !important;
       line-height: 1 !important;
       white-space: nowrap !important;
@@ -718,7 +715,7 @@
     }
 
     .hero-stats-responsive .hero-stat-row-divider {
-      width: calc(100% - 56px) !important;
+      width: min(100%, 500px) !important;
       height: 1px !important;
       margin: 0 auto !important;
       background: rgba(90, 98, 108, .22) !important;
@@ -739,18 +736,21 @@
       .hero-stats.hero-stats-responsive {
         display: grid !important;
         grid-template-columns: 1fr 1fr !important;
+        grid-template-rows: 1fr auto !important;
         align-items: stretch !important;
-        padding: 12px 8px 29px !important;
-        min-height: 154px !important;
+        padding: 10px 6px 6px !important;
+        min-height: 156px !important;
       }
 
       .hero-stats-responsive .hero-stat-row {
         display: flex !important;
         flex-direction: column !important;
         align-items: center !important;
-        justify-content: flex-start !important;
-        min-height: 112px !important;
-        padding: 4px 7px !important;
+        justify-content: center !important;
+        width: 100% !important;
+        min-height: 118px !important;
+        padding: 3px 7px !important;
+        gap: 8px !important;
       }
 
       .hero-stats-responsive .commander-row {
@@ -758,10 +758,7 @@
       }
 
       .hero-stats-responsive .hero-stat-row-title {
-        position: static !important;
-        transform: none !important;
-        width: auto !important;
-        margin: 0 0 7px !important;
+        margin: 0 !important;
         font-size: 13px !important;
       }
 
@@ -776,7 +773,7 @@
       }
 
       .hero-stats-responsive .hero-stat-summary-labels {
-        font-size: 8.4px !important;
+        font-size: 8.5px !important;
       }
 
       .hero-stats-responsive .hero-stat-summary-sep {
@@ -787,28 +784,27 @@
         gap: 2px !important;
       }
 
-      /* スマホも数字をしっかり主役に */
       .hero-stats-responsive .hero-stat-value strong {
-        font-size: clamp(42px, 11.3vw, 52px) !important;
+        font-size: clamp(43px, 11.5vw, 53px) !important;
       }
 
       .hero-stats-responsive .hero-stat-value span {
         padding-bottom: 4px !important;
-        font-size: 10.5px !important;
+        font-size: 10px !important;
       }
 
       .hero-stats-responsive .hero-stat-row-divider {
         display: none !important;
       }
 
-      /* 最終更新は青い下線のすぐ上 */
+      /* 最終更新を独立した最下段にして、青い下線のすぐ上へ */
       .hero-stats-responsive .hero-stat-update {
         grid-column: 1 / -1 !important;
-        position: absolute !important;
-        left: 0 !important;
-        right: 0 !important;
-        bottom: 5px !important;
-        margin: 0 !important;
+        grid-row: 2 !important;
+        position: static !important;
+        align-self: end !important;
+        margin: 1px 0 0 !important;
+        padding: 0 0 2px !important;
         font-size: 8px !important;
         line-height: 1 !important;
         text-align: center !important;
@@ -817,14 +813,15 @@
 
     @media screen and (max-width: 380px) {
       .hero-stats.hero-stats-responsive {
-        min-height: 148px !important;
-        padding-left: 5px !important;
-        padding-right: 5px !important;
+        min-height: 150px !important;
+        padding-left: 4px !important;
+        padding-right: 4px !important;
       }
 
       .hero-stats-responsive .hero-stat-row {
-        padding-left: 5px !important;
-        padding-right: 5px !important;
+        min-height: 113px !important;
+        padding-left: 4px !important;
+        padding-right: 4px !important;
       }
 
       .hero-stats-responsive .hero-stat-summary-labels {
@@ -832,11 +829,11 @@
       }
 
       .hero-stats-responsive .hero-stat-value strong {
-        font-size: clamp(38px, 10.8vw, 46px) !important;
+        font-size: clamp(39px, 10.8vw, 47px) !important;
       }
 
       .hero-stats-responsive .hero-stat-value span {
-        font-size: 9.5px !important;
+        font-size: 9px !important;
       }
     }
   </style>
