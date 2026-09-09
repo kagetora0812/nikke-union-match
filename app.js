@@ -29,98 +29,6 @@ const sb =
 
 
 // ========================================
-// アクセス解析
-// 管理画面でPV / ユニーク数を確認するため、
-// 公開サイトを開いた時に1回だけ記録します。
-// ========================================
-
-const ACCESS_VISITOR_KEY =
-  "nikke_union_match_visitor_v1";
-
-
-function getOrCreateAccessVisitorId() {
-
-  try {
-
-    let visitorId =
-      localStorage.getItem(
-        ACCESS_VISITOR_KEY
-      );
-
-    if (visitorId) {
-      return visitorId;
-    }
-
-    if (
-      window.crypto
-      &&
-      typeof window.crypto.randomUUID === "function"
-    ) {
-      visitorId =
-        window.crypto.randomUUID();
-    } else {
-      visitorId =
-        `v-${Date.now()}-${Math.random().toString(36).slice(2)}-${Math.random().toString(36).slice(2)}`;
-    }
-
-    localStorage.setItem(
-      ACCESS_VISITOR_KEY,
-      visitorId
-    );
-
-    return visitorId;
-
-  } catch {
-
-    // localStorageが使えない場合でもサイト本体は止めない
-    return `temp-${Date.now()}-${Math.random().toString(36).slice(2)}`;
-
-  }
-
-}
-
-
-async function recordSiteAccess() {
-
-  if (!sb) {
-    return;
-  }
-
-  try {
-
-    const visitorId =
-      getOrCreateAccessVisitorId();
-
-    const { error } =
-      await sb.rpc(
-        "record_site_visit",
-        {
-          p_visitor_id:
-            visitorId
-        }
-      );
-
-    if (error) {
-      console.debug(
-        "アクセス記録をスキップしました。",
-        error.message || error
-      );
-    }
-
-  } catch (error) {
-
-    // 解析失敗で本体機能を止めない
-    console.debug(
-      "アクセス記録エラー",
-      error
-    );
-
-  }
-
-}
-
-
-// ========================================
 // 共通
 // ========================================
 
@@ -146,26 +54,6 @@ let loadedManagePass = "";
 let loadedManagePassHash = "";
 let manageEditPreparedFile = null;
 let manageEditObjectUrl = null;
-
-// ========================================
-// Discord BOT経由 再掲載モード
-// ?discord_republish=... の一時トークンを使用
-// ========================================
-
-const DISCORD_REPUBLISH_PARAM =
-  "discord_republish";
-
-let discordRepublishRawToken =
-  "";
-
-let discordRepublishTokenHash =
-  "";
-
-let discordRepublishMode =
-  false;
-
-let discordRepublishInfo =
-  null;
 
 
 
@@ -936,199 +824,6 @@ async function sha256(text) {
     )
     .join("");
 
-}
-
-
-// ========================================
-// Discord BOT経由 再掲載モード初期化
-// ========================================
-
-function getDiscordRepublishTokenFromUrl() {
-
-  const params =
-    new URLSearchParams(
-      window.location.search
-    );
-
-  const queryToken =
-    params.get(
-      DISCORD_REPUBLISH_PARAM
-    );
-
-  if (queryToken) {
-    return String(queryToken).trim();
-  }
-
-  const hashText =
-    String(
-      window.location.hash || ""
-    )
-      .replace(/^#/, "");
-
-  const hashParams =
-    new URLSearchParams(
-      hashText
-    );
-
-  return String(
-    hashParams.get(
-      DISCORD_REPUBLISH_PARAM
-    )
-    ||
-    ""
-  ).trim();
-}
-
-
-function showDiscordRepublishBanner(info) {
-
-  const form =
-    $("#registerForm");
-
-  if (!form) {
-    return;
-  }
-
-  let banner =
-    $("#discordRepublishBanner");
-
-  if (!banner) {
-
-    banner =
-      document.createElement(
-        "div"
-      );
-
-    banner.id =
-      "discordRepublishBanner";
-
-    banner.style.cssText =
-      "margin:0 0 18px;padding:14px 16px;border:1px solid #2ecc71;border-radius:12px;background:rgba(46,204,113,.10);line-height:1.7;font-weight:700;";
-
-    form.prepend(
-      banner
-    );
-  }
-
-  const guildName =
-    info?.guild_name
-    ||
-    "連携Discord";
-
-  banner.textContent =
-    `✅ Discord BOT経由の再掲載モードです。${guildName} のユニオン募集として連携を引き継ぎます。既存PASSの入力は不要です。`;
-}
-
-
-async function initializeDiscordRepublishMode() {
-
-  const rawToken =
-    getDiscordRepublishTokenFromUrl();
-
-  if (!rawToken) {
-    return;
-  }
-
-  if (!sb) {
-    return;
-  }
-
-  try {
-
-    const tokenHash =
-      await sha256(
-        rawToken
-      );
-
-    const {
-      data,
-      error
-    } =
-      await sb.rpc(
-        "validate_discord_union_republish_token",
-        {
-          p_token_hash:
-            tokenHash
-        }
-      );
-
-    if (error) {
-      throw error;
-    }
-
-    const info =
-      Array.isArray(data)
-        ? data[0]
-        : data;
-
-    if (!info?.valid) {
-
-      alert(
-        "Discord BOTの再掲載リンクが無効か、有効期限が切れています。Discordからもう一度『BOTから再掲載』を押してください。"
-      );
-
-      return;
-    }
-
-    discordRepublishRawToken =
-      rawToken;
-
-    discordRepublishTokenHash =
-      tokenHash;
-
-    discordRepublishMode =
-      true;
-
-    discordRepublishInfo =
-      info;
-
-    if (
-      registrationTypeSelect
-    ) {
-
-      registrationTypeSelect.value =
-        "union";
-
-      registrationTypeSelect.disabled =
-        true;
-    }
-
-    updateRegistrationFields();
-
-    const unionNameInput =
-      $("#unionName");
-
-    if (
-      unionNameInput
-      &&
-      !unionNameInput.value
-      &&
-      info.current_union_name
-    ) {
-
-      unionNameInput.value =
-        info.current_union_name;
-    }
-
-    showDiscordRepublishBanner(
-      info
-    );
-
-    showPage(
-      "register"
-    );
-
-  } catch (error) {
-
-    console.error(
-      "Discord BOT再掲載モード確認エラー",
-      error
-    );
-
-    alert(
-      "Discord BOTの再掲載リンクを確認できませんでした。時間を置いてもう一度お試しください。"
-    );
-  }
 }
 
 
@@ -2262,6 +1957,86 @@ async function getCurrentUnionCount() {
 }
 
 
+
+// ========================================
+// TOP表示用：総登録ユニオン数
+// 読み取り専用。既存データの更新・削除は行わない。
+// 同じユニオン名の再登録は1ユニオンとして集計。
+// ========================================
+
+async function loadTotalRegisteredUnionCount() {
+
+  const counter =
+    $("#totalUnionCountTop");
+
+  if (!counter) {
+    return 0;
+  }
+
+  if (!sb) {
+    counter.textContent = "0";
+    return 0;
+  }
+
+  const {
+    data,
+    error
+  } =
+    await sb
+      .from(
+        "union_recruitments"
+      )
+      .select(
+        "union_name"
+      );
+
+  if (error) {
+
+    console.error(
+      "総登録ユニオン数取得エラー",
+      error
+    );
+
+    const fallback =
+      Number(
+        $("#unionCountTop")
+          ?.textContent
+        ||
+        $("#unionCount")
+          ?.textContent
+        ||
+        0
+      );
+
+    counter.textContent =
+      String(fallback);
+
+    return fallback;
+  }
+
+  const names =
+    new Set(
+      (data || [])
+        .map(item =>
+          String(
+            item?.union_name || ""
+          )
+            .trim()
+            .toLocaleLowerCase("ja-JP")
+        )
+        .filter(Boolean)
+    );
+
+  const total =
+    names.size;
+
+  counter.textContent =
+    String(total);
+
+  return total;
+}
+
+
 // ========================================
 // Xシェア文
 //
@@ -2404,8 +2179,10 @@ async function loadRecruitments() {
 
 
   // 卒業ちしかん更新
-
   await loadGraduatedCommanderCount();
+
+  // 総登録ユニオン数（読み取り専用）
+  await loadTotalRegisteredUnionCount();
 
 
   // ======================================
@@ -3856,52 +3633,31 @@ $("#registerForm")
             );
 
 
-          const rpcName =
-            discordRepublishMode
-              ? "create_union_recruitment_from_discord"
-              : "create_union_recruitment_url";
-
-          const rpcParams =
-            discordRepublishMode
-              ? {
-                  p_token_hash:
-                    discordRepublishTokenHash,
-
-                  p_union_name:
-                    unionName,
-
-                  p_union_rank:
-                    unionRank,
-
-                  p_x_url:
-                    xUrl,
-
-                  p_pass_hash:
-                    passHash
-                }
-              : {
-                  p_union_name:
-                    unionName,
-
-                  p_union_rank:
-                    unionRank,
-
-                  p_x_url:
-                    xUrl,
-
-                  p_pass_hash:
-                    passHash
-                };
-
-
           const {
             data,
             error
           } =
 
             await sb.rpc(
-              rpcName,
-              rpcParams
+
+              "create_union_recruitment_url",
+
+              {
+
+                p_union_name:
+                  unionName,
+
+                p_union_rank:
+                  unionRank,
+
+                p_x_url:
+                  xUrl,
+
+                p_pass_hash:
+                  passHash
+
+              }
+
             );
 
 
@@ -3912,21 +3668,6 @@ $("#registerForm")
               getErrorText(
                 error
               );
-
-
-            if (
-              errorText.includes(
-                "DISCORD_REPUBLISH_TOKEN_INVALID"
-              )
-            ) {
-
-              alert(
-                "Discord BOTの再掲載リンクの有効期限が切れました。Discordからもう一度『BOTから再掲載』を押してください。"
-              );
-
-              return;
-
-            }
 
 
             if (
@@ -4038,47 +3779,6 @@ $("#registerForm")
             pass,
             result
           );
-
-
-          if (discordRepublishMode) {
-
-            discordRepublishMode =
-              false;
-
-            discordRepublishRawToken =
-              "";
-
-            discordRepublishTokenHash =
-              "";
-
-            discordRepublishInfo =
-              null;
-
-            if (registrationTypeSelect) {
-              registrationTypeSelect.disabled = false;
-            }
-
-            $("#discordRepublishBanner")
-              ?.remove();
-
-            const cleanUrl =
-              new URL(
-                window.location.href
-              );
-
-            cleanUrl.searchParams.delete(
-              DISCORD_REPUBLISH_PARAM
-            );
-
-            cleanUrl.hash =
-              "";
-
-            window.history.replaceState(
-              {},
-              "",
-              cleanUrl.toString()
-            );
-          }
 
 
           event.target.reset();
@@ -5928,17 +5628,477 @@ $("#closeLoadedRecruitmentBtn")
   );
 
 
+
+// ========================================
+// v15 VIDEO TOP UI
+// ========================================
+
+function scrollToVideoTop() {
+
+  document
+    .getElementById(
+      "videoHero"
+    )
+    ?.scrollIntoView({
+      behavior:
+        "smooth",
+      block:
+        "start"
+    });
+
+}
+
+
+function closeSiteMenu() {
+
+  document.body
+    .classList
+    .remove(
+      "menu-open"
+    );
+
+  const button =
+    document.getElementById(
+      "siteMenuButton"
+    );
+
+  const drawer =
+    document.getElementById(
+      "siteMenuDrawer"
+    );
+
+  const backdrop =
+    document.getElementById(
+      "siteMenuBackdrop"
+    );
+
+  button?.setAttribute(
+    "aria-expanded",
+    "false"
+  );
+
+  drawer?.setAttribute(
+    "aria-hidden",
+    "true"
+  );
+
+  if (backdrop) {
+    backdrop.hidden =
+      true;
+  }
+
+}
+
+
+function openSiteMenu() {
+
+  document.body
+    .classList
+    .add(
+      "menu-open"
+    );
+
+  const button =
+    document.getElementById(
+      "siteMenuButton"
+    );
+
+  const drawer =
+    document.getElementById(
+      "siteMenuDrawer"
+    );
+
+  const backdrop =
+    document.getElementById(
+      "siteMenuBackdrop"
+    );
+
+  button?.setAttribute(
+    "aria-expanded",
+    "true"
+  );
+
+  drawer?.setAttribute(
+    "aria-hidden",
+    "false"
+  );
+
+  if (backdrop) {
+    backdrop.hidden =
+      false;
+  }
+
+}
+
+
+document
+  .getElementById(
+    "videoTopSwitch"
+  )
+  ?.addEventListener(
+    "click",
+    () => {
+
+      showPage(
+        "list"
+      );
+
+      setTimeout(
+        scrollToVideoTop,
+        80
+      );
+
+    }
+  );
+
+
+document
+  .getElementById(
+    "videoScrollButton"
+  )
+  ?.addEventListener(
+    "click",
+    () => {
+
+      document
+        .getElementById(
+          "listPage"
+        )
+        ?.scrollIntoView({
+          behavior:
+            "smooth",
+          block:
+            "start"
+        });
+
+    }
+  );
+
+
+document
+  .getElementById(
+    "siteMenuButton"
+  )
+  ?.addEventListener(
+    "click",
+    () => {
+
+      if (
+        document.body
+          .classList
+          .contains(
+            "menu-open"
+          )
+      ) {
+        closeSiteMenu();
+      } else {
+        openSiteMenu();
+      }
+
+    }
+  );
+
+
+document
+  .getElementById(
+    "siteMenuClose"
+  )
+  ?.addEventListener(
+    "click",
+    closeSiteMenu
+  );
+
+
+document
+  .getElementById(
+    "siteMenuBackdrop"
+  )
+  ?.addEventListener(
+    "click",
+    closeSiteMenu
+  );
+
+
+document
+  .querySelectorAll(
+    "[data-menu-action]"
+  )
+  .forEach(
+    button => {
+
+      button
+        .addEventListener(
+          "click",
+          () => {
+
+            const action =
+              button.dataset
+                .menuAction;
+
+            closeSiteMenu();
+
+            if (
+              action ===
+              "top"
+            ) {
+
+              showPage(
+                "list"
+              );
+
+              setTimeout(
+                scrollToVideoTop,
+                80
+              );
+
+              return;
+            }
+
+            if (
+              action ===
+              "commander"
+            ) {
+
+              setSearchType(
+                "commander"
+              );
+
+              showPage(
+                "list"
+              );
+
+              return;
+            }
+
+            if (
+              action ===
+              "union"
+            ) {
+
+              setSearchType(
+                "union"
+              );
+
+              showPage(
+                "list"
+              );
+
+              return;
+            }
+
+            if (
+              action ===
+              "register"
+            ) {
+
+              showPage(
+                "register"
+              );
+
+              return;
+            }
+
+            if (
+              action ===
+              "manage"
+            ) {
+
+              showPage(
+                "manage"
+              );
+
+            }
+
+          }
+        );
+
+    }
+  );
+
+
+document
+  .addEventListener(
+    "keydown",
+    event => {
+
+      if (
+        event.key ===
+        "Escape"
+      ) {
+        closeSiteMenu();
+      }
+
+    }
+  );
+
+
+// 白い募集エリアまで来た時だけ
+// スマホ / タブレット下部メニューを表示
+const bottomNavigation =
+  document.getElementById(
+    "bottomNav"
+  );
+
+const listPageForNav =
+  document.getElementById(
+    "listPage"
+  );
+
+if (
+  bottomNavigation
+  &&
+  listPageForNav
+) {
+
+  const bottomNavObserver =
+    new IntersectionObserver(
+      entries => {
+
+        const visible =
+          entries.some(
+            entry =>
+              entry.isIntersecting
+          );
+
+        bottomNavigation
+          .classList
+          .toggle(
+            "is-visible",
+            visible
+          );
+
+      },
+      {
+        root:
+          null,
+        threshold:
+          0.01
+      }
+    );
+
+  bottomNavObserver
+    .observe(
+      listPageForNav
+    );
+
+}
+
+
+// register/manage時は常用ナビとして表示
+const bodyModeObserver =
+  new MutationObserver(
+    () => {
+
+      if (!bottomNavigation) {
+        return;
+      }
+
+      const forceVisible =
+        document.body
+          .classList
+          .contains(
+            "register-mode"
+          )
+        ||
+        document.body
+          .classList
+          .contains(
+            "manage-mode"
+          );
+
+      if (forceVisible) {
+        bottomNavigation
+          .classList
+          .add(
+            "is-visible"
+          );
+      }
+
+    }
+  );
+
+bodyModeObserver
+  .observe(
+    document.body,
+    {
+      attributes:
+        true,
+      attributeFilter:
+        [
+          "class"
+        ]
+    }
+  );
+
+
+// BOT / Creatorページからのリンク
+function applyInitialRecruitmentView() {
+
+  const params =
+    new URLSearchParams(
+      window.location.search
+    );
+
+  const requestedView =
+    params.get(
+      "view"
+    );
+
+  if (
+    requestedView ===
+    "union"
+  ) {
+
+    setSearchType(
+      "union"
+    );
+
+  } else if (
+    requestedView ===
+    "commander"
+  ) {
+
+    setSearchType(
+      "commander"
+    );
+
+  }
+
+  if (
+    window.location.hash ===
+    "#listPage"
+  ) {
+
+    setTimeout(
+      () => {
+
+        document
+          .getElementById(
+            "listPage"
+          )
+          ?.scrollIntoView({
+            behavior:
+              "auto",
+            block:
+              "start"
+          });
+
+      },
+      180
+    );
+
+  }
+
+}
+
+
 // ========================================
 // 起動
 // ========================================
-
-// アクセス解析は失敗しても本体へ影響させない
-recordSiteAccess();
 
 setSearchType(
   "commander"
 );
 
-// Discord BOT経由の再掲載リンクなら、
-// トークン確認後にユニオン登録画面へ自動で切り替える。
-initializeDiscordRepublishMode();
+loadTotalRegisteredUnionCount();
+applyInitialRecruitmentView();
