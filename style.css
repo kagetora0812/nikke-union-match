@@ -4713,3 +4713,48 @@ body:not(.register-mode):not(.manage-mode) #listPage {
 body .video-topbar {
   z-index: 120 !important;
 }
+
+
+/* =========================================================
+   v27 SMARTPHONE CHROME SCROLL STABILITY
+   2026-09-10
+   - smartphone only (<=600px)
+   - tablet / PC are untouched
+   - keep video as an underlay while cards scroll over it
+   - avoid mobile Chrome sticky + viewport runaway scrolling
+   - no JS / Supabase / card logic changes
+   ========================================================= */
+
+@media screen and (max-width: 600px) {
+
+  /* In list/TOP mode only:
+     use a fixed video underlay instead of sticky on smartphones. */
+  html body:not(.register-mode):not(.manage-mode) .video-hero {
+    position: fixed !important;
+    top: 66px !important;
+    left: 0 !important;
+    right: 0 !important;
+    bottom: auto !important;
+
+    width: 100% !important;
+    height: calc(100svh - 66px) !important;
+    min-height: calc(100svh - 66px) !important;
+    max-height: calc(100svh - 66px) !important;
+
+    z-index: 1 !important;
+  }
+
+  /* The fixed hero is removed from normal flow,
+     so reserve exactly one smartphone hero-height before the list.
+     This makes the document end at the real end of the cards. */
+  html body:not(.register-mode):not(.manage-mode) main.container {
+    margin-top: calc(100svh - 66px) !important;
+    min-height: 0 !important;
+  }
+
+  html body:not(.register-mode):not(.manage-mode) #listPage {
+    height: auto !important;
+    min-height: 0 !important;
+    margin-top: 0 !important;
+  }
+}
