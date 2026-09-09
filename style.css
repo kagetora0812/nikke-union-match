@@ -4906,3 +4906,86 @@ body .video-topbar {
     object-position: center 42% !important;
   }
 }
+
+
+/* =========================================================
+   v32 SMARTPHONE VIDEO HARD LOCK
+   2026-09-10
+   - smartphone INDEX only
+   - video is completely fixed under the 66px header
+   - dragging/overscroll cannot pull the video downward
+   - the white recruitment sheet remains the only moving layer
+   - white sheet starts 28px later than the video viewport
+   - footer early-fade timing from v30 is unchanged
+   - tablet / PC / register / manage unchanged
+   ========================================================= */
+
+@media screen and (max-width: 600px) {
+
+  /*
+    Keep the app shell itself fixed below the header.
+    Only the contents inside this shell scroll.
+  */
+  html body .mobile-scroll-shell {
+    position: fixed !important;
+    top: 66px !important;
+    right: 0 !important;
+    bottom: 0 !important;
+    left: 0 !important;
+
+    width: 100% !important;
+    height: auto !important;
+    min-height: 0 !important;
+    max-height: none !important;
+
+    overflow-x: hidden !important;
+    overflow-y: auto !important;
+
+    overscroll-behavior-y: none !important;
+    -webkit-overflow-scrolling: touch;
+  }
+
+  /*
+    Hard-lock the TOP video to the viewport.
+    It is no longer sticky and is not part of the scrolling flow.
+  */
+  html body:not(.register-mode):not(.manage-mode) .video-hero {
+    position: fixed !important;
+
+    top: 66px !important;
+    right: 0 !important;
+    bottom: auto !important;
+    left: 0 !important;
+
+    width: 100% !important;
+    height: calc(100dvh - 66px) !important;
+    min-height: calc(100dvh - 66px) !important;
+    max-height: calc(100dvh - 66px) !important;
+
+    margin: 0 !important;
+    transform: none !important;
+
+    z-index: 1 !important;
+  }
+
+  /*
+    Because the video is fixed, reserve one full video viewport in the
+    scroll flow, plus 28px so the white sheet arrives slightly later.
+  */
+  html body:not(.register-mode):not(.manage-mode) main.container {
+    position: relative !important;
+    z-index: 8 !important;
+
+    margin-top: calc(100dvh - 66px + 28px) !important;
+    min-height: 0 !important;
+  }
+
+  html body:not(.register-mode):not(.manage-mode) #listPage {
+    position: relative !important;
+    z-index: 10 !important;
+
+    margin-top: 0 !important;
+    min-height: 0 !important;
+    height: auto !important;
+  }
+}
