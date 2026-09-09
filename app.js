@@ -5651,6 +5651,8 @@ function scrollToVideoTop() {
 
 function returnToVideoTop() {
 
+  closeSiteMenu?.();
+
   document.body.classList.remove(
     "register-mode",
     "manage-mode"
@@ -5675,10 +5677,9 @@ function returnToVideoTop() {
       );
     });
 
-  loadRecruitments();
-
-  requestAnimationFrame(() => {
-    requestAnimationFrame(scrollToVideoTop);
+  window.scrollTo({
+    top: 0,
+    behavior: "smooth"
   });
 
 }
@@ -5982,6 +5983,9 @@ if (
           entries.some(
             entry =>
               entry.isIntersecting
+              &&
+              entry.boundingClientRect.top <=
+                window.innerHeight * 0.90
           );
 
         bottomNavigation
@@ -5996,7 +6000,9 @@ if (
         root:
           null,
         threshold:
-          0.01
+          0,
+        rootMargin:
+          "0px 0px -10% 0px"
       }
     );
 
