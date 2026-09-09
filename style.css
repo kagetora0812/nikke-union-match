@@ -4758,3 +4758,133 @@ body .video-topbar {
     margin-top: 0 !important;
   }
 }
+
+
+/* =========================================================
+   v29 MOBILE INDEPENDENT SCROLL SHELL
+   2026-09-10
+   - smartphone Chrome: finite independent scroll area
+   - white recruitment sheet moves over the video inside that area
+   - footer fades in only after the white sheet begins to appear
+   - TOP footer hidden / register-manage footer visible
+   - tablet 601-1024 unchanged
+   - PC gray bottom gap removed
+   ========================================================= */
+
+.mobile-scroll-shell {
+  display: contents;
+}
+
+@media screen and (max-width: 600px) {
+
+  /* Smartphone root page itself never becomes the long scroller. */
+  html,
+  body {
+    width: 100%;
+    max-width: 100%;
+    height: 100dvh;
+    min-height: 100dvh;
+    overflow: hidden !important;
+  }
+
+  html body {
+    padding-bottom: 0 !important;
+  }
+
+  /* This is the only vertical scroller on smartphone. */
+  html body .mobile-scroll-shell {
+    display: block !important;
+    position: relative !important;
+
+    width: 100% !important;
+    height: calc(100dvh - 66px) !important;
+    min-height: 0 !important;
+    max-height: calc(100dvh - 66px) !important;
+
+    overflow-x: hidden !important;
+    overflow-y: auto !important;
+
+    overscroll-behavior-y: contain;
+    -webkit-overflow-scrolling: touch;
+  }
+
+  /*
+    Cancel v27 fixed mode.
+    Sticky now belongs to the finite shell instead of Chrome's root viewport.
+  */
+  html body:not(.register-mode):not(.manage-mode) .video-hero {
+    position: -webkit-sticky !important;
+    position: sticky !important;
+
+    top: 0 !important;
+    left: auto !important;
+    right: auto !important;
+    bottom: auto !important;
+
+    width: 100% !important;
+    height: calc(100dvh - 66px) !important;
+    min-height: calc(100dvh - 66px) !important;
+    max-height: calc(100dvh - 66px) !important;
+
+    z-index: 1 !important;
+  }
+
+  /* Remove v27's artificial flow spacer. */
+  html body:not(.register-mode):not(.manage-mode) main.container {
+    position: relative !important;
+    z-index: 8 !important;
+
+    margin-top: 0 !important;
+    min-height: 0 !important;
+  }
+
+  html body:not(.register-mode):not(.manage-mode) #listPage {
+    position: relative !important;
+    z-index: 10 !important;
+
+    height: auto !important;
+    min-height: 0 !important;
+    margin-top: 0 !important;
+  }
+
+  /*
+    Footer does not slide anymore on smartphone.
+    Only opacity changes, so Chrome cannot repeatedly animate its position.
+  */
+  html body #bottomNav.bottom-nav {
+    opacity: 0 !important;
+    visibility: hidden !important;
+    pointer-events: none !important;
+
+    transform: none !important;
+    translate: none !important;
+
+    transition: opacity .18s ease !important;
+    animation: none !important;
+  }
+
+  html body #bottomNav.bottom-nav.is-visible,
+  html body.register-mode #bottomNav.bottom-nav,
+  html body.manage-mode #bottomNav.bottom-nav {
+    opacity: 1 !important;
+    visibility: visible !important;
+    pointer-events: auto !important;
+
+    transform: none !important;
+    translate: none !important;
+  }
+
+  /* Forms need room above the fixed footer. */
+  html body.register-mode .mobile-scroll-shell,
+  html body.manage-mode .mobile-scroll-shell {
+    padding-bottom:
+      calc(76px + env(safe-area-inset-bottom)) !important;
+  }
+}
+
+/* PC only: hidden mobile footer must not leave a gray strip/card. */
+@media screen and (min-width: 1025px) {
+  html body:not(.register-mode):not(.manage-mode) {
+    padding-bottom: 0 !important;
+  }
+}
