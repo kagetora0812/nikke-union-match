@@ -5788,6 +5788,9 @@ function returnToVideoTop() {
       );
     });
 
+  mobileFooterHideUntilTop =
+    true;
+
   document
     .getElementById(
       "bottomNav"
@@ -6090,6 +6093,9 @@ const mobileScrollShell =
 let mobileFooterFramePending =
   false;
 
+let mobileFooterHideUntilTop =
+  false;
+
 
 function updateMobileFooterVisibility() {
 
@@ -6127,22 +6133,36 @@ function updateMobileFooterVisibility() {
     return;
   }
 
-  const listTop =
-    getElementTopInsideMobileShell(
-      listPageForNav,
-      mobileScrollShell
-    );
+  /*
+    TOPへ戻る操作中は、途中のスクロール位置で
+    フッターが再表示されないように固定で隠す。
+  */
+  if (mobileFooterHideUntilTop) {
 
-  /* White sheet ~40px visible => fade footer in. */
+    bottomNavigation
+      .classList
+      .remove(
+        "is-visible"
+      );
+
+    if (
+      mobileScrollShell.scrollTop
+        <= 8
+    ) {
+      mobileFooterHideUntilTop =
+        false;
+    }
+
+    return;
+  }
+
+  /*
+    スクロールを始めた直後にフッターを先にフェード表示。
+    白いカードが上がって来るより先に出るので、
+    レイヤーの切替感を目立たせない。
+  */
   const revealAt =
-    Math.max(
-      0,
-      listTop
-      -
-      mobileScrollShell.clientHeight
-      +
-      40
-    );
+    12;
 
   bottomNavigation
     .classList
