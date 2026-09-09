@@ -4989,3 +4989,43 @@ body .video-topbar {
     height: auto !important;
   }
 }
+
+/* =========================================================
+   v33 SMARTPHONE BOTTOM WHITE-FLASH MASK
+   2026-09-10
+   - smartphone INDEX only
+   - hide momentary bottom-edge gap on Chrome
+   - footer position / fade timing unchanged
+   - tablet / PC untouched
+   ========================================================= */
+
+@media screen and (max-width: 600px) {
+
+  html body:not(.register-mode):not(.manage-mode)
+  #bottomNav.bottom-nav {
+
+    /* 画面外へ8pxだけ余分に伸ばす */
+    bottom: -8px !important;
+
+    /* 上端位置は今までと完全に同じ */
+    height:
+      calc(
+        68px
+        + env(safe-area-inset-bottom)
+        + 8px
+      ) !important;
+
+    padding-bottom:
+      calc(
+        env(safe-area-inset-bottom)
+        + 8px
+      ) !important;
+
+    /* Chrome描画時の1フレームちらつき対策 */
+    -webkit-backface-visibility: hidden;
+    backface-visibility: hidden;
+
+    will-change: opacity, transform;
+  }
+
+}
