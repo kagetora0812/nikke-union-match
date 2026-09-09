@@ -1,6314 +1,4750 @@
-/*
-  NIKKE UNION MATCH
-  app.js
-*/
+@import url("https://fonts.googleapis.com/css2?family=Teko:wght@500;600;700&family=Zen+Kaku+Gothic+New:wght@500;700;900&display=swap");
 
-
-// ========================================
-// Supabase
-// ========================================
-
-const SUPABASE_URL =
-  "https://igoekrvpgnjberppiawf.supabase.co";
+/* =========================================================
+   NIKKE UNION MATCH
+   NIKKE UI REBUILD v3
+   - cyan unified borders/accent
+   - square / hard-edged UI
+   - angular typography
+   - charcoal buttons -> cyan on hover/active
+   ========================================================= */
 
-const SUPABASE_ANON_KEY =
-  "sb_publishable_xSjnNTnh667o9IesU5g5Kw_xcdg9bbh";
+:root {
+  --bg: #f2f5f7;
+  --surface: #ffffff;
+  --surface-2: #eceff1;
+  --surface-3: #e3e7e9;
 
-const hasSupabaseConfig =
-  !SUPABASE_URL.includes("YOUR_") &&
-  !SUPABASE_ANON_KEY.includes("YOUR_");
+  --ink: #222428;
+  --ink-2: #34363a;
+  --ink-3: #44464a;
+  --ink-soft: #62666a;
 
-const sb =
-  hasSupabaseConfig &&
-  window.supabase
-    ? window.supabase.createClient(
-        SUPABASE_URL,
-        SUPABASE_ANON_KEY
-      )
-    : null;
+  --text: #222428;
+  --muted: #7b8085;
 
+  --line: #c8cdd0;
+  --line-strong: #9da4a9;
 
-// ========================================
-// 共通
-// ========================================
+  --cyan: #1ab0f1;
+  --cyan-2: #28b8f4;
+  --cyan-dark: #0b8fc8;
 
-const $ = selector =>
-  document.querySelector(selector);
+  --gold: #d89f20;
+  --gold: #F2A124;
+  --yellow: #F2A124;
+  --yellow-deep: #D98912;
 
+  --purple: #a828f0;
+  --purple-2: #c875ff;
 
-// ========================================
-// Xシェア用
-// 直前に登録した募集情報
-// ========================================
+  --green: #35d78c;
+  --red: #ff5364;
 
-let lastRegisteredRecruitment = null;
+  --charcoal: #3d3e42;
+  --charcoal-2: #303135;
+  --charcoal-3: #27282b;
 
-// 登録前プレビューの確定フラグ
-let registrationPreviewApproved = false;
-let registrationPreviewObjectUrl = null;
-let registrationPreviewPreparedFile = null;
+  --shadow:
+    0 6px 18px rgba(26, 31, 36, .14);
 
-// PASS再編集・再延長
-let loadedManagedRecruitment = null;
-let loadedManagePass = "";
-let loadedManagePassHash = "";
-let manageEditPreparedFile = null;
-let manageEditObjectUrl = null;
-
-
-
-function escapeHtml(value) {
-  return String(value ?? "").replace(
-    /[&<>"']/g,
-    char => ({
-      "&": "&amp;",
-      "<": "&lt;",
-      ">": "&gt;",
-      '"': "&quot;",
-      "'": "&#039;"
-    }[char])
-  );
+  --shadow-soft:
+    0 3px 10px rgba(26, 31, 36, .10);
 }
-
 
-// ========================================
-// 募集記事URL
-// X / BlablaLink / Discord / その他のHTTP(S) URLに対応
-// ========================================
 
-function validRecruitmentUrl(value) {
+/* =========================================================
+   RESET / BASE
+   ========================================================= */
 
-  try {
-
-    const url =
-      new URL(
-        String(value || "").trim()
-      );
-
-    if (
-      url.protocol !== "https:"
-      &&
-      url.protocol !== "http:"
-    ) {
-      return false;
-    }
+* {
+  box-sizing: border-box;
+  border-radius: 0 !important;
+}
 
-    const host =
-      url.hostname
-        .toLowerCase()
-        .replace(/^www\./, "");
+html {
+  background: var(--bg);
+}
 
-    if (
-      host === "x.com"
-      ||
-      host === "twitter.com"
-    ) {
-      return /^\/[^/]+\/status\/\d+\/?$/
-        .test(url.pathname);
-    }
+body {
+  margin: 0;
+  min-height: 100vh;
+  padding-bottom: 76px;
 
-    return true;
+  color: var(--text);
 
-  } catch {
+  background:
+    linear-gradient(
+      180deg,
+      #f8fafb 0%,
+      #f1f4f6 42%,
+      #edf1f3 100%
+    );
 
-    return false;
+  font-family:
+    "Gothic MB101",
+    "Zen Kaku Gothic New",
+    sans-serif;
 
-  }
+  font-weight: 700;
 
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
 }
-
-
-function getRecruitmentPlatform(value) {
 
-  try {
+body::before {
+  content: "";
 
-    const url =
-      new URL(value);
+  position: fixed;
+  inset: 0;
+  z-index: -1;
 
-    const host =
-      url.hostname
-        .toLowerCase()
-        .replace(/^www\./, "");
+  pointer-events: none;
+
+  background:
+    linear-gradient(
+      135deg,
+      transparent 0 67%,
+      rgba(34, 36, 40, .024) 67% 68%,
+      transparent 68% 100%
+    );
+}
+
+button,
+input,
+select,
+textarea {
+  font: inherit;
+}
+
+button,
+a {
+  -webkit-tap-highlight-color: transparent;
+}
 
-    if (
-      host === "x.com"
-      ||
-      host === "twitter.com"
-    ) {
-      return "X";
-    }
+button:focus-visible,
+a:focus-visible,
+input:focus-visible,
+select:focus-visible,
+textarea:focus-visible {
+  outline: 2px solid var(--cyan);
+  outline-offset: 2px;
+}
 
-    if (
-      host === "blablalink.com"
-      ||
-      host.endsWith(".blablalink.com")
-    ) {
-      return "BlablaLink";
-    }
 
-    if (
-      host === "discord.gg"
-      ||
-      host === "discord.com"
-      ||
-      host.endsWith(".discord.com")
-    ) {
-      return "Discord";
-    }
+/* =========================================================
+   NIKKE ANGULAR GEOMETRY
+   丸角ではなく「切り欠き / 面取り」の形
+   ========================================================= */
 
-    return "その他";
+:root {
+  --cut-sm: 6px;
+  --cut-md: 9px;
+  --cut-lg: 12px;
+}
 
-  } catch {
+.btn,
+.creator-link-btn,
+.search-tab,
+.register-back-btn,
+.manage-back-btn,
+.copy-btn,
+.x-btn,
+.close-reason-btn,
+.nav-btn {
+  border-radius: 0 !important;
 
-    return "その他";
+  clip-path:
+    polygon(
+      var(--cut-sm) 0,
+      100% 0,
+      100% calc(100% - var(--cut-sm)),
+      calc(100% - var(--cut-sm)) 100%,
+      0 100%,
+      0 var(--cut-sm)
+    );
+}
 
-  }
+.hero-stats,
+.card,
+.filters,
+.panel,
+.notice,
+.easy-register-box,
+.commander-close-reason,
+.modal-card,
+.pass-box,
+.empty,
+.graduated-commander-counter {
+  border-radius: 0 !important;
 
+  clip-path:
+    polygon(
+      var(--cut-md) 0,
+      100% 0,
+      100% calc(100% - var(--cut-md)),
+      calc(100% - var(--cut-md)) 100%,
+      var(--cut-md) 100%,
+      0 calc(100% - var(--cut-md)),
+      0 var(--cut-md)
+    );
 }
-
 
-function isXRecruitmentUrl(value) {
-  return getRecruitmentPlatform(value) === "X";
+/* 入力欄は操作性優先で四角 */
+input,
+select,
+textarea {
+  border-radius: 0 !important;
+  clip-path: none;
 }
 
+/* ボタンの角をよりNIKKEらしく強調 */
+.main-register-btn,
+.btn.primary {
+  --cut-sm: 8px;
+}
 
-function getRecruitmentButtonLabel(value) {
+.search-tab.active,
+.btn:active,
+.btn.active,
+.nav-btn.active {
+  clip-path:
+    polygon(
+      8px 0,
+      100% 0,
+      100% calc(100% - 8px),
+      calc(100% - 8px) 100%,
+      0 100%,
+      0 8px
+    );
+}
 
-  const platform =
-    getRecruitmentPlatform(value);
 
-  if (platform === "X") {
-    return "Xで募集記事を開く ↗";
-  }
+/* =========================================================
+   HEADER
+   ========================================================= */
 
-  if (platform === "BlablaLink") {
-    return "BlablaLinkで募集記事を開く ↗";
-  }
+.topbar {
+  position: sticky;
+  top: 0;
+  z-index: 30;
 
-  return "募集記事を開く ↗";
-}
+  height: 66px;
 
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
 
-// ========================================
-// BlablaLink 自動キャプチャ
-// 対応URL：/post/detail?...&post_uuid=...
-// ========================================
+  padding: 0 18px;
 
-function isBlablaLinkPostUrl(value) {
-  try {
-    const url = new URL(String(value || "").trim());
-    const host = url.hostname.toLowerCase().replace(/^www\./, "");
+  border-bottom: 2px solid var(--cyan);
 
-    if (
-      host !== "blablalink.com" &&
-      !host.endsWith(".blablalink.com")
-    ) {
-      return false;
-    }
+  color: #fff;
 
-    return (
-      url.pathname === "/post/detail" &&
-      Boolean(url.searchParams.get("post_uuid"))
+  background:
+    linear-gradient(
+      180deg,
+      #252629 0%,
+      #17181b 100%
     );
-  } catch {
-    return false;
-  }
-}
-
-async function fetchBlablaLinkPreviewFile(value) {
-  if (!isBlablaLinkPostUrl(value)) {
-    throw new Error("INVALID_BLABLALINK_POST_URL");
-  }
-
-  const controller = new AbortController();
-  const timer = setTimeout(() => controller.abort(), 35000);
-
-  try {
-    const response = await fetch(
-      `${SUPABASE_URL}/functions/v1/blablalink-preview`,
-      {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          "apikey": SUPABASE_ANON_KEY,
-          "Authorization": `Bearer ${SUPABASE_ANON_KEY}`
-        },
-        body: JSON.stringify({
-          url: String(value || "").trim()
-        }),
-        signal: controller.signal
-      }
-    );
 
-    if (!response.ok) {
-      let message = `BLABLALINK_PREVIEW_HTTP_${response.status}`;
-      try {
-        const data = await response.json();
-        message = data?.error || data?.message || message;
-      } catch {}
-      throw new Error(message);
-    }
-
-    const contentType = response.headers.get("content-type") || "image/png";
-    if (!contentType.startsWith("image/")) {
-      throw new Error("BLABLALINK_PREVIEW_NOT_IMAGE");
-    }
-
-    const blob = await response.blob();
-    if (!blob.size) {
-      throw new Error("BLABLALINK_PREVIEW_EMPTY");
-    }
-
-    const cleanType = contentType.split(";")[0];
-    const extension =
-      cleanType.includes("webp")
-        ? "webp"
-        : cleanType.includes("jpeg")
-          ? "jpg"
-          : "png";
-
-    return new File(
-      [blob],
-      `blablalink-preview-${Date.now()}.${extension}`,
-      { type: cleanType, lastModified: Date.now() }
-    );
-  } finally {
-    clearTimeout(timer);
-  }
+  box-shadow:
+    0 4px 14px rgba(0, 0, 0, .22);
 }
 
-// ========================================
-// 任意募集画像
-// 元画像は20MBまで受付 → ブラウザ側で自動最適化
-// Supabaseへは原則1.8MB以下の画像をアップロード
-// ========================================
+.brand {
+  display: flex;
+  flex-direction: column;
 
-const PREVIEW_SOURCE_MAX_BYTES = 20 * 1024 * 1024;
-const PREVIEW_UPLOAD_TARGET_BYTES = 1.8 * 1024 * 1024;
-const PREVIEW_MAX_WIDTH = 1920;
-const PREVIEW_MAX_HEIGHT = 3200;
-const PREVIEW_MAX_PIXELS = 8_000_000;
+  font-family:
+    "Industry",
+    "Azonix",
+    "Futura PT Condensed",
+    "Teko",
+    "Gothic MB101",
+    "Zen Kaku Gothic New",
+    sans-serif;
 
-function formatFileSize(bytes) {
-  if (!Number.isFinite(bytes) || bytes <= 0) {
-    return "0MB";
-  }
+  line-height: .82;
+}
 
-  if (bytes < 1024 * 1024) {
-    return `${Math.max(1, Math.round(bytes / 1024))}KB`;
-  }
+.brand-small {
+  color: var(--cyan);
 
-  return `${(bytes / 1024 / 1024).toFixed(1)}MB`;
+  font-size: 10px;
+  font-weight: 800;
+
+  letter-spacing: 4px;
 }
 
-function validatePreviewImageFile(file) {
+.brand-main {
+  color: #fff;
 
-  if (!file) {
-    return true;
-  }
+  font-size: 28px;
+  font-weight: 700;
 
-  const allowedTypes =
-    [
-      "image/jpeg",
-      "image/png",
-      "image/webp"
-    ];
+  letter-spacing: 1.4px;
+}
 
-  if (!allowedTypes.includes(file.type)) {
-    alert("募集画像は JPG / PNG / WebP を選択してください。");
-    return false;
-  }
+.status-dot {
+  color: #d7dadd;
 
-  if (file.size > PREVIEW_SOURCE_MAX_BYTES) {
-    alert("募集画像は20MB以下を選択してください。\n大きな画像は選択後に自動で最適化されます。");
-    return false;
-  }
+  font:
+    700 11px "Teko",
+    sans-serif;
 
-  return true;
+  letter-spacing: 1.4px;
 }
 
-function loadPreviewImage(file) {
-  return new Promise((resolve, reject) => {
-    const objectUrl = URL.createObjectURL(file);
-    const image = new Image();
+.status-dot span {
+  display: inline-block;
 
-    image.onload = () => {
-      URL.revokeObjectURL(objectUrl);
-      resolve(image);
-    };
+  width: 8px;
+  height: 8px;
 
-    image.onerror = () => {
-      URL.revokeObjectURL(objectUrl);
-      reject(new Error("PREVIEW_IMAGE_DECODE_FAILED"));
-    };
+  margin-right: 7px;
 
-    image.src = objectUrl;
-  });
-}
+  background: var(--green);
 
-function canvasToPreviewBlob(canvas, mimeType, quality) {
-  return new Promise(resolve => {
-    canvas.toBlob(resolve, mimeType, quality);
-  });
+  box-shadow:
+    0 0 10px rgba(53, 215, 140, .85);
 }
-
-function getPreviewResizeScale(width, height) {
-  let scale = 1;
-
-  if (width > PREVIEW_MAX_WIDTH) {
-    scale = Math.min(scale, PREVIEW_MAX_WIDTH / width);
-  }
 
-  if (height > PREVIEW_MAX_HEIGHT) {
-    scale = Math.min(scale, PREVIEW_MAX_HEIGHT / height);
-  }
 
-  const pixels = width * height;
+/* =========================================================
+   CONTAINER
+   ========================================================= */
 
-  if (pixels > PREVIEW_MAX_PIXELS) {
-    scale = Math.min(
-      scale,
-      Math.sqrt(PREVIEW_MAX_PIXELS / pixels)
-    );
-  }
+.container {
+  width: 100%;
+  max-width: 1380px;
 
-  return scale;
+  margin: 0 auto;
+  padding: 0 18px;
 }
 
-function drawPreviewImageToCanvas(image, width, height) {
-  const canvas = document.createElement("canvas");
-  canvas.width = Math.max(1, Math.round(width));
-  canvas.height = Math.max(1, Math.round(height));
 
-  const context = canvas.getContext("2d", { alpha: false });
+/* =========================================================
+   TYPOGRAPHY
+   ========================================================= */
 
-  if (!context) {
-    throw new Error("PREVIEW_CANVAS_UNAVAILABLE");
-  }
-
-  context.imageSmoothingEnabled = true;
-  context.imageSmoothingQuality = "high";
-  context.fillStyle = "#ffffff";
-  context.fillRect(0, 0, canvas.width, canvas.height);
-  context.drawImage(image, 0, 0, canvas.width, canvas.height);
+h1,
+h2,
+h3,
+.hero-stat-title,
+.hero-graduate-title,
+.btn,
+.search-tab,
+.nav-btn,
+.recruitment-type,
+.state {
+  font-family:
+    "Gothic MB101",
+    "Zen Kaku Gothic New",
+    sans-serif;
 
-  return canvas;
+  font-weight: 900;
 }
 
-async function optimizePreviewImageFile(file) {
-  if (!file) {
-    return null;
-  }
+h1,
+h2,
+h3 {
+  margin: 0;
 
-  if (!validatePreviewImageFile(file)) {
-    throw new Error("PREVIEW_IMAGE_INVALID");
-  }
+  color: var(--ink);
 
-  const image = await loadPreviewImage(file);
-  const sourceWidth = image.naturalWidth || image.width;
-  const sourceHeight = image.naturalHeight || image.height;
+  letter-spacing: -.06em;
+}
 
-  if (!sourceWidth || !sourceHeight) {
-    throw new Error("PREVIEW_IMAGE_SIZE_INVALID");
-  }
+.eyebrow {
+  margin-bottom: 8px;
 
-  const initialScale =
-    getPreviewResizeScale(sourceWidth, sourceHeight);
+  color: var(--ink-soft);
 
-  // サイズ・解像度とも十分小さいJPEG/WebPは画質を落とさずそのまま使う。
-  if (
-    initialScale === 1 &&
-    file.size <= PREVIEW_UPLOAD_TARGET_BYTES &&
-    (file.type === "image/jpeg" || file.type === "image/webp")
-  ) {
-    return file;
-  }
+  font:
+    800 11px "Teko",
+    sans-serif;
 
-  let width = Math.max(1, Math.round(sourceWidth * initialScale));
-  let height = Math.max(1, Math.round(sourceHeight * initialScale));
+  letter-spacing: 2.2px;
+  text-transform: uppercase;
+}
 
-  let bestBlob = null;
-  let bestMimeType = "image/webp";
 
-  // 品質を段階的に下げ、それでも大きければ寸法を少しずつ縮小する。
-  for (let resizeAttempt = 0; resizeAttempt < 7; resizeAttempt++) {
-    const canvas =
-      drawPreviewImageToCanvas(image, width, height);
+/* =========================================================
+   HERO
+   ========================================================= */
 
-    for (const quality of [0.90, 0.82, 0.74, 0.66, 0.58]) {
-      let blob =
-        await canvasToPreviewBlob(
-          canvas,
-          "image/webp",
-          quality
-        );
+.hero {
+  display: grid;
 
-      // WebP出力に対応していない環境ではJPEGへフォールバック。
-      let mimeType = "image/webp";
+  grid-template-columns:
+    minmax(320px, .82fr)
+    minmax(560px, 1.18fr);
 
-      if (!blob || blob.type !== "image/webp") {
-        blob =
-          await canvasToPreviewBlob(
-            canvas,
-            "image/jpeg",
-            quality
-          );
-        mimeType = "image/jpeg";
-      }
-
-      if (!blob) {
-        continue;
-      }
-
-      if (!bestBlob || blob.size < bestBlob.size) {
-        bestBlob = blob;
-        bestMimeType = mimeType;
-      }
-
-      if (blob.size <= PREVIEW_UPLOAD_TARGET_BYTES) {
-        const extension =
-          mimeType === "image/webp" ? "webp" : "jpg";
-
-        return new File(
-          [blob],
-          `recruitment-preview-${Date.now()}.${extension}`,
-          {
-            type: mimeType,
-            lastModified: Date.now()
-          }
-        );
-      }
-    }
-
-    width = Math.max(1, Math.round(width * 0.82));
-    height = Math.max(1, Math.round(height * 0.82));
-  }
-
-  if (!bestBlob || bestBlob.size > 3 * 1024 * 1024) {
-    throw new Error("PREVIEW_IMAGE_OPTIMIZE_FAILED");
-  }
-
-  const extension =
-    bestMimeType === "image/webp" ? "webp" : "jpg";
-
-  return new File(
-    [bestBlob],
-    `recruitment-preview-${Date.now()}.${extension}`,
-    {
-      type: bestMimeType,
-      lastModified: Date.now()
-    }
-  );
-}
-
-
-function buildRecruitmentPreviewMedia(
-  url,
-  previewImageUrl = "",
-  xEmbedEnabled = true,
-  forcePreviewImage = false
-) {
-
-  const platform =
-    getRecruitmentPlatform(url);
-
-  // ========================================
-  // v13.17 画像優先表示
-  // 登録画像がある場合は、掲載先やX埋め込み設定に関係なく
-  // 必ず登録画像を最優先で表示する。
-  // BlablaLinkの自動キャプチャは画像未選択時だけ取得されるため、
-  // 手動画像を登録した場合はその画像がそのまま優先される。
-  // forcePreviewImage は旧データ互換のため引数として残す。
-  // ========================================
-  if (previewImageUrl) {
-    return `
-      <div class="registration-preview-platform">
-        掲載先：${escapeHtml(platform)}
-      </div>
-      <a
-        class="recruitment-preview-link"
-        href="${escapeHtml(url)}"
-        target="_blank"
-        rel="noopener noreferrer"
-      >
-        <img
-          class="recruitment-preview-image"
-          src="${escapeHtml(previewImageUrl)}"
-          alt="${escapeHtml(platform)}募集記事の登録画像"
-          loading="lazy"
-        >
-      </a>
-    `;
-  }
-
-  // 登録画像が無いXだけ、X埋め込みを表示する。
-  if (platform === "X") {
-
-    const postId =
-      getXPostId(url);
-
-    if (xEmbedEnabled !== false) {
-      return `
-        <div
-          class="x-embed"
-          data-post-id="${escapeHtml(postId || "")}"
-          data-preview-image-url=""
-          data-recruitment-url="${escapeHtml(url || "")}"
-        ></div>
-      `;
-    }
-
-    return `
-      <div class="x-embed-error">
-        <strong>🙈 X埋め込み表示はOFFです</strong><br>
-        <span>下のボタンから募集記事を確認できます。</span>
-      </div>
-    `;
-  }
-
-  // BlablaLink / Discord / その他で画像が無い場合。
-  return `
-    <div class="registration-preview-platform">
-      掲載先：${escapeHtml(platform)}
-    </div>
-    <div class="recruitment-preview-empty">
-      画像なし（任意）<br>
-      下のボタンから募集記事を確認できます。
-    </div>
-  `;
-}
-
-
-
-// ========================================
-// 募集画像アップロード
-// ========================================
-
-async function uploadRecruitmentPreviewImage(
-  type,
-  recruitmentId,
-  passHash,
-  file
-) {
-
-  if (!file) {
-    return null;
-  }
-
-  const extMap = {
-    "image/jpeg": "jpg",
-    "image/png": "png",
-    "image/webp": "webp"
-  };
-
-  const ext =
-    extMap[file.type] || "jpg";
-
-  const safeType =
-    type === "union"
-      ? "union"
-      : "commander";
-
-  const objectPath =
-    `${safeType}/${recruitmentId}/${Date.now()}.${ext}`;
-
-  const { error: uploadError } =
-    await sb.storage
-      .from("recruitment-previews")
-      .upload(
-        objectPath,
-        file,
-        {
-          cacheControl: "3600",
-          upsert: false,
-          contentType: file.type
-        }
-      );
-
-  if (uploadError) {
-    throw uploadError;
-  }
-
-  const { data: publicData } =
-    sb.storage
-      .from("recruitment-previews")
-      .getPublicUrl(objectPath);
-
-  const publicUrl =
-    publicData?.publicUrl || "";
-
-  if (!publicUrl) {
-    throw new Error("PREVIEW_PUBLIC_URL_FAILED");
-  }
-
-  const { error: attachError } =
-    await sb.rpc(
-      "set_recruitment_preview_image",
-      {
-        p_type: safeType,
-        p_id: recruitmentId,
-        p_pass_hash: passHash,
-        p_preview_image_url: publicUrl
-      }
-    );
+  gap: 28px;
+  align-items: center;
 
-  if (attachError) {
-    throw attachError;
-  }
+  margin-bottom: 24px;
+  padding: 34px 0 28px;
 
-  return publicUrl;
+  border-bottom: 1px solid var(--line);
 }
-
-
 
-// ========================================
-// 日付
-// ========================================
+.hero-left {
+  min-width: 0;
+}
 
-function formatDate(date) {
+.hero h1 {
+  font-size:
+    clamp(42px, 5vw, 68px);
 
-  return new Intl.DateTimeFormat(
-    "ja-JP",
-    {
-      year: "numeric",
-      month: "2-digit",
-      day: "2-digit"
-    }
-  ).format(
-    new Date(date)
-  );
+  line-height: .94;
 
+  letter-spacing: -.075em;
 }
 
-// ========================================
-// 表示テストモード
-// ?badgeTest=1    → NEW + 締切間近を両方表示
-// ?newTest=1      → NEWだけ強制表示
-// ?deadlineTest=1 → 締切間近だけ強制表示
-// ※本番の判定ロジックには影響しません
-// ========================================
+.hero-title-line1,
+.hero-title-line2 {
+  display: block;
+}
 
-const displayTestParams =
-  new URLSearchParams(
-    window.location.search
-  );
+.hero h1 em {
+  color: var(--cyan);
 
-const forceNewBadge =
-  displayTestParams.get("badgeTest") === "1"
-  ||
-  displayTestParams.get("newTest") === "1";
+  font-style: normal;
+}
 
-const forceDeadlineBadge =
-  displayTestParams.get("badgeTest") === "1"
-  ||
-  displayTestParams.get("deadlineTest") === "1";
+.hero p {
+  margin: 18px 0 20px;
 
+  color: var(--ink-soft);
 
-// ========================================
-// NEW表示
-// 登録から24時間以内
-// ========================================
+  font-size: 14px;
+  font-weight: 700;
 
-function isNewRecruitment(createdAt) {
+  line-height: 1.8;
+}
 
-  if (forceNewBadge) {
-    return true;
-  }
 
-  const createdTime =
-    new Date(createdAt).getTime();
+/* =========================================================
+   BUTTONS
+   ========================================================= */
 
-  if (!Number.isFinite(createdTime)) {
-    return false;
-  }
+.hero-actions,
+.creator-action-row {
+  display: flex;
+  align-items: center;
 
-  const diff =
-    Date.now() - createdTime;
+  gap: 9px;
 
-  return (
-    diff >= 0 &&
-    diff < 24 * 60 * 60 * 1000
-  );
+  flex-wrap: wrap;
+}
 
+.btn,
+.creator-link-btn,
+.search-tab,
+.register-back-btn,
+.manage-back-btn,
+.copy-btn,
+.text-btn {
+  transition:
+    background .15s ease,
+    border-color .15s ease,
+    color .15s ease,
+    transform .15s ease,
+    box-shadow .15s ease;
 }
+
+.btn {
+  min-height: 48px;
 
-// ========================================
-// ユニオンランク色分け
-// ========================================
+  padding: 12px 20px;
 
-function getUnionRankClass(rank) {
+  border: 1px solid #55575b;
 
-  const classes = {
+  color: #f7f8f9;
 
-    "チャレンジャー":
-      "challenger",
+  background:
+    linear-gradient(
+      180deg,
+      #48494d 0%,
+      #35363a 100%
+    );
 
-    "ダイヤ":
-      "diamond",
+  font-weight: 900;
 
-    "プラチナ":
-      "platinum",
+  cursor: pointer;
 
-    "ゴールド":
-      "gold",
+  box-shadow:
+    0 3px 8px rgba(0, 0, 0, .15);
+}
 
-    "シルバー":
-      "silver",
+.btn:hover,
+.btn:active,
+.btn.active {
+  border-color: var(--cyan);
 
-    "駆け出しユニオン":
-      "rookie"
+  color: #fff;
 
-  };
+  background:
+    linear-gradient(
+      180deg,
+      var(--cyan-2),
+      var(--cyan)
+    );
 
-  return classes[rank] ||
-    "default";
+  box-shadow:
+    0 4px 12px rgba(26, 176, 241, .28);
 
+  transform: translateY(-1px);
 }
 
+.btn.primary {
+  position: relative;
 
-// ========================================
-// PASS生成
-// 8文字
-// ========================================
+  border-color: #56585c;
 
-function generatePass() {
+  color: #fff;
 
-  const chars =
-    "ABCDEFGHJKLMNPQRSTUVWXYZ23456789";
+  background:
+    linear-gradient(
+      180deg,
+      #48494d,
+      #34363a
+    );
+}
 
-  const random =
-    new Uint32Array(8);
+.btn.primary::before {
+  content: "";
 
-  crypto.getRandomValues(
-    random
-  );
+  position: absolute;
+  left: 0;
+  top: 0;
+  bottom: 0;
 
-  return Array.from(
-    random,
-    number =>
-      chars[
-        number % chars.length
-      ]
-  ).join("");
+  width: 5px;
 
+  background: var(--cyan);
 }
 
+.btn.primary:hover,
+.btn.primary:active {
+  background:
+    linear-gradient(
+      180deg,
+      var(--cyan-2),
+      var(--cyan)
+    );
+}
 
-// ========================================
-// PASSハッシュ
-// ========================================
+.btn.primary:hover::before,
+.btn.primary:active::before {
+  background: #fff;
+}
 
-async function sha256(text) {
+.btn.danger {
+  border-color: #56585c;
 
-  const data =
-    new TextEncoder()
-      .encode(text);
+  color: #ffffff;
 
-  const hash =
-    await crypto.subtle.digest(
-      "SHA-256",
-      data
+  background:
+    linear-gradient(
+      180deg,
+      #48494d,
+      #35363a
     );
-
-  return Array.from(
-    new Uint8Array(hash)
-  )
-    .map(
-      byte =>
-        byte
-          .toString(16)
-          .padStart(
-            2,
-            "0"
-          )
-    )
-    .join("");
-
 }
 
+.btn.danger:hover,
+.btn.danger:active {
+  border-color: var(--cyan);
 
-// ========================================
-// Supabaseエラーを文字列化
-// ========================================
+  color: #ffffff;
 
-function getErrorText(error) {
+  background:
+    linear-gradient(
+      180deg,
+      var(--cyan-2),
+      var(--cyan)
+    );
 
-  if (!error) {
-    return "";
-  }
+  box-shadow:
+    0 4px 12px rgba(26, 176, 241, .28);
+}
 
-  return [
+.btn.ghost {
+  border-color: var(--line-strong);
 
-    error.message,
-    error.details,
-    error.hint,
-    error.code
+  color: var(--ink);
 
-  ]
-    .filter(Boolean)
-    .join(" ");
+  background: #fff;
+}
 
+.wide {
+  width: 100%;
 }
 
+.main-register-btn {
+  flex: 1.45;
 
-// ========================================
-// X投稿ID取得
-// X / Twitter のURLだけ対象
-// ========================================
+  min-height: 56px;
 
-function getXPostId(value) {
+  font-size: 16px;
+  font-weight: 900;
+}
 
-  try {
+.creator-link-btn {
+  flex: .8;
 
-    const parsed =
-      new URL(value);
+  min-height: 46px;
 
-    const host =
-      parsed.hostname
-        .toLowerCase()
-        .replace(/^www\./, "");
+  display: flex;
+  align-items: center;
+  justify-content: center;
 
-    if (
-      host !== "x.com"
-      &&
-      host !== "twitter.com"
-    ) {
-      return null;
-    }
+  padding: 0 14px;
 
-    const match =
-      parsed.pathname.match(
-        /\/status\/(\d+)/
-      );
+  border: 1px solid #5b5d61;
 
-    return match
-      ? match[1]
-      : null;
+  color: #f6f7f8;
 
-  } catch {
+  background:
+    linear-gradient(
+      180deg,
+      #48494d,
+      #35363a
+    );
 
-    return null;
+  font-size: 12px;
+  font-weight: 900;
 
-  }
+  text-decoration: none;
+  white-space: nowrap;
 
+  box-shadow: var(--shadow-soft);
 }
-
 
-// ========================================
-// X投稿埋め込み
-// 各投稿を独立・並列で読み込む
-// 1件が削除済み / Not found でも
-// 他の投稿の読み込みを止めない
-// ========================================
+.creator-link-btn:hover,
+.creator-link-btn:active {
+  border-color: var(--cyan);
 
-function showXEmbedFallback(target) {
-
-  if (!target) {
-    return;
-  }
+  color: #fff;
 
-  target.dataset.loaded =
-    "failed";
+  background:
+    linear-gradient(
+      180deg,
+      var(--cyan-2),
+      var(--cyan)
+    );
+}
 
-  const previewImageUrl =
-    target.dataset.previewImageUrl || "";
 
-  const recruitmentUrl =
-    target.dataset.recruitmentUrl || "";
+/* =========================================================
+   HERO STATS
+   ========================================================= */
 
-  // 管理画面などから登録された画像がある場合は、
-  // X埋め込みが削除済み / Not found / 読み込み失敗でも画像を表示する。
-  if (previewImageUrl) {
+.hero-stats {
+  position: relative;
 
-    target.innerHTML = `
-      <div class="registration-preview-platform">
-        掲載先：X
-      </div>
-      <a
-        class="recruitment-preview-link"
-        href="${escapeHtml(recruitmentUrl)}"
-        target="_blank"
-        rel="noopener noreferrer"
-      >
-        <img
-          class="recruitment-preview-image"
-          src="${escapeHtml(previewImageUrl)}"
-          alt="X募集記事の登録画像"
-          loading="lazy"
-        >
-      </a>
-    `;
+  width: 100%;
+  min-width: 0;
+  min-height: 224px;
 
-    return;
-  }
+  display: grid !important;
 
-  target.innerHTML =
-    '<div class="x-embed-error">' +
-      '<strong>X投稿を埋め込み表示できません</strong><br>' +
-      '<span>下の「Xで募集記事を開く」から確認してください。</span>' +
-    '</div>';
+  grid-template-columns:
+    minmax(0, 1fr)
+    1px
+    minmax(0, 1fr)
+    1px
+    minmax(0, 1fr) !important;
 
-}
+  align-items: stretch;
 
+  gap: 0 !important;
 
-// X側は削除済み投稿でも iframe 自体を返して
-// 「Not found」と表示する場合があるため、Promise成功だけでは判定できない。
-// 登録画像がある募集だけ、描画後のiframe高さを見て小さすぎる場合は画像へフォールバックする。
-function checkXEmbedUnavailable(target) {
+  padding: 16px 14px 34px;
 
-  if (!target) {
-    return;
-  }
+  border: 1px solid var(--cyan);
 
-  const previewImageUrl =
-    target.dataset.previewImageUrl || "";
+  color: var(--ink);
 
-  if (!previewImageUrl) {
-    return;
-  }
+  background:
+    linear-gradient(
+      180deg,
+      #ffffff 0%,
+      #f4f6f7 100%
+    );
 
-  if (target.dataset.loaded !== "true") {
-    return;
-  }
+  box-shadow: var(--shadow);
+}
 
-  const iframe =
-    target.querySelector("iframe");
+.hero-stats::before {
+  content: "";
 
-  if (!iframe) {
-    showXEmbedFallback(target);
-    return;
-  }
+  position: absolute;
+  left: 0;
+  top: 0;
 
-  const iframeRect =
-    iframe.getBoundingClientRect();
+  width: 92px;
+  height: 4px;
 
-  const iframeHeight =
-    Math.max(
-      iframeRect.height || 0,
-      iframe.offsetHeight || 0,
-      Number(iframe.getAttribute("height")) || 0
-    );
+  background: var(--cyan);
+}
 
-  const targetHeight =
-    Math.max(
-      target.getBoundingClientRect().height || 0,
-      target.offsetHeight || 0
-    );
+.hero-stat,
+.hero-graduate-stat {
+  min-width: 0;
 
-  // Xは削除済み投稿でも「Not found」用iframeを返すことがある。
-  // そのiframeは通常の投稿よりかなり低い。
-  // 管理画面で画像が登録済みなら、小さい埋め込みを画像へ切り替える。
-  const renderedHeight =
-    Math.max(iframeHeight, targetHeight);
+  display: flex !important;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
 
-  if (renderedHeight <= 260) {
-    showXEmbedFallback(target);
-  }
+  padding: 6px 8px;
 
+  text-align: center;
 }
 
+.hero-graduate-stat {
+  grid-column: 5 !important;
+  grid-row: 1 !important;
 
-function renderSingleXEmbed(target) {
+  margin: 0 !important;
+  padding: 6px 8px !important;
 
-  if (!target) {
-    return;
-  }
+  border: 0 !important;
 
+  background: transparent !important;
+}
 
-  if (
-    target.dataset.loaded === "true"
-    ||
-    target.dataset.loaded === "loading"
-  ) {
-    return;
-  }
+.hero-stat-divider {
+  width: 1px !important;
+  height: 72% !important;
+  min-height: 118px;
 
+  align-self: center;
 
-  const postId =
-    target.dataset.postId;
+  background: #9aa2aa !important;
+  opacity: 1 !important;
+}
 
+.hero-stat-title,
+.hero-graduate-title {
+  min-height: 26px;
 
-  if (!postId) {
+  display: flex;
+  align-items: center;
+  justify-content: center;
 
-    showXEmbedFallback(
-      target
-    );
+  margin: 0 0 7px;
 
-    return;
+  color: var(--ink);
 
-  }
+  font-size: 13px;
+  font-weight: 900;
 
+  line-height: 1.2;
+}
 
-  target.dataset.loaded =
-    "loading";
+.hero-stat-number,
+.hero-graduate-number {
+  display: flex;
+  align-items: flex-end;
+  justify-content: center;
 
+  gap: 5px;
+}
 
-  try {
+.hero-stat-number strong,
+.hero-graduate-number strong {
+  margin: 0;
 
-    const result =
-      window.twttr.widgets
-        .createTweet(
+  font-family:
+    "Industry",
+    "Azonix",
+    "Futura PT Condensed",
+    "Teko",
+    "Gothic MB101",
+    "Zen Kaku Gothic New",
+    sans-serif;
 
-          postId,
+  font-size:
+    clamp(54px, 6vw, 78px);
 
-          target,
+  font-weight: 800;
 
-          {
-            theme: "dark",
-            align: "center",
-            conversation: "none"
-          }
+  line-height: .82;
+}
 
-        );
+.hero-stat-number span,
+.hero-graduate-number span {
+  padding-bottom: 5px;
 
+  font-size: 17px;
+  font-weight: 900;
 
-    Promise
-      .resolve(result)
-      .then(tweetElement => {
+  line-height: 1;
+}
 
-        if (tweetElement) {
+.hero-stat-sub,
+.hero-graduate-sub {
+  margin-top: 9px;
 
-          target.dataset.loaded =
-            "true";
+  color: var(--muted);
 
-          // Xが「Not found」のiframeを返すケースを判定。
-          // iframeの描画完了を待ってから確認する。
-          // Xのiframeは段階的に高さが確定するため複数回確認する。
-          [1200, 3000, 6000].forEach(delay => {
-            setTimeout(
-              () => checkXEmbedUnavailable(target),
-              delay
-            );
-          });
+  font-size: 10px;
 
-          return;
+  line-height: 1.3;
+}
 
-        }
+/* commander */
+.commander-stat .hero-stat-title,
+.commander-stat .hero-stat-number strong,
+.commander-stat .hero-stat-number span {
+  color: var(--gold);
+}
 
-        showXEmbedFallback(
-          target
-        );
+/* union */
+.union-stat .hero-stat-title,
+.union-stat .hero-stat-number strong,
+.union-stat .hero-stat-number span {
+  color: var(--cyan);
+}
 
-      })
-      .catch(error => {
+/* graduate */
+.graduate-stat .hero-stat-title,
+.graduate-stat .hero-stat-number strong,
+.graduate-stat .hero-stat-number span,
+.hero-graduate-title,
+.hero-graduate-number strong,
+.hero-graduate-number span {
+  color: var(--purple);
+}
 
-        console.error(
-          "X投稿表示エラー",
-          error
-        );
+.hero-stat-update {
+  position: absolute !important;
 
-        showXEmbedFallback(
-          target
-        );
+  left: 0 !important;
+  right: 0 !important;
+  bottom: 9px !important;
 
-      });
+  color: var(--muted);
 
-  } catch (error) {
+  font:
+    700 10px "Teko",
+    sans-serif;
 
-    console.error(
-      "X投稿表示エラー",
-      error
-    );
+  text-align: center;
+}
 
-    showXEmbedFallback(
-      target
-    );
 
-  }
+/* =========================================================
+   PAGE / HEADERS
+   ========================================================= */
 
+.page {
+  display: none;
 }
 
+.page.active {
+  display: block;
+}
 
-function renderXEmbeds(
-  retry = 0
-) {
+.section-head {
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
 
-  if (
-    !window.twttr
-    ||
-    !window.twttr.widgets
-  ) {
+  gap: 16px;
 
-    if (retry < 10) {
+  margin-bottom: 16px;
+}
 
-      setTimeout(
-        () => {
+.section-head h2 {
+  font-size:
+    clamp(26px, 3vw, 34px);
 
-          renderXEmbeds(
-            retry + 1
-          );
+  line-height: 1.05;
+}
 
-        },
-        500
-      );
+.section-head-actions {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
 
-    }
+  gap: 10px;
+}
 
-    return;
-  }
+.text-btn {
+  padding: 7px 10px;
 
+  border: 1px solid transparent;
 
-  const targets =
-    document.querySelectorAll(
-      ".x-embed"
-    );
+  color: var(--ink-soft);
 
+  background: transparent;
 
-  // ★ await で1件ずつ待たない。
-  // 全投稿をそれぞれ独立して読み込む。
-  targets.forEach(target => {
-    renderSingleXEmbed(target);
-  });
+  font-weight: 900;
 
+  cursor: pointer;
 }
 
+.text-btn:hover,
+.text-btn:active {
+  border-color: var(--cyan);
 
-// ========================================
-// ページ切替
-//
-// ★重要
-// プログラムから一覧へ戻った場合も
-// 登録・締切モードを確実に解除
-// ========================================
-
-function showPage(name) {
+  color: var(--cyan);
+}
 
-  // 登録・締切モード
-  document.body.classList.toggle(
-    "register-mode",
-    name === "register"
-  );
 
-  document.body.classList.toggle(
-    "manage-mode",
-    name === "manage"
-  );
+/* =========================================================
+   SEARCH TABS
+   ========================================================= */
 
+.search-tabs {
+  display: grid;
 
-  // 全ページを一旦閉じる
-  document
-    .querySelectorAll(".page")
-    .forEach(page => {
-      page.classList.remove("active");
-    });
+  grid-template-columns:
+    1fr 1fr;
 
+  gap: 8px;
 
-  // 登録・締切ページも確実に閉じる
-  const registerPage =
-    document.getElementById("registerPage");
+  margin-bottom: 12px;
+}
 
-  const managePage =
-    document.getElementById("managePage");
+.search-tab {
+  min-height: 50px;
 
-  registerPage?.classList.remove("active");
-  managePage?.classList.remove("active");
+  border: 1px solid #56585c;
 
+  color: #fff;
 
-  // 指定ページだけ開く
-  const page =
-    document.getElementById(`${name}Page`);
+  background:
+    linear-gradient(
+      180deg,
+      #494a4e,
+      #37383c
+    );
 
-  if (page) {
-    page.classList.add("active");
-  }
+  font-size: 14px;
+  font-weight: 900;
 
+  cursor: pointer;
 
-  // 募集一覧へ戻る時は
-  // 登録・締切を完全に解除
-  if (name === "list") {
+  box-shadow: var(--shadow-soft);
+}
 
-    document.body.classList.remove(
-      "register-mode",
-      "manage-mode"
-    );
+.search-tab:hover,
+.search-tab.active,
+.commander-tab.active,
+.union-tab.active {
+  border-color: var(--cyan);
 
-    registerPage?.classList.remove("active");
-    managePage?.classList.remove("active");
-  }
+  color: #fff;
 
+  background:
+    linear-gradient(
+      180deg,
+      var(--cyan-2),
+      var(--cyan)
+    );
 
-  // 下部ナビ
-  document
-    .querySelectorAll(".nav-btn")
-    .forEach(button => {
+  box-shadow:
+    0 4px 12px rgba(26, 176, 241, .28);
+}
 
-      button.classList.toggle(
-        "active",
-        button.dataset.page === name
-      );
 
-    });
+/* =========================================================
+   FILTERS
+   ========================================================= */
 
+.filters {
+  margin-bottom: 14px;
+  padding: 12px;
 
-  // 募集一覧
-  if (name === "list") {
+  border: 1px solid var(--cyan);
 
-    loadRecruitments();
+  background: var(--surface);
 
-    setTimeout(() => {
+  box-shadow: var(--shadow-soft);
+}
 
-      const listPage =
-        document.getElementById("listPage");
+.filters label,
+.panel label {
+  display: block;
 
-      if (!listPage) {
-        return;
-      }
+  color: var(--ink-soft);
 
-      const headerOffset = 76;
+  font-size: 11px;
+  font-weight: 900;
+}
 
-      const targetTop =
-        listPage.getBoundingClientRect().top +
-        window.pageYOffset -
-        headerOffset;
+.filters select,
+.panel input,
+.panel select,
+.panel textarea,
+#unionRank,
+#registrationType,
+#slvFilter,
+#unionRankFilter {
+  width: 100%;
+  min-height: 46px;
 
-      window.scrollTo({
-        top: Math.max(0, targetTop),
-        behavior: "smooth"
-      });
+  margin-top: 6px;
+  padding: 11px 12px;
 
-    }, 120);
+  border: 1px solid #b7bcc0;
 
-  } else {
+  color: var(--ink);
 
-    window.scrollTo({
-      top: 0,
-      behavior: "smooth"
-    });
+  background: #fff;
 
-  }
+  outline: none;
 }
-
 
-// ========================================
-// ページボタン
-// ========================================
+.filters select:focus,
+.panel input:focus,
+.panel select:focus,
+.panel textarea:focus,
+#unionRank:focus,
+#registrationType:focus,
+#slvFilter:focus,
+#unionRankFilter:focus {
+  border-color: var(--cyan);
 
-document
-  .querySelectorAll(
-    "[data-page]"
-  )
-  .forEach(
-    button => {
-
-      button.addEventListener(
-        "click",
-        () => {
-
-          showPage(
-            button.dataset.page
-          );
+  box-shadow:
+    inset
+    0 0 0 1px var(--cyan);
+}
 
-        }
-      );
 
-    }
-  );
+/* =========================================================
+   LIST HEADER COUNTS
+   ========================================================= */
 
+.registration-count {
+  display: flex;
+  align-items: baseline;
 
-// ========================================
-// 指揮官 / ユニオン検索タブ
-// ========================================
+  gap: 14px;
 
-let currentSearchType =
-  "commander";
+  margin-top: 8px;
+}
 
+.registration-count > div {
+  display: flex;
+  align-items: baseline;
 
-const commanderSearchTab =
-  $("#commanderSearchTab");
+  gap: 4px;
+}
 
-const unionSearchTab =
-  $("#unionSearchTab");
+.registration-count strong {
+  font-family:
+    "Industry",
+    "Azonix",
+    "Futura PT Condensed",
+    "Teko",
+    "Gothic MB101",
+    "Zen Kaku Gothic New",
+    sans-serif;
 
-const commanderFilterBox =
-  $("#commanderFilterBox");
+  font-size: 24px;
+  font-weight: 800;
 
-const unionFilterBox =
-  $("#unionFilterBox");
+  line-height: 1;
+}
 
+.registration-count span,
+.registration-count small {
+  font-size: 11px;
+  font-weight: 900;
+}
 
-function setSearchType(type) {
+.registration-count > div:first-child strong,
+.registration-count > div:first-child span,
+.registration-count > div:first-child small {
+  color: var(--gold);
+}
 
-  currentSearchType =
-    type;
+.registration-count > div:nth-child(2) strong,
+.registration-count > div:nth-child(2) span,
+.registration-count > div:nth-child(2) small {
+  color: var(--cyan);
+}
 
 
-  const isCommander =
-    type ===
-    "commander";
+/* =========================================================
+   GRADUATED COUNTER
+   ========================================================= */
 
+.graduated-commander-counter {
+  display: flex;
+  align-items: center;
 
-  commanderSearchTab
-    ?.classList
-    .toggle(
-      "active",
-      isCommander
-    );
+  gap: 8px;
 
+  min-width: 190px;
 
-  unionSearchTab
-    ?.classList
-    .toggle(
-      "active",
-      !isCommander
-    );
+  padding: 8px 11px;
 
+  border: 1px solid var(--cyan);
 
-  commanderFilterBox
-    ?.classList
-    .toggle(
-      "hidden",
-      !isCommander
+  background:
+    linear-gradient(
+      180deg,
+      #fff,
+      #f5f8fa
     );
 
+  box-shadow: var(--shadow-soft);
+}
 
-  unionFilterBox
-    ?.classList
-    .toggle(
-      "hidden",
-      isCommander
-    );
+.graduated-commander-number {
+  display: flex;
+  align-items: baseline;
 
+  gap: 3px;
+}
 
-  loadRecruitments();
+.graduated-commander-number strong {
+  color: var(--purple);
 
+  font:
+    800 46px/.84 "Teko",
+    sans-serif;
 }
 
+.graduated-commander-number span {
+  color: var(--purple);
 
-commanderSearchTab
-  ?.addEventListener(
-    "click",
-    () => {
-
-      setSearchType(
-        "commander"
-      );
+  font-size: 13px;
+  font-weight: 900;
+}
 
-    }
-  );
+.graduated-commander-label {
+  display: flex;
+  flex-direction: column;
 
+  gap: 2px;
+}
 
-unionSearchTab
-  ?.addEventListener(
-    "click",
-    () => {
+.graduated-commander-label strong {
+  color: var(--ink);
 
-      setSearchType(
-        "union"
-      );
+  font-size: 12px;
+  font-weight: 900;
+}
 
-    }
-  );
+.graduated-commander-label small {
+  color: var(--purple);
 
+  font-size: 9px;
+  font-weight: 900;
+}
 
-// ========================================
-// カウントダウン
-// ========================================
 
-let countdownTimer =
-  null;
+/* =========================================================
+   CARDS
+   ========================================================= */
 
+.cards {
+  display: grid;
 
-function getRemainingTime(
-  expiresAt
-) {
+  grid-template-columns:
+    repeat(
+      auto-fit,
+      minmax(280px, 1fr)
+    );
 
-  const diff =
-    new Date(
-      expiresAt
-    ).getTime()
-    -
-    Date.now();
+  gap: 12px;
+}
 
+.card {
+  position: relative;
 
-  if (
-    diff <=
-    0
-  ) {
+  overflow: hidden;
 
-    return {
+  padding: 16px;
 
-      expired:
-        true,
+  border: 1px solid var(--cyan);
 
-      text:
-        "掲載終了",
+  color: var(--ink);
 
-      className:
-        "danger",
+  background:
+    linear-gradient(
+      180deg,
+      #fff,
+      #f4f6f7
+    );
 
-      deadlineNear:
-        false
+  box-shadow: var(--shadow-soft);
+}
 
-    };
+.card::before {
+  content: "";
 
-  }
+  position: absolute;
+  left: 0;
+  top: 0;
+  bottom: 0;
 
+  width: 4px;
 
-  // ======================================
-  // 締切間近 表示テスト
-  // 実際の期限を変更せず、見た目だけ強制表示
-  // ======================================
-  if (forceDeadlineBadge) {
+  background: var(--cyan);
+}
 
-    return {
+.card::after {
+  content: "";
 
-      expired:
-        false,
+  position: absolute;
+  right: -28px;
+  top: -28px;
 
-      text:
-        "⚠ 残り 23時間 59分",
+  width: 76px;
+  height: 76px;
 
-      className:
-        "deadline-near",
+  border: 1px solid rgba(26, 176, 241, .16);
 
-      deadlineNear:
-        true
+  transform: rotate(45deg);
 
-    };
+  pointer-events: none;
+}
 
-  }
+.card.commander-card,
+.card.union-card {
+  border-color: var(--cyan);
+}
 
+.card.commander-card::before,
+.card.union-card::before {
+  background: var(--cyan);
+}
 
-  const totalMinutes =
-    Math.floor(
-      diff / 60000
-    );
+.card-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
 
+  gap: 8px;
+}
 
-  const days =
-    Math.floor(
-      totalMinutes /
-      1440
-    );
+.type-with-new {
+  display: flex;
+  align-items: center;
 
+  gap: 6px;
 
-  const hours =
-    Math.floor(
-      (
-        totalMinutes %
-        1440
-      )
-      /
-      60
-    );
+  min-width: 0;
+}
 
+.recruitment-type {
+  display: inline-flex;
+  align-items: center;
 
-  const minutes =
-    totalMinutes %
-    60;
+  width: fit-content;
 
+  padding: 4px 8px;
 
-  // ======================================
-  // 締切間近：残り24時間以内
-  // ======================================
-  const deadlineNear =
-    diff <=
-    24 * 60 * 60 * 1000;
+  border: 1px solid var(--cyan);
 
+  color: var(--cyan-dark);
 
-  if (deadlineNear) {
+  background: #f4fbfe;
 
-    return {
+  font-size: 10px;
+  font-weight: 900;
 
-      expired:
-        false,
+  white-space: nowrap;
+}
 
-      text:
-        `⚠ 残り ${hours}時間 ${minutes}分`,
+.commander-card .recruitment-type,
+.union-card .recruitment-type {
+  border-color: var(--cyan);
 
-      className:
-        "deadline-near",
+  color: var(--cyan-dark);
+}
 
-      deadlineNear:
-        true
+.state {
+  padding: 4px 7px;
 
-    };
+  border: 1px solid var(--cyan);
 
-  }
+  color: var(--cyan-dark);
 
+  background: rgba(26, 176, 241, .08);
 
-  let className =
-    "";
+  font-size: 10px;
+  font-weight: 900;
+}
 
+.name {
+  margin: 10px 0 3px;
 
-  if (
-    days <=
-    2
-  ) {
+  color: var(--ink);
 
-    className =
-      "danger";
+  font-size: 20px;
+  font-weight: 900;
+}
 
+.slv {
+  color: var(--gold);
 
-  } else if (
-    days <=
-    6
-  ) {
+  font:
+    800 34px "Teko",
+    sans-serif;
+}
 
-    className =
-      "warning";
+.slv small {
+  margin-left: 4px;
 
-  }
+  color: var(--muted);
 
+  font-size: 11px;
+}
 
-  return {
+.date {
+  margin-top: 8px;
 
-    expired:
-      false,
+  color: var(--muted);
 
-    text:
-      `⏳ 残り ${days}日 ${hours}時間 ${minutes}分`,
+  font-size: 10px;
+}
 
-    className,
+.countdown {
+  margin-top: 12px;
+  padding-top: 10px;
 
-    deadlineNear:
-      false
+  border-top: 1px solid #dfe4e7;
 
-  };
+  color: var(--ink-soft);
 
+  font-size: 11px;
 }
 
+.countdown.warning {
+  color: #9b7300;
+}
 
-function updateCountdowns() {
+.countdown.danger {
+  color: #d73b4d;
+}
 
-  document
-    .querySelectorAll(
-      "[data-expires]"
-    )
-    .forEach(
-      element => {
 
-        const result =
-          getRemainingTime(
-            element.dataset.expires
-          );
+/* =========================================================
+   NEW BADGE
+   ========================================================= */
 
+.new-badge {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
 
-        if (
-          result.expired
-        ) {
+  flex: 0 0 auto;
 
-          const card =
-            element.closest(
-              ".card"
-            );
+  padding: 3px 6px;
 
+  border: 1px solid #ff5364;
 
-          if (card) {
+  color: #ffffff;
 
-            card.remove();
+  background: #ff5364;
 
-          }
+  box-shadow: 0 2px 6px rgba(255, 83, 100, .22);
 
+  font-size: 9px;
+  font-weight: 900;
 
-          return;
+  white-space: nowrap;
+}
 
-        }
 
+/* =========================================================
+   X
+   ========================================================= */
 
-        element.textContent =
-          result.text;
+.x-post-area {
+  margin-top: 10px;
+}
 
+.x-embed {
+  min-height: 0;
+}
 
-        element.className =
-          `countdown ${result.className}`;
+.x-embed-error {
+  padding: 18px 10px;
 
+  border: 1px dashed var(--cyan);
 
-        // ======================================
-        // 締切間近バッジを1分ごとに同期
-        // ======================================
-        const card =
-          element.closest(
-            ".card"
-          );
+  color: var(--muted);
 
-        const badgeWrap =
-          card
-            ?.querySelector(
-              ".type-with-new"
-            );
+  background: #f3f6f8;
 
-        const currentBadge =
-          badgeWrap
-            ?.querySelector(
-              ".deadline-badge"
-            );
+  text-align: center;
+}
 
-        if (
-          result.deadlineNear
-        ) {
+.x-btn {
+  display: block;
 
-          if (
-            badgeWrap &&
-            !currentBadge
-          ) {
+  margin-top: 12px;
+  padding: 10px;
 
-            badgeWrap
-              .insertAdjacentHTML(
-                "beforeend",
-                '<span class="deadline-badge">⚠ 締切間近</span>'
-              );
+  border: 1px solid #56585c;
 
-          }
+  color: #fff;
 
-        } else {
+  background:
+    linear-gradient(
+      180deg,
+      #494a4e,
+      #35363a
+    );
 
-          currentBadge
-            ?.remove();
+  font-size: 12px;
+  font-weight: 900;
 
-        }
+  text-align: center;
+  text-decoration: none;
+}
 
-      }
-    );
+.x-btn:hover,
+.x-btn:active {
+  border-color: var(--cyan);
 
+  background: var(--cyan);
 }
 
 
-// ========================================
-// メッセージ
-// ========================================
+/* =========================================================
+   UNION RANK
+   ランクラベルだけ塗りつぶし + 白文字
+   ========================================================= */
 
-function showMessage(
-  text,
-  type = ""
-) {
+.union-rank {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
 
-  const message =
-    $("#message");
+  width: fit-content;
 
+  margin-top: 7px;
+  padding: 5px 12px;
 
-  if (!message) {
-    return;
-  }
-
+  border: 1px solid transparent;
+  border-radius: 999px;
 
-  message.textContent =
-    text;
+  color: #ffffff;
 
+  font-size: 12px;
+  font-weight: 900;
 
-  message.className =
-    `message ${type}`;
+  letter-spacing: .02em;
+  line-height: 1.2;
+}
 
+.rank-challenger {
+  color: #ffffff;
+  border-color: #e14949;
+  background: #e14949;
 }
 
+.rank-diamond {
+  color: #ffffff;
+  border-color: #9d46d8;
+  background: #9d46d8;
+}
 
-// ========================================
-// 空表示
-// ========================================
+.rank-platinum {
+  color: #ffffff;
+  border-color: #159dcf;
+  background: #159dcf;
+}
 
-function showEmpty(text) {
+.rank-gold {
+  color: #ffffff;
+  border-color: #d89f20;
+  background: #d89f20;
+}
 
-  const empty =
-    $("#emptyState");
+.rank-silver {
+  color: #ffffff;
+  border-color: #9ca3a9;
+  background: #9ca3a9;
+}
 
+.rank-rookie {
+  color: #ffffff;
+  border-color: #83b641;
+  background: #83b641;
+}
 
-  if (!empty) {
-    return;
-  }
+.rank-default {
+  color: var(--ink-soft);
+  border-color: #999;
+  background: #f3f4f5;
+}
 
 
-  empty.classList.remove(
-    "hidden"
-  );
+/* =========================================================
+   PANEL / FORM / NOTICE
+   ========================================================= */
 
+.panel {
+  display: grid;
 
-  const p =
-    empty.querySelector(
-      "p"
-    );
+  gap: 14px;
 
+  padding: 16px;
 
-  if (p) {
+  border: 1px solid var(--cyan);
 
-    p.textContent =
-      text;
+  color: var(--ink);
 
-  }
+  background: #fff;
 
+  box-shadow: var(--shadow-soft);
 }
 
+.notice {
+  display: grid;
 
-// ========================================
-// 卒業ちしかんカウンター
-//
-// PASS締切
-// +
-// 14日経過
-//
-// Supabase側で合算
-// ========================================
+  gap: 3px;
 
-async function loadGraduatedCommanderCount() {
+  padding: 11px 13px;
 
-  const counter =
-    $("#graduatedCommanderCount");
+  border-left: 4px solid var(--cyan);
 
-  const topCounter =
-    $("#graduatedCommanderCountTop");
+  color: var(--ink-soft);
 
+  background: #edf8fd;
 
-  if (!sb) {
+  font-size: 11px;
 
-    return null;
+  line-height: 1.6;
+}
 
-  }
+.notice strong {
+  color: var(--ink);
+}
+
+.easy-register-box {
+  margin: 0 0 18px;
+  padding: 16px;
 
+  border: 1px solid var(--cyan);
+  border-left: 5px solid var(--cyan);
 
-  const {
-    data,
-    error
-  } =
-    await sb.rpc(
-      "get_graduated_commander_count"
+  color: var(--ink);
+
+  background:
+    linear-gradient(
+      180deg,
+      #fff,
+      #f3f6f8
     );
 
+  box-shadow: var(--shadow-soft);
+}
 
-  if (error) {
+.easy-register-title {
+  margin-bottom: 10px;
 
-    console.error(
-      "卒業ちしかんカウンター取得エラー",
-      error
-    );
+  color: var(--ink);
 
-    return null;
+  font-size: 17px;
+  font-weight: 900;
+}
 
-  }
+.easy-register-list {
+  display: grid;
 
+  gap: 5px;
 
-  const count =
-    Number(
-      Array.isArray(data)
-        ? data[0]
-        : data
-    );
+  color: var(--ink-soft);
 
+  font-size: 13px;
 
-  if (
-    !Number.isFinite(
-      count
-    )
-  ) {
+  line-height: 1.55;
+}
 
-    return null;
+.easy-register-copy {
+  margin-top: 10px;
 
-  }
+  color: var(--cyan-dark);
 
+  font-size: 13px;
+  font-weight: 900;
+}
 
-  // 下側が残っている場合だけ更新
-  if (counter) {
+.easy-register-privacy {
+  margin-top: 12px;
+  padding: 9px 11px;
 
-    counter.textContent =
-      count;
+  border: 1px solid var(--cyan);
 
-  }
+  color: var(--cyan-dark);
 
+  background: rgba(26, 176, 241, .06);
 
-  // TOP側
-  if (topCounter) {
+  font-size: 11px;
+  font-weight: 900;
+}
 
-    topCounter.textContent =
-      count;
 
-  }
+/* =========================================================
+   INLINE REGISTER / MANAGE
+   ========================================================= */
 
+#heroRegisterArea,
+#heroManageArea {
+  display: none;
+}
 
-  return count;
+body.register-mode #heroRegisterArea,
+body.manage-mode #heroManageArea {
+  display: block;
 
+  margin-top: 20px;
 }
 
+body.register-mode .hero-stats,
+body.manage-mode .hero-stats {
+  display: none !important;
+}
 
-// ========================================
-// Xシェア用
-// 現在募集中の指揮官数
-// ========================================
+body.register-mode .hero,
+body.manage-mode .hero {
+  grid-template-columns:
+    minmax(0, 760px) !important;
 
-async function getCurrentCommanderCount() {
+  justify-content: start !important;
+}
 
-  if (!sb) {
+body.register-mode .hero-left,
+body.manage-mode .hero-left {
+  width: 100% !important;
+  max-width: 760px !important;
+}
 
-    return 0;
+body.register-mode #registerPage,
+body.manage-mode #managePage {
+  display: block !important;
 
-  }
+  width: 100%;
 
+  margin: 0;
+  padding: 0 0 22px;
+}
 
-  const {
-    count,
-    error
-  } =
-    await sb
-      .from(
-        "recruitments"
-      )
-      .select(
-        "id",
-        {
-          count: "exact",
-          head: true
-        }
-      )
-      .eq(
-        "status",
-        "open"
-      )
-      .gt(
-        "expires_at",
-        new Date()
-          .toISOString()
-      );
+.register-inline-top,
+.manage-inline-top {
+  display: block !important;
 
+  width: 100% !important;
 
-  if (error) {
+  margin: 0 0 14px !important;
+}
 
-    console.error(
-      "登録指揮官数取得エラー",
-      error
-    );
+.register-back-btn,
+.manage-back-btn {
+  width: 100% !important;
+  min-height: 48px !important;
 
+  display: flex !important;
+  align-items: center;
+  justify-content: center;
 
-    return Number(
+  padding: 0 14px !important;
 
-      $("#commanderCountTop")
-        ?.textContent
-      ||
-      $("#commanderCount")
-        ?.textContent
-      ||
-      0
+  border: 1px solid #56585c !important;
 
-    );
+  color: #fff !important;
 
-  }
+  background:
+    linear-gradient(
+      180deg,
+      #494a4e,
+      #35363a
+    ) !important;
 
+  font-size: 14px !important;
+  font-weight: 900 !important;
+
+  cursor: pointer;
+}
 
-  return Number(
-    count || 0
-  );
+.register-back-btn:hover,
+.manage-back-btn:hover,
+.register-back-btn:active,
+.manage-back-btn:active {
+  border-color: var(--cyan) !important;
 
+  background: var(--cyan) !important;
 }
 
 
-// ========================================
-// Xシェア用
-// 現在募集中のユニオン数
-// ========================================
+/* =========================================================
+   COMMANDER CLOSE REASON
+   ========================================================= */
 
-async function getCurrentUnionCount() {
+.commander-close-reason {
+  margin-top: 14px;
+  padding: 14px;
 
-  if (!sb) {
+  border: 1px solid var(--cyan);
 
-    return 0;
+  background: #f6f8f9;
+}
 
-  }
+.commander-close-reason[hidden] {
+  display: none !important;
+}
 
+.commander-close-reason-title {
+  margin-bottom: 10px;
 
-  const {
-    count,
-    error
-  } =
-    await sb
-      .from(
-        "union_recruitments"
-      )
-      .select(
-        "id",
-        {
-          count: "exact",
-          head: true
-        }
-      )
-      .eq(
-        "status",
-        "open"
-      )
-      .gt(
-        "expires_at",
-        new Date()
-          .toISOString()
-      );
+  color: var(--ink);
 
+  font-size: 13px;
+  font-weight: 900;
+}
 
-  if (error) {
+.close-reason-btn {
+  width: 100%;
 
-    console.error(
-      "登録ユニオン数取得エラー",
-      error
-    );
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
 
+  margin-bottom: 8px;
+  padding: 12px 13px;
 
-    return Number(
+  border: 1px solid #56585c;
 
-      $("#unionCountTop")
-        ?.textContent
-      ||
-      $("#unionCount")
-        ?.textContent
-      ||
-      0
+  color: #fff;
 
+  background:
+    linear-gradient(
+      180deg,
+      #494a4e,
+      #35363a
     );
-
-  }
 
+  text-align: left;
 
-  return Number(
-    count || 0
-  );
+  cursor: pointer;
 
+  transition: .15s;
 }
 
+.close-reason-btn:hover,
+.close-reason-btn:active {
+  border-color: var(--cyan);
 
+  background: var(--cyan);
+}
 
-// ========================================
-// TOP表示用：総登録ユニオン数
-// 読み取り専用。既存データの更新・削除は行わない。
-// 同じユニオン名の再登録は1ユニオンとして集計。
-// ========================================
+.close-reason-btn strong {
+  font-size: 13px;
+  font-weight: 900;
+}
 
-async function loadTotalRegisteredUnionCount() {
+.close-reason-btn small {
+  margin-top: 4px;
 
-  const counter =
-    $("#totalUnionCountTop");
+  color: rgba(255, 255, 255, .80);
 
-  if (!counter) {
-    return 0;
-  }
+  font-size: 10px;
 
-  if (!sb) {
-    counter.textContent = "0";
-    return 0;
-  }
+  line-height: 1.45;
+}
 
-  const {
-    data,
-    error
-  } =
-    await sb
-      .from(
-        "union_recruitments"
-      )
-      .select(
-        "union_name"
-      );
+.close-reason-btn.graduated {
+  border-left: 5px solid var(--purple);
+}
 
-  if (error) {
+.close-reason-btn.close-only {
+  border-left: 5px solid var(--red);
+}
 
-    console.error(
-      "総登録ユニオン数取得エラー",
-      error
-    );
 
-    const fallback =
-      Number(
-        $("#unionCountTop")
-          ?.textContent
-        ||
-        $("#unionCount")
-          ?.textContent
-        ||
-        0
-      );
-
-    counter.textContent =
-      String(fallback);
-
-    return fallback;
-  }
-
-  const names =
-    new Set(
-      (data || [])
-        .map(item =>
-          String(
-            item?.union_name || ""
-          )
-            .trim()
-            .toLocaleLowerCase("ja-JP")
-        )
-        .filter(Boolean)
-    );
+/* =========================================================
+   MESSAGE / EMPTY
+   ========================================================= */
 
-  const total =
-    names.size;
+.message {
+  margin-bottom: 12px;
+  padding: 11px;
 
-  counter.textContent =
-    String(total);
+  border: 1px solid var(--cyan);
 
-  return total;
+  background: #fff;
 }
 
+.message.ok {
+  color: #13794d;
+}
 
-// ========================================
-// Xシェア文
-//
-// 通常Xアカウント用
-// 短縮版
-// ========================================
+.message.error {
+  color: #c93748;
+}
 
-function buildXShareText(
-  registration,
-  commanderCount,
-  unionCount,
-  graduatedCount
-) {
+.hidden {
+  display: none !important;
+}
 
-  if (!registration) {
+.empty {
+  padding: 48px 18px;
 
-    return "";
+  border: 1px dashed var(--cyan);
 
-  }
+  color: var(--muted);
 
+  background: #f8fafb;
 
-  const commonTop =
+  text-align: center;
+}
 
-    "🔎 指揮官とユニオンをつなぐマッチングアプリ\n" +
-    "「NIKKE UNION MATCH」に募集登録しました！\n\n";
+.empty-icon {
+  margin-bottom: 7px;
 
+  color: var(--cyan);
 
-  const commonStats =
+  font-size: 36px;
+}
 
-    "📊 現在の登録状況\n" +
-    `👤 ${commanderCount}名\n` +
-    `🏢 ${unionCount}\n` +
-    `🎓 ${graduatedCount}名\n\n`;
 
+/* =========================================================
+   MODAL
+   ========================================================= */
 
-  const appUrl =
-    "https://x.gd/4tEJo";
+.modal {
+  position: fixed;
+  inset: 0;
+  z-index: 60;
 
+  display: grid;
+  place-items: center;
 
-  // ======================================
-  // 指揮官
-  // ======================================
+  padding: 16px;
 
-  if (
-    registration.type ===
-    "commander"
-  ) {
+  background:
+    rgba(17, 18, 20, .78);
+}
 
-    return (
+.modal-card {
+  position: relative;
 
-      commonTop +
+  width:
+    min(480px, 100%);
 
-      `👤 ${registration.name}\n` +
-      `⚡ ${registration.slv}\n\n` +
+  padding: 22px;
 
-      commonStats +
+  border: 1px solid var(--cyan);
 
-      "👇 UNION MATCH\n" +
-      appUrl +
-      "\n\n" +
+  color: var(--ink);
 
-      "👇 募集投稿\n" +
-      registration.xUrl
+  background: #fff;
 
-    );
+  box-shadow:
+    0 22px 70px rgba(0, 0, 0, .35);
+}
 
-  }
+.modal-close {
+  position: absolute;
 
+  top: 6px;
+  right: 9px;
 
-  // ======================================
-  // ユニオン
-  // ======================================
+  padding: 0;
 
-  return (
+  border: 0;
 
-    commonTop +
+  color: var(--ink-soft);
 
-    `🏢 ${registration.name}\n` +
-    `🏆 ${registration.rank}\n\n` +
+  background: none;
 
-    commonStats +
+  font-size: 26px;
 
-    "👇 UNION MATCH\n" +
-    appUrl +
-    "\n\n" +
+  cursor: pointer;
+}
 
-    "👇 募集投稿\n" +
-    registration.xUrl
+.pass-box {
+  margin: 16px 0;
+  padding: 18px;
 
-  );
+  border: 1px solid var(--cyan);
 
+  background: #f3f6f8;
+
+  text-align: center;
 }
 
+.pass-box span {
+  display: block;
 
-// ========================================
-// 募集一覧
-// ========================================
+  color: var(--muted);
 
-async function loadRecruitments() {
+  font:
+    700 10px "Teko",
+    sans-serif;
 
-  const list =
-    $("#recruitmentList");
+  letter-spacing: 2px;
+}
 
-  const empty =
-    $("#emptyState");
+.pass-box strong {
+  display: block;
 
+  margin: 4px 0 10px;
 
-  if (
-    !list ||
-    !empty
-  ) {
+  color: var(--cyan);
 
-    return;
+  font:
+    800 40px "Teko",
+    sans-serif;
 
-  }
+  letter-spacing: 6px;
+}
 
+.copy-btn {
+  padding: 7px 11px;
 
-  if (!sb) {
+  border: 1px solid #56585c;
 
-    showMessage(
+  color: #fff;
 
-      "Supabaseの設定がまだです。",
+  background: var(--charcoal);
 
-      "error"
+  cursor: pointer;
+}
 
-    );
+.copy-btn:hover,
+.copy-btn:active {
+  border-color: var(--cyan);
 
-    return;
+  background: var(--cyan);
+}
 
-  }
+.result-row {
+  display: flex;
+  justify-content: space-between;
 
+  padding: 9px 0;
 
-  list.innerHTML =
-    "";
+  border-bottom: 1px solid #e1e4e6;
+
+  font-size: 12px;
+}
 
+.result-row span {
+  color: var(--muted);
+}
 
-  empty.classList.add(
-    "hidden"
-  );
+.warning {
+  color: #c93748;
 
+  font-size: 11px;
 
-  // 卒業ちしかん更新
-  await loadGraduatedCommanderCount();
+  line-height: 1.6;
+}
 
-  // 総登録ユニオン数（読み取り専用）
-  await loadTotalRegisteredUnionCount();
 
+/* =========================================================
+   BOTTOM NAV
+   ========================================================= */
 
-  // ======================================
-  // 指揮官取得
-  // ======================================
+.bottom-nav {
+  position: fixed;
 
-  const commanderQuery =
+  left: 0;
+  right: 0;
+  bottom: 0;
+  z-index: 50;
 
-    sb
-      .from(
-        "recruitments"
-      )
-      .select(
-        "id, commander_name, slv, x_url, x_embed_enabled, preview_image_url, force_preview_image, created_at, expires_at"
-      )
-      .eq(
-        "status",
-        "open"
-      )
-      .gt(
-        "expires_at",
-        new Date()
-          .toISOString()
-      )
-      .order(
-        "created_at",
-        {
-          ascending:
-            false
-        }
-      );
+  height: 68px;
 
+  display: flex;
+  justify-content: center;
 
-  // ======================================
-  // ユニオン取得
-  // ======================================
+  border-top: 2px solid var(--cyan);
 
-  const unionQuery =
+  background:
+    linear-gradient(
+      180deg,
+      #2d2e31,
+      #1d1e21
+    );
 
-    sb
-      .from(
-        "union_recruitments"
-      )
-      .select(
-        "id, union_name, union_rank, x_url, x_embed_enabled, preview_image_url, force_preview_image, created_at, expires_at"
-      )
-      .eq(
-        "status",
-        "open"
-      )
-      .gt(
-        "expires_at",
-        new Date()
-          .toISOString()
-      )
-      .order(
-        "created_at",
-        {
-          ascending:
-            false
-        }
-      );
+  box-shadow:
+    0 -4px 14px rgba(0, 0, 0, .16);
+}
 
+.nav-btn {
+  flex: 1;
 
-  const [
+  max-width: 300px;
 
-    commanderResult,
-    unionResult
+  border: 0;
 
-  ] =
+  color: #d0d2d4;
 
-    await Promise.all([
+  background: transparent;
 
-      commanderQuery,
-      unionQuery
+  font-size: 10px;
+  font-weight: 900;
 
-    ]);
+  cursor: pointer;
 
+  transition: .15s;
+}
 
-  // ======================================
-  // エラー
-  // ======================================
+.nav-btn span {
+  display: block;
 
-  if (
-    commanderResult.error
-  ) {
+  margin-bottom: 3px;
 
-    showMessage(
+  font-size: 20px;
 
-      `指揮官読み込みエラー：${commanderResult.error.message}`,
+  line-height: 19px;
+}
 
-      "error"
+.nav-btn:hover,
+.nav-btn.active {
+  color: #fff;
 
+  background:
+    linear-gradient(
+      180deg,
+      var(--cyan-2),
+      var(--cyan)
     );
+}
 
-    return;
 
-  }
 
 
-  if (
-    unionResult.error
-  ) {
+/* =========================================================
+   INDUSTRIAL / SCI-FI LATIN
+   Spaceeland / Industry 系の「細長く硬い」方向
+   ========================================================= */
 
-    showMessage(
+.brand,
+.status-dot,
+.eyebrow,
+.hero-stat-number strong,
+.hero-graduate-number strong,
+.registration-count strong,
+.graduated-commander-number strong,
+.pass-box strong,
+.pass-box span,
+.slv,
+.hero-stat-update {
+  font-family:
+    "Industry",
+    "Azonix",
+    "Futura PT Condensed",
+    "Teko",
+    "Gothic MB101",
+    "Zen Kaku Gothic New",
+    sans-serif;
+}
 
-      `ユニオン読み込みエラー：${unionResult.error.message}`,
+.brand-main {
+  font-stretch: condensed;
+  text-transform: uppercase;
+}
 
-      "error"
+.eyebrow,
+.status-dot,
+.hero-stat-update {
+  letter-spacing: .08em;
+}
 
-    );
+.hero-stat-number strong,
+.hero-graduate-number strong,
+.registration-count strong,
+.graduated-commander-number strong,
+.pass-box strong,
+.slv {
+  letter-spacing: .01em;
+}
 
-    return;
+/* 日本語見出しは角ゴシックを強く・少し詰める */
+.hero h1,
+.section-head h2,
+.name,
+.easy-register-title,
+.commander-close-reason-title {
+  font-family:
+    "Gothic MB101",
+    "Zen Kaku Gothic New",
+    sans-serif;
 
-  }
+  font-weight: 900;
+  letter-spacing: -.07em;
+}
 
 
-  const commanders =
-    commanderResult.data ||
-    [];
 
+/* =========================================================
+   v5 COUNTER / INDUSTRIAL FONT SYSTEM
+   ========================================================= */
 
-  const unions =
-    unionResult.data ||
-    [];
+.hero-stat-number strong,
+.hero-graduate-number strong,
+.registration-count strong,
+.graduated-commander-number strong,
+.pass-box strong,
+.slv {
+  font-family:
+    "Spaceeland Eight",
+    "Industry",
+    "Futura PT Condensed",
+    "Teko",
+    sans-serif !important;
 
+  font-weight: 700;
+  letter-spacing: .015em;
+}
 
-  // ======================================
-  // カウンター
-  // ======================================
+/* NIKKE logo / English UI */
+.brand-main,
+.brand-small,
+.status-dot,
+.eyebrow,
+.hero-stat-update {
+  font-family:
+    "Futura PT Condensed",
+    "Industry",
+    "Azonix",
+    "Teko",
+    sans-serif !important;
+}
 
-  if (
-    $("#commanderCountTop")
-  ) {
+/* Japanese headings: MB101 direction with free fallback */
+.hero h1,
+.section-head h2,
+.name,
+.easy-register-title,
+.commander-close-reason-title,
+.hero-stat-title,
+.hero-graduate-title,
+.btn,
+.search-tab,
+.nav-btn {
+  font-family:
+    "Gothic MB101",
+    "Zen Kaku Gothic New",
+    sans-serif !important;
 
-    $("#commanderCountTop")
-      .textContent =
-      commanders.length;
+  font-weight: 900;
+  letter-spacing: -.065em;
+}
 
-  }
 
 
-  if (
-    $("#unionCountTop")
-  ) {
+/* =========================================================
+   v6 COMMANDER ORANGE
+   NIKKE UI orange / no text outline
+   ========================================================= */
 
-    $("#unionCountTop")
-      .textContent =
-      unions.length;
+.commander-stat .hero-stat-title,
+.commander-stat .hero-stat-number strong,
+.commander-stat .hero-stat-number span,
+.registration-count > div:first-child strong,
+.registration-count > div:first-child span,
+.registration-count > div:first-child small,
+.slv {
+  color: var(--yellow) !important;
+}
 
-  }
 
 
-  if (
-    $("#commanderCount")
-  ) {
 
-    $("#commanderCount")
-      .textContent =
-      commanders.length;
 
-  }
+/* =========================================================
+   v6 NIKKE BUTTON SHAPE
+   ========================================================= */
 
+.btn,
+.creator-link-btn,
+.search-tab,
+.register-back-btn,
+.manage-back-btn,
+.copy-btn,
+.x-btn,
+.close-reason-btn {
+  clip-path:
+    polygon(
+      8px 0,
+      calc(100% - 8px) 0,
+      100% 8px,
+      100% calc(100% - 8px),
+      calc(100% - 8px) 100%,
+      8px 100%,
+      0 calc(100% - 8px),
+      0 8px
+    ) !important;
 
-  if (
-    $("#unionCount")
-  ) {
+  border-radius: 0 !important;
+}
 
-    $("#unionCount")
-      .textContent =
-      unions.length;
+.btn,
+.creator-link-btn,
+.search-tab,
+.register-back-btn,
+.manage-back-btn,
+.copy-btn,
+.x-btn,
+.close-reason-btn {
+  border-color: #5a5d62 !important;
 
-  }
+  background:
+    linear-gradient(
+      180deg,
+      #45474c 0%,
+      #323439 100%
+    );
+}
 
+.btn:hover,
+.btn:active,
+.btn.active,
+.creator-link-btn:hover,
+.creator-link-btn:active,
+.search-tab:hover,
+.search-tab:active,
+.search-tab.active,
+.register-back-btn:hover,
+.register-back-btn:active,
+.manage-back-btn:hover,
+.manage-back-btn:active,
+.copy-btn:hover,
+.copy-btn:active,
+.x-btn:hover,
+.x-btn:active,
+.close-reason-btn:hover,
+.close-reason-btn:active {
+  border-color: var(--cyan) !important;
 
-  // ======================================
-  // 最終更新
-  // ======================================
+  color: #fff !important;
 
-  if (
-    $("#lastUpdated")
-  ) {
+  background:
+    linear-gradient(
+      180deg,
+      #2cc5ff 0%,
+      var(--cyan) 100%
+    ) !important;
 
-    $("#lastUpdated")
-      .textContent =
+  box-shadow:
+    0 0 0 1px rgba(255,255,255,.08) inset,
+    0 4px 12px rgba(26,176,241,.26);
+}
 
-      "最終更新：" +
 
-      new Intl.DateTimeFormat(
-        "ja-JP",
-        {
 
-          month:
-            "2-digit",
+/* =========================================================
+   v6 NIKKE PANEL ACCENT
+   ========================================================= */
 
-          day:
-            "2-digit",
+.hero-stats,
+.card,
+.filters,
+.panel,
+.easy-register-box,
+.commander-close-reason,
+.modal-card,
+.pass-box,
+.graduated-commander-counter {
+  border-color: var(--cyan) !important;
+}
 
-          hour:
-            "2-digit",
+.hero-stats,
+.card,
+.filters,
+.panel,
+.easy-register-box,
+.commander-close-reason,
+.modal-card,
+.pass-box,
+.graduated-commander-counter {
+  clip-path:
+    polygon(
+      10px 0,
+      100% 0,
+      100% calc(100% - 10px),
+      calc(100% - 10px) 100%,
+      0 100%,
+      0 10px
+    ) !important;
 
-          minute:
-            "2-digit"
+  border-radius: 0 !important;
+}
 
-        }
-      ).format(
-        new Date()
-      );
 
-  }
 
+/* =========================================================
+   v6 FINAL VISUAL TUNING
+   NIKKE-like hierarchy / cleaner readability
+   ========================================================= */
 
-  // ======================================
-  // 指揮官一覧
-  // ======================================
+/* Commander = orange, Union = cyan, Result = purple */
+.commander-stat .hero-stat-title,
+.commander-stat .hero-stat-number strong,
+.commander-stat .hero-stat-number span {
+  color: #F2A124 !important;
+}
 
-  if (
-    currentSearchType ===
-    "commander"
-  ) {
+.union-stat .hero-stat-title,
+.union-stat .hero-stat-number strong,
+.union-stat .hero-stat-number span {
+  color: #18ABF4 !important;
+}
 
-    const minSlv =
-      Number(
-        $("#slvFilter")
-          ?.value ||
-        0
-      );
+.hero-graduate-title,
+.hero-graduate-number strong,
+.hero-graduate-number span {
+  color: #A928F2 !important;
+}
 
+/* No outline/glow around text */
+.hero h1 em,
+.commander-stat *,
+.union-stat *,
+.hero-graduate-stat *,
+.slv,
+.brand,
+.section-head,
+.card,
+.btn,
+.search-tab {
+  text-shadow: none !important;
+  -webkit-text-stroke: 0 !important;
+}
 
-    let filtered =
-      [
-        ...commanders
-      ];
+/* Make the two vertical dividers clearly visible */
+.hero-stats > .hero-stat-divider {
+  display: block !important;
+  width: 1px !important;
+  height: 72% !important;
+  min-height: 118px !important;
+  align-self: center !important;
+  background: #9AA2AA !important;
+  opacity: 1 !important;
+}
 
+/* PC readability: the previous version was slightly too small */
+@media screen and (min-width: 1025px) {
+  .topbar {
+    min-height: 74px;
+  }
 
-    if (
-      minSlv >
-      0
-    ) {
+  .brand-small {
+    font-size: 12px;
+  }
 
-      filtered =
-        filtered.filter(
-          item => {
+  .brand-main {
+    font-size: 28px;
+  }
 
-            const slv =
-              Number(
-                item.slv
-              );
+  .status-dot {
+    font-size: 12px;
+  }
 
+  .hero {
+    grid-template-columns:
+      minmax(390px, .78fr)
+      minmax(620px, 1.22fr);
+    gap: 38px;
+  }
 
-            if (
-              minSlv ===
-              1000
-            ) {
+  .hero p {
+    font-size: 15px;
+  }
 
-              return (
+  .hero-stats {
+    min-height: 238px;
+    padding: 18px 18px 38px;
+  }
 
-                slv >=
-                1000
+  .hero-stat-title,
+  .hero-graduate-title {
+    font-size: 14px;
+  }
 
-                &&
+  .hero-stat-number strong,
+  .hero-graduate-number strong {
+    font-size: 76px;
+  }
 
-                slv <=
-                1200
+  .hero-stat-number span,
+  .hero-graduate-number span {
+    font-size: 20px;
+  }
 
-              );
+  .hero-stat-sub,
+  .hero-graduate-sub {
+    font-size: 11px;
+  }
 
-            }
+  .section-head h2 {
+    font-size: 34px;
+  }
+}
 
+/* Recruitment cards: keep accent line cyan; SLV uses commander orange */
+.card {
+  border-color: #28B8F2 !important;
+}
 
-            return (
+.card .slv {
+  color: #F2A124 !important;
+  text-shadow: none !important;
+}
 
-              slv >=
-              minSlv
+/* Buttons: charcoal at rest, cyan only for active/hover */
+.btn,
+.creator-link-btn,
+.search-tab,
+.register-back-btn,
+.manage-back-btn,
+.copy-btn,
+.x-btn,
+.close-reason-btn {
+  text-shadow: none !important;
+}
 
-              &&
 
-              slv <=
-              minSlv + 99
+/* =========================================================
+   TABLET
+   ========================================================= */
 
-            );
+@media screen and (min-width: 601px) and (max-width: 1024px) {
 
-          }
-        );
+  .hero {
+    grid-template-columns:
+      minmax(260px, .75fr)
+      minmax(440px, 1.25fr);
 
-    }
+    gap: 18px;
+  }
 
+  .hero h1 {
+    font-size:
+      clamp(38px, 5.3vw, 54px);
+  }
 
-    filtered.sort(
+  .hero p {
+    font-size: 12px;
+  }
 
-      (a, b) =>
+  .hero-stats {
+    min-height: 196px;
 
-        new Date(
-          b.created_at
-        )
-        -
-        new Date(
-          a.created_at
-        )
+    padding:
+      14px 8px 31px;
+  }
 
-    );
+  .hero-stat-title,
+  .hero-graduate-title {
+    font-size: 11px;
+  }
 
+  .hero-stat-number strong,
+  .hero-graduate-number strong {
+    font-size:
+      clamp(46px, 6vw, 62px);
+  }
 
-    if (
-      filtered.length ===
-      0
-    ) {
+  .hero-stat-number span,
+  .hero-graduate-number span {
+    font-size: 13px;
+  }
 
-      showEmpty(
-        "現在募集中の指揮官はいません。"
-      );
+  .hero-stat-sub,
+  .hero-graduate-sub {
+    font-size: 8px;
+  }
 
-      return;
+}
 
-    }
 
+/* =========================================================
+   MOBILE
+   ========================================================= */
 
-    list.innerHTML =
+@media screen and (max-width: 600px) {
 
-      filtered
-        .map(
-          item => {
+  .hero-stats > .hero-stat-divider {
+    width: 1px !important;
+    height: 76px !important;
+    min-height: 76px !important;
+    background: #8F979F !important;
+    opacity: 1 !important;
+  }
 
 
-            const remaining =
-              getRemainingTime(
-                item.expires_at
-              );
+  body {
+    padding-bottom: 68px;
+  }
 
+  .topbar {
+    height: 62px;
 
-            const postId =
-              getXPostId(
-                item.x_url
-              );
+    padding: 0 14px;
+  }
 
-const newBadge =
-  isNewRecruitment(
-    item.created_at
-  )
-    ? '<span class="new-badge">🔥 NEW</span>'
-    : "";
+  .brand-small {
+    font-size: 9px;
+  }
 
-const deadlineBadge =
-  remaining.deadlineNear
-    ? '<span class="deadline-badge">⚠ 締切間近</span>'
-    : "";
-            return `
+  .brand-main {
+    font-size: 21px;
+  }
 
-              <article
-                class="card commander-card"
-              >
+  .container {
+    padding-left: 9px;
+    padding-right: 9px;
+  }
 
-                <div class="card-head">
+  .hero {
+    display: grid !important;
 
-                <div class="type-with-new">
+    grid-template-columns:
+      1fr !important;
 
-  <span
-    class="recruitment-type"
-  >
-    ● 指揮官
-  </span>
+    gap: 9px !important;
 
-  ${newBadge}
-  ${deadlineBadge}
+    margin: 0 0 12px;
+    padding: 16px 0 12px;
 
-</div>
+    border-bottom: 1px solid var(--cyan);
+  }
 
-<span class="date">
-                    期限
+  .hero .eyebrow {
+    display: none;
+  }
 
-                    ${formatDate(
-                      item.expires_at
-                    )}
+  .hero h1 {
+    font-size:
+      clamp(34px, 10.4vw, 46px);
 
-                  </span>
+    line-height: .93;
+  }
 
-                </div>
+  .hero p {
+    margin: 10px 0 11px;
 
+    font-size: 10.5px;
 
-                <div class="name">
+    line-height: 1.5;
+  }
 
-                  ${escapeHtml(
-                    item.commander_name
-                  )}
+  .hero-actions,
+  .creator-action-row {
+    display: grid;
 
-                </div>
+    grid-template-columns:
+      minmax(0, 1.15fr)
+      minmax(0, 1fr);
 
+    gap: 6px;
 
-                <div class="slv">
+    width: 100%;
+  }
 
-                  ${escapeHtml(
-                    item.slv
-                  )}
+  .main-register-btn,
+  .hero-actions .btn.primary {
+    width: 100%;
 
-                  <small
-                    class="slv-label"
-                    style="color:#7b8085 !important;-webkit-text-fill-color:#7b8085 !important;text-shadow:none !important;-webkit-text-stroke:0 !important;"
-                  >
-                    SLV
-                  </small>
+    min-height: 42px;
 
-                </div>
+    padding: 0 8px;
 
+    font-size: 11px;
+  }
 
-                <div class="date">
+  .creator-link-btn {
+    width: 100%;
 
-                  登録
+    min-height: 42px;
 
-                  ${formatDate(
-                    item.created_at
-                  )}
+    padding: 0 6px;
 
-                </div>
+    font-size: 9.5px;
+  }
 
+  .hero-stats {
+    width: 100% !important;
+    max-width: none !important;
+    min-height: 142px !important;
 
-                <div
-                  class="countdown ${remaining.className}"
-                  data-expires="${escapeHtml(
-                    item.expires_at
-                  )}"
-                >
+    grid-template-columns:
+      minmax(0, 1fr)
+      1px
+      minmax(0, 1fr)
+      1px
+      minmax(0, 1fr) !important;
 
-                  ${remaining.text}
+    gap: 0 !important;
 
-                </div>
+    margin: 0 !important;
+    padding: 8px 3px 24px !important;
 
+    border: 1px solid var(--cyan);
+  }
 
-                <div class="x-post-area">
+  .hero-stat,
+  .hero-graduate-stat {
+    min-width: 0;
 
-                  ${buildRecruitmentPreviewMedia(
-                    item.x_url,
-                    item.preview_image_url || "",
-                    item.x_embed_enabled,
-                    item.force_preview_image === true
-                  )}
+    padding: 3px !important;
+  }
 
+  .hero-graduate-stat {
+    grid-column: 5 !important;
+    grid-row: 1 !important;
+  }
 
-                  <a
+  .hero-stat-divider {
+    min-height: 72px;
 
-                    class="x-btn"
+    height: 72px !important;
+  }
 
-                    href="${escapeHtml(
-                      item.x_url
-                    )}"
+  .hero-stat-title,
+  .hero-graduate-title {
+    min-height: 18px;
 
-                    target="_blank"
+    margin-bottom: 2px;
 
-                    rel="noopener noreferrer"
+    font-size: 8.5px !important;
 
-                  >
+    line-height: 1.1;
 
-                    ${escapeHtml(
-                      getRecruitmentButtonLabel(
-                        item.x_url
-                      )
-                    )}
+    white-space: nowrap !important;
+  }
 
-                  </a>
+  .hero-stat-number,
+  .hero-graduate-number {
+    gap: 2px !important;
+  }
 
+  .hero-stat-number strong,
+  .hero-graduate-number strong {
+    font-size:
+      clamp(31px, 9.7vw, 39px) !important;
 
-                </div>
+    line-height: .82;
+  }
 
+  .hero-stat-number span,
+  .hero-graduate-number span {
+    padding-bottom: 2px !important;
 
-              </article>
+    font-size: 9px !important;
+  }
 
-            `;
+  .hero-stat-sub,
+  .hero-graduate-sub {
+    margin-top: 3px !important;
 
-          }
-        )
-        .join("");
+    font-size: 6.7px !important;
 
+    line-height: 1.15;
   }
 
+  .hero-stat-update {
+    bottom: 5px !important;
 
-  // ======================================
-  // ユニオン一覧
-  // ======================================
-
-  if (
-    currentSearchType ===
-    "union"
-  ) {
+    font-size: 7.5px !important;
+  }
 
-    const selectedRank =
+  .section-head {
+    gap: 8px;
 
-      $("#unionRankFilter")
-        ?.value
-      ||
-      "";
+    margin-bottom: 12px;
+  }
 
+  .section-head h2 {
+    font-size:
+      clamp(20px, 6vw, 26px);
+  }
 
-    let filtered =
-      [
-        ...unions
-      ];
+  .cards {
+    grid-template-columns:
+      1fr;
 
+    gap: 9px;
+  }
 
-    if (
-      selectedRank
-    ) {
+  .card {
+    padding: 13px;
+  }
 
-      filtered =
-        filtered.filter(
-          item =>
-            item.union_rank ===
-            selectedRank
-        );
+  .name {
+    font-size: 18px;
+  }
 
-    }
+  .slv {
+    font-size: 30px;
+  }
 
+  input,
+  select,
+  textarea,
+  #registerPage input,
+  #registerPage select,
+  #registerPage textarea,
+  #managePage input,
+  #managePage select,
+  #managePage textarea {
+    font-size: 16px !important;
+  }
 
-    filtered.sort(
+}
 
-      (a, b) =>
 
-        new Date(
-          b.created_at
-        )
-        -
-        new Date(
-          a.created_at
-        )
+/* =========================================================
+   SMALL MOBILE
+   ========================================================= */
 
-    );
+@media screen and (max-width: 360px) {
 
+  .hero h1 {
+    font-size: 33px;
+  }
 
-    if (
-      filtered.length ===
-      0
-    ) {
+  .hero-stat-title,
+  .hero-graduate-title {
+    font-size: 7.5px !important;
+  }
 
-      showEmpty(
-        "現在募集中のユニオンはいません。"
-      );
+  .hero-stat-number strong,
+  .hero-graduate-number strong {
+    font-size: 29px !important;
+  }
 
-      return;
+  .hero-stat-sub,
+  .hero-graduate-sub {
+    font-size: 6px !important;
+  }
 
-    }
+}
+/* =========================================================
+   v9 BRAND SWAP / RESPONSIVE HERO LOGO
+   HTML想定:
+   topbar:
+     .brand-small = 指揮官とユニオンを
+     .brand-main  = つなぐ。
+   hero h1:
+     .hero-title-line1 = NIKKE
+     .hero-title-line2 = UNION MATCH
+   ========================================================= */
 
+/* ---------- HEADER: 日本語キャッチは小さく固定 ---------- */
 
-    list.innerHTML =
+.topbar .brand {
+  display: flex !important;
+  flex-direction: row !important;
+  align-items: baseline !important;
+  gap: 5px !important;
 
-      filtered
-        .map(
-          item => {
+  line-height: 1 !important;
+  white-space: nowrap !important;
+}
 
+.topbar .brand-small,
+.topbar .brand-main {
+  font-family:
+    "JTCウインZ10",
+    "Gothic MB101",
+    "Zen Kaku Gothic New",
+    sans-serif !important;
 
-            const remaining =
-              getRemainingTime(
-                item.expires_at
-              );
+  font-weight: 900 !important;
+  line-height: 1 !important;
+  letter-spacing: -.06em !important;
+  white-space: nowrap !important;
+  text-transform: none !important;
+}
 
+/* 指揮官とユニオンを */
+.topbar .brand-small {
+  color: #ffffff !important;
+  font-size: 15px !important;
+}
 
-            const postId =
-              getXPostId(
-                item.x_url
-              );
+/* つなぐ。 */
+.topbar .brand-main {
+  color: var(--cyan) !important;
+  font-size: 15px !important;
+}
 
 
-            const rankClass =
-              getUnionRankClass(
-                item.union_rank
-              );
+/* ---------- HERO: NIKKE / UNION MATCH ---------- */
 
-const newBadge =
-  isNewRecruitment(
-    item.created_at
-  )
-    ? '<span class="new-badge">🔥 NEW</span>'
-    : "";
+.hero h1 {
+  display: block !important;
 
-const deadlineBadge =
-  remaining.deadlineNear
-    ? '<span class="deadline-badge">⚠ 締切間近</span>'
-    : "";
-            
-            return `
+  width: 100% !important;
+  min-width: 0 !important;
 
-              <article
-                class="card union-card"
-              >
+  margin: 0 !important;
 
-                <div class="card-head">
+  font-family:
+    "Futura PT Condensed",
+    "Industry",
+    "Azonix",
+    "Teko",
+    sans-serif !important;
 
+  font-weight: 800 !important;
+  line-height: .82 !important;
 
-                <div class="type-with-new">
+  white-space: nowrap !important;
+}
 
-  <span
-    class="recruitment-type"
-  >
-    ● ユニオン
-  </span>
+.hero-title-line1,
+.hero-title-line2 {
+  display: block !important;
+  white-space: nowrap !important;
+}
 
-  ${newBadge}
-  ${deadlineBadge}
+/* NIKKE */
+.hero-title-line1 {
+  color: var(--cyan) !important;
 
-</div>
+  font-size: .34em !important;
+  line-height: .9 !important;
 
-<span class="date">
+  letter-spacing: .34em !important;
 
-                    期限
+  margin: 0 0 .18em .04em !important;
+}
 
-                    ${formatDate(
-                      item.expires_at
-                    )}
+/* UNION MATCH */
+.hero-title-line2 {
+  color: var(--ink) !important;
 
-                  </span>
+  font-size: 1em !important;
+  line-height: .82 !important;
 
+  letter-spacing: -.035em !important;
 
-                </div>
+  margin: 0 !important;
+}
 
+/* 旧 em 指定が残っていても無効化 */
+.hero-title-line2 em,
+.hero h1 em {
+  color: inherit !important;
+  font: inherit !important;
+  font-style: normal !important;
+  letter-spacing: inherit !important;
+}
 
-                <div class="name">
 
-                  ${escapeHtml(
-                    item.union_name
-                  )}
+/* =========================================================
+   v9 DESKTOP
+   PCはデザインを安定させる固定寄り
+   ========================================================= */
 
-                </div>
+@media screen and (min-width: 1025px) {
 
+  .topbar .brand-small,
+  .topbar .brand-main {
+    font-size: 14px !important;
+  }
 
-                <div
-                  class="union-rank rank-${rankClass}"
-                >
+  .hero h1 {
+    font-size: 68px !important;
+  }
 
-                  ${escapeHtml(
-                    item.union_rank
-                  )}
+  .hero-title-line1 {
+    font-size: .30em !important;
+  }
 
-                </div>
+  .hero {
+    grid-template-columns:
+      minmax(370px, .80fr)
+      minmax(590px, 1.20fr) !important;
 
+    gap: 30px !important;
+  }
+}
 
-                <div class="date">
 
-                  登録
+/* =========================================================
+   v9 TABLET
+   ========================================================= */
 
-                  ${formatDate(
-                    item.created_at
-                  )}
+@media screen and (min-width: 601px) and (max-width: 1024px) {
 
-                </div>
+  .topbar .brand-small,
+  .topbar .brand-main {
+    font-size: 13px !important;
+  }
 
+  .hero h1 {
+    font-size:
+      clamp(52px, 7vw, 64px) !important;
+  }
 
-                <div
-                  class="countdown ${remaining.className}"
-                  data-expires="${escapeHtml(
-                    item.expires_at
-                  )}"
-                >
+  .hero-title-line1 {
+    font-size: .31em !important;
+  }
+}
 
-                  ${remaining.text}
 
-                </div>
+/* =========================================================
+   v9 MOBILE
+   NIKKE / UNION MATCHだけ端末幅に合わせて自動伸縮
+   ========================================================= */
 
+@media screen and (max-width: 600px) {
 
-                <div class="x-post-area">
+  .topbar {
+    padding-left: 12px !important;
+    padding-right: 12px !important;
+  }
 
-                  ${buildRecruitmentPreviewMedia(
-                    item.x_url,
-                    item.preview_image_url || "",
-                    item.x_embed_enabled,
-                    item.force_preview_image === true
-                  )}
+  .topbar .brand {
+    max-width: calc(100vw - 125px) !important;
+    overflow: hidden !important;
+  }
 
+  .topbar .brand-small,
+  .topbar .brand-main {
+    font-size: 12px !important;
+  }
 
-                  <a
+  .hero-left {
+    width: 100% !important;
+    min-width: 0 !important;
+  }
 
-                    class="x-btn"
+  .hero h1 {
+    width: 100% !important;
 
-                    href="${escapeHtml(
-                      item.x_url
-                    )}"
+    font-size:
+      clamp(44px, 13.1vw, 62px) !important;
 
-                    target="_blank"
+    line-height: .80 !important;
+  }
 
-                    rel="noopener noreferrer"
+  .hero-title-line1 {
+    font-size: .31em !important;
 
-                  >
+    letter-spacing: .31em !important;
 
-                    ${escapeHtml(
-                      getRecruitmentButtonLabel(
-                        item.x_url
-                      )
-                    )}
+    margin-bottom: .16em !important;
+  }
 
-                  </a>
+  .hero-title-line2 {
+    font-size: 1em !important;
+    letter-spacing: -.042em !important;
+  }
 
+  .hero {
+    padding-top: 10px !important;
+  }
+}
 
-                </div>
 
+/* 小型スマホ */
+@media screen and (max-width: 360px) {
 
-              </article>
+  .topbar .brand-small,
+  .topbar .brand-main {
+    font-size: 11px !important;
+  }
 
-            `;
+  .hero h1 {
+    font-size:
+      clamp(40px, 12.7vw, 47px) !important;
+  }
+}
+/* =========================================================
+   v10 CORRECT BRAND SWAP
+   HEADER = 指揮官とユニオンを つなぐ。
+   HERO   = NIKKE / UNION MATCH
+   ========================================================= */
 
-          }
-        )
-        .join("");
+/* ---------- HEADER ---------- */
 
-  }
+.topbar .brand {
+  display: flex !important;
+  flex-direction: row !important;
+  align-items: baseline !important;
+  gap: 5px !important;
 
+  white-space: nowrap !important;
+  line-height: 1 !important;
+}
 
-  updateCountdowns();
+.topbar .brand-small,
+.topbar .brand-main {
+  font-family:
+    "JTCウインZ10",
+    "Gothic MB101",
+    "Zen Kaku Gothic New",
+    sans-serif !important;
 
+  font-weight: 900 !important;
+  line-height: 1 !important;
+  letter-spacing: -.055em !important;
 
-  renderXEmbeds();
+  white-space: nowrap !important;
+  text-transform: none !important;
+}
 
+/* 指揮官とユニオンを */
+.topbar .brand-small {
+  color: #ffffff !important;
+  font-size: 14px !important;
+}
 
-  if (
-    countdownTimer
-  ) {
+/* つなぐ。 */
+.topbar .brand-main {
+  color: var(--cyan) !important;
+  font-size: 14px !important;
+}
 
-    clearInterval(
-      countdownTimer
-    );
 
-  }
+/* ---------- HERO LOGO ---------- */
 
+.hero h1 {
+  display: block !important;
 
-  countdownTimer =
+  width: 100% !important;
+  min-width: 0 !important;
 
-    setInterval(
+  margin: 0 !important;
 
-      updateCountdowns,
+  font-family:
+    "Futura PT Condensed",
+    "Industry",
+    "Azonix",
+    "Teko",
+    sans-serif !important;
 
-      60000
+  font-weight: 800 !important;
+  line-height: .82 !important;
 
-    );
+  white-space: nowrap !important;
+}
 
+.hero-title-line1,
+.hero-title-line2 {
+  display: block !important;
+  white-space: nowrap !important;
 }
+
+/* NIKKE */
+.hero-title-line1 {
+  color: var(--cyan) !important;
 
+  font-size: .31em !important;
+  line-height: .9 !important;
 
-// ========================================
-// フィルター
-// ========================================
+  letter-spacing: .34em !important;
 
-$("#slvFilter")
-  ?.addEventListener(
-    "change",
-    loadRecruitments
-  );
+  margin: 0 0 .18em .04em !important;
+}
 
+/* UNION MATCH */
+.hero-title-line2 {
+  color: var(--ink) !important;
 
-$("#unionRankFilter")
-  ?.addEventListener(
-    "change",
-    loadRecruitments
-  );
+  font-size: 1em !important;
+  line-height: .82 !important;
 
+  letter-spacing: -.035em !important;
 
-$("#refreshBtn")
-  ?.addEventListener(
-    "click",
-    loadRecruitments
-  );
+  margin: 0 !important;
+}
 
+/* Old em rules should not affect UNION MATCH */
+.hero-title-line2 em,
+.hero h1 em {
+  color: inherit !important;
+  font: inherit !important;
+  font-style: normal !important;
+  letter-spacing: inherit !important;
+}
 
-// ========================================
-// 登録タイプ切り替え
-// ========================================
 
-const registrationTypeSelect =
-  $("#registrationType");
+/* =========================================================
+   v10 DESKTOP
+   ========================================================= */
 
+@media screen and (min-width: 1025px) {
 
-const commanderFields =
-  $("#commanderFields");
+  .topbar .brand-small,
+  .topbar .brand-main {
+    font-size: 14px !important;
+  }
 
+  .hero h1 {
+    font-size: 70px !important;
+  }
 
-const unionFields =
-  $("#unionFields");
+  .hero {
+    grid-template-columns:
+      minmax(370px, .80fr)
+      minmax(590px, 1.20fr) !important;
 
+    gap: 30px !important;
+  }
+}
 
-function updateRegistrationFields() {
 
-  if (
-    !registrationTypeSelect
-  ) {
+/* =========================================================
+   v10 TABLET
+   ========================================================= */
 
-    return;
+@media screen and (min-width: 601px) and (max-width: 1024px) {
 
+  .topbar .brand-small,
+  .topbar .brand-main {
+    font-size: 13px !important;
   }
 
+  .hero h1 {
+    font-size:
+      clamp(52px, 7vw, 64px) !important;
+  }
+}
 
-  const isUnion =
 
-    registrationTypeSelect
-      .value ===
-    "union";
+/* =========================================================
+   v10 MOBILE
+   Only NIKKE / UNION MATCH auto-scales with device width
+   ========================================================= */
 
+@media screen and (max-width: 600px) {
 
-  commanderFields
-    ?.classList
-    .toggle(
+  .topbar {
+    padding-left: 12px !important;
+    padding-right: 12px !important;
+  }
 
-      "hidden",
+  .topbar .brand {
+    max-width: calc(100vw - 125px) !important;
+    overflow: hidden !important;
+  }
 
-      isUnion
+  .topbar .brand-small,
+  .topbar .brand-main {
+    font-size: 12px !important;
+  }
 
-    );
+  .hero-left {
+    width: 100% !important;
+    min-width: 0 !important;
+  }
 
+  .hero h1 {
+    width: 100% !important;
 
-  unionFields
-    ?.classList
-    .toggle(
+    font-size:
+      clamp(46px, 13.4vw, 64px) !important;
 
-      "hidden",
+    line-height: .80 !important;
+  }
 
-      !isUnion
+  .hero-title-line1 {
+    font-size: .31em !important;
+    letter-spacing: .31em !important;
+    margin-bottom: .16em !important;
+  }
 
-    );
+  .hero-title-line2 {
+    font-size: 1em !important;
+    letter-spacing: -.045em !important;
+  }
 
+  .hero {
+    padding-top: 10px !important;
+  }
+}
 
-  const name =
-    $("#name");
 
+@media screen and (max-width: 360px) {
 
-  const slv =
-    $("#slv");
+  .topbar .brand-small,
+  .topbar .brand-main {
+    font-size: 11px !important;
+  }
 
+  .hero h1 {
+    font-size:
+      clamp(41px, 12.8vw, 48px) !important;
+  }
+}
 
-  const unionName =
-    $("#unionName");
+/* =========================================================
+   v11 FINAL OVERRIDES
+   HEADER: 指揮官とユニオンをつなぐ。 / no visual gap
+   HERO  : NIKKE GODDESS OF VICTORY / UNION MATCH
+   PC    : larger hero balance
+   MOBILE: near edge-to-edge layout
+   ========================================================= */
 
+/* ---------- HEADER ---------- */
+.topbar .brand {
+  display: block !important;
+  max-width: none !important;
+  overflow: visible !important;
+  gap: 0 !important;
+  white-space: nowrap !important;
+  line-height: 1 !important;
+}
 
-  if (name) {
+/* New one-piece header markup */
+.topbar .brand-copy {
+  display: inline !important;
+  margin: 0 !important;
+  padding: 0 !important;
 
-    name.required =
-      !isUnion;
+  color: #fff !important;
 
-  }
+  font-family:
+    "JTCウインZ10",
+    "Gothic MB101",
+    "Zen Kaku Gothic New",
+    sans-serif !important;
 
+  font-size: 14px !important;
+  font-weight: 900 !important;
+  line-height: 1 !important;
+  letter-spacing: -.055em !important;
 
-  if (slv) {
+  white-space: nowrap !important;
+}
 
-    slv.required =
-      !isUnion;
+.topbar .brand-accent {
+  display: inline !important;
+  margin: 0 !important;
+  padding: 0 !important;
 
-  }
+  color: var(--cyan) !important;
 
+  font: inherit !important;
+  letter-spacing: inherit !important;
+  line-height: inherit !important;
 
-  if (unionName) {
+  white-space: nowrap !important;
+}
 
-    unionName.required =
-      isUnion;
+/* Compatibility with the older two-span header markup */
+.topbar .brand-small,
+.topbar .brand-main {
+  margin: 0 !important;
+  padding: 0 !important;
 
-  }
+  font-family:
+    "JTCウインZ10",
+    "Gothic MB101",
+    "Zen Kaku Gothic New",
+    sans-serif !important;
 
-}
+  font-size: 14px !important;
+  font-weight: 900 !important;
+  line-height: 1 !important;
+  letter-spacing: -.055em !important;
 
+  white-space: nowrap !important;
+}
 
-registrationTypeSelect
-  ?.addEventListener(
-    "change",
-    updateRegistrationFields
-  );
+.topbar .brand-small {
+  color: #fff !important;
+}
 
+.topbar .brand-main {
+  color: var(--cyan) !important;
+}
 
-updateRegistrationFields();
 
+/* ---------- HERO LOGO ---------- */
+.hero h1 {
+  display: block !important;
 
-// ========================================
-// 登録前プレビュー
-// ========================================
+  width: 100% !important;
+  min-width: 0 !important;
 
-function clearInitialPreviewImageSelection(showMessage = true) {
+  margin: 0 !important;
 
-  const input =
-    $("#previewImage");
+  font-family:
+    "Futura PT Condensed",
+    "Industry",
+    "Azonix",
+    "Teko",
+    sans-serif !important;
 
-  if (input) {
-    input.value = "";
-  }
+  font-weight: 800 !important;
+  line-height: .80 !important;
 
-  registrationPreviewApproved = false;
-  registrationPreviewPreparedFile = null;
+  white-space: nowrap !important;
+}
 
-  if (registrationPreviewObjectUrl) {
-    URL.revokeObjectURL(registrationPreviewObjectUrl);
-    registrationPreviewObjectUrl = null;
-  }
+.hero h1 .hero-title-line1 {
+  display: block !important;
 
-  $("#previewImageClearBtn")
-    ?.classList
-    .add("hidden");
+  margin: 0 0 .18em .04em !important;
 
-  const status =
-    $("#previewImageStatus");
+  color: var(--cyan) !important;
 
-  if (status) {
-    const url =
-      $("#xUrl")?.value.trim() || "";
+  font-size: clamp(14px, 1.25vw, 20px) !important;
+  font-weight: 900 !important;
+  line-height: 1 !important;
+  letter-spacing: .22em !important;
 
-    if (isBlablaLinkPostUrl(url)) {
-      status.textContent =
-        "選択画像を取り消しました。確認画面ではBlablaLinkの自動プレビューを取得します。";
-    } else {
-      status.textContent =
-        showMessage
-          ? "選択画像を取り消しました。画像なしでも登録できます。"
-          : "";
-    }
-  }
+  white-space: nowrap !important;
 }
 
+.hero h1 .hero-title-line2 {
+  display: block !important;
 
-function closeRegistrationPreview(keepPreparedFile = false) {
+  margin: 0 !important;
 
-  $("#registrationPreviewModal")
-    ?.classList
-    .add("hidden");
+  color: var(--ink) !important;
 
-  if (registrationPreviewObjectUrl) {
-    URL.revokeObjectURL(registrationPreviewObjectUrl);
-    registrationPreviewObjectUrl = null;
-  }
+  font-size: clamp(60px, 7vw, 104px) !important;
+  font-weight: 900 !important;
+  line-height: .82 !important;
+  letter-spacing: -.045em !important;
 
-  if (!keepPreparedFile) {
-    registrationPreviewPreparedFile = null;
-  }
+  white-space: nowrap !important;
 }
 
+.hero-title-line2 em,
+.hero h1 em {
+  color: inherit !important;
+  font: inherit !important;
+  font-style: normal !important;
+  letter-spacing: inherit !important;
+}
 
-async function showRegistrationPreview() {
 
-  const registrationType =
-    $("#registrationType")?.value || "commander";
+/* ---------- DESKTOP ---------- */
+@media screen and (min-width: 1025px) {
+  .container {
+    max-width: 1540px !important;
+    padding-left: 28px !important;
+    padding-right: 28px !important;
+  }
 
-  const xUrl =
-    $("#xUrl")?.value.trim() || "";
+  .hero {
+    grid-template-columns:
+      minmax(520px, 1.16fr)
+      minmax(460px, .84fr) !important;
 
-  if (!validRecruitmentUrl(xUrl)) {
-    alert("募集記事URLを入力してください。\nX・BlablaLink・DiscordなどのURLに対応しています。");
-    return false;
+    gap: 38px !important;
+    align-items: start !important;
   }
-
-  const previewFile =
-    $("#previewImage")?.files?.[0] || null;
 
-  if (!validatePreviewImageFile(previewFile)) {
-    return false;
+  .hero h1 .hero-title-line1 {
+    font-size: clamp(16px, 1.05vw, 22px) !important;
+    letter-spacing: .24em !important;
   }
 
-  let name = "";
-  let detail = "";
-  let cardClass = "commander-card";
-  let typeLabel = "● 指揮官";
+  .hero h1 .hero-title-line2 {
+    font-size: clamp(78px, 5.8vw, 112px) !important;
+  }
 
-  if (registrationType === "union") {
-    name = $("#unionName")?.value.trim() || "";
-    detail = $("#unionRank")?.value || "";
-    cardClass = "union-card";
-    typeLabel = "● ユニオン";
+  .hero-stats {
+    min-height: 240px !important;
+  }
+}
 
-    if (!name) {
-      alert("ユニオン名を入力してください。");
-      return false;
-    }
-  } else {
-    name = $("#name")?.value.trim() || "";
-    const slv = Number($("#slv")?.value);
 
-    if (!name) {
-      alert("指揮官名を入力してください。");
-      return false;
-    }
+/* ---------- TABLET ---------- */
+@media screen and (min-width: 601px) and (max-width: 1024px) {
+  .topbar .brand-copy,
+  .topbar .brand-small,
+  .topbar .brand-main {
+    font-size: 13px !important;
+  }
 
-    if (!slv || slv < 1 || slv > 1200) {
-      alert("SLVは1～1200で入力してください。");
-      return false;
-    }
+  .container {
+    max-width: 100% !important;
+    padding-left: 20px !important;
+    padding-right: 20px !important;
+  }
 
-    detail = `${slv} <small class="slv-label" style="color:#7b8085 !important;-webkit-text-fill-color:#7b8085 !important;text-shadow:none !important;-webkit-text-stroke:0 !important;">SLV</small>`;
+  .hero {
+    grid-template-columns: 1fr !important;
+    gap: 22px !important;
   }
 
-  if (registrationPreviewObjectUrl) {
-    URL.revokeObjectURL(registrationPreviewObjectUrl);
-    registrationPreviewObjectUrl = null;
+  .hero h1 .hero-title-line1 {
+    font-size: clamp(14px, 2vw, 18px) !important;
+    letter-spacing: .18em !important;
   }
 
-  registrationPreviewPreparedFile = null;
+  .hero h1 .hero-title-line2 {
+    font-size: clamp(60px, 10vw, 86px) !important;
+  }
+}
 
-  const platform =
-    getRecruitmentPlatform(xUrl);
 
-  const previewButton = $("#registerPreviewBtn");
-  const originalButtonText =
-    previewButton?.textContent || "登録内容を確認する";
-  const status = $("#previewImageStatus");
+/* ---------- MOBILE ---------- */
+@media screen and (max-width: 600px) {
+  .topbar {
+    padding-left: 12px !important;
+    padding-right: 12px !important;
+  }
 
-  // 手動画像がある場合は手動画像を優先。
-  if (previewFile) {
-    if (previewButton) {
-      previewButton.disabled = true;
-      previewButton.textContent = "画像を自動最適化中...";
-    }
+  .topbar .brand {
+    max-width: calc(100vw - 112px) !important;
+    overflow: visible !important;
+  }
 
-    try {
-      registrationPreviewPreparedFile =
-        await optimizePreviewImageFile(previewFile);
+  .topbar .brand-copy,
+  .topbar .brand-small,
+  .topbar .brand-main {
+    font-size: 12px !important;
+  }
 
-      registrationPreviewObjectUrl =
-        URL.createObjectURL(registrationPreviewPreparedFile);
+  .container {
+    width: 100% !important;
+    max-width: none !important;
+    padding-left: 6px !important;
+    padding-right: 6px !important;
+  }
 
-      if (status) {
-        status.textContent =
-          previewFile === registrationPreviewPreparedFile
-            ? `選択画像：${formatFileSize(previewFile.size)}（そのまま使用できます）`
-            : `自動最適化：${formatFileSize(previewFile.size)} → ${formatFileSize(registrationPreviewPreparedFile.size)}`;
-      }
-    } catch (error) {
-      console.error("募集画像の自動最適化エラー", error);
-      registrationPreviewPreparedFile = null;
-      alert(
-        "画像を自動最適化できませんでした。\n別のJPG / PNG / WebP画像を選択してください。"
-      );
-      return false;
-    } finally {
-      if (previewButton) {
-        previewButton.disabled = false;
-        previewButton.textContent = originalButtonText;
-      }
-    }
+  .hero {
+    grid-template-columns: 1fr !important;
+    gap: 16px !important;
+    padding-top: 12px !important;
+    padding-bottom: 20px !important;
   }
 
-  // BlablaLink投稿で画像未選択なら、自動キャプチャを試す。
-  if (
-    !previewFile &&
-    platform === "BlablaLink" &&
-    isBlablaLinkPostUrl(xUrl)
-  ) {
-    if (previewButton) {
-      previewButton.disabled = true;
-      previewButton.textContent = "BlablaLinkプレビュー取得中...";
-    }
+  .hero-left {
+    width: 100% !important;
+    min-width: 0 !important;
+    padding-left: 6px !important;
+    padding-right: 6px !important;
+  }
 
-    if (status) {
-      status.textContent = "BlablaLinkの記事を自動取得しています...";
-    }
+  .hero h1 {
+    width: 100% !important;
+  }
 
-    try {
-      const autoPreviewFile =
-        await fetchBlablaLinkPreviewFile(xUrl);
+  .hero h1 .hero-title-line1 {
+    margin: 0 0 .14em .02em !important;
 
-      registrationPreviewPreparedFile =
-        await optimizePreviewImageFile(autoPreviewFile);
+    font-size: clamp(12px, 3.6vw, 16px) !important;
+    letter-spacing: .16em !important;
+  }
 
-      registrationPreviewObjectUrl =
-        URL.createObjectURL(registrationPreviewPreparedFile);
+  .hero h1 .hero-title-line2 {
+    font-size: clamp(58px, 15.5vw, 74px) !important;
+    letter-spacing: -.055em !important;
+  }
 
-      if (status) {
-        status.textContent =
-          `BlablaLinkから自動取得しました（${formatFileSize(registrationPreviewPreparedFile.size)}）`;
-      }
-    } catch (error) {
-      console.warn("BlablaLink自動プレビュー取得失敗", error);
-      registrationPreviewPreparedFile = null;
+  .hero-stats,
+  .filters,
+  .card,
+  .panel,
+  .notice,
+  .easy-register-box,
+  .search-tabs {
+    width: 100% !important;
+  }
+}
 
-      if (registrationPreviewObjectUrl) {
-        URL.revokeObjectURL(registrationPreviewObjectUrl);
-        registrationPreviewObjectUrl = null;
-      }
 
-      // 取得失敗でも登録は止めない。
-      if (status) {
-        status.textContent =
-          "BlablaLinkの自動取得に失敗しました。画像なしでも登録できます。必要なら画像を選択してください。";
-      }
-    } finally {
-      if (previewButton) {
-        previewButton.disabled = false;
-        previewButton.textContent = originalButtonText;
-      }
-    }
+/* ---------- SMALL MOBILE ---------- */
+@media screen and (max-width: 360px) {
+  .topbar .brand-copy,
+  .topbar .brand-small,
+  .topbar .brand-main {
+    font-size: 11px !important;
   }
 
-  const mediaHtml =
-    buildRecruitmentPreviewMedia(
-      xUrl,
-      registrationPreviewObjectUrl || "",
-      true
-    );
+  .container {
+    padding-left: 4px !important;
+    padding-right: 4px !important;
+  }
 
-  const detailHtml =
-    registrationType === "union"
-      ? `<div class="union-rank rank-${escapeHtml(getUnionRankClass(detail))}">${escapeHtml(detail)}</div>`
-      : `<div class="slv">${detail}</div>`;
-
-  const host =
-    $("#registrationPreviewCard");
-
-  if (!host) {
-    return false;
-  }
-
-  host.innerHTML = `
-    <article class="card ${cardClass}">
-      <div class="card-head">
-        <div class="type-with-new">
-          <span class="recruitment-type">${typeLabel}</span>
-          <span class="new-badge">🔥 NEW</span>
-        </div>
-        <span class="date">期限 14日後</span>
-      </div>
-
-      <div class="name">${escapeHtml(name)}</div>
-      ${detailHtml}
-      ${platform === "X" ? '<div class="date">掲載先：X</div>' : ""}
-      <div class="countdown">残り14日</div>
-
-      <div class="x-post-area">
-        ${mediaHtml}
-
-        <a
-          class="x-btn"
-          href="${escapeHtml(xUrl)}"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          ${escapeHtml(getRecruitmentButtonLabel(xUrl))}
-        </a>
-      </div>
-    </article>
-  `;
-
-  $("#registrationPreviewModal")
-    ?.classList
-    .remove("hidden");
-
-  if (isXRecruitmentUrl(xUrl)) {
-    setTimeout(renderXEmbeds, 0);
-  }
-
-  return true;
-}
-
-
-$("#registrationPreviewBack")
-  ?.addEventListener("click", () => closeRegistrationPreview(false));
-
-$("#registrationPreviewClose")
-  ?.addEventListener("click", () => closeRegistrationPreview(false));
-
-$("#registrationPreviewModal")
-  ?.addEventListener(
-    "click",
-    event => {
-      if (event.target?.id === "registrationPreviewModal") {
-        closeRegistrationPreview(false);
-      }
-    }
-  );
-
-$("#registrationPreviewConfirm")
-  ?.addEventListener(
-    "click",
-    () => {
-      registrationPreviewApproved = true;
-      closeRegistrationPreview(true);
-      $("#registerForm")?.requestSubmit();
-    }
-  );
-
-
-$("#xUrl")
-  ?.addEventListener(
-    "input",
-    () => {
-      registrationPreviewApproved = false;
-      registrationPreviewPreparedFile = null;
-
-      if (registrationPreviewObjectUrl) {
-        URL.revokeObjectURL(registrationPreviewObjectUrl);
-        registrationPreviewObjectUrl = null;
-      }
-
-      const status = $("#previewImageStatus");
-      const selectedFile = $("#previewImage")?.files?.[0] || null;
-
-      if (status && !selectedFile) {
-        const url = $("#xUrl")?.value.trim() || "";
-        status.textContent =
-          isBlablaLinkPostUrl(url)
-            ? "BlablaLink投稿は確認画面で自動プレビューを取得します。画像は任意です。"
-            : "";
-      }
-    }
-  );
+  .hero-left {
+    padding-left: 4px !important;
+    padding-right: 4px !important;
+  }
 
+  .hero h1 .hero-title-line1 {
+    font-size: 11px !important;
+    letter-spacing: .12em !important;
+  }
 
-$("#previewImage")
-  ?.addEventListener(
-    "change",
-    event => {
-      registrationPreviewApproved = false;
-      registrationPreviewPreparedFile = null;
+  .hero h1 .hero-title-line2 {
+    font-size: clamp(50px, 15.2vw, 64px) !important;
+  }
+}
 
-      if (registrationPreviewObjectUrl) {
-        URL.revokeObjectURL(registrationPreviewObjectUrl);
-        registrationPreviewObjectUrl = null;
-      }
 
-      const file = event.target?.files?.[0] || null;
-      const status = $("#previewImageStatus");
+/* =========================================================
+   v11.1 COMMANDER COLOR RESTORE
+   指揮官 = orange / ユニオン = blue
+   ========================================================= */
 
-      if (!file) {
-        $("#previewImageClearBtn")
-          ?.classList
-          .add("hidden");
+/* 指揮官カードのアクセント */
+.card.commander-card {
+  border-color: #ff7a18 !important;
+}
 
-        if (status) {
-          status.textContent = "";
-        }
-        return;
-      }
+.card.commander-card::before {
+  background: #ff7a18 !important;
+}
 
-      if (!validatePreviewImageFile(file)) {
-        event.target.value = "";
+/* ● 指揮官 */
+.card.commander-card .recruitment-type {
+  border-color: #ff7a18 !important;
+  color: #ff9b32 !important;
+  background: rgba(255, 122, 24, .08) !important;
+}
 
-        $("#previewImageClearBtn")
-          ?.classList
-          .add("hidden");
+/* SLV */
+.card.commander-card .slv,
+.card.commander-card .slv small {
+  color: #7b8085 !important;
+  text-shadow: none !important;
+  -webkit-text-stroke: 0 !important;
+}
 
-        if (status) {
-          status.textContent = "";
-        }
-        return;
-      }
+/* ユニオンはブルーを維持 */
+.card.union-card {
+  border-color: #3696ff !important;
+}
 
-      $("#previewImageClearBtn")
-        ?.classList
-        .remove("hidden");
+.card.union-card::before {
+  background: #3696ff !important;
+}
 
-      if (status) {
-        status.textContent =
-          `選択画像：${formatFileSize(file.size)} / 20MBまで（確認時に自動最適化）`;
-      }
-    }
-  );
+.card.union-card .recruitment-type {
+  border-color: #3696ff !important;
+  color: #3696ff !important;
+  background: rgba(54, 150, 255, .08) !important;
+}
 
 
-$("#previewImageClearBtn")
-  ?.addEventListener(
-    "click",
-    () => {
-      clearInitialPreviewImageSelection(true);
-    }
-  );
+/* =========================================================
+   v11.2 CACHE-SAFE COMMANDER COLOR FIX
+   ========================================================= */
 
+/* 指揮官カード：ラベルをオレンジで固定 */
+body .card.commander-card .recruitment-type,
+body article.card.commander-card .recruitment-type,
+body .commander-card .type-with-new .recruitment-type {
+  color: #F2A124 !important;
+  border-color: #F2A124 !important;
+  background: rgba(242, 161, 36, .08) !important;
+}
 
-// ========================================
-// 登録結果表示
-// ========================================
+/* 指揮官カード：SLV数字はオレンジ */
+body .card.commander-card .slv,
+body article.card.commander-card .slv {
+  color: #F2A124 !important;
+  text-shadow: none !important;
+  -webkit-text-stroke: 0 !important;
+}
 
-function showRegistrationResult(
-  pass,
-  result
-) {
+/* 数字横の小さいSLV文字は元のグレー */
+body .card.commander-card .slv small,
+body article.card.commander-card .slv small,
+body .card .slv small {
+  color: #7b8085 !important;
+  text-shadow: none !important;
+  -webkit-text-stroke: 0 !important;
+}
 
+/* 指揮官カード枠・左アクセント */
+body .card.commander-card {
+  border-color: #ff7a18 !important;
+}
 
-  if (
-    $("#passValue")
-  ) {
+body .card.commander-card::before {
+  background: #ff7a18 !important;
+}
 
-    $("#passValue")
-      .textContent =
-      pass;
+/* ユニオン側は青を維持 */
+body .card.union-card .recruitment-type,
+body article.card.union-card .recruitment-type {
+  color: #18ABF4 !important;
+  border-color: #18ABF4 !important;
+  background: rgba(24, 171, 244, .08) !important;
+}
 
-  }
 
+/* =========================================================
+   v11.3 COMMANDER SLV LABEL COLOR FIX
+   指揮官ラベル = orange
+   SLV数値       = orange
+   small "SLV"   = cyan
+   ========================================================= */
 
-  if (
-    $("#resultExpiry")
-  ) {
+/* SLVの数字はオレンジ */
+body .card.commander-card .slv,
+body article.card.commander-card .slv {
+  color: #F2A124 !important;
+}
 
-    $("#resultExpiry")
-      .textContent =
+/* 数字横の小さい「SLV」だけ水色 */
+body .card.commander-card .slv small,
+body article.card.commander-card .slv small,
+body .card .slv small {
+  color: #7b8085 !important;
+  text-shadow: none !important;
+  -webkit-text-stroke: 0 !important;
+}
 
-      formatDate(
-        result.expires_at
-      );
+/* =========================================================
+   v11.4 MOBILE HERO TITLE CENTER
+   スマホ版のみメインロゴ2段を中央揃え
+   ========================================================= */
+@media screen and (max-width: 600px) {
+  .hero h1 {
+    text-align: center !important;
+  }
 
+  .hero h1 .hero-title-line1,
+  .hero h1 .hero-title-line2 {
+    width: 100% !important;
+    margin-left: 0 !important;
+    margin-right: 0 !important;
+    text-align: center !important;
   }
+}
 
 
-  const resultId =
-    $("#resultId");
+/* =========================================================
+   v11.5 MOBILE HERO TRUE CENTER
+   文字列そのものを中央配置（100%幅spanではなくmax-content）
+   ========================================================= */
+@media screen and (max-width: 600px) {
+  body .hero-left {
+    width: 100% !important;
+    max-width: none !important;
+  }
 
+  body .hero h1 {
+    width: 100% !important;
+    max-width: none !important;
+    display: flex !important;
+    flex-direction: column !important;
+    align-items: center !important;
+    justify-content: center !important;
+    text-align: center !important;
+  }
 
-  if (resultId) {
+  body .hero h1 .hero-title-line1,
+  body .hero h1 .hero-title-line2 {
+    display: block !important;
+    width: max-content !important;
+    max-width: 100% !important;
+    margin-left: auto !important;
+    margin-right: auto !important;
+    text-align: center !important;
+  }
 
-    const row =
-      resultId.closest(
-        ".result-row"
-      );
+  /* letter-spacingの末尾分で右に寄って見えるのを補正 */
+  body .hero h1 .hero-title-line1 {
+    padding-left: .16em !important;
+  }
+}
 
 
-    if (row) {
+/* =========================================================
+   v11.6 HERO TITLE COLOR
+   UNION MATCH をボタンと同系統のグレーに変更
+   ========================================================= */
+body .hero h1 .hero-title-line2 {
+  color: var(--charcoal) !important;
+}
 
-      row.style.display =
-        "none";
 
-    }
+/* =========================================================
+   v11.7 SLV LABEL COLOR
+   数字横の小さい「SLV」を元のグレーに戻す
+   ========================================================= */
+body .card.commander-card .slv small,
+body article.card.commander-card .slv small,
+body .card .slv small {
+  color: var(--muted) !important;
+  text-shadow: none !important;
+  -webkit-text-stroke: 0 !important;
+}
 
-  }
 
+/* =========================================================
+   v11.8 FINAL SLV LABEL FIX
+   小さい「SLV」は元のグレー #7b8085 に完全固定
+   ========================================================= */
+html body .card .slv > small,
+html body .card.commander-card .slv > small,
+html body article.card.commander-card .slv > small,
+html body .slv small {
+  color: #7b8085 !important;
+  -webkit-text-fill-color: #7b8085 !important;
+  text-shadow: none !important;
+  -webkit-text-stroke: 0 !important;
+}
 
-  $("#resultModal")
-    ?.classList
-    .remove(
-      "hidden"
-    );
 
+/* =========================================================
+   v11.9 SLV LABEL — app.js generated element
+   ========================================================= */
+html body .card.commander-card .slv .slv-label,
+html body article.card.commander-card .slv .slv-label,
+html body .slv .slv-label {
+  color: #7b8085 !important;
+  -webkit-text-fill-color: #7b8085 !important;
+  text-shadow: none !important;
+  -webkit-text-stroke: 0 !important;
+  opacity: 1 !important;
 }
 
 
-// ========================================
-// 募集登録
-// ========================================
+/* =========================================================
+   v12 BOTTOM NAV FIX
+   - PCでも横幅いっぱいを3等分
+   - 青点灯はactiveの1個だけ
+   - PC hoverでは青点灯させない
+   ========================================================= */
 
-$("#registerForm")
-  ?.addEventListener(
-    "submit",
-    async event => {
+body .bottom-nav {
+  display: grid !important;
+  grid-template-columns: repeat(3, minmax(0, 1fr)) !important;
+  justify-content: stretch !important;
+  align-items: stretch !important;
+  width: 100% !important;
+}
 
+body .bottom-nav .nav-btn {
+  width: 100% !important;
+  max-width: none !important;
+  min-width: 0 !important;
+  flex: none !important;
+  color: #d0d2d4 !important;
+  background: transparent !important;
+}
 
-      event.preventDefault();
+/* 現在ページだけ青 */
+body .bottom-nav .nav-btn.active,
+body .bottom-nav .nav-btn.active:hover {
+  color: #fff !important;
+  background:
+    linear-gradient(
+      180deg,
+      var(--cyan-2),
+      var(--cyan)
+    ) !important;
+}
 
+/* PCのマウスオーバーは薄く反応するだけ */
+@media (hover: hover) and (pointer: fine) {
+  body .bottom-nav .nav-btn:not(.active):hover {
+    color: #fff !important;
+    background: rgba(255, 255, 255, .07) !important;
+  }
+}
 
-      if (!registrationPreviewApproved) {
+/* スマホはhover残りを完全無効化 */
+@media (hover: none), (pointer: coarse) {
+  body .bottom-nav .nav-btn:not(.active):hover {
+    color: #d0d2d4 !important;
+    background: transparent !important;
+  }
+}
 
-        await showRegistrationPreview();
-        return;
+/* =========================================================
+   v12.4 DEADLINE NEAR
+   残り24時間以内：NEW風の赤バッジ + 大きめ赤カウント
+   ========================================================= */
+.deadline-badge {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
 
-      }
+  flex: 0 0 auto;
 
-      registrationPreviewApproved = false;
+  padding: 4px 7px;
 
+  border: 1px solid #e13b4f;
 
-      if (!sb) {
+  color: #d9273f;
+  background: rgba(225, 59, 79, .10);
 
-        alert(
-          "Supabaseの設定がまだです。"
-        );
+  font-size: 10px;
+  font-weight: 900;
+  line-height: 1;
+  letter-spacing: .02em;
 
-        return;
+  white-space: nowrap;
+}
 
-      }
+.countdown.deadline-near {
+  color: #d9273f !important;
+  font-size: 14px !important;
+  font-weight: 900 !important;
+  letter-spacing: .01em;
+}
 
+@media (max-width: 600px) {
+  .deadline-badge {
+    padding: 4px 6px;
+    font-size: 10px;
+  }
 
-      const registrationType =
+  .countdown.deadline-near {
+    font-size: 15px !important;
+  }
+}
 
-        $("#registrationType")
-          ?.value
-        ||
-        "commander";
+/* =========================================================
+   v12.7 NEW FIRE VISIBILITY
+   炎アイコンを独立表示して見やすくする
+   ========================================================= */
+.new-badge {
+  gap: 4px;
+  padding: 3px 7px;
+  font-size: 0 !important;
+  line-height: 1;
+}
 
+.new-badge::before {
+  content: "🔥";
+  display: inline-block;
+  flex: 0 0 auto;
+  font-size: 13px;
+  line-height: 1;
+  transform: translateY(-0.5px);
+}
 
-      const xUrl =
+.new-badge::after {
+  content: "NEW";
+  display: inline-block;
+  color: #ffffff;
+  font-size: 10px;
+  font-weight: 900;
+  line-height: 1;
+  letter-spacing: .02em;
+}
 
-        $("#xUrl")
-          ?.value
-          .trim();
+@media (max-width: 600px) {
+  .new-badge::before {
+    font-size: 14px;
+  }
 
+  .new-badge::after {
+    font-size: 10px;
+  }
+}
 
-      const originalPreviewFile =
-        $("#previewImage")
-          ?.files?.[0]
-        ||
-        null;
+/* =========================================================
+   v13.3 登録前プレビュー + 任意募集画像
+   既存デザインは変更せず追加のみ
+   ========================================================= */
 
-      const previewFile =
-        registrationPreviewPreparedFile || originalPreviewFile;
-
-
-      if (!validatePreviewImageFile(originalPreviewFile)) {
-        return;
-      }
-
-
-      if (
-        !validRecruitmentUrl(
-          xUrl
-        )
-      ) {
-
-        alert(
-          "募集記事URLを入力してください。\nX・BlablaLink・DiscordなどのURLに対応しています。"
-        );
-
-        return;
-
-      }
-
-
-      // ======================================
-      // ユニオン登録
-      // ======================================
-
-      if (
-        registrationType ===
-        "union"
-      ) {
-
-
-        const unionName =
-
-          $("#unionName")
-            ?.value
-            .trim();
-
-
-        const unionRank =
-
-          $("#unionRank")
-            ?.value;
-
-
-        if (!unionName) {
-
-          alert(
-            "ユニオン名を入力してください。"
-          );
-
-          return;
-
-        }
-
-
-        for (
-
-          let attempt = 0;
-
-          attempt < 5;
-
-          attempt++
-
-        ) {
-
-
-          const pass =
-            generatePass();
-
-
-          const passHash =
-            await sha256(
-              pass
-            );
-
-
-          const {
-            data,
-            error
-          } =
-
-            await sb.rpc(
-
-              "create_union_recruitment_url",
-
-              {
-
-                p_union_name:
-                  unionName,
-
-                p_union_rank:
-                  unionRank,
-
-                p_x_url:
-                  xUrl,
-
-                p_pass_hash:
-                  passHash
-
-              }
-
-            );
-
-
-          if (error) {
-
-
-            const errorText =
-              getErrorText(
-                error
-              );
-
-
-            if (
-              errorText.includes(
-                "UNION_NAME_DUPLICATE"
-              )
-            ) {
-
-              alert(
-                "同じユニオン名ですでに募集中です。"
-              );
-
-              return;
-
-            }
-
-
-            if (
-              errorText.includes(
-                "INVALID_RECRUITMENT_URL"
-              )
-              ||
-              errorText.includes(
-                "INVALID_X_POST_URL"
-              )
-            ) {
-
-              alert(
-                "募集記事URLが正しくありません。http:// または https:// から始まるURLを入力してください。"
-              );
-
-              return;
-
-            }
-
-
-            if (
-              errorText.includes(
-                "PASS_DUPLICATE"
-              )
-            ) {
-
-              continue;
-
-            }
-
-
-            console.error(
-              "ユニオン登録エラー",
-              error
-            );
-
-
-            alert(
-              `登録に失敗しました：${error.message}`
-            );
-
-
-            return;
-
-          }
-
-
-          const result =
-
-            Array.isArray(
-              data
-            )
-              ? data[0]
-              : data;
-
-
-          if (previewFile && result?.id) {
-            try {
-              await uploadRecruitmentPreviewImage(
-                "union",
-                result.id,
-                passHash,
-                previewFile
-              );
-            } catch (previewError) {
-              console.error("募集画像アップロードエラー", previewError);
-              alert("募集登録は完了しましたが、画像の登録だけ失敗しました。\n募集自体は正常に掲載されています。");
-            }
-          }
-
-
-          // ==================================
-          // Xシェア用
-          // ==================================
-
-          lastRegisteredRecruitment = {
-
-            type:
-              "union",
-
-            name:
-              unionName,
-
-            rank:
-              unionRank,
-
-            xUrl
-
-          };
-
-
-          showRegistrationResult(
-            pass,
-            result
-          );
-
-
-          event.target.reset();
-          clearInitialPreviewImageSelection(false);
-
-
-          updateRegistrationFields();
-
-
-          return;
-
-        }
-
-
-        alert(
-          "PASSの発行に失敗しました。もう一度登録してください。"
-        );
-
-
-        return;
-
-      }
-
-
-      // ======================================
-      // 指揮官登録
-      // ======================================
-
-      const name =
-
-        $("#name")
-          ?.value
-          .trim();
-
-
-      const slv =
-
-        Number(
-          $("#slv")
-            ?.value
-        );
-
-
-      if (!name) {
-
-        alert(
-          "指揮官名を入力してください。"
-        );
-
-        return;
-
-      }
-
-
-      if (
-        !slv ||
-        slv < 1 ||
-        slv > 1200
-      ) {
-
-        alert(
-          "SLVは1～1200で入力してください。"
-        );
-
-        return;
-
-      }
-
-
-      for (
-
-        let attempt = 0;
-
-        attempt < 5;
-
-        attempt++
-
-      ) {
-
-
-        const pass =
-          generatePass();
-
-
-        const passHash =
-          await sha256(
-            pass
-          );
-
-
-        const {
-          data,
-          error
-        } =
-
-          await sb.rpc(
-
-            "create_recruitment_url",
-
-            {
-
-              p_commander_name:
-                name,
-
-              p_slv:
-                slv,
-
-              p_x_url:
-                xUrl,
-
-              p_pass_hash:
-                passHash
-
-            }
-
-          );
-
-
-        if (error) {
-
-
-          const errorText =
-            getErrorText(
-              error
-            );
-
-
-          if (
-            errorText.includes(
-              "COMMANDER_NAME_DUPLICATE"
-            )
-          ) {
-
-            alert(
-              "同じ指揮官名ですでに募集中です。"
-            );
-
-            return;
-
-          }
-
-
-          if (
-            errorText.includes(
-              "INVALID_RECRUITMENT_URL"
-            )
-            ||
-            errorText.includes(
-              "INVALID_X_POST_URL"
-            )
-          ) {
-
-            alert(
-              "募集記事URLが正しくありません。http:// または https:// から始まるURLを入力してください。"
-            );
-
-            return;
-
-          }
-
-
-          if (
-            errorText.includes(
-              "PASS_DUPLICATE"
-            )
-          ) {
-
-            continue;
-
-          }
-
-
-          console.error(
-            "指揮官登録エラー",
-            error
-          );
-
-
-          alert(
-            `登録に失敗しました：${error.message}`
-          );
-
-
-          return;
-
-        }
-
-
-        const result =
-
-          Array.isArray(
-            data
-          )
-            ? data[0]
-            : data;
-
-
-        if (previewFile && result?.id) {
-          try {
-            await uploadRecruitmentPreviewImage(
-              "commander",
-              result.id,
-              passHash,
-              previewFile
-            );
-          } catch (previewError) {
-            console.error("募集画像アップロードエラー", previewError);
-            alert("募集登録は完了しましたが、画像の登録だけ失敗しました。\n募集自体は正常に掲載されています。");
-          }
-        }
-
-
-        // ==================================
-        // Xシェア用
-        // ==================================
-
-        lastRegisteredRecruitment = {
-
-          type:
-            "commander",
-
-          name,
-
-          slv,
-
-          xUrl
-
-        };
-
-
-        showRegistrationResult(
-          pass,
-          result
-        );
-
-
-        event.target.reset();
-        clearInitialPreviewImageSelection(false);
-
-
-        updateRegistrationFields();
-
-
-        return;
-
-      }
-
-
-      alert(
-        "PASSの発行に失敗しました。もう一度登録してください。"
-      );
-
-    }
-  );
-
-
-// ========================================
-// PASSコピー
-// ========================================
-
-$("#copyPass")
-  ?.addEventListener(
-    "click",
-    async () => {
-
-
-      const pass =
-
-        $("#passValue")
-          ?.textContent
-        ||
-        "";
-
-
-      try {
-
-
-        await navigator
-          .clipboard
-          .writeText(
-            pass
-          );
-
-
-        const button =
-          $("#copyPass");
-
-
-        if (button) {
-
-
-          button.textContent =
-            "コピーしました";
-
-
-          setTimeout(
-            () => {
-
-              button.textContent =
-                "PASSをコピー";
-
-            },
-            1500
-          );
-
-        }
-
-
-      } catch (error) {
-
-
-        console.error(
-          "PASSコピーエラー",
-          error
-        );
-
-
-        alert(
-          "PASSをコピーできませんでした。手動で保存してください。"
-        );
-
-      }
-
-    }
-  );
-
-
-// ========================================
-// 登録完了モーダル
-// ========================================
-
-function closeModal() {
-
-  $("#resultModal")
-    ?.classList
-    .add(
-      "hidden"
-    );
-
-}
-
-
-// ×ボタン
-
-$("#modalClose")
-  ?.addEventListener(
-    "click",
-    closeModal
-  );
-
-
-// ========================================
-// シェアしないで完了
-//
-// ★一覧へ戻る
-// ★登録フォームを閉じる
-// ========================================
-
-$("#resultDone")
-  ?.addEventListener(
-    "click",
-    () => {
-
-
-      closeModal();
-
-
-      showPage(
-        "list"
-      );
-
-
-    }
-  );
-
-
-// ========================================
-// Xで募集をシェア
-// ========================================
-
-$("#shareXBtn")
-  ?.addEventListener(
-    "click",
-    async () => {
-
-
-      if (
-        !lastRegisteredRecruitment
-      ) {
-
-        alert(
-          "登録情報を取得できませんでした。\n募集一覧から登録内容をご確認ください。"
-        );
-
-        return;
-
-      }
-
-
-      // ======================================
-      // ボタン操作直後に
-      // X用タブを確保
-      // ======================================
-
-      const shareWindow =
-
-        window.open(
-          "about:blank",
-          "_blank"
-        );
-
-
-      // ======================================
-      // 最新カウンター取得
-      // ======================================
-
-      const [
-
-        commanderCount,
-        unionCount,
-        graduatedCountResult
-
-      ] =
-
-        await Promise.all([
-
-          getCurrentCommanderCount(),
-
-          getCurrentUnionCount(),
-
-          loadGraduatedCommanderCount()
-
-        ]);
-
-
-      const graduatedCount =
-
-        Number.isFinite(
-          Number(
-            graduatedCountResult
-          )
-        )
-
-          ?
-
-          Number(
-            graduatedCountResult
-          )
-
-          :
-
-          Number(
-            $("#graduatedCommanderCount")
-              ?.textContent
-            ||
-            0
-          );
-
-
-      // ======================================
-      // X文章
-      // ======================================
-
-      const shareText =
-
-        buildXShareText(
-
-          lastRegisteredRecruitment,
-
-          commanderCount,
-
-          unionCount,
-
-          graduatedCount
-
-        );
-
-
-      const shareUrl =
-
-        "https://twitter.com/intent/tweet?text="
-
-        +
-
-        encodeURIComponent(
-          shareText
-        );
-
-
-      // ======================================
-      // X投稿画面
-      // ======================================
-
-      if (
-        shareWindow
-      ) {
-
-
-        shareWindow.opener =
-          null;
-
-
-        shareWindow.location.href =
-          shareUrl;
-
-
-      } else {
-
-
-        window.location.href =
-          shareUrl;
-
-      }
-
-
-      // ======================================
-      // 元のアプリ側
-      // 登録画面を閉じて一覧へ
-      // ======================================
-
-      closeModal();
-
-
-      showPage(
-        "list"
-      );
-
-    }
-  );
-
-
-// ========================================
-// PASSで募集を再編集・再延長・締切
-// ========================================
-
-function resetManageImageState() {
-
-  manageEditPreparedFile = null;
-
-  if (manageEditObjectUrl) {
-    URL.revokeObjectURL(manageEditObjectUrl);
-    manageEditObjectUrl = null;
-  }
-
-  const fileInput =
-    $("#manageEditImage");
-
-  if (fileInput) {
-    fileInput.value = "";
-  }
-
-  const status =
-    $("#manageEditImageStatus");
-
-  if (status) {
-    status.textContent =
-      "未選択なら現在の画像をそのまま使用します。20MBまで。選択画像は自動で最適化されます。";
-  }
-
-  $("#manageEditSelectedImageBox")
-    ?.classList
-    .add("hidden");
-
-  const selectedPreview =
-    $("#manageEditSelectedImage");
-
-  if (selectedPreview) {
-    selectedPreview.removeAttribute("src");
-  }
-
-  const removeCheckbox =
-    $("#manageRemoveImage");
-
-  if (removeCheckbox) {
-    removeCheckbox.checked = false;
-  }
-}
-
-
-function resetManageActionMenu() {
-
-  $("#managePrimaryActions")
-    ?.classList
-    .remove("hidden");
-
-  $("#manageEditActionChoices")
-    ?.classList
-    .add("hidden");
-}
-
-
-function showManageEditActionChoices() {
-
-  if (!loadedManagedRecruitment) {
-    alert("先にPASSから募集内容を呼び出してください。");
-    return;
-  }
-
-  $("#managePrimaryActions")
-    ?.classList
-    .add("hidden");
-
-  $("#manageEditActionChoices")
-    ?.classList
-    .remove("hidden");
-}
-
-
-function clearLoadedManageRecruitment() {
-
-  loadedManagedRecruitment = null;
-  loadedManagePass = "";
-  loadedManagePassHash = "";
-
-  resetManageImageState();
-  resetManageActionMenu();
-
-  $("#manageLoadedPanel")
-    ?.classList
-    .add("hidden");
-
-  $("#manageEditPanel")
-    ?.classList
-    .add("hidden");
-}
-
-
-function getManagedRecruitmentStatus(item) {
-
-  if (!item) {
-    return "--";
-  }
-
-  const expiresTime =
-    new Date(item.expires_at).getTime();
-
-  if (item.status !== "open") {
-    return "締切済み";
-  }
-
-  if (
-    Number.isFinite(expiresTime)
-    &&
-    expiresTime <= Date.now()
-  ) {
-    return "期限切れ";
-  }
-
-  return "募集中";
-}
-
-
-function renderLoadedManageRecruitment() {
-
-  const item =
-    loadedManagedRecruitment;
-
-  if (!item) {
-    $("#manageLoadedPanel")
-      ?.classList
-      .add("hidden");
-    return;
-  }
-
-  const isUnion =
-    item.type === "union";
-
-  const name =
-    String(item.name || "");
-
-  const detail =
-    isUnion
-      ? String(item.union_rank || "")
-      : `SLV ${Number(item.slv || 0)}`;
-
-  if ($("#manageCurrentName")) {
-    $("#manageCurrentName").textContent =
-      `${isUnion ? "🏢" : "👤"} ${name}`;
-  }
-
-  if ($("#manageCurrentDetail")) {
-    $("#manageCurrentDetail").textContent =
-      detail;
-  }
-
-  if ($("#manageCurrentExpiry")) {
-    $("#manageCurrentExpiry").textContent =
-      item.expires_at
-        ? formatDate(item.expires_at)
-        : "--";
-  }
-
-  if ($("#manageCurrentStatus")) {
-    $("#manageCurrentStatus").textContent =
-      getManagedRecruitmentStatus(item);
-  }
-
-  const urlLink =
-    $("#manageCurrentUrl");
-
-  if (urlLink) {
-    urlLink.textContent =
-      item.x_url || "--";
-
-    if (item.x_url) {
-      urlLink.href = item.x_url;
-    } else {
-      urlLink.removeAttribute("href");
-    }
-  }
-
-  const imageBox =
-    $("#manageCurrentImageBox");
-
-  const image =
-    $("#manageCurrentImage");
-
-  if (
-    item.preview_image_url
-    &&
-    imageBox
-    &&
-    image
-  ) {
-    image.src =
-      item.preview_image_url;
-    imageBox.classList.remove("hidden");
-  } else {
-    imageBox?.classList.add("hidden");
-    image?.removeAttribute("src");
-  }
-
-  $("#manageLoadedPanel")
-    ?.classList
-    .remove("hidden");
-}
-
-
-function populateManageEditForm() {
-
-  const item =
-    loadedManagedRecruitment;
-
-  if (!item) {
-    return;
-  }
-
-  resetManageImageState();
-
-  const isUnion =
-    item.type === "union";
-
-  if ($("#manageEditNameLabel")) {
-    $("#manageEditNameLabel").textContent =
-      isUnion
-        ? "ユニオン名"
-        : "指揮官名";
-  }
-
-  if ($("#manageEditName")) {
-    $("#manageEditName").textContent =
-      item.name || "--";
-  }
-
-  $("#manageCommanderEditFields")
-    ?.classList
-    .toggle("hidden", isUnion);
-
-  $("#manageUnionEditFields")
-    ?.classList
-    .toggle("hidden", !isUnion);
-
-  if (!isUnion && $("#manageEditSlv")) {
-    $("#manageEditSlv").value =
-      String(item.slv || "");
-  }
-
-  if (isUnion && $("#manageEditUnionRank")) {
-    $("#manageEditUnionRank").value =
-      item.union_rank || "プラチナ";
-  }
-
-  if ($("#manageEditUrl")) {
-    $("#manageEditUrl").value =
-      item.x_url || "";
-  }
-
-  $("#manageEditPanel")
-    ?.classList
-    .remove("hidden");
-
-  setTimeout(() => {
-    $("#manageEditPanel")
-      ?.scrollIntoView({
-        behavior: "smooth",
-        block: "start"
-      });
-  }, 50);
-}
-
-
-function normalizeManagePass() {
-
-  return (
-    $("#closePass")
-      ?.value
-      .trim()
-      .toUpperCase()
-    ||
-    ""
-  );
-}
-
-
-async function loadRecruitmentForManage() {
-
-  if (!sb) {
-    alert("Supabaseの設定がまだです。");
-    return;
-  }
-
-  const pass =
-    normalizeManagePass();
-
-  if (pass.length !== 8) {
-    alert("登録時に発行された8文字PASSを入力してください。");
-    return;
-  }
-
-  const passHash =
-    await sha256(pass);
-
-  const button =
-    $("#loadManageRecruitmentBtn");
-
-  const originalText =
-    button?.textContent || "🔑 募集内容を呼び出す";
-
-  if (button) {
-    button.disabled = true;
-    button.textContent = "募集内容を確認中...";
-  }
-
-  try {
-
-    const {
-      data,
-      error
-    } =
-      await sb.rpc(
-        "get_recruitment_by_pass_for_reregister",
-        {
-          p_pass_hash: passHash
-        }
-      );
-
-    if (error) {
-      console.error("PASS募集取得エラー", error);
-
-      const errorText =
-        getErrorText(error);
-
-      if (
-        errorText.includes("Could not find the function")
-        ||
-        errorText.includes("PGRST202")
-      ) {
-        alert(
-          "PASS再編集機能のSQLがまだ反映されていません。\nsupabase_pass_reregister.sql を先に実行してください。"
-        );
-        return;
-      }
-
-      alert("募集内容を読み込めませんでした。");
-      return;
-    }
-
-    if (!data) {
-      clearLoadedManageRecruitment();
-      alert("PASSが正しくありません。もう一度確認してください。");
-      return;
-    }
-
-    loadedManagedRecruitment = data;
-    loadedManagePass = pass;
-    loadedManagePassHash = passHash;
-
-    $("#manageEditPanel")
-      ?.classList
-      .add("hidden");
-
-    resetManageImageState();
-    resetManageActionMenu();
-    renderLoadedManageRecruitment();
-
-    setTimeout(() => {
-      $("#manageLoadedPanel")
-        ?.scrollIntoView({
-          behavior: "smooth",
-          block: "start"
-        });
-    }, 50);
-
-  } finally {
-
-    if (button) {
-      button.disabled = false;
-      button.textContent = originalText;
-    }
-  }
-}
-
-
-$("#closeForm")
-  ?.addEventListener(
-    "submit",
-    async event => {
-      event.preventDefault();
-      await loadRecruitmentForManage();
-    }
-  );
-
-
-$("#closePass")
-  ?.addEventListener(
-    "input",
-    event => {
-
-      const normalized =
-        String(event.target?.value || "")
-          .toUpperCase()
-          .replace(/[^A-Z0-9]/g, "")
-          .slice(0, 8);
-
-      if (event.target) {
-        event.target.value = normalized;
-      }
-
-      if (
-        loadedManagePass
-        &&
-        normalized !== loadedManagePass
-      ) {
-        clearLoadedManageRecruitment();
-      }
-    }
-  );
-
-
-$("#openManageActionBtn")
-  ?.addEventListener(
-    "click",
-    showManageEditActionChoices
-  );
-
-
-$("#backManageActionBtn")
-  ?.addEventListener(
-    "click",
-    () => {
-      resetManageImageState();
-
-      $("#manageEditPanel")
-        ?.classList
-        .add("hidden");
-
-      resetManageActionMenu();
-
-      $("#manageLoadedPanel")
-        ?.scrollIntoView({
-          behavior: "smooth",
-          block: "start"
-        });
-    }
-  );
-
+.preview-image-field {
+  margin-top: 14px;
+}
 
-$("#openManageEditBtn")
-  ?.addEventListener(
-    "click",
-    () => {
-      if (!loadedManagedRecruitment) {
-        alert("先にPASSから募集内容を呼び出してください。");
-        return;
-      }
+.optional-label {
+  display: inline-flex;
+  align-items: center;
+  margin-left: 6px;
+  padding: 2px 7px;
+  border: 1px solid rgba(123, 128, 133, .34);
+  color: #7b8085;
+  font-size: 10px;
+  font-weight: 900;
+  letter-spacing: .08em;
+  vertical-align: middle;
+}
 
-      populateManageEditForm();
-    }
-  );
+.preview-file-help {
+  display: block;
+  margin-top: 8px;
+  color: #7b8085;
+  font-size: 11px;
+  font-weight: 700;
+  line-height: 1.65;
+}
 
+.registration-preview-modal-card {
+  width: min(720px, calc(100vw - 24px));
+  max-height: calc(100vh - 32px);
+  overflow-y: auto;
+}
 
-$("#cancelManageEditBtn")
-  ?.addEventListener(
-    "click",
-    () => {
-      resetManageImageState();
-      $("#manageEditPanel")
-        ?.classList
-        .add("hidden");
+.registration-preview-note {
+  margin: 10px 0 18px;
+  color: #7b8085;
+  font-size: 12px;
+  font-weight: 700;
+  line-height: 1.7;
+}
 
-      $("#managePrimaryActions")
-        ?.classList
-        .add("hidden");
+#registrationPreviewCard .card {
+  width: 100%;
+  margin: 0;
+}
 
-      $("#manageEditActionChoices")
-        ?.classList
-        .remove("hidden");
+.registration-preview-actions {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 10px;
+  margin-top: 18px;
+}
 
-      $("#manageLoadedPanel")
-        ?.scrollIntoView({
-          behavior: "smooth",
-          block: "start"
-        });
-    }
-  );
+.registration-preview-platform {
+  margin-bottom: 9px;
+  color: #7b8085;
+  font-size: 11px;
+  font-weight: 900;
+  letter-spacing: .04em;
+}
 
+.recruitment-preview-link {
+  display: block;
+  text-decoration: none;
+}
 
-$("#manageEditImage")
-  ?.addEventListener(
-    "change",
-    event => {
+.recruitment-preview-image {
+  display: block;
+  width: 100%;
+  max-height: 420px;
+  object-fit: contain;
+  border: 1px solid rgba(21, 174, 235, .24);
+  background: #0d1014;
+}
 
-      manageEditPreparedFile = null;
+.recruitment-preview-empty {
+  display: grid;
+  place-items: center;
+  min-height: 120px;
+  padding: 18px;
+  border: 1px dashed rgba(123, 128, 133, .36);
+  color: #7b8085;
+  font-size: 12px;
+  font-weight: 800;
+  line-height: 1.7;
+  text-align: center;
+}
 
-      if (manageEditObjectUrl) {
-        URL.revokeObjectURL(manageEditObjectUrl);
-        manageEditObjectUrl = null;
-      }
+@media (max-width: 600px) {
+  .registration-preview-actions {
+    grid-template-columns: 1fr;
+  }
 
-      const file =
-        event.target?.files?.[0] || null;
+  .registration-preview-modal-card {
+    width: calc(100vw - 16px);
+    max-height: calc(100vh - 16px);
+  }
+}
 
-      const status =
-        $("#manageEditImageStatus");
+/* =========================================================
+   v13.8 BlablaLink preview side-gap fix
+   ========================================================= */
 
-      if (!file) {
-        $("#manageEditSelectedImageBox")
-          ?.classList
-          .add("hidden");
+.recruitment-preview-link {
+  display: block;
+  width: 100%;
+  overflow: hidden;
+}
 
-        if (status) {
-          status.textContent =
-            "未選択なら現在の画像をそのまま使用します。20MBまで。選択画像は自動で最適化されます。";
-        }
-        return;
-      }
+.recruitment-preview-image {
+  display: block !important;
+  width: 100% !important;
+  height: auto !important;
 
-      if (!validatePreviewImageFile(file)) {
-        event.target.value = "";
-        $("#manageEditSelectedImageBox")
-          ?.classList
-          .add("hidden");
-        return;
-      }
+  max-width: 100% !important;
+  max-height: none !important;
 
-      const remove =
-        $("#manageRemoveImage");
+  margin: 0 !important;
 
-      if (remove) {
-        remove.checked = false;
-      }
+  object-fit: initial !important;
 
-      manageEditObjectUrl =
-        URL.createObjectURL(file);
+  background: transparent !important;
+}
 
-      const preview =
-        $("#manageEditSelectedImage");
 
-      if (preview) {
-        preview.src = manageEditObjectUrl;
-      }
+/* =========================================================
+   v15 VIDEO TOP / HEADER / MOBILE+TABLET NAV
+   2026-09-09
+   ========================================================= */
 
-      $("#manageEditSelectedImageBox")
-        ?.classList
-        .remove("hidden");
+/* Header: uploaded UNION MATCH logo is the hidden TOP switch */
+body .video-topbar {
+  position: sticky !important;
+  top: 0 !important;
+  z-index: 120 !important;
+  height: 66px !important;
+  padding: 0 14px !important;
+  border-bottom: 0 !important;
+  background: rgba(9, 10, 13, .92) !important;
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+}
 
-      if (status) {
-        status.textContent =
-          `選択画像：${formatFileSize(file.size)} / 20MBまで（確認時に自動最適化）`;
-      }
-    }
-  );
+body .video-logo-switch {
+  width: auto !important;
+  max-width: none !important;
+  height: 58px !important;
+  display: flex !important;
+  align-items: center !important;
+  padding: 0 !important;
+  margin: 0 !important;
+  border: 0 !important;
+  background: transparent !important;
+  box-shadow: none !important;
+  cursor: pointer;
+  appearance: none;
+  -webkit-appearance: none;
+}
 
+body .video-logo-switch img {
+  display: block !important;
+  width: clamp(154px, 18vw, 238px) !important;
+  max-width: 46vw !important;
+  height: auto !important;
+  max-height: 54px !important;
+  object-fit: contain !important;
+  object-position: left center !important;
+  pointer-events: none;
+}
 
-$("#manageRemoveImage")
-  ?.addEventListener(
-    "change",
-    event => {
+body .video-logo-switch:hover,
+body .video-logo-switch:focus,
+body .video-logo-switch:active {
+  border: 0 !important;
+  outline: 0 !important;
+  background: transparent !important;
+  box-shadow: none !important;
+  transform: none !important;
+}
 
-      if (!event.target?.checked) {
-        return;
-      }
+body .site-menu-button {
+  width: 46px;
+  height: 46px;
+  display: grid;
+  place-content: center;
+  gap: 5px;
+  padding: 0;
+  border: 0;
+  background: transparent;
+  cursor: pointer;
+}
 
-      manageEditPreparedFile = null;
+body .site-menu-button span {
+  display: block;
+  width: 25px;
+  height: 2px;
+  border-radius: 99px;
+  background: #fff;
+  transition: transform .22s ease, opacity .22s ease;
+}
 
-      if (manageEditObjectUrl) {
-        URL.revokeObjectURL(manageEditObjectUrl);
-        manageEditObjectUrl = null;
-      }
+body.menu-open .site-menu-button span:nth-child(1) {
+  transform: translateY(7px) rotate(45deg);
+}
 
-      const fileInput =
-        $("#manageEditImage");
+body.menu-open .site-menu-button span:nth-child(2) {
+  opacity: 0;
+}
 
-      if (fileInput) {
-        fileInput.value = "";
-      }
+body.menu-open .site-menu-button span:nth-child(3) {
+  transform: translateY(-7px) rotate(-45deg);
+}
 
-      $("#manageEditSelectedImageBox")
-        ?.classList
-        .add("hidden");
+body .site-menu-backdrop {
+  position: fixed;
+  inset: 66px 0 0;
+  z-index: 108;
+  background: rgba(0, 0, 0, .48);
+  backdrop-filter: blur(2px);
+  -webkit-backdrop-filter: blur(2px);
+}
 
-      const status =
-        $("#manageEditImageStatus");
+body .site-menu-drawer {
+  position: fixed;
+  top: 66px;
+  right: 0;
+  z-index: 110;
+  width: min(86vw, 340px);
+  height: calc(100dvh - 66px);
+  padding: 12px;
+  transform: translateX(105%);
+  overflow-y: auto;
+  background: rgba(17, 19, 24, .98);
+  box-shadow: -18px 0 50px rgba(0, 0, 0, .32);
+  transition: transform .24s ease;
+}
 
-      if (status) {
-        status.textContent =
-          "現在の登録画像を削除して再登録します。";
-      }
-    }
-  );
+body.menu-open .site-menu-drawer {
+  transform: translateX(0);
+}
 
+body .site-menu-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  min-height: 48px;
+  padding: 0 6px 10px;
+  color: rgba(255,255,255,.7);
+  font: 800 12px "Teko", sans-serif;
+  letter-spacing: .24em;
+}
 
-async function prepareManageEditImage() {
+body .site-menu-head button {
+  width: 38px;
+  height: 38px;
+  border: 0;
+  color: #fff;
+  background: transparent;
+  font-size: 28px;
+  line-height: 1;
+  cursor: pointer;
+}
 
-  const inputFile =
-    $("#manageEditImage")
-      ?.files?.[0]
-    ||
-    null;
+body .site-menu-drawer > button,
+body .site-menu-drawer > a {
+  width: 100%;
+  min-height: 52px;
+  display: flex;
+  align-items: center;
+  padding: 0 14px;
+  border: 0;
+  border-bottom: 1px solid rgba(255,255,255,.09);
+  color: #fff;
+  background: transparent;
+  font-size: 14px;
+  font-weight: 800;
+  text-align: left;
+  text-decoration: none;
+  cursor: pointer;
+}
 
-  if (!inputFile) {
-    manageEditPreparedFile = null;
-    return null;
-  }
+body .site-menu-drawer > button:hover,
+body .site-menu-drawer > a:hover {
+  background: rgba(255,255,255,.06);
+}
 
-  if (!validatePreviewImageFile(inputFile)) {
-    return null;
-  }
+/* Video hero */
+body .video-hero {
+  position: relative;
+  z-index: 1;
+  width: 100%;
+  overflow: hidden;
+  background: #000;
+  scroll-margin-top: 66px;
+  isolation: isolate;
+}
 
-  const button =
-    $("#manageEditPreviewBtn");
+body .hero-background-video {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center center;
+  background: #000;
+}
 
-  const originalText =
-    button?.textContent || "再登録内容を確認する";
+body .video-hero-shade {
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  background:
+    linear-gradient(
+      180deg,
+      rgba(0,0,0,.08) 0%,
+      rgba(0,0,0,.02) 42%,
+      rgba(0,0,0,.38) 100%
+    );
+  pointer-events: none;
+}
 
-  if (button) {
-    button.disabled = true;
-    button.textContent = "画像を自動最適化中...";
-  }
+body .video-hero-stats {
+  position: absolute;
+  left: 50%;
+  bottom: clamp(62px, 9vw, 108px);
+  z-index: 3;
+  transform: translateX(-50%);
+  width: min(92%, 860px);
+  color: #fff;
+  text-align: center;
+  text-shadow: 0 3px 22px rgba(0,0,0,.52);
+}
 
-  try {
+body .video-current-row {
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
+  gap: clamp(46px, 11vw, 150px);
+}
 
-    manageEditPreparedFile =
-      await optimizePreviewImageFile(inputFile);
+body .video-current-stat {
+  min-width: 110px;
+}
 
-    if (manageEditObjectUrl) {
-      URL.revokeObjectURL(manageEditObjectUrl);
-    }
+body .video-current-stat strong {
+  display: block;
+  color: #fff !important;
+  font-family: "Teko", "Arial Narrow", sans-serif;
+  font-size: clamp(50px, 7vw, 92px);
+  font-weight: 700;
+  line-height: .86;
+  letter-spacing: -.025em;
+}
 
-    manageEditObjectUrl =
-      URL.createObjectURL(manageEditPreparedFile);
+body .video-current-stat span {
+  display: block;
+  margin-top: 9px;
+  color: rgba(255,255,255,.96);
+  font-family: "Teko", "Arial Narrow", sans-serif;
+  font-size: clamp(13px, 1.6vw, 18px);
+  font-weight: 700;
+  line-height: 1;
+  letter-spacing: .19em;
+}
 
-    const preview =
-      $("#manageEditSelectedImage");
+body .video-history-row {
+  margin-top: clamp(22px, 3vw, 36px);
+  color: rgba(255,255,255,.68);
+  font-family: "Teko", "Arial Narrow", sans-serif;
+  font-size: clamp(11px, 1.25vw, 14px);
+  font-weight: 600;
+  letter-spacing: .13em;
+  white-space: nowrap;
+}
 
-    if (preview) {
-      preview.src = manageEditObjectUrl;
-    }
+body .video-history-row strong {
+  color: rgba(255,255,255,.82) !important;
+  font: inherit;
+}
 
-    $("#manageEditSelectedImageBox")
-      ?.classList
-      .remove("hidden");
+body .video-history-slash {
+  display: inline-block;
+  margin: 0 12px;
+  color: rgba(255,255,255,.42);
+}
 
-    const status =
-      $("#manageEditImageStatus");
+body .video-scroll-button {
+  position: absolute;
+  left: 50%;
+  bottom: 14px;
+  z-index: 4;
+  transform: translateX(-50%);
+  min-width: 74px;
+  padding: 4px 10px 2px;
+  border: 0;
+  color: rgba(255,255,255,.66);
+  background: transparent;
+  cursor: pointer;
+  text-align: center;
+}
 
-    if (status) {
-      status.textContent =
-        inputFile === manageEditPreparedFile
-          ? `選択画像：${formatFileSize(inputFile.size)}（そのまま使用できます）`
-          : `自動最適化：${formatFileSize(inputFile.size)} → ${formatFileSize(manageEditPreparedFile.size)}`;
-    }
+body .video-scroll-button span {
+  display: block;
+  font-family: "Teko", sans-serif;
+  font-size: 9px;
+  font-weight: 700;
+  letter-spacing: .28em;
+}
 
-    return manageEditPreparedFile;
+body .video-scroll-button b {
+  display: block;
+  margin-top: -1px;
+  font-size: 20px;
+  font-weight: 400;
+  animation: videoScrollFloat 1.8s ease-in-out infinite;
+}
 
-  } catch (error) {
+@keyframes videoScrollFloat {
+  0%, 100% { transform: translateY(0); opacity: .55; }
+  50% { transform: translateY(4px); opacity: 1; }
+}
 
-    console.error("再登録画像最適化エラー", error);
-    manageEditPreparedFile = null;
+/* In list mode the old hero copy/buttons disappear.
+   Register/manage forms themselves remain untouched and use existing logic. */
+body:not(.register-mode):not(.manage-mode) main.container > .hero {
+  display: none !important;
+}
 
-    alert(
-      "画像を自動最適化できませんでした。\n別のJPG / PNG / WebP画像を選択してください。"
-    );
+body.register-mode .video-hero,
+body.manage-mode .video-hero {
+  display: none !important;
+}
 
-    return null;
+body.register-mode main.container > .hero,
+body.manage-mode main.container > .hero {
+  display: grid !important;
+  margin-top: 18px !important;
+}
 
-  } finally {
+/* Current hero copy/action buttons are no longer used */
+body main.container > .hero .hero-left > h1,
+body main.container > .hero .hero-left > p,
+body main.container > .hero .hero-actions {
+  display: none !important;
+}
 
-    if (button) {
-      button.disabled = false;
-      button.textContent = originalText;
-    }
-  }
+/* White content sheet */
+body #listPage {
+  position: relative;
+  z-index: 8;
+  background: #fff;
 }
 
+/* Bottom nav: smartphone/tablet only.
+   Hidden on video; fades in when list area enters the viewport. */
+body .bottom-nav {
+  opacity: 0 !important;
+  transform: translateY(calc(100% + 18px)) !important;
+  pointer-events: none !important;
+  transition:
+    opacity .24s ease,
+    transform .24s ease !important;
+}
 
-function getManageEditValues() {
+body .bottom-nav.is-visible {
+  opacity: 1 !important;
+  transform: translateY(0) !important;
+  pointer-events: auto !important;
+}
 
-  const item =
-    loadedManagedRecruitment;
+body .bottom-nav .nav-link-btn {
+  box-sizing: border-box;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  text-decoration: none !important;
+}
 
-  if (!item) {
-    return null;
+@media screen and (max-width: 1024px) {
+  body .video-hero {
+    aspect-ratio: 1 / 1;
   }
 
-  const url =
-    $("#manageEditUrl")
-      ?.value
-      .trim()
-    ||
-    "";
+  body .video-current-stat strong {
+    font-size: clamp(42px, 8.8vw, 68px);
+  }
 
-  if (!validRecruitmentUrl(url)) {
-    alert(
-      "募集記事URLが正しくありません。\nX・BlablaLink・DiscordなどのURLを入力してください。"
-    );
-    return null;
+  body .video-current-stat span {
+    font-size: clamp(10px, 2vw, 14px);
   }
 
-  if (item.type === "commander") {
+  body .video-history-row {
+    font-size: clamp(9px, 1.7vw, 12px);
+  }
 
-    const slv =
-      Number(
-        $("#manageEditSlv")
-          ?.value
-      );
+  body .container {
+    padding-left: 0 !important;
+    padding-right: 0 !important;
+  }
 
-    if (
-      !Number.isInteger(slv)
-      ||
-      slv < 1
-      ||
-      slv > 1200
-    ) {
-      alert("SLVは1～1200で入力してください。");
-      return null;
-    }
+  body #listPage {
+    margin-top: -24px !important;
+    padding: 28px 16px 96px !important;
+    border-radius: 28px 28px 0 0 !important;
+    box-shadow: 0 -15px 42px rgba(0,0,0,.16);
+  }
 
-    return {
-      type: "commander",
-      slv,
-      unionRank: null,
-      url
-    };
+  body.register-mode main.container,
+  body.manage-mode main.container {
+    padding-left: 14px !important;
+    padding-right: 14px !important;
   }
 
-  const unionRank =
-    $("#manageEditUnionRank")
-      ?.value
-    ||
-    "";
+  body.register-mode #listPage,
+  body.manage-mode #listPage {
+    display: none !important;
+  }
 
-  if (!unionRank) {
-    alert("ユニオンランクを選択してください。");
-    return null;
+  body .bottom-nav {
+    display: flex !important;
+    bottom: 0 !important;
+    padding-bottom: env(safe-area-inset-bottom);
+    height: calc(68px + env(safe-area-inset-bottom)) !important;
   }
 
-  return {
-    type: "union",
-    slv: null,
-    unionRank,
-    url
-  };
+  body .bottom-nav .nav-btn {
+    min-width: 0;
+    max-width: none !important;
+    padding-left: 4px !important;
+    padding-right: 4px !important;
+  }
 }
-
 
-async function showManageEditPreview() {
-
-  const item =
-    loadedManagedRecruitment;
-
-  if (!item) {
-    alert("先にPASSから募集内容を呼び出してください。");
-    return;
+@media screen and (max-width: 600px) {
+  body .video-logo-switch img {
+    width: clamp(148px, 43vw, 196px) !important;
   }
 
-  const values =
-    getManageEditValues();
-
-  if (!values) {
-    return;
+  body .video-hero-stats {
+    bottom: 48px;
   }
-
-  const inputFile =
-    $("#manageEditImage")
-      ?.files?.[0]
-    ||
-    null;
 
-  if (inputFile) {
-    const prepared =
-      await prepareManageEditImage();
-
-    if (!prepared) {
-      return;
-    }
+  body .video-current-row {
+    gap: clamp(34px, 12vw, 60px);
   }
-
-  const removeImage =
-    $("#manageRemoveImage")
-      ?.checked === true;
-
-  const previewImageUrl =
-    manageEditPreparedFile
-      ? manageEditObjectUrl
-      : removeImage
-        ? ""
-        : item.preview_image_url || "";
-
-  const isUnion =
-    item.type === "union";
 
-  const detailHtml =
-    isUnion
-      ? `<div class="union-rank rank-${escapeHtml(getUnionRankClass(values.unionRank))}">${escapeHtml(values.unionRank)}</div>`
-      : `<div class="slv">${escapeHtml(values.slv)}<small class="slv-label" style="color:#7b8085 !important;-webkit-text-fill-color:#7b8085 !important;text-shadow:none !important;-webkit-text-stroke:0 !important;"> SLV</small></div>`;
-
-  const mediaHtml =
-    buildRecruitmentPreviewMedia(
-      values.url,
-      previewImageUrl,
-      item.x_embed_enabled !== false,
-      item.force_preview_image === true && Boolean(previewImageUrl)
-    );
-
-  const host =
-    $("#managePreviewCard");
-
-  if (!host) {
-    return;
+  body .video-current-stat {
+    min-width: 102px;
   }
-
-  host.innerHTML = `
-    <article class="card ${isUnion ? "union-card" : "commander-card"}">
-      <div class="card-head">
-        <div class="type-with-new">
-          <span class="recruitment-type">${isUnion ? "● ユニオン" : "● 指揮官"}</span>
-          <span class="new-badge">🔥 NEW</span>
-        </div>
-        <span class="date">期限 14日後</span>
-      </div>
-
-      <div class="name">${escapeHtml(item.name || "")}</div>
-      ${detailHtml}
-      <div class="countdown">残り14日</div>
-
-      <div class="x-post-area">
-        ${mediaHtml}
-
-        <a
-          class="x-btn"
-          href="${escapeHtml(values.url)}"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          ${escapeHtml(getRecruitmentButtonLabel(values.url))}
-        </a>
-      </div>
-    </article>
-  `;
 
-  $("#managePreviewModal")
-    ?.classList
-    .remove("hidden");
+  body .video-history-row {
+    margin-top: 19px;
+  }
 
-  if (isXRecruitmentUrl(values.url)) {
-    setTimeout(renderXEmbeds, 0);
+  body #listPage {
+    padding-left: 12px !important;
+    padding-right: 12px !important;
   }
 }
-
 
-$("#manageEditPreviewBtn")
-  ?.addEventListener(
-    "click",
-    showManageEditPreview
-  );
+@media screen and (min-width: 601px) and (max-width: 1024px) {
+  body .video-logo-switch img {
+    width: clamp(178px, 26vw, 236px) !important;
+  }
 
+  body .video-hero-stats {
+    bottom: 72px;
+  }
 
-function closeManagePreview() {
-  $("#managePreviewModal")
-    ?.classList
-    .add("hidden");
+  /* keep the existing tablet card grid; only the top is replaced */
+  body #listPage {
+    padding-left: 20px !important;
+    padding-right: 20px !important;
+  }
 }
-
-
-$("#managePreviewBack")
-  ?.addEventListener(
-    "click",
-    closeManagePreview
-  );
-
-$("#managePreviewClose")
-  ?.addEventListener(
-    "click",
-    closeManagePreview
-  );
 
-$("#managePreviewModal")
-  ?.addEventListener(
-    "click",
-    event => {
-      if (event.target?.id === "managePreviewModal") {
-        closeManagePreview();
-      }
-    }
-  );
-
-
-function showManageResult(mode, result) {
-
-  const isRenew =
-    mode === "renew";
-
-  if ($("#manageResultTitle")) {
-    $("#manageResultTitle").textContent =
-      isRenew
-        ? "再延長が完了しました！"
-        : "再登録が完了しました！";
+@media screen and (min-width: 1025px) {
+  body .video-hero {
+    aspect-ratio: 16 / 9;
+    max-height: calc(100svh - 66px);
+    min-height: 560px;
   }
 
-  if ($("#manageResultSummary")) {
-    $("#manageResultSummary").textContent =
-      isRenew
-        ? "募集内容は変更せず、掲載期限を本日から14日間に更新しました。"
-        : "編集内容を反映し、掲載期限を本日から14日間に更新しました。";
+  body #listPage {
+    margin-top: -36px !important;
+    padding: 36px 26px 42px !important;
+    border-radius: 34px 34px 0 0 !important;
+    box-shadow: 0 -20px 60px rgba(0,0,0,.16);
   }
 
-  if ($("#manageResultPass")) {
-    $("#manageResultPass").textContent =
-      loadedManagePass || "--------";
+  body .bottom-nav {
+    display: none !important;
   }
+}
 
-  if ($("#manageResultExpiry")) {
-    $("#manageResultExpiry").textContent =
-      result?.expires_at
-        ? formatDate(result.expires_at)
-        : "14日後";
+@media (prefers-reduced-motion: reduce) {
+  body .video-scroll-button b {
+    animation: none;
   }
 
-  $("#manageResultModal")
-    ?.classList
-    .remove("hidden");
+  body .site-menu-drawer,
+  body .bottom-nav {
+    transition: none !important;
+  }
 }
-
-
-function closeManageResult() {
-  $("#manageResultModal")
-    ?.classList
-    .add("hidden");
-}
 
 
-$("#manageResultClose")
-  ?.addEventListener(
-    "click",
-    closeManageResult
-  );
-
-
-$("#manageCopyPass")
-  ?.addEventListener(
-    "click",
-    async () => {
-
-      const pass =
-        $("#manageResultPass")
-          ?.textContent
-        ||
-        "";
-
-      try {
-        await navigator.clipboard.writeText(pass);
-
-        const button =
-          $("#manageCopyPass");
-
-        if (button) {
-          button.textContent = "コピーしました";
-          setTimeout(() => {
-            button.textContent = "PASSをコピー";
-          }, 1500);
-        }
-      } catch (error) {
-        console.error("再登録PASSコピーエラー", error);
-        alert("PASSをコピーできませんでした。手動で保存してください。");
-      }
-    }
-  );
-
-
-$("#manageResultDone")
-  ?.addEventListener(
-    "click",
-    () => {
-      closeManageResult();
-      clearLoadedManageRecruitment();
-      $("#closeForm")?.reset();
-      showPage("list");
-    }
-  );
-
-
-$("#renewUnchangedBtn")
-  ?.addEventListener(
-    "click",
-    async () => {
-
-      if (
-        !loadedManagedRecruitment
-        ||
-        !loadedManagePassHash
-      ) {
-        alert("先にPASSから募集内容を呼び出してください。");
-        return;
-      }
-
-      const ok =
-        window.confirm(
-          "募集内容は変更せず、掲載期限を本日から14日間に更新します。\n\n・一覧の一番上へ移動\n・NEW表示が復活\n・PASSは前回と同じ\n\n再延長しますか？"
-        );
-
-      if (!ok) {
-        return;
-      }
-
-      const button =
-        $("#renewUnchangedBtn");
-
-      const originalText =
-        button?.textContent || "🔄 内容そのままで14日再延長";
-
-      if (button) {
-        button.disabled = true;
-        button.textContent = "再延長中...";
-      }
-
-      try {
-
-        const {
-          data,
-          error
-        } =
-          await sb.rpc(
-            "renew_recruitment_by_pass",
-            {
-              p_pass_hash:
-                loadedManagePassHash
-            }
-          );
-
-        if (error) {
-          console.error("再延長エラー", error);
-          alert("再延長に失敗しました。PASSを確認してもう一度お試しください。");
-          return;
-        }
-
-        loadedManagedRecruitment = {
-          ...loadedManagedRecruitment,
-          ...data,
-          status: "open"
-        };
-
-        renderLoadedManageRecruitment();
-        showManageResult("renew", data);
-
-      } finally {
-
-        if (button) {
-          button.disabled = false;
-          button.textContent = originalText;
-        }
-      }
-    }
-  );
-
-
-$("#managePreviewConfirm")
-  ?.addEventListener(
-    "click",
-    async () => {
-
-      if (
-        !loadedManagedRecruitment
-        ||
-        !loadedManagePassHash
-      ) {
-        alert("PASS情報を取得できませんでした。もう一度呼び出してください。");
-        return;
-      }
-
-      const values =
-        getManageEditValues();
-
-      if (!values) {
-        closeManagePreview();
-        return;
-      }
-
-      const inputFile =
-        $("#manageEditImage")
-          ?.files?.[0]
-        ||
-        null;
-
-      if (
-        inputFile
-        &&
-        !manageEditPreparedFile
-      ) {
-        const prepared =
-          await prepareManageEditImage();
-
-        if (!prepared) {
-          return;
-        }
-      }
-
-      const removeImage =
-        !manageEditPreparedFile
-        &&
-        $("#manageRemoveImage")
-          ?.checked === true;
-
-      const button =
-        $("#managePreviewConfirm");
-
-      const originalText =
-        button?.textContent || "🔥 この内容で再登録";
-
-      if (button) {
-        button.disabled = true;
-        button.textContent = "再登録中...";
-      }
-
-      try {
-
-        const {
-          data,
-          error
-        } =
-          await sb.rpc(
-            "reregister_recruitment_by_pass",
-            {
-              p_pass_hash:
-                loadedManagePassHash,
-              p_slv:
-                values.slv,
-              p_union_rank:
-                values.unionRank,
-              p_x_url:
-                values.url,
-              p_remove_preview_image:
-                removeImage
-            }
-          );
-
-        if (error) {
-
-          console.error("PASS再登録エラー", error);
-
-          const errorText =
-            getErrorText(error);
-
-          if (errorText.includes("INVALID_SLV")) {
-            alert("SLVは1～1200で入力してください。");
-          } else if (errorText.includes("INVALID_UNION_RANK")) {
-            alert("ユニオンランクが正しくありません。");
-          } else if (errorText.includes("INVALID_RECRUITMENT_URL")) {
-            alert("募集記事URLが正しくありません。");
-          } else if (errorText.includes("PASS_NOT_FOUND")) {
-            alert("PASSが正しくありません。");
-          } else {
-            alert("再登録に失敗しました。もう一度お試しください。");
-          }
-
-          return;
-        }
-
-        let uploadedImageUrl =
-          data?.preview_image_url || "";
-
-        if (
-          manageEditPreparedFile
-          &&
-          data?.id
-        ) {
-          try {
-            uploadedImageUrl =
-              await uploadRecruitmentPreviewImage(
-                loadedManagedRecruitment.type,
-                data.id,
-                loadedManagePassHash,
-                manageEditPreparedFile
-              );
-          } catch (previewError) {
-            console.error("再登録画像アップロードエラー", previewError);
-            alert(
-              "再登録は完了しましたが、画像の差し替えだけ失敗しました。\n募集自体は14日間で正常に再登録されています。"
-            );
-          }
-        }
-
-        loadedManagedRecruitment = {
-          ...loadedManagedRecruitment,
-          ...data,
-          type: loadedManagedRecruitment.type,
-          name: loadedManagedRecruitment.name,
-          x_url: values.url,
-          slv: values.type === "commander" ? values.slv : loadedManagedRecruitment.slv,
-          union_rank: values.type === "union" ? values.unionRank : loadedManagedRecruitment.union_rank,
-          preview_image_url: uploadedImageUrl,
-          force_preview_image:
-            removeImage
-              ? false
-              : loadedManagedRecruitment.force_preview_image,
-          status: "open"
-        };
-
-        closeManagePreview();
-        $("#manageEditPanel")
-          ?.classList
-          .add("hidden");
-
-        renderLoadedManageRecruitment();
-        showManageResult("edit", data);
-
-        resetManageImageState();
-
-      } finally {
-
-        if (button) {
-          button.disabled = false;
-          button.textContent = originalText;
-        }
-      }
-    }
-  );
-
-
-// ========================================
-// PASSで募集締切（従来機能を維持）
-// ========================================
-
-async function closeLoadedRecruitment() {
-
-  if (!sb) {
-    alert("Supabaseの設定がまだです。");
-    return;
-  }
-
-  if (
-    !loadedManagedRecruitment
-    ||
-    !loadedManagePassHash
-  ) {
-    alert("先にPASSから募集内容を呼び出してください。");
-    return;
-  }
-
-  const ok =
-    window.confirm(
-      "この募集を締め切りますか？\n\n※ 再延長・再登録ではありません。募集一覧から非表示になります。"
-    );
-
-  if (!ok) {
-    return;
-  }
-
-  const {
-    data,
-    error
-  } =
-    await sb.rpc(
-      "close_recruitment_by_pass",
-      {
-        p_pass_hash:
-          loadedManagePassHash
-      }
-    );
+/* =========================================================
+   v18 MOBILE HOTFIX
+   ========================================================= */
 
-  if (error) {
-    console.error("募集締切エラー", error);
-    alert("募集締切処理に失敗しました。");
-    return;
+/* MATCHED / TOTAL UNIONS: labels stay small, numbers only larger */
+@media screen and (max-width: 1024px) {
+  html body .video-history-row {
+    font-size: clamp(12px, 3vw, 15px) !important;
   }
-
-  if (data === "commander_confirm") {
-
-    const {
-      data: commanderClosed,
-      error: commanderError
-    } =
-      await sb.rpc(
-        "close_commander_recruitment_by_pass",
-        {
-          p_pass_hash:
-            loadedManagePassHash,
-          p_close_reason:
-            "graduated"
-        }
-      );
-
-    if (commanderError) {
-      console.error("指揮官募集締切エラー", commanderError);
-      alert("指揮官募集の締切処理に失敗しました。");
-      return;
-    }
-
-    if (commanderClosed !== true) {
-      alert("PASSが正しくないか、すでに募集終了しています。");
-      return;
-    }
-
-    alert("🎓 ユニオン決定として募集を締め切りました。");
-    await loadGraduatedCommanderCount();
 
-  } else if (data === "union") {
-
-    alert("ユニオン募集を締め切りました。");
-
-  } else {
-
-    alert("PASSが正しくないか、すでに募集終了しています。");
-    return;
+  html body .video-history-row strong {
+    display: inline-block !important;
+    font-size: 1.55em !important;
+    font-weight: 800 !important;
+    line-height: .8 !important;
+    vertical-align: -0.04em !important;
+    letter-spacing: .04em !important;
+    margin-left: 3px !important;
+    margin-right: 2px !important;
   }
-
-  clearLoadedManageRecruitment();
-  $("#closeForm")?.reset();
-  showPage("list");
 }
-
-
-$("#closeLoadedRecruitmentBtn")
-  ?.addEventListener(
-    "click",
-    closeLoadedRecruitment
-  );
-
-
 
-// ========================================
-// v15 VIDEO TOP UI
-// ========================================
-
-function scrollToVideoTop() {
+/* Mobile/tablet footer: force all 3 buttons to exist side-by-side */
+@media screen and (max-width: 1024px) {
+  html body #bottomNav.bottom-nav {
+    display: grid !important;
+    grid-template-columns: repeat(3, minmax(0, 1fr)) !important;
+    grid-auto-flow: column !important;
+    width: 100% !important;
+    left: 0 !important;
+    right: 0 !important;
+    overflow: visible !important;
+  }
 
-  document
-    .getElementById(
-      "videoHero"
-    )
-    ?.scrollIntoView({
-      behavior:
-        "smooth",
-      block:
-        "start"
-    });
+  html body #bottomNav.bottom-nav > .nav-btn {
+    display: flex !important;
+    visibility: visible !important;
+    opacity: 1 !important;
+    position: relative !important;
+    grid-column: auto !important;
+    width: 100% !important;
+    min-width: 0 !important;
+    max-width: none !important;
+    height: 100% !important;
+    margin: 0 !important;
+    padding: 7px 2px 10px !important;
+    flex: none !important;
+    flex-direction: column !important;
+    align-items: center !important;
+    justify-content: center !important;
+    text-align: center !important;
+    white-space: nowrap !important;
+  }
 
+  html body #bottomNav.bottom-nav > .nav-btn span {
+    display: block !important;
+    margin: 0 0 4px !important;
+  }
 }
-
-
-function returnToVideoTop() {
-
-  closeSiteMenu?.();
-
-  /*
-    v24:
-    TOPへ戻る操作をした瞬間にフッターを隠し、
-    スムーズスクロール中に再表示されないようにする。
-  */
-  bottomNavHideUntilVideoTop =
-    true;
 
-  document
-    .getElementById("bottomNav")
-    ?.classList
-    .remove("is-visible");
 
-  document.body.classList.remove(
-    "register-mode",
-    "manage-mode"
-  );
+/* =========================================================
+   v19 MOBILE TOP ONLY FIX
+   2026-09-09
+   - smartphone logo smaller
+   - main COMMANDERS / UNIONS larger
+   - MATCHED / TOTAL UNIONS numbers only larger
+   - hamburger drawer glass/translucent
+   - video fills first viewport; white list stays below fold
+   - bottom navigation forced to three equal buttons
+   ========================================================= */
 
-  document
-    .querySelectorAll(".page")
-    .forEach(page => {
-      page.classList.remove("active");
-    });
+@media screen and (max-width: 600px) {
+  /* Left logo: about two steps smaller than the previous mobile size */
+  html body .video-logo-switch img {
+    width: clamp(90px, 27vw, 116px) !important;
+    max-width: 29vw !important;
+    max-height: 40px !important;
+  }
 
-  document
-    .getElementById("listPage")
-    ?.classList.add("active");
+  /* Hero occupies the viewport below the 66px sticky header.
+     The white recruitment sheet starts only after scrolling. */
+  html body .video-hero {
+    aspect-ratio: auto !important;
+    width: 100% !important;
+    height: calc(100svh - 66px) !important;
+    min-height: calc(100svh - 66px) !important;
+    max-height: none !important;
+  }
 
-  document
-    .querySelectorAll(".bottom-nav .nav-btn")
-    .forEach(button => {
-      button.classList.toggle(
-        "active",
-        button.dataset.page === "list"
-      );
-    });
+  html body .hero-background-video {
+    object-fit: cover !important;
+    object-position: center center !important;
+  }
 
-  window.scrollTo({
-    top: 0,
-    behavior: "smooth"
-  });
+  /* Put the stats lower in the frame, while leaving room for SCROLL */
+  html body .video-hero-stats {
+    bottom: 92px !important;
+    width: min(94%, 420px) !important;
+  }
 
-}
+  html body .video-current-row {
+    gap: clamp(46px, 15vw, 82px) !important;
+  }
 
+  html body .video-current-stat {
+    min-width: 118px !important;
+  }
 
-function closeSiteMenu() {
+  html body .video-current-stat strong {
+    font-size: clamp(76px, 19vw, 94px) !important;
+    line-height: .80 !important;
+  }
 
-  document.body
-    .classList
-    .remove(
-      "menu-open"
-    );
+  html body .video-current-stat span {
+    margin-top: 12px !important;
+    font-size: clamp(15px, 4.1vw, 18px) !important;
+    line-height: 1 !important;
+    letter-spacing: .17em !important;
+  }
 
-  const button =
-    document.getElementById(
-      "siteMenuButton"
-    );
+  html body .video-history-row {
+    margin-top: 24px !important;
+    font-size: clamp(12px, 3.1vw, 14px) !important;
+    line-height: 1.15 !important;
+  }
 
-  const drawer =
-    document.getElementById(
-      "siteMenuDrawer"
-    );
+  /* Only the 12 / 16 etc. are enlarged */
+  html body .video-history-row strong {
+    display: inline-block !important;
+    font-size: 1.72em !important;
+    font-weight: 800 !important;
+    line-height: .74 !important;
+    vertical-align: -0.08em !important;
+    letter-spacing: .02em !important;
+    margin: 0 2px 0 3px !important;
+  }
 
-  const backdrop =
-    document.getElementById(
-      "siteMenuBackdrop"
-    );
+  html body .video-history-slash {
+    margin-left: 10px !important;
+    margin-right: 10px !important;
+  }
 
-  button?.setAttribute(
-    "aria-expanded",
-    "false"
-  );
+  /* SCROLL gets its own safe zone and no longer overlaps stats */
+  html body .video-scroll-button {
+    bottom: 22px !important;
+    min-width: 84px !important;
+    padding: 3px 10px 0 !important;
+  }
 
-  drawer?.setAttribute(
-    "aria-hidden",
-    "true"
-  );
+  html body .video-scroll-button span {
+    font-size: 10px !important;
+    letter-spacing: .28em !important;
+  }
 
-  if (backdrop) {
-    backdrop.hidden =
-      true;
+  html body .video-scroll-button b {
+    margin-top: 0 !important;
+    font-size: 18px !important;
   }
 
+  /* No negative overlap into the first screen */
+  html body #listPage {
+    margin-top: 0 !important;
+  }
 }
-
-
-function openSiteMenu() {
-
-  document.body
-    .classList
-    .add(
-      "menu-open"
-    );
-
-  const button =
-    document.getElementById(
-      "siteMenuButton"
-    );
-
-  const drawer =
-    document.getElementById(
-      "siteMenuDrawer"
-    );
-
-  const backdrop =
-    document.getElementById(
-      "siteMenuBackdrop"
-    );
-
-  button?.setAttribute(
-    "aria-expanded",
-    "true"
-  );
-
-  drawer?.setAttribute(
-    "aria-hidden",
-    "false"
-  );
-
-  if (backdrop) {
-    backdrop.hidden =
-      false;
-  }
-
-}
-
-
-document
-  .getElementById(
-    "videoTopSwitch"
-  )
-  ?.addEventListener(
-    "click",
-    event => {
-
-      event.preventDefault();
-      event.stopPropagation();
-
-      returnToVideoTop();
-
-    }
-  );
-
-
-document
-  .getElementById(
-    "videoScrollButton"
-  )
-  ?.addEventListener(
-    "click",
-    () => {
-
-      document
-        .getElementById(
-          "listPage"
-        )
-        ?.scrollIntoView({
-          behavior:
-            "smooth",
-          block:
-            "start"
-        });
-
-    }
-  );
-
-
-document
-  .getElementById(
-    "siteMenuButton"
-  )
-  ?.addEventListener(
-    "click",
-    () => {
-
-      if (
-        document.body
-          .classList
-          .contains(
-            "menu-open"
-          )
-      ) {
-        closeSiteMenu();
-      } else {
-        openSiteMenu();
-      }
-
-    }
-  );
-
-
-document
-  .getElementById(
-    "siteMenuClose"
-  )
-  ?.addEventListener(
-    "click",
-    closeSiteMenu
-  );
-
-
-document
-  .getElementById(
-    "siteMenuBackdrop"
-  )
-  ?.addEventListener(
-    "click",
-    closeSiteMenu
-  );
-
-
-document
-  .querySelectorAll(
-    "[data-menu-action]"
-  )
-  .forEach(
-    button => {
-
-      button
-        .addEventListener(
-          "click",
-          () => {
-
-            const action =
-              button.dataset
-                .menuAction;
-
-            closeSiteMenu();
-
-            if (
-              action ===
-              "top"
-            ) {
-
-              returnToVideoTop();
-
-              return;
-            }
-
-            if (
-              action ===
-              "commander"
-            ) {
-
-              setSearchType(
-                "commander"
-              );
-
-              showPage(
-                "list"
-              );
-
-              return;
-            }
-
-            if (
-              action ===
-              "union"
-            ) {
-
-              setSearchType(
-                "union"
-              );
-
-              showPage(
-                "list"
-              );
-
-              return;
-            }
-
-            if (
-              action ===
-              "register"
-            ) {
-
-              showPage(
-                "register"
-              );
-
-              return;
-            }
-
-            if (
-              action ===
-              "manage"
-            ) {
-
-              showPage(
-                "manage"
-              );
-
-            }
-
-          }
-        );
-
-    }
-  );
-
-
-document
-  .addEventListener(
-    "keydown",
-    event => {
-
-      if (
-        event.key ===
-        "Escape"
-      ) {
-        closeSiteMenu();
-      }
-
-    }
-  );
-
-
-// 白い募集エリアまで来た時だけ
-// スマホ / タブレット下部メニューを表示
-//
-// v24:
-// 元の表示方法（TOPでは非表示 → 一覧で表示）はそのまま。
-// IntersectionObserverだけ廃止し、一覧の「絶対位置」で安定判定する。
-const bottomNavigation =
-  document.getElementById(
-    "bottomNav"
-  );
-
-const listPageForNav =
-  document.getElementById(
-    "listPage"
-  );
-
-let bottomNavHideUntilVideoTop =
-  false;
-
-let bottomNavFramePending =
-  false;
-
 
-function updateBottomNavigationVisibility() {
-
-  if (!bottomNavigation) {
-    return;
+/* Hamburger drawer: lighter transparent black / glass */
+@media screen and (max-width: 1024px) {
+  html body .site-menu-backdrop {
+    background: rgba(0, 0, 0, .18) !important;
+    backdrop-filter: blur(4px) !important;
+    -webkit-backdrop-filter: blur(4px) !important;
   }
-
-  const registerOrManage =
-    document.body
-      .classList
-      .contains("register-mode")
-    ||
-    document.body
-      .classList
-      .contains("manage-mode");
-
-  if (registerOrManage) {
-
-    bottomNavHideUntilVideoTop =
-      false;
 
-    bottomNavigation
-      .classList
-      .add("is-visible");
-
-    return;
+  html body .site-menu-drawer {
+    background: rgba(13, 16, 22, .62) !important;
+    border-left: 1px solid rgba(255,255,255,.12) !important;
+    box-shadow: -12px 0 34px rgba(0,0,0,.18) !important;
+    backdrop-filter: blur(14px) saturate(118%) !important;
+    -webkit-backdrop-filter: blur(14px) saturate(118%) !important;
   }
-
-
-  const scrollY =
-    window.scrollY
-    ||
-    window.pageYOffset
-    ||
-    0;
-
 
-  /*
-    TOPへ戻るスムーズスクロール中は、
-    一覧の位置を通過しても再表示させない。
-    TOP到着後にロック解除。
-  */
-  if (bottomNavHideUntilVideoTop) {
-
-    bottomNavigation
-      .classList
-      .remove("is-visible");
-
-    if (scrollY <= 8) {
-      bottomNavHideUntilVideoTop =
-        false;
-    }
-
-    return;
+  html body .site-menu-drawer > button,
+  html body .site-menu-drawer > a {
+    border-bottom-color: rgba(255,255,255,.12) !important;
   }
-
 
-  if (!listPageForNav) {
-
-    bottomNavigation
-      .classList
-      .remove("is-visible");
-
-    return;
+  /* Bottom nav: exactly three equal buttons, never a single stretched item */
+  html body #bottomNav.bottom-nav {
+    display: flex !important;
+    grid-template-columns: none !important;
+    grid-auto-flow: initial !important;
+    align-items: stretch !important;
+    justify-content: stretch !important;
+    width: 100% !important;
+    left: 0 !important;
+    right: 0 !important;
+    overflow: hidden !important;
   }
-
-
-  /*
-    一覧のページ内絶対位置を使うため、
-    sticky動画やiPhone Safariの表示領域変化に影響されにくい。
-  */
-  const listDocumentTop =
-    scrollY
-    +
-    listPageForNav
-      .getBoundingClientRect()
-      .top;
 
-  const showAt =
-    Math.max(
-      0,
-      listDocumentTop - 76
-    );
-
-  const visible =
-    scrollY >= showAt;
-
-
-  bottomNavigation
-    .classList
-    .toggle(
-      "is-visible",
-      visible
-    );
+  html body #bottomNav.bottom-nav > .nav-btn {
+    display: flex !important;
+    visibility: visible !important;
+    opacity: 1 !important;
+    position: static !important;
+    flex: 1 1 33.333333% !important;
+    width: 33.333333% !important;
+    min-width: 0 !important;
+    max-width: none !important;
+    height: 100% !important;
+    margin: 0 !important;
+    padding: 7px 2px 10px !important;
+    flex-direction: column !important;
+    align-items: center !important;
+    justify-content: center !important;
+    text-align: center !important;
+    white-space: nowrap !important;
+  }
 
+  html body #bottomNav.bottom-nav > .nav-btn span {
+    display: block !important;
+    margin: 0 0 4px !important;
+  }
 }
-
 
-function clampListScrollToContentEnd() {
-
-  /*
-    v25:
-    Safariなど一部ブラウザでsticky動画＋fixed footerの組み合わせ時に
-    募集カードが終わった後も余白へスクロールできる場合だけ補正する。
-
-    登録 / 編集画面には一切適用しない。
-    PCにも適用しない。
-  */
-  if (
-    window.matchMedia("(min-width: 1025px)").matches
-    ||
-    document.body.classList.contains("register-mode")
-    ||
-    document.body.classList.contains("manage-mode")
-    ||
-    !listPageForNav
-  ) {
-    return;
-  }
-
-  const scrollY =
-    window.scrollY
-    ||
-    window.pageYOffset
-    ||
-    0;
-
-  const viewportHeight =
-    window.visualViewport?.height
-    ||
-    window.innerHeight
-    ||
-    document.documentElement.clientHeight
-    ||
-    0;
-
-  const footerHeight =
-    bottomNavigation?.offsetHeight
-    ||
-    68;
-
-  const listBottomDocument =
-    scrollY
-    +
-    listPageForNav
-      .getBoundingClientRect()
-      .bottom;
-
-  /*
-    固定フッターに最後のカードが隠れない分だけ余裕を残す。
-    それより下の「何もない領域」には進ませない。
-  */
-  const maxScroll =
-    Math.max(
-      0,
-      Math.ceil(
-        listBottomDocument
-        -
-        viewportHeight
-        +
-        footerHeight
-      )
-    );
 
-  if (scrollY > maxScroll + 2) {
+/* =========================================================
+   v20 VIDEO STICKY UNDERLAY
+   2026-09-09
+   - Keep the current video / counts in place while scrolling
+   - Let the white recruitment sheet rise over the video
+   - Registration / manage modes remain unchanged
+   ========================================================= */
 
-    window.scrollTo({
-      top:
-        maxScroll,
-      left:
-        0,
-      behavior:
-        "auto"
-    });
+body:not(.register-mode):not(.manage-mode) .video-hero {
+  position: -webkit-sticky !important;
+  position: sticky !important;
+  top: 66px !important;
+  z-index: 1 !important;
+}
 
-  }
+/* The normal page content becomes the foreground layer.
+   Existing spacing, card sizes, colors and functions are untouched. */
+body:not(.register-mode):not(.manage-mode) main.container {
+  position: relative;
+  z-index: 8;
+}
 
+body:not(.register-mode):not(.manage-mode) #listPage {
+  position: relative !important;
+  z-index: 10 !important;
 }
 
+/* Keep the header and hamburger menu above both layers. */
+body .video-topbar {
+  z-index: 120 !important;
+}
 
-function scheduleBottomNavigationUpdate() {
 
-  if (bottomNavFramePending) {
-    return;
+/* =========================================================
+   v24 PC BOTTOM SPACE FIX ONLY
+   2026-09-10
+   - PC list page bottom gray gap only
+   - mobile footer appearance remains the original style
+   ========================================================= */
+@media screen and (min-width: 1025px) {
+  html body:not(.register-mode):not(.manage-mode) {
+    padding-bottom: 0 !important;
   }
-
-  bottomNavFramePending =
-    true;
-
-  window
-    .requestAnimationFrame(
-      () => {
-
-        bottomNavFramePending =
-          false;
-
-        updateBottomNavigationVisibility();
-        clampListScrollToContentEnd();
-
-      }
-    );
-
 }
-
-
-window
-  .addEventListener(
-    "scroll",
-    scheduleBottomNavigationUpdate,
-    {
-      passive:
-        true
-    }
-  );
-
-
-window
-  .addEventListener(
-    "resize",
-    scheduleBottomNavigationUpdate
-  );
-
-
-// register/manage時は常用ナビとして表示
-const bodyModeObserver =
-  new MutationObserver(
-    scheduleBottomNavigationUpdate
-  );
-
-bodyModeObserver
-  .observe(
-    document.body,
-    {
-      attributes:
-        true,
-      attributeFilter:
-        [
-          "class"
-        ]
-    }
-  );
-
-
-window
-  .requestAnimationFrame(
-    updateBottomNavigationVisibility
-  );
-
-
-// BOT / Creatorページからのリンク
-function applyInitialRecruitmentView() {
-
-  const params =
-    new URLSearchParams(
-      window.location.search
-    );
-
-  const requestedView =
-    params.get(
-      "view"
-    );
-
-  if (
-    requestedView ===
-    "union"
-  ) {
 
-    setSearchType(
-      "union"
-    );
-
-  } else if (
-    requestedView ===
-    "commander"
-  ) {
 
-    setSearchType(
-      "commander"
-    );
+/* =========================================================
+   v25 MOBILE LIST END / OVERSCROLL FIX
+   2026-09-10
+   - keep v24 footer behavior unchanged
+   - stop Safari-style overscroll past the final recruitment card
+   - list height stays equal to its real content height
+   ========================================================= */
+@media screen and (max-width: 1024px) {
 
+  html,
+  body {
+    overscroll-behavior-y: none;
   }
-
-  if (
-    window.location.hash ===
-    "#listPage"
-  ) {
 
-    setTimeout(
-      () => {
-
-        document
-          .getElementById(
-            "listPage"
-          )
-          ?.scrollIntoView({
-            behavior:
-              "auto",
-            block:
-              "start"
-          });
-
-      },
-      180
-    );
-
+  body:not(.register-mode):not(.manage-mode) main.container,
+  body:not(.register-mode):not(.manage-mode) #listPage {
+    min-height: 0 !important;
+    height: auto !important;
   }
-
 }
-
-
-// ========================================
-// 起動
-// ========================================
-
-setSearchType(
-  "commander"
-);
-
-loadTotalRegisteredUnionCount();
-applyInitialRecruitmentView();
