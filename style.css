@@ -4454,3 +4454,150 @@ body .bottom-nav .nav-link-btn {
     transition: none !important;
   }
 }
+
+
+/* =========================================================
+   v16 FIXES
+   ========================================================= */
+
+/* Desktop topbar: subtle text-only nav */
+body .topbar-text-nav {
+  display: none;
+  align-items: center;
+  gap: 18px;
+  margin-left: auto;
+  margin-right: 8px;
+}
+
+body .topbar-text-nav button,
+body .topbar-text-nav a {
+  padding: 0;
+  border: 0;
+  color: rgba(255,255,255,.72);
+  background: transparent;
+  font: 700 13px/1 "Inter", "Segoe UI", sans-serif;
+  letter-spacing: .06em;
+  text-decoration: none;
+  cursor: pointer;
+  transition: color .18s ease;
+}
+
+body .topbar-text-nav button:hover,
+body .topbar-text-nav a:hover,
+body .topbar-text-nav button:focus-visible,
+body .topbar-text-nav a:focus-visible {
+  color: var(--cyan);
+  outline: none;
+}
+
+@media screen and (min-width: 1025px) {
+  body .topbar-text-nav {
+    display: flex;
+  }
+
+  body .site-menu-button {
+    display: none !important;
+  }
+}
+
+@media screen and (max-width: 1024px) {
+  body .topbar-text-nav {
+    display: none !important;
+  }
+
+  body .site-menu-button {
+    display: grid !important;
+  }
+}
+
+/* Bigger numbers */
+body .video-current-stat strong {
+  font-size: clamp(54px, 8.2vw, 102px) !important;
+}
+
+body .video-current-stat span {
+  font-size: clamp(13px, 1.55vw, 18px) !important;
+  letter-spacing: .16em !important;
+}
+
+body .video-history-row {
+  font-size: clamp(11px, 1.15vw, 15px) !important;
+}
+
+body .video-history-row strong {
+  display: inline-block;
+  font-size: 1.3em;
+  font-weight: 800;
+  margin-left: 4px;
+  margin-right: 2px;
+}
+
+@media screen and (max-width: 1024px) {
+  body .video-current-stat strong {
+    font-size: clamp(56px, 12vw, 84px) !important;
+  }
+
+  body .video-current-stat span {
+    font-size: clamp(13px, 3.2vw, 18px) !important;
+  }
+
+  body .video-history-row {
+    font-size: clamp(11px, 2.3vw, 15px) !important;
+  }
+}
+
+/* Keep white card below first screen */
+body .video-hero {
+  min-height: calc(100svh - 66px) !important;
+}
+
+@media screen and (min-width: 1025px) {
+  body .video-hero {
+    min-height: calc(100vh - 66px) !important;
+  }
+}
+
+body #listPage {
+  margin-top: 0 !important;
+}
+
+@media screen and (max-width: 1024px) {
+  body #listPage {
+    margin-top: 0 !important;
+    padding: 28px 16px 96px !important;
+    border-radius: 28px 28px 0 0 !important;
+    box-shadow: 0 -15px 42px rgba(0,0,0,.16);
+  }
+}
+
+/* Bottom nav: always 4 equal items */
+@media screen and (max-width: 1024px) {
+  body .bottom-nav {
+    display: grid !important;
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    align-items: stretch;
+    justify-content: stretch;
+  }
+
+  body .bottom-nav .nav-btn,
+  body .bottom-nav .nav-link-btn {
+    width: 100% !important;
+    min-width: 0 !important;
+    max-width: none !important;
+    height: 100%;
+    display: flex !important;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 4px;
+    padding: 7px 2px 10px !important;
+    line-height: 1.15;
+    text-align: center;
+    white-space: nowrap;
+  }
+
+  body .bottom-nav .nav-btn span,
+  body .bottom-nav .nav-link-btn span {
+    margin-bottom: 0 !important;
+  }
+}
