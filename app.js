@@ -1254,6 +1254,19 @@ function showPage(name) {
         return;
       }
 
+      const mobileShell =
+        getMobileScrollShell();
+
+      if (mobileShell) {
+
+        scrollAppElementToTop(
+          listPage,
+          "smooth"
+        );
+
+        return;
+      }
+
       const headerOffset = 76;
 
       const targetTop =
@@ -1270,10 +1283,9 @@ function showPage(name) {
 
   } else {
 
-    window.scrollTo({
-      top: 0,
-      behavior: "smooth"
-    });
+    scrollAppToTop(
+      "smooth"
+    );
 
   }
 }
@@ -5633,18 +5645,117 @@ $("#closeLoadedRecruitmentBtn")
 // v15 VIDEO TOP UI
 // ========================================
 
+function getMobileScrollShell() {
+
+  if (
+    !window.matchMedia(
+      "(max-width: 600px)"
+    ).matches
+  ) {
+    return null;
+  }
+
+  return document.getElementById(
+    "mobileScrollShell"
+  );
+
+}
+
+
+function getElementTopInsideMobileShell(
+  element,
+  shell
+) {
+
+  if (
+    !element
+    ||
+    !shell
+  ) {
+    return 0;
+  }
+
+  return (
+    shell.scrollTop
+    +
+    element.getBoundingClientRect().top
+    -
+    shell.getBoundingClientRect().top
+  );
+
+}
+
+
+function scrollAppToTop(
+  behavior = "smooth"
+) {
+
+  const shell =
+    getMobileScrollShell();
+
+  if (shell) {
+
+    shell.scrollTo({
+      top: 0,
+      left: 0,
+      behavior
+    });
+
+    return;
+  }
+
+  window.scrollTo({
+    top: 0,
+    left: 0,
+    behavior
+  });
+
+}
+
+
+function scrollAppElementToTop(
+  element,
+  behavior = "smooth"
+) {
+
+  if (!element) {
+    return;
+  }
+
+  const shell =
+    getMobileScrollShell();
+
+  if (shell) {
+
+    shell.scrollTo({
+      top:
+        Math.max(
+          0,
+          getElementTopInsideMobileShell(
+            element,
+            shell
+          )
+        ),
+      left: 0,
+      behavior
+    });
+
+    return;
+  }
+
+  element.scrollIntoView({
+    behavior,
+    block: "start"
+  });
+
+}
+
+
 function scrollToVideoTop() {
 
-  document
-    .getElementById(
-      "videoHero"
-    )
-    ?.scrollIntoView({
-      behavior:
-        "smooth",
-      block:
-        "start"
-    });
+  scrollAppToTop(
+    "smooth"
+  );
 
 }
 
@@ -5677,10 +5788,18 @@ function returnToVideoTop() {
       );
     });
 
-  window.scrollTo({
-    top: 0,
-    behavior: "smooth"
-  });
+  document
+    .getElementById(
+      "bottomNav"
+    )
+    ?.classList
+    .remove(
+      "is-visible"
+    );
+
+  scrollAppToTop(
+    "smooth"
+  );
 
 }
 
@@ -5792,16 +5911,12 @@ document
     "click",
     () => {
 
-      document
-        .getElementById(
+      scrollAppElementToTop(
+        document.getElementById(
           "listPage"
-        )
-        ?.scrollIntoView({
-          behavior:
-            "smooth",
-          block:
-            "start"
-        });
+        ),
+        "smooth"
+      );
 
     }
   );
@@ -5969,47 +6084,170 @@ const listPageForNav =
     "listPage"
   );
 
+const mobileScrollShell =
+  getMobileScrollShell();
+
+let mobileFooterFramePending =
+  false;
+
+
+function updateMobileFooterVisibility() {
+
+  if (
+    !bottomNavigation
+    ||
+    !mobileScrollShell
+    ||
+    !listPageForNav
+  ) {
+    return;
+  }
+
+  const forceVisible =
+    document.body
+      .classList
+      .contains(
+        "register-mode"
+      )
+    ||
+    document.body
+      .classList
+      .contains(
+        "manage-mode"
+      );
+
+  if (forceVisible) {
+
+    bottomNavigation
+      .classList
+      .add(
+        "is-visible"
+      );
+
+    return;
+  }
+
+  const listTop =
+    getElementTopInsideMobileShell(
+      listPageForNav,
+      mobileScrollShell
+    );
+
+  /* White sheet ~40px visible => fade footer in. */
+  const revealAt =
+    Math.max(
+      0,
+      listTop
+      -
+      mobileScrollShell.clientHeight
+      +
+      40
+    );
+
+  bottomNavigation
+    .classList
+    .toggle(
+      "is-visible",
+      mobileScrollShell.scrollTop
+        >= revealAt
+    );
+
+}
+
+
+function scheduleMobileFooterUpdate() {
+
+  if (mobileFooterFramePending) {
+    return;
+  }
+
+  mobileFooterFramePending =
+    true;
+
+  window
+    .requestAnimationFrame(
+      () => {
+
+        mobileFooterFramePending =
+          false;
+
+        updateMobileFooterVisibility();
+
+      }
+    );
+
+}
+
+
 if (
   bottomNavigation
   &&
   listPageForNav
 ) {
 
-  const bottomNavObserver =
-    new IntersectionObserver(
-      entries => {
+  if (mobileScrollShell) {
 
-        const visible =
-          entries.some(
-            entry =>
-              entry.isIntersecting
-              &&
-              entry.boundingClientRect.top <=
-                window.innerHeight * 0.90
-          );
+    mobileScrollShell
+      .addEventListener(
+        "scroll",
+        scheduleMobileFooterUpdate,
+        {
+          passive:
+            true
+        }
+      );
 
-        bottomNavigation
-          .classList
-          .toggle(
-            "is-visible",
-            visible
-          );
+    window
+      .addEventListener(
+        "resize",
+        scheduleMobileFooterUpdate
+      );
 
-      },
-      {
-        root:
-          null,
-        threshold:
-          0,
-        rootMargin:
-          "0px 0px -10% 0px"
-      }
-    );
+    window
+      .requestAnimationFrame(
+        updateMobileFooterVisibility
+      );
 
-  bottomNavObserver
-    .observe(
-      listPageForNav
-    );
+  } else {
+
+    /* Tablet keeps the existing behavior. */
+    const bottomNavObserver =
+      new IntersectionObserver(
+        entries => {
+
+          const visible =
+            entries.some(
+              entry =>
+                entry.isIntersecting
+                &&
+                entry.boundingClientRect.top <=
+                  window.innerHeight * 0.90
+            );
+
+          bottomNavigation
+            .classList
+            .toggle(
+              "is-visible",
+              visible
+            );
+
+        },
+        {
+          root:
+            null,
+          threshold:
+            0,
+          rootMargin:
+            "0px 0px -10% 0px"
+        }
+      );
+
+    bottomNavObserver
+      .observe(
+        listPageForNav
+      );
+
+  }
 
 }
 
@@ -6037,11 +6275,18 @@ const bodyModeObserver =
           );
 
       if (forceVisible) {
+
         bottomNavigation
           .classList
           .add(
             "is-visible"
           );
+
+        return;
+      }
+
+      if (mobileScrollShell) {
+        scheduleMobileFooterUpdate();
       }
 
     }
