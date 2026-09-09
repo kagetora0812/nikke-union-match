@@ -4713,38 +4713,3 @@ body:not(.register-mode):not(.manage-mode) #listPage {
 body .video-topbar {
   z-index: 120 !important;
 }
-
-
-/* =========================================================
-   v24 PC BOTTOM SPACE FIX ONLY
-   2026-09-10
-   - PC list page bottom gray gap only
-   - mobile footer appearance remains the original style
-   ========================================================= */
-@media screen and (min-width: 1025px) {
-  html body:not(.register-mode):not(.manage-mode) {
-    padding-bottom: 0 !important;
-  }
-}
-
-
-/* =========================================================
-   v25 MOBILE LIST END / OVERSCROLL FIX
-   2026-09-10
-   - keep v24 footer behavior unchanged
-   - stop Safari-style overscroll past the final recruitment card
-   - list height stays equal to its real content height
-   ========================================================= */
-@media screen and (max-width: 1024px) {
-
-  html,
-  body {
-    overscroll-behavior-y: none;
-  }
-
-  body:not(.register-mode):not(.manage-mode) main.container,
-  body:not(.register-mode):not(.manage-mode) #listPage {
-    min-height: 0 !important;
-    height: auto !important;
-  }
-}
