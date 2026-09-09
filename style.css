@@ -4727,3 +4727,134 @@ body .video-topbar {
     padding-bottom: 0 !important;
   }
 }
+
+
+/* =========================================================
+   v22 MOBILE FOOTER FIX
+   2026-09-10
+   - smartphone / tablet footer is always fixed to the viewport
+   - footer no longer slides / disappears while scrolling cards
+   - visible on list / register / manage / TOP
+   - all existing page/data logic is left untouched
+   ========================================================= */
+
+@media screen and (max-width: 1024px) {
+
+  html body {
+    padding-bottom:
+      calc(76px + env(safe-area-inset-bottom)) !important;
+  }
+
+  html body #bottomNav.bottom-nav {
+    position: fixed !important;
+    left: 0 !important;
+    right: 0 !important;
+    bottom: 0 !important;
+    z-index: 220 !important;
+
+    display: flex !important;
+    visibility: visible !important;
+    opacity: 1 !important;
+
+    transform: none !important;
+    translate: none !important;
+
+    pointer-events: auto !important;
+
+    width: 100% !important;
+    height:
+      calc(68px + env(safe-area-inset-bottom)) !important;
+
+    margin: 0 !important;
+    padding-bottom:
+      env(safe-area-inset-bottom) !important;
+
+    overflow: hidden !important;
+
+    transition: none !important;
+    animation: none !important;
+  }
+
+  html body #bottomNav.bottom-nav.is-visible {
+    opacity: 1 !important;
+    transform: none !important;
+    pointer-events: auto !important;
+  }
+
+  html body #bottomNav.bottom-nav > .nav-btn {
+    position: static !important;
+    flex: 1 1 33.333333% !important;
+    width: 33.333333% !important;
+    min-width: 0 !important;
+    max-width: none !important;
+    height: 100% !important;
+
+    margin: 0 !important;
+    padding: 7px 2px 10px !important;
+
+    display: flex !important;
+    flex-direction: column !important;
+    align-items: center !important;
+    justify-content: center !important;
+
+    visibility: visible !important;
+    opacity: 1 !important;
+
+    text-align: center !important;
+    white-space: nowrap !important;
+
+    transform: none !important;
+    transition: none !important;
+  }
+
+  html body #bottomNav.bottom-nav > .nav-btn span {
+    display: block !important;
+    margin: 0 0 4px !important;
+  }
+}
+
+
+/* =========================================================
+   v23 CARD-LOCKED MOBILE FOOTER
+   2026-09-10
+   - video TOP: hidden
+   - recruitment cards/list: fixed and visible
+   - register/manage: always fixed and visible
+   - no slide / no footer movement
+   ========================================================= */
+
+@media screen and (max-width: 1024px) {
+
+  /* fixed position itself is kept at all times */
+  html body #bottomNav.bottom-nav {
+    position: fixed !important;
+    left: 0 !important;
+    right: 0 !important;
+    bottom: 0 !important;
+    z-index: 220 !important;
+
+    display: flex !important;
+
+    opacity: 0 !important;
+    visibility: hidden !important;
+    pointer-events: none !important;
+
+    transform: none !important;
+    translate: none !important;
+
+    transition: none !important;
+    animation: none !important;
+  }
+
+  /* card/list area reached */
+  html body #bottomNav.bottom-nav.is-visible,
+
+  /* register / manage pages must always show it */
+  html body.register-mode #bottomNav.bottom-nav,
+  html body.manage-mode #bottomNav.bottom-nav {
+    opacity: 1 !important;
+    visibility: visible !important;
+    pointer-events: auto !important;
+    transform: none !important;
+  }
+}
