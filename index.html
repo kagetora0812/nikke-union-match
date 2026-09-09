@@ -21,7 +21,7 @@
 
   <link
     rel="stylesheet"
-    href="./style.css?v=12.8"
+    href="./style.css?v=15.0"
   >
 
 
@@ -134,9 +134,9 @@
       }
 
       .hero {
-        gap: 10px !important;
-        padding-top: 9px !important;
-        padding-bottom: 14px !important;
+        gap: 16px !important;
+        padding-top: 12px !important;
+        padding-bottom: 20px !important;
       }
 
       .hero-left {
@@ -150,14 +150,14 @@
       }
 
       .hero h1 .hero-title-line1 {
-        font-size: clamp(11px, 3.1vw, 14px);
-        letter-spacing: .14em;
-        margin: 0 0 .12em .02em;
+        font-size: clamp(12px, 3.6vw, 16px);
+        letter-spacing: .16em;
+        margin: 0 0 .14em .02em;
       }
 
       .hero h1 .hero-title-line2 {
-        font-size: clamp(46px, 12.5vw, 58px);
-        letter-spacing: -.05em;
+        font-size: clamp(58px, 15.5vw, 74px);
+        letter-spacing: -.055em;
       }
 
       .hero-stats,
@@ -182,12 +182,12 @@
       }
 
       .hero h1 .hero-title-line1 {
-        font-size: 10px;
-        letter-spacing: .11em;
+        font-size: 11px;
+        letter-spacing: .12em;
       }
 
       .hero h1 .hero-title-line2 {
-        font-size: clamp(42px, 12.3vw, 50px);
+        font-size: clamp(50px, 15.2vw, 64px);
       }
     }
   
@@ -569,235 +569,6 @@
     }
   </style>
 
-
-
-
-
-
-
-  <style id="hero-stats-impact-v13">
-    /* =========================================================
-       TOP STATS v12
-       PC / SP 共通：左右2カラム
-       主役＝募集中の大きな数字
-       補助数字＝タイトルと同サイズ・同系色
-       ========================================================= */
-
-    .hero-stats.hero-stats-impact {
-      position: relative !important;
-      display: grid !important;
-      grid-template-columns: 1fr 1px 1fr !important;
-      align-items: stretch !important;
-      gap: 0 !important;
-      min-height: 220px !important;
-      padding: 24px 26px 34px !important;
-    }
-
-    .hero-stats-impact .hero-impact-row {
-      display: flex !important;
-      flex-direction: column !important;
-      align-items: center !important;
-      justify-content: center !important;
-      min-width: 0 !important;
-      min-height: 150px !important;
-      padding: 8px 18px !important;
-      text-align: center !important;
-    }
-
-    .hero-stats-impact .hero-impact-heading {
-      display: flex !important;
-      align-items: baseline !important;
-      justify-content: center !important;
-      flex-wrap: wrap !important;
-      gap: 8px !important;
-      margin-bottom: 7px !important;
-      font-size: 17px !important;
-      font-weight: 900 !important;
-      line-height: 1.25 !important;
-      letter-spacing: .02em !important;
-    }
-
-    .hero-stats-impact .commander-impact .hero-impact-heading {
-      color: var(--gold, #f4a21c) !important;
-    }
-
-    .hero-stats-impact .union-impact .hero-impact-heading {
-      color: var(--cyan, #1ab0f1) !important;
-    }
-
-    .hero-stats-impact .hero-impact-sub {
-      color: currentColor !important;
-      font-size: 1em !important;
-      font-weight: 900 !important;
-      opacity: .84 !important;
-      white-space: nowrap !important;
-    }
-
-    .hero-stats-impact .hero-impact-sub strong {
-      margin-left: 2px !important;
-      color: currentColor !important;
-      font-size: 1em !important;
-      font-weight: 950 !important;
-    }
-
-    .hero-stats-impact .hero-impact-label {
-      margin: 1px 0 3px !important;
-      color: var(--muted, #737b86) !important;
-      font-size: 11px !important;
-      font-weight: 900 !important;
-      line-height: 1.2 !important;
-      letter-spacing: .02em !important;
-    }
-
-    .hero-stats-impact .hero-impact-number {
-      display: flex !important;
-      align-items: flex-end !important;
-      justify-content: center !important;
-      gap: 6px !important;
-      min-width: 0 !important;
-      line-height: .78 !important;
-    }
-
-    .hero-stats-impact .hero-impact-number strong {
-      margin: 0 !important;
-      font-family:
-        "Industry",
-        "Azonix",
-        "Futura PT Condensed",
-        "Teko",
-        "Gothic MB101",
-        "Zen Kaku Gothic New",
-        sans-serif !important;
-      font-size: clamp(80px, 7vw, 100px) !important;
-      font-weight: 900 !important;
-      line-height: .76 !important;
-      letter-spacing: -.045em !important;
-    }
-
-    .hero-stats-impact .hero-impact-number span {
-      padding-bottom: 7px !important;
-      font-size: 19px !important;
-      font-weight: 900 !important;
-      line-height: 1 !important;
-      white-space: nowrap !important;
-    }
-
-    .hero-stats-impact .commander-impact .hero-impact-number strong,
-    .hero-stats-impact .commander-impact .hero-impact-number span {
-      color: var(--gold, #f4a21c) !important;
-    }
-
-    .hero-stats-impact .union-impact .hero-impact-number strong,
-    .hero-stats-impact .union-impact .hero-impact-number span {
-      color: var(--cyan, #1ab0f1) !important;
-    }
-
-    /* 中央の縦線 */
-    .hero-stats-impact .hero-impact-divider {
-      display: block !important;
-      width: 1px !important;
-      height: auto !important;
-      align-self: stretch !important;
-      margin: 12px 0 22px !important;
-      background: rgba(90, 98, 108, .28) !important;
-    }
-
-    .hero-stats-impact .hero-stat-update {
-      grid-column: 1 / -1 !important;
-      position: absolute !important;
-      left: 0 !important;
-      right: 0 !important;
-      bottom: 8px !important;
-      margin: 0 !important;
-      text-align: center !important;
-    }
-
-    @media screen and (max-width: 600px) {
-      .hero-stats.hero-stats-impact {
-        grid-template-columns: 1fr 1px 1fr !important;
-        min-height: 174px !important;
-        padding: 14px 8px 34px !important;
-      }
-
-      .hero-stats-impact .hero-impact-row {
-        min-height: 126px !important;
-        padding: 7px 6px 10px !important;
-        justify-content: center !important;
-      }
-
-      .hero-stats-impact .hero-impact-heading {
-        gap: 4px !important;
-        margin-bottom: 6px !important;
-        font-size: 12.5px !important;
-        white-space: nowrap !important;
-      }
-
-      .hero-stats-impact .hero-impact-sub {
-        opacity: .88 !important;
-      }
-
-      .hero-stats-impact .hero-impact-label {
-        margin: 0 0 4px !important;
-        font-size: 9px !important;
-      }
-
-      .hero-stats-impact .hero-impact-number {
-        gap: 3px !important;
-        align-items: flex-end !important;
-      }
-
-      .hero-stats-impact .hero-impact-number strong {
-        font-size: clamp(60px, 17vw, 74px) !important;
-        line-height: .74 !important;
-      }
-
-      .hero-stats-impact .hero-impact-number span {
-        padding-bottom: 6px !important;
-        font-size: 12px !important;
-      }
-
-      .hero-stats-impact .hero-impact-divider {
-        margin: 10px 0 22px !important;
-      }
-
-      .hero-stats-impact .hero-stat-update {
-        bottom: 7px !important;
-        font-size: 8.5px !important;
-        line-height: 1 !important;
-      }
-    }
-
-    @media screen and (max-width: 380px) {
-      .hero-stats.hero-stats-impact {
-        min-height: 166px !important;
-        padding: 13px 6px 32px !important;
-      }
-
-      .hero-stats-impact .hero-impact-row {
-        min-height: 120px !important;
-        padding: 6px 4px 8px !important;
-      }
-
-      .hero-stats-impact .hero-impact-heading {
-        gap: 3px !important;
-        font-size: 11.5px !important;
-      }
-
-      .hero-stats-impact .hero-impact-label {
-        font-size: 8.5px !important;
-      }
-
-      .hero-stats-impact .hero-impact-number strong {
-        font-size: clamp(56px, 16vw, 68px) !important;
-      }
-
-      .hero-stats-impact .hero-impact-number span {
-        padding-bottom: 5px !important;
-        font-size: 11px !important;
-      }
-    }
-  </style>
-
 </head>
 
 
@@ -808,24 +579,134 @@
        ヘッダー
   ========================================= -->
 
-  <header class="topbar">
+  <header class="topbar video-topbar">
 
-    <div class="brand">
-      <span class="brand-copy">指揮官とユニオンを<span class="brand-accent">つなぐ。</span></span>
-    </div>
+    <button
+      id="videoTopSwitch"
+      class="brand video-logo-switch"
+      type="button"
+      aria-label="動画トップへ戻る"
+      title="TOP"
+    >
+      <img
+        src="./assets/union-match-logo-white.png"
+        alt="UNION MATCH"
+      >
+    </button>
 
-
-    <div class="status-dot">
-
+    <button
+      id="siteMenuButton"
+      class="site-menu-button"
+      type="button"
+      aria-label="メニューを開く"
+      aria-expanded="false"
+      aria-controls="siteMenuDrawer"
+    >
       <span></span>
-
-      ONLINE
-
-    </div>
+      <span></span>
+      <span></span>
+    </button>
 
   </header>
 
+  <div
+    id="siteMenuBackdrop"
+    class="site-menu-backdrop"
+    hidden
+  ></div>
 
+  <aside
+    id="siteMenuDrawer"
+    class="site-menu-drawer"
+    aria-hidden="true"
+  >
+    <div class="site-menu-head">
+      <span>MENU</span>
+      <button
+        id="siteMenuClose"
+        type="button"
+        aria-label="メニューを閉じる"
+      >×</button>
+    </div>
+
+    <button type="button" data-menu-action="top">TOP</button>
+    <button type="button" data-menu-action="commander">指揮官を見る</button>
+    <button type="button" data-menu-action="union">ユニオンを見る</button>
+    <button type="button" data-menu-action="register">募集登録</button>
+    <button type="button" data-menu-action="manage">編集・締切</button>
+    <a href="./bot.html">Discord BOT</a>
+    <a href="./creators.html">応援クリエイター</a>
+  </aside>
+
+
+
+
+  <!-- ========================================
+       VIDEO TOP
+       Smartphone / Tablet : square mob.mp4
+       PC                  : 16:9 pc.mp4
+  ========================================= -->
+
+  <section
+    id="videoHero"
+    class="video-hero"
+    aria-label="NIKKE UNION MATCH"
+  >
+    <video
+      id="heroBackgroundVideo"
+      class="hero-background-video"
+      autoplay
+      muted
+      loop
+      playsinline
+      preload="metadata"
+      aria-hidden="true"
+    >
+      <source
+        src="./assets/pc.mp4"
+        type="video/mp4"
+        media="(min-width: 1025px)"
+      >
+      <source
+        src="./assets/mob.mp4"
+        type="video/mp4"
+      >
+    </video>
+
+    <div class="video-hero-shade"></div>
+
+    <div class="video-hero-stats">
+      <div class="video-current-row">
+
+        <div class="video-current-stat">
+          <strong id="commanderCountTop">0</strong>
+          <span>COMMANDERS</span>
+        </div>
+
+        <div class="video-current-stat">
+          <strong id="unionCountTop">0</strong>
+          <span>UNIONS</span>
+        </div>
+
+      </div>
+
+      <div class="video-history-row">
+        <span>MATCHED <strong id="graduatedCommanderCountTop">0</strong></span>
+        <span class="video-history-slash">/</span>
+        <span>TOTAL UNIONS <strong id="totalUnionCountTop">0</strong></span>
+      </div>
+    </div>
+
+    <button
+      id="videoScrollButton"
+      class="video-scroll-button"
+      type="button"
+      aria-label="募集一覧へ"
+    >
+      <span>SCROLL</span>
+      <b>⌄</b>
+    </button>
+  </section>
 
   <main class="container">
 
@@ -838,50 +719,6 @@
 
 
       <div class="hero-left">
-
-
-       <h1>
-
-  <span class="hero-title-line1">
-    NIKKE GODDESS OF VICTORY
-  </span>
-
-  <span class="hero-title-line2">
-    UNION MATCH
-  </span>
-
-</h1>
-
-<p class="hero-description">
-  <span>名前・SLV・募集記事URLだけで掲載。</span>
-  <span>X・BlablaLink・Discordなど、普段使っている募集記事をそのまま登録！</span>
-  <span>連絡方法は募集記事の案内に従ってください。</span>
-</p>
-
-<div class="hero-actions creator-action-row">
-
-  <button
-    class="btn primary main-register-btn"
-    data-page="register"
-    type="button"
-  >
-    ＋ 募集を登録
-  </button>
-
-  <a
-    class="btn creator-link-btn"
-    href="./creators.html"
-  >
-    📺 応援クリエイター
-  </a>
-
-  <a
-    class="btn bot-link-btn"
-    href="./bot.html"
-  >
-    🤖 Discord BOT
-  </a>
-</div>
         <!-- 募集登録ボタン直下の登録フォーム -->
 
         <div id="heroRegisterArea">
@@ -1498,70 +1335,6 @@
         </section>
 
       </div>
-
-
-      <!-- ========================================
-           募集総数
-      ========================================= -->
-
-<div class="hero-stats hero-stats-impact">
-
-  <!-- 指揮官 -->
-  <div class="hero-impact-row commander-impact">
-
-    <div class="hero-impact-heading">
-      <span>👤 指揮官</span>
-      <span class="hero-impact-sub">
-        / 成立 <strong id="graduatedCommanderCountTop">0</strong>
-      </span>
-    </div>
-
-    <div class="hero-impact-label">
-      募集中
-    </div>
-
-    <div class="hero-impact-number">
-      <strong id="commanderCountTop">0</strong>
-      <span>名</span>
-    </div>
-
-  </div>
-
-
-  <div class="hero-impact-divider"></div>
-
-
-  <!-- ユニオン -->
-  <div class="hero-impact-row union-impact">
-
-    <div class="hero-impact-heading">
-      <span>🏢 ユニオン</span>
-      <span class="hero-impact-sub">
-        / 登録 <strong id="totalUnionCountTop">0</strong>
-      </span>
-    </div>
-
-    <div class="hero-impact-label">
-      募集中
-    </div>
-
-    <div class="hero-impact-number">
-      <strong id="unionCountTop">0</strong>
-      <span>件</span>
-    </div>
-
-  </div>
-
-
-  <div
-    class="hero-stat-update"
-    id="lastUpdated"
-  >
-    最終更新：--
-  </div>
-
-</div></div>
-
     </section>
 
 
@@ -1833,58 +1606,50 @@
 
 
   <!-- ========================================
-       下部メニュー
+       スマホ / タブレット 下部固定メニュー
+       動画TOPでは非表示、募集エリアで表示
   ========================================= -->
 
-  <nav class="bottom-nav">
-
+  <nav
+    class="bottom-nav"
+    id="bottomNav"
+    aria-label="メインメニュー"
+  >
 
     <button
       data-page="list"
       class="nav-btn active"
       type="button"
     >
-
-      <span>
-        ⌂
-      </span>
-
+      <span>⌂</span>
       募集を見る
-
     </button>
-
-
 
     <button
       data-page="register"
       class="nav-btn"
       type="button"
     >
-
-      <span>
-        ＋
-      </span>
-
-      募集登録
-
+      <span>＋</span>
+      登録
     </button>
-
-
 
     <button
       data-page="manage"
       class="nav-btn"
       type="button"
     >
-
-      <span>
-        ▣
-      </span>
-
-      募集管理
-
+      <span>▣</span>
+      編集・締切
     </button>
 
+    <a
+      class="nav-btn nav-link-btn"
+      href="./bot.html"
+    >
+      <span>🤖</span>
+      BOT
+    </a>
 
   </nav>
 
@@ -2316,221 +2081,7 @@
 
   <!-- アプリ本体 -->
 
-  <script src="./app.js?v=13.21"></script>
-
-
-
-  <script id="current-union-count-v3">
-    /* =========================================================
-       現在登録ユニオン数
-       - 過去の掲載履歴はカウントしない
-       - 現在有効なユニオンだけを対象
-       - 同一ユニオンの再掲載は固定IDで1件にまとめる
-       - 将来の「募集休止(paused)」にも対応できる設計
-       ========================================================= */
-
-    async function loadTotalUnionCountTop() {
-
-      const target =
-        document.getElementById("totalUnionCountTop");
-
-      if (
-        !target
-        ||
-        typeof sb === "undefined"
-        ||
-        !sb
-      ) {
-        return;
-      }
-
-      try {
-
-        /* SQLを入れている環境では、軽い集計RPCを優先 */
-        const rpcResult =
-          await sb.rpc(
-            "get_current_registered_union_count"
-          );
-
-        if (!rpcResult.error) {
-
-          const rpcCount =
-            Number(
-              Array.isArray(rpcResult.data)
-                ? rpcResult.data[0]
-                : rpcResult.data
-            );
-
-          if (Number.isFinite(rpcCount)) {
-            target.textContent =
-              String(rpcCount);
-            return;
-          }
-        }
-
-        /* RPC未導入時の安全なフォールバック */
-        const pageSize = 1000;
-        let from = 0;
-        const rows = [];
-        const nowIso =
-          new Date().toISOString();
-
-        while (true) {
-
-          let result =
-            await sb
-              .from("union_recruitments")
-              .select("union_identity_id,union_name,status,expires_at,created_at")
-              .in("status", ["open", "paused"])
-              .order("created_at", { ascending: false })
-              .range(from, from + pageSize - 1);
-
-          if (result.error) {
-            throw result.error;
-          }
-
-          const page =
-            Array.isArray(result.data)
-              ? result.data
-              : [];
-
-          rows.push(...page);
-
-          if (page.length < pageSize) {
-            break;
-          }
-
-          from += pageSize;
-        }
-
-        const normalizeName =
-          value =>
-            String(value || "")
-              .trim()
-              .replace(/\s+/g, " ")
-              .toLocaleLowerCase("ja-JP");
-
-        /*
-          最新行だけを見る。
-          open は期限内のみ登録中。
-          paused は将来の募集休止機能用で、期限に関係なく登録中扱い。
-        */
-        const seen =
-          new Set();
-
-        let count = 0;
-
-        rows.forEach(row => {
-
-          const key =
-            String(
-              row?.union_identity_id || ""
-            ).trim()
-            ||
-            normalizeName(
-              row?.union_name
-            );
-
-          if (
-            !key
-            ||
-            seen.has(key)
-          ) {
-            return;
-          }
-
-          seen.add(key);
-
-          const status =
-            String(
-              row?.status || ""
-            );
-
-          const isCurrent =
-            status === "paused"
-            ||
-            (
-              status === "open"
-              &&
-              row?.expires_at
-              &&
-              row.expires_at > nowIso
-            );
-
-          if (isCurrent) {
-            count++;
-          }
-
-        });
-
-        target.textContent =
-          String(count);
-
-      } catch (error) {
-
-        console.error(
-          "現在登録ユニオン数取得エラー",
-          error
-        );
-
-        /* 追加表示だけ失敗しても本体は止めない */
-        target.textContent = "--";
-      }
-    }
-
-
-    window.addEventListener(
-      "load",
-      () => {
-        loadTotalUnionCountTop();
-      }
-    );
-
-
-    document.addEventListener(
-      "DOMContentLoaded",
-      () => {
-
-        const openUnionCounter =
-          document.getElementById(
-            "unionCountTop"
-          );
-
-        if (!openUnionCounter) {
-          return;
-        }
-
-        let timer = null;
-
-        const observer =
-          new MutationObserver(
-            () => {
-
-              clearTimeout(timer);
-
-              timer =
-                setTimeout(
-                  () => {
-                    loadTotalUnionCountTop();
-                  },
-                  250
-                );
-            }
-          );
-
-        observer.observe(
-          openUnionCounter,
-          {
-            childList: true,
-            characterData: true,
-            subtree: true
-          }
-        );
-
-      }
-    );
-  </script>
-
+  <script src="./app.js?v=15.0"></script>
 
 
 </body>
