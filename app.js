@@ -5649,6 +5649,41 @@ function scrollToVideoTop() {
 }
 
 
+function returnToVideoTop() {
+
+  document.body.classList.remove(
+    "register-mode",
+    "manage-mode"
+  );
+
+  document
+    .querySelectorAll(".page")
+    .forEach(page => {
+      page.classList.remove("active");
+    });
+
+  document
+    .getElementById("listPage")
+    ?.classList.add("active");
+
+  document
+    .querySelectorAll(".bottom-nav .nav-btn")
+    .forEach(button => {
+      button.classList.toggle(
+        "active",
+        button.dataset.page === "list"
+      );
+    });
+
+  loadRecruitments();
+
+  requestAnimationFrame(() => {
+    requestAnimationFrame(scrollToVideoTop);
+  });
+
+}
+
+
 function closeSiteMenu() {
 
   document.body
@@ -5737,20 +5772,12 @@ document
   )
   ?.addEventListener(
     "click",
-    () => {
+    event => {
 
-      showPage(
-        "list",
-        {
-          skipListScroll:
-            true
-        }
-      );
+      event.preventDefault();
+      event.stopPropagation();
 
-      setTimeout(
-        scrollToVideoTop,
-        80
-      );
+      returnToVideoTop();
 
     }
   );
@@ -5846,18 +5873,7 @@ document
               "top"
             ) {
 
-              showPage(
-                "list",
-                {
-                  skipListScroll:
-                    true
-                }
-              );
-
-              setTimeout(
-                scrollToVideoTop,
-                80
-              );
+              returnToVideoTop();
 
               return;
             }
