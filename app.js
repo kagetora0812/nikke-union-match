@@ -1254,19 +1254,6 @@ function showPage(name) {
         return;
       }
 
-      const mobileShell =
-        getMobileScrollShell();
-
-      if (mobileShell) {
-
-        scrollAppElementToTop(
-          listPage,
-          "smooth"
-        );
-
-        return;
-      }
-
       const headerOffset = 76;
 
       const targetTop =
@@ -1283,9 +1270,10 @@ function showPage(name) {
 
   } else {
 
-    scrollAppToTop(
-      "smooth"
-    );
+    window.scrollTo({
+      top: 0,
+      behavior: "smooth"
+    });
 
   }
 }
@@ -5645,117 +5633,18 @@ $("#closeLoadedRecruitmentBtn")
 // v15 VIDEO TOP UI
 // ========================================
 
-function getMobileScrollShell() {
-
-  if (
-    !window.matchMedia(
-      "(max-width: 600px)"
-    ).matches
-  ) {
-    return null;
-  }
-
-  return document.getElementById(
-    "mobileScrollShell"
-  );
-
-}
-
-
-function getElementTopInsideMobileShell(
-  element,
-  shell
-) {
-
-  if (
-    !element
-    ||
-    !shell
-  ) {
-    return 0;
-  }
-
-  return (
-    shell.scrollTop
-    +
-    element.getBoundingClientRect().top
-    -
-    shell.getBoundingClientRect().top
-  );
-
-}
-
-
-function scrollAppToTop(
-  behavior = "smooth"
-) {
-
-  const shell =
-    getMobileScrollShell();
-
-  if (shell) {
-
-    shell.scrollTo({
-      top: 0,
-      left: 0,
-      behavior
-    });
-
-    return;
-  }
-
-  window.scrollTo({
-    top: 0,
-    left: 0,
-    behavior
-  });
-
-}
-
-
-function scrollAppElementToTop(
-  element,
-  behavior = "smooth"
-) {
-
-  if (!element) {
-    return;
-  }
-
-  const shell =
-    getMobileScrollShell();
-
-  if (shell) {
-
-    shell.scrollTo({
-      top:
-        Math.max(
-          0,
-          getElementTopInsideMobileShell(
-            element,
-            shell
-          )
-        ),
-      left: 0,
-      behavior
-    });
-
-    return;
-  }
-
-  element.scrollIntoView({
-    behavior,
-    block: "start"
-  });
-
-}
-
-
 function scrollToVideoTop() {
 
-  scrollAppToTop(
-    "smooth"
-  );
+  document
+    .getElementById(
+      "videoHero"
+    )
+    ?.scrollIntoView({
+      behavior:
+        "smooth",
+      block:
+        "start"
+    });
 
 }
 
@@ -5788,21 +5677,10 @@ function returnToVideoTop() {
       );
     });
 
-  mobileFooterHideUntilTop =
-    true;
-
-  document
-    .getElementById(
-      "bottomNav"
-    )
-    ?.classList
-    .remove(
-      "is-visible"
-    );
-
-  scrollAppToTop(
-    "smooth"
-  );
+  window.scrollTo({
+    top: 0,
+    behavior: "smooth"
+  });
 
 }
 
@@ -5914,12 +5792,16 @@ document
     "click",
     () => {
 
-      scrollAppElementToTop(
-        document.getElementById(
+      document
+        .getElementById(
           "listPage"
-        ),
-        "smooth"
-      );
+        )
+        ?.scrollIntoView({
+          behavior:
+            "smooth",
+          block:
+            "start"
+        });
 
     }
   );
@@ -6077,6 +5959,11 @@ document
 
 // 白い募集エリアまで来た時だけ
 // スマホ / タブレット下部メニューを表示
+//
+// v21:
+// IntersectionObserverによる境界付近の表示/非表示ループを廃止。
+// 動画の下端を基準にした固定スクロール位置で判定し、
+// 少しヒステリシスを持たせてブラウザUIの伸縮でも暴れないようにする。
 const bottomNavigation =
   document.getElementById(
     "bottomNav"
@@ -6087,25 +5974,30 @@ const listPageForNav =
     "listPage"
   );
 
-const mobileScrollShell =
-  getMobileScrollShell();
+const videoHeroForNav =
+  document.getElementById(
+    "videoHero"
+  );
 
-let mobileFooterFramePending =
+let bottomNavVisible =
+  Boolean(
+    bottomNavigation
+      ?.classList
+      .contains(
+        "is-visible"
+      )
+  );
+
+let bottomNavFramePending =
   false;
 
-let mobileFooterHideUntilTop =
-  false;
+let bottomNavHideTimer =
+  null;
 
 
-function updateMobileFooterVisibility() {
+function updateBottomNavigationVisibility() {
 
-  if (
-    !bottomNavigation
-    ||
-    !mobileScrollShell
-    ||
-    !listPageForNav
-  ) {
+  if (!bottomNavigation) {
     return;
   }
 
@@ -6122,7 +6014,17 @@ function updateMobileFooterVisibility() {
         "manage-mode"
       );
 
+
+  /* 登録・締切画面は常に表示 */
   if (forceVisible) {
+
+    if (bottomNavHideTimer !== null) {
+      clearTimeout(bottomNavHideTimer);
+      bottomNavHideTimer = null;
+    }
+
+    bottomNavVisible =
+      true;
 
     bottomNavigation
       .classList
@@ -6133,11 +6035,16 @@ function updateMobileFooterVisibility() {
     return;
   }
 
-  /*
-    TOPへ戻る操作中は、途中のスクロール位置で
-    フッターが再表示されないように固定で隠す。
-  */
-  if (mobileFooterHideUntilTop) {
+
+  if (!listPageForNav) {
+
+    if (bottomNavHideTimer !== null) {
+      clearTimeout(bottomNavHideTimer);
+      bottomNavHideTimer = null;
+    }
+
+    bottomNavVisible =
+      false;
 
     bottomNavigation
       .classList
@@ -6145,53 +6052,195 @@ function updateMobileFooterVisibility() {
         "is-visible"
       );
 
-    if (
-      mobileScrollShell.scrollTop
-        <= 8
-    ) {
-      mobileFooterHideUntilTop =
-        false;
+    return;
+  }
+
+
+  const listTop =
+    listPageForNav
+      .getBoundingClientRect()
+      .top;
+
+
+  const viewportHeight =
+    window.innerHeight
+    ||
+    document.documentElement.clientHeight
+    ||
+    0;
+
+
+  const showLine =
+    viewportHeight - 24;
+
+
+  const hideLine =
+    viewportHeight + 96;
+
+
+  const shouldShow =
+    bottomNavVisible
+      ? listTop <= hideLine
+      : listTop <= showLine;
+
+
+  /* 表示するときは即表示 */
+  if (shouldShow) {
+
+    if (bottomNavHideTimer !== null) {
+      clearTimeout(bottomNavHideTimer);
+      bottomNavHideTimer = null;
     }
+
+    bottomNavVisible =
+      true;
+
+    bottomNavigation
+      .classList
+      .add(
+        "is-visible"
+      );
 
     return;
   }
 
-  /*
-    スクロールを始めた直後にフッターを先にフェード表示。
-    白いカードが上がって来るより先に出るので、
-    レイヤーの切替感を目立たせない。
-  */
-  const revealAt =
-    12;
 
-  bottomNavigation
-    .classList
-    .toggle(
-      "is-visible",
-      mobileScrollShell.scrollTop
-        >= revealAt
+  /* タブレット / PCは今まで通り */
+  const isSmartphone =
+    window.matchMedia(
+      "(max-width: 600px)"
+    ).matches;
+
+
+  if (!isSmartphone) {
+
+    if (bottomNavHideTimer !== null) {
+      clearTimeout(bottomNavHideTimer);
+      bottomNavHideTimer = null;
+    }
+
+    bottomNavVisible =
+      false;
+
+    bottomNavigation
+      .classList
+      .remove(
+        "is-visible"
+      );
+
+    return;
+  }
+
+
+  /* すでに非表示なら何もしない */
+  if (!bottomNavVisible) {
+    return;
+  }
+
+
+  /* すでに非表示予約中なら重複させない */
+  if (bottomNavHideTimer !== null) {
+    return;
+  }
+
+
+  /* スマホだけ非表示を120ms遅らせる */
+  bottomNavHideTimer =
+    window.setTimeout(
+      () => {
+
+        bottomNavHideTimer =
+          null;
+
+
+        /* 120ms後にもう一度現在位置を確認 */
+        const latestListTop =
+          listPageForNav
+            .getBoundingClientRect()
+            .top;
+
+
+        const latestViewportHeight =
+          window.innerHeight
+          ||
+          document.documentElement.clientHeight
+          ||
+          0;
+
+
+        const latestHideLine =
+          latestViewportHeight + 96;
+
+
+        const stillForceVisible =
+          document.body
+            .classList
+            .contains(
+              "register-mode"
+            )
+          ||
+          document.body
+            .classList
+            .contains(
+              "manage-mode"
+            );
+
+
+        /* 待機中にまた下へ動いたら消さない */
+        if (
+          stillForceVisible
+          ||
+          latestListTop <= latestHideLine
+        ) {
+
+          bottomNavVisible =
+            true;
+
+          bottomNavigation
+            .classList
+            .add(
+              "is-visible"
+            );
+
+          return;
+        }
+
+
+        /* 本当にTOP側へ戻った時だけ消す */
+        bottomNavVisible =
+          false;
+
+        bottomNavigation
+          .classList
+          .remove(
+            "is-visible"
+          );
+
+      },
+      120
     );
-
 }
 
 
-function scheduleMobileFooterUpdate() {
+function scheduleBottomNavigationUpdate() {
 
-  if (mobileFooterFramePending) {
+  if (
+    bottomNavFramePending
+  ) {
     return;
   }
 
-  mobileFooterFramePending =
+  bottomNavFramePending =
     true;
 
   window
     .requestAnimationFrame(
       () => {
 
-        mobileFooterFramePending =
+        bottomNavFramePending =
           false;
 
-        updateMobileFooterVisibility();
+        updateBottomNavigationVisibility();
 
       }
     );
@@ -6199,117 +6248,28 @@ function scheduleMobileFooterUpdate() {
 }
 
 
-if (
-  bottomNavigation
-  &&
-  listPageForNav
-) {
+window
+  .addEventListener(
+    "scroll",
+    scheduleBottomNavigationUpdate,
+    {
+      passive:
+        true
+    }
+  );
 
-  if (mobileScrollShell) {
 
-    mobileScrollShell
-      .addEventListener(
-        "scroll",
-        scheduleMobileFooterUpdate,
-        {
-          passive:
-            true
-        }
-      );
-
-    window
-      .addEventListener(
-        "resize",
-        scheduleMobileFooterUpdate
-      );
-
-    window
-      .requestAnimationFrame(
-        updateMobileFooterVisibility
-      );
-
-  } else {
-
-    /* Tablet keeps the existing behavior. */
-    const bottomNavObserver =
-      new IntersectionObserver(
-        entries => {
-
-          const visible =
-            entries.some(
-              entry =>
-                entry.isIntersecting
-                &&
-                entry.boundingClientRect.top <=
-                  window.innerHeight * 0.90
-            );
-
-          bottomNavigation
-            .classList
-            .toggle(
-              "is-visible",
-              visible
-            );
-
-        },
-        {
-          root:
-            null,
-          threshold:
-            0,
-          rootMargin:
-            "0px 0px -10% 0px"
-        }
-      );
-
-    bottomNavObserver
-      .observe(
-        listPageForNav
-      );
-
-  }
-
-}
+window
+  .addEventListener(
+    "resize",
+    scheduleBottomNavigationUpdate
+  );
 
 
 // register/manage時は常用ナビとして表示
 const bodyModeObserver =
   new MutationObserver(
-    () => {
-
-      if (!bottomNavigation) {
-        return;
-      }
-
-      const forceVisible =
-        document.body
-          .classList
-          .contains(
-            "register-mode"
-          )
-        ||
-        document.body
-          .classList
-          .contains(
-            "manage-mode"
-          );
-
-      if (forceVisible) {
-
-        bottomNavigation
-          .classList
-          .add(
-            "is-visible"
-          );
-
-        return;
-      }
-
-      if (mobileScrollShell) {
-        scheduleMobileFooterUpdate();
-      }
-
-    }
+    scheduleBottomNavigationUpdate
   );
 
 bodyModeObserver
@@ -6323,6 +6283,12 @@ bodyModeObserver
           "class"
         ]
     }
+  );
+
+
+window
+  .requestAnimationFrame(
+    updateBottomNavigationVisibility
   );
 
 
