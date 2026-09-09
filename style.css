@@ -4713,3 +4713,17 @@ body:not(.register-mode):not(.manage-mode) #listPage {
 body .video-topbar {
   z-index: 120 !important;
 }
+
+
+/* =========================================================
+   v21 STABLE FIX
+   2026-09-10
+   PC TOP/list only:
+   remove the unused body bottom padding that exposed the gray
+   page background below the white recruitment sheet.
+   ========================================================= */
+@media screen and (min-width: 1025px) {
+  html body:not(.register-mode):not(.manage-mode) {
+    padding-bottom: 0 !important;
+  }
+}
