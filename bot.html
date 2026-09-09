@@ -281,15 +281,310 @@
     }
   </style>
   <link rel="stylesheet" href="./subpage-nav.css?v=15.0">
+
+  <style id="bot-menu-creator-rule-v16">
+    .bot-topbar { z-index: 120; }
+
+    .bot-brand {
+      gap: 9px;
+      color: #fff;
+      font: 700 22px/1 "Teko", sans-serif;
+      letter-spacing: .16em;
+    }
+
+    .bot-brand::before {
+      width: 5px;
+      height: 22px;
+      flex: 0 0 5px;
+    }
+
+    .site-menu-button {
+      width: 46px;
+      height: 46px;
+      display: grid;
+      place-content: center;
+      gap: 5px;
+      padding: 0;
+      border: 0;
+      background: transparent;
+      cursor: pointer;
+    }
+
+    .site-menu-button span {
+      display: block;
+      width: 25px;
+      height: 2px;
+      border-radius: 99px;
+      background: #fff;
+      transition: transform .22s ease, opacity .22s ease;
+    }
+
+    body.menu-open .site-menu-button span:nth-child(1) {
+      transform: translateY(7px) rotate(45deg);
+    }
+
+    body.menu-open .site-menu-button span:nth-child(2) {
+      opacity: 0;
+    }
+
+    body.menu-open .site-menu-button span:nth-child(3) {
+      transform: translateY(-7px) rotate(-45deg);
+    }
+
+    .site-menu-backdrop {
+      position: fixed;
+      inset: 64px 0 0;
+      z-index: 108;
+      background: rgba(0, 0, 0, .48);
+      backdrop-filter: blur(2px);
+      -webkit-backdrop-filter: blur(2px);
+    }
+
+    .site-menu-drawer {
+      position: fixed;
+      top: 64px;
+      right: 0;
+      z-index: 110;
+      width: min(86vw, 340px);
+      height: calc(100dvh - 64px);
+      padding: 12px;
+      transform: translateX(105%);
+      overflow-y: auto;
+      background: rgba(17, 19, 24, .98);
+      box-shadow: -18px 0 50px rgba(0, 0, 0, .32);
+      transition: transform .24s ease;
+    }
+
+    body.menu-open .site-menu-drawer {
+      transform: translateX(0);
+    }
+
+    .site-menu-head {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      min-height: 48px;
+      padding: 0 6px 10px;
+      color: rgba(255,255,255,.7);
+      font: 800 12px "Teko", sans-serif;
+      letter-spacing: .24em;
+    }
+
+    .site-menu-head button {
+      width: 38px;
+      height: 38px;
+      border: 0;
+      color: #fff;
+      background: transparent;
+      font-size: 28px;
+      line-height: 1;
+      cursor: pointer;
+    }
+
+    .site-menu-drawer > a {
+      width: 100%;
+      min-height: 52px;
+      display: flex;
+      align-items: center;
+      padding: 0 14px;
+      border: 0;
+      border-bottom: 1px solid rgba(255,255,255,.09);
+      color: #fff;
+      background: transparent;
+      font-size: 14px;
+      font-weight: 800;
+      text-align: left;
+      text-decoration: none;
+      cursor: pointer;
+      transition: background .18s ease, color .18s ease;
+    }
+
+    .site-menu-drawer > a:hover {
+      color: var(--cyan);
+      background: rgba(255,255,255,.06);
+    }
+
+    .bot-pc-home-row { display: none; }
+
+    @media screen and (min-width: 1025px) {
+      .bot-pc-home-row {
+        display: flex;
+        padding: 12px 0 0 20px;
+      }
+
+      .bot-pc-home {
+        position: relative;
+        width: 44px;
+        height: 44px;
+        display: grid;
+        place-items: center;
+        overflow: hidden;
+        border: 1px solid rgba(26, 176, 241, .38);
+        background: rgba(26, 176, 241, .055);
+        color: #dcecf4;
+        text-decoration: none;
+        font: 800 23px/1 "Teko", sans-serif;
+        box-shadow: none;
+        transition: .18s ease;
+      }
+
+      .bot-pc-home::before,
+      .bot-pc-home::after {
+        display: none;
+      }
+
+      .bot-pc-home:hover,
+      .bot-pc-home:active {
+        border-color: #a9dff6;
+        background: #f7fbfd;
+        color: #079fd9;
+        transform: none;
+        box-shadow: none;
+      }
+    }
+
+    @media screen and (max-width: 1024px) {
+      .site-menu-backdrop {
+        background: rgba(0, 0, 0, .18) !important;
+        backdrop-filter: blur(4px) !important;
+        -webkit-backdrop-filter: blur(4px) !important;
+      }
+
+      .site-menu-drawer {
+        background: rgba(13, 16, 22, .62) !important;
+        border-left: 1px solid rgba(255,255,255,.12) !important;
+        box-shadow: -12px 0 34px rgba(0,0,0,.18) !important;
+        backdrop-filter: blur(14px) saturate(118%) !important;
+        -webkit-backdrop-filter: blur(14px) saturate(118%) !important;
+      }
+
+      .site-menu-drawer > a {
+        border-bottom-color: rgba(255,255,255,.12) !important;
+      }
+
+      .bot-bottom-nav {
+        grid-template-columns: repeat(3, minmax(0, 1fr)) !important;
+      }
+
+      .bot-bottom-nav > a {
+        display: flex !important;
+        flex-direction: column !important;
+        align-items: center !important;
+        justify-content: center !important;
+        gap: 4px !important;
+        padding: 6px 3px 8px !important;
+        color: rgba(255,255,255,.72) !important;
+        background: rgba(16,18,22,.96) !important;
+        font-size: 10px !important;
+        font-weight: 900 !important;
+        line-height: 1 !important;
+        text-align: center !important;
+      }
+
+      .bot-bottom-nav .bot-nav-icon {
+        display: block !important;
+        min-height: 19px;
+        color: rgba(255,255,255,.94);
+        font-family: "Teko", "Zen Kaku Gothic New", sans-serif;
+        font-size: 21px;
+        font-weight: 800;
+        line-height: .9;
+      }
+
+      .bot-bottom-nav .bot-nav-label {
+        display: block !important;
+        font-size: 10px;
+        font-weight: 900;
+        line-height: 1;
+        white-space: nowrap;
+      }
+
+      .bot-bottom-nav > a:nth-child(2) {
+        color: #fff !important;
+        background: rgba(40,185,232,.13) !important;
+        box-shadow:
+          inset 0 2px 0 rgba(40,185,232,.92),
+          inset 1px 0 0 rgba(255,255,255,.04),
+          inset -1px 0 0 rgba(255,255,255,.04) !important;
+      }
+
+      .bot-bottom-nav > a:nth-child(2) .bot-nav-icon {
+        color: var(--cyan) !important;
+      }
+
+      .bot-bottom-nav > a:active {
+        background: rgba(40,185,232,.22) !important;
+        color: #fff !important;
+      }
+    }
+
+    @media screen and (max-width: 600px) {
+      .bot-brand { font-size: 19px; }
+
+      .site-menu-backdrop {
+        inset: 58px 0 0;
+      }
+
+      .site-menu-drawer {
+        top: 58px;
+        height: calc(100dvh - 58px);
+      }
+    }
+  </style>
 </head>
 <body>
-  <header class="topbar">
-    <div class="brand">
-      <span class="brand-small">NIKKE</span>
-      <span class="brand-main">UNION MATCH</span>
-    </div>
-    <div class="status">DISCORD BOT</div>
+  <header class="topbar bot-topbar">
+    <div class="status bot-brand">DISCORD BOT</div>
+
+    <button
+      id="siteMenuButton"
+      class="site-menu-button"
+      type="button"
+      aria-label="メニューを開く"
+      aria-expanded="false"
+      aria-controls="siteMenuDrawer"
+    >
+      <span></span>
+      <span></span>
+      <span></span>
+    </button>
   </header>
+
+  <div id="siteMenuBackdrop" class="site-menu-backdrop" hidden></div>
+
+  <aside
+    id="siteMenuDrawer"
+    class="site-menu-drawer"
+    aria-hidden="true"
+  >
+    <div class="site-menu-head">
+      <span>MENU</span>
+      <button
+        id="siteMenuClose"
+        type="button"
+        aria-label="メニューを閉じる"
+      >×</button>
+    </div>
+
+    <a href="./index.html#videoHero">TOP</a>
+    <a href="./index.html?view=commander#listPage">指揮官を見る</a>
+    <a href="./index.html?view=union#listPage">ユニオンを見る</a>
+    <a href="./index.html#registerPage">募集登録</a>
+    <a href="./index.html#managePage">編集・締切</a>
+    <a href="./bot.html">Discord BOT</a>
+    <a href="./creators.html">応援クリエイター</a>
+  </aside>
+
+  <div class="bot-pc-home-row">
+    <a
+      class="bot-pc-home"
+      href="./index.html#videoHero"
+      aria-label="UNION MATCH TOPへ戻る"
+      title="HOME"
+    >
+      <span aria-hidden="true">⌂</span>
+    </a>
+  </div>
 
   <main class="container">
     <section class="bot-hero">
@@ -303,7 +598,6 @@
         <div class="top-actions">
           <!-- 招待URLが確定したら href を差し替え -->
           <a class="action-btn primary disabled" id="botInviteBtn" href="#install" aria-disabled="true">🤖 BOTを導入する（招待リンク準備中）</a>
-          <a class="action-btn" href="./index.html">← UNION MATCHへ戻る</a>
         </div>
       </div>
       <div class="hero-side">
@@ -549,10 +843,6 @@
 
     <footer class="bottom-area">
       <div>NIKKE UNION MATCH · DISCORD BOT</div>
-      <div style="display:flex;gap:8px;flex-wrap:wrap;">
-        <a class="action-btn" href="./creators.html">📺 応援クリエイター</a>
-        <a class="action-btn" href="./index.html">UNION MATCHへ戻る</a>
-      </div>
     </footer>
   </main>
 
@@ -610,11 +900,82 @@
   </script>
 
 
-  <nav class="subpage-bottom-nav" aria-label="フッターメニュー">
-    <a href="./index.html#videoHero">TOP</a>
-    <a href="./index.html?view=commander#listPage">指揮官を見る</a>
-    <a href="./index.html?view=union#listPage">ユニオン</a>
-    <a class="active" href="./bot.html">BOT</a>
+
+  <script>
+    function closeSiteMenu() {
+      document.body.classList.remove("menu-open");
+      const button = document.getElementById("siteMenuButton");
+      const drawer = document.getElementById("siteMenuDrawer");
+      const backdrop = document.getElementById("siteMenuBackdrop");
+
+      button?.setAttribute("aria-expanded", "false");
+      drawer?.setAttribute("aria-hidden", "true");
+
+      if (backdrop) {
+        backdrop.hidden = true;
+      }
+    }
+
+    function openSiteMenu() {
+      document.body.classList.add("menu-open");
+      const button = document.getElementById("siteMenuButton");
+      const drawer = document.getElementById("siteMenuDrawer");
+      const backdrop = document.getElementById("siteMenuBackdrop");
+
+      button?.setAttribute("aria-expanded", "true");
+      drawer?.setAttribute("aria-hidden", "false");
+
+      if (backdrop) {
+        backdrop.hidden = false;
+      }
+    }
+
+    document
+      .getElementById("siteMenuButton")
+      ?.addEventListener("click", () => {
+        if (document.body.classList.contains("menu-open")) {
+          closeSiteMenu();
+        } else {
+          openSiteMenu();
+        }
+      });
+
+    document
+      .getElementById("siteMenuClose")
+      ?.addEventListener("click", closeSiteMenu);
+
+    document
+      .getElementById("siteMenuBackdrop")
+      ?.addEventListener("click", closeSiteMenu);
+
+    document
+      .querySelectorAll("#siteMenuDrawer a")
+      .forEach(link => {
+        link.addEventListener("click", closeSiteMenu);
+      });
+
+    document.addEventListener("keydown", event => {
+      if (event.key === "Escape") {
+        closeSiteMenu();
+      }
+    });
+  </script>
+
+  <nav class="subpage-bottom-nav bot-bottom-nav" aria-label="フッターメニュー">
+    <a href="./index.html#videoHero">
+      <span class="bot-nav-icon" aria-hidden="true">⌂</span>
+      <span class="bot-nav-label">TOP</span>
+    </a>
+
+    <a href="./index.html#registerPage">
+      <span class="bot-nav-icon" aria-hidden="true">＋</span>
+      <span class="bot-nav-label">募集登録</span>
+    </a>
+
+    <a href="./creators.html">
+      <span class="bot-nav-icon" aria-hidden="true">✦</span>
+      <span class="bot-nav-label">CREATOR</span>
+    </a>
   </nav>
 
 </body>
