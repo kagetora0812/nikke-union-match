@@ -959,42 +959,27 @@
         display: grid;
         place-items: center;
         overflow: hidden;
-        border: 1px solid var(--cyan);
-        background: var(--cyan);
-        color: #bfefff;
+        border: 1px solid rgba(26, 176, 241, .38);
+        background: rgba(26, 176, 241, .055);
+        color: #dcecf4;
         text-decoration: none;
         font: 800 23px/1 "Teko", sans-serif;
-        box-shadow: 0 8px 20px rgba(0,0,0,.22);
-        transition: color .18s ease, border-color .18s ease, transform .18s ease, box-shadow .18s ease;
+        box-shadow: none;
+        transition: .18s ease;
       }
 
       .creator-pc-home::before,
       .creator-pc-home::after {
-        content: "";
-        position: absolute;
-        background: var(--cyan);
+        display: none;
       }
 
-      .creator-pc-home::before {
-        left: 0;
-        top: 0;
-        width: 3px;
-        height: 17px;
-      }
-
-      .creator-pc-home::after {
-        right: 0;
-        bottom: 0;
-        width: 17px;
-        height: 3px;
-      }
-
-      .creator-pc-home:hover {
-        color: #e8fbff;
-        border-color: var(--cyan);
-        background: #1aaedb;
-        transform: translateY(-1px);
-        box-shadow: 0 9px 24px rgba(40,185,232,.22);
+      .creator-pc-home:hover,
+      .creator-pc-home:active {
+        border-color: #a9dff6;
+        background: #f7fbfd;
+        color: #079fd9;
+        transform: none;
+        box-shadow: none;
       }
     }
 
