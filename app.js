@@ -1171,7 +1171,7 @@ function renderXEmbeds(
 // 登録・締切モードを確実に解除
 // ========================================
 
-function showPage(name, options = {}) {
+function showPage(name) {
 
   // 登録・締切モード
   document.body.classList.toggle(
@@ -1245,32 +1245,28 @@ function showPage(name, options = {}) {
 
     loadRecruitments();
 
-    if (!options.skipListScroll) {
+    setTimeout(() => {
 
-      setTimeout(() => {
+      const listPage =
+        document.getElementById("listPage");
 
-        const listPage =
-          document.getElementById("listPage");
+      if (!listPage) {
+        return;
+      }
 
-        if (!listPage) {
-          return;
-        }
+      const headerOffset = 76;
 
-        const headerOffset = 76;
+      const targetTop =
+        listPage.getBoundingClientRect().top +
+        window.pageYOffset -
+        headerOffset;
 
-        const targetTop =
-          listPage.getBoundingClientRect().top +
-          window.pageYOffset -
-          headerOffset;
+      window.scrollTo({
+        top: Math.max(0, targetTop),
+        behavior: "smooth"
+      });
 
-        window.scrollTo({
-          top: Math.max(0, targetTop),
-          behavior: "smooth"
-        });
-
-      }, 120);
-
-    }
+    }, 120);
 
   } else {
 
@@ -4151,11 +4147,7 @@ $("#resultDone")
 
 
       showPage(
-        "list",
-        {
-          skipListScroll:
-            true
-        }
+        "list"
       );
 
 
@@ -5657,22 +5649,6 @@ function scrollToVideoTop() {
 }
 
 
-function scrollToListPage() {
-
-  document
-    .getElementById(
-      "listPage"
-    )
-    ?.scrollIntoView({
-      behavior:
-        "smooth",
-      block:
-        "start"
-    });
-
-}
-
-
 function closeSiteMenu() {
 
   document.body
@@ -5788,7 +5764,16 @@ document
     "click",
     () => {
 
-      scrollToListPage();
+      document
+        .getElementById(
+          "listPage"
+        )
+        ?.scrollIntoView({
+          behavior:
+            "smooth",
+          block:
+            "start"
+        });
 
     }
   );
@@ -5981,8 +5966,6 @@ if (
           entries.some(
             entry =>
               entry.isIntersecting
-              &&
-              entry.boundingClientRect.top <= window.innerHeight * 0.96
           );
 
         bottomNavigation
@@ -5997,9 +5980,7 @@ if (
         root:
           null,
         threshold:
-          0,
-        rootMargin:
-          "0px 0px -4% 0px"
+          0.01
       }
     );
 
