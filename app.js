@@ -6026,11 +6026,7 @@ function updateBottomNavigationVisibility() {
   }
 
 
-  if (
-    !listPageForNav
-    ||
-    !videoHeroForNav
-  ) {
+  if (!listPageForNav) {
 
     bottomNavVisible =
       false;
@@ -6045,34 +6041,37 @@ function updateBottomNavigationVisibility() {
   }
 
 
-  const scrollY =
-    window.scrollY
+  /*
+    v23
+    動画のスクロール量ではなく、
+    「白い募集カードエリアの先頭位置」を基準に判定する。
+
+    カードが画面へ入ったら固定フッターを表示。
+    カードから動画側へ戻った時だけ非表示。
+    96pxのヒステリシスで境界付近の点滅・往復を防止。
+  */
+  const listTop =
+    listPageForNav
+      .getBoundingClientRect()
+      .top;
+
+  const viewportHeight =
+    window.innerHeight
     ||
-    window.pageYOffset
+    document.documentElement.clientHeight
     ||
     0;
 
-  const videoBottom =
-    videoHeroForNav.offsetTop
-    +
-    videoHeroForNav.offsetHeight;
+  const showLine =
+    viewportHeight - 24;
 
-  const showAt =
-    Math.max(
-      0,
-      videoBottom - 76
-    );
-
-  const hideBelow =
-    Math.max(
-      0,
-      showAt - 96
-    );
+  const hideLine =
+    viewportHeight + 96;
 
   const shouldShow =
     bottomNavVisible
-      ? scrollY >= hideBelow
-      : scrollY >= showAt;
+      ? listTop <= hideLine
+      : listTop <= showLine;
 
 
   bottomNavVisible =
