@@ -1171,7 +1171,7 @@ function renderXEmbeds(
 // 登録・締切モードを確実に解除
 // ========================================
 
-function showPage(name) {
+function showPage(name, options = {}) {
 
   // 登録・締切モード
   document.body.classList.toggle(
@@ -1245,28 +1245,32 @@ function showPage(name) {
 
     loadRecruitments();
 
-    setTimeout(() => {
+    if (!options.skipListScroll) {
 
-      const listPage =
-        document.getElementById("listPage");
+      setTimeout(() => {
 
-      if (!listPage) {
-        return;
-      }
+        const listPage =
+          document.getElementById("listPage");
 
-      const headerOffset = 76;
+        if (!listPage) {
+          return;
+        }
 
-      const targetTop =
-        listPage.getBoundingClientRect().top +
-        window.pageYOffset -
-        headerOffset;
+        const headerOffset = 76;
 
-      window.scrollTo({
-        top: Math.max(0, targetTop),
-        behavior: "smooth"
-      });
+        const targetTop =
+          listPage.getBoundingClientRect().top +
+          window.pageYOffset -
+          headerOffset;
 
-    }, 120);
+        window.scrollTo({
+          top: Math.max(0, targetTop),
+          behavior: "smooth"
+        });
+
+      }, 120);
+
+    }
 
   } else {
 
@@ -4147,7 +4151,11 @@ $("#resultDone")
 
 
       showPage(
-        "list"
+        "list",
+        {
+          skipListScroll:
+            true
+        }
       );
 
 
@@ -5649,6 +5657,22 @@ function scrollToVideoTop() {
 }
 
 
+function scrollToListPage() {
+
+  document
+    .getElementById(
+      "listPage"
+    )
+    ?.scrollIntoView({
+      behavior:
+        "smooth",
+      block:
+        "start"
+    });
+
+}
+
+
 function closeSiteMenu() {
 
   document.body
@@ -5740,7 +5764,11 @@ document
     () => {
 
       showPage(
-        "list"
+        "list",
+        {
+          skipListScroll:
+            true
+        }
       );
 
       setTimeout(
@@ -5760,16 +5788,7 @@ document
     "click",
     () => {
 
-      document
-        .getElementById(
-          "listPage"
-        )
-        ?.scrollIntoView({
-          behavior:
-            "smooth",
-          block:
-            "start"
-        });
+      scrollToListPage();
 
     }
   );
@@ -5843,7 +5862,11 @@ document
             ) {
 
               showPage(
-                "list"
+                "list",
+                {
+                  skipListScroll:
+                    true
+                }
               );
 
               setTimeout(
@@ -5958,6 +5981,8 @@ if (
           entries.some(
             entry =>
               entry.isIntersecting
+              &&
+              entry.boundingClientRect.top <= window.innerHeight * 0.96
           );
 
         bottomNavigation
@@ -5972,7 +5997,9 @@ if (
         root:
           null,
         threshold:
-          0.01
+          0,
+        rootMargin:
+          "0px 0px -4% 0px"
       }
     );
 
