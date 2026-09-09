@@ -5653,6 +5653,19 @@ function returnToVideoTop() {
 
   closeSiteMenu?.();
 
+  /*
+    v24:
+    TOPへ戻る操作をした瞬間にフッターを隠し、
+    スムーズスクロール中に再表示されないようにする。
+  */
+  bottomNavHideUntilVideoTop =
+    true;
+
+  document
+    .getElementById("bottomNav")
+    ?.classList
+    .remove("is-visible");
+
   document.body.classList.remove(
     "register-mode",
     "manage-mode"
@@ -5960,10 +5973,9 @@ document
 // 白い募集エリアまで来た時だけ
 // スマホ / タブレット下部メニューを表示
 //
-// v21:
-// IntersectionObserverによる境界付近の表示/非表示ループを廃止。
-// 動画の下端を基準にした固定スクロール位置で判定し、
-// 少しヒステリシスを持たせてブラウザUIの伸縮でも暴れないようにする。
+// v24:
+// 元の表示方法（TOPでは非表示 → 一覧で表示）はそのまま。
+// IntersectionObserverだけ廃止し、一覧の「絶対位置」で安定判定する。
 const bottomNavigation =
   document.getElementById(
     "bottomNav"
@@ -5974,19 +5986,8 @@ const listPageForNav =
     "listPage"
   );
 
-const videoHeroForNav =
-  document.getElementById(
-    "videoHero"
-  );
-
-let bottomNavVisible =
-  Boolean(
-    bottomNavigation
-      ?.classList
-      .contains(
-        "is-visible"
-      )
-  );
+let bottomNavHideUntilVideoTop =
+  false;
 
 let bottomNavFramePending =
   false;
@@ -5998,29 +5999,51 @@ function updateBottomNavigationVisibility() {
     return;
   }
 
-  const forceVisible =
+  const registerOrManage =
     document.body
       .classList
-      .contains(
-        "register-mode"
-      )
+      .contains("register-mode")
     ||
     document.body
       .classList
-      .contains(
-        "manage-mode"
-      );
+      .contains("manage-mode");
 
-  if (forceVisible) {
+  if (registerOrManage) {
 
-    bottomNavVisible =
-      true;
+    bottomNavHideUntilVideoTop =
+      false;
 
     bottomNavigation
       .classList
-      .add(
-        "is-visible"
-      );
+      .add("is-visible");
+
+    return;
+  }
+
+
+  const scrollY =
+    window.scrollY
+    ||
+    window.pageYOffset
+    ||
+    0;
+
+
+  /*
+    TOPへ戻るスムーズスクロール中は、
+    一覧の位置を通過しても再表示させない。
+    TOP到着後にロック解除。
+  */
+  if (bottomNavHideUntilVideoTop) {
+
+    bottomNavigation
+      .classList
+      .remove("is-visible");
+
+    if (scrollY <= 8) {
+      bottomNavHideUntilVideoTop =
+        false;
+    }
 
     return;
   }
@@ -6028,70 +6051,130 @@ function updateBottomNavigationVisibility() {
 
   if (!listPageForNav) {
 
-    bottomNavVisible =
-      false;
-
     bottomNavigation
       .classList
-      .remove(
-        "is-visible"
-      );
+      .remove("is-visible");
 
     return;
   }
 
 
   /*
-    v23
-    動画のスクロール量ではなく、
-    「白い募集カードエリアの先頭位置」を基準に判定する。
-
-    カードが画面へ入ったら固定フッターを表示。
-    カードから動画側へ戻った時だけ非表示。
-    96pxのヒステリシスで境界付近の点滅・往復を防止。
+    一覧のページ内絶対位置を使うため、
+    sticky動画やiPhone Safariの表示領域変化に影響されにくい。
   */
-  const listTop =
+  const listDocumentTop =
+    scrollY
+    +
     listPageForNav
       .getBoundingClientRect()
       .top;
 
+  const showAt =
+    Math.max(
+      0,
+      listDocumentTop - 76
+    );
+
+  const visible =
+    scrollY >= showAt;
+
+
+  bottomNavigation
+    .classList
+    .toggle(
+      "is-visible",
+      visible
+    );
+
+}
+
+
+function clampListScrollToContentEnd() {
+
+  /*
+    v25:
+    Safariなど一部ブラウザでsticky動画＋fixed footerの組み合わせ時に
+    募集カードが終わった後も余白へスクロールできる場合だけ補正する。
+
+    登録 / 編集画面には一切適用しない。
+    PCにも適用しない。
+  */
+  if (
+    window.matchMedia("(min-width: 1025px)").matches
+    ||
+    document.body.classList.contains("register-mode")
+    ||
+    document.body.classList.contains("manage-mode")
+    ||
+    !listPageForNav
+  ) {
+    return;
+  }
+
+  const scrollY =
+    window.scrollY
+    ||
+    window.pageYOffset
+    ||
+    0;
+
   const viewportHeight =
+    window.visualViewport?.height
+    ||
     window.innerHeight
     ||
     document.documentElement.clientHeight
     ||
     0;
 
-  const showLine =
-    viewportHeight - 24;
+  const footerHeight =
+    bottomNavigation?.offsetHeight
+    ||
+    68;
 
-  const hideLine =
-    viewportHeight + 96;
+  const listBottomDocument =
+    scrollY
+    +
+    listPageForNav
+      .getBoundingClientRect()
+      .bottom;
 
-  const shouldShow =
-    bottomNavVisible
-      ? listTop <= hideLine
-      : listTop <= showLine;
-
-
-  bottomNavVisible =
-    shouldShow;
-
-  bottomNavigation
-    .classList
-    .toggle(
-      "is-visible",
-      shouldShow
+  /*
+    固定フッターに最後のカードが隠れない分だけ余裕を残す。
+    それより下の「何もない領域」には進ませない。
+  */
+  const maxScroll =
+    Math.max(
+      0,
+      Math.ceil(
+        listBottomDocument
+        -
+        viewportHeight
+        +
+        footerHeight
+      )
     );
+
+  if (scrollY > maxScroll + 2) {
+
+    window.scrollTo({
+      top:
+        maxScroll,
+      left:
+        0,
+      behavior:
+        "auto"
+    });
+
+  }
 
 }
 
 
 function scheduleBottomNavigationUpdate() {
 
-  if (
-    bottomNavFramePending
-  ) {
+  if (bottomNavFramePending) {
     return;
   }
 
@@ -6106,6 +6189,7 @@ function scheduleBottomNavigationUpdate() {
           false;
 
         updateBottomNavigationVisibility();
+        clampListScrollToContentEnd();
 
       }
     );
