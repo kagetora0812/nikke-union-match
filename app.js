@@ -5959,6 +5959,11 @@ document
 
 // 白い募集エリアまで来た時だけ
 // スマホ / タブレット下部メニューを表示
+//
+// v21:
+// IntersectionObserverによる境界付近の表示/非表示ループを廃止。
+// 動画の下端を基準にした固定スクロール位置で判定し、
+// 少しヒステリシスを持たせてブラウザUIの伸縮でも暴れないようにする。
 const bottomNavigation =
   document.getElementById(
     "bottomNav"
@@ -5969,82 +5974,168 @@ const listPageForNav =
     "listPage"
   );
 
-if (
-  bottomNavigation
-  &&
-  listPageForNav
-) {
+const videoHeroForNav =
+  document.getElementById(
+    "videoHero"
+  );
 
-  const bottomNavObserver =
-    new IntersectionObserver(
-      entries => {
+let bottomNavVisible =
+  Boolean(
+    bottomNavigation
+      ?.classList
+      .contains(
+        "is-visible"
+      )
+  );
 
-        const visible =
-          entries.some(
-            entry =>
-              entry.isIntersecting
-              &&
-              entry.boundingClientRect.top <=
-                window.innerHeight * 0.90
-          );
+let bottomNavFramePending =
+  false;
 
-        bottomNavigation
-          .classList
-          .toggle(
-            "is-visible",
-            visible
-          );
 
-      },
-      {
-        root:
-          null,
-        threshold:
-          0,
-        rootMargin:
-          "0px 0px -10% 0px"
-      }
+function updateBottomNavigationVisibility() {
+
+  if (!bottomNavigation) {
+    return;
+  }
+
+  const forceVisible =
+    document.body
+      .classList
+      .contains(
+        "register-mode"
+      )
+    ||
+    document.body
+      .classList
+      .contains(
+        "manage-mode"
+      );
+
+  if (forceVisible) {
+
+    bottomNavVisible =
+      true;
+
+    bottomNavigation
+      .classList
+      .add(
+        "is-visible"
+      );
+
+    return;
+  }
+
+
+  if (
+    !listPageForNav
+    ||
+    !videoHeroForNav
+  ) {
+
+    bottomNavVisible =
+      false;
+
+    bottomNavigation
+      .classList
+      .remove(
+        "is-visible"
+      );
+
+    return;
+  }
+
+
+  const scrollY =
+    window.scrollY
+    ||
+    window.pageYOffset
+    ||
+    0;
+
+  const videoBottom =
+    videoHeroForNav.offsetTop
+    +
+    videoHeroForNav.offsetHeight;
+
+  const showAt =
+    Math.max(
+      0,
+      videoBottom - 76
     );
 
-  bottomNavObserver
-    .observe(
-      listPageForNav
+  const hideBelow =
+    Math.max(
+      0,
+      showAt - 96
+    );
+
+  const shouldShow =
+    bottomNavVisible
+      ? scrollY >= hideBelow
+      : scrollY >= showAt;
+
+
+  bottomNavVisible =
+    shouldShow;
+
+  bottomNavigation
+    .classList
+    .toggle(
+      "is-visible",
+      shouldShow
     );
 
 }
 
 
+function scheduleBottomNavigationUpdate() {
+
+  if (
+    bottomNavFramePending
+  ) {
+    return;
+  }
+
+  bottomNavFramePending =
+    true;
+
+  window
+    .requestAnimationFrame(
+      () => {
+
+        bottomNavFramePending =
+          false;
+
+        updateBottomNavigationVisibility();
+
+      }
+    );
+
+}
+
+
+window
+  .addEventListener(
+    "scroll",
+    scheduleBottomNavigationUpdate,
+    {
+      passive:
+        true
+    }
+  );
+
+
+window
+  .addEventListener(
+    "resize",
+    scheduleBottomNavigationUpdate
+  );
+
+
 // register/manage時は常用ナビとして表示
 const bodyModeObserver =
   new MutationObserver(
-    () => {
-
-      if (!bottomNavigation) {
-        return;
-      }
-
-      const forceVisible =
-        document.body
-          .classList
-          .contains(
-            "register-mode"
-          )
-        ||
-        document.body
-          .classList
-          .contains(
-            "manage-mode"
-          );
-
-      if (forceVisible) {
-        bottomNavigation
-          .classList
-          .add(
-            "is-visible"
-          );
-      }
-
-    }
+    scheduleBottomNavigationUpdate
   );
 
 bodyModeObserver
@@ -6058,6 +6149,12 @@ bodyModeObserver
           "class"
         ]
     }
+  );
+
+
+window
+  .requestAnimationFrame(
+    updateBottomNavigationVisibility
   );
 
 
