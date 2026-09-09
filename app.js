@@ -1,4750 +1,6134 @@
-@import url("https://fonts.googleapis.com/css2?family=Teko:wght@500;600;700&family=Zen+Kaku+Gothic+New:wght@500;700;900&display=swap");
+/*
+  NIKKE UNION MATCH
+  app.js
+*/
 
-/* =========================================================
-   NIKKE UNION MATCH
-   NIKKE UI REBUILD v3
-   - cyan unified borders/accent
-   - square / hard-edged UI
-   - angular typography
-   - charcoal buttons -> cyan on hover/active
-   ========================================================= */
 
-:root {
-  --bg: #f2f5f7;
-  --surface: #ffffff;
-  --surface-2: #eceff1;
-  --surface-3: #e3e7e9;
+// ========================================
+// Supabase
+// ========================================
 
-  --ink: #222428;
-  --ink-2: #34363a;
-  --ink-3: #44464a;
-  --ink-soft: #62666a;
+const SUPABASE_URL =
+  "https://igoekrvpgnjberppiawf.supabase.co";
 
-  --text: #222428;
-  --muted: #7b8085;
+const SUPABASE_ANON_KEY =
+  "sb_publishable_xSjnNTnh667o9IesU5g5Kw_xcdg9bbh";
 
-  --line: #c8cdd0;
-  --line-strong: #9da4a9;
+const hasSupabaseConfig =
+  !SUPABASE_URL.includes("YOUR_") &&
+  !SUPABASE_ANON_KEY.includes("YOUR_");
 
-  --cyan: #1ab0f1;
-  --cyan-2: #28b8f4;
-  --cyan-dark: #0b8fc8;
+const sb =
+  hasSupabaseConfig &&
+  window.supabase
+    ? window.supabase.createClient(
+        SUPABASE_URL,
+        SUPABASE_ANON_KEY
+      )
+    : null;
 
-  --gold: #d89f20;
-  --gold: #F2A124;
-  --yellow: #F2A124;
-  --yellow-deep: #D98912;
 
-  --purple: #a828f0;
-  --purple-2: #c875ff;
+// ========================================
+// 共通
+// ========================================
 
-  --green: #35d78c;
-  --red: #ff5364;
+const $ = selector =>
+  document.querySelector(selector);
 
-  --charcoal: #3d3e42;
-  --charcoal-2: #303135;
-  --charcoal-3: #27282b;
 
-  --shadow:
-    0 6px 18px rgba(26, 31, 36, .14);
+// ========================================
+// Xシェア用
+// 直前に登録した募集情報
+// ========================================
 
-  --shadow-soft:
-    0 3px 10px rgba(26, 31, 36, .10);
+let lastRegisteredRecruitment = null;
+
+// 登録前プレビューの確定フラグ
+let registrationPreviewApproved = false;
+let registrationPreviewObjectUrl = null;
+let registrationPreviewPreparedFile = null;
+
+// PASS再編集・再延長
+let loadedManagedRecruitment = null;
+let loadedManagePass = "";
+let loadedManagePassHash = "";
+let manageEditPreparedFile = null;
+let manageEditObjectUrl = null;
+
+
+
+function escapeHtml(value) {
+  return String(value ?? "").replace(
+    /[&<>"']/g,
+    char => ({
+      "&": "&amp;",
+      "<": "&lt;",
+      ">": "&gt;",
+      '"': "&quot;",
+      "'": "&#039;"
+    }[char])
+  );
 }
 
 
-/* =========================================================
-   RESET / BASE
-   ========================================================= */
+// ========================================
+// 募集記事URL
+// X / BlablaLink / Discord / その他のHTTP(S) URLに対応
+// ========================================
 
-* {
-  box-sizing: border-box;
-  border-radius: 0 !important;
+function validRecruitmentUrl(value) {
+
+  try {
+
+    const url =
+      new URL(
+        String(value || "").trim()
+      );
+
+    if (
+      url.protocol !== "https:"
+      &&
+      url.protocol !== "http:"
+    ) {
+      return false;
+    }
+
+    const host =
+      url.hostname
+        .toLowerCase()
+        .replace(/^www\./, "");
+
+    if (
+      host === "x.com"
+      ||
+      host === "twitter.com"
+    ) {
+      return /^\/[^/]+\/status\/\d+\/?$/
+        .test(url.pathname);
+    }
+
+    return true;
+
+  } catch {
+
+    return false;
+
+  }
+
 }
 
-html {
-  background: var(--bg);
+
+function getRecruitmentPlatform(value) {
+
+  try {
+
+    const url =
+      new URL(value);
+
+    const host =
+      url.hostname
+        .toLowerCase()
+        .replace(/^www\./, "");
+
+    if (
+      host === "x.com"
+      ||
+      host === "twitter.com"
+    ) {
+      return "X";
+    }
+
+    if (
+      host === "blablalink.com"
+      ||
+      host.endsWith(".blablalink.com")
+    ) {
+      return "BlablaLink";
+    }
+
+    if (
+      host === "discord.gg"
+      ||
+      host === "discord.com"
+      ||
+      host.endsWith(".discord.com")
+    ) {
+      return "Discord";
+    }
+
+    return "その他";
+
+  } catch {
+
+    return "その他";
+
+  }
+
 }
 
-body {
-  margin: 0;
-  min-height: 100vh;
-  padding-bottom: 76px;
 
-  color: var(--text);
+function isXRecruitmentUrl(value) {
+  return getRecruitmentPlatform(value) === "X";
+}
 
-  background:
-    linear-gradient(
-      180deg,
-      #f8fafb 0%,
-      #f1f4f6 42%,
-      #edf1f3 100%
+
+function getRecruitmentButtonLabel(value) {
+
+  const platform =
+    getRecruitmentPlatform(value);
+
+  if (platform === "X") {
+    return "Xで募集記事を開く ↗";
+  }
+
+  if (platform === "BlablaLink") {
+    return "BlablaLinkで募集記事を開く ↗";
+  }
+
+  return "募集記事を開く ↗";
+}
+
+
+// ========================================
+// BlablaLink 自動キャプチャ
+// 対応URL：/post/detail?...&post_uuid=...
+// ========================================
+
+function isBlablaLinkPostUrl(value) {
+  try {
+    const url = new URL(String(value || "").trim());
+    const host = url.hostname.toLowerCase().replace(/^www\./, "");
+
+    if (
+      host !== "blablalink.com" &&
+      !host.endsWith(".blablalink.com")
+    ) {
+      return false;
+    }
+
+    return (
+      url.pathname === "/post/detail" &&
+      Boolean(url.searchParams.get("post_uuid"))
+    );
+  } catch {
+    return false;
+  }
+}
+
+async function fetchBlablaLinkPreviewFile(value) {
+  if (!isBlablaLinkPostUrl(value)) {
+    throw new Error("INVALID_BLABLALINK_POST_URL");
+  }
+
+  const controller = new AbortController();
+  const timer = setTimeout(() => controller.abort(), 35000);
+
+  try {
+    const response = await fetch(
+      `${SUPABASE_URL}/functions/v1/blablalink-preview`,
+      {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          "apikey": SUPABASE_ANON_KEY,
+          "Authorization": `Bearer ${SUPABASE_ANON_KEY}`
+        },
+        body: JSON.stringify({
+          url: String(value || "").trim()
+        }),
+        signal: controller.signal
+      }
     );
 
-  font-family:
-    "Gothic MB101",
-    "Zen Kaku Gothic New",
-    sans-serif;
+    if (!response.ok) {
+      let message = `BLABLALINK_PREVIEW_HTTP_${response.status}`;
+      try {
+        const data = await response.json();
+        message = data?.error || data?.message || message;
+      } catch {}
+      throw new Error(message);
+    }
 
-  font-weight: 700;
+    const contentType = response.headers.get("content-type") || "image/png";
+    if (!contentType.startsWith("image/")) {
+      throw new Error("BLABLALINK_PREVIEW_NOT_IMAGE");
+    }
 
-  -webkit-font-smoothing: antialiased;
-  text-rendering: optimizeLegibility;
-}
+    const blob = await response.blob();
+    if (!blob.size) {
+      throw new Error("BLABLALINK_PREVIEW_EMPTY");
+    }
 
-body::before {
-  content: "";
+    const cleanType = contentType.split(";")[0];
+    const extension =
+      cleanType.includes("webp")
+        ? "webp"
+        : cleanType.includes("jpeg")
+          ? "jpg"
+          : "png";
 
-  position: fixed;
-  inset: 0;
-  z-index: -1;
-
-  pointer-events: none;
-
-  background:
-    linear-gradient(
-      135deg,
-      transparent 0 67%,
-      rgba(34, 36, 40, .024) 67% 68%,
-      transparent 68% 100%
+    return new File(
+      [blob],
+      `blablalink-preview-${Date.now()}.${extension}`,
+      { type: cleanType, lastModified: Date.now() }
     );
+  } finally {
+    clearTimeout(timer);
+  }
 }
 
-button,
-input,
-select,
-textarea {
-  font: inherit;
+// ========================================
+// 任意募集画像
+// 元画像は20MBまで受付 → ブラウザ側で自動最適化
+// Supabaseへは原則1.8MB以下の画像をアップロード
+// ========================================
+
+const PREVIEW_SOURCE_MAX_BYTES = 20 * 1024 * 1024;
+const PREVIEW_UPLOAD_TARGET_BYTES = 1.8 * 1024 * 1024;
+const PREVIEW_MAX_WIDTH = 1920;
+const PREVIEW_MAX_HEIGHT = 3200;
+const PREVIEW_MAX_PIXELS = 8_000_000;
+
+function formatFileSize(bytes) {
+  if (!Number.isFinite(bytes) || bytes <= 0) {
+    return "0MB";
+  }
+
+  if (bytes < 1024 * 1024) {
+    return `${Math.max(1, Math.round(bytes / 1024))}KB`;
+  }
+
+  return `${(bytes / 1024 / 1024).toFixed(1)}MB`;
 }
 
-button,
-a {
-  -webkit-tap-highlight-color: transparent;
+function validatePreviewImageFile(file) {
+
+  if (!file) {
+    return true;
+  }
+
+  const allowedTypes =
+    [
+      "image/jpeg",
+      "image/png",
+      "image/webp"
+    ];
+
+  if (!allowedTypes.includes(file.type)) {
+    alert("募集画像は JPG / PNG / WebP を選択してください。");
+    return false;
+  }
+
+  if (file.size > PREVIEW_SOURCE_MAX_BYTES) {
+    alert("募集画像は20MB以下を選択してください。\n大きな画像は選択後に自動で最適化されます。");
+    return false;
+  }
+
+  return true;
 }
 
-button:focus-visible,
-a:focus-visible,
-input:focus-visible,
-select:focus-visible,
-textarea:focus-visible {
-  outline: 2px solid var(--cyan);
-  outline-offset: 2px;
+function loadPreviewImage(file) {
+  return new Promise((resolve, reject) => {
+    const objectUrl = URL.createObjectURL(file);
+    const image = new Image();
+
+    image.onload = () => {
+      URL.revokeObjectURL(objectUrl);
+      resolve(image);
+    };
+
+    image.onerror = () => {
+      URL.revokeObjectURL(objectUrl);
+      reject(new Error("PREVIEW_IMAGE_DECODE_FAILED"));
+    };
+
+    image.src = objectUrl;
+  });
 }
 
-
-/* =========================================================
-   NIKKE ANGULAR GEOMETRY
-   丸角ではなく「切り欠き / 面取り」の形
-   ========================================================= */
-
-:root {
-  --cut-sm: 6px;
-  --cut-md: 9px;
-  --cut-lg: 12px;
+function canvasToPreviewBlob(canvas, mimeType, quality) {
+  return new Promise(resolve => {
+    canvas.toBlob(resolve, mimeType, quality);
+  });
 }
 
-.btn,
-.creator-link-btn,
-.search-tab,
-.register-back-btn,
-.manage-back-btn,
-.copy-btn,
-.x-btn,
-.close-reason-btn,
-.nav-btn {
-  border-radius: 0 !important;
+function getPreviewResizeScale(width, height) {
+  let scale = 1;
 
-  clip-path:
-    polygon(
-      var(--cut-sm) 0,
-      100% 0,
-      100% calc(100% - var(--cut-sm)),
-      calc(100% - var(--cut-sm)) 100%,
-      0 100%,
-      0 var(--cut-sm)
+  if (width > PREVIEW_MAX_WIDTH) {
+    scale = Math.min(scale, PREVIEW_MAX_WIDTH / width);
+  }
+
+  if (height > PREVIEW_MAX_HEIGHT) {
+    scale = Math.min(scale, PREVIEW_MAX_HEIGHT / height);
+  }
+
+  const pixels = width * height;
+
+  if (pixels > PREVIEW_MAX_PIXELS) {
+    scale = Math.min(
+      scale,
+      Math.sqrt(PREVIEW_MAX_PIXELS / pixels)
     );
+  }
+
+  return scale;
 }
 
-.hero-stats,
-.card,
-.filters,
-.panel,
-.notice,
-.easy-register-box,
-.commander-close-reason,
-.modal-card,
-.pass-box,
-.empty,
-.graduated-commander-counter {
-  border-radius: 0 !important;
+function drawPreviewImageToCanvas(image, width, height) {
+  const canvas = document.createElement("canvas");
+  canvas.width = Math.max(1, Math.round(width));
+  canvas.height = Math.max(1, Math.round(height));
 
-  clip-path:
-    polygon(
-      var(--cut-md) 0,
-      100% 0,
-      100% calc(100% - var(--cut-md)),
-      calc(100% - var(--cut-md)) 100%,
-      var(--cut-md) 100%,
-      0 calc(100% - var(--cut-md)),
-      0 var(--cut-md)
-    );
+  const context = canvas.getContext("2d", { alpha: false });
+
+  if (!context) {
+    throw new Error("PREVIEW_CANVAS_UNAVAILABLE");
+  }
+
+  context.imageSmoothingEnabled = true;
+  context.imageSmoothingQuality = "high";
+  context.fillStyle = "#ffffff";
+  context.fillRect(0, 0, canvas.width, canvas.height);
+  context.drawImage(image, 0, 0, canvas.width, canvas.height);
+
+  return canvas;
 }
 
-/* 入力欄は操作性優先で四角 */
-input,
-select,
-textarea {
-  border-radius: 0 !important;
-  clip-path: none;
-}
+async function optimizePreviewImageFile(file) {
+  if (!file) {
+    return null;
+  }
 
-/* ボタンの角をよりNIKKEらしく強調 */
-.main-register-btn,
-.btn.primary {
-  --cut-sm: 8px;
-}
+  if (!validatePreviewImageFile(file)) {
+    throw new Error("PREVIEW_IMAGE_INVALID");
+  }
 
-.search-tab.active,
-.btn:active,
-.btn.active,
-.nav-btn.active {
-  clip-path:
-    polygon(
-      8px 0,
-      100% 0,
-      100% calc(100% - 8px),
-      calc(100% - 8px) 100%,
-      0 100%,
-      0 8px
-    );
-}
+  const image = await loadPreviewImage(file);
+  const sourceWidth = image.naturalWidth || image.width;
+  const sourceHeight = image.naturalHeight || image.height;
 
+  if (!sourceWidth || !sourceHeight) {
+    throw new Error("PREVIEW_IMAGE_SIZE_INVALID");
+  }
 
-/* =========================================================
-   HEADER
-   ========================================================= */
+  const initialScale =
+    getPreviewResizeScale(sourceWidth, sourceHeight);
 
-.topbar {
-  position: sticky;
-  top: 0;
-  z-index: 30;
+  // サイズ・解像度とも十分小さいJPEG/WebPは画質を落とさずそのまま使う。
+  if (
+    initialScale === 1 &&
+    file.size <= PREVIEW_UPLOAD_TARGET_BYTES &&
+    (file.type === "image/jpeg" || file.type === "image/webp")
+  ) {
+    return file;
+  }
 
-  height: 66px;
+  let width = Math.max(1, Math.round(sourceWidth * initialScale));
+  let height = Math.max(1, Math.round(sourceHeight * initialScale));
 
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
+  let bestBlob = null;
+  let bestMimeType = "image/webp";
 
-  padding: 0 18px;
+  // 品質を段階的に下げ、それでも大きければ寸法を少しずつ縮小する。
+  for (let resizeAttempt = 0; resizeAttempt < 7; resizeAttempt++) {
+    const canvas =
+      drawPreviewImageToCanvas(image, width, height);
 
-  border-bottom: 2px solid var(--cyan);
+    for (const quality of [0.90, 0.82, 0.74, 0.66, 0.58]) {
+      let blob =
+        await canvasToPreviewBlob(
+          canvas,
+          "image/webp",
+          quality
+        );
 
-  color: #fff;
+      // WebP出力に対応していない環境ではJPEGへフォールバック。
+      let mimeType = "image/webp";
 
-  background:
-    linear-gradient(
-      180deg,
-      #252629 0%,
-      #17181b 100%
-    );
+      if (!blob || blob.type !== "image/webp") {
+        blob =
+          await canvasToPreviewBlob(
+            canvas,
+            "image/jpeg",
+            quality
+          );
+        mimeType = "image/jpeg";
+      }
 
-  box-shadow:
-    0 4px 14px rgba(0, 0, 0, .22);
-}
+      if (!blob) {
+        continue;
+      }
 
-.brand {
-  display: flex;
-  flex-direction: column;
+      if (!bestBlob || blob.size < bestBlob.size) {
+        bestBlob = blob;
+        bestMimeType = mimeType;
+      }
 
-  font-family:
-    "Industry",
-    "Azonix",
-    "Futura PT Condensed",
-    "Teko",
-    "Gothic MB101",
-    "Zen Kaku Gothic New",
-    sans-serif;
+      if (blob.size <= PREVIEW_UPLOAD_TARGET_BYTES) {
+        const extension =
+          mimeType === "image/webp" ? "webp" : "jpg";
 
-  line-height: .82;
-}
+        return new File(
+          [blob],
+          `recruitment-preview-${Date.now()}.${extension}`,
+          {
+            type: mimeType,
+            lastModified: Date.now()
+          }
+        );
+      }
+    }
 
-.brand-small {
-  color: var(--cyan);
+    width = Math.max(1, Math.round(width * 0.82));
+    height = Math.max(1, Math.round(height * 0.82));
+  }
 
-  font-size: 10px;
-  font-weight: 800;
+  if (!bestBlob || bestBlob.size > 3 * 1024 * 1024) {
+    throw new Error("PREVIEW_IMAGE_OPTIMIZE_FAILED");
+  }
 
-  letter-spacing: 4px;
-}
+  const extension =
+    bestMimeType === "image/webp" ? "webp" : "jpg";
 
-.brand-main {
-  color: #fff;
-
-  font-size: 28px;
-  font-weight: 700;
-
-  letter-spacing: 1.4px;
-}
-
-.status-dot {
-  color: #d7dadd;
-
-  font:
-    700 11px "Teko",
-    sans-serif;
-
-  letter-spacing: 1.4px;
-}
-
-.status-dot span {
-  display: inline-block;
-
-  width: 8px;
-  height: 8px;
-
-  margin-right: 7px;
-
-  background: var(--green);
-
-  box-shadow:
-    0 0 10px rgba(53, 215, 140, .85);
+  return new File(
+    [bestBlob],
+    `recruitment-preview-${Date.now()}.${extension}`,
+    {
+      type: bestMimeType,
+      lastModified: Date.now()
+    }
+  );
 }
 
 
-/* =========================================================
-   CONTAINER
-   ========================================================= */
+function buildRecruitmentPreviewMedia(
+  url,
+  previewImageUrl = "",
+  xEmbedEnabled = true,
+  forcePreviewImage = false
+) {
 
-.container {
-  width: 100%;
-  max-width: 1380px;
+  const platform =
+    getRecruitmentPlatform(url);
 
-  margin: 0 auto;
-  padding: 0 18px;
+  // ========================================
+  // v13.17 画像優先表示
+  // 登録画像がある場合は、掲載先やX埋め込み設定に関係なく
+  // 必ず登録画像を最優先で表示する。
+  // BlablaLinkの自動キャプチャは画像未選択時だけ取得されるため、
+  // 手動画像を登録した場合はその画像がそのまま優先される。
+  // forcePreviewImage は旧データ互換のため引数として残す。
+  // ========================================
+  if (previewImageUrl) {
+    return `
+      <div class="registration-preview-platform">
+        掲載先：${escapeHtml(platform)}
+      </div>
+      <a
+        class="recruitment-preview-link"
+        href="${escapeHtml(url)}"
+        target="_blank"
+        rel="noopener noreferrer"
+      >
+        <img
+          class="recruitment-preview-image"
+          src="${escapeHtml(previewImageUrl)}"
+          alt="${escapeHtml(platform)}募集記事の登録画像"
+          loading="lazy"
+        >
+      </a>
+    `;
+  }
+
+  // 登録画像が無いXだけ、X埋め込みを表示する。
+  if (platform === "X") {
+
+    const postId =
+      getXPostId(url);
+
+    if (xEmbedEnabled !== false) {
+      return `
+        <div
+          class="x-embed"
+          data-post-id="${escapeHtml(postId || "")}"
+          data-preview-image-url=""
+          data-recruitment-url="${escapeHtml(url || "")}"
+        ></div>
+      `;
+    }
+
+    return `
+      <div class="x-embed-error">
+        <strong>🙈 X埋め込み表示はOFFです</strong><br>
+        <span>下のボタンから募集記事を確認できます。</span>
+      </div>
+    `;
+  }
+
+  // BlablaLink / Discord / その他で画像が無い場合。
+  return `
+    <div class="registration-preview-platform">
+      掲載先：${escapeHtml(platform)}
+    </div>
+    <div class="recruitment-preview-empty">
+      画像なし（任意）<br>
+      下のボタンから募集記事を確認できます。
+    </div>
+  `;
 }
 
 
-/* =========================================================
-   TYPOGRAPHY
-   ========================================================= */
 
-h1,
-h2,
-h3,
-.hero-stat-title,
-.hero-graduate-title,
-.btn,
-.search-tab,
-.nav-btn,
-.recruitment-type,
-.state {
-  font-family:
-    "Gothic MB101",
-    "Zen Kaku Gothic New",
-    sans-serif;
+// ========================================
+// 募集画像アップロード
+// ========================================
 
-  font-weight: 900;
-}
+async function uploadRecruitmentPreviewImage(
+  type,
+  recruitmentId,
+  passHash,
+  file
+) {
 
-h1,
-h2,
-h3 {
-  margin: 0;
+  if (!file) {
+    return null;
+  }
 
-  color: var(--ink);
+  const extMap = {
+    "image/jpeg": "jpg",
+    "image/png": "png",
+    "image/webp": "webp"
+  };
 
-  letter-spacing: -.06em;
-}
+  const ext =
+    extMap[file.type] || "jpg";
 
-.eyebrow {
-  margin-bottom: 8px;
+  const safeType =
+    type === "union"
+      ? "union"
+      : "commander";
 
-  color: var(--ink-soft);
+  const objectPath =
+    `${safeType}/${recruitmentId}/${Date.now()}.${ext}`;
 
-  font:
-    800 11px "Teko",
-    sans-serif;
+  const { error: uploadError } =
+    await sb.storage
+      .from("recruitment-previews")
+      .upload(
+        objectPath,
+        file,
+        {
+          cacheControl: "3600",
+          upsert: false,
+          contentType: file.type
+        }
+      );
 
-  letter-spacing: 2.2px;
-  text-transform: uppercase;
-}
+  if (uploadError) {
+    throw uploadError;
+  }
 
+  const { data: publicData } =
+    sb.storage
+      .from("recruitment-previews")
+      .getPublicUrl(objectPath);
 
-/* =========================================================
-   HERO
-   ========================================================= */
+  const publicUrl =
+    publicData?.publicUrl || "";
 
-.hero {
-  display: grid;
+  if (!publicUrl) {
+    throw new Error("PREVIEW_PUBLIC_URL_FAILED");
+  }
 
-  grid-template-columns:
-    minmax(320px, .82fr)
-    minmax(560px, 1.18fr);
-
-  gap: 28px;
-  align-items: center;
-
-  margin-bottom: 24px;
-  padding: 34px 0 28px;
-
-  border-bottom: 1px solid var(--line);
-}
-
-.hero-left {
-  min-width: 0;
-}
-
-.hero h1 {
-  font-size:
-    clamp(42px, 5vw, 68px);
-
-  line-height: .94;
-
-  letter-spacing: -.075em;
-}
-
-.hero-title-line1,
-.hero-title-line2 {
-  display: block;
-}
-
-.hero h1 em {
-  color: var(--cyan);
-
-  font-style: normal;
-}
-
-.hero p {
-  margin: 18px 0 20px;
-
-  color: var(--ink-soft);
-
-  font-size: 14px;
-  font-weight: 700;
-
-  line-height: 1.8;
-}
-
-
-/* =========================================================
-   BUTTONS
-   ========================================================= */
-
-.hero-actions,
-.creator-action-row {
-  display: flex;
-  align-items: center;
-
-  gap: 9px;
-
-  flex-wrap: wrap;
-}
-
-.btn,
-.creator-link-btn,
-.search-tab,
-.register-back-btn,
-.manage-back-btn,
-.copy-btn,
-.text-btn {
-  transition:
-    background .15s ease,
-    border-color .15s ease,
-    color .15s ease,
-    transform .15s ease,
-    box-shadow .15s ease;
-}
-
-.btn {
-  min-height: 48px;
-
-  padding: 12px 20px;
-
-  border: 1px solid #55575b;
-
-  color: #f7f8f9;
-
-  background:
-    linear-gradient(
-      180deg,
-      #48494d 0%,
-      #35363a 100%
-    );
-
-  font-weight: 900;
-
-  cursor: pointer;
-
-  box-shadow:
-    0 3px 8px rgba(0, 0, 0, .15);
-}
-
-.btn:hover,
-.btn:active,
-.btn.active {
-  border-color: var(--cyan);
-
-  color: #fff;
-
-  background:
-    linear-gradient(
-      180deg,
-      var(--cyan-2),
-      var(--cyan)
-    );
-
-  box-shadow:
-    0 4px 12px rgba(26, 176, 241, .28);
-
-  transform: translateY(-1px);
-}
-
-.btn.primary {
-  position: relative;
-
-  border-color: #56585c;
-
-  color: #fff;
-
-  background:
-    linear-gradient(
-      180deg,
-      #48494d,
-      #34363a
-    );
-}
-
-.btn.primary::before {
-  content: "";
-
-  position: absolute;
-  left: 0;
-  top: 0;
-  bottom: 0;
-
-  width: 5px;
-
-  background: var(--cyan);
-}
-
-.btn.primary:hover,
-.btn.primary:active {
-  background:
-    linear-gradient(
-      180deg,
-      var(--cyan-2),
-      var(--cyan)
-    );
-}
-
-.btn.primary:hover::before,
-.btn.primary:active::before {
-  background: #fff;
-}
-
-.btn.danger {
-  border-color: #56585c;
-
-  color: #ffffff;
-
-  background:
-    linear-gradient(
-      180deg,
-      #48494d,
-      #35363a
-    );
-}
-
-.btn.danger:hover,
-.btn.danger:active {
-  border-color: var(--cyan);
-
-  color: #ffffff;
-
-  background:
-    linear-gradient(
-      180deg,
-      var(--cyan-2),
-      var(--cyan)
+  const { error: attachError } =
+    await sb.rpc(
+      "set_recruitment_preview_image",
+      {
+        p_type: safeType,
+        p_id: recruitmentId,
+        p_pass_hash: passHash,
+        p_preview_image_url: publicUrl
+      }
     );
 
-  box-shadow:
-    0 4px 12px rgba(26, 176, 241, .28);
+  if (attachError) {
+    throw attachError;
+  }
+
+  return publicUrl;
 }
 
-.btn.ghost {
-  border-color: var(--line-strong);
 
-  color: var(--ink);
 
-  background: #fff;
+// ========================================
+// 日付
+// ========================================
+
+function formatDate(date) {
+
+  return new Intl.DateTimeFormat(
+    "ja-JP",
+    {
+      year: "numeric",
+      month: "2-digit",
+      day: "2-digit"
+    }
+  ).format(
+    new Date(date)
+  );
+
 }
 
-.wide {
-  width: 100%;
+// ========================================
+// 表示テストモード
+// ?badgeTest=1    → NEW + 締切間近を両方表示
+// ?newTest=1      → NEWだけ強制表示
+// ?deadlineTest=1 → 締切間近だけ強制表示
+// ※本番の判定ロジックには影響しません
+// ========================================
+
+const displayTestParams =
+  new URLSearchParams(
+    window.location.search
+  );
+
+const forceNewBadge =
+  displayTestParams.get("badgeTest") === "1"
+  ||
+  displayTestParams.get("newTest") === "1";
+
+const forceDeadlineBadge =
+  displayTestParams.get("badgeTest") === "1"
+  ||
+  displayTestParams.get("deadlineTest") === "1";
+
+
+// ========================================
+// NEW表示
+// 登録から24時間以内
+// ========================================
+
+function isNewRecruitment(createdAt) {
+
+  if (forceNewBadge) {
+    return true;
+  }
+
+  const createdTime =
+    new Date(createdAt).getTime();
+
+  if (!Number.isFinite(createdTime)) {
+    return false;
+  }
+
+  const diff =
+    Date.now() - createdTime;
+
+  return (
+    diff >= 0 &&
+    diff < 24 * 60 * 60 * 1000
+  );
+
 }
 
-.main-register-btn {
-  flex: 1.45;
+// ========================================
+// ユニオンランク色分け
+// ========================================
 
-  min-height: 56px;
+function getUnionRankClass(rank) {
 
-  font-size: 16px;
-  font-weight: 900;
+  const classes = {
+
+    "チャレンジャー":
+      "challenger",
+
+    "ダイヤ":
+      "diamond",
+
+    "プラチナ":
+      "platinum",
+
+    "ゴールド":
+      "gold",
+
+    "シルバー":
+      "silver",
+
+    "駆け出しユニオン":
+      "rookie"
+
+  };
+
+  return classes[rank] ||
+    "default";
+
 }
 
-.creator-link-btn {
-  flex: .8;
 
-  min-height: 46px;
+// ========================================
+// PASS生成
+// 8文字
+// ========================================
 
-  display: flex;
-  align-items: center;
-  justify-content: center;
+function generatePass() {
 
-  padding: 0 14px;
+  const chars =
+    "ABCDEFGHJKLMNPQRSTUVWXYZ23456789";
 
-  border: 1px solid #5b5d61;
+  const random =
+    new Uint32Array(8);
 
-  color: #f6f7f8;
+  crypto.getRandomValues(
+    random
+  );
 
-  background:
-    linear-gradient(
-      180deg,
-      #48494d,
-      #35363a
+  return Array.from(
+    random,
+    number =>
+      chars[
+        number % chars.length
+      ]
+  ).join("");
+
+}
+
+
+// ========================================
+// PASSハッシュ
+// ========================================
+
+async function sha256(text) {
+
+  const data =
+    new TextEncoder()
+      .encode(text);
+
+  const hash =
+    await crypto.subtle.digest(
+      "SHA-256",
+      data
     );
 
-  font-size: 12px;
-  font-weight: 900;
+  return Array.from(
+    new Uint8Array(hash)
+  )
+    .map(
+      byte =>
+        byte
+          .toString(16)
+          .padStart(
+            2,
+            "0"
+          )
+    )
+    .join("");
 
-  text-decoration: none;
-  white-space: nowrap;
-
-  box-shadow: var(--shadow-soft);
-}
-
-.creator-link-btn:hover,
-.creator-link-btn:active {
-  border-color: var(--cyan);
-
-  color: #fff;
-
-  background:
-    linear-gradient(
-      180deg,
-      var(--cyan-2),
-      var(--cyan)
-    );
 }
 
 
-/* =========================================================
-   HERO STATS
-   ========================================================= */
+// ========================================
+// Supabaseエラーを文字列化
+// ========================================
 
-.hero-stats {
-  position: relative;
+function getErrorText(error) {
 
-  width: 100%;
-  min-width: 0;
-  min-height: 224px;
+  if (!error) {
+    return "";
+  }
 
-  display: grid !important;
+  return [
 
-  grid-template-columns:
-    minmax(0, 1fr)
-    1px
-    minmax(0, 1fr)
-    1px
-    minmax(0, 1fr) !important;
+    error.message,
+    error.details,
+    error.hint,
+    error.code
 
-  align-items: stretch;
+  ]
+    .filter(Boolean)
+    .join(" ");
 
-  gap: 0 !important;
-
-  padding: 16px 14px 34px;
-
-  border: 1px solid var(--cyan);
-
-  color: var(--ink);
-
-  background:
-    linear-gradient(
-      180deg,
-      #ffffff 0%,
-      #f4f6f7 100%
-    );
-
-  box-shadow: var(--shadow);
-}
-
-.hero-stats::before {
-  content: "";
-
-  position: absolute;
-  left: 0;
-  top: 0;
-
-  width: 92px;
-  height: 4px;
-
-  background: var(--cyan);
-}
-
-.hero-stat,
-.hero-graduate-stat {
-  min-width: 0;
-
-  display: flex !important;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-
-  padding: 6px 8px;
-
-  text-align: center;
-}
-
-.hero-graduate-stat {
-  grid-column: 5 !important;
-  grid-row: 1 !important;
-
-  margin: 0 !important;
-  padding: 6px 8px !important;
-
-  border: 0 !important;
-
-  background: transparent !important;
-}
-
-.hero-stat-divider {
-  width: 1px !important;
-  height: 72% !important;
-  min-height: 118px;
-
-  align-self: center;
-
-  background: #9aa2aa !important;
-  opacity: 1 !important;
-}
-
-.hero-stat-title,
-.hero-graduate-title {
-  min-height: 26px;
-
-  display: flex;
-  align-items: center;
-  justify-content: center;
-
-  margin: 0 0 7px;
-
-  color: var(--ink);
-
-  font-size: 13px;
-  font-weight: 900;
-
-  line-height: 1.2;
-}
-
-.hero-stat-number,
-.hero-graduate-number {
-  display: flex;
-  align-items: flex-end;
-  justify-content: center;
-
-  gap: 5px;
-}
-
-.hero-stat-number strong,
-.hero-graduate-number strong {
-  margin: 0;
-
-  font-family:
-    "Industry",
-    "Azonix",
-    "Futura PT Condensed",
-    "Teko",
-    "Gothic MB101",
-    "Zen Kaku Gothic New",
-    sans-serif;
-
-  font-size:
-    clamp(54px, 6vw, 78px);
-
-  font-weight: 800;
-
-  line-height: .82;
-}
-
-.hero-stat-number span,
-.hero-graduate-number span {
-  padding-bottom: 5px;
-
-  font-size: 17px;
-  font-weight: 900;
-
-  line-height: 1;
-}
-
-.hero-stat-sub,
-.hero-graduate-sub {
-  margin-top: 9px;
-
-  color: var(--muted);
-
-  font-size: 10px;
-
-  line-height: 1.3;
-}
-
-/* commander */
-.commander-stat .hero-stat-title,
-.commander-stat .hero-stat-number strong,
-.commander-stat .hero-stat-number span {
-  color: var(--gold);
-}
-
-/* union */
-.union-stat .hero-stat-title,
-.union-stat .hero-stat-number strong,
-.union-stat .hero-stat-number span {
-  color: var(--cyan);
-}
-
-/* graduate */
-.graduate-stat .hero-stat-title,
-.graduate-stat .hero-stat-number strong,
-.graduate-stat .hero-stat-number span,
-.hero-graduate-title,
-.hero-graduate-number strong,
-.hero-graduate-number span {
-  color: var(--purple);
-}
-
-.hero-stat-update {
-  position: absolute !important;
-
-  left: 0 !important;
-  right: 0 !important;
-  bottom: 9px !important;
-
-  color: var(--muted);
-
-  font:
-    700 10px "Teko",
-    sans-serif;
-
-  text-align: center;
 }
 
 
-/* =========================================================
-   PAGE / HEADERS
-   ========================================================= */
+// ========================================
+// X投稿ID取得
+// X / Twitter のURLだけ対象
+// ========================================
 
-.page {
-  display: none;
-}
+function getXPostId(value) {
 
-.page.active {
-  display: block;
-}
+  try {
 
-.section-head {
-  display: flex;
-  align-items: flex-end;
-  justify-content: space-between;
+    const parsed =
+      new URL(value);
 
-  gap: 16px;
+    const host =
+      parsed.hostname
+        .toLowerCase()
+        .replace(/^www\./, "");
 
-  margin-bottom: 16px;
-}
+    if (
+      host !== "x.com"
+      &&
+      host !== "twitter.com"
+    ) {
+      return null;
+    }
 
-.section-head h2 {
-  font-size:
-    clamp(26px, 3vw, 34px);
+    const match =
+      parsed.pathname.match(
+        /\/status\/(\d+)/
+      );
 
-  line-height: 1.05;
-}
+    return match
+      ? match[1]
+      : null;
 
-.section-head-actions {
-  display: flex;
-  align-items: center;
-  justify-content: flex-end;
+  } catch {
 
-  gap: 10px;
-}
+    return null;
 
-.text-btn {
-  padding: 7px 10px;
+  }
 
-  border: 1px solid transparent;
-
-  color: var(--ink-soft);
-
-  background: transparent;
-
-  font-weight: 900;
-
-  cursor: pointer;
-}
-
-.text-btn:hover,
-.text-btn:active {
-  border-color: var(--cyan);
-
-  color: var(--cyan);
 }
 
 
-/* =========================================================
-   SEARCH TABS
-   ========================================================= */
+// ========================================
+// X投稿埋め込み
+// 各投稿を独立・並列で読み込む
+// 1件が削除済み / Not found でも
+// 他の投稿の読み込みを止めない
+// ========================================
 
-.search-tabs {
-  display: grid;
+function showXEmbedFallback(target) {
 
-  grid-template-columns:
-    1fr 1fr;
+  if (!target) {
+    return;
+  }
 
-  gap: 8px;
+  target.dataset.loaded =
+    "failed";
 
-  margin-bottom: 12px;
+  const previewImageUrl =
+    target.dataset.previewImageUrl || "";
+
+  const recruitmentUrl =
+    target.dataset.recruitmentUrl || "";
+
+  // 管理画面などから登録された画像がある場合は、
+  // X埋め込みが削除済み / Not found / 読み込み失敗でも画像を表示する。
+  if (previewImageUrl) {
+
+    target.innerHTML = `
+      <div class="registration-preview-platform">
+        掲載先：X
+      </div>
+      <a
+        class="recruitment-preview-link"
+        href="${escapeHtml(recruitmentUrl)}"
+        target="_blank"
+        rel="noopener noreferrer"
+      >
+        <img
+          class="recruitment-preview-image"
+          src="${escapeHtml(previewImageUrl)}"
+          alt="X募集記事の登録画像"
+          loading="lazy"
+        >
+      </a>
+    `;
+
+    return;
+  }
+
+  target.innerHTML =
+    '<div class="x-embed-error">' +
+      '<strong>X投稿を埋め込み表示できません</strong><br>' +
+      '<span>下の「Xで募集記事を開く」から確認してください。</span>' +
+    '</div>';
+
 }
 
-.search-tab {
-  min-height: 50px;
 
-  border: 1px solid #56585c;
+// X側は削除済み投稿でも iframe 自体を返して
+// 「Not found」と表示する場合があるため、Promise成功だけでは判定できない。
+// 登録画像がある募集だけ、描画後のiframe高さを見て小さすぎる場合は画像へフォールバックする。
+function checkXEmbedUnavailable(target) {
 
-  color: #fff;
+  if (!target) {
+    return;
+  }
 
-  background:
-    linear-gradient(
-      180deg,
-      #494a4e,
-      #37383c
+  const previewImageUrl =
+    target.dataset.previewImageUrl || "";
+
+  if (!previewImageUrl) {
+    return;
+  }
+
+  if (target.dataset.loaded !== "true") {
+    return;
+  }
+
+  const iframe =
+    target.querySelector("iframe");
+
+  if (!iframe) {
+    showXEmbedFallback(target);
+    return;
+  }
+
+  const iframeRect =
+    iframe.getBoundingClientRect();
+
+  const iframeHeight =
+    Math.max(
+      iframeRect.height || 0,
+      iframe.offsetHeight || 0,
+      Number(iframe.getAttribute("height")) || 0
     );
 
-  font-size: 14px;
-  font-weight: 900;
-
-  cursor: pointer;
-
-  box-shadow: var(--shadow-soft);
-}
-
-.search-tab:hover,
-.search-tab.active,
-.commander-tab.active,
-.union-tab.active {
-  border-color: var(--cyan);
-
-  color: #fff;
-
-  background:
-    linear-gradient(
-      180deg,
-      var(--cyan-2),
-      var(--cyan)
+  const targetHeight =
+    Math.max(
+      target.getBoundingClientRect().height || 0,
+      target.offsetHeight || 0
     );
 
-  box-shadow:
-    0 4px 12px rgba(26, 176, 241, .28);
+  // Xは削除済み投稿でも「Not found」用iframeを返すことがある。
+  // そのiframeは通常の投稿よりかなり低い。
+  // 管理画面で画像が登録済みなら、小さい埋め込みを画像へ切り替える。
+  const renderedHeight =
+    Math.max(iframeHeight, targetHeight);
+
+  if (renderedHeight <= 260) {
+    showXEmbedFallback(target);
+  }
+
 }
 
 
-/* =========================================================
-   FILTERS
-   ========================================================= */
+function renderSingleXEmbed(target) {
 
-.filters {
-  margin-bottom: 14px;
-  padding: 12px;
-
-  border: 1px solid var(--cyan);
-
-  background: var(--surface);
-
-  box-shadow: var(--shadow-soft);
-}
-
-.filters label,
-.panel label {
-  display: block;
-
-  color: var(--ink-soft);
-
-  font-size: 11px;
-  font-weight: 900;
-}
-
-.filters select,
-.panel input,
-.panel select,
-.panel textarea,
-#unionRank,
-#registrationType,
-#slvFilter,
-#unionRankFilter {
-  width: 100%;
-  min-height: 46px;
-
-  margin-top: 6px;
-  padding: 11px 12px;
-
-  border: 1px solid #b7bcc0;
-
-  color: var(--ink);
-
-  background: #fff;
-
-  outline: none;
-}
-
-.filters select:focus,
-.panel input:focus,
-.panel select:focus,
-.panel textarea:focus,
-#unionRank:focus,
-#registrationType:focus,
-#slvFilter:focus,
-#unionRankFilter:focus {
-  border-color: var(--cyan);
-
-  box-shadow:
-    inset
-    0 0 0 1px var(--cyan);
-}
+  if (!target) {
+    return;
+  }
 
 
-/* =========================================================
-   LIST HEADER COUNTS
-   ========================================================= */
-
-.registration-count {
-  display: flex;
-  align-items: baseline;
-
-  gap: 14px;
-
-  margin-top: 8px;
-}
-
-.registration-count > div {
-  display: flex;
-  align-items: baseline;
-
-  gap: 4px;
-}
-
-.registration-count strong {
-  font-family:
-    "Industry",
-    "Azonix",
-    "Futura PT Condensed",
-    "Teko",
-    "Gothic MB101",
-    "Zen Kaku Gothic New",
-    sans-serif;
-
-  font-size: 24px;
-  font-weight: 800;
-
-  line-height: 1;
-}
-
-.registration-count span,
-.registration-count small {
-  font-size: 11px;
-  font-weight: 900;
-}
-
-.registration-count > div:first-child strong,
-.registration-count > div:first-child span,
-.registration-count > div:first-child small {
-  color: var(--gold);
-}
-
-.registration-count > div:nth-child(2) strong,
-.registration-count > div:nth-child(2) span,
-.registration-count > div:nth-child(2) small {
-  color: var(--cyan);
-}
+  if (
+    target.dataset.loaded === "true"
+    ||
+    target.dataset.loaded === "loading"
+  ) {
+    return;
+  }
 
 
-/* =========================================================
-   GRADUATED COUNTER
-   ========================================================= */
+  const postId =
+    target.dataset.postId;
 
-.graduated-commander-counter {
-  display: flex;
-  align-items: center;
 
-  gap: 8px;
+  if (!postId) {
 
-  min-width: 190px;
-
-  padding: 8px 11px;
-
-  border: 1px solid var(--cyan);
-
-  background:
-    linear-gradient(
-      180deg,
-      #fff,
-      #f5f8fa
+    showXEmbedFallback(
+      target
     );
 
-  box-shadow: var(--shadow-soft);
-}
+    return;
 
-.graduated-commander-number {
-  display: flex;
-  align-items: baseline;
-
-  gap: 3px;
-}
-
-.graduated-commander-number strong {
-  color: var(--purple);
-
-  font:
-    800 46px/.84 "Teko",
-    sans-serif;
-}
-
-.graduated-commander-number span {
-  color: var(--purple);
-
-  font-size: 13px;
-  font-weight: 900;
-}
-
-.graduated-commander-label {
-  display: flex;
-  flex-direction: column;
-
-  gap: 2px;
-}
-
-.graduated-commander-label strong {
-  color: var(--ink);
-
-  font-size: 12px;
-  font-weight: 900;
-}
-
-.graduated-commander-label small {
-  color: var(--purple);
-
-  font-size: 9px;
-  font-weight: 900;
-}
+  }
 
 
-/* =========================================================
-   CARDS
-   ========================================================= */
+  target.dataset.loaded =
+    "loading";
 
-.cards {
-  display: grid;
 
-  grid-template-columns:
-    repeat(
-      auto-fit,
-      minmax(280px, 1fr)
+  try {
+
+    const result =
+      window.twttr.widgets
+        .createTweet(
+
+          postId,
+
+          target,
+
+          {
+            theme: "dark",
+            align: "center",
+            conversation: "none"
+          }
+
+        );
+
+
+    Promise
+      .resolve(result)
+      .then(tweetElement => {
+
+        if (tweetElement) {
+
+          target.dataset.loaded =
+            "true";
+
+          // Xが「Not found」のiframeを返すケースを判定。
+          // iframeの描画完了を待ってから確認する。
+          // Xのiframeは段階的に高さが確定するため複数回確認する。
+          [1200, 3000, 6000].forEach(delay => {
+            setTimeout(
+              () => checkXEmbedUnavailable(target),
+              delay
+            );
+          });
+
+          return;
+
+        }
+
+        showXEmbedFallback(
+          target
+        );
+
+      })
+      .catch(error => {
+
+        console.error(
+          "X投稿表示エラー",
+          error
+        );
+
+        showXEmbedFallback(
+          target
+        );
+
+      });
+
+  } catch (error) {
+
+    console.error(
+      "X投稿表示エラー",
+      error
     );
 
-  gap: 12px;
-}
-
-.card {
-  position: relative;
-
-  overflow: hidden;
-
-  padding: 16px;
-
-  border: 1px solid var(--cyan);
-
-  color: var(--ink);
-
-  background:
-    linear-gradient(
-      180deg,
-      #fff,
-      #f4f6f7
+    showXEmbedFallback(
+      target
     );
 
-  box-shadow: var(--shadow-soft);
-}
+  }
 
-.card::before {
-  content: "";
-
-  position: absolute;
-  left: 0;
-  top: 0;
-  bottom: 0;
-
-  width: 4px;
-
-  background: var(--cyan);
-}
-
-.card::after {
-  content: "";
-
-  position: absolute;
-  right: -28px;
-  top: -28px;
-
-  width: 76px;
-  height: 76px;
-
-  border: 1px solid rgba(26, 176, 241, .16);
-
-  transform: rotate(45deg);
-
-  pointer-events: none;
-}
-
-.card.commander-card,
-.card.union-card {
-  border-color: var(--cyan);
-}
-
-.card.commander-card::before,
-.card.union-card::before {
-  background: var(--cyan);
-}
-
-.card-head {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-
-  gap: 8px;
-}
-
-.type-with-new {
-  display: flex;
-  align-items: center;
-
-  gap: 6px;
-
-  min-width: 0;
-}
-
-.recruitment-type {
-  display: inline-flex;
-  align-items: center;
-
-  width: fit-content;
-
-  padding: 4px 8px;
-
-  border: 1px solid var(--cyan);
-
-  color: var(--cyan-dark);
-
-  background: #f4fbfe;
-
-  font-size: 10px;
-  font-weight: 900;
-
-  white-space: nowrap;
-}
-
-.commander-card .recruitment-type,
-.union-card .recruitment-type {
-  border-color: var(--cyan);
-
-  color: var(--cyan-dark);
-}
-
-.state {
-  padding: 4px 7px;
-
-  border: 1px solid var(--cyan);
-
-  color: var(--cyan-dark);
-
-  background: rgba(26, 176, 241, .08);
-
-  font-size: 10px;
-  font-weight: 900;
-}
-
-.name {
-  margin: 10px 0 3px;
-
-  color: var(--ink);
-
-  font-size: 20px;
-  font-weight: 900;
-}
-
-.slv {
-  color: var(--gold);
-
-  font:
-    800 34px "Teko",
-    sans-serif;
-}
-
-.slv small {
-  margin-left: 4px;
-
-  color: var(--muted);
-
-  font-size: 11px;
-}
-
-.date {
-  margin-top: 8px;
-
-  color: var(--muted);
-
-  font-size: 10px;
-}
-
-.countdown {
-  margin-top: 12px;
-  padding-top: 10px;
-
-  border-top: 1px solid #dfe4e7;
-
-  color: var(--ink-soft);
-
-  font-size: 11px;
-}
-
-.countdown.warning {
-  color: #9b7300;
-}
-
-.countdown.danger {
-  color: #d73b4d;
 }
 
 
-/* =========================================================
-   NEW BADGE
-   ========================================================= */
+function renderXEmbeds(
+  retry = 0
+) {
 
-.new-badge {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
+  if (
+    !window.twttr
+    ||
+    !window.twttr.widgets
+  ) {
 
-  flex: 0 0 auto;
+    if (retry < 10) {
 
-  padding: 3px 6px;
+      setTimeout(
+        () => {
 
-  border: 1px solid #ff5364;
+          renderXEmbeds(
+            retry + 1
+          );
 
-  color: #ffffff;
+        },
+        500
+      );
 
-  background: #ff5364;
+    }
 
-  box-shadow: 0 2px 6px rgba(255, 83, 100, .22);
-
-  font-size: 9px;
-  font-weight: 900;
-
-  white-space: nowrap;
-}
+    return;
+  }
 
 
-/* =========================================================
-   X
-   ========================================================= */
-
-.x-post-area {
-  margin-top: 10px;
-}
-
-.x-embed {
-  min-height: 0;
-}
-
-.x-embed-error {
-  padding: 18px 10px;
-
-  border: 1px dashed var(--cyan);
-
-  color: var(--muted);
-
-  background: #f3f6f8;
-
-  text-align: center;
-}
-
-.x-btn {
-  display: block;
-
-  margin-top: 12px;
-  padding: 10px;
-
-  border: 1px solid #56585c;
-
-  color: #fff;
-
-  background:
-    linear-gradient(
-      180deg,
-      #494a4e,
-      #35363a
+  const targets =
+    document.querySelectorAll(
+      ".x-embed"
     );
 
-  font-size: 12px;
-  font-weight: 900;
 
-  text-align: center;
-  text-decoration: none;
-}
+  // ★ await で1件ずつ待たない。
+  // 全投稿をそれぞれ独立して読み込む。
+  targets.forEach(target => {
+    renderSingleXEmbed(target);
+  });
 
-.x-btn:hover,
-.x-btn:active {
-  border-color: var(--cyan);
-
-  background: var(--cyan);
 }
 
 
-/* =========================================================
-   UNION RANK
-   ランクラベルだけ塗りつぶし + 白文字
-   ========================================================= */
+// ========================================
+// ページ切替
+//
+// ★重要
+// プログラムから一覧へ戻った場合も
+// 登録・締切モードを確実に解除
+// ========================================
 
-.union-rank {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
+function showPage(name) {
 
-  width: fit-content;
+  // 登録・締切モード
+  document.body.classList.toggle(
+    "register-mode",
+    name === "register"
+  );
 
-  margin-top: 7px;
-  padding: 5px 12px;
-
-  border: 1px solid transparent;
-  border-radius: 999px;
-
-  color: #ffffff;
-
-  font-size: 12px;
-  font-weight: 900;
-
-  letter-spacing: .02em;
-  line-height: 1.2;
-}
-
-.rank-challenger {
-  color: #ffffff;
-  border-color: #e14949;
-  background: #e14949;
-}
-
-.rank-diamond {
-  color: #ffffff;
-  border-color: #9d46d8;
-  background: #9d46d8;
-}
-
-.rank-platinum {
-  color: #ffffff;
-  border-color: #159dcf;
-  background: #159dcf;
-}
-
-.rank-gold {
-  color: #ffffff;
-  border-color: #d89f20;
-  background: #d89f20;
-}
-
-.rank-silver {
-  color: #ffffff;
-  border-color: #9ca3a9;
-  background: #9ca3a9;
-}
-
-.rank-rookie {
-  color: #ffffff;
-  border-color: #83b641;
-  background: #83b641;
-}
-
-.rank-default {
-  color: var(--ink-soft);
-  border-color: #999;
-  background: #f3f4f5;
-}
+  document.body.classList.toggle(
+    "manage-mode",
+    name === "manage"
+  );
 
 
-/* =========================================================
-   PANEL / FORM / NOTICE
-   ========================================================= */
+  // 全ページを一旦閉じる
+  document
+    .querySelectorAll(".page")
+    .forEach(page => {
+      page.classList.remove("active");
+    });
 
-.panel {
-  display: grid;
 
-  gap: 14px;
+  // 登録・締切ページも確実に閉じる
+  const registerPage =
+    document.getElementById("registerPage");
 
-  padding: 16px;
+  const managePage =
+    document.getElementById("managePage");
 
-  border: 1px solid var(--cyan);
+  registerPage?.classList.remove("active");
+  managePage?.classList.remove("active");
 
-  color: var(--ink);
 
-  background: #fff;
+  // 指定ページだけ開く
+  const page =
+    document.getElementById(`${name}Page`);
 
-  box-shadow: var(--shadow-soft);
-}
+  if (page) {
+    page.classList.add("active");
+  }
 
-.notice {
-  display: grid;
 
-  gap: 3px;
+  // 募集一覧へ戻る時は
+  // 登録・締切を完全に解除
+  if (name === "list") {
 
-  padding: 11px 13px;
-
-  border-left: 4px solid var(--cyan);
-
-  color: var(--ink-soft);
-
-  background: #edf8fd;
-
-  font-size: 11px;
-
-  line-height: 1.6;
-}
-
-.notice strong {
-  color: var(--ink);
-}
-
-.easy-register-box {
-  margin: 0 0 18px;
-  padding: 16px;
-
-  border: 1px solid var(--cyan);
-  border-left: 5px solid var(--cyan);
-
-  color: var(--ink);
-
-  background:
-    linear-gradient(
-      180deg,
-      #fff,
-      #f3f6f8
+    document.body.classList.remove(
+      "register-mode",
+      "manage-mode"
     );
 
-  box-shadow: var(--shadow-soft);
-}
-
-.easy-register-title {
-  margin-bottom: 10px;
-
-  color: var(--ink);
-
-  font-size: 17px;
-  font-weight: 900;
-}
-
-.easy-register-list {
-  display: grid;
-
-  gap: 5px;
-
-  color: var(--ink-soft);
-
-  font-size: 13px;
-
-  line-height: 1.55;
-}
-
-.easy-register-copy {
-  margin-top: 10px;
-
-  color: var(--cyan-dark);
-
-  font-size: 13px;
-  font-weight: 900;
-}
-
-.easy-register-privacy {
-  margin-top: 12px;
-  padding: 9px 11px;
-
-  border: 1px solid var(--cyan);
-
-  color: var(--cyan-dark);
-
-  background: rgba(26, 176, 241, .06);
-
-  font-size: 11px;
-  font-weight: 900;
-}
+    registerPage?.classList.remove("active");
+    managePage?.classList.remove("active");
+  }
 
 
-/* =========================================================
-   INLINE REGISTER / MANAGE
-   ========================================================= */
+  // 下部ナビ
+  document
+    .querySelectorAll(".nav-btn")
+    .forEach(button => {
 
-#heroRegisterArea,
-#heroManageArea {
-  display: none;
-}
+      button.classList.toggle(
+        "active",
+        button.dataset.page === name
+      );
 
-body.register-mode #heroRegisterArea,
-body.manage-mode #heroManageArea {
-  display: block;
+    });
 
-  margin-top: 20px;
-}
 
-body.register-mode .hero-stats,
-body.manage-mode .hero-stats {
-  display: none !important;
-}
+  // 募集一覧
+  if (name === "list") {
 
-body.register-mode .hero,
-body.manage-mode .hero {
-  grid-template-columns:
-    minmax(0, 760px) !important;
+    loadRecruitments();
 
-  justify-content: start !important;
-}
+    setTimeout(() => {
 
-body.register-mode .hero-left,
-body.manage-mode .hero-left {
-  width: 100% !important;
-  max-width: 760px !important;
-}
+      const listPage =
+        document.getElementById("listPage");
 
-body.register-mode #registerPage,
-body.manage-mode #managePage {
-  display: block !important;
+      if (!listPage) {
+        return;
+      }
 
-  width: 100%;
+      const headerOffset = 76;
 
-  margin: 0;
-  padding: 0 0 22px;
-}
+      const targetTop =
+        listPage.getBoundingClientRect().top +
+        window.pageYOffset -
+        headerOffset;
 
-.register-inline-top,
-.manage-inline-top {
-  display: block !important;
+      window.scrollTo({
+        top: Math.max(0, targetTop),
+        behavior: "smooth"
+      });
 
-  width: 100% !important;
+    }, 120);
 
-  margin: 0 0 14px !important;
-}
+  } else {
 
-.register-back-btn,
-.manage-back-btn {
-  width: 100% !important;
-  min-height: 48px !important;
+    window.scrollTo({
+      top: 0,
+      behavior: "smooth"
+    });
 
-  display: flex !important;
-  align-items: center;
-  justify-content: center;
-
-  padding: 0 14px !important;
-
-  border: 1px solid #56585c !important;
-
-  color: #fff !important;
-
-  background:
-    linear-gradient(
-      180deg,
-      #494a4e,
-      #35363a
-    ) !important;
-
-  font-size: 14px !important;
-  font-weight: 900 !important;
-
-  cursor: pointer;
-}
-
-.register-back-btn:hover,
-.manage-back-btn:hover,
-.register-back-btn:active,
-.manage-back-btn:active {
-  border-color: var(--cyan) !important;
-
-  background: var(--cyan) !important;
+  }
 }
 
 
-/* =========================================================
-   COMMANDER CLOSE REASON
-   ========================================================= */
+// ========================================
+// ページボタン
+// ========================================
 
-.commander-close-reason {
-  margin-top: 14px;
-  padding: 14px;
+document
+  .querySelectorAll(
+    "[data-page]"
+  )
+  .forEach(
+    button => {
 
-  border: 1px solid var(--cyan);
+      button.addEventListener(
+        "click",
+        () => {
 
-  background: #f6f8f9;
-}
+          showPage(
+            button.dataset.page
+          );
 
-.commander-close-reason[hidden] {
-  display: none !important;
-}
+        }
+      );
 
-.commander-close-reason-title {
-  margin-bottom: 10px;
+    }
+  );
 
-  color: var(--ink);
 
-  font-size: 13px;
-  font-weight: 900;
-}
+// ========================================
+// 指揮官 / ユニオン検索タブ
+// ========================================
 
-.close-reason-btn {
-  width: 100%;
+let currentSearchType =
+  "commander";
 
-  display: flex;
-  flex-direction: column;
-  align-items: flex-start;
 
-  margin-bottom: 8px;
-  padding: 12px 13px;
+const commanderSearchTab =
+  $("#commanderSearchTab");
 
-  border: 1px solid #56585c;
+const unionSearchTab =
+  $("#unionSearchTab");
 
-  color: #fff;
+const commanderFilterBox =
+  $("#commanderFilterBox");
 
-  background:
-    linear-gradient(
-      180deg,
-      #494a4e,
-      #35363a
+const unionFilterBox =
+  $("#unionFilterBox");
+
+
+function setSearchType(type) {
+
+  currentSearchType =
+    type;
+
+
+  const isCommander =
+    type ===
+    "commander";
+
+
+  commanderSearchTab
+    ?.classList
+    .toggle(
+      "active",
+      isCommander
     );
 
-  text-align: left;
 
-  cursor: pointer;
-
-  transition: .15s;
-}
-
-.close-reason-btn:hover,
-.close-reason-btn:active {
-  border-color: var(--cyan);
-
-  background: var(--cyan);
-}
-
-.close-reason-btn strong {
-  font-size: 13px;
-  font-weight: 900;
-}
-
-.close-reason-btn small {
-  margin-top: 4px;
-
-  color: rgba(255, 255, 255, .80);
-
-  font-size: 10px;
-
-  line-height: 1.45;
-}
-
-.close-reason-btn.graduated {
-  border-left: 5px solid var(--purple);
-}
-
-.close-reason-btn.close-only {
-  border-left: 5px solid var(--red);
-}
-
-
-/* =========================================================
-   MESSAGE / EMPTY
-   ========================================================= */
-
-.message {
-  margin-bottom: 12px;
-  padding: 11px;
-
-  border: 1px solid var(--cyan);
-
-  background: #fff;
-}
-
-.message.ok {
-  color: #13794d;
-}
-
-.message.error {
-  color: #c93748;
-}
-
-.hidden {
-  display: none !important;
-}
-
-.empty {
-  padding: 48px 18px;
-
-  border: 1px dashed var(--cyan);
-
-  color: var(--muted);
-
-  background: #f8fafb;
-
-  text-align: center;
-}
-
-.empty-icon {
-  margin-bottom: 7px;
-
-  color: var(--cyan);
-
-  font-size: 36px;
-}
-
-
-/* =========================================================
-   MODAL
-   ========================================================= */
-
-.modal {
-  position: fixed;
-  inset: 0;
-  z-index: 60;
-
-  display: grid;
-  place-items: center;
-
-  padding: 16px;
-
-  background:
-    rgba(17, 18, 20, .78);
-}
-
-.modal-card {
-  position: relative;
-
-  width:
-    min(480px, 100%);
-
-  padding: 22px;
-
-  border: 1px solid var(--cyan);
-
-  color: var(--ink);
-
-  background: #fff;
-
-  box-shadow:
-    0 22px 70px rgba(0, 0, 0, .35);
-}
-
-.modal-close {
-  position: absolute;
-
-  top: 6px;
-  right: 9px;
-
-  padding: 0;
-
-  border: 0;
-
-  color: var(--ink-soft);
-
-  background: none;
-
-  font-size: 26px;
-
-  cursor: pointer;
-}
-
-.pass-box {
-  margin: 16px 0;
-  padding: 18px;
-
-  border: 1px solid var(--cyan);
-
-  background: #f3f6f8;
-
-  text-align: center;
-}
-
-.pass-box span {
-  display: block;
-
-  color: var(--muted);
-
-  font:
-    700 10px "Teko",
-    sans-serif;
-
-  letter-spacing: 2px;
-}
-
-.pass-box strong {
-  display: block;
-
-  margin: 4px 0 10px;
-
-  color: var(--cyan);
-
-  font:
-    800 40px "Teko",
-    sans-serif;
-
-  letter-spacing: 6px;
-}
-
-.copy-btn {
-  padding: 7px 11px;
-
-  border: 1px solid #56585c;
-
-  color: #fff;
-
-  background: var(--charcoal);
-
-  cursor: pointer;
-}
-
-.copy-btn:hover,
-.copy-btn:active {
-  border-color: var(--cyan);
-
-  background: var(--cyan);
-}
-
-.result-row {
-  display: flex;
-  justify-content: space-between;
-
-  padding: 9px 0;
-
-  border-bottom: 1px solid #e1e4e6;
-
-  font-size: 12px;
-}
-
-.result-row span {
-  color: var(--muted);
-}
-
-.warning {
-  color: #c93748;
-
-  font-size: 11px;
-
-  line-height: 1.6;
-}
-
-
-/* =========================================================
-   BOTTOM NAV
-   ========================================================= */
-
-.bottom-nav {
-  position: fixed;
-
-  left: 0;
-  right: 0;
-  bottom: 0;
-  z-index: 50;
-
-  height: 68px;
-
-  display: flex;
-  justify-content: center;
-
-  border-top: 2px solid var(--cyan);
-
-  background:
-    linear-gradient(
-      180deg,
-      #2d2e31,
-      #1d1e21
+  unionSearchTab
+    ?.classList
+    .toggle(
+      "active",
+      !isCommander
     );
 
-  box-shadow:
-    0 -4px 14px rgba(0, 0, 0, .16);
-}
 
-.nav-btn {
-  flex: 1;
-
-  max-width: 300px;
-
-  border: 0;
-
-  color: #d0d2d4;
-
-  background: transparent;
-
-  font-size: 10px;
-  font-weight: 900;
-
-  cursor: pointer;
-
-  transition: .15s;
-}
-
-.nav-btn span {
-  display: block;
-
-  margin-bottom: 3px;
-
-  font-size: 20px;
-
-  line-height: 19px;
-}
-
-.nav-btn:hover,
-.nav-btn.active {
-  color: #fff;
-
-  background:
-    linear-gradient(
-      180deg,
-      var(--cyan-2),
-      var(--cyan)
+  commanderFilterBox
+    ?.classList
+    .toggle(
+      "hidden",
+      !isCommander
     );
-}
 
 
-
-
-/* =========================================================
-   INDUSTRIAL / SCI-FI LATIN
-   Spaceeland / Industry 系の「細長く硬い」方向
-   ========================================================= */
-
-.brand,
-.status-dot,
-.eyebrow,
-.hero-stat-number strong,
-.hero-graduate-number strong,
-.registration-count strong,
-.graduated-commander-number strong,
-.pass-box strong,
-.pass-box span,
-.slv,
-.hero-stat-update {
-  font-family:
-    "Industry",
-    "Azonix",
-    "Futura PT Condensed",
-    "Teko",
-    "Gothic MB101",
-    "Zen Kaku Gothic New",
-    sans-serif;
-}
-
-.brand-main {
-  font-stretch: condensed;
-  text-transform: uppercase;
-}
-
-.eyebrow,
-.status-dot,
-.hero-stat-update {
-  letter-spacing: .08em;
-}
-
-.hero-stat-number strong,
-.hero-graduate-number strong,
-.registration-count strong,
-.graduated-commander-number strong,
-.pass-box strong,
-.slv {
-  letter-spacing: .01em;
-}
-
-/* 日本語見出しは角ゴシックを強く・少し詰める */
-.hero h1,
-.section-head h2,
-.name,
-.easy-register-title,
-.commander-close-reason-title {
-  font-family:
-    "Gothic MB101",
-    "Zen Kaku Gothic New",
-    sans-serif;
-
-  font-weight: 900;
-  letter-spacing: -.07em;
-}
-
-
-
-/* =========================================================
-   v5 COUNTER / INDUSTRIAL FONT SYSTEM
-   ========================================================= */
-
-.hero-stat-number strong,
-.hero-graduate-number strong,
-.registration-count strong,
-.graduated-commander-number strong,
-.pass-box strong,
-.slv {
-  font-family:
-    "Spaceeland Eight",
-    "Industry",
-    "Futura PT Condensed",
-    "Teko",
-    sans-serif !important;
-
-  font-weight: 700;
-  letter-spacing: .015em;
-}
-
-/* NIKKE logo / English UI */
-.brand-main,
-.brand-small,
-.status-dot,
-.eyebrow,
-.hero-stat-update {
-  font-family:
-    "Futura PT Condensed",
-    "Industry",
-    "Azonix",
-    "Teko",
-    sans-serif !important;
-}
-
-/* Japanese headings: MB101 direction with free fallback */
-.hero h1,
-.section-head h2,
-.name,
-.easy-register-title,
-.commander-close-reason-title,
-.hero-stat-title,
-.hero-graduate-title,
-.btn,
-.search-tab,
-.nav-btn {
-  font-family:
-    "Gothic MB101",
-    "Zen Kaku Gothic New",
-    sans-serif !important;
-
-  font-weight: 900;
-  letter-spacing: -.065em;
-}
-
-
-
-/* =========================================================
-   v6 COMMANDER ORANGE
-   NIKKE UI orange / no text outline
-   ========================================================= */
-
-.commander-stat .hero-stat-title,
-.commander-stat .hero-stat-number strong,
-.commander-stat .hero-stat-number span,
-.registration-count > div:first-child strong,
-.registration-count > div:first-child span,
-.registration-count > div:first-child small,
-.slv {
-  color: var(--yellow) !important;
-}
-
-
-
-
-
-/* =========================================================
-   v6 NIKKE BUTTON SHAPE
-   ========================================================= */
-
-.btn,
-.creator-link-btn,
-.search-tab,
-.register-back-btn,
-.manage-back-btn,
-.copy-btn,
-.x-btn,
-.close-reason-btn {
-  clip-path:
-    polygon(
-      8px 0,
-      calc(100% - 8px) 0,
-      100% 8px,
-      100% calc(100% - 8px),
-      calc(100% - 8px) 100%,
-      8px 100%,
-      0 calc(100% - 8px),
-      0 8px
-    ) !important;
-
-  border-radius: 0 !important;
-}
-
-.btn,
-.creator-link-btn,
-.search-tab,
-.register-back-btn,
-.manage-back-btn,
-.copy-btn,
-.x-btn,
-.close-reason-btn {
-  border-color: #5a5d62 !important;
-
-  background:
-    linear-gradient(
-      180deg,
-      #45474c 0%,
-      #323439 100%
+  unionFilterBox
+    ?.classList
+    .toggle(
+      "hidden",
+      isCommander
     );
-}
-
-.btn:hover,
-.btn:active,
-.btn.active,
-.creator-link-btn:hover,
-.creator-link-btn:active,
-.search-tab:hover,
-.search-tab:active,
-.search-tab.active,
-.register-back-btn:hover,
-.register-back-btn:active,
-.manage-back-btn:hover,
-.manage-back-btn:active,
-.copy-btn:hover,
-.copy-btn:active,
-.x-btn:hover,
-.x-btn:active,
-.close-reason-btn:hover,
-.close-reason-btn:active {
-  border-color: var(--cyan) !important;
-
-  color: #fff !important;
-
-  background:
-    linear-gradient(
-      180deg,
-      #2cc5ff 0%,
-      var(--cyan) 100%
-    ) !important;
-
-  box-shadow:
-    0 0 0 1px rgba(255,255,255,.08) inset,
-    0 4px 12px rgba(26,176,241,.26);
-}
-
-
-
-/* =========================================================
-   v6 NIKKE PANEL ACCENT
-   ========================================================= */
-
-.hero-stats,
-.card,
-.filters,
-.panel,
-.easy-register-box,
-.commander-close-reason,
-.modal-card,
-.pass-box,
-.graduated-commander-counter {
-  border-color: var(--cyan) !important;
-}
-
-.hero-stats,
-.card,
-.filters,
-.panel,
-.easy-register-box,
-.commander-close-reason,
-.modal-card,
-.pass-box,
-.graduated-commander-counter {
-  clip-path:
-    polygon(
-      10px 0,
-      100% 0,
-      100% calc(100% - 10px),
-      calc(100% - 10px) 100%,
-      0 100%,
-      0 10px
-    ) !important;
-
-  border-radius: 0 !important;
-}
-
-
-
-/* =========================================================
-   v6 FINAL VISUAL TUNING
-   NIKKE-like hierarchy / cleaner readability
-   ========================================================= */
-
-/* Commander = orange, Union = cyan, Result = purple */
-.commander-stat .hero-stat-title,
-.commander-stat .hero-stat-number strong,
-.commander-stat .hero-stat-number span {
-  color: #F2A124 !important;
-}
-
-.union-stat .hero-stat-title,
-.union-stat .hero-stat-number strong,
-.union-stat .hero-stat-number span {
-  color: #18ABF4 !important;
-}
-
-.hero-graduate-title,
-.hero-graduate-number strong,
-.hero-graduate-number span {
-  color: #A928F2 !important;
-}
-
-/* No outline/glow around text */
-.hero h1 em,
-.commander-stat *,
-.union-stat *,
-.hero-graduate-stat *,
-.slv,
-.brand,
-.section-head,
-.card,
-.btn,
-.search-tab {
-  text-shadow: none !important;
-  -webkit-text-stroke: 0 !important;
-}
-
-/* Make the two vertical dividers clearly visible */
-.hero-stats > .hero-stat-divider {
-  display: block !important;
-  width: 1px !important;
-  height: 72% !important;
-  min-height: 118px !important;
-  align-self: center !important;
-  background: #9AA2AA !important;
-  opacity: 1 !important;
-}
-
-/* PC readability: the previous version was slightly too small */
-@media screen and (min-width: 1025px) {
-  .topbar {
-    min-height: 74px;
-  }
-
-  .brand-small {
-    font-size: 12px;
-  }
-
-  .brand-main {
-    font-size: 28px;
-  }
-
-  .status-dot {
-    font-size: 12px;
-  }
-
-  .hero {
-    grid-template-columns:
-      minmax(390px, .78fr)
-      minmax(620px, 1.22fr);
-    gap: 38px;
-  }
-
-  .hero p {
-    font-size: 15px;
-  }
-
-  .hero-stats {
-    min-height: 238px;
-    padding: 18px 18px 38px;
-  }
-
-  .hero-stat-title,
-  .hero-graduate-title {
-    font-size: 14px;
-  }
-
-  .hero-stat-number strong,
-  .hero-graduate-number strong {
-    font-size: 76px;
-  }
-
-  .hero-stat-number span,
-  .hero-graduate-number span {
-    font-size: 20px;
-  }
-
-  .hero-stat-sub,
-  .hero-graduate-sub {
-    font-size: 11px;
-  }
-
-  .section-head h2 {
-    font-size: 34px;
-  }
-}
-
-/* Recruitment cards: keep accent line cyan; SLV uses commander orange */
-.card {
-  border-color: #28B8F2 !important;
-}
-
-.card .slv {
-  color: #F2A124 !important;
-  text-shadow: none !important;
-}
-
-/* Buttons: charcoal at rest, cyan only for active/hover */
-.btn,
-.creator-link-btn,
-.search-tab,
-.register-back-btn,
-.manage-back-btn,
-.copy-btn,
-.x-btn,
-.close-reason-btn {
-  text-shadow: none !important;
-}
-
-
-/* =========================================================
-   TABLET
-   ========================================================= */
-
-@media screen and (min-width: 601px) and (max-width: 1024px) {
-
-  .hero {
-    grid-template-columns:
-      minmax(260px, .75fr)
-      minmax(440px, 1.25fr);
-
-    gap: 18px;
-  }
-
-  .hero h1 {
-    font-size:
-      clamp(38px, 5.3vw, 54px);
-  }
-
-  .hero p {
-    font-size: 12px;
-  }
-
-  .hero-stats {
-    min-height: 196px;
-
-    padding:
-      14px 8px 31px;
-  }
-
-  .hero-stat-title,
-  .hero-graduate-title {
-    font-size: 11px;
-  }
-
-  .hero-stat-number strong,
-  .hero-graduate-number strong {
-    font-size:
-      clamp(46px, 6vw, 62px);
-  }
-
-  .hero-stat-number span,
-  .hero-graduate-number span {
-    font-size: 13px;
-  }
-
-  .hero-stat-sub,
-  .hero-graduate-sub {
-    font-size: 8px;
-  }
-
-}
-
-
-/* =========================================================
-   MOBILE
-   ========================================================= */
-
-@media screen and (max-width: 600px) {
-
-  .hero-stats > .hero-stat-divider {
-    width: 1px !important;
-    height: 76px !important;
-    min-height: 76px !important;
-    background: #8F979F !important;
-    opacity: 1 !important;
-  }
-
-
-  body {
-    padding-bottom: 68px;
-  }
-
-  .topbar {
-    height: 62px;
-
-    padding: 0 14px;
-  }
-
-  .brand-small {
-    font-size: 9px;
-  }
-
-  .brand-main {
-    font-size: 21px;
-  }
-
-  .container {
-    padding-left: 9px;
-    padding-right: 9px;
-  }
-
-  .hero {
-    display: grid !important;
-
-    grid-template-columns:
-      1fr !important;
-
-    gap: 9px !important;
-
-    margin: 0 0 12px;
-    padding: 16px 0 12px;
-
-    border-bottom: 1px solid var(--cyan);
-  }
-
-  .hero .eyebrow {
-    display: none;
-  }
-
-  .hero h1 {
-    font-size:
-      clamp(34px, 10.4vw, 46px);
-
-    line-height: .93;
-  }
-
-  .hero p {
-    margin: 10px 0 11px;
-
-    font-size: 10.5px;
-
-    line-height: 1.5;
-  }
-
-  .hero-actions,
-  .creator-action-row {
-    display: grid;
-
-    grid-template-columns:
-      minmax(0, 1.15fr)
-      minmax(0, 1fr);
-
-    gap: 6px;
-
-    width: 100%;
-  }
-
-  .main-register-btn,
-  .hero-actions .btn.primary {
-    width: 100%;
-
-    min-height: 42px;
-
-    padding: 0 8px;
-
-    font-size: 11px;
-  }
-
-  .creator-link-btn {
-    width: 100%;
-
-    min-height: 42px;
-
-    padding: 0 6px;
-
-    font-size: 9.5px;
-  }
-
-  .hero-stats {
-    width: 100% !important;
-    max-width: none !important;
-    min-height: 142px !important;
-
-    grid-template-columns:
-      minmax(0, 1fr)
-      1px
-      minmax(0, 1fr)
-      1px
-      minmax(0, 1fr) !important;
-
-    gap: 0 !important;
-
-    margin: 0 !important;
-    padding: 8px 3px 24px !important;
-
-    border: 1px solid var(--cyan);
-  }
-
-  .hero-stat,
-  .hero-graduate-stat {
-    min-width: 0;
-
-    padding: 3px !important;
-  }
-
-  .hero-graduate-stat {
-    grid-column: 5 !important;
-    grid-row: 1 !important;
-  }
-
-  .hero-stat-divider {
-    min-height: 72px;
-
-    height: 72px !important;
-  }
-
-  .hero-stat-title,
-  .hero-graduate-title {
-    min-height: 18px;
-
-    margin-bottom: 2px;
-
-    font-size: 8.5px !important;
-
-    line-height: 1.1;
-
-    white-space: nowrap !important;
-  }
-
-  .hero-stat-number,
-  .hero-graduate-number {
-    gap: 2px !important;
-  }
-
-  .hero-stat-number strong,
-  .hero-graduate-number strong {
-    font-size:
-      clamp(31px, 9.7vw, 39px) !important;
-
-    line-height: .82;
-  }
-
-  .hero-stat-number span,
-  .hero-graduate-number span {
-    padding-bottom: 2px !important;
-
-    font-size: 9px !important;
-  }
-
-  .hero-stat-sub,
-  .hero-graduate-sub {
-    margin-top: 3px !important;
-
-    font-size: 6.7px !important;
-
-    line-height: 1.15;
-  }
-
-  .hero-stat-update {
-    bottom: 5px !important;
-
-    font-size: 7.5px !important;
-  }
-
-  .section-head {
-    gap: 8px;
-
-    margin-bottom: 12px;
-  }
-
-  .section-head h2 {
-    font-size:
-      clamp(20px, 6vw, 26px);
-  }
-
-  .cards {
-    grid-template-columns:
-      1fr;
-
-    gap: 9px;
-  }
-
-  .card {
-    padding: 13px;
-  }
-
-  .name {
-    font-size: 18px;
-  }
-
-  .slv {
-    font-size: 30px;
-  }
-
-  input,
-  select,
-  textarea,
-  #registerPage input,
-  #registerPage select,
-  #registerPage textarea,
-  #managePage input,
-  #managePage select,
-  #managePage textarea {
-    font-size: 16px !important;
-  }
-
-}
-
-
-/* =========================================================
-   SMALL MOBILE
-   ========================================================= */
-
-@media screen and (max-width: 360px) {
-
-  .hero h1 {
-    font-size: 33px;
-  }
-
-  .hero-stat-title,
-  .hero-graduate-title {
-    font-size: 7.5px !important;
-  }
-
-  .hero-stat-number strong,
-  .hero-graduate-number strong {
-    font-size: 29px !important;
-  }
-
-  .hero-stat-sub,
-  .hero-graduate-sub {
-    font-size: 6px !important;
-  }
-
-}
-/* =========================================================
-   v9 BRAND SWAP / RESPONSIVE HERO LOGO
-   HTML想定:
-   topbar:
-     .brand-small = 指揮官とユニオンを
-     .brand-main  = つなぐ。
-   hero h1:
-     .hero-title-line1 = NIKKE
-     .hero-title-line2 = UNION MATCH
-   ========================================================= */
-
-/* ---------- HEADER: 日本語キャッチは小さく固定 ---------- */
-
-.topbar .brand {
-  display: flex !important;
-  flex-direction: row !important;
-  align-items: baseline !important;
-  gap: 5px !important;
-
-  line-height: 1 !important;
-  white-space: nowrap !important;
-}
-
-.topbar .brand-small,
-.topbar .brand-main {
-  font-family:
-    "JTCウインZ10",
-    "Gothic MB101",
-    "Zen Kaku Gothic New",
-    sans-serif !important;
-
-  font-weight: 900 !important;
-  line-height: 1 !important;
-  letter-spacing: -.06em !important;
-  white-space: nowrap !important;
-  text-transform: none !important;
-}
-
-/* 指揮官とユニオンを */
-.topbar .brand-small {
-  color: #ffffff !important;
-  font-size: 15px !important;
-}
-
-/* つなぐ。 */
-.topbar .brand-main {
-  color: var(--cyan) !important;
-  font-size: 15px !important;
-}
-
-
-/* ---------- HERO: NIKKE / UNION MATCH ---------- */
-
-.hero h1 {
-  display: block !important;
-
-  width: 100% !important;
-  min-width: 0 !important;
-
-  margin: 0 !important;
-
-  font-family:
-    "Futura PT Condensed",
-    "Industry",
-    "Azonix",
-    "Teko",
-    sans-serif !important;
-
-  font-weight: 800 !important;
-  line-height: .82 !important;
-
-  white-space: nowrap !important;
-}
-
-.hero-title-line1,
-.hero-title-line2 {
-  display: block !important;
-  white-space: nowrap !important;
-}
-
-/* NIKKE */
-.hero-title-line1 {
-  color: var(--cyan) !important;
-
-  font-size: .34em !important;
-  line-height: .9 !important;
-
-  letter-spacing: .34em !important;
-
-  margin: 0 0 .18em .04em !important;
-}
-
-/* UNION MATCH */
-.hero-title-line2 {
-  color: var(--ink) !important;
-
-  font-size: 1em !important;
-  line-height: .82 !important;
-
-  letter-spacing: -.035em !important;
-
-  margin: 0 !important;
-}
-
-/* 旧 em 指定が残っていても無効化 */
-.hero-title-line2 em,
-.hero h1 em {
-  color: inherit !important;
-  font: inherit !important;
-  font-style: normal !important;
-  letter-spacing: inherit !important;
-}
-
-
-/* =========================================================
-   v9 DESKTOP
-   PCはデザインを安定させる固定寄り
-   ========================================================= */
-
-@media screen and (min-width: 1025px) {
-
-  .topbar .brand-small,
-  .topbar .brand-main {
-    font-size: 14px !important;
-  }
-
-  .hero h1 {
-    font-size: 68px !important;
-  }
-
-  .hero-title-line1 {
-    font-size: .30em !important;
-  }
-
-  .hero {
-    grid-template-columns:
-      minmax(370px, .80fr)
-      minmax(590px, 1.20fr) !important;
-
-    gap: 30px !important;
-  }
-}
-
-
-/* =========================================================
-   v9 TABLET
-   ========================================================= */
-
-@media screen and (min-width: 601px) and (max-width: 1024px) {
-
-  .topbar .brand-small,
-  .topbar .brand-main {
-    font-size: 13px !important;
-  }
-
-  .hero h1 {
-    font-size:
-      clamp(52px, 7vw, 64px) !important;
-  }
-
-  .hero-title-line1 {
-    font-size: .31em !important;
-  }
-}
-
-
-/* =========================================================
-   v9 MOBILE
-   NIKKE / UNION MATCHだけ端末幅に合わせて自動伸縮
-   ========================================================= */
-
-@media screen and (max-width: 600px) {
-
-  .topbar {
-    padding-left: 12px !important;
-    padding-right: 12px !important;
-  }
-
-  .topbar .brand {
-    max-width: calc(100vw - 125px) !important;
-    overflow: hidden !important;
-  }
-
-  .topbar .brand-small,
-  .topbar .brand-main {
-    font-size: 12px !important;
-  }
-
-  .hero-left {
-    width: 100% !important;
-    min-width: 0 !important;
-  }
-
-  .hero h1 {
-    width: 100% !important;
-
-    font-size:
-      clamp(44px, 13.1vw, 62px) !important;
-
-    line-height: .80 !important;
-  }
-
-  .hero-title-line1 {
-    font-size: .31em !important;
-
-    letter-spacing: .31em !important;
-
-    margin-bottom: .16em !important;
-  }
-
-  .hero-title-line2 {
-    font-size: 1em !important;
-    letter-spacing: -.042em !important;
-  }
-
-  .hero {
-    padding-top: 10px !important;
-  }
-}
-
-
-/* 小型スマホ */
-@media screen and (max-width: 360px) {
-
-  .topbar .brand-small,
-  .topbar .brand-main {
-    font-size: 11px !important;
-  }
-
-  .hero h1 {
-    font-size:
-      clamp(40px, 12.7vw, 47px) !important;
-  }
-}
-/* =========================================================
-   v10 CORRECT BRAND SWAP
-   HEADER = 指揮官とユニオンを つなぐ。
-   HERO   = NIKKE / UNION MATCH
-   ========================================================= */
-
-/* ---------- HEADER ---------- */
-
-.topbar .brand {
-  display: flex !important;
-  flex-direction: row !important;
-  align-items: baseline !important;
-  gap: 5px !important;
-
-  white-space: nowrap !important;
-  line-height: 1 !important;
-}
-
-.topbar .brand-small,
-.topbar .brand-main {
-  font-family:
-    "JTCウインZ10",
-    "Gothic MB101",
-    "Zen Kaku Gothic New",
-    sans-serif !important;
-
-  font-weight: 900 !important;
-  line-height: 1 !important;
-  letter-spacing: -.055em !important;
-
-  white-space: nowrap !important;
-  text-transform: none !important;
-}
-
-/* 指揮官とユニオンを */
-.topbar .brand-small {
-  color: #ffffff !important;
-  font-size: 14px !important;
-}
-
-/* つなぐ。 */
-.topbar .brand-main {
-  color: var(--cyan) !important;
-  font-size: 14px !important;
-}
-
-
-/* ---------- HERO LOGO ---------- */
-
-.hero h1 {
-  display: block !important;
-
-  width: 100% !important;
-  min-width: 0 !important;
-
-  margin: 0 !important;
-
-  font-family:
-    "Futura PT Condensed",
-    "Industry",
-    "Azonix",
-    "Teko",
-    sans-serif !important;
-
-  font-weight: 800 !important;
-  line-height: .82 !important;
-
-  white-space: nowrap !important;
-}
-
-.hero-title-line1,
-.hero-title-line2 {
-  display: block !important;
-  white-space: nowrap !important;
-}
-
-/* NIKKE */
-.hero-title-line1 {
-  color: var(--cyan) !important;
-
-  font-size: .31em !important;
-  line-height: .9 !important;
-
-  letter-spacing: .34em !important;
-
-  margin: 0 0 .18em .04em !important;
-}
-
-/* UNION MATCH */
-.hero-title-line2 {
-  color: var(--ink) !important;
-
-  font-size: 1em !important;
-  line-height: .82 !important;
-
-  letter-spacing: -.035em !important;
-
-  margin: 0 !important;
-}
-
-/* Old em rules should not affect UNION MATCH */
-.hero-title-line2 em,
-.hero h1 em {
-  color: inherit !important;
-  font: inherit !important;
-  font-style: normal !important;
-  letter-spacing: inherit !important;
-}
-
-
-/* =========================================================
-   v10 DESKTOP
-   ========================================================= */
-
-@media screen and (min-width: 1025px) {
-
-  .topbar .brand-small,
-  .topbar .brand-main {
-    font-size: 14px !important;
-  }
-
-  .hero h1 {
-    font-size: 70px !important;
-  }
-
-  .hero {
-    grid-template-columns:
-      minmax(370px, .80fr)
-      minmax(590px, 1.20fr) !important;
-
-    gap: 30px !important;
-  }
-}
-
-
-/* =========================================================
-   v10 TABLET
-   ========================================================= */
-
-@media screen and (min-width: 601px) and (max-width: 1024px) {
-
-  .topbar .brand-small,
-  .topbar .brand-main {
-    font-size: 13px !important;
-  }
-
-  .hero h1 {
-    font-size:
-      clamp(52px, 7vw, 64px) !important;
-  }
-}
-
-
-/* =========================================================
-   v10 MOBILE
-   Only NIKKE / UNION MATCH auto-scales with device width
-   ========================================================= */
-
-@media screen and (max-width: 600px) {
 
-  .topbar {
-    padding-left: 12px !important;
-    padding-right: 12px !important;
-  }
-
-  .topbar .brand {
-    max-width: calc(100vw - 125px) !important;
-    overflow: hidden !important;
-  }
-
-  .topbar .brand-small,
-  .topbar .brand-main {
-    font-size: 12px !important;
-  }
-
-  .hero-left {
-    width: 100% !important;
-    min-width: 0 !important;
-  }
-
-  .hero h1 {
-    width: 100% !important;
-
-    font-size:
-      clamp(46px, 13.4vw, 64px) !important;
-
-    line-height: .80 !important;
-  }
-
-  .hero-title-line1 {
-    font-size: .31em !important;
-    letter-spacing: .31em !important;
-    margin-bottom: .16em !important;
-  }
-
-  .hero-title-line2 {
-    font-size: 1em !important;
-    letter-spacing: -.045em !important;
-  }
-
-  .hero {
-    padding-top: 10px !important;
-  }
-}
-
-
-@media screen and (max-width: 360px) {
-
-  .topbar .brand-small,
-  .topbar .brand-main {
-    font-size: 11px !important;
-  }
-
-  .hero h1 {
-    font-size:
-      clamp(41px, 12.8vw, 48px) !important;
-  }
-}
-
-/* =========================================================
-   v11 FINAL OVERRIDES
-   HEADER: 指揮官とユニオンをつなぐ。 / no visual gap
-   HERO  : NIKKE GODDESS OF VICTORY / UNION MATCH
-   PC    : larger hero balance
-   MOBILE: near edge-to-edge layout
-   ========================================================= */
-
-/* ---------- HEADER ---------- */
-.topbar .brand {
-  display: block !important;
-  max-width: none !important;
-  overflow: visible !important;
-  gap: 0 !important;
-  white-space: nowrap !important;
-  line-height: 1 !important;
-}
-
-/* New one-piece header markup */
-.topbar .brand-copy {
-  display: inline !important;
-  margin: 0 !important;
-  padding: 0 !important;
-
-  color: #fff !important;
-
-  font-family:
-    "JTCウインZ10",
-    "Gothic MB101",
-    "Zen Kaku Gothic New",
-    sans-serif !important;
-
-  font-size: 14px !important;
-  font-weight: 900 !important;
-  line-height: 1 !important;
-  letter-spacing: -.055em !important;
-
-  white-space: nowrap !important;
-}
-
-.topbar .brand-accent {
-  display: inline !important;
-  margin: 0 !important;
-  padding: 0 !important;
-
-  color: var(--cyan) !important;
-
-  font: inherit !important;
-  letter-spacing: inherit !important;
-  line-height: inherit !important;
-
-  white-space: nowrap !important;
-}
-
-/* Compatibility with the older two-span header markup */
-.topbar .brand-small,
-.topbar .brand-main {
-  margin: 0 !important;
-  padding: 0 !important;
-
-  font-family:
-    "JTCウインZ10",
-    "Gothic MB101",
-    "Zen Kaku Gothic New",
-    sans-serif !important;
-
-  font-size: 14px !important;
-  font-weight: 900 !important;
-  line-height: 1 !important;
-  letter-spacing: -.055em !important;
-
-  white-space: nowrap !important;
-}
-
-.topbar .brand-small {
-  color: #fff !important;
-}
-
-.topbar .brand-main {
-  color: var(--cyan) !important;
-}
-
-
-/* ---------- HERO LOGO ---------- */
-.hero h1 {
-  display: block !important;
-
-  width: 100% !important;
-  min-width: 0 !important;
-
-  margin: 0 !important;
-
-  font-family:
-    "Futura PT Condensed",
-    "Industry",
-    "Azonix",
-    "Teko",
-    sans-serif !important;
-
-  font-weight: 800 !important;
-  line-height: .80 !important;
-
-  white-space: nowrap !important;
-}
-
-.hero h1 .hero-title-line1 {
-  display: block !important;
-
-  margin: 0 0 .18em .04em !important;
-
-  color: var(--cyan) !important;
-
-  font-size: clamp(14px, 1.25vw, 20px) !important;
-  font-weight: 900 !important;
-  line-height: 1 !important;
-  letter-spacing: .22em !important;
-
-  white-space: nowrap !important;
-}
-
-.hero h1 .hero-title-line2 {
-  display: block !important;
-
-  margin: 0 !important;
-
-  color: var(--ink) !important;
-
-  font-size: clamp(60px, 7vw, 104px) !important;
-  font-weight: 900 !important;
-  line-height: .82 !important;
-  letter-spacing: -.045em !important;
-
-  white-space: nowrap !important;
-}
-
-.hero-title-line2 em,
-.hero h1 em {
-  color: inherit !important;
-  font: inherit !important;
-  font-style: normal !important;
-  letter-spacing: inherit !important;
-}
-
-
-/* ---------- DESKTOP ---------- */
-@media screen and (min-width: 1025px) {
-  .container {
-    max-width: 1540px !important;
-    padding-left: 28px !important;
-    padding-right: 28px !important;
-  }
-
-  .hero {
-    grid-template-columns:
-      minmax(520px, 1.16fr)
-      minmax(460px, .84fr) !important;
-
-    gap: 38px !important;
-    align-items: start !important;
-  }
-
-  .hero h1 .hero-title-line1 {
-    font-size: clamp(16px, 1.05vw, 22px) !important;
-    letter-spacing: .24em !important;
-  }
-
-  .hero h1 .hero-title-line2 {
-    font-size: clamp(78px, 5.8vw, 112px) !important;
-  }
-
-  .hero-stats {
-    min-height: 240px !important;
-  }
-}
-
-
-/* ---------- TABLET ---------- */
-@media screen and (min-width: 601px) and (max-width: 1024px) {
-  .topbar .brand-copy,
-  .topbar .brand-small,
-  .topbar .brand-main {
-    font-size: 13px !important;
-  }
-
-  .container {
-    max-width: 100% !important;
-    padding-left: 20px !important;
-    padding-right: 20px !important;
-  }
-
-  .hero {
-    grid-template-columns: 1fr !important;
-    gap: 22px !important;
-  }
-
-  .hero h1 .hero-title-line1 {
-    font-size: clamp(14px, 2vw, 18px) !important;
-    letter-spacing: .18em !important;
-  }
-
-  .hero h1 .hero-title-line2 {
-    font-size: clamp(60px, 10vw, 86px) !important;
-  }
-}
-
-
-/* ---------- MOBILE ---------- */
-@media screen and (max-width: 600px) {
-  .topbar {
-    padding-left: 12px !important;
-    padding-right: 12px !important;
-  }
-
-  .topbar .brand {
-    max-width: calc(100vw - 112px) !important;
-    overflow: visible !important;
-  }
-
-  .topbar .brand-copy,
-  .topbar .brand-small,
-  .topbar .brand-main {
-    font-size: 12px !important;
-  }
-
-  .container {
-    width: 100% !important;
-    max-width: none !important;
-    padding-left: 6px !important;
-    padding-right: 6px !important;
-  }
-
-  .hero {
-    grid-template-columns: 1fr !important;
-    gap: 16px !important;
-    padding-top: 12px !important;
-    padding-bottom: 20px !important;
-  }
-
-  .hero-left {
-    width: 100% !important;
-    min-width: 0 !important;
-    padding-left: 6px !important;
-    padding-right: 6px !important;
-  }
-
-  .hero h1 {
-    width: 100% !important;
-  }
-
-  .hero h1 .hero-title-line1 {
-    margin: 0 0 .14em .02em !important;
-
-    font-size: clamp(12px, 3.6vw, 16px) !important;
-    letter-spacing: .16em !important;
-  }
-
-  .hero h1 .hero-title-line2 {
-    font-size: clamp(58px, 15.5vw, 74px) !important;
-    letter-spacing: -.055em !important;
-  }
-
-  .hero-stats,
-  .filters,
-  .card,
-  .panel,
-  .notice,
-  .easy-register-box,
-  .search-tabs {
-    width: 100% !important;
-  }
-}
-
-
-/* ---------- SMALL MOBILE ---------- */
-@media screen and (max-width: 360px) {
-  .topbar .brand-copy,
-  .topbar .brand-small,
-  .topbar .brand-main {
-    font-size: 11px !important;
-  }
-
-  .container {
-    padding-left: 4px !important;
-    padding-right: 4px !important;
-  }
-
-  .hero-left {
-    padding-left: 4px !important;
-    padding-right: 4px !important;
-  }
-
-  .hero h1 .hero-title-line1 {
-    font-size: 11px !important;
-    letter-spacing: .12em !important;
-  }
-
-  .hero h1 .hero-title-line2 {
-    font-size: clamp(50px, 15.2vw, 64px) !important;
-  }
-}
-
-
-/* =========================================================
-   v11.1 COMMANDER COLOR RESTORE
-   指揮官 = orange / ユニオン = blue
-   ========================================================= */
-
-/* 指揮官カードのアクセント */
-.card.commander-card {
-  border-color: #ff7a18 !important;
-}
-
-.card.commander-card::before {
-  background: #ff7a18 !important;
-}
 
-/* ● 指揮官 */
-.card.commander-card .recruitment-type {
-  border-color: #ff7a18 !important;
-  color: #ff9b32 !important;
-  background: rgba(255, 122, 24, .08) !important;
-}
-
-/* SLV */
-.card.commander-card .slv,
-.card.commander-card .slv small {
-  color: #7b8085 !important;
-  text-shadow: none !important;
-  -webkit-text-stroke: 0 !important;
-}
-
-/* ユニオンはブルーを維持 */
-.card.union-card {
-  border-color: #3696ff !important;
-}
-
-.card.union-card::before {
-  background: #3696ff !important;
-}
-
-.card.union-card .recruitment-type {
-  border-color: #3696ff !important;
-  color: #3696ff !important;
-  background: rgba(54, 150, 255, .08) !important;
-}
-
-
-/* =========================================================
-   v11.2 CACHE-SAFE COMMANDER COLOR FIX
-   ========================================================= */
-
-/* 指揮官カード：ラベルをオレンジで固定 */
-body .card.commander-card .recruitment-type,
-body article.card.commander-card .recruitment-type,
-body .commander-card .type-with-new .recruitment-type {
-  color: #F2A124 !important;
-  border-color: #F2A124 !important;
-  background: rgba(242, 161, 36, .08) !important;
-}
-
-/* 指揮官カード：SLV数字はオレンジ */
-body .card.commander-card .slv,
-body article.card.commander-card .slv {
-  color: #F2A124 !important;
-  text-shadow: none !important;
-  -webkit-text-stroke: 0 !important;
-}
-
-/* 数字横の小さいSLV文字は元のグレー */
-body .card.commander-card .slv small,
-body article.card.commander-card .slv small,
-body .card .slv small {
-  color: #7b8085 !important;
-  text-shadow: none !important;
-  -webkit-text-stroke: 0 !important;
-}
-
-/* 指揮官カード枠・左アクセント */
-body .card.commander-card {
-  border-color: #ff7a18 !important;
-}
-
-body .card.commander-card::before {
-  background: #ff7a18 !important;
-}
-
-/* ユニオン側は青を維持 */
-body .card.union-card .recruitment-type,
-body article.card.union-card .recruitment-type {
-  color: #18ABF4 !important;
-  border-color: #18ABF4 !important;
-  background: rgba(24, 171, 244, .08) !important;
-}
-
-
-/* =========================================================
-   v11.3 COMMANDER SLV LABEL COLOR FIX
-   指揮官ラベル = orange
-   SLV数値       = orange
-   small "SLV"   = cyan
-   ========================================================= */
-
-/* SLVの数字はオレンジ */
-body .card.commander-card .slv,
-body article.card.commander-card .slv {
-  color: #F2A124 !important;
-}
-
-/* 数字横の小さい「SLV」だけ水色 */
-body .card.commander-card .slv small,
-body article.card.commander-card .slv small,
-body .card .slv small {
-  color: #7b8085 !important;
-  text-shadow: none !important;
-  -webkit-text-stroke: 0 !important;
-}
-
-/* =========================================================
-   v11.4 MOBILE HERO TITLE CENTER
-   スマホ版のみメインロゴ2段を中央揃え
-   ========================================================= */
-@media screen and (max-width: 600px) {
-  .hero h1 {
-    text-align: center !important;
-  }
-
-  .hero h1 .hero-title-line1,
-  .hero h1 .hero-title-line2 {
-    width: 100% !important;
-    margin-left: 0 !important;
-    margin-right: 0 !important;
-    text-align: center !important;
-  }
-}
+  loadRecruitments();
 
-
-/* =========================================================
-   v11.5 MOBILE HERO TRUE CENTER
-   文字列そのものを中央配置（100%幅spanではなくmax-content）
-   ========================================================= */
-@media screen and (max-width: 600px) {
-  body .hero-left {
-    width: 100% !important;
-    max-width: none !important;
-  }
-
-  body .hero h1 {
-    width: 100% !important;
-    max-width: none !important;
-    display: flex !important;
-    flex-direction: column !important;
-    align-items: center !important;
-    justify-content: center !important;
-    text-align: center !important;
-  }
-
-  body .hero h1 .hero-title-line1,
-  body .hero h1 .hero-title-line2 {
-    display: block !important;
-    width: max-content !important;
-    max-width: 100% !important;
-    margin-left: auto !important;
-    margin-right: auto !important;
-    text-align: center !important;
-  }
-
-  /* letter-spacingの末尾分で右に寄って見えるのを補正 */
-  body .hero h1 .hero-title-line1 {
-    padding-left: .16em !important;
-  }
-}
-
-
-/* =========================================================
-   v11.6 HERO TITLE COLOR
-   UNION MATCH をボタンと同系統のグレーに変更
-   ========================================================= */
-body .hero h1 .hero-title-line2 {
-  color: var(--charcoal) !important;
-}
-
-
-/* =========================================================
-   v11.7 SLV LABEL COLOR
-   数字横の小さい「SLV」を元のグレーに戻す
-   ========================================================= */
-body .card.commander-card .slv small,
-body article.card.commander-card .slv small,
-body .card .slv small {
-  color: var(--muted) !important;
-  text-shadow: none !important;
-  -webkit-text-stroke: 0 !important;
-}
-
-
-/* =========================================================
-   v11.8 FINAL SLV LABEL FIX
-   小さい「SLV」は元のグレー #7b8085 に完全固定
-   ========================================================= */
-html body .card .slv > small,
-html body .card.commander-card .slv > small,
-html body article.card.commander-card .slv > small,
-html body .slv small {
-  color: #7b8085 !important;
-  -webkit-text-fill-color: #7b8085 !important;
-  text-shadow: none !important;
-  -webkit-text-stroke: 0 !important;
 }
 
 
-/* =========================================================
-   v11.9 SLV LABEL — app.js generated element
-   ========================================================= */
-html body .card.commander-card .slv .slv-label,
-html body article.card.commander-card .slv .slv-label,
-html body .slv .slv-label {
-  color: #7b8085 !important;
-  -webkit-text-fill-color: #7b8085 !important;
-  text-shadow: none !important;
-  -webkit-text-stroke: 0 !important;
-  opacity: 1 !important;
-}
+commanderSearchTab
+  ?.addEventListener(
+    "click",
+    () => {
 
+      setSearchType(
+        "commander"
+      );
 
-/* =========================================================
-   v12 BOTTOM NAV FIX
-   - PCでも横幅いっぱいを3等分
-   - 青点灯はactiveの1個だけ
-   - PC hoverでは青点灯させない
-   ========================================================= */
-
-body .bottom-nav {
-  display: grid !important;
-  grid-template-columns: repeat(3, minmax(0, 1fr)) !important;
-  justify-content: stretch !important;
-  align-items: stretch !important;
-  width: 100% !important;
-}
+    }
+  );
 
-body .bottom-nav .nav-btn {
-  width: 100% !important;
-  max-width: none !important;
-  min-width: 0 !important;
-  flex: none !important;
-  color: #d0d2d4 !important;
-  background: transparent !important;
-}
 
-/* 現在ページだけ青 */
-body .bottom-nav .nav-btn.active,
-body .bottom-nav .nav-btn.active:hover {
-  color: #fff !important;
-  background:
-    linear-gradient(
-      180deg,
-      var(--cyan-2),
-      var(--cyan)
-    ) !important;
-}
+unionSearchTab
+  ?.addEventListener(
+    "click",
+    () => {
 
-/* PCのマウスオーバーは薄く反応するだけ */
-@media (hover: hover) and (pointer: fine) {
-  body .bottom-nav .nav-btn:not(.active):hover {
-    color: #fff !important;
-    background: rgba(255, 255, 255, .07) !important;
-  }
-}
+      setSearchType(
+        "union"
+      );
 
-/* スマホはhover残りを完全無効化 */
-@media (hover: none), (pointer: coarse) {
-  body .bottom-nav .nav-btn:not(.active):hover {
-    color: #d0d2d4 !important;
-    background: transparent !important;
-  }
-}
+    }
+  );
 
-/* =========================================================
-   v12.4 DEADLINE NEAR
-   残り24時間以内：NEW風の赤バッジ + 大きめ赤カウント
-   ========================================================= */
-.deadline-badge {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
 
-  flex: 0 0 auto;
+// ========================================
+// カウントダウン
+// ========================================
 
-  padding: 4px 7px;
+let countdownTimer =
+  null;
 
-  border: 1px solid #e13b4f;
 
-  color: #d9273f;
-  background: rgba(225, 59, 79, .10);
+function getRemainingTime(
+  expiresAt
+) {
 
-  font-size: 10px;
-  font-weight: 900;
-  line-height: 1;
-  letter-spacing: .02em;
+  const diff =
+    new Date(
+      expiresAt
+    ).getTime()
+    -
+    Date.now();
 
-  white-space: nowrap;
-}
 
-.countdown.deadline-near {
-  color: #d9273f !important;
-  font-size: 14px !important;
-  font-weight: 900 !important;
-  letter-spacing: .01em;
-}
+  if (
+    diff <=
+    0
+  ) {
 
-@media (max-width: 600px) {
-  .deadline-badge {
-    padding: 4px 6px;
-    font-size: 10px;
-  }
+    return {
 
-  .countdown.deadline-near {
-    font-size: 15px !important;
-  }
-}
+      expired:
+        true,
 
-/* =========================================================
-   v12.7 NEW FIRE VISIBILITY
-   炎アイコンを独立表示して見やすくする
-   ========================================================= */
-.new-badge {
-  gap: 4px;
-  padding: 3px 7px;
-  font-size: 0 !important;
-  line-height: 1;
-}
+      text:
+        "掲載終了",
 
-.new-badge::before {
-  content: "🔥";
-  display: inline-block;
-  flex: 0 0 auto;
-  font-size: 13px;
-  line-height: 1;
-  transform: translateY(-0.5px);
-}
+      className:
+        "danger",
 
-.new-badge::after {
-  content: "NEW";
-  display: inline-block;
-  color: #ffffff;
-  font-size: 10px;
-  font-weight: 900;
-  line-height: 1;
-  letter-spacing: .02em;
-}
+      deadlineNear:
+        false
 
-@media (max-width: 600px) {
-  .new-badge::before {
-    font-size: 14px;
-  }
+    };
 
-  .new-badge::after {
-    font-size: 10px;
   }
-}
-
-/* =========================================================
-   v13.3 登録前プレビュー + 任意募集画像
-   既存デザインは変更せず追加のみ
-   ========================================================= */
-
-.preview-image-field {
-  margin-top: 14px;
-}
-
-.optional-label {
-  display: inline-flex;
-  align-items: center;
-  margin-left: 6px;
-  padding: 2px 7px;
-  border: 1px solid rgba(123, 128, 133, .34);
-  color: #7b8085;
-  font-size: 10px;
-  font-weight: 900;
-  letter-spacing: .08em;
-  vertical-align: middle;
-}
 
-.preview-file-help {
-  display: block;
-  margin-top: 8px;
-  color: #7b8085;
-  font-size: 11px;
-  font-weight: 700;
-  line-height: 1.65;
-}
-
-.registration-preview-modal-card {
-  width: min(720px, calc(100vw - 24px));
-  max-height: calc(100vh - 32px);
-  overflow-y: auto;
-}
-
-.registration-preview-note {
-  margin: 10px 0 18px;
-  color: #7b8085;
-  font-size: 12px;
-  font-weight: 700;
-  line-height: 1.7;
-}
 
-#registrationPreviewCard .card {
-  width: 100%;
-  margin: 0;
-}
+  // ======================================
+  // 締切間近 表示テスト
+  // 実際の期限を変更せず、見た目だけ強制表示
+  // ======================================
+  if (forceDeadlineBadge) {
 
-.registration-preview-actions {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 10px;
-  margin-top: 18px;
-}
+    return {
 
-.registration-preview-platform {
-  margin-bottom: 9px;
-  color: #7b8085;
-  font-size: 11px;
-  font-weight: 900;
-  letter-spacing: .04em;
-}
+      expired:
+        false,
 
-.recruitment-preview-link {
-  display: block;
-  text-decoration: none;
-}
+      text:
+        "⚠ 残り 23時間 59分",
 
-.recruitment-preview-image {
-  display: block;
-  width: 100%;
-  max-height: 420px;
-  object-fit: contain;
-  border: 1px solid rgba(21, 174, 235, .24);
-  background: #0d1014;
-}
+      className:
+        "deadline-near",
 
-.recruitment-preview-empty {
-  display: grid;
-  place-items: center;
-  min-height: 120px;
-  padding: 18px;
-  border: 1px dashed rgba(123, 128, 133, .36);
-  color: #7b8085;
-  font-size: 12px;
-  font-weight: 800;
-  line-height: 1.7;
-  text-align: center;
-}
+      deadlineNear:
+        true
 
-@media (max-width: 600px) {
-  .registration-preview-actions {
-    grid-template-columns: 1fr;
-  }
+    };
 
-  .registration-preview-modal-card {
-    width: calc(100vw - 16px);
-    max-height: calc(100vh - 16px);
   }
-}
-
-/* =========================================================
-   v13.8 BlablaLink preview side-gap fix
-   ========================================================= */
-
-.recruitment-preview-link {
-  display: block;
-  width: 100%;
-  overflow: hidden;
-}
-
-.recruitment-preview-image {
-  display: block !important;
-  width: 100% !important;
-  height: auto !important;
-
-  max-width: 100% !important;
-  max-height: none !important;
-
-  margin: 0 !important;
-
-  object-fit: initial !important;
-
-  background: transparent !important;
-}
-
-
-/* =========================================================
-   v15 VIDEO TOP / HEADER / MOBILE+TABLET NAV
-   2026-09-09
-   ========================================================= */
-
-/* Header: uploaded UNION MATCH logo is the hidden TOP switch */
-body .video-topbar {
-  position: sticky !important;
-  top: 0 !important;
-  z-index: 120 !important;
-  height: 66px !important;
-  padding: 0 14px !important;
-  border-bottom: 0 !important;
-  background: rgba(9, 10, 13, .92) !important;
-  backdrop-filter: blur(12px);
-  -webkit-backdrop-filter: blur(12px);
-}
 
-body .video-logo-switch {
-  width: auto !important;
-  max-width: none !important;
-  height: 58px !important;
-  display: flex !important;
-  align-items: center !important;
-  padding: 0 !important;
-  margin: 0 !important;
-  border: 0 !important;
-  background: transparent !important;
-  box-shadow: none !important;
-  cursor: pointer;
-  appearance: none;
-  -webkit-appearance: none;
-}
-
-body .video-logo-switch img {
-  display: block !important;
-  width: clamp(154px, 18vw, 238px) !important;
-  max-width: 46vw !important;
-  height: auto !important;
-  max-height: 54px !important;
-  object-fit: contain !important;
-  object-position: left center !important;
-  pointer-events: none;
-}
-
-body .video-logo-switch:hover,
-body .video-logo-switch:focus,
-body .video-logo-switch:active {
-  border: 0 !important;
-  outline: 0 !important;
-  background: transparent !important;
-  box-shadow: none !important;
-  transform: none !important;
-}
-
-body .site-menu-button {
-  width: 46px;
-  height: 46px;
-  display: grid;
-  place-content: center;
-  gap: 5px;
-  padding: 0;
-  border: 0;
-  background: transparent;
-  cursor: pointer;
-}
-
-body .site-menu-button span {
-  display: block;
-  width: 25px;
-  height: 2px;
-  border-radius: 99px;
-  background: #fff;
-  transition: transform .22s ease, opacity .22s ease;
-}
-
-body.menu-open .site-menu-button span:nth-child(1) {
-  transform: translateY(7px) rotate(45deg);
-}
-
-body.menu-open .site-menu-button span:nth-child(2) {
-  opacity: 0;
-}
-
-body.menu-open .site-menu-button span:nth-child(3) {
-  transform: translateY(-7px) rotate(-45deg);
-}
-
-body .site-menu-backdrop {
-  position: fixed;
-  inset: 66px 0 0;
-  z-index: 108;
-  background: rgba(0, 0, 0, .48);
-  backdrop-filter: blur(2px);
-  -webkit-backdrop-filter: blur(2px);
-}
-
-body .site-menu-drawer {
-  position: fixed;
-  top: 66px;
-  right: 0;
-  z-index: 110;
-  width: min(86vw, 340px);
-  height: calc(100dvh - 66px);
-  padding: 12px;
-  transform: translateX(105%);
-  overflow-y: auto;
-  background: rgba(17, 19, 24, .98);
-  box-shadow: -18px 0 50px rgba(0, 0, 0, .32);
-  transition: transform .24s ease;
-}
-
-body.menu-open .site-menu-drawer {
-  transform: translateX(0);
-}
-
-body .site-menu-head {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  min-height: 48px;
-  padding: 0 6px 10px;
-  color: rgba(255,255,255,.7);
-  font: 800 12px "Teko", sans-serif;
-  letter-spacing: .24em;
-}
-
-body .site-menu-head button {
-  width: 38px;
-  height: 38px;
-  border: 0;
-  color: #fff;
-  background: transparent;
-  font-size: 28px;
-  line-height: 1;
-  cursor: pointer;
-}
-
-body .site-menu-drawer > button,
-body .site-menu-drawer > a {
-  width: 100%;
-  min-height: 52px;
-  display: flex;
-  align-items: center;
-  padding: 0 14px;
-  border: 0;
-  border-bottom: 1px solid rgba(255,255,255,.09);
-  color: #fff;
-  background: transparent;
-  font-size: 14px;
-  font-weight: 800;
-  text-align: left;
-  text-decoration: none;
-  cursor: pointer;
-}
-
-body .site-menu-drawer > button:hover,
-body .site-menu-drawer > a:hover {
-  background: rgba(255,255,255,.06);
-}
-
-/* Video hero */
-body .video-hero {
-  position: relative;
-  z-index: 1;
-  width: 100%;
-  overflow: hidden;
-  background: #000;
-  scroll-margin-top: 66px;
-  isolation: isolate;
-}
-
-body .hero-background-video {
-  position: absolute;
-  inset: 0;
-  z-index: 0;
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-  object-position: center center;
-  background: #000;
-}
 
-body .video-hero-shade {
-  position: absolute;
-  inset: 0;
-  z-index: 1;
-  background:
-    linear-gradient(
-      180deg,
-      rgba(0,0,0,.08) 0%,
-      rgba(0,0,0,.02) 42%,
-      rgba(0,0,0,.38) 100%
+  const totalMinutes =
+    Math.floor(
+      diff / 60000
     );
-  pointer-events: none;
-}
 
-body .video-hero-stats {
-  position: absolute;
-  left: 50%;
-  bottom: clamp(62px, 9vw, 108px);
-  z-index: 3;
-  transform: translateX(-50%);
-  width: min(92%, 860px);
-  color: #fff;
-  text-align: center;
-  text-shadow: 0 3px 22px rgba(0,0,0,.52);
-}
 
-body .video-current-row {
-  display: flex;
-  justify-content: center;
-  align-items: flex-start;
-  gap: clamp(46px, 11vw, 150px);
-}
+  const days =
+    Math.floor(
+      totalMinutes /
+      1440
+    );
 
-body .video-current-stat {
-  min-width: 110px;
-}
 
-body .video-current-stat strong {
-  display: block;
-  color: #fff !important;
-  font-family: "Teko", "Arial Narrow", sans-serif;
-  font-size: clamp(50px, 7vw, 92px);
-  font-weight: 700;
-  line-height: .86;
-  letter-spacing: -.025em;
-}
+  const hours =
+    Math.floor(
+      (
+        totalMinutes %
+        1440
+      )
+      /
+      60
+    );
 
-body .video-current-stat span {
-  display: block;
-  margin-top: 9px;
-  color: rgba(255,255,255,.96);
-  font-family: "Teko", "Arial Narrow", sans-serif;
-  font-size: clamp(13px, 1.6vw, 18px);
-  font-weight: 700;
-  line-height: 1;
-  letter-spacing: .19em;
-}
 
-body .video-history-row {
-  margin-top: clamp(22px, 3vw, 36px);
-  color: rgba(255,255,255,.68);
-  font-family: "Teko", "Arial Narrow", sans-serif;
-  font-size: clamp(11px, 1.25vw, 14px);
-  font-weight: 600;
-  letter-spacing: .13em;
-  white-space: nowrap;
-}
+  const minutes =
+    totalMinutes %
+    60;
 
-body .video-history-row strong {
-  color: rgba(255,255,255,.82) !important;
-  font: inherit;
-}
 
-body .video-history-slash {
-  display: inline-block;
-  margin: 0 12px;
-  color: rgba(255,255,255,.42);
-}
+  // ======================================
+  // 締切間近：残り24時間以内
+  // ======================================
+  const deadlineNear =
+    diff <=
+    24 * 60 * 60 * 1000;
 
-body .video-scroll-button {
-  position: absolute;
-  left: 50%;
-  bottom: 14px;
-  z-index: 4;
-  transform: translateX(-50%);
-  min-width: 74px;
-  padding: 4px 10px 2px;
-  border: 0;
-  color: rgba(255,255,255,.66);
-  background: transparent;
-  cursor: pointer;
-  text-align: center;
-}
 
-body .video-scroll-button span {
-  display: block;
-  font-family: "Teko", sans-serif;
-  font-size: 9px;
-  font-weight: 700;
-  letter-spacing: .28em;
-}
+  if (deadlineNear) {
 
-body .video-scroll-button b {
-  display: block;
-  margin-top: -1px;
-  font-size: 20px;
-  font-weight: 400;
-  animation: videoScrollFloat 1.8s ease-in-out infinite;
-}
+    return {
 
-@keyframes videoScrollFloat {
-  0%, 100% { transform: translateY(0); opacity: .55; }
-  50% { transform: translateY(4px); opacity: 1; }
-}
+      expired:
+        false,
 
-/* In list mode the old hero copy/buttons disappear.
-   Register/manage forms themselves remain untouched and use existing logic. */
-body:not(.register-mode):not(.manage-mode) main.container > .hero {
-  display: none !important;
-}
+      text:
+        `⚠ 残り ${hours}時間 ${minutes}分`,
 
-body.register-mode .video-hero,
-body.manage-mode .video-hero {
-  display: none !important;
-}
+      className:
+        "deadline-near",
 
-body.register-mode main.container > .hero,
-body.manage-mode main.container > .hero {
-  display: grid !important;
-  margin-top: 18px !important;
-}
+      deadlineNear:
+        true
 
-/* Current hero copy/action buttons are no longer used */
-body main.container > .hero .hero-left > h1,
-body main.container > .hero .hero-left > p,
-body main.container > .hero .hero-actions {
-  display: none !important;
-}
+    };
 
-/* White content sheet */
-body #listPage {
-  position: relative;
-  z-index: 8;
-  background: #fff;
-}
-
-/* Bottom nav: smartphone/tablet only.
-   Hidden on video; fades in when list area enters the viewport. */
-body .bottom-nav {
-  opacity: 0 !important;
-  transform: translateY(calc(100% + 18px)) !important;
-  pointer-events: none !important;
-  transition:
-    opacity .24s ease,
-    transform .24s ease !important;
-}
-
-body .bottom-nav.is-visible {
-  opacity: 1 !important;
-  transform: translateY(0) !important;
-  pointer-events: auto !important;
-}
-
-body .bottom-nav .nav-link-btn {
-  box-sizing: border-box;
-  align-items: center;
-  justify-content: center;
-  text-align: center;
-  text-decoration: none !important;
-}
-
-@media screen and (max-width: 1024px) {
-  body .video-hero {
-    aspect-ratio: 1 / 1;
   }
 
-  body .video-current-stat strong {
-    font-size: clamp(42px, 8.8vw, 68px);
+
+  let className =
+    "";
+
+
+  if (
+    days <=
+    2
+  ) {
+
+    className =
+      "danger";
+
+
+  } else if (
+    days <=
+    6
+  ) {
+
+    className =
+      "warning";
+
   }
 
-  body .video-current-stat span {
-    font-size: clamp(10px, 2vw, 14px);
-  }
 
-  body .video-history-row {
-    font-size: clamp(9px, 1.7vw, 12px);
-  }
+  return {
 
-  body .container {
-    padding-left: 0 !important;
-    padding-right: 0 !important;
-  }
+    expired:
+      false,
 
-  body #listPage {
-    margin-top: -24px !important;
-    padding: 28px 16px 96px !important;
-    border-radius: 28px 28px 0 0 !important;
-    box-shadow: 0 -15px 42px rgba(0,0,0,.16);
-  }
+    text:
+      `⏳ 残り ${days}日 ${hours}時間 ${minutes}分`,
 
-  body.register-mode main.container,
-  body.manage-mode main.container {
-    padding-left: 14px !important;
-    padding-right: 14px !important;
-  }
+    className,
 
-  body.register-mode #listPage,
-  body.manage-mode #listPage {
-    display: none !important;
-  }
+    deadlineNear:
+      false
 
-  body .bottom-nav {
-    display: flex !important;
-    bottom: 0 !important;
-    padding-bottom: env(safe-area-inset-bottom);
-    height: calc(68px + env(safe-area-inset-bottom)) !important;
-  }
+  };
 
-  body .bottom-nav .nav-btn {
-    min-width: 0;
-    max-width: none !important;
-    padding-left: 4px !important;
-    padding-right: 4px !important;
-  }
-}
-
-@media screen and (max-width: 600px) {
-  body .video-logo-switch img {
-    width: clamp(148px, 43vw, 196px) !important;
-  }
-
-  body .video-hero-stats {
-    bottom: 48px;
-  }
-
-  body .video-current-row {
-    gap: clamp(34px, 12vw, 60px);
-  }
-
-  body .video-current-stat {
-    min-width: 102px;
-  }
-
-  body .video-history-row {
-    margin-top: 19px;
-  }
-
-  body #listPage {
-    padding-left: 12px !important;
-    padding-right: 12px !important;
-  }
-}
-
-@media screen and (min-width: 601px) and (max-width: 1024px) {
-  body .video-logo-switch img {
-    width: clamp(178px, 26vw, 236px) !important;
-  }
-
-  body .video-hero-stats {
-    bottom: 72px;
-  }
-
-  /* keep the existing tablet card grid; only the top is replaced */
-  body #listPage {
-    padding-left: 20px !important;
-    padding-right: 20px !important;
-  }
-}
-
-@media screen and (min-width: 1025px) {
-  body .video-hero {
-    aspect-ratio: 16 / 9;
-    max-height: calc(100svh - 66px);
-    min-height: 560px;
-  }
-
-  body #listPage {
-    margin-top: -36px !important;
-    padding: 36px 26px 42px !important;
-    border-radius: 34px 34px 0 0 !important;
-    box-shadow: 0 -20px 60px rgba(0,0,0,.16);
-  }
-
-  body .bottom-nav {
-    display: none !important;
-  }
-}
-
-@media (prefers-reduced-motion: reduce) {
-  body .video-scroll-button b {
-    animation: none;
-  }
-
-  body .site-menu-drawer,
-  body .bottom-nav {
-    transition: none !important;
-  }
 }
 
 
-/* =========================================================
-   v18 MOBILE HOTFIX
-   ========================================================= */
+function updateCountdowns() {
 
-/* MATCHED / TOTAL UNIONS: labels stay small, numbers only larger */
-@media screen and (max-width: 1024px) {
-  html body .video-history-row {
-    font-size: clamp(12px, 3vw, 15px) !important;
-  }
+  document
+    .querySelectorAll(
+      "[data-expires]"
+    )
+    .forEach(
+      element => {
 
-  html body .video-history-row strong {
-    display: inline-block !important;
-    font-size: 1.55em !important;
-    font-weight: 800 !important;
-    line-height: .8 !important;
-    vertical-align: -0.04em !important;
-    letter-spacing: .04em !important;
-    margin-left: 3px !important;
-    margin-right: 2px !important;
-  }
-}
-
-/* Mobile/tablet footer: force all 3 buttons to exist side-by-side */
-@media screen and (max-width: 1024px) {
-  html body #bottomNav.bottom-nav {
-    display: grid !important;
-    grid-template-columns: repeat(3, minmax(0, 1fr)) !important;
-    grid-auto-flow: column !important;
-    width: 100% !important;
-    left: 0 !important;
-    right: 0 !important;
-    overflow: visible !important;
-  }
-
-  html body #bottomNav.bottom-nav > .nav-btn {
-    display: flex !important;
-    visibility: visible !important;
-    opacity: 1 !important;
-    position: relative !important;
-    grid-column: auto !important;
-    width: 100% !important;
-    min-width: 0 !important;
-    max-width: none !important;
-    height: 100% !important;
-    margin: 0 !important;
-    padding: 7px 2px 10px !important;
-    flex: none !important;
-    flex-direction: column !important;
-    align-items: center !important;
-    justify-content: center !important;
-    text-align: center !important;
-    white-space: nowrap !important;
-  }
-
-  html body #bottomNav.bottom-nav > .nav-btn span {
-    display: block !important;
-    margin: 0 0 4px !important;
-  }
-}
+        const result =
+          getRemainingTime(
+            element.dataset.expires
+          );
 
 
-/* =========================================================
-   v19 MOBILE TOP ONLY FIX
-   2026-09-09
-   - smartphone logo smaller
-   - main COMMANDERS / UNIONS larger
-   - MATCHED / TOTAL UNIONS numbers only larger
-   - hamburger drawer glass/translucent
-   - video fills first viewport; white list stays below fold
-   - bottom navigation forced to three equal buttons
-   ========================================================= */
+        if (
+          result.expired
+        ) {
 
-@media screen and (max-width: 600px) {
-  /* Left logo: about two steps smaller than the previous mobile size */
-  html body .video-logo-switch img {
-    width: clamp(90px, 27vw, 116px) !important;
-    max-width: 29vw !important;
-    max-height: 40px !important;
-  }
+          const card =
+            element.closest(
+              ".card"
+            );
 
-  /* Hero occupies the viewport below the 66px sticky header.
-     The white recruitment sheet starts only after scrolling. */
-  html body .video-hero {
-    aspect-ratio: auto !important;
-    width: 100% !important;
-    height: calc(100svh - 66px) !important;
-    min-height: calc(100svh - 66px) !important;
-    max-height: none !important;
-  }
 
-  html body .hero-background-video {
-    object-fit: cover !important;
-    object-position: center center !important;
-  }
+          if (card) {
 
-  /* Put the stats lower in the frame, while leaving room for SCROLL */
-  html body .video-hero-stats {
-    bottom: 92px !important;
-    width: min(94%, 420px) !important;
-  }
+            card.remove();
 
-  html body .video-current-row {
-    gap: clamp(46px, 15vw, 82px) !important;
-  }
+          }
 
-  html body .video-current-stat {
-    min-width: 118px !important;
-  }
 
-  html body .video-current-stat strong {
-    font-size: clamp(76px, 19vw, 94px) !important;
-    line-height: .80 !important;
-  }
+          return;
 
-  html body .video-current-stat span {
-    margin-top: 12px !important;
-    font-size: clamp(15px, 4.1vw, 18px) !important;
-    line-height: 1 !important;
-    letter-spacing: .17em !important;
-  }
+        }
 
-  html body .video-history-row {
-    margin-top: 24px !important;
-    font-size: clamp(12px, 3.1vw, 14px) !important;
-    line-height: 1.15 !important;
-  }
 
-  /* Only the 12 / 16 etc. are enlarged */
-  html body .video-history-row strong {
-    display: inline-block !important;
-    font-size: 1.72em !important;
-    font-weight: 800 !important;
-    line-height: .74 !important;
-    vertical-align: -0.08em !important;
-    letter-spacing: .02em !important;
-    margin: 0 2px 0 3px !important;
-  }
+        element.textContent =
+          result.text;
 
-  html body .video-history-slash {
-    margin-left: 10px !important;
-    margin-right: 10px !important;
-  }
 
-  /* SCROLL gets its own safe zone and no longer overlaps stats */
-  html body .video-scroll-button {
-    bottom: 22px !important;
-    min-width: 84px !important;
-    padding: 3px 10px 0 !important;
-  }
+        element.className =
+          `countdown ${result.className}`;
 
-  html body .video-scroll-button span {
-    font-size: 10px !important;
-    letter-spacing: .28em !important;
-  }
 
-  html body .video-scroll-button b {
-    margin-top: 0 !important;
-    font-size: 18px !important;
-  }
+        // ======================================
+        // 締切間近バッジを1分ごとに同期
+        // ======================================
+        const card =
+          element.closest(
+            ".card"
+          );
 
-  /* No negative overlap into the first screen */
-  html body #listPage {
-    margin-top: 0 !important;
-  }
-}
+        const badgeWrap =
+          card
+            ?.querySelector(
+              ".type-with-new"
+            );
 
-/* Hamburger drawer: lighter transparent black / glass */
-@media screen and (max-width: 1024px) {
-  html body .site-menu-backdrop {
-    background: rgba(0, 0, 0, .18) !important;
-    backdrop-filter: blur(4px) !important;
-    -webkit-backdrop-filter: blur(4px) !important;
-  }
+        const currentBadge =
+          badgeWrap
+            ?.querySelector(
+              ".deadline-badge"
+            );
 
-  html body .site-menu-drawer {
-    background: rgba(13, 16, 22, .62) !important;
-    border-left: 1px solid rgba(255,255,255,.12) !important;
-    box-shadow: -12px 0 34px rgba(0,0,0,.18) !important;
-    backdrop-filter: blur(14px) saturate(118%) !important;
-    -webkit-backdrop-filter: blur(14px) saturate(118%) !important;
-  }
+        if (
+          result.deadlineNear
+        ) {
 
-  html body .site-menu-drawer > button,
-  html body .site-menu-drawer > a {
-    border-bottom-color: rgba(255,255,255,.12) !important;
-  }
+          if (
+            badgeWrap &&
+            !currentBadge
+          ) {
 
-  /* Bottom nav: exactly three equal buttons, never a single stretched item */
-  html body #bottomNav.bottom-nav {
-    display: flex !important;
-    grid-template-columns: none !important;
-    grid-auto-flow: initial !important;
-    align-items: stretch !important;
-    justify-content: stretch !important;
-    width: 100% !important;
-    left: 0 !important;
-    right: 0 !important;
-    overflow: hidden !important;
-  }
+            badgeWrap
+              .insertAdjacentHTML(
+                "beforeend",
+                '<span class="deadline-badge">⚠ 締切間近</span>'
+              );
 
-  html body #bottomNav.bottom-nav > .nav-btn {
-    display: flex !important;
-    visibility: visible !important;
-    opacity: 1 !important;
-    position: static !important;
-    flex: 1 1 33.333333% !important;
-    width: 33.333333% !important;
-    min-width: 0 !important;
-    max-width: none !important;
-    height: 100% !important;
-    margin: 0 !important;
-    padding: 7px 2px 10px !important;
-    flex-direction: column !important;
-    align-items: center !important;
-    justify-content: center !important;
-    text-align: center !important;
-    white-space: nowrap !important;
-  }
+          }
 
-  html body #bottomNav.bottom-nav > .nav-btn span {
-    display: block !important;
-    margin: 0 0 4px !important;
-  }
+        } else {
+
+          currentBadge
+            ?.remove();
+
+        }
+
+      }
+    );
+
 }
 
 
-/* =========================================================
-   v20 VIDEO STICKY UNDERLAY
-   2026-09-09
-   - Keep the current video / counts in place while scrolling
-   - Let the white recruitment sheet rise over the video
-   - Registration / manage modes remain unchanged
-   ========================================================= */
+// ========================================
+// メッセージ
+// ========================================
 
-body:not(.register-mode):not(.manage-mode) .video-hero {
-  position: -webkit-sticky !important;
-  position: sticky !important;
-  top: 66px !important;
-  z-index: 1 !important;
-}
+function showMessage(
+  text,
+  type = ""
+) {
 
-/* The normal page content becomes the foreground layer.
-   Existing spacing, card sizes, colors and functions are untouched. */
-body:not(.register-mode):not(.manage-mode) main.container {
-  position: relative;
-  z-index: 8;
-}
+  const message =
+    $("#message");
 
-body:not(.register-mode):not(.manage-mode) #listPage {
-  position: relative !important;
-  z-index: 10 !important;
-}
 
-/* Keep the header and hamburger menu above both layers. */
-body .video-topbar {
-  z-index: 120 !important;
+  if (!message) {
+    return;
+  }
+
+
+  message.textContent =
+    text;
+
+
+  message.className =
+    `message ${type}`;
+
 }
 
 
-/* =========================================================
-   v24 PC BOTTOM SPACE FIX ONLY
-   2026-09-10
-   - PC list page bottom gray gap only
-   - mobile footer appearance remains the original style
-   ========================================================= */
-@media screen and (min-width: 1025px) {
-  html body:not(.register-mode):not(.manage-mode) {
-    padding-bottom: 0 !important;
+// ========================================
+// 空表示
+// ========================================
+
+function showEmpty(text) {
+
+  const empty =
+    $("#emptyState");
+
+
+  if (!empty) {
+    return;
+  }
+
+
+  empty.classList.remove(
+    "hidden"
+  );
+
+
+  const p =
+    empty.querySelector(
+      "p"
+    );
+
+
+  if (p) {
+
+    p.textContent =
+      text;
+
+  }
+
+}
+
+
+// ========================================
+// 卒業ちしかんカウンター
+//
+// PASS締切
+// +
+// 14日経過
+//
+// Supabase側で合算
+// ========================================
+
+async function loadGraduatedCommanderCount() {
+
+  const counter =
+    $("#graduatedCommanderCount");
+
+  const topCounter =
+    $("#graduatedCommanderCountTop");
+
+
+  if (!sb) {
+
+    return null;
+
+  }
+
+
+  const {
+    data,
+    error
+  } =
+    await sb.rpc(
+      "get_graduated_commander_count"
+    );
+
+
+  if (error) {
+
+    console.error(
+      "卒業ちしかんカウンター取得エラー",
+      error
+    );
+
+    return null;
+
+  }
+
+
+  const count =
+    Number(
+      Array.isArray(data)
+        ? data[0]
+        : data
+    );
+
+
+  if (
+    !Number.isFinite(
+      count
+    )
+  ) {
+
+    return null;
+
+  }
+
+
+  // 下側が残っている場合だけ更新
+  if (counter) {
+
+    counter.textContent =
+      count;
+
+  }
+
+
+  // TOP側
+  if (topCounter) {
+
+    topCounter.textContent =
+      count;
+
+  }
+
+
+  return count;
+
+}
+
+
+// ========================================
+// Xシェア用
+// 現在募集中の指揮官数
+// ========================================
+
+async function getCurrentCommanderCount() {
+
+  if (!sb) {
+
+    return 0;
+
+  }
+
+
+  const {
+    count,
+    error
+  } =
+    await sb
+      .from(
+        "recruitments"
+      )
+      .select(
+        "id",
+        {
+          count: "exact",
+          head: true
+        }
+      )
+      .eq(
+        "status",
+        "open"
+      )
+      .gt(
+        "expires_at",
+        new Date()
+          .toISOString()
+      );
+
+
+  if (error) {
+
+    console.error(
+      "登録指揮官数取得エラー",
+      error
+    );
+
+
+    return Number(
+
+      $("#commanderCountTop")
+        ?.textContent
+      ||
+      $("#commanderCount")
+        ?.textContent
+      ||
+      0
+
+    );
+
+  }
+
+
+  return Number(
+    count || 0
+  );
+
+}
+
+
+// ========================================
+// Xシェア用
+// 現在募集中のユニオン数
+// ========================================
+
+async function getCurrentUnionCount() {
+
+  if (!sb) {
+
+    return 0;
+
+  }
+
+
+  const {
+    count,
+    error
+  } =
+    await sb
+      .from(
+        "union_recruitments"
+      )
+      .select(
+        "id",
+        {
+          count: "exact",
+          head: true
+        }
+      )
+      .eq(
+        "status",
+        "open"
+      )
+      .gt(
+        "expires_at",
+        new Date()
+          .toISOString()
+      );
+
+
+  if (error) {
+
+    console.error(
+      "登録ユニオン数取得エラー",
+      error
+    );
+
+
+    return Number(
+
+      $("#unionCountTop")
+        ?.textContent
+      ||
+      $("#unionCount")
+        ?.textContent
+      ||
+      0
+
+    );
+
+  }
+
+
+  return Number(
+    count || 0
+  );
+
+}
+
+
+
+// ========================================
+// TOP表示用：総登録ユニオン数
+// 読み取り専用。既存データの更新・削除は行わない。
+// 同じユニオン名の再登録は1ユニオンとして集計。
+// ========================================
+
+async function loadTotalRegisteredUnionCount() {
+
+  const counter =
+    $("#totalUnionCountTop");
+
+  if (!counter) {
+    return 0;
+  }
+
+  if (!sb) {
+    counter.textContent = "0";
+    return 0;
+  }
+
+  const {
+    data,
+    error
+  } =
+    await sb
+      .from(
+        "union_recruitments"
+      )
+      .select(
+        "union_name"
+      );
+
+  if (error) {
+
+    console.error(
+      "総登録ユニオン数取得エラー",
+      error
+    );
+
+    const fallback =
+      Number(
+        $("#unionCountTop")
+          ?.textContent
+        ||
+        $("#unionCount")
+          ?.textContent
+        ||
+        0
+      );
+
+    counter.textContent =
+      String(fallback);
+
+    return fallback;
+  }
+
+  const names =
+    new Set(
+      (data || [])
+        .map(item =>
+          String(
+            item?.union_name || ""
+          )
+            .trim()
+            .toLocaleLowerCase("ja-JP")
+        )
+        .filter(Boolean)
+    );
+
+  const total =
+    names.size;
+
+  counter.textContent =
+    String(total);
+
+  return total;
+}
+
+
+// ========================================
+// Xシェア文
+//
+// 通常Xアカウント用
+// 短縮版
+// ========================================
+
+function buildXShareText(
+  registration,
+  commanderCount,
+  unionCount,
+  graduatedCount
+) {
+
+  if (!registration) {
+
+    return "";
+
+  }
+
+
+  const commonTop =
+
+    "🔎 指揮官とユニオンをつなぐマッチングアプリ\n" +
+    "「NIKKE UNION MATCH」に募集登録しました！\n\n";
+
+
+  const commonStats =
+
+    "📊 現在の登録状況\n" +
+    `👤 ${commanderCount}名\n` +
+    `🏢 ${unionCount}\n` +
+    `🎓 ${graduatedCount}名\n\n`;
+
+
+  const appUrl =
+    "https://x.gd/4tEJo";
+
+
+  // ======================================
+  // 指揮官
+  // ======================================
+
+  if (
+    registration.type ===
+    "commander"
+  ) {
+
+    return (
+
+      commonTop +
+
+      `👤 ${registration.name}\n` +
+      `⚡ ${registration.slv}\n\n` +
+
+      commonStats +
+
+      "👇 UNION MATCH\n" +
+      appUrl +
+      "\n\n" +
+
+      "👇 募集投稿\n" +
+      registration.xUrl
+
+    );
+
+  }
+
+
+  // ======================================
+  // ユニオン
+  // ======================================
+
+  return (
+
+    commonTop +
+
+    `🏢 ${registration.name}\n` +
+    `🏆 ${registration.rank}\n\n` +
+
+    commonStats +
+
+    "👇 UNION MATCH\n" +
+    appUrl +
+    "\n\n" +
+
+    "👇 募集投稿\n" +
+    registration.xUrl
+
+  );
+
+}
+
+
+// ========================================
+// 募集一覧
+// ========================================
+
+async function loadRecruitments() {
+
+  const list =
+    $("#recruitmentList");
+
+  const empty =
+    $("#emptyState");
+
+
+  if (
+    !list ||
+    !empty
+  ) {
+
+    return;
+
+  }
+
+
+  if (!sb) {
+
+    showMessage(
+
+      "Supabaseの設定がまだです。",
+
+      "error"
+
+    );
+
+    return;
+
+  }
+
+
+  list.innerHTML =
+    "";
+
+
+  empty.classList.add(
+    "hidden"
+  );
+
+
+  // 卒業ちしかん更新
+  await loadGraduatedCommanderCount();
+
+  // 総登録ユニオン数（読み取り専用）
+  await loadTotalRegisteredUnionCount();
+
+
+  // ======================================
+  // 指揮官取得
+  // ======================================
+
+  const commanderQuery =
+
+    sb
+      .from(
+        "recruitments"
+      )
+      .select(
+        "id, commander_name, slv, x_url, x_embed_enabled, preview_image_url, force_preview_image, created_at, expires_at"
+      )
+      .eq(
+        "status",
+        "open"
+      )
+      .gt(
+        "expires_at",
+        new Date()
+          .toISOString()
+      )
+      .order(
+        "created_at",
+        {
+          ascending:
+            false
+        }
+      );
+
+
+  // ======================================
+  // ユニオン取得
+  // ======================================
+
+  const unionQuery =
+
+    sb
+      .from(
+        "union_recruitments"
+      )
+      .select(
+        "id, union_name, union_rank, x_url, x_embed_enabled, preview_image_url, force_preview_image, created_at, expires_at"
+      )
+      .eq(
+        "status",
+        "open"
+      )
+      .gt(
+        "expires_at",
+        new Date()
+          .toISOString()
+      )
+      .order(
+        "created_at",
+        {
+          ascending:
+            false
+        }
+      );
+
+
+  const [
+
+    commanderResult,
+    unionResult
+
+  ] =
+
+    await Promise.all([
+
+      commanderQuery,
+      unionQuery
+
+    ]);
+
+
+  // ======================================
+  // エラー
+  // ======================================
+
+  if (
+    commanderResult.error
+  ) {
+
+    showMessage(
+
+      `指揮官読み込みエラー：${commanderResult.error.message}`,
+
+      "error"
+
+    );
+
+    return;
+
+  }
+
+
+  if (
+    unionResult.error
+  ) {
+
+    showMessage(
+
+      `ユニオン読み込みエラー：${unionResult.error.message}`,
+
+      "error"
+
+    );
+
+    return;
+
+  }
+
+
+  const commanders =
+    commanderResult.data ||
+    [];
+
+
+  const unions =
+    unionResult.data ||
+    [];
+
+
+  // ======================================
+  // カウンター
+  // ======================================
+
+  if (
+    $("#commanderCountTop")
+  ) {
+
+    $("#commanderCountTop")
+      .textContent =
+      commanders.length;
+
+  }
+
+
+  if (
+    $("#unionCountTop")
+  ) {
+
+    $("#unionCountTop")
+      .textContent =
+      unions.length;
+
+  }
+
+
+  if (
+    $("#commanderCount")
+  ) {
+
+    $("#commanderCount")
+      .textContent =
+      commanders.length;
+
+  }
+
+
+  if (
+    $("#unionCount")
+  ) {
+
+    $("#unionCount")
+      .textContent =
+      unions.length;
+
+  }
+
+
+  // ======================================
+  // 最終更新
+  // ======================================
+
+  if (
+    $("#lastUpdated")
+  ) {
+
+    $("#lastUpdated")
+      .textContent =
+
+      "最終更新：" +
+
+      new Intl.DateTimeFormat(
+        "ja-JP",
+        {
+
+          month:
+            "2-digit",
+
+          day:
+            "2-digit",
+
+          hour:
+            "2-digit",
+
+          minute:
+            "2-digit"
+
+        }
+      ).format(
+        new Date()
+      );
+
+  }
+
+
+  // ======================================
+  // 指揮官一覧
+  // ======================================
+
+  if (
+    currentSearchType ===
+    "commander"
+  ) {
+
+    const minSlv =
+      Number(
+        $("#slvFilter")
+          ?.value ||
+        0
+      );
+
+
+    let filtered =
+      [
+        ...commanders
+      ];
+
+
+    if (
+      minSlv >
+      0
+    ) {
+
+      filtered =
+        filtered.filter(
+          item => {
+
+            const slv =
+              Number(
+                item.slv
+              );
+
+
+            if (
+              minSlv ===
+              1000
+            ) {
+
+              return (
+
+                slv >=
+                1000
+
+                &&
+
+                slv <=
+                1200
+
+              );
+
+            }
+
+
+            return (
+
+              slv >=
+              minSlv
+
+              &&
+
+              slv <=
+              minSlv + 99
+
+            );
+
+          }
+        );
+
+    }
+
+
+    filtered.sort(
+
+      (a, b) =>
+
+        new Date(
+          b.created_at
+        )
+        -
+        new Date(
+          a.created_at
+        )
+
+    );
+
+
+    if (
+      filtered.length ===
+      0
+    ) {
+
+      showEmpty(
+        "現在募集中の指揮官はいません。"
+      );
+
+      return;
+
+    }
+
+
+    list.innerHTML =
+
+      filtered
+        .map(
+          item => {
+
+
+            const remaining =
+              getRemainingTime(
+                item.expires_at
+              );
+
+
+            const postId =
+              getXPostId(
+                item.x_url
+              );
+
+const newBadge =
+  isNewRecruitment(
+    item.created_at
+  )
+    ? '<span class="new-badge">🔥 NEW</span>'
+    : "";
+
+const deadlineBadge =
+  remaining.deadlineNear
+    ? '<span class="deadline-badge">⚠ 締切間近</span>'
+    : "";
+            return `
+
+              <article
+                class="card commander-card"
+              >
+
+                <div class="card-head">
+
+                <div class="type-with-new">
+
+  <span
+    class="recruitment-type"
+  >
+    ● 指揮官
+  </span>
+
+  ${newBadge}
+  ${deadlineBadge}
+
+</div>
+
+<span class="date">
+                    期限
+
+                    ${formatDate(
+                      item.expires_at
+                    )}
+
+                  </span>
+
+                </div>
+
+
+                <div class="name">
+
+                  ${escapeHtml(
+                    item.commander_name
+                  )}
+
+                </div>
+
+
+                <div class="slv">
+
+                  ${escapeHtml(
+                    item.slv
+                  )}
+
+                  <small
+                    class="slv-label"
+                    style="color:#7b8085 !important;-webkit-text-fill-color:#7b8085 !important;text-shadow:none !important;-webkit-text-stroke:0 !important;"
+                  >
+                    SLV
+                  </small>
+
+                </div>
+
+
+                <div class="date">
+
+                  登録
+
+                  ${formatDate(
+                    item.created_at
+                  )}
+
+                </div>
+
+
+                <div
+                  class="countdown ${remaining.className}"
+                  data-expires="${escapeHtml(
+                    item.expires_at
+                  )}"
+                >
+
+                  ${remaining.text}
+
+                </div>
+
+
+                <div class="x-post-area">
+
+                  ${buildRecruitmentPreviewMedia(
+                    item.x_url,
+                    item.preview_image_url || "",
+                    item.x_embed_enabled,
+                    item.force_preview_image === true
+                  )}
+
+
+                  <a
+
+                    class="x-btn"
+
+                    href="${escapeHtml(
+                      item.x_url
+                    )}"
+
+                    target="_blank"
+
+                    rel="noopener noreferrer"
+
+                  >
+
+                    ${escapeHtml(
+                      getRecruitmentButtonLabel(
+                        item.x_url
+                      )
+                    )}
+
+                  </a>
+
+
+                </div>
+
+
+              </article>
+
+            `;
+
+          }
+        )
+        .join("");
+
+  }
+
+
+  // ======================================
+  // ユニオン一覧
+  // ======================================
+
+  if (
+    currentSearchType ===
+    "union"
+  ) {
+
+    const selectedRank =
+
+      $("#unionRankFilter")
+        ?.value
+      ||
+      "";
+
+
+    let filtered =
+      [
+        ...unions
+      ];
+
+
+    if (
+      selectedRank
+    ) {
+
+      filtered =
+        filtered.filter(
+          item =>
+            item.union_rank ===
+            selectedRank
+        );
+
+    }
+
+
+    filtered.sort(
+
+      (a, b) =>
+
+        new Date(
+          b.created_at
+        )
+        -
+        new Date(
+          a.created_at
+        )
+
+    );
+
+
+    if (
+      filtered.length ===
+      0
+    ) {
+
+      showEmpty(
+        "現在募集中のユニオンはいません。"
+      );
+
+      return;
+
+    }
+
+
+    list.innerHTML =
+
+      filtered
+        .map(
+          item => {
+
+
+            const remaining =
+              getRemainingTime(
+                item.expires_at
+              );
+
+
+            const postId =
+              getXPostId(
+                item.x_url
+              );
+
+
+            const rankClass =
+              getUnionRankClass(
+                item.union_rank
+              );
+
+const newBadge =
+  isNewRecruitment(
+    item.created_at
+  )
+    ? '<span class="new-badge">🔥 NEW</span>'
+    : "";
+
+const deadlineBadge =
+  remaining.deadlineNear
+    ? '<span class="deadline-badge">⚠ 締切間近</span>'
+    : "";
+            
+            return `
+
+              <article
+                class="card union-card"
+              >
+
+                <div class="card-head">
+
+
+                <div class="type-with-new">
+
+  <span
+    class="recruitment-type"
+  >
+    ● ユニオン
+  </span>
+
+  ${newBadge}
+  ${deadlineBadge}
+
+</div>
+
+<span class="date">
+
+                    期限
+
+                    ${formatDate(
+                      item.expires_at
+                    )}
+
+                  </span>
+
+
+                </div>
+
+
+                <div class="name">
+
+                  ${escapeHtml(
+                    item.union_name
+                  )}
+
+                </div>
+
+
+                <div
+                  class="union-rank rank-${rankClass}"
+                >
+
+                  ${escapeHtml(
+                    item.union_rank
+                  )}
+
+                </div>
+
+
+                <div class="date">
+
+                  登録
+
+                  ${formatDate(
+                    item.created_at
+                  )}
+
+                </div>
+
+
+                <div
+                  class="countdown ${remaining.className}"
+                  data-expires="${escapeHtml(
+                    item.expires_at
+                  )}"
+                >
+
+                  ${remaining.text}
+
+                </div>
+
+
+                <div class="x-post-area">
+
+                  ${buildRecruitmentPreviewMedia(
+                    item.x_url,
+                    item.preview_image_url || "",
+                    item.x_embed_enabled,
+                    item.force_preview_image === true
+                  )}
+
+
+                  <a
+
+                    class="x-btn"
+
+                    href="${escapeHtml(
+                      item.x_url
+                    )}"
+
+                    target="_blank"
+
+                    rel="noopener noreferrer"
+
+                  >
+
+                    ${escapeHtml(
+                      getRecruitmentButtonLabel(
+                        item.x_url
+                      )
+                    )}
+
+                  </a>
+
+
+                </div>
+
+
+              </article>
+
+            `;
+
+          }
+        )
+        .join("");
+
+  }
+
+
+  updateCountdowns();
+
+
+  renderXEmbeds();
+
+
+  if (
+    countdownTimer
+  ) {
+
+    clearInterval(
+      countdownTimer
+    );
+
+  }
+
+
+  countdownTimer =
+
+    setInterval(
+
+      updateCountdowns,
+
+      60000
+
+    );
+
+}
+
+
+// ========================================
+// フィルター
+// ========================================
+
+$("#slvFilter")
+  ?.addEventListener(
+    "change",
+    loadRecruitments
+  );
+
+
+$("#unionRankFilter")
+  ?.addEventListener(
+    "change",
+    loadRecruitments
+  );
+
+
+$("#refreshBtn")
+  ?.addEventListener(
+    "click",
+    loadRecruitments
+  );
+
+
+// ========================================
+// 登録タイプ切り替え
+// ========================================
+
+const registrationTypeSelect =
+  $("#registrationType");
+
+
+const commanderFields =
+  $("#commanderFields");
+
+
+const unionFields =
+  $("#unionFields");
+
+
+function updateRegistrationFields() {
+
+  if (
+    !registrationTypeSelect
+  ) {
+
+    return;
+
+  }
+
+
+  const isUnion =
+
+    registrationTypeSelect
+      .value ===
+    "union";
+
+
+  commanderFields
+    ?.classList
+    .toggle(
+
+      "hidden",
+
+      isUnion
+
+    );
+
+
+  unionFields
+    ?.classList
+    .toggle(
+
+      "hidden",
+
+      !isUnion
+
+    );
+
+
+  const name =
+    $("#name");
+
+
+  const slv =
+    $("#slv");
+
+
+  const unionName =
+    $("#unionName");
+
+
+  if (name) {
+
+    name.required =
+      !isUnion;
+
+  }
+
+
+  if (slv) {
+
+    slv.required =
+      !isUnion;
+
+  }
+
+
+  if (unionName) {
+
+    unionName.required =
+      isUnion;
+
+  }
+
+}
+
+
+registrationTypeSelect
+  ?.addEventListener(
+    "change",
+    updateRegistrationFields
+  );
+
+
+updateRegistrationFields();
+
+
+// ========================================
+// 登録前プレビュー
+// ========================================
+
+function clearInitialPreviewImageSelection(showMessage = true) {
+
+  const input =
+    $("#previewImage");
+
+  if (input) {
+    input.value = "";
+  }
+
+  registrationPreviewApproved = false;
+  registrationPreviewPreparedFile = null;
+
+  if (registrationPreviewObjectUrl) {
+    URL.revokeObjectURL(registrationPreviewObjectUrl);
+    registrationPreviewObjectUrl = null;
+  }
+
+  $("#previewImageClearBtn")
+    ?.classList
+    .add("hidden");
+
+  const status =
+    $("#previewImageStatus");
+
+  if (status) {
+    const url =
+      $("#xUrl")?.value.trim() || "";
+
+    if (isBlablaLinkPostUrl(url)) {
+      status.textContent =
+        "選択画像を取り消しました。確認画面ではBlablaLinkの自動プレビューを取得します。";
+    } else {
+      status.textContent =
+        showMessage
+          ? "選択画像を取り消しました。画像なしでも登録できます。"
+          : "";
+    }
   }
 }
 
 
-/* =========================================================
-   v25 MOBILE LIST END / OVERSCROLL FIX
-   2026-09-10
-   - keep v24 footer behavior unchanged
-   - stop Safari-style overscroll past the final recruitment card
-   - list height stays equal to its real content height
-   ========================================================= */
-@media screen and (max-width: 1024px) {
+function closeRegistrationPreview(keepPreparedFile = false) {
 
-  html,
-  body {
-    overscroll-behavior-y: none;
+  $("#registrationPreviewModal")
+    ?.classList
+    .add("hidden");
+
+  if (registrationPreviewObjectUrl) {
+    URL.revokeObjectURL(registrationPreviewObjectUrl);
+    registrationPreviewObjectUrl = null;
   }
 
-  body:not(.register-mode):not(.manage-mode) main.container,
-  body:not(.register-mode):not(.manage-mode) #listPage {
-    min-height: 0 !important;
-    height: auto !important;
+  if (!keepPreparedFile) {
+    registrationPreviewPreparedFile = null;
   }
 }
+
+
+async function showRegistrationPreview() {
+
+  const registrationType =
+    $("#registrationType")?.value || "commander";
+
+  const xUrl =
+    $("#xUrl")?.value.trim() || "";
+
+  if (!validRecruitmentUrl(xUrl)) {
+    alert("募集記事URLを入力してください。\nX・BlablaLink・DiscordなどのURLに対応しています。");
+    return false;
+  }
+
+  const previewFile =
+    $("#previewImage")?.files?.[0] || null;
+
+  if (!validatePreviewImageFile(previewFile)) {
+    return false;
+  }
+
+  let name = "";
+  let detail = "";
+  let cardClass = "commander-card";
+  let typeLabel = "● 指揮官";
+
+  if (registrationType === "union") {
+    name = $("#unionName")?.value.trim() || "";
+    detail = $("#unionRank")?.value || "";
+    cardClass = "union-card";
+    typeLabel = "● ユニオン";
+
+    if (!name) {
+      alert("ユニオン名を入力してください。");
+      return false;
+    }
+  } else {
+    name = $("#name")?.value.trim() || "";
+    const slv = Number($("#slv")?.value);
+
+    if (!name) {
+      alert("指揮官名を入力してください。");
+      return false;
+    }
+
+    if (!slv || slv < 1 || slv > 1200) {
+      alert("SLVは1～1200で入力してください。");
+      return false;
+    }
+
+    detail = `${slv} <small class="slv-label" style="color:#7b8085 !important;-webkit-text-fill-color:#7b8085 !important;text-shadow:none !important;-webkit-text-stroke:0 !important;">SLV</small>`;
+  }
+
+  if (registrationPreviewObjectUrl) {
+    URL.revokeObjectURL(registrationPreviewObjectUrl);
+    registrationPreviewObjectUrl = null;
+  }
+
+  registrationPreviewPreparedFile = null;
+
+  const platform =
+    getRecruitmentPlatform(xUrl);
+
+  const previewButton = $("#registerPreviewBtn");
+  const originalButtonText =
+    previewButton?.textContent || "登録内容を確認する";
+  const status = $("#previewImageStatus");
+
+  // 手動画像がある場合は手動画像を優先。
+  if (previewFile) {
+    if (previewButton) {
+      previewButton.disabled = true;
+      previewButton.textContent = "画像を自動最適化中...";
+    }
+
+    try {
+      registrationPreviewPreparedFile =
+        await optimizePreviewImageFile(previewFile);
+
+      registrationPreviewObjectUrl =
+        URL.createObjectURL(registrationPreviewPreparedFile);
+
+      if (status) {
+        status.textContent =
+          previewFile === registrationPreviewPreparedFile
+            ? `選択画像：${formatFileSize(previewFile.size)}（そのまま使用できます）`
+            : `自動最適化：${formatFileSize(previewFile.size)} → ${formatFileSize(registrationPreviewPreparedFile.size)}`;
+      }
+    } catch (error) {
+      console.error("募集画像の自動最適化エラー", error);
+      registrationPreviewPreparedFile = null;
+      alert(
+        "画像を自動最適化できませんでした。\n別のJPG / PNG / WebP画像を選択してください。"
+      );
+      return false;
+    } finally {
+      if (previewButton) {
+        previewButton.disabled = false;
+        previewButton.textContent = originalButtonText;
+      }
+    }
+  }
+
+  // BlablaLink投稿で画像未選択なら、自動キャプチャを試す。
+  if (
+    !previewFile &&
+    platform === "BlablaLink" &&
+    isBlablaLinkPostUrl(xUrl)
+  ) {
+    if (previewButton) {
+      previewButton.disabled = true;
+      previewButton.textContent = "BlablaLinkプレビュー取得中...";
+    }
+
+    if (status) {
+      status.textContent = "BlablaLinkの記事を自動取得しています...";
+    }
+
+    try {
+      const autoPreviewFile =
+        await fetchBlablaLinkPreviewFile(xUrl);
+
+      registrationPreviewPreparedFile =
+        await optimizePreviewImageFile(autoPreviewFile);
+
+      registrationPreviewObjectUrl =
+        URL.createObjectURL(registrationPreviewPreparedFile);
+
+      if (status) {
+        status.textContent =
+          `BlablaLinkから自動取得しました（${formatFileSize(registrationPreviewPreparedFile.size)}）`;
+      }
+    } catch (error) {
+      console.warn("BlablaLink自動プレビュー取得失敗", error);
+      registrationPreviewPreparedFile = null;
+
+      if (registrationPreviewObjectUrl) {
+        URL.revokeObjectURL(registrationPreviewObjectUrl);
+        registrationPreviewObjectUrl = null;
+      }
+
+      // 取得失敗でも登録は止めない。
+      if (status) {
+        status.textContent =
+          "BlablaLinkの自動取得に失敗しました。画像なしでも登録できます。必要なら画像を選択してください。";
+      }
+    } finally {
+      if (previewButton) {
+        previewButton.disabled = false;
+        previewButton.textContent = originalButtonText;
+      }
+    }
+  }
+
+  const mediaHtml =
+    buildRecruitmentPreviewMedia(
+      xUrl,
+      registrationPreviewObjectUrl || "",
+      true
+    );
+
+  const detailHtml =
+    registrationType === "union"
+      ? `<div class="union-rank rank-${escapeHtml(getUnionRankClass(detail))}">${escapeHtml(detail)}</div>`
+      : `<div class="slv">${detail}</div>`;
+
+  const host =
+    $("#registrationPreviewCard");
+
+  if (!host) {
+    return false;
+  }
+
+  host.innerHTML = `
+    <article class="card ${cardClass}">
+      <div class="card-head">
+        <div class="type-with-new">
+          <span class="recruitment-type">${typeLabel}</span>
+          <span class="new-badge">🔥 NEW</span>
+        </div>
+        <span class="date">期限 14日後</span>
+      </div>
+
+      <div class="name">${escapeHtml(name)}</div>
+      ${detailHtml}
+      ${platform === "X" ? '<div class="date">掲載先：X</div>' : ""}
+      <div class="countdown">残り14日</div>
+
+      <div class="x-post-area">
+        ${mediaHtml}
+
+        <a
+          class="x-btn"
+          href="${escapeHtml(xUrl)}"
+          target="_blank"
+          rel="noopener noreferrer"
+        >
+          ${escapeHtml(getRecruitmentButtonLabel(xUrl))}
+        </a>
+      </div>
+    </article>
+  `;
+
+  $("#registrationPreviewModal")
+    ?.classList
+    .remove("hidden");
+
+  if (isXRecruitmentUrl(xUrl)) {
+    setTimeout(renderXEmbeds, 0);
+  }
+
+  return true;
+}
+
+
+$("#registrationPreviewBack")
+  ?.addEventListener("click", () => closeRegistrationPreview(false));
+
+$("#registrationPreviewClose")
+  ?.addEventListener("click", () => closeRegistrationPreview(false));
+
+$("#registrationPreviewModal")
+  ?.addEventListener(
+    "click",
+    event => {
+      if (event.target?.id === "registrationPreviewModal") {
+        closeRegistrationPreview(false);
+      }
+    }
+  );
+
+$("#registrationPreviewConfirm")
+  ?.addEventListener(
+    "click",
+    () => {
+      registrationPreviewApproved = true;
+      closeRegistrationPreview(true);
+      $("#registerForm")?.requestSubmit();
+    }
+  );
+
+
+$("#xUrl")
+  ?.addEventListener(
+    "input",
+    () => {
+      registrationPreviewApproved = false;
+      registrationPreviewPreparedFile = null;
+
+      if (registrationPreviewObjectUrl) {
+        URL.revokeObjectURL(registrationPreviewObjectUrl);
+        registrationPreviewObjectUrl = null;
+      }
+
+      const status = $("#previewImageStatus");
+      const selectedFile = $("#previewImage")?.files?.[0] || null;
+
+      if (status && !selectedFile) {
+        const url = $("#xUrl")?.value.trim() || "";
+        status.textContent =
+          isBlablaLinkPostUrl(url)
+            ? "BlablaLink投稿は確認画面で自動プレビューを取得します。画像は任意です。"
+            : "";
+      }
+    }
+  );
+
+
+$("#previewImage")
+  ?.addEventListener(
+    "change",
+    event => {
+      registrationPreviewApproved = false;
+      registrationPreviewPreparedFile = null;
+
+      if (registrationPreviewObjectUrl) {
+        URL.revokeObjectURL(registrationPreviewObjectUrl);
+        registrationPreviewObjectUrl = null;
+      }
+
+      const file = event.target?.files?.[0] || null;
+      const status = $("#previewImageStatus");
+
+      if (!file) {
+        $("#previewImageClearBtn")
+          ?.classList
+          .add("hidden");
+
+        if (status) {
+          status.textContent = "";
+        }
+        return;
+      }
+
+      if (!validatePreviewImageFile(file)) {
+        event.target.value = "";
+
+        $("#previewImageClearBtn")
+          ?.classList
+          .add("hidden");
+
+        if (status) {
+          status.textContent = "";
+        }
+        return;
+      }
+
+      $("#previewImageClearBtn")
+        ?.classList
+        .remove("hidden");
+
+      if (status) {
+        status.textContent =
+          `選択画像：${formatFileSize(file.size)} / 20MBまで（確認時に自動最適化）`;
+      }
+    }
+  );
+
+
+$("#previewImageClearBtn")
+  ?.addEventListener(
+    "click",
+    () => {
+      clearInitialPreviewImageSelection(true);
+    }
+  );
+
+
+// ========================================
+// 登録結果表示
+// ========================================
+
+function showRegistrationResult(
+  pass,
+  result
+) {
+
+
+  if (
+    $("#passValue")
+  ) {
+
+    $("#passValue")
+      .textContent =
+      pass;
+
+  }
+
+
+  if (
+    $("#resultExpiry")
+  ) {
+
+    $("#resultExpiry")
+      .textContent =
+
+      formatDate(
+        result.expires_at
+      );
+
+  }
+
+
+  const resultId =
+    $("#resultId");
+
+
+  if (resultId) {
+
+    const row =
+      resultId.closest(
+        ".result-row"
+      );
+
+
+    if (row) {
+
+      row.style.display =
+        "none";
+
+    }
+
+  }
+
+
+  $("#resultModal")
+    ?.classList
+    .remove(
+      "hidden"
+    );
+
+}
+
+
+// ========================================
+// 募集登録
+// ========================================
+
+$("#registerForm")
+  ?.addEventListener(
+    "submit",
+    async event => {
+
+
+      event.preventDefault();
+
+
+      if (!registrationPreviewApproved) {
+
+        await showRegistrationPreview();
+        return;
+
+      }
+
+      registrationPreviewApproved = false;
+
+
+      if (!sb) {
+
+        alert(
+          "Supabaseの設定がまだです。"
+        );
+
+        return;
+
+      }
+
+
+      const registrationType =
+
+        $("#registrationType")
+          ?.value
+        ||
+        "commander";
+
+
+      const xUrl =
+
+        $("#xUrl")
+          ?.value
+          .trim();
+
+
+      const originalPreviewFile =
+        $("#previewImage")
+          ?.files?.[0]
+        ||
+        null;
+
+      const previewFile =
+        registrationPreviewPreparedFile || originalPreviewFile;
+
+
+      if (!validatePreviewImageFile(originalPreviewFile)) {
+        return;
+      }
+
+
+      if (
+        !validRecruitmentUrl(
+          xUrl
+        )
+      ) {
+
+        alert(
+          "募集記事URLを入力してください。\nX・BlablaLink・DiscordなどのURLに対応しています。"
+        );
+
+        return;
+
+      }
+
+
+      // ======================================
+      // ユニオン登録
+      // ======================================
+
+      if (
+        registrationType ===
+        "union"
+      ) {
+
+
+        const unionName =
+
+          $("#unionName")
+            ?.value
+            .trim();
+
+
+        const unionRank =
+
+          $("#unionRank")
+            ?.value;
+
+
+        if (!unionName) {
+
+          alert(
+            "ユニオン名を入力してください。"
+          );
+
+          return;
+
+        }
+
+
+        for (
+
+          let attempt = 0;
+
+          attempt < 5;
+
+          attempt++
+
+        ) {
+
+
+          const pass =
+            generatePass();
+
+
+          const passHash =
+            await sha256(
+              pass
+            );
+
+
+          const {
+            data,
+            error
+          } =
+
+            await sb.rpc(
+
+              "create_union_recruitment_url",
+
+              {
+
+                p_union_name:
+                  unionName,
+
+                p_union_rank:
+                  unionRank,
+
+                p_x_url:
+                  xUrl,
+
+                p_pass_hash:
+                  passHash
+
+              }
+
+            );
+
+
+          if (error) {
+
+
+            const errorText =
+              getErrorText(
+                error
+              );
+
+
+            if (
+              errorText.includes(
+                "UNION_NAME_DUPLICATE"
+              )
+            ) {
+
+              alert(
+                "同じユニオン名ですでに募集中です。"
+              );
+
+              return;
+
+            }
+
+
+            if (
+              errorText.includes(
+                "INVALID_RECRUITMENT_URL"
+              )
+              ||
+              errorText.includes(
+                "INVALID_X_POST_URL"
+              )
+            ) {
+
+              alert(
+                "募集記事URLが正しくありません。http:// または https:// から始まるURLを入力してください。"
+              );
+
+              return;
+
+            }
+
+
+            if (
+              errorText.includes(
+                "PASS_DUPLICATE"
+              )
+            ) {
+
+              continue;
+
+            }
+
+
+            console.error(
+              "ユニオン登録エラー",
+              error
+            );
+
+
+            alert(
+              `登録に失敗しました：${error.message}`
+            );
+
+
+            return;
+
+          }
+
+
+          const result =
+
+            Array.isArray(
+              data
+            )
+              ? data[0]
+              : data;
+
+
+          if (previewFile && result?.id) {
+            try {
+              await uploadRecruitmentPreviewImage(
+                "union",
+                result.id,
+                passHash,
+                previewFile
+              );
+            } catch (previewError) {
+              console.error("募集画像アップロードエラー", previewError);
+              alert("募集登録は完了しましたが、画像の登録だけ失敗しました。\n募集自体は正常に掲載されています。");
+            }
+          }
+
+
+          // ==================================
+          // Xシェア用
+          // ==================================
+
+          lastRegisteredRecruitment = {
+
+            type:
+              "union",
+
+            name:
+              unionName,
+
+            rank:
+              unionRank,
+
+            xUrl
+
+          };
+
+
+          showRegistrationResult(
+            pass,
+            result
+          );
+
+
+          event.target.reset();
+          clearInitialPreviewImageSelection(false);
+
+
+          updateRegistrationFields();
+
+
+          return;
+
+        }
+
+
+        alert(
+          "PASSの発行に失敗しました。もう一度登録してください。"
+        );
+
+
+        return;
+
+      }
+
+
+      // ======================================
+      // 指揮官登録
+      // ======================================
+
+      const name =
+
+        $("#name")
+          ?.value
+          .trim();
+
+
+      const slv =
+
+        Number(
+          $("#slv")
+            ?.value
+        );
+
+
+      if (!name) {
+
+        alert(
+          "指揮官名を入力してください。"
+        );
+
+        return;
+
+      }
+
+
+      if (
+        !slv ||
+        slv < 1 ||
+        slv > 1200
+      ) {
+
+        alert(
+          "SLVは1～1200で入力してください。"
+        );
+
+        return;
+
+      }
+
+
+      for (
+
+        let attempt = 0;
+
+        attempt < 5;
+
+        attempt++
+
+      ) {
+
+
+        const pass =
+          generatePass();
+
+
+        const passHash =
+          await sha256(
+            pass
+          );
+
+
+        const {
+          data,
+          error
+        } =
+
+          await sb.rpc(
+
+            "create_recruitment_url",
+
+            {
+
+              p_commander_name:
+                name,
+
+              p_slv:
+                slv,
+
+              p_x_url:
+                xUrl,
+
+              p_pass_hash:
+                passHash
+
+            }
+
+          );
+
+
+        if (error) {
+
+
+          const errorText =
+            getErrorText(
+              error
+            );
+
+
+          if (
+            errorText.includes(
+              "COMMANDER_NAME_DUPLICATE"
+            )
+          ) {
+
+            alert(
+              "同じ指揮官名ですでに募集中です。"
+            );
+
+            return;
+
+          }
+
+
+          if (
+            errorText.includes(
+              "INVALID_RECRUITMENT_URL"
+            )
+            ||
+            errorText.includes(
+              "INVALID_X_POST_URL"
+            )
+          ) {
+
+            alert(
+              "募集記事URLが正しくありません。http:// または https:// から始まるURLを入力してください。"
+            );
+
+            return;
+
+          }
+
+
+          if (
+            errorText.includes(
+              "PASS_DUPLICATE"
+            )
+          ) {
+
+            continue;
+
+          }
+
+
+          console.error(
+            "指揮官登録エラー",
+            error
+          );
+
+
+          alert(
+            `登録に失敗しました：${error.message}`
+          );
+
+
+          return;
+
+        }
+
+
+        const result =
+
+          Array.isArray(
+            data
+          )
+            ? data[0]
+            : data;
+
+
+        if (previewFile && result?.id) {
+          try {
+            await uploadRecruitmentPreviewImage(
+              "commander",
+              result.id,
+              passHash,
+              previewFile
+            );
+          } catch (previewError) {
+            console.error("募集画像アップロードエラー", previewError);
+            alert("募集登録は完了しましたが、画像の登録だけ失敗しました。\n募集自体は正常に掲載されています。");
+          }
+        }
+
+
+        // ==================================
+        // Xシェア用
+        // ==================================
+
+        lastRegisteredRecruitment = {
+
+          type:
+            "commander",
+
+          name,
+
+          slv,
+
+          xUrl
+
+        };
+
+
+        showRegistrationResult(
+          pass,
+          result
+        );
+
+
+        event.target.reset();
+        clearInitialPreviewImageSelection(false);
+
+
+        updateRegistrationFields();
+
+
+        return;
+
+      }
+
+
+      alert(
+        "PASSの発行に失敗しました。もう一度登録してください。"
+      );
+
+    }
+  );
+
+
+// ========================================
+// PASSコピー
+// ========================================
+
+$("#copyPass")
+  ?.addEventListener(
+    "click",
+    async () => {
+
+
+      const pass =
+
+        $("#passValue")
+          ?.textContent
+        ||
+        "";
+
+
+      try {
+
+
+        await navigator
+          .clipboard
+          .writeText(
+            pass
+          );
+
+
+        const button =
+          $("#copyPass");
+
+
+        if (button) {
+
+
+          button.textContent =
+            "コピーしました";
+
+
+          setTimeout(
+            () => {
+
+              button.textContent =
+                "PASSをコピー";
+
+            },
+            1500
+          );
+
+        }
+
+
+      } catch (error) {
+
+
+        console.error(
+          "PASSコピーエラー",
+          error
+        );
+
+
+        alert(
+          "PASSをコピーできませんでした。手動で保存してください。"
+        );
+
+      }
+
+    }
+  );
+
+
+// ========================================
+// 登録完了モーダル
+// ========================================
+
+function closeModal() {
+
+  $("#resultModal")
+    ?.classList
+    .add(
+      "hidden"
+    );
+
+}
+
+
+// ×ボタン
+
+$("#modalClose")
+  ?.addEventListener(
+    "click",
+    closeModal
+  );
+
+
+// ========================================
+// シェアしないで完了
+//
+// ★一覧へ戻る
+// ★登録フォームを閉じる
+// ========================================
+
+$("#resultDone")
+  ?.addEventListener(
+    "click",
+    () => {
+
+
+      closeModal();
+
+
+      showPage(
+        "list"
+      );
+
+
+    }
+  );
+
+
+// ========================================
+// Xで募集をシェア
+// ========================================
+
+$("#shareXBtn")
+  ?.addEventListener(
+    "click",
+    async () => {
+
+
+      if (
+        !lastRegisteredRecruitment
+      ) {
+
+        alert(
+          "登録情報を取得できませんでした。\n募集一覧から登録内容をご確認ください。"
+        );
+
+        return;
+
+      }
+
+
+      // ======================================
+      // ボタン操作直後に
+      // X用タブを確保
+      // ======================================
+
+      const shareWindow =
+
+        window.open(
+          "about:blank",
+          "_blank"
+        );
+
+
+      // ======================================
+      // 最新カウンター取得
+      // ======================================
+
+      const [
+
+        commanderCount,
+        unionCount,
+        graduatedCountResult
+
+      ] =
+
+        await Promise.all([
+
+          getCurrentCommanderCount(),
+
+          getCurrentUnionCount(),
+
+          loadGraduatedCommanderCount()
+
+        ]);
+
+
+      const graduatedCount =
+
+        Number.isFinite(
+          Number(
+            graduatedCountResult
+          )
+        )
+
+          ?
+
+          Number(
+            graduatedCountResult
+          )
+
+          :
+
+          Number(
+            $("#graduatedCommanderCount")
+              ?.textContent
+            ||
+            0
+          );
+
+
+      // ======================================
+      // X文章
+      // ======================================
+
+      const shareText =
+
+        buildXShareText(
+
+          lastRegisteredRecruitment,
+
+          commanderCount,
+
+          unionCount,
+
+          graduatedCount
+
+        );
+
+
+      const shareUrl =
+
+        "https://twitter.com/intent/tweet?text="
+
+        +
+
+        encodeURIComponent(
+          shareText
+        );
+
+
+      // ======================================
+      // X投稿画面
+      // ======================================
+
+      if (
+        shareWindow
+      ) {
+
+
+        shareWindow.opener =
+          null;
+
+
+        shareWindow.location.href =
+          shareUrl;
+
+
+      } else {
+
+
+        window.location.href =
+          shareUrl;
+
+      }
+
+
+      // ======================================
+      // 元のアプリ側
+      // 登録画面を閉じて一覧へ
+      // ======================================
+
+      closeModal();
+
+
+      showPage(
+        "list"
+      );
+
+    }
+  );
+
+
+// ========================================
+// PASSで募集を再編集・再延長・締切
+// ========================================
+
+function resetManageImageState() {
+
+  manageEditPreparedFile = null;
+
+  if (manageEditObjectUrl) {
+    URL.revokeObjectURL(manageEditObjectUrl);
+    manageEditObjectUrl = null;
+  }
+
+  const fileInput =
+    $("#manageEditImage");
+
+  if (fileInput) {
+    fileInput.value = "";
+  }
+
+  const status =
+    $("#manageEditImageStatus");
+
+  if (status) {
+    status.textContent =
+      "未選択なら現在の画像をそのまま使用します。20MBまで。選択画像は自動で最適化されます。";
+  }
+
+  $("#manageEditSelectedImageBox")
+    ?.classList
+    .add("hidden");
+
+  const selectedPreview =
+    $("#manageEditSelectedImage");
+
+  if (selectedPreview) {
+    selectedPreview.removeAttribute("src");
+  }
+
+  const removeCheckbox =
+    $("#manageRemoveImage");
+
+  if (removeCheckbox) {
+    removeCheckbox.checked = false;
+  }
+}
+
+
+function resetManageActionMenu() {
+
+  $("#managePrimaryActions")
+    ?.classList
+    .remove("hidden");
+
+  $("#manageEditActionChoices")
+    ?.classList
+    .add("hidden");
+}
+
+
+function showManageEditActionChoices() {
+
+  if (!loadedManagedRecruitment) {
+    alert("先にPASSから募集内容を呼び出してください。");
+    return;
+  }
+
+  $("#managePrimaryActions")
+    ?.classList
+    .add("hidden");
+
+  $("#manageEditActionChoices")
+    ?.classList
+    .remove("hidden");
+}
+
+
+function clearLoadedManageRecruitment() {
+
+  loadedManagedRecruitment = null;
+  loadedManagePass = "";
+  loadedManagePassHash = "";
+
+  resetManageImageState();
+  resetManageActionMenu();
+
+  $("#manageLoadedPanel")
+    ?.classList
+    .add("hidden");
+
+  $("#manageEditPanel")
+    ?.classList
+    .add("hidden");
+}
+
+
+function getManagedRecruitmentStatus(item) {
+
+  if (!item) {
+    return "--";
+  }
+
+  const expiresTime =
+    new Date(item.expires_at).getTime();
+
+  if (item.status !== "open") {
+    return "締切済み";
+  }
+
+  if (
+    Number.isFinite(expiresTime)
+    &&
+    expiresTime <= Date.now()
+  ) {
+    return "期限切れ";
+  }
+
+  return "募集中";
+}
+
+
+function renderLoadedManageRecruitment() {
+
+  const item =
+    loadedManagedRecruitment;
+
+  if (!item) {
+    $("#manageLoadedPanel")
+      ?.classList
+      .add("hidden");
+    return;
+  }
+
+  const isUnion =
+    item.type === "union";
+
+  const name =
+    String(item.name || "");
+
+  const detail =
+    isUnion
+      ? String(item.union_rank || "")
+      : `SLV ${Number(item.slv || 0)}`;
+
+  if ($("#manageCurrentName")) {
+    $("#manageCurrentName").textContent =
+      `${isUnion ? "🏢" : "👤"} ${name}`;
+  }
+
+  if ($("#manageCurrentDetail")) {
+    $("#manageCurrentDetail").textContent =
+      detail;
+  }
+
+  if ($("#manageCurrentExpiry")) {
+    $("#manageCurrentExpiry").textContent =
+      item.expires_at
+        ? formatDate(item.expires_at)
+        : "--";
+  }
+
+  if ($("#manageCurrentStatus")) {
+    $("#manageCurrentStatus").textContent =
+      getManagedRecruitmentStatus(item);
+  }
+
+  const urlLink =
+    $("#manageCurrentUrl");
+
+  if (urlLink) {
+    urlLink.textContent =
+      item.x_url || "--";
+
+    if (item.x_url) {
+      urlLink.href = item.x_url;
+    } else {
+      urlLink.removeAttribute("href");
+    }
+  }
+
+  const imageBox =
+    $("#manageCurrentImageBox");
+
+  const image =
+    $("#manageCurrentImage");
+
+  if (
+    item.preview_image_url
+    &&
+    imageBox
+    &&
+    image
+  ) {
+    image.src =
+      item.preview_image_url;
+    imageBox.classList.remove("hidden");
+  } else {
+    imageBox?.classList.add("hidden");
+    image?.removeAttribute("src");
+  }
+
+  $("#manageLoadedPanel")
+    ?.classList
+    .remove("hidden");
+}
+
+
+function populateManageEditForm() {
+
+  const item =
+    loadedManagedRecruitment;
+
+  if (!item) {
+    return;
+  }
+
+  resetManageImageState();
+
+  const isUnion =
+    item.type === "union";
+
+  if ($("#manageEditNameLabel")) {
+    $("#manageEditNameLabel").textContent =
+      isUnion
+        ? "ユニオン名"
+        : "指揮官名";
+  }
+
+  if ($("#manageEditName")) {
+    $("#manageEditName").textContent =
+      item.name || "--";
+  }
+
+  $("#manageCommanderEditFields")
+    ?.classList
+    .toggle("hidden", isUnion);
+
+  $("#manageUnionEditFields")
+    ?.classList
+    .toggle("hidden", !isUnion);
+
+  if (!isUnion && $("#manageEditSlv")) {
+    $("#manageEditSlv").value =
+      String(item.slv || "");
+  }
+
+  if (isUnion && $("#manageEditUnionRank")) {
+    $("#manageEditUnionRank").value =
+      item.union_rank || "プラチナ";
+  }
+
+  if ($("#manageEditUrl")) {
+    $("#manageEditUrl").value =
+      item.x_url || "";
+  }
+
+  $("#manageEditPanel")
+    ?.classList
+    .remove("hidden");
+
+  setTimeout(() => {
+    $("#manageEditPanel")
+      ?.scrollIntoView({
+        behavior: "smooth",
+        block: "start"
+      });
+  }, 50);
+}
+
+
+function normalizeManagePass() {
+
+  return (
+    $("#closePass")
+      ?.value
+      .trim()
+      .toUpperCase()
+    ||
+    ""
+  );
+}
+
+
+async function loadRecruitmentForManage() {
+
+  if (!sb) {
+    alert("Supabaseの設定がまだです。");
+    return;
+  }
+
+  const pass =
+    normalizeManagePass();
+
+  if (pass.length !== 8) {
+    alert("登録時に発行された8文字PASSを入力してください。");
+    return;
+  }
+
+  const passHash =
+    await sha256(pass);
+
+  const button =
+    $("#loadManageRecruitmentBtn");
+
+  const originalText =
+    button?.textContent || "🔑 募集内容を呼び出す";
+
+  if (button) {
+    button.disabled = true;
+    button.textContent = "募集内容を確認中...";
+  }
+
+  try {
+
+    const {
+      data,
+      error
+    } =
+      await sb.rpc(
+        "get_recruitment_by_pass_for_reregister",
+        {
+          p_pass_hash: passHash
+        }
+      );
+
+    if (error) {
+      console.error("PASS募集取得エラー", error);
+
+      const errorText =
+        getErrorText(error);
+
+      if (
+        errorText.includes("Could not find the function")
+        ||
+        errorText.includes("PGRST202")
+      ) {
+        alert(
+          "PASS再編集機能のSQLがまだ反映されていません。\nsupabase_pass_reregister.sql を先に実行してください。"
+        );
+        return;
+      }
+
+      alert("募集内容を読み込めませんでした。");
+      return;
+    }
+
+    if (!data) {
+      clearLoadedManageRecruitment();
+      alert("PASSが正しくありません。もう一度確認してください。");
+      return;
+    }
+
+    loadedManagedRecruitment = data;
+    loadedManagePass = pass;
+    loadedManagePassHash = passHash;
+
+    $("#manageEditPanel")
+      ?.classList
+      .add("hidden");
+
+    resetManageImageState();
+    resetManageActionMenu();
+    renderLoadedManageRecruitment();
+
+    setTimeout(() => {
+      $("#manageLoadedPanel")
+        ?.scrollIntoView({
+          behavior: "smooth",
+          block: "start"
+        });
+    }, 50);
+
+  } finally {
+
+    if (button) {
+      button.disabled = false;
+      button.textContent = originalText;
+    }
+  }
+}
+
+
+$("#closeForm")
+  ?.addEventListener(
+    "submit",
+    async event => {
+      event.preventDefault();
+      await loadRecruitmentForManage();
+    }
+  );
+
+
+$("#closePass")
+  ?.addEventListener(
+    "input",
+    event => {
+
+      const normalized =
+        String(event.target?.value || "")
+          .toUpperCase()
+          .replace(/[^A-Z0-9]/g, "")
+          .slice(0, 8);
+
+      if (event.target) {
+        event.target.value = normalized;
+      }
+
+      if (
+        loadedManagePass
+        &&
+        normalized !== loadedManagePass
+      ) {
+        clearLoadedManageRecruitment();
+      }
+    }
+  );
+
+
+$("#openManageActionBtn")
+  ?.addEventListener(
+    "click",
+    showManageEditActionChoices
+  );
+
+
+$("#backManageActionBtn")
+  ?.addEventListener(
+    "click",
+    () => {
+      resetManageImageState();
+
+      $("#manageEditPanel")
+        ?.classList
+        .add("hidden");
+
+      resetManageActionMenu();
+
+      $("#manageLoadedPanel")
+        ?.scrollIntoView({
+          behavior: "smooth",
+          block: "start"
+        });
+    }
+  );
+
+
+$("#openManageEditBtn")
+  ?.addEventListener(
+    "click",
+    () => {
+      if (!loadedManagedRecruitment) {
+        alert("先にPASSから募集内容を呼び出してください。");
+        return;
+      }
+
+      populateManageEditForm();
+    }
+  );
+
+
+$("#cancelManageEditBtn")
+  ?.addEventListener(
+    "click",
+    () => {
+      resetManageImageState();
+      $("#manageEditPanel")
+        ?.classList
+        .add("hidden");
+
+      $("#managePrimaryActions")
+        ?.classList
+        .add("hidden");
+
+      $("#manageEditActionChoices")
+        ?.classList
+        .remove("hidden");
+
+      $("#manageLoadedPanel")
+        ?.scrollIntoView({
+          behavior: "smooth",
+          block: "start"
+        });
+    }
+  );
+
+
+$("#manageEditImage")
+  ?.addEventListener(
+    "change",
+    event => {
+
+      manageEditPreparedFile = null;
+
+      if (manageEditObjectUrl) {
+        URL.revokeObjectURL(manageEditObjectUrl);
+        manageEditObjectUrl = null;
+      }
+
+      const file =
+        event.target?.files?.[0] || null;
+
+      const status =
+        $("#manageEditImageStatus");
+
+      if (!file) {
+        $("#manageEditSelectedImageBox")
+          ?.classList
+          .add("hidden");
+
+        if (status) {
+          status.textContent =
+            "未選択なら現在の画像をそのまま使用します。20MBまで。選択画像は自動で最適化されます。";
+        }
+        return;
+      }
+
+      if (!validatePreviewImageFile(file)) {
+        event.target.value = "";
+        $("#manageEditSelectedImageBox")
+          ?.classList
+          .add("hidden");
+        return;
+      }
+
+      const remove =
+        $("#manageRemoveImage");
+
+      if (remove) {
+        remove.checked = false;
+      }
+
+      manageEditObjectUrl =
+        URL.createObjectURL(file);
+
+      const preview =
+        $("#manageEditSelectedImage");
+
+      if (preview) {
+        preview.src = manageEditObjectUrl;
+      }
+
+      $("#manageEditSelectedImageBox")
+        ?.classList
+        .remove("hidden");
+
+      if (status) {
+        status.textContent =
+          `選択画像：${formatFileSize(file.size)} / 20MBまで（確認時に自動最適化）`;
+      }
+    }
+  );
+
+
+$("#manageRemoveImage")
+  ?.addEventListener(
+    "change",
+    event => {
+
+      if (!event.target?.checked) {
+        return;
+      }
+
+      manageEditPreparedFile = null;
+
+      if (manageEditObjectUrl) {
+        URL.revokeObjectURL(manageEditObjectUrl);
+        manageEditObjectUrl = null;
+      }
+
+      const fileInput =
+        $("#manageEditImage");
+
+      if (fileInput) {
+        fileInput.value = "";
+      }
+
+      $("#manageEditSelectedImageBox")
+        ?.classList
+        .add("hidden");
+
+      const status =
+        $("#manageEditImageStatus");
+
+      if (status) {
+        status.textContent =
+          "現在の登録画像を削除して再登録します。";
+      }
+    }
+  );
+
+
+async function prepareManageEditImage() {
+
+  const inputFile =
+    $("#manageEditImage")
+      ?.files?.[0]
+    ||
+    null;
+
+  if (!inputFile) {
+    manageEditPreparedFile = null;
+    return null;
+  }
+
+  if (!validatePreviewImageFile(inputFile)) {
+    return null;
+  }
+
+  const button =
+    $("#manageEditPreviewBtn");
+
+  const originalText =
+    button?.textContent || "再登録内容を確認する";
+
+  if (button) {
+    button.disabled = true;
+    button.textContent = "画像を自動最適化中...";
+  }
+
+  try {
+
+    manageEditPreparedFile =
+      await optimizePreviewImageFile(inputFile);
+
+    if (manageEditObjectUrl) {
+      URL.revokeObjectURL(manageEditObjectUrl);
+    }
+
+    manageEditObjectUrl =
+      URL.createObjectURL(manageEditPreparedFile);
+
+    const preview =
+      $("#manageEditSelectedImage");
+
+    if (preview) {
+      preview.src = manageEditObjectUrl;
+    }
+
+    $("#manageEditSelectedImageBox")
+      ?.classList
+      .remove("hidden");
+
+    const status =
+      $("#manageEditImageStatus");
+
+    if (status) {
+      status.textContent =
+        inputFile === manageEditPreparedFile
+          ? `選択画像：${formatFileSize(inputFile.size)}（そのまま使用できます）`
+          : `自動最適化：${formatFileSize(inputFile.size)} → ${formatFileSize(manageEditPreparedFile.size)}`;
+    }
+
+    return manageEditPreparedFile;
+
+  } catch (error) {
+
+    console.error("再登録画像最適化エラー", error);
+    manageEditPreparedFile = null;
+
+    alert(
+      "画像を自動最適化できませんでした。\n別のJPG / PNG / WebP画像を選択してください。"
+    );
+
+    return null;
+
+  } finally {
+
+    if (button) {
+      button.disabled = false;
+      button.textContent = originalText;
+    }
+  }
+}
+
+
+function getManageEditValues() {
+
+  const item =
+    loadedManagedRecruitment;
+
+  if (!item) {
+    return null;
+  }
+
+  const url =
+    $("#manageEditUrl")
+      ?.value
+      .trim()
+    ||
+    "";
+
+  if (!validRecruitmentUrl(url)) {
+    alert(
+      "募集記事URLが正しくありません。\nX・BlablaLink・DiscordなどのURLを入力してください。"
+    );
+    return null;
+  }
+
+  if (item.type === "commander") {
+
+    const slv =
+      Number(
+        $("#manageEditSlv")
+          ?.value
+      );
+
+    if (
+      !Number.isInteger(slv)
+      ||
+      slv < 1
+      ||
+      slv > 1200
+    ) {
+      alert("SLVは1～1200で入力してください。");
+      return null;
+    }
+
+    return {
+      type: "commander",
+      slv,
+      unionRank: null,
+      url
+    };
+  }
+
+  const unionRank =
+    $("#manageEditUnionRank")
+      ?.value
+    ||
+    "";
+
+  if (!unionRank) {
+    alert("ユニオンランクを選択してください。");
+    return null;
+  }
+
+  return {
+    type: "union",
+    slv: null,
+    unionRank,
+    url
+  };
+}
+
+
+async function showManageEditPreview() {
+
+  const item =
+    loadedManagedRecruitment;
+
+  if (!item) {
+    alert("先にPASSから募集内容を呼び出してください。");
+    return;
+  }
+
+  const values =
+    getManageEditValues();
+
+  if (!values) {
+    return;
+  }
+
+  const inputFile =
+    $("#manageEditImage")
+      ?.files?.[0]
+    ||
+    null;
+
+  if (inputFile) {
+    const prepared =
+      await prepareManageEditImage();
+
+    if (!prepared) {
+      return;
+    }
+  }
+
+  const removeImage =
+    $("#manageRemoveImage")
+      ?.checked === true;
+
+  const previewImageUrl =
+    manageEditPreparedFile
+      ? manageEditObjectUrl
+      : removeImage
+        ? ""
+        : item.preview_image_url || "";
+
+  const isUnion =
+    item.type === "union";
+
+  const detailHtml =
+    isUnion
+      ? `<div class="union-rank rank-${escapeHtml(getUnionRankClass(values.unionRank))}">${escapeHtml(values.unionRank)}</div>`
+      : `<div class="slv">${escapeHtml(values.slv)}<small class="slv-label" style="color:#7b8085 !important;-webkit-text-fill-color:#7b8085 !important;text-shadow:none !important;-webkit-text-stroke:0 !important;"> SLV</small></div>`;
+
+  const mediaHtml =
+    buildRecruitmentPreviewMedia(
+      values.url,
+      previewImageUrl,
+      item.x_embed_enabled !== false,
+      item.force_preview_image === true && Boolean(previewImageUrl)
+    );
+
+  const host =
+    $("#managePreviewCard");
+
+  if (!host) {
+    return;
+  }
+
+  host.innerHTML = `
+    <article class="card ${isUnion ? "union-card" : "commander-card"}">
+      <div class="card-head">
+        <div class="type-with-new">
+          <span class="recruitment-type">${isUnion ? "● ユニオン" : "● 指揮官"}</span>
+          <span class="new-badge">🔥 NEW</span>
+        </div>
+        <span class="date">期限 14日後</span>
+      </div>
+
+      <div class="name">${escapeHtml(item.name || "")}</div>
+      ${detailHtml}
+      <div class="countdown">残り14日</div>
+
+      <div class="x-post-area">
+        ${mediaHtml}
+
+        <a
+          class="x-btn"
+          href="${escapeHtml(values.url)}"
+          target="_blank"
+          rel="noopener noreferrer"
+        >
+          ${escapeHtml(getRecruitmentButtonLabel(values.url))}
+        </a>
+      </div>
+    </article>
+  `;
+
+  $("#managePreviewModal")
+    ?.classList
+    .remove("hidden");
+
+  if (isXRecruitmentUrl(values.url)) {
+    setTimeout(renderXEmbeds, 0);
+  }
+}
+
+
+$("#manageEditPreviewBtn")
+  ?.addEventListener(
+    "click",
+    showManageEditPreview
+  );
+
+
+function closeManagePreview() {
+  $("#managePreviewModal")
+    ?.classList
+    .add("hidden");
+}
+
+
+$("#managePreviewBack")
+  ?.addEventListener(
+    "click",
+    closeManagePreview
+  );
+
+$("#managePreviewClose")
+  ?.addEventListener(
+    "click",
+    closeManagePreview
+  );
+
+$("#managePreviewModal")
+  ?.addEventListener(
+    "click",
+    event => {
+      if (event.target?.id === "managePreviewModal") {
+        closeManagePreview();
+      }
+    }
+  );
+
+
+function showManageResult(mode, result) {
+
+  const isRenew =
+    mode === "renew";
+
+  if ($("#manageResultTitle")) {
+    $("#manageResultTitle").textContent =
+      isRenew
+        ? "再延長が完了しました！"
+        : "再登録が完了しました！";
+  }
+
+  if ($("#manageResultSummary")) {
+    $("#manageResultSummary").textContent =
+      isRenew
+        ? "募集内容は変更せず、掲載期限を本日から14日間に更新しました。"
+        : "編集内容を反映し、掲載期限を本日から14日間に更新しました。";
+  }
+
+  if ($("#manageResultPass")) {
+    $("#manageResultPass").textContent =
+      loadedManagePass || "--------";
+  }
+
+  if ($("#manageResultExpiry")) {
+    $("#manageResultExpiry").textContent =
+      result?.expires_at
+        ? formatDate(result.expires_at)
+        : "14日後";
+  }
+
+  $("#manageResultModal")
+    ?.classList
+    .remove("hidden");
+}
+
+
+function closeManageResult() {
+  $("#manageResultModal")
+    ?.classList
+    .add("hidden");
+}
+
+
+$("#manageResultClose")
+  ?.addEventListener(
+    "click",
+    closeManageResult
+  );
+
+
+$("#manageCopyPass")
+  ?.addEventListener(
+    "click",
+    async () => {
+
+      const pass =
+        $("#manageResultPass")
+          ?.textContent
+        ||
+        "";
+
+      try {
+        await navigator.clipboard.writeText(pass);
+
+        const button =
+          $("#manageCopyPass");
+
+        if (button) {
+          button.textContent = "コピーしました";
+          setTimeout(() => {
+            button.textContent = "PASSをコピー";
+          }, 1500);
+        }
+      } catch (error) {
+        console.error("再登録PASSコピーエラー", error);
+        alert("PASSをコピーできませんでした。手動で保存してください。");
+      }
+    }
+  );
+
+
+$("#manageResultDone")
+  ?.addEventListener(
+    "click",
+    () => {
+      closeManageResult();
+      clearLoadedManageRecruitment();
+      $("#closeForm")?.reset();
+      showPage("list");
+    }
+  );
+
+
+$("#renewUnchangedBtn")
+  ?.addEventListener(
+    "click",
+    async () => {
+
+      if (
+        !loadedManagedRecruitment
+        ||
+        !loadedManagePassHash
+      ) {
+        alert("先にPASSから募集内容を呼び出してください。");
+        return;
+      }
+
+      const ok =
+        window.confirm(
+          "募集内容は変更せず、掲載期限を本日から14日間に更新します。\n\n・一覧の一番上へ移動\n・NEW表示が復活\n・PASSは前回と同じ\n\n再延長しますか？"
+        );
+
+      if (!ok) {
+        return;
+      }
+
+      const button =
+        $("#renewUnchangedBtn");
+
+      const originalText =
+        button?.textContent || "🔄 内容そのままで14日再延長";
+
+      if (button) {
+        button.disabled = true;
+        button.textContent = "再延長中...";
+      }
+
+      try {
+
+        const {
+          data,
+          error
+        } =
+          await sb.rpc(
+            "renew_recruitment_by_pass",
+            {
+              p_pass_hash:
+                loadedManagePassHash
+            }
+          );
+
+        if (error) {
+          console.error("再延長エラー", error);
+          alert("再延長に失敗しました。PASSを確認してもう一度お試しください。");
+          return;
+        }
+
+        loadedManagedRecruitment = {
+          ...loadedManagedRecruitment,
+          ...data,
+          status: "open"
+        };
+
+        renderLoadedManageRecruitment();
+        showManageResult("renew", data);
+
+      } finally {
+
+        if (button) {
+          button.disabled = false;
+          button.textContent = originalText;
+        }
+      }
+    }
+  );
+
+
+$("#managePreviewConfirm")
+  ?.addEventListener(
+    "click",
+    async () => {
+
+      if (
+        !loadedManagedRecruitment
+        ||
+        !loadedManagePassHash
+      ) {
+        alert("PASS情報を取得できませんでした。もう一度呼び出してください。");
+        return;
+      }
+
+      const values =
+        getManageEditValues();
+
+      if (!values) {
+        closeManagePreview();
+        return;
+      }
+
+      const inputFile =
+        $("#manageEditImage")
+          ?.files?.[0]
+        ||
+        null;
+
+      if (
+        inputFile
+        &&
+        !manageEditPreparedFile
+      ) {
+        const prepared =
+          await prepareManageEditImage();
+
+        if (!prepared) {
+          return;
+        }
+      }
+
+      const removeImage =
+        !manageEditPreparedFile
+        &&
+        $("#manageRemoveImage")
+          ?.checked === true;
+
+      const button =
+        $("#managePreviewConfirm");
+
+      const originalText =
+        button?.textContent || "🔥 この内容で再登録";
+
+      if (button) {
+        button.disabled = true;
+        button.textContent = "再登録中...";
+      }
+
+      try {
+
+        const {
+          data,
+          error
+        } =
+          await sb.rpc(
+            "reregister_recruitment_by_pass",
+            {
+              p_pass_hash:
+                loadedManagePassHash,
+              p_slv:
+                values.slv,
+              p_union_rank:
+                values.unionRank,
+              p_x_url:
+                values.url,
+              p_remove_preview_image:
+                removeImage
+            }
+          );
+
+        if (error) {
+
+          console.error("PASS再登録エラー", error);
+
+          const errorText =
+            getErrorText(error);
+
+          if (errorText.includes("INVALID_SLV")) {
+            alert("SLVは1～1200で入力してください。");
+          } else if (errorText.includes("INVALID_UNION_RANK")) {
+            alert("ユニオンランクが正しくありません。");
+          } else if (errorText.includes("INVALID_RECRUITMENT_URL")) {
+            alert("募集記事URLが正しくありません。");
+          } else if (errorText.includes("PASS_NOT_FOUND")) {
+            alert("PASSが正しくありません。");
+          } else {
+            alert("再登録に失敗しました。もう一度お試しください。");
+          }
+
+          return;
+        }
+
+        let uploadedImageUrl =
+          data?.preview_image_url || "";
+
+        if (
+          manageEditPreparedFile
+          &&
+          data?.id
+        ) {
+          try {
+            uploadedImageUrl =
+              await uploadRecruitmentPreviewImage(
+                loadedManagedRecruitment.type,
+                data.id,
+                loadedManagePassHash,
+                manageEditPreparedFile
+              );
+          } catch (previewError) {
+            console.error("再登録画像アップロードエラー", previewError);
+            alert(
+              "再登録は完了しましたが、画像の差し替えだけ失敗しました。\n募集自体は14日間で正常に再登録されています。"
+            );
+          }
+        }
+
+        loadedManagedRecruitment = {
+          ...loadedManagedRecruitment,
+          ...data,
+          type: loadedManagedRecruitment.type,
+          name: loadedManagedRecruitment.name,
+          x_url: values.url,
+          slv: values.type === "commander" ? values.slv : loadedManagedRecruitment.slv,
+          union_rank: values.type === "union" ? values.unionRank : loadedManagedRecruitment.union_rank,
+          preview_image_url: uploadedImageUrl,
+          force_preview_image:
+            removeImage
+              ? false
+              : loadedManagedRecruitment.force_preview_image,
+          status: "open"
+        };
+
+        closeManagePreview();
+        $("#manageEditPanel")
+          ?.classList
+          .add("hidden");
+
+        renderLoadedManageRecruitment();
+        showManageResult("edit", data);
+
+        resetManageImageState();
+
+      } finally {
+
+        if (button) {
+          button.disabled = false;
+          button.textContent = originalText;
+        }
+      }
+    }
+  );
+
+
+// ========================================
+// PASSで募集締切（従来機能を維持）
+// ========================================
+
+async function closeLoadedRecruitment() {
+
+  if (!sb) {
+    alert("Supabaseの設定がまだです。");
+    return;
+  }
+
+  if (
+    !loadedManagedRecruitment
+    ||
+    !loadedManagePassHash
+  ) {
+    alert("先にPASSから募集内容を呼び出してください。");
+    return;
+  }
+
+  const ok =
+    window.confirm(
+      "この募集を締め切りますか？\n\n※ 再延長・再登録ではありません。募集一覧から非表示になります。"
+    );
+
+  if (!ok) {
+    return;
+  }
+
+  const {
+    data,
+    error
+  } =
+    await sb.rpc(
+      "close_recruitment_by_pass",
+      {
+        p_pass_hash:
+          loadedManagePassHash
+      }
+    );
+
+  if (error) {
+    console.error("募集締切エラー", error);
+    alert("募集締切処理に失敗しました。");
+    return;
+  }
+
+  if (data === "commander_confirm") {
+
+    const {
+      data: commanderClosed,
+      error: commanderError
+    } =
+      await sb.rpc(
+        "close_commander_recruitment_by_pass",
+        {
+          p_pass_hash:
+            loadedManagePassHash,
+          p_close_reason:
+            "graduated"
+        }
+      );
+
+    if (commanderError) {
+      console.error("指揮官募集締切エラー", commanderError);
+      alert("指揮官募集の締切処理に失敗しました。");
+      return;
+    }
+
+    if (commanderClosed !== true) {
+      alert("PASSが正しくないか、すでに募集終了しています。");
+      return;
+    }
+
+    alert("🎓 ユニオン決定として募集を締め切りました。");
+    await loadGraduatedCommanderCount();
+
+  } else if (data === "union") {
+
+    alert("ユニオン募集を締め切りました。");
+
+  } else {
+
+    alert("PASSが正しくないか、すでに募集終了しています。");
+    return;
+  }
+
+  clearLoadedManageRecruitment();
+  $("#closeForm")?.reset();
+  showPage("list");
+}
+
+
+$("#closeLoadedRecruitmentBtn")
+  ?.addEventListener(
+    "click",
+    closeLoadedRecruitment
+  );
+
+
+
+// ========================================
+// v15 VIDEO TOP UI
+// ========================================
+
+function scrollToVideoTop() {
+
+  document
+    .getElementById(
+      "videoHero"
+    )
+    ?.scrollIntoView({
+      behavior:
+        "smooth",
+      block:
+        "start"
+    });
+
+}
+
+
+function returnToVideoTop() {
+
+  closeSiteMenu?.();
+
+  document.body.classList.remove(
+    "register-mode",
+    "manage-mode"
+  );
+
+  document
+    .querySelectorAll(".page")
+    .forEach(page => {
+      page.classList.remove("active");
+    });
+
+  document
+    .getElementById("listPage")
+    ?.classList.add("active");
+
+  document
+    .querySelectorAll(".bottom-nav .nav-btn")
+    .forEach(button => {
+      button.classList.toggle(
+        "active",
+        button.dataset.page === "list"
+      );
+    });
+
+  window.scrollTo({
+    top: 0,
+    behavior: "smooth"
+  });
+
+}
+
+
+function closeSiteMenu() {
+
+  document.body
+    .classList
+    .remove(
+      "menu-open"
+    );
+
+  const button =
+    document.getElementById(
+      "siteMenuButton"
+    );
+
+  const drawer =
+    document.getElementById(
+      "siteMenuDrawer"
+    );
+
+  const backdrop =
+    document.getElementById(
+      "siteMenuBackdrop"
+    );
+
+  button?.setAttribute(
+    "aria-expanded",
+    "false"
+  );
+
+  drawer?.setAttribute(
+    "aria-hidden",
+    "true"
+  );
+
+  if (backdrop) {
+    backdrop.hidden =
+      true;
+  }
+
+}
+
+
+function openSiteMenu() {
+
+  document.body
+    .classList
+    .add(
+      "menu-open"
+    );
+
+  const button =
+    document.getElementById(
+      "siteMenuButton"
+    );
+
+  const drawer =
+    document.getElementById(
+      "siteMenuDrawer"
+    );
+
+  const backdrop =
+    document.getElementById(
+      "siteMenuBackdrop"
+    );
+
+  button?.setAttribute(
+    "aria-expanded",
+    "true"
+  );
+
+  drawer?.setAttribute(
+    "aria-hidden",
+    "false"
+  );
+
+  if (backdrop) {
+    backdrop.hidden =
+      false;
+  }
+
+}
+
+
+document
+  .getElementById(
+    "videoTopSwitch"
+  )
+  ?.addEventListener(
+    "click",
+    event => {
+
+      event.preventDefault();
+      event.stopPropagation();
+
+      returnToVideoTop();
+
+    }
+  );
+
+
+document
+  .getElementById(
+    "videoScrollButton"
+  )
+  ?.addEventListener(
+    "click",
+    () => {
+
+      document
+        .getElementById(
+          "listPage"
+        )
+        ?.scrollIntoView({
+          behavior:
+            "smooth",
+          block:
+            "start"
+        });
+
+    }
+  );
+
+
+document
+  .getElementById(
+    "siteMenuButton"
+  )
+  ?.addEventListener(
+    "click",
+    () => {
+
+      if (
+        document.body
+          .classList
+          .contains(
+            "menu-open"
+          )
+      ) {
+        closeSiteMenu();
+      } else {
+        openSiteMenu();
+      }
+
+    }
+  );
+
+
+document
+  .getElementById(
+    "siteMenuClose"
+  )
+  ?.addEventListener(
+    "click",
+    closeSiteMenu
+  );
+
+
+document
+  .getElementById(
+    "siteMenuBackdrop"
+  )
+  ?.addEventListener(
+    "click",
+    closeSiteMenu
+  );
+
+
+document
+  .querySelectorAll(
+    "[data-menu-action]"
+  )
+  .forEach(
+    button => {
+
+      button
+        .addEventListener(
+          "click",
+          () => {
+
+            const action =
+              button.dataset
+                .menuAction;
+
+            closeSiteMenu();
+
+            if (
+              action ===
+              "top"
+            ) {
+
+              returnToVideoTop();
+
+              return;
+            }
+
+            if (
+              action ===
+              "commander"
+            ) {
+
+              setSearchType(
+                "commander"
+              );
+
+              showPage(
+                "list"
+              );
+
+              return;
+            }
+
+            if (
+              action ===
+              "union"
+            ) {
+
+              setSearchType(
+                "union"
+              );
+
+              showPage(
+                "list"
+              );
+
+              return;
+            }
+
+            if (
+              action ===
+              "register"
+            ) {
+
+              showPage(
+                "register"
+              );
+
+              return;
+            }
+
+            if (
+              action ===
+              "manage"
+            ) {
+
+              showPage(
+                "manage"
+              );
+
+            }
+
+          }
+        );
+
+    }
+  );
+
+
+document
+  .addEventListener(
+    "keydown",
+    event => {
+
+      if (
+        event.key ===
+        "Escape"
+      ) {
+        closeSiteMenu();
+      }
+
+    }
+  );
+
+
+// 白い募集エリアまで来た時だけ
+// スマホ / タブレット下部メニューを表示
+const bottomNavigation =
+  document.getElementById(
+    "bottomNav"
+  );
+
+const listPageForNav =
+  document.getElementById(
+    "listPage"
+  );
+
+if (
+  bottomNavigation
+  &&
+  listPageForNav
+) {
+
+  const bottomNavObserver =
+    new IntersectionObserver(
+      entries => {
+
+        const visible =
+          entries.some(
+            entry =>
+              entry.isIntersecting
+              &&
+              entry.boundingClientRect.top <=
+                window.innerHeight * 0.90
+          );
+
+        bottomNavigation
+          .classList
+          .toggle(
+            "is-visible",
+            visible
+          );
+
+      },
+      {
+        root:
+          null,
+        threshold:
+          0,
+        rootMargin:
+          "0px 0px -10% 0px"
+      }
+    );
+
+  bottomNavObserver
+    .observe(
+      listPageForNav
+    );
+
+}
+
+
+// register/manage時は常用ナビとして表示
+const bodyModeObserver =
+  new MutationObserver(
+    () => {
+
+      if (!bottomNavigation) {
+        return;
+      }
+
+      const forceVisible =
+        document.body
+          .classList
+          .contains(
+            "register-mode"
+          )
+        ||
+        document.body
+          .classList
+          .contains(
+            "manage-mode"
+          );
+
+      if (forceVisible) {
+        bottomNavigation
+          .classList
+          .add(
+            "is-visible"
+          );
+      }
+
+    }
+  );
+
+bodyModeObserver
+  .observe(
+    document.body,
+    {
+      attributes:
+        true,
+      attributeFilter:
+        [
+          "class"
+        ]
+    }
+  );
+
+
+// BOT / Creatorページからのリンク
+function applyInitialRecruitmentView() {
+
+  const params =
+    new URLSearchParams(
+      window.location.search
+    );
+
+  const requestedView =
+    params.get(
+      "view"
+    );
+
+  if (
+    requestedView ===
+    "union"
+  ) {
+
+    setSearchType(
+      "union"
+    );
+
+  } else if (
+    requestedView ===
+    "commander"
+  ) {
+
+    setSearchType(
+      "commander"
+    );
+
+  }
+
+  if (
+    window.location.hash ===
+    "#listPage"
+  ) {
+
+    setTimeout(
+      () => {
+
+        document
+          .getElementById(
+            "listPage"
+          )
+          ?.scrollIntoView({
+            behavior:
+              "auto",
+            block:
+              "start"
+          });
+
+      },
+      180
+    );
+
+  }
+
+}
+
+
+// ========================================
+// 起動
+// ========================================
+
+setSearchType(
+  "commander"
+);
+
+loadTotalRegisteredUnionCount();
+applyInitialRecruitmentView();
