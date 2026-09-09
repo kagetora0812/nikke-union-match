@@ -121,23 +121,9 @@
     .hero-copy,.hero-side { position:relative; z-index:1; }
     .hero-side { border-left:1px solid #30333a; padding-left:25px; }
     .hero-mini { color:#7f858d; font:800 10px "Teko",sans-serif; letter-spacing:2px; }
-    .hero-feature { margin-top:14px; display:grid; gap:12px; }
-    .hero-feature div {
-      display:flex;
-      gap:10px;
-      align-items:flex-start;
-      color:#e4e7ea;
-      font-size:13.5px;
-      line-height:1.62;
-    }
-    .hero-feature b {
-      display:inline-block;
-      margin-bottom:1px;
-      color:var(--accent2);
-      font-size:15px;
-      font-weight:900;
-      line-height:1.35;
-    }
+    .hero-feature { margin-top:12px; display:grid; gap:9px; }
+    .hero-feature div { display:flex; gap:8px; align-items:flex-start; color:#d7dade; font-size:12px; line-height:1.55; }
+    .hero-feature b { color:var(--accent2); }
 
     .top-actions { margin-top:20px; display:flex; flex-wrap:wrap; gap:8px; }
     .action-btn {
@@ -185,15 +171,6 @@
       color:#79d9f6;
       font-size:13px;
       font-weight:900;
-    }
-    .union-required-note-large {
-      text-align:center;
-      padding:16px 18px;
-    }
-    .union-required-note-large .required-title {
-      margin-bottom:0;
-      font-size:18px;
-      line-height:1.5;
     }
 
     .reassurance-box {
@@ -285,393 +262,25 @@
       .container { width:min(100% - 18px,1180px); padding-top:14px; }
       .bot-hero { padding:22px 16px 18px; }
       h1 { font-size:34px; }
-      h2 { font-size:24px; line-height:1.22; }
-      h3 { font-size:18px; }
-      .bot-hero h1 { font-size:clamp(17px,5vw,21px); white-space:nowrap; letter-spacing:-.06em; }
-      .lead { font-size:13px; line-height:1.8; }
-      .hero-feature { gap:12px; }
-      .hero-feature div { font-size:13.5px; line-height:1.65; }
-      .hero-feature b { font-size:15px; }
+      .bot-hero h1 { font-size:clamp(16.5px,4.8vw,20px); white-space:nowrap; letter-spacing:-.06em; }
+      .lead { font-size:11.5px; }
       .top-actions { display:grid; grid-template-columns:1fr; }
-      .action-btn { width:100%; font-size:13px; }
-      .section { padding:20px 14px; }
+      .action-btn { width:100%; }
+      .section { padding:19px 14px; }
       .section-head { display:block; }
-      .section-note { margin-top:7px; text-align:left; font-size:12.5px; line-height:1.7; }
-      .union-required-note { font-size:13px; line-height:1.75; }
-      .union-required-note .required-title { font-size:14px; }
-      .union-required-note-large { padding:15px 12px; }
-      .union-required-note-large .required-title { font-size:17px; line-height:1.45; }
+      .section-note { margin-top:7px; text-align:left; }
       .reassurance-box { padding:17px 14px; }
-      .reassurance-box p { font-size:13px; line-height:1.8; }
-      .privacy-note { font-size:12.5px; line-height:1.75; }
       .reassurance-points { grid-template-columns:1fr; }
-      .reassurance-point { font-size:12.5px; line-height:1.7; }
       .steps,.character-grid,.feature-grid,.talk-box,.relist-flow { grid-template-columns:1fr; }
       .step { min-height:0; }
-      .step p { font-size:13px; line-height:1.75; }
       .character-visual { height:210px; }
-      .character-desc { font-size:13px; line-height:1.72; }
-      .character-call { font-size:12.5px; }
-      .feature-card p { font-size:13px; line-height:1.75; }
-      .command-row { grid-template-columns:1fr auto; gap:7px 8px; }
+      .command-row { grid-template-columns:1fr auto; gap:6px 8px; }
       .command-row .command-desc { grid-column:1 / -1; }
-      code { font-size:13px; }
-      .command-desc { font-size:13px; line-height:1.65; }
-      .copy-command { min-width:80px; min-height:34px; font-size:11.5px; }
-      .chat-example { font-size:13px; line-height:1.7; }
-      .chat-note { font-size:12px; line-height:1.7; }
-      .relist-label { font-size:14px; }
-      .relist-card p { font-size:13px; line-height:1.75; }
-      .notice { font-size:12.5px; line-height:1.78; }
+      .copy-command { min-width:78px; min-height:32px; }
       .bottom-area { flex-direction:column; align-items:stretch; text-align:center; }
     }
   </style>
-
-  <style id="desktop-reading-balance-v15">
-    /* =========================================================
-       PC版 読みやすさ調整 v15
-       - 851px以上だけに適用
-       - スマホ用CSS・既存機能・HTML構造は変更しない
-       - 小見出しは控えめ、本文/重要情報を一段大きく
-       ========================================================= */
-    @media (min-width: 851px) {
-
-      /* 全体：余白は活かしつつ、情報密度を落とさず読みやすく */
-      .container {
-        width: min(1200px, calc(100% - 36px));
-        padding-top: 30px;
-      }
-
-      .section {
-        padding: 30px 28px;
-        margin-top: 18px;
-      }
-
-      /* 大見出しは一段強く */
-      h2 {
-        font-size: clamp(29px, 2.55vw, 35px);
-        line-height: 1.16;
-      }
-
-      h3 {
-        font-size: 19px;
-        line-height: 1.3;
-        letter-spacing: -.03em;
-      }
-
-      /* 英字の補助見出しは小さめのまま */
-      .eyebrow {
-        font-size: 11px;
-        letter-spacing: 2.6px;
-      }
-
-      .section-head {
-        margin-bottom: 22px;
-      }
-
-      .section-note {
-        max-width: 660px;
-        font-size: 12.5px;
-        line-height: 1.72;
-      }
-
-      /* HERO */
-      .bot-hero {
-        min-height: 300px;
-        padding: 38px 36px;
-        grid-template-columns: minmax(0, 1fr) 360px;
-        gap: 34px;
-      }
-
-      .bot-hero h1 {
-        font-size: clamp(39px, 3.35vw, 46px);
-        line-height: 1.06;
-      }
-
-      .lead {
-        max-width: 760px;
-        font-size: 14.5px;
-        line-height: 1.88;
-      }
-
-      .hero-side {
-        padding-left: 28px;
-      }
-
-      .hero-mini {
-        font-size: 10.5px;
-      }
-
-      .hero-feature {
-        gap: 14px;
-        margin-top: 16px;
-      }
-
-      .hero-feature div {
-        gap: 11px;
-        font-size: 14px;
-        line-height: 1.65;
-      }
-
-      .hero-feature b {
-        font-size: 16px;
-        line-height: 1.4;
-      }
-
-      .top-actions {
-        margin-top: 23px;
-        gap: 10px;
-      }
-
-      .action-btn {
-        min-height: 47px;
-        padding: 0 18px;
-        font-size: 13px;
-      }
-
-      /* 利用条件：重要なのでしっかり見せる */
-      .union-required-note-large {
-        padding: 18px 20px;
-      }
-
-      .union-required-note-large .required-title {
-        font-size: 20px;
-        line-height: 1.45;
-      }
-
-      /* 導入不安向け */
-      .reassurance-box {
-        padding: 25px 26px;
-      }
-
-      .reassurance-box h2 {
-        font-size: clamp(27px, 2.35vw, 33px);
-      }
-
-      .reassurance-box p {
-        font-size: 13.5px;
-        line-height: 1.82;
-      }
-
-      .privacy-note {
-        padding: 13px 14px;
-        font-size: 12.5px;
-        line-height: 1.75;
-      }
-
-      .reassurance-points {
-        gap: 10px;
-        margin-top: 15px;
-      }
-
-      .reassurance-point {
-        padding: 14px 14px;
-        font-size: 12.5px;
-        line-height: 1.72;
-      }
-
-      /* 4ステップ：固定高の余白を文字サイズに回す */
-      .steps {
-        gap: 12px;
-      }
-
-      .step {
-        min-height: 198px;
-        padding: 20px 18px;
-      }
-
-      .step-no {
-        width: 30px;
-        height: 30px;
-        margin-bottom: 14px;
-        font-size: 18px;
-      }
-
-      .step h3 {
-        margin-bottom: 10px;
-      }
-
-      .step p {
-        font-size: 13px;
-        line-height: 1.76;
-      }
-
-      /* キャラクター */
-      .character-grid {
-        gap: 14px;
-      }
-
-      .character-visual {
-        height: 205px;
-      }
-
-      .character-body {
-        padding: 18px 18px 20px;
-      }
-
-      .character-tag {
-        font-size: 10.5px;
-      }
-
-      .character-name {
-        font-size: 23px;
-      }
-
-      .character-desc {
-        margin-top: 8px;
-        font-size: 13px;
-        line-height: 1.72;
-      }
-
-      .character-call {
-        margin-top: 12px;
-        padding-top: 11px;
-        font-size: 12.5px;
-        line-height: 1.6;
-      }
-
-      /* 機能カード：ここは読ませたいので本文を大きめに */
-      .feature-grid {
-        gap: 12px;
-      }
-
-      .feature-card {
-        padding: 20px 20px 21px;
-      }
-
-      .feature-card .icon {
-        font-size: 24px;
-      }
-
-      .feature-card h3 {
-        margin-top: 8px;
-        font-size: 20px;
-      }
-
-      .feature-card p {
-        margin-top: 9px;
-        font-size: 13.5px;
-        line-height: 1.78;
-      }
-
-      /* 普通の言葉で操作 / 会話例 */
-      .talk-box {
-        gap: 12px;
-      }
-
-      .talk-card {
-        padding: 20px;
-      }
-
-      .talk-card h3 {
-        margin-bottom: 12px;
-        font-size: 19px;
-      }
-
-      .chat-example {
-        margin-top: 8px;
-        padding: 11px 13px;
-        font-size: 13.5px;
-        line-height: 1.68;
-      }
-
-      .chat-note {
-        margin-top: 11px;
-        font-size: 12.5px;
-        line-height: 1.7;
-      }
-
-      /* コマンド一覧：PCで特に小さかった部分 */
-      .command-list {
-        gap: 9px;
-      }
-
-      .command-row {
-        grid-template-columns: 165px minmax(0, 1fr) auto;
-        gap: 15px;
-        padding: 14px 14px;
-      }
-
-      code {
-        font-size: 13.5px;
-      }
-
-      .command-desc {
-        font-size: 13px;
-        line-height: 1.68;
-      }
-
-      .copy-command {
-        min-width: 92px;
-        min-height: 38px;
-        padding: 0 12px;
-        font-size: 11.5px;
-      }
-
-      .recommended {
-        padding: 3px 7px;
-        font-size: 9.5px;
-      }
-
-      /* 再掲載 */
-      .relist-flow {
-        gap: 12px;
-      }
-
-      .relist-card {
-        padding: 20px;
-      }
-
-      .relist-label {
-        font-size: 15px;
-      }
-
-      .relist-card p {
-        margin-top: 9px;
-        font-size: 13.5px;
-        line-height: 1.76;
-      }
-
-      /* 注意書き：補助情報なので本文より少し小さめ */
-      .notice {
-        padding: 15px 16px;
-        font-size: 12.5px;
-        line-height: 1.76;
-      }
-
-      .bottom-area {
-        font-size: 10.5px;
-      }
-    }
-
-    /* 大きめPCでは余白をさらに文字へ回す */
-    @media (min-width: 1180px) {
-      .section {
-        padding-left: 32px;
-        padding-right: 32px;
-      }
-
-      .step p,
-      .character-desc,
-      .command-desc {
-        font-size: 13.5px;
-      }
-
-      .feature-card p,
-      .relist-card p {
-        font-size: 14px;
-      }
-
-      .chat-example {
-        font-size: 14px;
-      }
-
-      .hero-feature div {
-        font-size: 14.5px;
-      }
-    }
-  </style>
-
+  <link rel="stylesheet" href="./subpage-nav.css?v=15.0">
 </head>
 <body>
   <header class="topbar">
@@ -709,8 +318,9 @@
       </div>
     </section>
 
-    <div class="union-required-note union-required-note-large">
+    <div class="union-required-note">
       <span class="required-title">⚠️ 利用にはUNION MATCHへのユニオン登録が必要です</span>
+      ユニオン募集を登録後、<code>/setup</code> でPASSを1回入力すると利用できます。
     </div>
 
     <section class="reassurance-box">
@@ -840,40 +450,6 @@
             <button class="copy-command profile-copy" type="button" data-copy="/botprofiles">📋 コピー</button>
           </div>
         </div>
-      </div>
-    </section>
-
-    <section class="section" id="ai-recruitment-control">
-      <div class="section-head">
-        <div>
-          <div class="eyebrow">AI RECRUITMENT CONTROL · COMING SOON</div>
-          <h2>💬 普通の言葉でUNION MATCHを操作</h2>
-        </div>
-        <div class="section-note cyan-note">コマンドを覚えなくても、BOTをメンションして話しかけるだけ。</div>
-      </div>
-
-      <div class="talk-box">
-        <div class="talk-card">
-          <h3>🔎 募集状況を確認</h3>
-          <div class="chat-example">@カイリ 今の募集状況教えて</div>
-          <div class="chat-example">@カイリ あと何日掲載される？</div>
-          <p class="chat-note">UNION MATCHと連携中のユニオン情報を取得して、その場で回答します。</p>
-        </div>
-
-        <div class="talk-card">
-          <h3>🛠 募集内容を変更</h3>
-          <div class="chat-example">@カイリ 募集休止にして</div>
-          <div class="chat-example">@カイリ 募集再開したい。今回はダイヤで、このX記事を使って</div>
-          <div class="chat-example">@カイリ 募集URLこれに変えて</div>
-          <p class="chat-note">休止・再開・URL変更などは、内容を確認したあとにボタンで確定する方式を予定しています。</p>
-        </div>
-      </div>
-
-      <div class="notice">
-        <strong>※ 実装予定：</strong>
-        AIが普通の言葉を理解してUNION MATCHの募集情報を確認・更新します。
-        募集休止・再開・URL変更など、データを書き換える操作は確認なしで自動確定せず、
-        <strong>「変更する」ボタンで最終確認</strong>してから反映する予定です。
       </div>
     </section>
 
@@ -1032,6 +608,14 @@
       });
     });
   </script>
+
+
+  <nav class="subpage-bottom-nav" aria-label="フッターメニュー">
+    <a href="./index.html#videoHero">TOP</a>
+    <a href="./index.html?view=commander#listPage">指揮官を見る</a>
+    <a href="./index.html?view=union#listPage">ユニオン</a>
+    <a class="active" href="./bot.html">BOT</a>
+  </nav>
 
 </body>
 </html>
