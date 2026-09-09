@@ -4457,179 +4457,61 @@ body .bottom-nav .nav-link-btn {
 
 
 /* =========================================================
-   v17 FIXES
+   v18 MOBILE HOTFIX
    ========================================================= */
 
-/* Keep hamburger on PC. Quick menu is under the black header, desktop only. */
-body .topbar-text-nav {
-  display: none !important;
-}
-
-body .site-menu-button {
-  display: grid !important;
-}
-
-body .video-underbar-nav {
-  display: none;
-}
-
-@media screen and (min-width: 1025px) {
-  body .video-underbar-nav {
-    position: relative;
-    z-index: 12;
-    height: 48px;
-    margin-bottom: -48px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    gap: 22px;
-    padding: 0 24px;
-    background: rgba(7, 10, 14, .52);
-    backdrop-filter: blur(8px);
-    -webkit-backdrop-filter: blur(8px);
-  }
-
-  body .video-underbar-nav button,
-  body .video-underbar-nav a {
-    padding: 0;
-    border: 0;
-    color: rgba(255,255,255,.76);
-    background: transparent;
-    font: 800 13px/1 "Inter", "Segoe UI", sans-serif;
-    letter-spacing: .06em;
-    text-decoration: none;
-    cursor: pointer;
-    transition: color .18s ease;
-  }
-
-  body .video-underbar-nav button:hover,
-  body .video-underbar-nav a:hover,
-  body .video-underbar-nav button:focus-visible,
-  body .video-underbar-nav a:focus-visible {
-    color: var(--cyan);
-    outline: none;
-  }
-}
-
-/* Mobile drawer more translucent */
-body .site-menu-backdrop {
-  background: rgba(0, 0, 0, .28) !important;
-  backdrop-filter: blur(6px) !important;
-  -webkit-backdrop-filter: blur(6px) !important;
-}
-
-body .site-menu-drawer {
-  background: rgba(17, 19, 24, .72) !important;
-  backdrop-filter: blur(14px) !important;
-  -webkit-backdrop-filter: blur(14px) !important;
-}
-
-/* Footer nav: back to 3 items */
+/* MATCHED / TOTAL UNIONS: labels stay small, numbers only larger */
 @media screen and (max-width: 1024px) {
-  body .bottom-nav {
+  html body .video-history-row {
+    font-size: clamp(12px, 3vw, 15px) !important;
+  }
+
+  html body .video-history-row strong {
+    display: inline-block !important;
+    font-size: 1.55em !important;
+    font-weight: 800 !important;
+    line-height: .8 !important;
+    vertical-align: -0.04em !important;
+    letter-spacing: .04em !important;
+    margin-left: 3px !important;
+    margin-right: 2px !important;
+  }
+}
+
+/* Mobile/tablet footer: force all 3 buttons to exist side-by-side */
+@media screen and (max-width: 1024px) {
+  html body #bottomNav.bottom-nav {
+    display: grid !important;
     grid-template-columns: repeat(3, minmax(0, 1fr)) !important;
-  }
-}
-
-/* Better mobile hero balance */
-@media screen and (max-width: 600px) {
-  body .video-logo-switch img {
-    width: clamp(88px, 28vw, 118px) !important;
-    max-width: 28vw !important;
+    grid-auto-flow: column !important;
+    width: 100% !important;
+    left: 0 !important;
+    right: 0 !important;
+    overflow: visible !important;
   }
 
-  body .topbar {
-    padding-left: 14px;
-    padding-right: 12px;
+  html body #bottomNav.bottom-nav > .nav-btn {
+    display: flex !important;
+    visibility: visible !important;
+    opacity: 1 !important;
+    position: relative !important;
+    grid-column: auto !important;
+    width: 100% !important;
+    min-width: 0 !important;
+    max-width: none !important;
+    height: 100% !important;
+    margin: 0 !important;
+    padding: 7px 2px 10px !important;
+    flex: none !important;
+    flex-direction: column !important;
+    align-items: center !important;
+    justify-content: center !important;
+    text-align: center !important;
+    white-space: nowrap !important;
   }
 
-  body .video-hero {
-    min-height: calc(100svh - 66px + 72px) !important;
-  }
-
-  body .video-hero-stats {
-    bottom: 92px !important;
-    width: min(92%, 390px);
-  }
-
-  body .video-current-row {
-    gap: clamp(52px, 16vw, 90px) !important;
-  }
-
-  body .video-current-stat {
-    min-width: 112px !important;
-  }
-
-  body .video-current-stat strong {
-    font-size: clamp(62px, 16vw, 84px) !important;
-    line-height: .82 !important;
-  }
-
-  body .video-current-stat span {
-    margin-top: 12px !important;
-    font-size: clamp(14px, 4vw, 18px) !important;
-    letter-spacing: .18em !important;
-  }
-
-  body .video-history-row {
-    margin-top: 22px !important;
-    font-size: clamp(12px, 3.4vw, 15px) !important;
-  }
-
-  body .video-scroll-button {
-    bottom: 18px !important;
-  }
-
-  body .video-scroll-button span {
-    font-size: 10px !important;
-  }
-
-  body .video-scroll-button b {
-    margin-top: 1px !important;
-    font-size: 18px !important;
-  }
-}
-
-@media screen and (min-width: 601px) and (max-width: 1024px) {
-  body .video-hero {
-    min-height: calc(100svh - 66px + 56px) !important;
-  }
-
-  body .video-hero-stats {
-    bottom: 96px !important;
-  }
-
-  body .video-current-stat strong {
-    font-size: clamp(72px, 12vw, 102px) !important;
-  }
-
-  body .video-current-stat span {
-    font-size: clamp(15px, 2.5vw, 19px) !important;
-  }
-
-  body .video-history-row {
-    font-size: clamp(13px, 2vw, 16px) !important;
-  }
-
-  body .video-scroll-button {
-    bottom: 18px !important;
-  }
-}
-
-/* White card should stay below first view on mobile/tablet */
-@media screen and (max-width: 1024px) {
-  body #listPage {
-    margin-top: 18px !important;
-  }
-}
-
-/* PC hero / underbar spacing */
-@media screen and (min-width: 1025px) {
-  body .video-hero {
-    min-height: calc(100vh - 66px) !important;
-  }
-
-  body .video-hero-stats {
-    bottom: 86px !important;
+  html body #bottomNav.bottom-nav > .nav-btn span {
+    display: block !important;
+    margin: 0 0 4px !important;
   }
 }
