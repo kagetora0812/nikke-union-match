@@ -4888,3 +4888,21 @@ body .video-topbar {
     padding-bottom: 0 !important;
   }
 }
+
+
+/* =========================================================
+   v30 FOOTER EARLY FADE + PC VIDEO POSITION
+   2026-09-10
+   - smartphone footer: presentation remains opacity-only
+   - PC video: shift visible video content slightly downward
+     so the upper/head area is less cropped
+   - tablet unchanged
+   ========================================================= */
+
+/* PC only: move the video picture downward inside the existing hero frame.
+   Smaller Y percentage = rendered video content sits lower when cover-cropped. */
+@media screen and (min-width: 1025px) {
+  html body .hero-background-video {
+    object-position: center 42% !important;
+  }
+}
