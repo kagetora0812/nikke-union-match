@@ -610,6 +610,89 @@
     }
 
     /* ========================================
+       ユニオン登録情報
+    ======================================== */
+
+    .union-registry-summary {
+      margin-top: 16px;
+      padding: 12px 14px;
+      border: 1px solid rgba(54, 150, 255, .30);
+      background: rgba(54, 150, 255, .06);
+      color: #b9dcff;
+      font-size: 13px;
+      font-weight: 800;
+      line-height: 1.6;
+    }
+
+    .union-registry-list {
+      display: grid;
+      gap: 12px;
+      margin-top: 14px;
+    }
+
+    .union-registry-card {
+      padding: 16px;
+      border: 1px solid var(--line);
+      background: rgba(16, 22, 33, .90);
+    }
+
+    .union-registry-head {
+      display: flex;
+      align-items: flex-start;
+      justify-content: space-between;
+      gap: 12px;
+    }
+
+    .union-registry-name {
+      font-size: 19px;
+      font-weight: 900;
+      word-break: break-word;
+    }
+
+    .union-registry-rank {
+      margin-top: 6px;
+      color: #8cc9ff;
+      font-size: 12px;
+      font-weight: 800;
+    }
+
+    .union-registry-badge {
+      flex: 0 0 auto;
+      padding: 5px 9px;
+      border: 1px solid rgba(143, 240, 189, .38);
+      color: var(--green);
+      background: rgba(143, 240, 189, .07);
+      font-size: 10px;
+      font-weight: 900;
+    }
+
+    .union-registry-badge.listing-only {
+      border-color: rgba(255, 177, 92, .45);
+      color: #ffc36d;
+      background: rgba(255, 177, 92, .07);
+    }
+
+    .union-registry-meta {
+      margin-top: 10px;
+      color: var(--muted);
+      font-size: 11px;
+      line-height: 1.7;
+    }
+
+    .union-registry-url {
+      margin-top: 8px;
+      color: #b9dcff;
+      font-size: 11px;
+      word-break: break-all;
+    }
+
+    @media screen and (max-width: 600px) {
+      .union-registry-head {
+        flex-direction: column;
+      }
+    }
+
+    /* ========================================
        ログイン
     ======================================== */
 
@@ -1687,6 +1770,20 @@
         </button>
 
         <button
+          id="openUnionRegistryBtn"
+          class="menu-card"
+          type="button"
+        >
+          <div class="menu-card-icon">🏢</div>
+          <div class="menu-card-title">
+            ユニオン登録情報
+          </div>
+          <div class="menu-card-copy">
+            現在有効なユニオン登録を、募集中と掲載のみで分けて確認します。
+          </div>
+        </button>
+
+        <button
           id="openPassReissueBtn"
           class="menu-card"
           type="button"
@@ -1696,8 +1793,8 @@
             募集PASS再発行
           </div>
           <div class="menu-card-copy">
-            指揮官名＋SLV、またはユニオン名＋ランクから
-            現在募集中のPASSを再発行します。
+            現在募集中の指揮官・ユニオンをプルダウンから選び、
+            PASSを再発行します。
           </div>
         </button>
 
@@ -2565,6 +2662,91 @@
 
 
     <!-- ========================================
+         ユニオン登録情報
+    ========================================= -->
+
+    <section
+      id="unionRegistrySection"
+      class="hidden"
+    >
+
+      <div class="admin-head">
+
+        <div>
+          <div class="eyebrow">
+            UNION REGISTRY
+          </div>
+
+          <h2>
+            🏢 ユニオン登録情報
+          </h2>
+        </div>
+
+        <div class="admin-head-actions">
+          <button
+            id="reloadUnionRegistryBtn"
+            class="btn blue"
+            type="button"
+          >
+            ↻ 更新
+          </button>
+
+          <button
+            id="backToMenuFromUnionRegistryBtn"
+            class="btn"
+            type="button"
+          >
+            ← 管理メニュー
+          </button>
+        </div>
+
+      </div>
+
+      <p class="lead">
+        現在管理期間内のユニオン登録を確認します。<br>
+        「募集中」と「掲載のみ」を切り替えて表示できます。
+      </p>
+
+      <div class="panel">
+
+        <label>
+          表示区分
+          <select id="unionRegistryView">
+            <option value="open">募集中</option>
+            <option value="listing_only">掲載のみ</option>
+          </select>
+        </label>
+
+        <div
+          id="unionRegistrySummary"
+          class="union-registry-summary"
+        >
+          読み込み中...
+        </div>
+
+        <div
+          id="unionRegistryList"
+          class="union-registry-list"
+        ></div>
+
+        <div
+          id="unionRegistryEmpty"
+          class="empty hidden"
+        >
+          該当するユニオン登録はありません。
+        </div>
+
+        <div
+          id="unionRegistryError"
+          class="message error hidden"
+        ></div>
+
+      </div>
+
+    </section>
+
+
+    <!-- ========================================
          募集PASS再発行
     ========================================= -->
 
@@ -2599,7 +2781,7 @@
 
       <p class="lead">
         現在募集中の募集だけが対象です。<br>
-        指揮官は「指揮官名＋SLV」、ユニオンは「ユニオン名＋ユニオンランク」で照合します。
+        募集タイプを選び、対象をプルダウンから選択してください。
       </p>
 
       <div class="panel">
@@ -2617,66 +2799,12 @@
             </select>
           </label>
 
-          <div
-            id="passReissueCommanderFields"
-            class="form-grid"
-          >
-            <label>
-              指揮官名
-              <input
-                id="passReissueCommanderName"
-                type="text"
-                maxlength="40"
-                autocomplete="off"
-                autocapitalize="off"
-                spellcheck="false"
-                placeholder="例：KAGETORA"
-              >
-            </label>
-
-            <label>
-              SLV
-              <input
-                id="passReissueSlv"
-                type="number"
-                min="1"
-                max="1200"
-                inputmode="numeric"
-                autocomplete="off"
-                placeholder="例：999"
-              >
-            </label>
-          </div>
-
-          <div
-            id="passReissueUnionFields"
-            class="form-grid hidden"
-          >
-            <label>
-              ユニオン名
-              <input
-                id="passReissueUnionName"
-                type="text"
-                maxlength="40"
-                autocomplete="off"
-                autocapitalize="off"
-                spellcheck="false"
-                placeholder="例：ACTORS"
-              >
-            </label>
-
-            <label>
-              ユニオンランク
-              <select id="passReissueUnionRank">
-                <option value="チャレンジャー">チャレンジャー</option>
-                <option value="ダイヤ">ダイヤ</option>
-                <option value="プラチナ">プラチナ</option>
-                <option value="ゴールド">ゴールド</option>
-                <option value="シルバー">シルバー</option>
-                <option value="駆け出しユニオン">駆け出しユニオン</option>
-              </select>
-            </label>
-          </div>
+          <label>
+            対象の募集
+            <select id="passReissueTarget">
+              <option value="">読み込み中...</option>
+            </select>
+          </label>
 
           <button
             class="btn primary wide"
@@ -3268,6 +3396,8 @@
 
 
     let creators = [];
+    let unionRegistryItems = [];
+    let passReissueTargets = [];
 
     // アイコン画像状態
     let selectedIconData = "";
@@ -5206,6 +5336,297 @@
     }
 
 
+    function getUnionMatchRootUrl() {
+
+      try {
+        return new URL("./", window.location.href).href;
+      } catch {
+        return "";
+      }
+
+    }
+
+
+    function isUnionRegistryListingOnly(item) {
+
+      const status =
+        String(item?.status || "").toLowerCase();
+
+      if (
+        status === "registered"
+        || status === "listing_only"
+        || status === "published_only"
+      ) {
+        return true;
+      }
+
+      if (status !== "closed") {
+        return false;
+      }
+
+      // 現行INDEXの「登録のみ」は、既存DBを壊さないため
+      // UNION MATCHトップURLで登録後にclosedへ切り替える方式。
+      // 通常の募集締切(closed)と混同しないよう、このURLだけを旧方式の掲載のみとして扱う。
+      try {
+        const rowUrl = new URL(String(item?.x_url || ""), window.location.href);
+        const rootUrl = new URL(getUnionMatchRootUrl());
+
+        return (
+          rowUrl.origin === rootUrl.origin
+          && rowUrl.pathname.replace(/index\.html$/, "")
+            === rootUrl.pathname.replace(/index\.html$/, "")
+          && !rowUrl.search
+          && !rowUrl.hash
+        );
+      } catch {
+        return false;
+      }
+
+    }
+
+
+    function getUnionRegistryKind(item) {
+
+      if (String(item?.status || "").toLowerCase() === "open") {
+        return "open";
+      }
+
+      if (isUnionRegistryListingOnly(item)) {
+        return "listing_only";
+      }
+
+      return "other";
+
+    }
+
+
+    function renderUnionRegistry() {
+
+      const list = $("#unionRegistryList");
+      const empty = $("#unionRegistryEmpty");
+      const summary = $("#unionRegistrySummary");
+      const view = $("#unionRegistryView")?.value || "open";
+
+      if (!list || !empty || !summary) {
+        return;
+      }
+
+      const openItems = unionRegistryItems.filter(
+        item => getUnionRegistryKind(item) === "open"
+      );
+
+      const listingOnlyItems = unionRegistryItems.filter(
+        item => getUnionRegistryKind(item) === "listing_only"
+      );
+
+      const displayItems =
+        view === "listing_only"
+          ? listingOnlyItems
+          : openItems;
+
+      summary.textContent =
+        `募集中 ${openItems.length}件　｜　掲載のみ ${listingOnlyItems.length}件`;
+
+      list.innerHTML = "";
+
+      if (!displayItems.length) {
+        empty.textContent =
+          view === "listing_only"
+            ? "現在、掲載のみのユニオン登録はありません。"
+            : "現在募集中のユニオン登録はありません。";
+        empty.classList.remove("hidden");
+        return;
+      }
+
+      empty.classList.add("hidden");
+
+      list.innerHTML = displayItems.map(item => {
+        const kind = getUnionRegistryKind(item);
+        const listingOnly = kind === "listing_only";
+        const created = formatAdminDate(item.created_at);
+        const expires = formatAdminDate(item.expires_at);
+        const url = String(item.x_url || "").trim();
+
+        return `
+          <article class="union-registry-card">
+            <div class="union-registry-head">
+              <div>
+                <div class="union-registry-name">
+                  ${escapeHtml(item.union_name || "--")}
+                </div>
+                <div class="union-registry-rank">
+                  ${escapeHtml(item.union_rank || "--")}
+                </div>
+              </div>
+              <div class="union-registry-badge${listingOnly ? " listing-only" : ""}">
+                ${listingOnly ? "掲載のみ" : "募集中"}
+              </div>
+            </div>
+            <div class="union-registry-meta">
+              登録：${escapeHtml(created)}<br>
+              管理期限：${escapeHtml(expires)}
+            </div>
+            ${
+              !listingOnly && url
+                ? `<div class="union-registry-url">募集記事：${escapeHtml(url)}</div>`
+                : ""
+            }
+          </article>
+        `;
+      }).join("");
+
+    }
+
+
+    async function loadUnionRegistry() {
+
+      const errorBox = $("#unionRegistryError");
+      const summary = $("#unionRegistrySummary");
+
+      if (errorBox) {
+        errorBox.classList.add("hidden");
+      }
+
+      if (summary) {
+        summary.textContent = "読み込み中...";
+      }
+
+      const token = getToken();
+
+      if (!token) {
+        showLogin();
+        return;
+      }
+
+      const tokenResult = await sb.rpc(
+        "creator_admin_token_valid",
+        {
+          p_token: token
+        }
+      );
+
+      if (
+        tokenResult.error
+        || tokenResult.data !== true
+      ) {
+        clearToken();
+        showLogin();
+        return;
+      }
+
+      const nowIso = new Date().toISOString();
+
+      const {
+        data,
+        error
+      } = await sb
+        .from("union_recruitments")
+        .select("id, union_name, union_rank, x_url, status, created_at, expires_at")
+        .gt("expires_at", nowIso)
+        .order("created_at", { ascending: false });
+
+      if (error) {
+        console.error("ユニオン登録情報取得エラー", error);
+        unionRegistryItems = [];
+        if (summary) {
+          summary.textContent = "募集中 --件　｜　掲載のみ --件";
+        }
+        if (errorBox) {
+          errorBox.textContent = "ユニオン登録情報を読み込めませんでした。";
+          errorBox.classList.remove("hidden");
+        }
+        renderUnionRegistry();
+        return;
+      }
+
+      unionRegistryItems = Array.isArray(data) ? data : [];
+      renderUnionRegistry();
+
+    }
+
+
+    async function loadPassReissueTargets() {
+
+      const type =
+        $("#passReissueType")?.value || "commander";
+
+      const target = $("#passReissueTarget");
+
+      if (!target) {
+        return;
+      }
+
+      target.innerHTML = '<option value="">読み込み中...</option>';
+      target.disabled = true;
+      passReissueTargets = [];
+
+      $("#passReissueResult")
+        ?.classList
+        .add("hidden");
+
+      clearMessage(
+        $("#passReissueMessage")
+      );
+
+      const nowIso = new Date().toISOString();
+
+      const query =
+        type === "union"
+          ? sb
+              .from("union_recruitments")
+              .select("id, union_name, union_rank, created_at, expires_at")
+              .eq("status", "open")
+              .gt("expires_at", nowIso)
+              .order("created_at", { ascending: false })
+          : sb
+              .from("recruitments")
+              .select("id, commander_name, slv, created_at, expires_at")
+              .eq("status", "open")
+              .gt("expires_at", nowIso)
+              .order("created_at", { ascending: false });
+
+      const {
+        data,
+        error
+      } = await query;
+
+      if (error) {
+        console.error("PASS再発行対象取得エラー", error);
+        target.innerHTML = '<option value="">読み込めませんでした</option>';
+        target.disabled = false;
+        showMessage(
+          $("#passReissueMessage"),
+          "募集中の対象を読み込めませんでした。",
+          "error"
+        );
+        return;
+      }
+
+      passReissueTargets = Array.isArray(data) ? data : [];
+
+      if (!passReissueTargets.length) {
+        target.innerHTML = '<option value="">現在募集中の対象はありません</option>';
+        target.disabled = false;
+        return;
+      }
+
+      target.innerHTML =
+        '<option value="">対象を選択してください</option>'
+        + passReissueTargets.map(item => {
+          const label =
+            type === "union"
+              ? `${item.union_name || "--"} / ${item.union_rank || "--"}`
+              : `${item.commander_name || "--"} / SLV ${item.slv ?? "--"}`;
+          const date = formatAdminDate(item.created_at);
+
+          return `<option value="${escapeHtml(item.id)}">${escapeHtml(label)} / ${escapeHtml(date)}</option>`;
+        }).join("");
+
+      target.disabled = false;
+
+    }
+
+
     async function loadEndingUnions() {
 
       const list =
@@ -5758,11 +6179,25 @@
         }
       );
 
+    $("#openUnionRegistryBtn")
+      ?.addEventListener(
+        "click",
+        async () => {
+
+          showUnionRegistryAdmin();
+          await loadUnionRegistry();
+
+        }
+      );
+
 
     $("#openPassReissueBtn")
       ?.addEventListener(
         "click",
-        showPassReissueAdmin
+        async () => {
+          showPassReissueAdmin();
+          await loadPassReissueTargets();
+        }
       );
 
 
@@ -5807,6 +6242,24 @@
       ?.addEventListener(
         "click",
         showMenu
+      );
+
+    $("#backToMenuFromUnionRegistryBtn")
+      ?.addEventListener(
+        "click",
+        showMenu
+      );
+
+    $("#reloadUnionRegistryBtn")
+      ?.addEventListener(
+        "click",
+        loadUnionRegistry
+      );
+
+    $("#unionRegistryView")
+      ?.addEventListener(
+        "change",
+        renderUnionRegistry
       );
 
 
@@ -6540,6 +6993,10 @@
         ?.classList
         .add("hidden");
 
+      $("#unionRegistrySection")
+        ?.classList
+        .add("hidden");
+
       $("#passReissueSection")
         ?.classList
         .add("hidden");
@@ -6603,6 +7060,22 @@
       $("#endingUnionSection")
         ?.classList
         .remove("hidden");
+
+    }
+
+
+    function showUnionRegistryAdmin() {
+
+      hideAllAdminSections();
+
+      $("#unionRegistrySection")
+        ?.classList
+        .remove("hidden");
+
+      const view = $("#unionRegistryView");
+      if (view && !["open", "listing_only"].includes(view.value)) {
+        view.value = "open";
+      }
 
     }
 
@@ -8134,29 +8607,7 @@
     // 募集PASS再発行
     // ========================================
 
-    function updatePassReissueFields() {
-
-      const type =
-        $("#passReissueType")
-          ?.value ||
-        "commander";
-
-      const isUnion =
-        type === "union";
-
-      $("#passReissueCommanderFields")
-        ?.classList
-        .toggle(
-          "hidden",
-          isUnion
-        );
-
-      $("#passReissueUnionFields")
-        ?.classList
-        .toggle(
-          "hidden",
-          !isUnion
-        );
+    async function updatePassReissueFields() {
 
       $("#passReissueResult")
         ?.classList
@@ -8165,6 +8616,8 @@
       clearMessage(
         $("#passReissueMessage")
       );
+
+      await loadPassReissueTargets();
 
     }
 
@@ -8204,61 +8657,42 @@
               ?.value ||
             "commander";
 
-          let name = "";
-          let value = "";
+          const targetId =
+            $("#passReissueTarget")
+              ?.value ||
+            "";
 
-          if (type === "commander") {
+          const selected =
+            passReissueTargets.find(
+              item => String(item.id) === String(targetId)
+            );
 
-            name =
-              $("#passReissueCommanderName")
-                ?.value
-                .trim() ||
-              "";
+          if (!selected) {
+            showMessage(
+              $("#passReissueMessage"),
+              "PASSを再発行する対象を選択してください。",
+              "error"
+            );
+            return;
+          }
 
-            value =
-              $("#passReissueSlv")
-                ?.value
-                .trim() ||
-              "";
+          const name =
+            type === "commander"
+              ? String(selected.commander_name || "").trim()
+              : String(selected.union_name || "").trim();
 
-            const slv = Number(value);
+          const value =
+            type === "commander"
+              ? String(selected.slv ?? "").trim()
+              : String(selected.union_rank || "").trim();
 
-            if (
-              !name ||
-              !Number.isInteger(slv) ||
-              slv < 1 ||
-              slv > 1200
-            ) {
-              showMessage(
-                $("#passReissueMessage"),
-                "指揮官名とSLV（1～1200）を入力してください。",
-                "error"
-              );
-              return;
-            }
-
-          } else {
-
-            name =
-              $("#passReissueUnionName")
-                ?.value
-                .trim() ||
-              "";
-
-            value =
-              $("#passReissueUnionRank")
-                ?.value ||
-              "";
-
-            if (!name || !value) {
-              showMessage(
-                $("#passReissueMessage"),
-                "ユニオン名とユニオンランクを入力してください。",
-                "error"
-              );
-              return;
-            }
-
+          if (!name || !value) {
+            showMessage(
+              $("#passReissueMessage"),
+              "選択した募集情報を取得できませんでした。再読み込みしてください。",
+              "error"
+            );
+            return;
           }
 
           for (
