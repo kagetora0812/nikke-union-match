@@ -5513,9 +5513,10 @@ body.register-mode .register-inline-title h2 {
   line-height: 1.6;
 }
 
-/* Requested: no horizontal accent line above the bottom menu on register page only. */
-body.register-mode #bottomNav.bottom-nav {
-  border-top: 0 !important;
+/* Register page: remove only the HERO separator line.
+   Bottom navigation border is intentionally preserved. */
+body.register-mode .hero {
+  border-bottom-color: transparent !important;
 }
 
 @media screen and (max-width: 600px) {
