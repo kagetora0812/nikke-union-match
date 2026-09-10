@@ -5055,7 +5055,7 @@ body .video-topbar {
 
 @media screen and (min-width: 1025px) {
 
-  html body:not(.register-mode):not(.manage-mode) {
+  html:not(.tablet-device) body:not(.register-mode):not(.manage-mode) {
     --pc-video-height:
       clamp(
         560px,
@@ -5065,7 +5065,7 @@ body .video-topbar {
   }
 
   /* Header: no sticky repaint / no card shadow showing through. */
-  html body:not(.register-mode):not(.manage-mode) .video-topbar {
+  html:not(.tablet-device) body:not(.register-mode):not(.manage-mode) .video-topbar {
     position: fixed !important;
     top: 0 !important;
     left: 0 !important;
@@ -5083,7 +5083,7 @@ body .video-topbar {
   }
 
   /* Video: hard lock below the header. */
-  html body:not(.register-mode):not(.manage-mode) .video-hero {
+  html:not(.tablet-device) body:not(.register-mode):not(.manage-mode) .video-hero {
     position: fixed !important;
     top: 66px !important;
     left: 0 !important;
@@ -5107,7 +5107,7 @@ body .video-topbar {
   }
 
   /* Reserve exactly the space removed by the fixed header + video. */
-  html body:not(.register-mode):not(.manage-mode) main.container {
+  html:not(.tablet-device) body:not(.register-mode):not(.manage-mode) main.container {
     position: relative !important;
     z-index: 8 !important;
 
@@ -5119,9 +5119,148 @@ body .video-topbar {
   }
 
   /* White recruitment sheet stays in normal flow and is the moving layer. */
-  html body:not(.register-mode):not(.manage-mode) #listPage {
+  html:not(.tablet-device) body:not(.register-mode):not(.manage-mode) #listPage {
     position: relative !important;
     z-index: 10 !important;
     margin-top: 0 !important;
   }
+}
+
+
+/* =========================================================
+   v40 TABLET ONLY: VIDEO HARD LOCK + FOOTER STABILITY
+   2026-09-10
+   - physical iPad / Android tablet only
+   - portrait and landscape keep tablet behavior
+   - TOP: white recruitment sheet and its shadow stay off-screen
+   - video is fixed below the existing 66px tablet top bar
+   - footer uses the same internal scroll shell from every menu route
+   - smartphone / PC / Supabase / card rendering untouched
+   ========================================================= */
+
+html.tablet-device,
+html.tablet-device body {
+  width: 100% !important;
+  max-width: 100% !important;
+  height: 100dvh !important;
+  min-height: 100dvh !important;
+  overflow: hidden !important;
+}
+
+html.tablet-device body {
+  padding-bottom: 0 !important;
+}
+
+/* Keep the tablet top bar itself in its existing sticky form. */
+html.tablet-device body .video-topbar {
+  position: sticky !important;
+  top: 0 !important;
+  z-index: 120 !important;
+  height: 66px !important;
+  background: rgba(9, 10, 13, .92) !important;
+  backdrop-filter: blur(12px) !important;
+  -webkit-backdrop-filter: blur(12px) !important;
+}
+
+/* The shell becomes the tablet's only vertical scroller. */
+html.tablet-device body .mobile-scroll-shell {
+  display: block !important;
+  position: fixed !important;
+  top: 66px !important;
+  right: 0 !important;
+  bottom: 0 !important;
+  left: 0 !important;
+
+  width: 100% !important;
+  height: auto !important;
+  min-height: 0 !important;
+  max-height: none !important;
+
+  overflow-x: hidden !important;
+  overflow-y: auto !important;
+
+  overscroll-behavior-y: none !important;
+  -webkit-overflow-scrolling: touch;
+}
+
+/* Tablet TOP video: hard-locked to the viewport below the top bar. */
+html.tablet-device body:not(.register-mode):not(.manage-mode) .video-hero {
+  position: fixed !important;
+  top: 66px !important;
+  right: 0 !important;
+  bottom: auto !important;
+  left: 0 !important;
+
+  width: 100% !important;
+  height: calc(100dvh - 66px) !important;
+  min-height: calc(100dvh - 66px) !important;
+  max-height: calc(100dvh - 66px) !important;
+  aspect-ratio: auto !important;
+
+  margin: 0 !important;
+  transform: none !important;
+
+  z-index: 1 !important;
+}
+
+/* Do not inherit the PC crop position when a wide iPad is landscape. */
+html.tablet-device body .hero-background-video {
+  object-position: center center !important;
+}
+
+/* Reserve a full tablet viewport plus 28px so TOP shows no white sheet/shadow. */
+html.tablet-device body:not(.register-mode):not(.manage-mode) main.container {
+  position: relative !important;
+  z-index: 8 !important;
+  margin-top: calc(100dvh - 66px + 28px) !important;
+  min-height: 0 !important;
+}
+
+html.tablet-device body:not(.register-mode):not(.manage-mode) #listPage {
+  position: relative !important;
+  z-index: 10 !important;
+  margin-top: 0 !important;
+  min-height: 0 !important;
+  height: auto !important;
+}
+
+/* Wide iPad landscape may exceed 1024px; keep the tablet footer available. */
+html.tablet-device body #bottomNav.bottom-nav {
+  display: flex !important;
+  position: fixed !important;
+  left: 0 !important;
+  right: 0 !important;
+  bottom: 0 !important;
+  z-index: 220 !important;
+
+  width: 100% !important;
+  height: calc(68px + env(safe-area-inset-bottom)) !important;
+  padding-bottom: env(safe-area-inset-bottom) !important;
+
+  opacity: 0 !important;
+  visibility: hidden !important;
+  pointer-events: none !important;
+  transform: none !important;
+  translate: none !important;
+}
+
+html.tablet-device body #bottomNav.bottom-nav.is-visible,
+html.tablet-device body.register-mode #bottomNav.bottom-nav,
+html.tablet-device body.manage-mode #bottomNav.bottom-nav {
+  opacity: 1 !important;
+  visibility: visible !important;
+  pointer-events: auto !important;
+}
+
+html.tablet-device body #bottomNav.bottom-nav > .nav-btn {
+  display: flex !important;
+  flex: 1 1 33.333333% !important;
+  width: 33.333333% !important;
+  min-width: 0 !important;
+  max-width: none !important;
+}
+
+html.tablet-device body.register-mode .mobile-scroll-shell,
+html.tablet-device body.manage-mode .mobile-scroll-shell {
+  padding-bottom: calc(76px + env(safe-area-inset-bottom)) !important;
 }
