@@ -5991,9 +5991,6 @@ let bottomNavVisible =
 let bottomNavFramePending =
   false;
 
-let bottomNavHideTimer =
-  null;
-
 
 function updateBottomNavigationVisibility() {
 
@@ -6014,14 +6011,7 @@ function updateBottomNavigationVisibility() {
         "manage-mode"
       );
 
-
-  /* 登録・締切画面は常に表示 */
   if (forceVisible) {
-
-    if (bottomNavHideTimer !== null) {
-      clearTimeout(bottomNavHideTimer);
-      bottomNavHideTimer = null;
-    }
 
     bottomNavVisible =
       true;
@@ -6038,11 +6028,6 @@ function updateBottomNavigationVisibility() {
 
   if (!listPageForNav) {
 
-    if (bottomNavHideTimer !== null) {
-      clearTimeout(bottomNavHideTimer);
-      bottomNavHideTimer = null;
-    }
-
     bottomNavVisible =
       false;
 
@@ -6056,11 +6041,19 @@ function updateBottomNavigationVisibility() {
   }
 
 
+  /*
+    v23
+    動画のスクロール量ではなく、
+    「白い募集カードエリアの先頭位置」を基準に判定する。
+
+    カードが画面へ入ったら固定フッターを表示。
+    カードから動画側へ戻った時だけ非表示。
+    96pxのヒステリシスで境界付近の点滅・往復を防止。
+  */
   const listTop =
     listPageForNav
       .getBoundingClientRect()
       .top;
-
 
   const viewportHeight =
     window.innerHeight
@@ -6069,14 +6062,11 @@ function updateBottomNavigationVisibility() {
     ||
     0;
 
-
   const showLine =
     viewportHeight - 24;
 
-
   const hideLine =
     viewportHeight + 96;
-
 
   const shouldShow =
     bottomNavVisible
@@ -6084,141 +6074,16 @@ function updateBottomNavigationVisibility() {
       : listTop <= showLine;
 
 
-  /* 表示するときは即表示 */
-  if (shouldShow) {
+  bottomNavVisible =
+    shouldShow;
 
-    if (bottomNavHideTimer !== null) {
-      clearTimeout(bottomNavHideTimer);
-      bottomNavHideTimer = null;
-    }
-
-    bottomNavVisible =
-      true;
-
-    bottomNavigation
-      .classList
-      .add(
-        "is-visible"
-      );
-
-    return;
-  }
-
-
-  /* タブレット / PCは今まで通り */
-  const isSmartphone =
-    window.matchMedia(
-      "(max-width: 600px)"
-    ).matches;
-
-
-  if (!isSmartphone) {
-
-    if (bottomNavHideTimer !== null) {
-      clearTimeout(bottomNavHideTimer);
-      bottomNavHideTimer = null;
-    }
-
-    bottomNavVisible =
-      false;
-
-    bottomNavigation
-      .classList
-      .remove(
-        "is-visible"
-      );
-
-    return;
-  }
-
-
-  /* すでに非表示なら何もしない */
-  if (!bottomNavVisible) {
-    return;
-  }
-
-
-  /* すでに非表示予約中なら重複させない */
-  if (bottomNavHideTimer !== null) {
-    return;
-  }
-
-
-  /* スマホだけ非表示を120ms遅らせる */
-  bottomNavHideTimer =
-    window.setTimeout(
-      () => {
-
-        bottomNavHideTimer =
-          null;
-
-
-        /* 120ms後にもう一度現在位置を確認 */
-        const latestListTop =
-          listPageForNav
-            .getBoundingClientRect()
-            .top;
-
-
-        const latestViewportHeight =
-          window.innerHeight
-          ||
-          document.documentElement.clientHeight
-          ||
-          0;
-
-
-        const latestHideLine =
-          latestViewportHeight + 96;
-
-
-        const stillForceVisible =
-          document.body
-            .classList
-            .contains(
-              "register-mode"
-            )
-          ||
-          document.body
-            .classList
-            .contains(
-              "manage-mode"
-            );
-
-
-        /* 待機中にまた下へ動いたら消さない */
-        if (
-          stillForceVisible
-          ||
-          latestListTop <= latestHideLine
-        ) {
-
-          bottomNavVisible =
-            true;
-
-          bottomNavigation
-            .classList
-            .add(
-              "is-visible"
-            );
-
-          return;
-        }
-
-
-        /* 本当にTOP側へ戻った時だけ消す */
-        bottomNavVisible =
-          false;
-
-        bottomNavigation
-          .classList
-          .remove(
-            "is-visible"
-          );
-
-      },
-      120
+  bottomNavigation
+    .classList
+    .toggle(
+      "is-visible",
+      shouldShow
     );
+
 }
 
 
@@ -6363,3 +6228,106 @@ setSearchType(
 
 loadTotalRegisteredUnionCount();
 applyInitialRecruitmentView();
+
+// =========================================================
+// v35 SMARTPHONE FOOTER STABILITY / WHITE-FLASH FIX
+// 2026-09-10
+// - Keep the stable v32 footer visibility JS unchanged.
+// - Smartphone INDEX only.
+// - Avoid one-frame white flashes when is-visible toggles rapidly.
+// - Footer shell/background and button visuals linger very briefly on hide,
+//   while show remains immediate. No JS timer is added to the nav logic.
+// - Tablet / PC / register / manage remain untouched.
+// =========================================================
+(function installSmartphoneFooterStabilityStyle() {
+  const STYLE_ID = "smartphone-footer-stability-v35";
+
+  if (document.getElementById(STYLE_ID)) {
+    return;
+  }
+
+  const style = document.createElement("style");
+  style.id = STYLE_ID;
+  style.textContent = `
+@media screen and (max-width: 600px) {
+
+  html body:not(.register-mode):not(.manage-mode)
+  #bottomNav.bottom-nav {
+    /* Keep the fixed shell alive so Chrome never exposes the white sheet
+       during a rapid is-visible class flip. */
+    opacity: 1 !important;
+    visibility: visible !important;
+    pointer-events: none !important;
+
+    /* 8px overscan below the visual viewport. Top edge stays unchanged. */
+    bottom: -8px !important;
+    height: calc(68px + env(safe-area-inset-bottom) + 8px) !important;
+    padding-bottom: calc(env(safe-area-inset-bottom) + 8px) !important;
+
+    /* Background is drawn by ::before so it can linger independently. */
+    background: transparent !important;
+    border-top-color: transparent !important;
+
+    -webkit-backface-visibility: hidden !important;
+    backface-visibility: hidden !important;
+    transform: translateZ(0) !important;
+    -webkit-transform: translateZ(0) !important;
+    isolation: isolate !important;
+    contain: paint !important;
+    will-change: transform !important;
+  }
+
+  html body:not(.register-mode):not(.manage-mode)
+  #bottomNav.bottom-nav::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    z-index: -1;
+    pointer-events: none;
+
+    background: linear-gradient(180deg, #2d2e31, #1d1e21);
+    border-top: 2px solid var(--cyan);
+
+    opacity: 0;
+
+    /* Hide is intentionally delayed a touch.
+       If the user immediately scrolls back, the background never blinks. */
+    transition: opacity .09s ease .14s;
+
+    -webkit-backface-visibility: hidden;
+    backface-visibility: hidden;
+    transform: translateZ(0);
+    -webkit-transform: translateZ(0);
+    will-change: opacity;
+  }
+
+  html body:not(.register-mode):not(.manage-mode)
+  #bottomNav.bottom-nav.is-visible::before {
+    opacity: 1;
+    transition-delay: 0s;
+  }
+
+  html body:not(.register-mode):not(.manage-mode)
+  #bottomNav.bottom-nav > .nav-btn {
+    /* Override older whole-footer opacity rules.
+       The buttons themselves linger for the same tiny hide window. */
+    opacity: 0 !important;
+    visibility: visible !important;
+    pointer-events: none !important;
+    transition: opacity .09s ease .14s !important;
+  }
+
+  html body:not(.register-mode):not(.manage-mode)
+  #bottomNav.bottom-nav.is-visible > .nav-btn {
+    opacity: 1 !important;
+    visibility: visible !important;
+    pointer-events: auto !important;
+    transition-delay: 0s !important;
+  }
+
+}
+`;
+
+  document.head.appendChild(style);
+})();
+
