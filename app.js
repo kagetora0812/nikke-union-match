@@ -3140,9 +3140,7 @@ function setUnionRegistrationMode(mode) {
 
   if (unionUsageNote) {
     unionUsageNote.textContent =
-      registerOnly
-        ? "登録のみ行い、求人広告は掲載しません。"
-        : "求人広告を掲載します。";
+      "募集する・登録のみでもBOTをご利用できます。";
   }
 
   updateRegistrationFields();
