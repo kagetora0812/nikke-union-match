@@ -19,9 +19,26 @@
     NIKKE UNION MATCH
   </title>
 
+  <script>
+    /* v40: iPad / Android tablet stays tablet in portrait and landscape. */
+    (() => {
+      const ua = navigator.userAgent || "";
+      const platform = navigator.platform || "";
+      const isIPad =
+        /iPad/i.test(ua) ||
+        (platform === "MacIntel" && navigator.maxTouchPoints > 1);
+      const isAndroidTablet =
+        /Android/i.test(ua) && !/Mobile/i.test(ua);
+
+      if (isIPad || isAndroidTablet) {
+        document.documentElement.classList.add("tablet-device");
+      }
+    })();
+  </script>
+
   <link
     rel="stylesheet"
-    href="./style.css?v=39.0"
+    href="./style.css?v=40.0"
   >
 
 
@@ -2076,7 +2093,7 @@
 
   <!-- アプリ本体 -->
 
-  <script src="./app.js?v=37.0"></script>
+  <script src="./app.js?v=40.0"></script>
 
 
 </body>
