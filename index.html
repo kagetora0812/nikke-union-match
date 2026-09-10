@@ -38,7 +38,7 @@
 
   <link
     rel="stylesheet"
-    href="./style.css?v=40.0"
+    href="./style.css?v=41.0"
   >
 
 
@@ -753,35 +753,13 @@
                 id="registerBackBtn"
                 class="text-btn register-back-btn"
                 type="button"
+                aria-label="戻る"
+                title="戻る"
               >
-                ← 戻る
+                <span aria-hidden="true">↩</span>
               </button>
 
             </div>
-
-
-            <div class="easy-register-box">
-
-              <strong class="easy-register-title">
-                ✨ 登録はかんたん・約1分！
-              </strong>
-
-              <div class="easy-register-list">
-                <div>・指揮官名 / ユニオン名</div>
-                <div>・SLV / ユニオンランク</div>
-                <div>・募集記事URL</div>
-              </div>
-
-              <div class="easy-register-copy">
-                これだけで掲載できます！
-              </div>
-
-              <div class="easy-register-privacy">
-                🔒 メールアドレスなどの個人情報登録は一切不要！
-              </div>
-
-            </div>
-
 
 
             <div class="section-head">
@@ -815,7 +793,10 @@
 
               <label>
 
-                登録タイプ
+                <span class="form-label-line">
+                  <span>登録タイプ</span>
+                  <span class="form-label-help">指揮官 / ユニオン</span>
+                </span>
 
 
                 <select id="registrationType">
@@ -970,7 +951,10 @@
 
               <label>
 
-                募集記事URL
+                <span class="form-label-line">
+                  <span>募集記事URL</span>
+                  <span class="form-label-help">X・BlablaLink・Discordなど、募集記事のURLを貼ってください</span>
+                </span>
 
 
                 <input
@@ -984,17 +968,16 @@
                   placeholder="https://..."
                 >
 
-                <small>
-                  X・BlablaLink・Discordなど、募集記事のURLを貼ってください
-                </small>
-
 
               </label>
 
 
               <div id="previewImageField" class="preview-image-field">
                 <label>
-                  募集記事の画像 <span class="optional-label">任意</span>
+                  <span class="form-label-line">
+                    <span>募集記事の画像 <span class="optional-label">任意</span></span>
+                    <span class="form-label-help">画像を選択した場合は登録画像を最優先で表示します。20MBまで</span>
+                  </span>
 
                   <input
                     id="previewImage"
@@ -1002,9 +985,6 @@
                     accept="image/jpeg,image/png,image/webp"
                   >
 
-                  <small class="preview-file-help">
-                    画像を選択した場合は登録画像を最優先で表示します。BlablaLinkは画像未選択時のみ自動取得します。20MBまで。大きな画像は確認時に自動で最適化されます。
-                  </small>
                   <small id="previewImageStatus" class="preview-file-help"></small>
 
                   <button
@@ -1018,20 +998,9 @@
               </div>
 
 
-              <div class="notice">
-
-
-                <strong>
-                  掲載期間：14日間
-                </strong>
-
-
-                <span>
-                  登録から14日後に自動で掲載終了します。
-                  連絡方法は募集記事の案内に従ってください。
-                </span>
-
-
+              <div class="notice register-period-note">
+                <strong>掲載期間：14日間</strong>
+                <span>登録から14日後に自動で掲載終了します。</span>
               </div>
 
 
@@ -1075,8 +1044,10 @@
               id="manageBackBtn"
               class="text-btn manage-back-btn"
               type="button"
+              aria-label="戻る"
+              title="戻る"
             >
-              ← 戻る
+              <span aria-hidden="true">↩</span>
             </button>
 
           </div>
