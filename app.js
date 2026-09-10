@@ -2105,9 +2105,9 @@ async function getCurrentUnionCount() {
 
 
 // ========================================
-// TOP表示用：総登録ユニオン数
-// 読み取り専用。既存データの更新・削除は行わない。
-// 同じユニオン名の再登録は1ユニオンとして集計。
+// TOP表示用：現在利用中ユニオン数
+// TOTAL UNIONS = 現在の会員台帳だけを数える。
+// 過去の募集履歴・終了済み募集は集計しない。
 // ========================================
 
 async function loadTotalRegisteredUnionCount() {
@@ -2128,18 +2128,14 @@ async function loadTotalRegisteredUnionCount() {
     data,
     error
   } =
-    await sb
-      .from(
-        "union_recruitments"
-      )
-      .select(
-        "union_name"
-      );
+    await sb.rpc(
+      "get_active_union_member_count"
+    );
 
   if (error) {
 
     console.error(
-      "総登録ユニオン数取得エラー",
+      "現在利用中ユニオン数取得エラー",
       error
     );
 
@@ -2160,26 +2156,22 @@ async function loadTotalRegisteredUnionCount() {
     return fallback;
   }
 
-  const names =
-    new Set(
-      (data || [])
-        .map(item =>
-          String(
-            item?.union_name || ""
-          )
-            .trim()
-            .toLocaleLowerCase("ja-JP")
-        )
-        .filter(Boolean)
+  const total =
+    Number(
+      Array.isArray(data)
+        ? data[0]
+        : data
     );
 
-  const total =
-    names.size;
+  const safeTotal =
+    Number.isFinite(total)
+      ? total
+      : 0;
 
   counter.textContent =
-    String(total);
+    String(safeTotal);
 
-  return total;
+  return safeTotal;
 }
 
 
@@ -3149,8 +3141,8 @@ function setUnionRegistrationMode(mode) {
   if (unionUsageNote) {
     unionUsageNote.textContent =
       registerOnly
-        ? "TOTAL UNIONSにはカウントされます。募集一覧には表示されません。"
-        : "募集一覧に表示します。TOTAL UNIONSにもカウントされます。";
+        ? "登録のみ行い、求人広告は掲載しません。"
+        : "求人広告を掲載します。";
   }
 
   updateRegistrationFields();
@@ -3526,7 +3518,7 @@ async function showRegistrationPreview() {
 
         <div class="notice" style="margin-top:14px;">
           <strong>登録のみ</strong><br>
-          TOTAL UNIONSにはカウントされますが、募集一覧には表示されません。
+          求人広告は掲載されません。
         </div>
       </article>
     `;
@@ -3783,7 +3775,7 @@ function showRegistrationResult(
   if (resultModeNote) {
     resultModeNote.textContent =
       registerOnly
-        ? "登録のみで保存しました。TOTAL UNIONSにはカウントされますが、募集一覧には表示されません。"
+        ? "登録のみで保存しました。求人広告は掲載されません。"
         : "";
 
     resultModeNote.classList.toggle(
@@ -3864,7 +3856,7 @@ $("#registerForm")
       const xUrl =
 
         registerOnly
-          ? new URL("./", window.location.href).href
+          ? ""
           : $("#xUrl")
               ?.value
               .trim();
@@ -3959,31 +3951,45 @@ $("#registerForm")
             );
 
 
+          const unionRpcName =
+            registerOnly
+              ? "create_union_registration_only"
+              : "create_union_member_recruitment_url";
+
+          const unionRpcParams =
+            registerOnly
+              ? {
+                  p_union_name:
+                    unionName,
+
+                  p_union_rank:
+                    unionRank,
+
+                  p_pass_hash:
+                    passHash
+                }
+              : {
+                  p_union_name:
+                    unionName,
+
+                  p_union_rank:
+                    unionRank,
+
+                  p_x_url:
+                    xUrl,
+
+                  p_pass_hash:
+                    passHash
+                };
+
           const {
             data,
             error
           } =
 
             await sb.rpc(
-
-              "create_union_recruitment_url",
-
-              {
-
-                p_union_name:
-                  unionName,
-
-                p_union_rank:
-                  unionRank,
-
-                p_x_url:
-                  xUrl,
-
-                p_pass_hash:
-                  passHash
-
-              }
-
+              unionRpcName,
+              unionRpcParams
             );
 
 
@@ -3997,13 +4003,44 @@ $("#registerForm")
 
 
             if (
+              registerOnly
+              &&
+              (
+                errorText.includes(
+                  "create_union_registration_only"
+                )
+                ||
+                errorText.includes(
+                  "PGRST202"
+                )
+                ||
+                errorText.includes(
+                  "Could not find the function"
+                )
+              )
+            ) {
+
+              alert(
+                "「登録のみ」用のSupabase SQLがまだ反映されていません。\n付属の supabase_union_membership_v51.sql をSQL EditorでRunしてください。"
+              );
+
+              return;
+
+            }
+
+
+            if (
+              errorText.includes(
+                "UNION_ALREADY_REGISTERED"
+              )
+              ||
               errorText.includes(
                 "UNION_NAME_DUPLICATE"
               )
             ) {
 
               alert(
-                "同じユニオン名ですでに募集中です。"
+                "このユニオンは現在登録中です。\n既存のPASSから「利用確認・編集」で募集の開始／停止を切り替えてください。"
               );
 
               return;
@@ -4066,41 +4103,7 @@ $("#registerForm")
               : data;
 
 
-          if (registerOnly) {
-
-            const {
-              data: closeResult,
-              error: closeError
-            } =
-              await sb.rpc(
-                "close_recruitment_by_pass",
-                {
-                  p_pass_hash:
-                    passHash
-                }
-              );
-
-            if (
-              closeError
-              ||
-              closeResult !== "union"
-            ) {
-              console.error(
-                "登録のみ非表示処理エラー",
-                closeError || closeResult
-              );
-
-              alert(
-                "登録は作成されましたが、募集一覧から非表示にできませんでした。\nPASSを保存して、編集・締切から募集を締め切ってください。"
-              );
-
-              return;
-            }
-
-          }
-
-
-          if (previewFile && result?.id) {
+          if (!registerOnly && previewFile && result?.id) {
             try {
               await uploadRecruitmentPreviewImage(
                 "union",
@@ -4143,6 +4146,11 @@ $("#registerForm")
             result,
             registerOnly
           );
+
+          // 登録完了後は、PASSモーダルを表示したまま
+          // 背景をTOPページへ戻す。
+          await loadRecruitments();
+          returnToVideoTop();
 
 
           event.target.reset();
@@ -4377,6 +4385,11 @@ $("#registerForm")
           pass,
           result
         );
+
+        // 登録完了後は、PASSモーダルを表示したまま
+        // 背景をTOPページへ戻す。
+        await loadRecruitments();
+        returnToVideoTop();
 
 
         event.target.reset();
@@ -4776,6 +4789,26 @@ function getManagedRecruitmentStatus(item) {
     return "--";
   }
 
+  if (item.type === "union") {
+
+    const recruitmentExpiry =
+      new Date(item.expires_at).getTime();
+
+    if (
+      item.status === "open"
+      &&
+      item.recruitment_id
+      &&
+      Number.isFinite(recruitmentExpiry)
+      &&
+      recruitmentExpiry > Date.now()
+    ) {
+      return "募集中";
+    }
+
+    return "登録のみ";
+  }
+
   const expiresTime =
     new Date(item.expires_at).getTime();
 
@@ -4810,6 +4843,11 @@ function renderLoadedManageRecruitment() {
   const isUnion =
     item.type === "union";
 
+  const isUnionRecruiting =
+    isUnion
+    &&
+    getManagedRecruitmentStatus(item) === "募集中";
+
   const name =
     String(item.name || "");
 
@@ -4817,6 +4855,13 @@ function renderLoadedManageRecruitment() {
     isUnion
       ? String(item.union_rank || "")
       : `SLV ${Number(item.slv || 0)}`;
+
+  if ($("#manageLoadedEyebrow")) {
+    $("#manageLoadedEyebrow").textContent =
+      isUnion
+        ? "UNION MEMBERSHIP"
+        : "CURRENT RECRUITMENT";
+  }
 
   if ($("#manageCurrentName")) {
     $("#manageCurrentName").textContent =
@@ -4826,6 +4871,17 @@ function renderLoadedManageRecruitment() {
   if ($("#manageCurrentDetail")) {
     $("#manageCurrentDetail").textContent =
       detail;
+  }
+
+  if ($("#manageCurrentExpiryLabel")) {
+    $("#manageCurrentExpiryLabel").textContent =
+      isUnion
+        ? (
+            isUnionRecruiting
+              ? "募集掲載期限"
+              : "次回利用確認期限"
+          )
+        : "現在の期限";
   }
 
   if ($("#manageCurrentExpiry")) {
@@ -4840,8 +4896,54 @@ function renderLoadedManageRecruitment() {
       getManagedRecruitmentStatus(item);
   }
 
+  const membershipNotice =
+    $("#manageMembershipConfirmedNotice");
+
+  if (membershipNotice) {
+    if (isUnion) {
+      membershipNotice.textContent =
+        `✅ 利用確認が完了しました。次回確認期限：${
+          item.member_expires_at
+            ? formatDate(item.member_expires_at)
+            : "14日後"
+        }`;
+      membershipNotice.classList.remove("hidden");
+    } else {
+      membershipNotice.classList.add("hidden");
+      membershipNotice.textContent = "";
+    }
+  }
+
+  const memberExpiryBox =
+    $("#manageMembershipExpiryBox");
+
+  if (memberExpiryBox) {
+    memberExpiryBox.classList.toggle(
+      "hidden",
+      !isUnion || !isUnionRecruiting
+    );
+  }
+
+  if ($("#manageMembershipExpiry")) {
+    $("#manageMembershipExpiry").textContent =
+      item.member_expires_at
+        ? formatDate(item.member_expires_at)
+        : "--";
+  }
+
+  const urlWrap =
+    $("#manageCurrentUrl")
+      ?.closest(".manage-current-url");
+
   const urlLink =
     $("#manageCurrentUrl");
+
+  if (urlWrap) {
+    urlWrap.classList.toggle(
+      "hidden",
+      isUnion && !isUnionRecruiting
+    );
+  }
 
   if (urlLink) {
     urlLink.textContent =
@@ -4861,18 +4963,88 @@ function renderLoadedManageRecruitment() {
     $("#manageCurrentImage");
 
   if (
-    item.preview_image_url
-    &&
-    imageBox
-    &&
-    image
+    isUnionRecruiting
+    || !isUnion
   ) {
-    image.src =
-      item.preview_image_url;
-    imageBox.classList.remove("hidden");
+    if (
+      item.preview_image_url
+      &&
+      imageBox
+      &&
+      image
+    ) {
+      image.src =
+        item.preview_image_url;
+      imageBox.classList.remove("hidden");
+    } else {
+      imageBox?.classList.add("hidden");
+      image?.removeAttribute("src");
+    }
   } else {
     imageBox?.classList.add("hidden");
     image?.removeAttribute("src");
+  }
+
+  const editButton =
+    $("#openManageActionBtn");
+
+  if (editButton) {
+    editButton.textContent =
+      isUnion && !isUnionRecruiting
+        ? "📣 募集を開始"
+        : "✏️ 編集";
+  }
+
+  const closeButton =
+    $("#closeLoadedRecruitmentBtn");
+
+  if (closeButton) {
+    closeButton.classList.toggle(
+      "hidden",
+      isUnion && !isUnionRecruiting
+    );
+  }
+
+  const deleteMembershipButton =
+    $("#deleteUnionMembershipBtn");
+
+  if (deleteMembershipButton) {
+    deleteMembershipButton.classList.toggle(
+      "hidden",
+      !isUnion
+    );
+  }
+
+  const renewButton =
+    $("#renewUnchangedBtn");
+
+  if (renewButton) {
+    renewButton.classList.toggle(
+      "hidden",
+      isUnion && !isUnionRecruiting
+    );
+  }
+
+  const editDetailButton =
+    $("#openManageEditBtn");
+
+  if (editDetailButton) {
+    editDetailButton.textContent =
+      isUnion && !isUnionRecruiting
+        ? "📣 求人広告を掲載する"
+        : "✏️ 内容を編集して再登録";
+  }
+
+  const renewNote =
+    document.querySelector(
+      "#manageEditActionChoices .manage-renew-note"
+    );
+
+  if (renewNote) {
+    renewNote.innerHTML =
+      isUnion && !isUnionRecruiting
+        ? "募集記事URLと必要な内容を入力すると、<strong>登録のみ</strong> から <strong>募集中</strong> に切り替わります。会員登録は同じ1件のままです。"
+        : "再延長・再登録すると、掲載期限は本日から14日間に更新され、一覧の一番上へ移動して <strong>🔥 NEW</strong> 表示も復活します。";
   }
 
   $("#manageLoadedPanel")
@@ -4894,6 +5066,18 @@ function populateManageEditForm() {
 
   const isUnion =
     item.type === "union";
+
+  const isUnionRecruiting =
+    isUnion
+    &&
+    getManagedRecruitmentStatus(item) === "募集中";
+
+  if ($("#manageEditTitle")) {
+    $("#manageEditTitle").textContent =
+      isUnion && !isUnionRecruiting
+        ? "求人広告を掲載"
+        : "募集内容を編集";
+  }
 
   if ($("#manageEditNameLabel")) {
     $("#manageEditNameLabel").textContent =
@@ -4979,15 +5163,104 @@ async function loadRecruitmentForManage() {
     $("#loadManageRecruitmentBtn");
 
   const originalText =
-    button?.textContent || "🔑 募集内容を呼び出す";
+    button?.textContent || "🔑 登録内容を呼び出す";
 
   if (button) {
     button.disabled = true;
-    button.textContent = "募集内容を確認中...";
+    button.textContent = "登録内容を確認中...";
   }
 
   try {
 
+    // --------------------------------------
+    // まずユニオン会員PASSを確認。
+    // 正しいPASSなら、この呼び出し自体が14日利用確認になる。
+    // --------------------------------------
+    const membershipResult =
+      await sb.rpc(
+        "confirm_union_membership_by_pass",
+        {
+          p_pass_hash:
+            passHash
+        }
+      );
+
+    if (membershipResult.error) {
+
+      const membershipErrorText =
+        getErrorText(
+          membershipResult.error
+        );
+
+      if (
+        membershipErrorText.includes(
+          "confirm_union_membership_by_pass"
+        )
+        ||
+        membershipErrorText.includes(
+          "PGRST202"
+        )
+        ||
+        membershipErrorText.includes(
+          "Could not find the function"
+        )
+      ) {
+        alert(
+          "ユニオン会員管理SQLがまだ反映されていません。\n付属の supabase_union_membership_v51.sql を先にRunしてください。"
+        );
+        return;
+      }
+
+      console.error(
+        "ユニオン会員PASS確認エラー",
+        membershipResult.error
+      );
+    }
+
+    const membershipData =
+      Array.isArray(
+        membershipResult.data
+      )
+        ? membershipResult.data[0]
+        : membershipResult.data;
+
+    if (membershipData) {
+
+      loadedManagedRecruitment =
+        membershipData;
+
+      loadedManagePass =
+        pass;
+
+      loadedManagePassHash =
+        passHash;
+
+      $("#manageEditPanel")
+        ?.classList
+        .add("hidden");
+
+      resetManageImageState();
+      resetManageActionMenu();
+      renderLoadedManageRecruitment();
+
+      await loadTotalRegisteredUnionCount();
+
+      setTimeout(() => {
+        $("#manageLoadedPanel")
+          ?.scrollIntoView({
+            behavior: "smooth",
+            block: "start"
+          });
+      }, 50);
+
+      return;
+    }
+
+
+    // --------------------------------------
+    // ユニオン会員でなければ、従来の指揮官募集PASSを確認。
+    // 指揮官側の既存仕様は変更しない。
+    // --------------------------------------
     const {
       data,
       error
@@ -4995,40 +5268,76 @@ async function loadRecruitmentForManage() {
       await sb.rpc(
         "get_recruitment_by_pass_for_reregister",
         {
-          p_pass_hash: passHash
+          p_pass_hash:
+            passHash
         }
       );
 
     if (error) {
-      console.error("PASS募集取得エラー", error);
+      console.error(
+        "PASS募集取得エラー",
+        error
+      );
 
       const errorText =
         getErrorText(error);
 
       if (
-        errorText.includes("Could not find the function")
+        errorText.includes(
+          "Could not find the function"
+        )
         ||
-        errorText.includes("PGRST202")
+        errorText.includes(
+          "PGRST202"
+        )
       ) {
         alert(
-          "PASS再編集機能のSQLがまだ反映されていません。\nsupabase_pass_reregister.sql を先に実行してください。"
+          "PASS再編集機能のSQLがまだ反映されていません。"
         );
         return;
       }
 
-      alert("募集内容を読み込めませんでした。");
+      alert(
+        "登録内容を読み込めませんでした。"
+      );
       return;
     }
 
-    if (!data) {
+    const fallbackData =
+      Array.isArray(data)
+        ? data[0]
+        : data;
+
+    if (!fallbackData) {
       clearLoadedManageRecruitment();
-      alert("PASSが正しくありません。もう一度確認してください。");
+      alert(
+        "PASSが正しくないか、ユニオン会員の利用確認期限が切れています。\n期限切れのユニオンは会員解除済みのため、再利用する場合は新規登録してください。"
+      );
       return;
     }
 
-    loadedManagedRecruitment = data;
-    loadedManagePass = pass;
-    loadedManagePassHash = passHash;
+    // 新ルールではユニオンは必ず会員台帳経由。
+    // 旧募集PASSだけが残っているユニオンを復活させない。
+    if (
+      String(
+        fallbackData.type || ""
+      ) === "union"
+    ) {
+      clearLoadedManageRecruitment();
+      alert(
+        "このユニオンは現在の会員台帳にありません。\n再利用する場合はユニオンを新規登録してください。"
+      );
+      return;
+    }
+
+    loadedManagedRecruitment =
+      fallbackData;
+
+    loadedManagePass =
+      pass;
+
+    loadedManagePassHash =
+      passHash;
 
     $("#manageEditPanel")
       ?.classList
@@ -5566,18 +5875,25 @@ function showManageResult(mode, result) {
   const isRenew =
     mode === "renew";
 
+  const isStart =
+    mode === "start";
+
   if ($("#manageResultTitle")) {
     $("#manageResultTitle").textContent =
       isRenew
         ? "再延長が完了しました！"
-        : "再登録が完了しました！";
+        : isStart
+          ? "募集を開始しました！"
+          : "再登録が完了しました！";
   }
 
   if ($("#manageResultSummary")) {
     $("#manageResultSummary").textContent =
       isRenew
         ? "募集内容は変更せず、掲載期限を本日から14日間に更新しました。"
-        : "編集内容を反映し、掲載期限を本日から14日間に更新しました。";
+        : isStart
+          ? "会員登録はそのまま、求人広告を14日間の募集中へ切り替えました。"
+          : "編集内容を反映し、掲載期限を本日から14日間に更新しました。";
   }
 
   if ($("#manageResultPass")) {
@@ -5691,12 +6007,17 @@ $("#renewUnchangedBtn")
 
       try {
 
+        const isUnion =
+          loadedManagedRecruitment.type === "union";
+
         const {
           data,
           error
         } =
           await sb.rpc(
-            "renew_recruitment_by_pass",
+            isUnion
+              ? "renew_union_recruitment_by_membership_pass"
+              : "renew_recruitment_by_pass",
             {
               p_pass_hash:
                 loadedManagePassHash
@@ -5709,14 +6030,23 @@ $("#renewUnchangedBtn")
           return;
         }
 
+        const renewData =
+          Array.isArray(data)
+            ? data[0]
+            : data;
+
         loadedManagedRecruitment = {
           ...loadedManagedRecruitment,
-          ...data,
-          status: "open"
+          ...renewData,
+          status: "open",
+          member_expires_at:
+            renewData?.member_expires_at
+            ||
+            loadedManagedRecruitment.member_expires_at
         };
 
         renderLoadedManageRecruitment();
-        showManageResult("renew", data);
+        showManageResult("renew", renewData);
 
       } finally {
 
@@ -5789,24 +6119,53 @@ $("#managePreviewConfirm")
 
       try {
 
+        const isUnion =
+          loadedManagedRecruitment.type === "union";
+
+        const wasUnionRegisterOnly =
+          isUnion
+          &&
+          getManagedRecruitmentStatus(
+            loadedManagedRecruitment
+          ) === "登録のみ";
+
+        const rpcName =
+          isUnion
+            ? "set_union_membership_recruiting_by_pass"
+            : "reregister_recruitment_by_pass";
+
+        const rpcParams =
+          isUnion
+            ? {
+                p_pass_hash:
+                  loadedManagePassHash,
+                p_union_rank:
+                  values.unionRank,
+                p_x_url:
+                  values.url,
+                p_remove_preview_image:
+                  removeImage
+              }
+            : {
+                p_pass_hash:
+                  loadedManagePassHash,
+                p_slv:
+                  values.slv,
+                p_union_rank:
+                  values.unionRank,
+                p_x_url:
+                  values.url,
+                p_remove_preview_image:
+                  removeImage
+              };
+
         const {
           data,
           error
         } =
           await sb.rpc(
-            "reregister_recruitment_by_pass",
-            {
-              p_pass_hash:
-                loadedManagePassHash,
-              p_slv:
-                values.slv,
-              p_union_rank:
-                values.unionRank,
-              p_x_url:
-                values.url,
-              p_remove_preview_image:
-                removeImage
-            }
+            rpcName,
+            rpcParams
           );
 
         if (error) {
@@ -5831,19 +6190,28 @@ $("#managePreviewConfirm")
           return;
         }
 
+        const resultData =
+          Array.isArray(data)
+            ? data[0]
+            : data;
+
         let uploadedImageUrl =
-          data?.preview_image_url || "";
+          resultData?.preview_image_url
+          ||
+          loadedManagedRecruitment.preview_image_url
+          ||
+          "";
 
         if (
           manageEditPreparedFile
           &&
-          data?.id
+          resultData?.id
         ) {
           try {
             uploadedImageUrl =
               await uploadRecruitmentPreviewImage(
                 loadedManagedRecruitment.type,
-                data.id,
+                resultData.id,
                 loadedManagePassHash,
                 manageEditPreparedFile
               );
@@ -5857,17 +6225,35 @@ $("#managePreviewConfirm")
 
         loadedManagedRecruitment = {
           ...loadedManagedRecruitment,
-          ...data,
+          ...resultData,
           type: loadedManagedRecruitment.type,
           name: loadedManagedRecruitment.name,
           x_url: values.url,
-          slv: values.type === "commander" ? values.slv : loadedManagedRecruitment.slv,
-          union_rank: values.type === "union" ? values.unionRank : loadedManagedRecruitment.union_rank,
-          preview_image_url: uploadedImageUrl,
+          slv:
+            values.type === "commander"
+              ? values.slv
+              : loadedManagedRecruitment.slv,
+          union_rank:
+            values.type === "union"
+              ? values.unionRank
+              : loadedManagedRecruitment.union_rank,
+          preview_image_url:
+            removeImage
+              ? (manageEditPreparedFile ? uploadedImageUrl : "")
+              : uploadedImageUrl,
           force_preview_image:
             removeImage
               ? false
               : loadedManagedRecruitment.force_preview_image,
+          recruitment_id:
+            isUnion
+              ? resultData?.id
+                || loadedManagedRecruitment.recruitment_id
+              : loadedManagedRecruitment.recruitment_id,
+          member_expires_at:
+            resultData?.member_expires_at
+            ||
+            loadedManagedRecruitment.member_expires_at,
           status: "open"
         };
 
@@ -5877,7 +6263,12 @@ $("#managePreviewConfirm")
           .add("hidden");
 
         renderLoadedManageRecruitment();
-        showManageResult("edit", data);
+        showManageResult(
+          wasUnionRegisterOnly
+            ? "start"
+            : "edit",
+          resultData
+        );
 
         resetManageImageState();
 
@@ -5908,10 +6299,74 @@ async function closeLoadedRecruitment() {
     ||
     !loadedManagePassHash
   ) {
-    alert("先にPASSから募集内容を呼び出してください。");
+    alert("先にPASSから登録内容を呼び出してください。");
     return;
   }
 
+  // --------------------------------------
+  // ユニオン
+  // 募集終了 = 会員解除ではない。
+  // 求人広告だけ閉じて「登録のみ」に戻す。
+  // --------------------------------------
+  if (
+    loadedManagedRecruitment.type === "union"
+  ) {
+
+    const ok =
+      window.confirm(
+        "求人広告を締め切って「登録のみ」に戻しますか？\n\n会員登録は残るため、TOTAL UNIONSからは外れません。"
+      );
+
+    if (!ok) {
+      return;
+    }
+
+    const {
+      data,
+      error
+    } =
+      await sb.rpc(
+        "stop_union_recruiting_by_membership_pass",
+        {
+          p_pass_hash:
+            loadedManagePassHash
+        }
+      );
+
+    if (
+      error
+      ||
+      data !== true
+    ) {
+      console.error(
+        "ユニオン募集停止エラー",
+        error || data
+      );
+      alert(
+        "募集を締め切れませんでした。PASSを確認してもう一度お試しください。"
+      );
+      return;
+    }
+
+    alert(
+      "求人広告を締め切りました。\nユニオン会員登録は「登録のみ」として継続します。"
+    );
+
+    clearLoadedManageRecruitment();
+    $("#closeForm")?.reset();
+
+    await loadRecruitments();
+    await loadTotalRegisteredUnionCount();
+
+    showPage("list");
+    return;
+  }
+
+
+  // --------------------------------------
+  // 指揮官
+  // 従来の締切処理を維持
+  // --------------------------------------
   const ok =
     window.confirm(
       "この募集を締め切りますか？\n\n※ 再延長・再登録ではありません。募集一覧から非表示になります。"
@@ -5956,26 +6411,34 @@ async function closeLoadedRecruitment() {
       );
 
     if (commanderError) {
-      console.error("指揮官募集締切エラー", commanderError);
-      alert("指揮官募集の締切処理に失敗しました。");
+      console.error(
+        "指揮官募集締切エラー",
+        commanderError
+      );
+      alert(
+        "指揮官募集の締切処理に失敗しました。"
+      );
       return;
     }
 
     if (commanderClosed !== true) {
-      alert("PASSが正しくないか、すでに募集終了しています。");
+      alert(
+        "PASSが正しくないか、すでに募集終了しています。"
+      );
       return;
     }
 
-    alert("🎓 ユニオン決定として募集を締め切りました。");
+    alert(
+      "🎓 ユニオン決定として募集を締め切りました。"
+    );
+
     await loadGraduatedCommanderCount();
-
-  } else if (data === "union") {
-
-    alert("ユニオン募集を締め切りました。");
 
   } else {
 
-    alert("PASSが正しくないか、すでに募集終了しています。");
+    alert(
+      "PASSが正しくないか、すでに募集終了しています。"
+    );
     return;
   }
 
@@ -5991,6 +6454,76 @@ $("#closeLoadedRecruitmentBtn")
     closeLoadedRecruitment
   );
 
+
+// ========================================
+// ユニオン会員解除
+// 会員台帳から抹消し、再利用時は新規登録。
+// ========================================
+
+$("#deleteUnionMembershipBtn")
+  ?.addEventListener(
+    "click",
+    async () => {
+
+      if (
+        !loadedManagedRecruitment
+        ||
+        loadedManagedRecruitment.type !== "union"
+        ||
+        !loadedManagePassHash
+      ) {
+        return;
+      }
+
+      const ok =
+        window.confirm(
+          "ユニオン会員登録を解除しますか？\n\n・TOTAL UNIONSから外れます\n・募集中なら求人広告も終了します\n・BOTとのユニオン連携も解除されます\n・再利用する場合は新規登録が必要です"
+        );
+
+      if (!ok) {
+        return;
+      }
+
+      const {
+        data,
+        error
+      } =
+        await sb.rpc(
+          "delete_union_membership_by_pass",
+          {
+            p_pass_hash:
+              loadedManagePassHash
+          }
+        );
+
+      if (
+        error
+        ||
+        data !== true
+      ) {
+        console.error(
+          "ユニオン会員解除エラー",
+          error || data
+        );
+        alert(
+          "会員登録を解除できませんでした。"
+        );
+        return;
+      }
+
+      alert(
+        "ユニオン会員登録を解除しました。\n再び利用する場合は新規登録してください。"
+      );
+
+      clearLoadedManageRecruitment();
+      $("#closeForm")?.reset();
+
+      await loadRecruitments();
+      await loadTotalRegisteredUnionCount();
+
+      showPage("list");
+    }
+  );
 
 
 // ========================================
