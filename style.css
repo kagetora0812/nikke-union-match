@@ -5041,3 +5041,87 @@ body .video-topbar {
     opacity: 1 !important;
   }
 }
+
+
+/* =========================================================
+   v39 PC HEADER + VIDEO HARD LOCK
+   2026-09-10
+   - PC INDEX only
+   - header is fixed and fully opaque
+   - video is fixed directly below the 66px header
+   - only the white recruitment content scrolls over the video
+   - smartphone / tablet / register / manage untouched
+   ========================================================= */
+
+@media screen and (min-width: 1025px) {
+
+  html body:not(.register-mode):not(.manage-mode) {
+    --pc-video-height:
+      clamp(
+        560px,
+        56.25vw,
+        calc(100svh - 66px)
+      );
+  }
+
+  /* Header: no sticky repaint / no card shadow showing through. */
+  html body:not(.register-mode):not(.manage-mode) .video-topbar {
+    position: fixed !important;
+    top: 0 !important;
+    left: 0 !important;
+    right: 0 !important;
+
+    width: 100% !important;
+    height: 66px !important;
+
+    z-index: 120 !important;
+
+    background: #090a0d !important;
+    backdrop-filter: none !important;
+    -webkit-backdrop-filter: none !important;
+    box-shadow: none !important;
+  }
+
+  /* Video: hard lock below the header. */
+  html body:not(.register-mode):not(.manage-mode) .video-hero {
+    position: fixed !important;
+    top: 66px !important;
+    left: 0 !important;
+    right: 0 !important;
+    bottom: auto !important;
+
+    width: 100% !important;
+    height: var(--pc-video-height) !important;
+    min-height: 0 !important;
+    max-height: none !important;
+    aspect-ratio: auto !important;
+
+    margin: 0 !important;
+
+    z-index: 1 !important;
+
+    -webkit-backface-visibility: hidden;
+    backface-visibility: hidden;
+    transform: translate3d(0, 0, 0) !important;
+    will-change: transform;
+  }
+
+  /* Reserve exactly the space removed by the fixed header + video. */
+  html body:not(.register-mode):not(.manage-mode) main.container {
+    position: relative !important;
+    z-index: 8 !important;
+
+    margin-top:
+      calc(
+        66px
+        + var(--pc-video-height)
+      ) !important;
+  }
+
+  /* White recruitment sheet stays in normal flow and is the moving layer. */
+  html body:not(.register-mode):not(.manage-mode) #listPage {
+    position: relative !important;
+    z-index: 10 !important;
+    margin-top: 0 !important;
+  }
+}
