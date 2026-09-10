@@ -7,6 +7,23 @@
   <title>NIKKE UNION MATCH - Discord BOT</title>
   <meta name="description" content="NIKKE UNION MATCH Discord BOTの導入方法・コマンド・キャラクター設定・通知機能の案内ページです。">
 
+  <script>
+    /* Tablet detection: keep iPad / Android tablet classification across orientation. */
+    (() => {
+      const ua = navigator.userAgent || "";
+      const platform = navigator.platform || "";
+      const isIPad =
+        /iPad/i.test(ua) ||
+        (platform === "MacIntel" && navigator.maxTouchPoints > 1);
+      const isAndroidTablet =
+        /Android/i.test(ua) && !/Mobile/i.test(ua);
+
+      if (isIPad || isAndroidTablet) {
+        document.documentElement.classList.add("tablet-device");
+      }
+    })();
+  </script>
+
   <style>
     @import url("https://fonts.googleapis.com/css2?family=Teko:wght@500;600;700&family=Zen+Kaku+Gothic+New:wght@500;700;900&display=swap");
 
@@ -280,7 +297,7 @@
       .bottom-area { flex-direction:column; align-items:stretch; text-align:center; }
     }
   </style>
-  <link rel="stylesheet" href="./subpage-nav.css?v=15.0">
+  <link rel="stylesheet" href="./subpage-nav.css?v=19.0">
 
   <style id="bot-menu-creator-rule-v16">
     .bot-topbar { z-index: 120; }
