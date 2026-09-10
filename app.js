@@ -1254,6 +1254,19 @@ function showPage(name) {
         return;
       }
 
+      const mobileShell =
+        getMobileScrollShell();
+
+      if (mobileShell) {
+
+        scrollAppElementToTop(
+          listPage,
+          "smooth"
+        );
+
+        return;
+      }
+
       const headerOffset = 76;
 
       const targetTop =
@@ -1270,10 +1283,9 @@ function showPage(name) {
 
   } else {
 
-    window.scrollTo({
-      top: 0,
-      behavior: "smooth"
-    });
+    scrollAppToTop(
+      "smooth"
+    );
 
   }
 }
@@ -5633,18 +5645,117 @@ $("#closeLoadedRecruitmentBtn")
 // v15 VIDEO TOP UI
 // ========================================
 
+function getMobileScrollShell() {
+
+  if (
+    !window.matchMedia(
+      "(max-width: 600px)"
+    ).matches
+  ) {
+    return null;
+  }
+
+  return document.getElementById(
+    "mobileScrollShell"
+  );
+
+}
+
+
+function getElementTopInsideMobileShell(
+  element,
+  shell
+) {
+
+  if (
+    !element
+    ||
+    !shell
+  ) {
+    return 0;
+  }
+
+  return (
+    shell.scrollTop
+    +
+    element.getBoundingClientRect().top
+    -
+    shell.getBoundingClientRect().top
+  );
+
+}
+
+
+function scrollAppToTop(
+  behavior = "smooth"
+) {
+
+  const shell =
+    getMobileScrollShell();
+
+  if (shell) {
+
+    shell.scrollTo({
+      top: 0,
+      left: 0,
+      behavior
+    });
+
+    return;
+  }
+
+  window.scrollTo({
+    top: 0,
+    left: 0,
+    behavior
+  });
+
+}
+
+
+function scrollAppElementToTop(
+  element,
+  behavior = "smooth"
+) {
+
+  if (!element) {
+    return;
+  }
+
+  const shell =
+    getMobileScrollShell();
+
+  if (shell) {
+
+    shell.scrollTo({
+      top:
+        Math.max(
+          0,
+          getElementTopInsideMobileShell(
+            element,
+            shell
+          )
+        ),
+      left: 0,
+      behavior
+    });
+
+    return;
+  }
+
+  element.scrollIntoView({
+    behavior,
+    block: "start"
+  });
+
+}
+
+
 function scrollToVideoTop() {
 
-  document
-    .getElementById(
-      "videoHero"
-    )
-    ?.scrollIntoView({
-      behavior:
-        "smooth",
-      block:
-        "start"
-    });
+  scrollAppToTop(
+    "smooth"
+  );
 
 }
 
@@ -5677,10 +5788,21 @@ function returnToVideoTop() {
       );
     });
 
-  window.scrollTo({
-    top: 0,
-    behavior: "smooth"
-  });
+  mobileFooterHideUntilTop =
+    true;
+
+  document
+    .getElementById(
+      "bottomNav"
+    )
+    ?.classList
+    .remove(
+      "is-visible"
+    );
+
+  scrollAppToTop(
+    "smooth"
+  );
 
 }
 
@@ -5792,16 +5914,12 @@ document
     "click",
     () => {
 
-      document
-        .getElementById(
+      scrollAppElementToTop(
+        document.getElementById(
           "listPage"
-        )
-        ?.scrollIntoView({
-          behavior:
-            "smooth",
-          block:
-            "start"
-        });
+        ),
+        "smooth"
+      );
 
     }
   );
@@ -5959,11 +6077,6 @@ document
 
 // 白い募集エリアまで来た時だけ
 // スマホ / タブレット下部メニューを表示
-//
-// v21:
-// IntersectionObserverによる境界付近の表示/非表示ループを廃止。
-// 動画の下端を基準にした固定スクロール位置で判定し、
-// 少しヒステリシスを持たせてブラウザUIの伸縮でも暴れないようにする。
 const bottomNavigation =
   document.getElementById(
     "bottomNav"
@@ -5974,27 +6087,25 @@ const listPageForNav =
     "listPage"
   );
 
-const videoHeroForNav =
-  document.getElementById(
-    "videoHero"
-  );
+const mobileScrollShell =
+  getMobileScrollShell();
 
-let bottomNavVisible =
-  Boolean(
-    bottomNavigation
-      ?.classList
-      .contains(
-        "is-visible"
-      )
-  );
+let mobileFooterFramePending =
+  false;
 
-let bottomNavFramePending =
+let mobileFooterHideUntilTop =
   false;
 
 
-function updateBottomNavigationVisibility() {
+function updateMobileFooterVisibility() {
 
-  if (!bottomNavigation) {
+  if (
+    !bottomNavigation
+    ||
+    !mobileScrollShell
+    ||
+    !listPageForNav
+  ) {
     return;
   }
 
@@ -6013,9 +6124,6 @@ function updateBottomNavigationVisibility() {
 
   if (forceVisible) {
 
-    bottomNavVisible =
-      true;
-
     bottomNavigation
       .classList
       .add(
@@ -6025,11 +6133,11 @@ function updateBottomNavigationVisibility() {
     return;
   }
 
-
-  if (!listPageForNav) {
-
-    bottomNavVisible =
-      false;
+  /*
+    TOPへ戻る操作中は、途中のスクロール位置で
+    フッターが再表示されないように固定で隠す。
+  */
+  if (mobileFooterHideUntilTop) {
 
     bottomNavigation
       .classList
@@ -6037,45 +6145,45 @@ function updateBottomNavigationVisibility() {
         "is-visible"
       );
 
+    if (
+      mobileScrollShell.scrollTop
+        <= 8
+    ) {
+      mobileFooterHideUntilTop =
+        false;
+    }
+
     return;
   }
 
+  /*
+    スクロールを始めた直後にフッターを先にフェード表示。
+    白いカードが上がって来るより先に出るので、
+    レイヤーの切替感を目立たせない。
+  */
+  const revealAt =
+    12;
+
+  const hideAt =
+    2;
+
+  const footerIsVisible =
+    bottomNavigation
+      .classList
+      .contains(
+        "is-visible"
+      );
 
   /*
-    v23
-    動画のスクロール量ではなく、
-    「白い募集カードエリアの先頭位置」を基準に判定する。
-
-    カードが画面へ入ったら固定フッターを表示。
-    カードから動画側へ戻った時だけ非表示。
-    96pxのヒステリシスで境界付近の点滅・往復を防止。
+    v37 smartphone footer hysteresis:
+    hidden -> show at 12px
+    visible -> hide only when nearly back at TOP (2px)
+    No timer is used.
   */
-  const listTop =
-    listPageForNav
-      .getBoundingClientRect()
-      .top;
-
-  const viewportHeight =
-    window.innerHeight
-    ||
-    document.documentElement.clientHeight
-    ||
-    0;
-
-  const showLine =
-    viewportHeight - 24;
-
-  const hideLine =
-    viewportHeight + 96;
-
   const shouldShow =
-    bottomNavVisible
-      ? listTop <= hideLine
-      : listTop <= showLine;
-
-
-  bottomNavVisible =
-    shouldShow;
+    footerIsVisible
+      ? mobileScrollShell.scrollTop > hideAt
+      : mobileScrollShell.scrollTop >= revealAt;
 
   bottomNavigation
     .classList
@@ -6087,25 +6195,23 @@ function updateBottomNavigationVisibility() {
 }
 
 
-function scheduleBottomNavigationUpdate() {
+function scheduleMobileFooterUpdate() {
 
-  if (
-    bottomNavFramePending
-  ) {
+  if (mobileFooterFramePending) {
     return;
   }
 
-  bottomNavFramePending =
+  mobileFooterFramePending =
     true;
 
   window
     .requestAnimationFrame(
       () => {
 
-        bottomNavFramePending =
+        mobileFooterFramePending =
           false;
 
-        updateBottomNavigationVisibility();
+        updateMobileFooterVisibility();
 
       }
     );
@@ -6113,28 +6219,117 @@ function scheduleBottomNavigationUpdate() {
 }
 
 
-window
-  .addEventListener(
-    "scroll",
-    scheduleBottomNavigationUpdate,
-    {
-      passive:
-        true
-    }
-  );
+if (
+  bottomNavigation
+  &&
+  listPageForNav
+) {
 
+  if (mobileScrollShell) {
 
-window
-  .addEventListener(
-    "resize",
-    scheduleBottomNavigationUpdate
-  );
+    mobileScrollShell
+      .addEventListener(
+        "scroll",
+        scheduleMobileFooterUpdate,
+        {
+          passive:
+            true
+        }
+      );
+
+    window
+      .addEventListener(
+        "resize",
+        scheduleMobileFooterUpdate
+      );
+
+    window
+      .requestAnimationFrame(
+        updateMobileFooterVisibility
+      );
+
+  } else {
+
+    /* Tablet keeps the existing behavior. */
+    const bottomNavObserver =
+      new IntersectionObserver(
+        entries => {
+
+          const visible =
+            entries.some(
+              entry =>
+                entry.isIntersecting
+                &&
+                entry.boundingClientRect.top <=
+                  window.innerHeight * 0.90
+            );
+
+          bottomNavigation
+            .classList
+            .toggle(
+              "is-visible",
+              visible
+            );
+
+        },
+        {
+          root:
+            null,
+          threshold:
+            0,
+          rootMargin:
+            "0px 0px -10% 0px"
+        }
+      );
+
+    bottomNavObserver
+      .observe(
+        listPageForNav
+      );
+
+  }
+
+}
 
 
 // register/manage時は常用ナビとして表示
 const bodyModeObserver =
   new MutationObserver(
-    scheduleBottomNavigationUpdate
+    () => {
+
+      if (!bottomNavigation) {
+        return;
+      }
+
+      const forceVisible =
+        document.body
+          .classList
+          .contains(
+            "register-mode"
+          )
+        ||
+        document.body
+          .classList
+          .contains(
+            "manage-mode"
+          );
+
+      if (forceVisible) {
+
+        bottomNavigation
+          .classList
+          .add(
+            "is-visible"
+          );
+
+        return;
+      }
+
+      if (mobileScrollShell) {
+        scheduleMobileFooterUpdate();
+      }
+
+    }
   );
 
 bodyModeObserver
@@ -6148,12 +6343,6 @@ bodyModeObserver
           "class"
         ]
     }
-  );
-
-
-window
-  .requestAnimationFrame(
-    updateBottomNavigationVisibility
   );
 
 
@@ -6228,161 +6417,3 @@ setSearchType(
 
 loadTotalRegisteredUnionCount();
 applyInitialRecruitmentView();
-
-// =========================================================
-// v36 SMARTPHONE FOOTER BACKPLATE
-// 2026-09-10
-// - Keep the stable footer visibility logic unchanged.
-// - Do NOT change #bottomNav opacity/background/transform.
-// - Add an independent opaque backplate behind the footer.
-// - Masks X in-app browser bottom-edge gaps and rapid-scroll white flashes.
-// - Smartphone only (<= 600px). Tablet / PC untouched.
-// =========================================================
-(function installSmartphoneFooterBackplate() {
-  const MASK_ID = "bottom-nav-stable-backplate-v36";
-  const STYLE_ID = "bottom-nav-stable-backplate-style-v36";
-  const HIDE_DELAY_MS = 140;
-
-  const nav = document.getElementById("bottomNav");
-  if (!nav || document.getElementById(MASK_ID)) {
-    return;
-  }
-
-  const style = document.createElement("style");
-  style.id = STYLE_ID;
-  style.textContent = `
-    #${MASK_ID} {
-      display: none;
-    }
-
-    @media screen and (max-width: 600px) {
-      #${MASK_ID} {
-        position: fixed;
-        left: 0;
-        right: 0;
-
-        /* Extend below the visual viewport and overlap the footer by 2px. */
-        bottom: -18px;
-        height: calc(70px + env(safe-area-inset-bottom) + 18px);
-
-        z-index: 219;
-        pointer-events: none;
-
-        border-top: 2px solid var(--cyan);
-        background: linear-gradient(180deg, #2d2e31, #1d1e21);
-        box-shadow: 0 -4px 14px rgba(0, 0, 0, .16);
-
-        opacity: 0;
-        visibility: hidden;
-
-        -webkit-backface-visibility: hidden;
-        backface-visibility: hidden;
-        -webkit-transform: translateZ(0);
-        transform: translateZ(0);
-        will-change: opacity, transform;
-      }
-
-      #${MASK_ID}.is-on {
-        opacity: 1;
-        visibility: visible;
-      }
-    }
-  `;
-  document.head.appendChild(style);
-
-  const mask = document.createElement("div");
-  mask.id = MASK_ID;
-  mask.setAttribute("aria-hidden", "true");
-  document.body.appendChild(mask);
-
-  let hideTimer = null;
-  const phoneQuery = window.matchMedia("(max-width: 600px)");
-
-  function cancelHide() {
-    if (hideTimer !== null) {
-      clearTimeout(hideTimer);
-      hideTimer = null;
-    }
-  }
-
-  function forceVisibleByPageMode() {
-    return (
-      document.body.classList.contains("register-mode") ||
-      document.body.classList.contains("manage-mode")
-    );
-  }
-
-  function footerShouldHaveBackplate() {
-    return (
-      phoneQuery.matches &&
-      (
-        nav.classList.contains("is-visible") ||
-        forceVisibleByPageMode()
-      )
-    );
-  }
-
-  function showMask() {
-    cancelHide();
-    mask.classList.add("is-on");
-  }
-
-  function hideMaskNow() {
-    cancelHide();
-    mask.classList.remove("is-on");
-  }
-
-  function syncMask() {
-    if (!phoneQuery.matches) {
-      hideMaskNow();
-      return;
-    }
-
-    if (footerShouldHaveBackplate()) {
-      showMask();
-      return;
-    }
-
-    /*
-      Only the backplate lingers briefly.
-      The real footer/menu logic is never delayed or modified.
-      This bridges a one-frame class flip without making navigation unstable.
-    */
-    if (hideTimer === null && mask.classList.contains("is-on")) {
-      hideTimer = window.setTimeout(() => {
-        hideTimer = null;
-
-        if (footerShouldHaveBackplate()) {
-          mask.classList.add("is-on");
-          return;
-        }
-
-        mask.classList.remove("is-on");
-      }, HIDE_DELAY_MS);
-    }
-  }
-
-  const navObserver = new MutationObserver(syncMask);
-  navObserver.observe(nav, {
-    attributes: true,
-    attributeFilter: ["class"]
-  });
-
-  const bodyObserver = new MutationObserver(syncMask);
-  bodyObserver.observe(document.body, {
-    attributes: true,
-    attributeFilter: ["class"]
-  });
-
-  if (typeof phoneQuery.addEventListener === "function") {
-    phoneQuery.addEventListener("change", syncMask);
-  } else if (typeof phoneQuery.addListener === "function") {
-    phoneQuery.addListener(syncMask);
-  }
-
-  window.addEventListener("pageshow", syncMask, { passive: true });
-  window.addEventListener("resize", syncMask, { passive: true });
-  window.addEventListener("orientationchange", syncMask, { passive: true });
-
-  syncMask();
-})();
