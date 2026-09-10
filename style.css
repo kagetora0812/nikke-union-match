@@ -1617,7 +1617,7 @@ body.manage-mode .hero {
   grid-template-columns:
     minmax(0, 760px) !important;
 
-  justify-content: start !important;
+  justify-content: center !important;
 }
 
 body.register-mode .hero-left,
@@ -1647,14 +1647,16 @@ body.manage-mode #managePage {
 
 .register-back-btn,
 .manage-back-btn {
-  width: 100% !important;
+  width: 48px !important;
+  min-width: 48px !important;
+  height: 48px !important;
   min-height: 48px !important;
 
   display: flex !important;
   align-items: center;
   justify-content: center;
 
-  padding: 0 14px !important;
+  padding: 0 !important;
 
   border: 1px solid #56585c !important;
 
@@ -1667,8 +1669,9 @@ body.manage-mode #managePage {
       #35363a
     ) !important;
 
-  font-size: 14px !important;
+  font-size: 22px !important;
   font-weight: 900 !important;
+  line-height: 1 !important;
 
   cursor: pointer;
 }
@@ -1680,6 +1683,49 @@ body.manage-mode #managePage {
   border-color: var(--cyan) !important;
 
   background: var(--cyan) !important;
+}
+
+
+/* =========================================================
+   v41 REGISTER / MANAGE CLEANUP
+   2026-09-10
+   - register/manage centered
+   - compact square back buttons
+   - registration help moved beside labels
+   - no logic/data changes
+   ========================================================= */
+
+#registerPage .form-label-line {
+  display: flex;
+  align-items: baseline;
+  flex-wrap: wrap;
+  gap: 4px 10px;
+}
+
+#registerPage .form-label-help {
+  color: var(--cyan-dark);
+  font-size: 11px;
+  font-weight: 900;
+  line-height: 1.45;
+}
+
+#registerPage .register-period-note {
+  display: flex;
+  align-items: baseline;
+  flex-wrap: wrap;
+  gap: 3px 10px;
+}
+
+#registerPage .register-period-note > span {
+  color: var(--cyan-dark);
+  font-weight: 900;
+}
+
+@media screen and (max-width: 600px) {
+  #registerPage .form-label-line,
+  #registerPage .register-period-note {
+    align-items: flex-start;
+  }
 }
 
 
