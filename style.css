@@ -4990,88 +4990,54 @@ body .video-topbar {
   }
 }
 
+
 /* =========================================================
-   v33 SMARTPHONE BOTTOM WHITE-FLASH MASK
+   v37 SMARTPHONE FOOTER STABLE OPAQUE + X BROWSER BOTTOM MASK
    2026-09-10
-   - smartphone INDEX only
-   - hide momentary bottom-edge gap on Chrome
-   - footer position / fade timing unchanged
-   - tablet / PC untouched
+   - exact v32 layout/scroll shell retained
+   - footer background never opacity-fades
+   - only button contents fade
+   - footer extends 24px below viewport without moving its top edge
+   - tablet / PC / register / manage unchanged
    ========================================================= */
 
 @media screen and (max-width: 600px) {
 
   html body:not(.register-mode):not(.manage-mode)
   #bottomNav.bottom-nav {
+    bottom: -24px !important;
+    height: calc(68px + env(safe-area-inset-bottom) + 24px) !important;
+    padding-bottom: calc(env(safe-area-inset-bottom) + 24px) !important;
 
-    /* 画面外へ8pxだけ余分に伸ばす */
-    bottom: -8px !important;
+    z-index: 220 !important;
 
-    /* 上端位置は今までと完全に同じ */
-    height:
-      calc(
-        68px
-        + env(safe-area-inset-bottom)
-        + 8px
-      ) !important;
-
-    padding-bottom:
-      calc(
-        env(safe-area-inset-bottom)
-        + 8px
-      ) !important;
-
-    /* Chrome描画時の1フレームちらつき対策 */
-    -webkit-backface-visibility: hidden;
-    backface-visibility: hidden;
-
-    will-change: opacity, transform;
-  }
-
-}
-
-/* =========================================================
-   v34 SMARTPHONE FOOTER OPACITY FIX
-   - footer background never becomes transparent
-   - only buttons/text fade
-   - smartphone INDEX only
-   - tablet / PC untouched
-   ========================================================= */
-
-@media screen and (max-width: 600px) {
-
-  /* フッター本体は透明化しない */
-  html body:not(.register-mode):not(.manage-mode)
-  #bottomNav.bottom-nav {
     opacity: 1 !important;
-
-    background:
-      linear-gradient(
-        180deg,
-        #2d2e31,
-        #1d1e21
-      ) !important;
-  }
-
-  /* TOPでは中身だけ非表示 */
-  html body:not(.register-mode):not(.manage-mode)
-  #bottomNav.bottom-nav:not(.is-visible)
-  > .nav-btn {
-    opacity: 0 !important;
     visibility: hidden !important;
     pointer-events: none !important;
+    transition: none !important;
+
+    background: linear-gradient(180deg, #2d2e31, #1d1e21) !important;
+
+    -webkit-backface-visibility: hidden;
+    backface-visibility: hidden;
+    transform: translateZ(0) !important;
   }
 
-  /* 募集シートに入ったら文字・アイコンだけフェード */
   html body:not(.register-mode):not(.manage-mode)
-  #bottomNav.bottom-nav.is-visible
-  > .nav-btn {
+  #bottomNav.bottom-nav.is-visible {
     opacity: 1 !important;
     visibility: visible !important;
     pointer-events: auto !important;
-
-    transition:
-      opacity .22s ease !important;
   }
 
+  html body:not(.register-mode):not(.manage-mode)
+  #bottomNav.bottom-nav > .nav-btn {
+    opacity: 0 !important;
+    transition: opacity .18s ease !important;
+  }
+
+  html body:not(.register-mode):not(.manage-mode)
+  #bottomNav.bottom-nav.is-visible > .nav-btn {
+    opacity: 1 !important;
+  }
 }
