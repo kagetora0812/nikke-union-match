@@ -6230,104 +6230,159 @@ loadTotalRegisteredUnionCount();
 applyInitialRecruitmentView();
 
 // =========================================================
-// v35 SMARTPHONE FOOTER STABILITY / WHITE-FLASH FIX
+// v36 SMARTPHONE FOOTER BACKPLATE
 // 2026-09-10
-// - Keep the stable v32 footer visibility JS unchanged.
-// - Smartphone INDEX only.
-// - Avoid one-frame white flashes when is-visible toggles rapidly.
-// - Footer shell/background and button visuals linger very briefly on hide,
-//   while show remains immediate. No JS timer is added to the nav logic.
-// - Tablet / PC / register / manage remain untouched.
+// - Keep the stable footer visibility logic unchanged.
+// - Do NOT change #bottomNav opacity/background/transform.
+// - Add an independent opaque backplate behind the footer.
+// - Masks X in-app browser bottom-edge gaps and rapid-scroll white flashes.
+// - Smartphone only (<= 600px). Tablet / PC untouched.
 // =========================================================
-(function installSmartphoneFooterStabilityStyle() {
-  const STYLE_ID = "smartphone-footer-stability-v35";
+(function installSmartphoneFooterBackplate() {
+  const MASK_ID = "bottom-nav-stable-backplate-v36";
+  const STYLE_ID = "bottom-nav-stable-backplate-style-v36";
+  const HIDE_DELAY_MS = 140;
 
-  if (document.getElementById(STYLE_ID)) {
+  const nav = document.getElementById("bottomNav");
+  if (!nav || document.getElementById(MASK_ID)) {
     return;
   }
 
   const style = document.createElement("style");
   style.id = STYLE_ID;
   style.textContent = `
-@media screen and (max-width: 600px) {
+    #${MASK_ID} {
+      display: none;
+    }
 
-  html body:not(.register-mode):not(.manage-mode)
-  #bottomNav.bottom-nav {
-    /* Keep the fixed shell alive so Chrome never exposes the white sheet
-       during a rapid is-visible class flip. */
-    opacity: 1 !important;
-    visibility: visible !important;
-    pointer-events: none !important;
+    @media screen and (max-width: 600px) {
+      #${MASK_ID} {
+        position: fixed;
+        left: 0;
+        right: 0;
 
-    /* 8px overscan below the visual viewport. Top edge stays unchanged. */
-    bottom: -8px !important;
-    height: calc(68px + env(safe-area-inset-bottom) + 8px) !important;
-    padding-bottom: calc(env(safe-area-inset-bottom) + 8px) !important;
+        /* Extend below the visual viewport and overlap the footer by 2px. */
+        bottom: -18px;
+        height: calc(70px + env(safe-area-inset-bottom) + 18px);
 
-    /* Background is drawn by ::before so it can linger independently. */
-    background: transparent !important;
-    border-top-color: transparent !important;
+        z-index: 219;
+        pointer-events: none;
 
-    -webkit-backface-visibility: hidden !important;
-    backface-visibility: hidden !important;
-    transform: translateZ(0) !important;
-    -webkit-transform: translateZ(0) !important;
-    isolation: isolate !important;
-    contain: paint !important;
-    will-change: transform !important;
-  }
+        border-top: 2px solid var(--cyan);
+        background: linear-gradient(180deg, #2d2e31, #1d1e21);
+        box-shadow: 0 -4px 14px rgba(0, 0, 0, .16);
 
-  html body:not(.register-mode):not(.manage-mode)
-  #bottomNav.bottom-nav::before {
-    content: "";
-    position: absolute;
-    inset: 0;
-    z-index: -1;
-    pointer-events: none;
+        opacity: 0;
+        visibility: hidden;
 
-    background: linear-gradient(180deg, #2d2e31, #1d1e21);
-    border-top: 2px solid var(--cyan);
+        -webkit-backface-visibility: hidden;
+        backface-visibility: hidden;
+        -webkit-transform: translateZ(0);
+        transform: translateZ(0);
+        will-change: opacity, transform;
+      }
 
-    opacity: 0;
-
-    /* Hide is intentionally delayed a touch.
-       If the user immediately scrolls back, the background never blinks. */
-    transition: opacity .09s ease .14s;
-
-    -webkit-backface-visibility: hidden;
-    backface-visibility: hidden;
-    transform: translateZ(0);
-    -webkit-transform: translateZ(0);
-    will-change: opacity;
-  }
-
-  html body:not(.register-mode):not(.manage-mode)
-  #bottomNav.bottom-nav.is-visible::before {
-    opacity: 1;
-    transition-delay: 0s;
-  }
-
-  html body:not(.register-mode):not(.manage-mode)
-  #bottomNav.bottom-nav > .nav-btn {
-    /* Override older whole-footer opacity rules.
-       The buttons themselves linger for the same tiny hide window. */
-    opacity: 0 !important;
-    visibility: visible !important;
-    pointer-events: none !important;
-    transition: opacity .09s ease .14s !important;
-  }
-
-  html body:not(.register-mode):not(.manage-mode)
-  #bottomNav.bottom-nav.is-visible > .nav-btn {
-    opacity: 1 !important;
-    visibility: visible !important;
-    pointer-events: auto !important;
-    transition-delay: 0s !important;
-  }
-
-}
-`;
-
+      #${MASK_ID}.is-on {
+        opacity: 1;
+        visibility: visible;
+      }
+    }
+  `;
   document.head.appendChild(style);
-})();
 
+  const mask = document.createElement("div");
+  mask.id = MASK_ID;
+  mask.setAttribute("aria-hidden", "true");
+  document.body.appendChild(mask);
+
+  let hideTimer = null;
+  const phoneQuery = window.matchMedia("(max-width: 600px)");
+
+  function cancelHide() {
+    if (hideTimer !== null) {
+      clearTimeout(hideTimer);
+      hideTimer = null;
+    }
+  }
+
+  function forceVisibleByPageMode() {
+    return (
+      document.body.classList.contains("register-mode") ||
+      document.body.classList.contains("manage-mode")
+    );
+  }
+
+  function footerShouldHaveBackplate() {
+    return (
+      phoneQuery.matches &&
+      (
+        nav.classList.contains("is-visible") ||
+        forceVisibleByPageMode()
+      )
+    );
+  }
+
+  function showMask() {
+    cancelHide();
+    mask.classList.add("is-on");
+  }
+
+  function hideMaskNow() {
+    cancelHide();
+    mask.classList.remove("is-on");
+  }
+
+  function syncMask() {
+    if (!phoneQuery.matches) {
+      hideMaskNow();
+      return;
+    }
+
+    if (footerShouldHaveBackplate()) {
+      showMask();
+      return;
+    }
+
+    /*
+      Only the backplate lingers briefly.
+      The real footer/menu logic is never delayed or modified.
+      This bridges a one-frame class flip without making navigation unstable.
+    */
+    if (hideTimer === null && mask.classList.contains("is-on")) {
+      hideTimer = window.setTimeout(() => {
+        hideTimer = null;
+
+        if (footerShouldHaveBackplate()) {
+          mask.classList.add("is-on");
+          return;
+        }
+
+        mask.classList.remove("is-on");
+      }, HIDE_DELAY_MS);
+    }
+  }
+
+  const navObserver = new MutationObserver(syncMask);
+  navObserver.observe(nav, {
+    attributes: true,
+    attributeFilter: ["class"]
+  });
+
+  const bodyObserver = new MutationObserver(syncMask);
+  bodyObserver.observe(document.body, {
+    attributes: true,
+    attributeFilter: ["class"]
+  });
+
+  if (typeof phoneQuery.addEventListener === "function") {
+    phoneQuery.addEventListener("change", syncMask);
+  } else if (typeof phoneQuery.addListener === "function") {
+    phoneQuery.addListener(syncMask);
+  }
+
+  window.addEventListener("pageshow", syncMask, { passive: true });
+  window.addEventListener("resize", syncMask, { passive: true });
+  window.addEventListener("orientationchange", syncMask, { passive: true });
+
+  syncMask();
+})();
