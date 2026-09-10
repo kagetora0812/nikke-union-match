@@ -21,6 +21,23 @@
   <!-- creators v6: description alignment fix / plain X button -->
 
 
+  <script>
+    /* Tablet detection: keep iPad / Android tablet classification across orientation. */
+    (() => {
+      const ua = navigator.userAgent || "";
+      const platform = navigator.platform || "";
+      const isIPad =
+        /iPad/i.test(ua) ||
+        (platform === "MacIntel" && navigator.maxTouchPoints > 1);
+      const isAndroidTablet =
+        /Android/i.test(ua) && !/Mobile/i.test(ua);
+
+      if (isIPad || isAndroidTablet) {
+        document.documentElement.classList.add("tablet-device");
+      }
+    })();
+  </script>
+
   <style>
 
     @import url("https://fonts.googleapis.com/css2?family=Teko:wght@500;600;700&family=Zen+Kaku+Gothic+New:wght@500;700;900&display=swap");
@@ -813,7 +830,7 @@
     }
   </style>
 
-  <link rel="stylesheet" href="./subpage-nav.css?v=18.0">
+  <link rel="stylesheet" href="./subpage-nav.css?v=19.0">
 
 
   <style id="creator-menu-v9">
