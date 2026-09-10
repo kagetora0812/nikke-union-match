@@ -1793,7 +1793,7 @@
             募集PASS再発行
           </div>
           <div class="menu-card-copy">
-            現在募集中の指揮官・ユニオンをプルダウンから選び、
+            募集中の指揮官、または現在利用中のユニオンをプルダウンから選び、
             PASSを再発行します。
           </div>
         </button>
@@ -2703,7 +2703,7 @@
       </div>
 
       <p class="lead">
-        現在管理期間内のユニオン登録を確認します。<br>
+        現在利用中のユニオン会員を確認します。<br>
         「募集中」と「掲載のみ」を切り替えて表示できます。
       </p>
 
@@ -2780,7 +2780,7 @@
       </div>
 
       <p class="lead">
-        現在募集中の募集だけが対象です。<br>
+        指揮官は現在募集中の募集、ユニオンは現在利用中の会員が対象です。<br>
         募集タイプを選び、対象をプルダウンから選択してください。
       </p>
 
@@ -2800,7 +2800,7 @@
           </label>
 
           <label>
-            対象の募集
+            対象
             <select id="passReissueTarget">
               <option value="">読み込み中...</option>
             </select>
@@ -5387,15 +5387,9 @@
 
     function getUnionRegistryKind(item) {
 
-      if (String(item?.status || "").toLowerCase() === "open") {
-        return "open";
-      }
-
-      if (isUnionRegistryListingOnly(item)) {
-        return "listing_only";
-      }
-
-      return "other";
+      return item?._registryKind === "open"
+        ? "open"
+        : "listing_only";
 
     }
 
@@ -5425,15 +5419,15 @@
           : openItems;
 
       summary.textContent =
-        `募集中 ${openItems.length}件　｜　掲載のみ ${listingOnlyItems.length}件`;
+        `現在利用中 ${unionRegistryItems.length}件　｜　募集中 ${openItems.length}件　｜　掲載のみ ${listingOnlyItems.length}件`;
 
       list.innerHTML = "";
 
       if (!displayItems.length) {
         empty.textContent =
           view === "listing_only"
-            ? "現在、掲載のみのユニオン登録はありません。"
-            : "現在募集中のユニオン登録はありません。";
+            ? "現在、掲載のみのユニオン会員はいません。"
+            : "現在募集中のユニオン会員はいません。";
         empty.classList.remove("hidden");
         return;
       }
@@ -5444,8 +5438,13 @@
         const kind = getUnionRegistryKind(item);
         const listingOnly = kind === "listing_only";
         const created = formatAdminDate(item.created_at);
-        const expires = formatAdminDate(item.expires_at);
-        const url = String(item.x_url || "").trim();
+        const memberExpiry = formatAdminDate(item.expires_at);
+        const recruitmentExpiry =
+          item._recruitment?.expires_at
+            ? formatAdminDate(item._recruitment.expires_at)
+            : "";
+        const url =
+          String(item._recruitment?.x_url || "").trim();
 
         return `
           <article class="union-registry-card">
@@ -5463,8 +5462,13 @@
               </div>
             </div>
             <div class="union-registry-meta">
-              登録：${escapeHtml(created)}<br>
-              管理期限：${escapeHtml(expires)}
+              会員登録：${escapeHtml(created)}<br>
+              次回利用確認期限：${escapeHtml(memberExpiry)}
+              ${
+                !listingOnly && recruitmentExpiry
+                  ? `<br>募集掲載期限：${escapeHtml(recruitmentExpiry)}`
+                  : ""
+              }
             </div>
             ${
               !listingOnly && url
@@ -5485,6 +5489,7 @@
 
       if (errorBox) {
         errorBox.classList.add("hidden");
+        errorBox.textContent = "";
       }
 
       if (summary) {
@@ -5514,32 +5519,157 @@
         return;
       }
 
-      const nowIso = new Date().toISOString();
+      // TOTAL UNIONSと同じ会員ルールで、期限切れを先に整理する。
+      const countResult =
+        await sb.rpc(
+          "get_active_union_member_count"
+        );
 
-      const {
-        data,
-        error
-      } = await sb
-        .from("union_recruitments")
-        .select("id, union_name, union_rank, x_url, status, created_at, expires_at")
-        .gt("expires_at", nowIso)
-        .order("created_at", { ascending: false });
+      if (countResult.error) {
+        console.error(
+          "ユニオン会員整理エラー",
+          countResult.error
+        );
 
-      if (error) {
-        console.error("ユニオン登録情報取得エラー", error);
         unionRegistryItems = [];
+
         if (summary) {
-          summary.textContent = "募集中 --件　｜　掲載のみ --件";
+          summary.textContent =
+            "現在利用中 --件　｜　募集中 --件　｜　掲載のみ --件";
         }
+
         if (errorBox) {
-          errorBox.textContent = "ユニオン登録情報を読み込めませんでした。";
+          errorBox.textContent =
+            "ユニオン会員機能のSQLが未適用、または読み込みできません。supabase_union_membership_v51.sql をSupabaseでRunしてください。";
           errorBox.classList.remove("hidden");
         }
+
         renderUnionRegistry();
         return;
       }
 
-      unionRegistryItems = Array.isArray(data) ? data : [];
+      const nowIso = new Date().toISOString();
+
+      const membershipResult =
+        await sb
+          .from("union_registrations")
+          .select("id, union_name, union_rank, recruitment_id, created_at, last_confirmed_at, expires_at")
+          .gt("expires_at", nowIso)
+          .order("created_at", { ascending: false });
+
+      if (membershipResult.error) {
+        console.error(
+          "ユニオン会員情報取得エラー",
+          membershipResult.error
+        );
+
+        unionRegistryItems = [];
+
+        if (summary) {
+          summary.textContent =
+            "現在利用中 --件　｜　募集中 --件　｜　掲載のみ --件";
+        }
+
+        if (errorBox) {
+          errorBox.textContent =
+            "ユニオン会員情報を読み込めませんでした。";
+          errorBox.classList.remove("hidden");
+        }
+
+        renderUnionRegistry();
+        return;
+      }
+
+      const memberships =
+        Array.isArray(membershipResult.data)
+          ? membershipResult.data
+          : [];
+
+      const recruitmentIds =
+        [
+          ...new Set(
+            memberships
+              .map(item => item.recruitment_id)
+              .filter(Boolean)
+              .map(String)
+          )
+        ];
+
+      let recruitmentMap =
+        new Map();
+
+      if (recruitmentIds.length) {
+
+        const recruitmentResult =
+          await sb
+            .from("union_recruitments")
+            .select("id, x_url, status, created_at, expires_at")
+            .in("id", recruitmentIds);
+
+        if (recruitmentResult.error) {
+          console.error(
+            "ユニオン募集情報取得エラー",
+            recruitmentResult.error
+          );
+
+          if (errorBox) {
+            errorBox.textContent =
+              "会員情報は取得できましたが、募集状態の取得に失敗しました。";
+            errorBox.classList.remove("hidden");
+          }
+
+        } else {
+
+          recruitmentMap =
+            new Map(
+              (recruitmentResult.data || [])
+                .map(item => [
+                  String(item.id),
+                  item
+                ])
+            );
+
+        }
+      }
+
+      unionRegistryItems =
+        memberships
+          .map(item => {
+
+            const recruitment =
+              item.recruitment_id
+                ? recruitmentMap.get(
+                    String(item.recruitment_id)
+                  ) || null
+                : null;
+
+            const recruiting =
+              Boolean(
+                recruitment
+                &&
+                String(recruitment.status || "").toLowerCase() === "open"
+                &&
+                new Date(recruitment.expires_at).getTime() > Date.now()
+              );
+
+            return {
+              ...item,
+              _registryKind:
+                recruiting
+                  ? "open"
+                  : "listing_only",
+              _recruitment:
+                recruitment
+            };
+
+          })
+          .sort(
+            (a, b) =>
+              new Date(b.created_at).getTime()
+              -
+              new Date(a.created_at).getTime()
+          );
+
       renderUnionRegistry();
 
     }
@@ -5570,42 +5700,147 @@
 
       const nowIso = new Date().toISOString();
 
-      const query =
-        type === "union"
-          ? sb
+      if (type === "union") {
+
+        // 期限切れ会員を整理してから、現在利用中の会員を全件対象にする。
+        const countResult =
+          await sb.rpc(
+            "get_active_union_member_count"
+          );
+
+        if (countResult.error) {
+          console.error(
+            "ユニオンPASS再発行対象整理エラー",
+            countResult.error
+          );
+          target.innerHTML =
+            '<option value="">読み込めませんでした</option>';
+          target.disabled = false;
+          showMessage(
+            $("#passReissueMessage"),
+            "ユニオン会員機能のSQLを確認してください。",
+            "error"
+          );
+          return;
+        }
+
+        const membershipResult =
+          await sb
+            .from("union_registrations")
+            .select("id, union_name, union_rank, recruitment_id, created_at, expires_at")
+            .gt("expires_at", nowIso)
+            .order("created_at", { ascending: false });
+
+        if (membershipResult.error) {
+          console.error(
+            "ユニオンPASS再発行対象取得エラー",
+            membershipResult.error
+          );
+          target.innerHTML =
+            '<option value="">読み込めませんでした</option>';
+          target.disabled = false;
+          showMessage(
+            $("#passReissueMessage"),
+            "現在利用中のユニオンを読み込めませんでした。",
+            "error"
+          );
+          return;
+        }
+
+        passReissueTargets =
+          Array.isArray(membershipResult.data)
+            ? membershipResult.data
+            : [];
+
+        const recruitmentIds =
+          [
+            ...new Set(
+              passReissueTargets
+                .map(item => item.recruitment_id)
+                .filter(Boolean)
+                .map(String)
+            )
+          ];
+
+        const openRecruitmentIds =
+          new Set();
+
+        if (recruitmentIds.length) {
+
+          const recruitmentResult =
+            await sb
               .from("union_recruitments")
-              .select("id, union_name, union_rank, created_at, expires_at")
-              .eq("status", "open")
-              .gt("expires_at", nowIso)
-              .order("created_at", { ascending: false })
-          : sb
-              .from("recruitments")
-              .select("id, commander_name, slv, created_at, expires_at")
-              .eq("status", "open")
-              .gt("expires_at", nowIso)
-              .order("created_at", { ascending: false });
+              .select("id, status, expires_at")
+              .in("id", recruitmentIds);
 
-      const {
-        data,
-        error
-      } = await query;
+          if (!recruitmentResult.error) {
+            (recruitmentResult.data || [])
+              .forEach(item => {
+                if (
+                  String(item.status || "").toLowerCase() === "open"
+                  &&
+                  new Date(item.expires_at).getTime() > Date.now()
+                ) {
+                  openRecruitmentIds.add(
+                    String(item.id)
+                  );
+                }
+              });
+          }
+        }
 
-      if (error) {
-        console.error("PASS再発行対象取得エラー", error);
-        target.innerHTML = '<option value="">読み込めませんでした</option>';
-        target.disabled = false;
-        showMessage(
-          $("#passReissueMessage"),
-          "募集中の対象を読み込めませんでした。",
-          "error"
-        );
-        return;
+        passReissueTargets =
+          passReissueTargets.map(item => ({
+            ...item,
+            _membershipTarget: true,
+            _displayState:
+              item.recruitment_id
+              &&
+              openRecruitmentIds.has(
+                String(item.recruitment_id)
+              )
+                ? "募集中"
+                : "掲載のみ"
+          }));
+
+      } else {
+
+        const {
+          data,
+          error
+        } =
+          await sb
+            .from("recruitments")
+            .select("id, commander_name, slv, created_at, expires_at")
+            .eq("status", "open")
+            .gt("expires_at", nowIso)
+            .order("created_at", { ascending: false });
+
+        if (error) {
+          console.error("PASS再発行対象取得エラー", error);
+          target.innerHTML =
+            '<option value="">読み込めませんでした</option>';
+          target.disabled = false;
+          showMessage(
+            $("#passReissueMessage"),
+            "募集中の指揮官を読み込めませんでした。",
+            "error"
+          );
+          return;
+        }
+
+        passReissueTargets =
+          Array.isArray(data)
+            ? data
+            : [];
+
       }
 
-      passReissueTargets = Array.isArray(data) ? data : [];
-
       if (!passReissueTargets.length) {
-        target.innerHTML = '<option value="">現在募集中の対象はありません</option>';
+        target.innerHTML =
+          type === "union"
+            ? '<option value="">現在利用中のユニオンはありません</option>'
+            : '<option value="">現在募集中の指揮官はありません</option>';
         target.disabled = false;
         return;
       }
@@ -5615,7 +5850,7 @@
         + passReissueTargets.map(item => {
           const label =
             type === "union"
-              ? `${item.union_name || "--"} / ${item.union_rank || "--"}`
+              ? `${item.union_name || "--"} / ${item.union_rank || "--"} / ${item._displayState || "掲載のみ"}`
               : `${item.commander_name || "--"} / SLV ${item.slv ?? "--"}`;
           const date = formatAdminDate(item.created_at);
 
@@ -5625,7 +5860,6 @@
       target.disabled = false;
 
     }
-
 
     async function loadEndingUnions() {
 
@@ -8686,10 +8920,18 @@
               ? String(selected.slv ?? "").trim()
               : String(selected.union_rank || "").trim();
 
-          if (!name || !value) {
+          if (
+            !name
+            ||
+            (
+              type === "commander"
+              &&
+              !value
+            )
+          ) {
             showMessage(
               $("#passReissueMessage"),
-              "選択した募集情報を取得できませんでした。再読み込みしてください。",
+              "選択した登録情報を取得できませんでした。再読み込みしてください。",
               "error"
             );
             return;
@@ -8713,21 +8955,33 @@
               data,
               error
             } =
-              await sb.rpc(
-                "admin_reissue_recruitment_pass",
-                {
-                  p_token:
-                    token,
-                  p_type:
-                    type,
-                  p_name:
-                    name,
-                  p_value:
-                    value,
-                  p_new_pass_hash:
-                    newPassHash
-                }
-              );
+              type === "union"
+                ? await sb.rpc(
+                    "admin_reissue_union_membership_pass",
+                    {
+                      p_token:
+                        token,
+                      p_membership_id:
+                        selected.id,
+                      p_new_pass_hash:
+                        newPassHash
+                    }
+                  )
+                : await sb.rpc(
+                    "admin_reissue_recruitment_pass",
+                    {
+                      p_token:
+                        token,
+                      p_type:
+                        type,
+                      p_name:
+                        name,
+                      p_value:
+                        value,
+                      p_new_pass_hash:
+                        newPassHash
+                    }
+                  );
 
             if (error) {
 
@@ -8758,14 +9012,18 @@
 
               if (
                 errorText.includes(
+                  "MEMBERSHIP_NOT_FOUND"
+                )
+                ||
+                errorText.includes(
                   "RECRUITMENT_NOT_FOUND"
                 )
               ) {
                 showMessage(
                   $("#passReissueMessage"),
                   type === "commander"
-                    ? "一致する募集中の指揮官が見つかりません。指揮官名とSLVを確認してください。"
-                    : "一致する募集中のユニオンが見つかりません。ユニオン名とランクを確認してください。",
+                    ? "選択した募集中の指揮官が見つかりません。再読み込みしてください。"
+                    : "選択したユニオン会員が見つかりません。期限切れの場合は会員解除されています。",
                   "error"
                 );
                 return;
@@ -8797,7 +9055,7 @@
               $("#passReissueMessage"),
               type === "commander"
                 ? "指揮官募集のPASSを再発行しました。"
-                : "ユニオン募集のPASSを再発行しました。",
+                : "ユニオン会員のPASSを再発行しました。",
               "ok"
             );
 
