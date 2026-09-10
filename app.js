@@ -3102,6 +3102,61 @@ const unionFields =
   $("#unionFields");
 
 
+const unionRecruitModeBtn =
+  $("#unionRecruitModeBtn");
+
+
+const unionRegisterOnlyModeBtn =
+  $("#unionRegisterOnlyModeBtn");
+
+
+const unionUsageNote =
+  $("#unionUsageNote");
+
+
+const recruitmentInputFields =
+  $("#recruitmentInputFields");
+
+
+let unionRegistrationMode =
+  "recruit";
+
+
+function setUnionRegistrationMode(mode) {
+
+  unionRegistrationMode =
+    mode === "register-only"
+      ? "register-only"
+      : "recruit";
+
+  const registerOnly =
+    unionRegistrationMode === "register-only";
+
+  unionRecruitModeBtn
+    ?.classList
+    .toggle("active", !registerOnly);
+
+  unionRegisterOnlyModeBtn
+    ?.classList
+    .toggle("active", registerOnly);
+
+  unionRecruitModeBtn
+    ?.setAttribute("aria-pressed", String(!registerOnly));
+
+  unionRegisterOnlyModeBtn
+    ?.setAttribute("aria-pressed", String(registerOnly));
+
+  if (unionUsageNote) {
+    unionUsageNote.textContent =
+      registerOnly
+        ? "TOTAL UNIONSにはカウントされます。募集一覧には表示されません。"
+        : "募集一覧に表示します。TOTAL UNIONSにもカウントされます。";
+  }
+
+  updateRegistrationFields();
+}
+
+
 function updateRegistrationFields() {
 
   if (
@@ -3177,7 +3232,41 @@ function updateRegistrationFields() {
 
   }
 
+
+  const registerOnly =
+    isUnion
+    &&
+    unionRegistrationMode === "register-only";
+
+
+  recruitmentInputFields
+    ?.classList
+    .toggle("hidden", registerOnly);
+
+
+  const xUrl =
+    $("#xUrl");
+
+  if (xUrl) {
+    xUrl.required =
+      !registerOnly;
+  }
+
 }
+
+
+unionRecruitModeBtn
+  ?.addEventListener(
+    "click",
+    () => setUnionRegistrationMode("recruit")
+  );
+
+
+unionRegisterOnlyModeBtn
+  ?.addEventListener(
+    "click",
+    () => setUnionRegistrationMode("register-only")
+  );
 
 
 registrationTypeSelect
@@ -3257,16 +3346,25 @@ async function showRegistrationPreview() {
   const registrationType =
     $("#registrationType")?.value || "commander";
 
-  const xUrl =
-    $("#xUrl")?.value.trim() || "";
+  const registerOnly =
+    registrationType === "union"
+    &&
+    unionRegistrationMode === "register-only";
 
-  if (!validRecruitmentUrl(xUrl)) {
+  const xUrl =
+    registerOnly
+      ? ""
+      : $("#xUrl")?.value.trim() || "";
+
+  if (!registerOnly && !validRecruitmentUrl(xUrl)) {
     alert("募集記事URLを入力してください。\nX・BlablaLink・DiscordなどのURLに対応しています。");
     return false;
   }
 
   const previewFile =
-    $("#previewImage")?.files?.[0] || null;
+    registerOnly
+      ? null
+      : $("#previewImage")?.files?.[0] || null;
 
   if (!validatePreviewImageFile(previewFile)) {
     return false;
@@ -3404,6 +3502,42 @@ async function showRegistrationPreview() {
       }
     }
   }
+
+  if (registerOnly) {
+    const host =
+      $("#registrationPreviewCard");
+
+    if (!host) {
+      return false;
+    }
+
+    host.innerHTML = `
+      <article class="card union-card">
+        <div class="card-head">
+          <div class="type-with-new">
+            <span class="recruitment-type">● ユニオン</span>
+          </div>
+          <span class="date">管理期限 14日後</span>
+        </div>
+
+        <div class="name">${escapeHtml(name)}</div>
+        <div class="union-rank rank-${escapeHtml(getUnionRankClass(detail))}">${escapeHtml(detail)}</div>
+        <div class="countdown">残り14日</div>
+
+        <div class="notice" style="margin-top:14px;">
+          <strong>登録のみ</strong><br>
+          TOTAL UNIONSにはカウントされますが、募集一覧には表示されません。
+        </div>
+      </article>
+    `;
+
+    $("#registrationPreviewModal")
+      ?.classList
+      .remove("hidden");
+
+    return true;
+  }
+
 
   const mediaHtml =
     buildRecruitmentPreviewMedia(
@@ -3585,7 +3719,8 @@ $("#previewImageClearBtn")
 
 function showRegistrationResult(
   pass,
-  result
+  result,
+  registerOnly = false
 ) {
 
 
@@ -3634,6 +3769,39 @@ function showRegistrationResult(
     }
 
   }
+
+
+  const resultModeNote =
+    $("#registrationResultModeNote");
+
+  const resultExpiryLabel =
+    $("#resultExpiryLabel");
+
+  const registrationShareChoice =
+    $("#registrationShareChoice");
+
+  if (resultModeNote) {
+    resultModeNote.textContent =
+      registerOnly
+        ? "登録のみで保存しました。TOTAL UNIONSにはカウントされますが、募集一覧には表示されません。"
+        : "";
+
+    resultModeNote.classList.toggle(
+      "hidden",
+      !registerOnly
+    );
+  }
+
+  if (resultExpiryLabel) {
+    resultExpiryLabel.textContent =
+      registerOnly
+        ? "管理期限"
+        : "掲載期限";
+  }
+
+  registrationShareChoice
+    ?.classList
+    .toggle("hidden", registerOnly);
 
 
   $("#resultModal")
@@ -3687,18 +3855,28 @@ $("#registerForm")
         "commander";
 
 
+      const registerOnly =
+        registrationType === "union"
+        &&
+        unionRegistrationMode === "register-only";
+
+
       const xUrl =
 
-        $("#xUrl")
-          ?.value
-          .trim();
+        registerOnly
+          ? new URL("./", window.location.href).href
+          : $("#xUrl")
+              ?.value
+              .trim();
 
 
       const originalPreviewFile =
-        $("#previewImage")
-          ?.files?.[0]
-        ||
-        null;
+        registerOnly
+          ? null
+          : $("#previewImage")
+              ?.files?.[0]
+            ||
+            null;
 
       const previewFile =
         registrationPreviewPreparedFile || originalPreviewFile;
@@ -3710,6 +3888,8 @@ $("#registerForm")
 
 
       if (
+        !registerOnly
+        &&
         !validRecruitmentUrl(
           xUrl
         )
@@ -3886,6 +4066,40 @@ $("#registerForm")
               : data;
 
 
+          if (registerOnly) {
+
+            const {
+              data: closeResult,
+              error: closeError
+            } =
+              await sb.rpc(
+                "close_recruitment_by_pass",
+                {
+                  p_pass_hash:
+                    passHash
+                }
+              );
+
+            if (
+              closeError
+              ||
+              closeResult !== "union"
+            ) {
+              console.error(
+                "登録のみ非表示処理エラー",
+                closeError || closeResult
+              );
+
+              alert(
+                "登録は作成されましたが、募集一覧から非表示にできませんでした。\nPASSを保存して、編集・締切から募集を締め切ってください。"
+              );
+
+              return;
+            }
+
+          }
+
+
           if (previewFile && result?.id) {
             try {
               await uploadRecruitmentPreviewImage(
@@ -3905,32 +4119,36 @@ $("#registerForm")
           // Xシェア用
           // ==================================
 
-          lastRegisteredRecruitment = {
+          lastRegisteredRecruitment =
+            registerOnly
+              ? null
+              : {
 
-            type:
-              "union",
+                  type:
+                    "union",
 
-            name:
-              unionName,
+                  name:
+                    unionName,
 
-            rank:
-              unionRank,
+                  rank:
+                    unionRank,
 
-            xUrl
+                  xUrl
 
-          };
+                };
 
 
           showRegistrationResult(
             pass,
-            result
+            result,
+            registerOnly
           );
 
 
           event.target.reset();
           clearInitialPreviewImageSelection(false);
 
-
+          setUnionRegistrationMode("recruit");
           updateRegistrationFields();
 
 
