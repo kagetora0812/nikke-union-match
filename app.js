@@ -1245,6 +1245,48 @@ function showPage(name) {
 
     loadRecruitments();
 
+    /*
+      v40 tablet only:
+      footer buttons and top drawer use exactly the same immediate list move.
+      Smartphone and PC keep their previous behavior.
+    */
+    if (
+      document.documentElement
+        .classList
+        .contains(
+          "tablet-device"
+        )
+    ) {
+
+      const tabletListPage =
+        document.getElementById(
+          "listPage"
+        );
+
+      if (!tabletListPage) {
+        return;
+      }
+
+      mobileFooterHideUntilTop =
+        false;
+
+      scrollAppElementToTop(
+        tabletListPage,
+        "auto"
+      );
+
+      document
+        .getElementById(
+          "bottomNav"
+        )
+        ?.classList
+        .add(
+          "is-visible"
+        );
+
+      return;
+    }
+
     setTimeout(() => {
 
       const listPage =
@@ -5647,10 +5689,22 @@ $("#closeLoadedRecruitmentBtn")
 
 function getMobileScrollShell() {
 
-  if (
-    !window.matchMedia(
+  const isSmartphone =
+    window.matchMedia(
       "(max-width: 600px)"
-    ).matches
+    ).matches;
+
+  const isTabletDevice =
+    document.documentElement
+      .classList
+      .contains(
+        "tablet-device"
+      );
+
+  if (
+    !isSmartphone
+    &&
+    !isTabletDevice
   ) {
     return null;
   }
@@ -6387,11 +6441,45 @@ function applyInitialRecruitmentView() {
     setTimeout(
       () => {
 
-        document
-          .getElementById(
+        const listPage =
+          document.getElementById(
             "listPage"
-          )
-          ?.scrollIntoView({
+          );
+
+        if (!listPage) {
+          return;
+        }
+
+        if (
+          document.documentElement
+            .classList
+            .contains(
+              "tablet-device"
+            )
+        ) {
+
+          mobileFooterHideUntilTop =
+            false;
+
+          scrollAppElementToTop(
+            listPage,
+            "auto"
+          );
+
+          document
+            .getElementById(
+              "bottomNav"
+            )
+            ?.classList
+            .add(
+              "is-visible"
+            );
+
+          return;
+        }
+
+        listPage
+          .scrollIntoView({
             behavior:
               "auto",
             block:
