@@ -5310,3 +5310,72 @@ html.tablet-device body.register-mode .mobile-scroll-shell,
 html.tablet-device body.manage-mode .mobile-scroll-shell {
   padding-bottom: calc(76px + env(safe-area-inset-bottom)) !important;
 }
+
+/* =========================================================
+   v42 TABLET REGISTER / MANAGE FRAME LOCK
+   2026-09-11
+   - tablet register/manage pages only
+   - top bar and bottom navigation are hard-fixed
+   - only the center content shell scrolls
+   - INDEX / smartphone / PC / app logic untouched
+   ========================================================= */
+
+/* Register / Manage only: hard-lock the top bar to the viewport. */
+html.tablet-device body.register-mode .video-topbar,
+html.tablet-device body.manage-mode .video-topbar {
+  position: fixed !important;
+  top: 0 !important;
+  right: 0 !important;
+  left: 0 !important;
+
+  width: 100% !important;
+  height: 66px !important;
+
+  z-index: 240 !important;
+
+  transform: translate3d(0, 0, 0) !important;
+  -webkit-backface-visibility: hidden !important;
+  backface-visibility: hidden !important;
+  will-change: transform;
+}
+
+/* Register / Manage only: keep the scroller strictly between both bars. */
+html.tablet-device body.register-mode .mobile-scroll-shell,
+html.tablet-device body.manage-mode .mobile-scroll-shell {
+  position: fixed !important;
+  top: 66px !important;
+  right: 0 !important;
+  bottom: calc(68px + env(safe-area-inset-bottom)) !important;
+  left: 0 !important;
+
+  padding-bottom: 0 !important;
+
+  overflow-x: hidden !important;
+  overflow-y: auto !important;
+  overscroll-behavior-y: none !important;
+  -webkit-overflow-scrolling: touch;
+}
+
+/* Register / Manage only: hard-lock the footer and remove repaint movement. */
+html.tablet-device body.register-mode #bottomNav.bottom-nav,
+html.tablet-device body.manage-mode #bottomNav.bottom-nav {
+  position: fixed !important;
+  right: 0 !important;
+  bottom: 0 !important;
+  left: 0 !important;
+
+  z-index: 240 !important;
+
+  opacity: 1 !important;
+  visibility: visible !important;
+  pointer-events: auto !important;
+
+  transform: translate3d(0, 0, 0) !important;
+  translate: none !important;
+  transition: none !important;
+  animation: none !important;
+
+  -webkit-backface-visibility: hidden !important;
+  backface-visibility: hidden !important;
+  will-change: transform;
+}
