@@ -38,7 +38,7 @@
 
   <link
     rel="stylesheet"
-    href="./style.css?v=47.0"
+    href="./style.css?v=51.0"
   >
 
 
@@ -934,7 +934,7 @@
                       aria-pressed="true"
                     >
                       <strong>募集する</strong>
-                      <small>募集一覧に表示</small>
+                      <small>求人広告を掲載します</small>
                     </button>
 
                     <button
@@ -944,12 +944,12 @@
                       aria-pressed="false"
                     >
                       <strong>登録のみ</strong>
-                      <small>募集一覧には非表示</small>
+                      <small>登録のみ行い、求人広告は掲載しません</small>
                     </button>
                   </div>
 
                   <p id="unionUsageNote" class="register-usage-note">
-                    募集一覧に表示します。TOTAL UNIONSにもカウントされます。
+                    求人広告を掲載します。
                   </p>
                 </section>
 
@@ -982,7 +982,7 @@
                     placeholder="https://..."
                   >
 
-                  <small class="register-field-help">X・BlablaLink・Discordなど、募集記事のURLを貼ってください。</small>
+                  <small class="register-field-help">X・BlablaLink・Discordなど、募集記事のURL</small>
 
                 </label>
 
@@ -1007,7 +1007,7 @@
                       class="btn hidden"
                       type="button"
                     >
-                      ✕ 選択画像を取り消す
+                      ✕ 選択画像を解除
                     </button>
                   </label>
                 </div>
@@ -1078,7 +1078,7 @@
               </div>
 
               <h2>
-                PASSで編集・締切
+                PASSで利用確認・編集・締切
               </h2>
 
             </div>
@@ -1111,7 +1111,7 @@
               id="loadManageRecruitmentBtn"
               type="submit"
             >
-              🔑 募集内容を呼び出す
+              🔑 登録内容を呼び出す
             </button>
 
           </form>
@@ -1119,11 +1119,11 @@
           <div class="notice manage-pass-notice">
 
             <strong>
-              PASSは前回のものをそのまま使用します。
+              ユニオンは14日ごとに利用確認が必要です。
             </strong>
 
             <span>
-              PASSで募集を呼び出した後、「編集」または「締切」を選べます。編集では、内容そのままの14日再延長・再編集ができます。
+              ユニオンPASSで登録内容を呼び出すと利用確認が完了し、次回確認期限が14日後へ更新されます。BOT連携中はBOTから自動確認されます。
             </span>
 
           </div>
@@ -1135,11 +1135,13 @@
 
             <div class="manage-loaded-head">
               <div>
-                <div class="eyebrow">CURRENT RECRUITMENT</div>
+                <div id="manageLoadedEyebrow" class="eyebrow">CURRENT RECRUITMENT</div>
                 <h3 id="manageCurrentName">--</h3>
               </div>
               <span id="manageCurrentStatus" class="manage-status-chip">--</span>
             </div>
+
+            <div id="manageMembershipConfirmedNotice" class="notice hidden" style="margin-top:14px;"></div>
 
             <div class="manage-current-grid">
               <div>
@@ -1147,8 +1149,12 @@
                 <strong id="manageCurrentDetail">--</strong>
               </div>
               <div>
-                <span>現在の期限</span>
+                <span id="manageCurrentExpiryLabel">現在の期限</span>
                 <strong id="manageCurrentExpiry">--</strong>
+              </div>
+              <div id="manageMembershipExpiryBox" class="hidden">
+                <span>次回利用確認期限</span>
+                <strong id="manageMembershipExpiry">--</strong>
               </div>
             </div>
 
@@ -1187,6 +1193,14 @@
                 type="button"
               >
                 募集を締め切る
+              </button>
+
+              <button
+                id="deleteUnionMembershipBtn"
+                class="btn danger wide hidden"
+                type="button"
+              >
+                会員登録を解除
               </button>
 
             </div>
@@ -1243,7 +1257,7 @@
           >
 
             <div class="eyebrow">EDIT & REREGISTER</div>
-            <h3>募集内容を編集</h3>
+            <h3 id="manageEditTitle">募集内容を編集</h3>
 
             <div class="manage-fixed-name">
               <span id="manageEditNameLabel">指揮官名</span>
@@ -2083,7 +2097,7 @@
 
   <!-- アプリ本体 -->
 
-  <script src="./app.js?v=47.0"></script>
+  <script src="./app.js?v=51.0"></script>
 
 
 </body>
