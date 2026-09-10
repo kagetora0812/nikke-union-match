@@ -38,7 +38,7 @@
 
   <link
     rel="stylesheet"
-    href="./style.css?v=42.0"
+    href="./style.css?v=47.0"
   >
 
 
@@ -759,27 +759,10 @@
                 <span aria-hidden="true">↩</span>
               </button>
 
-            </div>
-
-
-            <div class="section-head">
-
-
-              <div>
-
-
-                <div class="eyebrow">
-                  REGISTER
-                </div>
-
-
-                <h2>
-                  募集を登録
-                </h2>
-
-
+              <div class="register-inline-title">
+                <div class="eyebrow">REGISTER</div>
+                <h2>募集登録</h2>
               </div>
-
 
             </div>
 
@@ -795,7 +778,6 @@
 
                 <span class="form-label-line">
                   <span>登録タイプ</span>
-                  <span class="form-label-help">指揮官 / ユニオン</span>
                 </span>
 
 
@@ -837,7 +819,7 @@
                     autocomplete="off"
                     autocapitalize="off"
                     spellcheck="false"
-                    placeholder="例：KAGETORA"
+                    placeholder="指揮官名を入力"
                   >
 
 
@@ -941,66 +923,101 @@
                 </label>
 
 
+                <section id="unionUsageBlock" class="register-usage-block">
+                  <div class="register-usage-title">利用方法</div>
+
+                  <div class="register-usage-options" role="group" aria-label="ユニオンの利用方法">
+                    <button
+                      id="unionRecruitModeBtn"
+                      class="register-usage-option active"
+                      type="button"
+                      aria-pressed="true"
+                    >
+                      <strong>募集する</strong>
+                      <small>募集一覧に表示</small>
+                    </button>
+
+                    <button
+                      id="unionRegisterOnlyModeBtn"
+                      class="register-usage-option"
+                      type="button"
+                      aria-pressed="false"
+                    >
+                      <strong>登録のみ</strong>
+                      <small>募集一覧には非表示</small>
+                    </button>
+                  </div>
+
+                  <p id="unionUsageNote" class="register-usage-note">
+                    募集一覧に表示します。TOTAL UNIONSにもカウントされます。
+                  </p>
+                </section>
+
+
               </div>
 
 
 
               <!-- ========================================
-                   募集記事URL
+                   募集記事URL / 画像
+                   ※ ユニオン「登録のみ」では非表示
               ========================================= -->
 
-              <label>
+              <div id="recruitmentInputFields">
 
-                <span class="form-label-line">
-                  <span>募集記事URL</span>
-                  <span class="form-label-help">X・BlablaLink・Discordなど、募集記事のURLを貼ってください</span>
-                </span>
-
-
-                <input
-                  id="xUrl"
-                  type="url"
-                  required
-                  inputmode="url"
-                  autocomplete="off"
-                  autocapitalize="off"
-                  spellcheck="false"
-                  placeholder="https://..."
-                >
-
-
-              </label>
-
-
-              <div id="previewImageField" class="preview-image-field">
                 <label>
+
                   <span class="form-label-line">
-                    <span>募集記事の画像 <span class="optional-label">任意</span></span>
-                    <span class="form-label-help">画像を選択した場合は登録画像を最優先で表示します。20MBまで</span>
+                    <span>募集記事URL</span>
                   </span>
 
                   <input
-                    id="previewImage"
-                    type="file"
-                    accept="image/jpeg,image/png,image/webp"
+                    id="xUrl"
+                    type="url"
+                    required
+                    inputmode="url"
+                    autocomplete="off"
+                    autocapitalize="off"
+                    spellcheck="false"
+                    placeholder="https://..."
                   >
 
-                  <small id="previewImageStatus" class="preview-file-help"></small>
+                  <small class="register-field-help">X・BlablaLink・Discordなど、募集記事のURLを貼ってください。</small>
 
-                  <button
-                    id="previewImageClearBtn"
-                    class="btn hidden"
-                    type="button"
-                  >
-                    ✕ 選択画像を取り消す
-                  </button>
                 </label>
+
+
+                <div id="previewImageField" class="preview-image-field">
+                  <label>
+                    <span class="form-label-line">
+                      <span>募集記事の画像 <span class="optional-label">任意</span></span>
+                    </span>
+
+                    <input
+                      id="previewImage"
+                      type="file"
+                      accept="image/jpeg,image/png,image/webp"
+                    >
+
+                    <small class="register-field-help">画像を選択した場合は登録画像を優先表示します。20MBまで。</small>
+                    <small id="previewImageStatus" class="preview-file-help"></small>
+
+                    <button
+                      id="previewImageClearBtn"
+                      class="btn hidden"
+                      type="button"
+                    >
+                      ✕ 選択画像を取り消す
+                    </button>
+                  </label>
+                </div>
+
               </div>
 
 
               <div class="notice register-period-note">
-                <strong>掲載期間：14日間</strong>
-                <span>登録から14日後に自動で掲載終了します。</span>
+                <strong>管理期間：14日間</strong>
+                <span>登録から14日後に管理期限となります。</span>
               </div>
 
 
@@ -1724,9 +1741,11 @@
 
 
 
-      <h2>
+      <h2 id="registrationResultTitle">
         登録完了
       </h2>
+
+      <p id="registrationResultModeNote" class="registration-result-mode-note hidden"></p>
 
 
 
@@ -1759,7 +1778,7 @@
       <div class="result-row">
 
 
-        <span>
+        <span id="resultExpiryLabel">
           掲載期限
         </span>
 
@@ -1784,7 +1803,7 @@
            Xシェア
       ========================================= -->
 
-      <div class="share-choice">
+      <div id="registrationShareChoice" class="share-choice">
 
 
         <div class="share-choice-title">
@@ -2064,7 +2083,7 @@
 
   <!-- アプリ本体 -->
 
-  <script src="./app.js?v=40.0"></script>
+  <script src="./app.js?v=47.0"></script>
 
 
 </body>
