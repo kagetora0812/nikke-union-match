@@ -5401,6 +5401,7 @@ body.register-mode .register-inline-title {
 
 body.register-mode .register-inline-title .eyebrow {
   margin-bottom: 2px;
+  color: var(--cyan) !important;
 }
 
 body.register-mode .register-inline-title h2 {
