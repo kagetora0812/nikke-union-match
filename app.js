@@ -5013,7 +5013,7 @@ function renderLoadedManageRecruitment() {
   if (editButton) {
     editButton.textContent =
       isUnion && !isUnionRecruiting
-        ? "📣 募集を開始"
+        ? "募集を開始"
         : "✏️ 編集";
     editButton.classList.toggle("hidden", !isUnion);
   }
@@ -6133,7 +6133,7 @@ $("#managePreviewConfirm")
         $("#managePreviewConfirm");
 
       const originalText =
-        button?.textContent || "🔥 この内容で再登録";
+        button?.textContent || "この内容で再登録";
 
       if (button) {
         button.disabled = true;
