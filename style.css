@@ -1994,6 +1994,28 @@ body.manage-mode #managePage {
   line-height: 1.6;
 }
 
+.registration-pass-warning {
+  margin-top: 12px;
+  color: #c93748;
+}
+
+.registration-pass-warning strong {
+  display: block;
+  color: #c82f40;
+  font-size: 12px;
+  font-weight: 900;
+  line-height: 1.55;
+}
+
+.registration-pass-warning span {
+  display: block;
+  margin-top: 3px;
+  color: #c93748;
+  font-size: 11px;
+  font-weight: 800;
+  line-height: 1.6;
+}
+
 
 /* =========================================================
    BOTTOM NAV
@@ -3947,6 +3969,15 @@ body .bottom-nav .nav-btn.active:hover {
   margin-top: 18px;
 }
 
+/* 登録確認：「修正する」を完全な四角にして切り欠きの隙間をなくす */
+#registrationPreviewBack {
+  clip-path: none !important;
+  border: 1px solid #686b70 !important;
+  background: #ffffff !important;
+  color: #222428 !important;
+  box-shadow: none !important;
+}
+
 .registration-preview-platform {
   margin-bottom: 9px;
   color: #7b8085;
@@ -5428,11 +5459,29 @@ body.register-mode .register-inline-title h2 {
   background: rgba(26, 176, 241, .035);
 }
 
-#registerPage .register-usage-title {
+#registerPage .register-usage-head {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 12px;
   margin-bottom: 10px;
+}
+
+#registerPage .register-usage-title {
+  flex: 0 0 auto;
+  margin: 0;
   color: #222428;
   font-size: 13px;
   font-weight: 900;
+}
+
+#registerPage .register-usage-bot-note {
+  min-width: 0;
+  color: #6e7379;
+  font-size: 10.5px;
+  font-weight: 700;
+  line-height: 1.45;
+  text-align: right;
 }
 
 #registerPage .register-usage-options {
@@ -5480,9 +5529,9 @@ body.register-mode .register-inline-title h2 {
 
 #registerPage .register-usage-note {
   margin: 9px 0 0;
-  color: #6e7379;
+  color: #555c63;
   font-size: 10.5px;
-  font-weight: 700;
+  font-weight: 800;
   line-height: 1.55;
 }
 
@@ -5523,6 +5572,14 @@ body.register-mode .hero {
 @media screen and (max-width: 600px) {
   #registerPage .register-usage-block {
     padding: 12px;
+  }
+
+  #registerPage .register-usage-head {
+    gap: 8px;
+  }
+
+  #registerPage .register-usage-bot-note {
+    font-size: 9.5px;
   }
 
   #registerPage .register-usage-options {
