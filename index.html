@@ -1449,6 +1449,166 @@
     }
   </style>
 
+
+
+  <style id="v51-19-manage-preview-position-fix">
+    /* =========================================================
+       v51.19 PASS EDIT PREVIEW POSITION FIX
+       PC / smartphone / tablet 共通
+       - PASS編集の確認画面だけを対象
+       - 上部固定ヘッダーの直下から表示
+       - 下部固定フッターに内容が隠れないスクロール余白
+       - 確認カードを画面中央の正常幅へ固定
+       ※ 登録処理 / PASS処理 / BOT / Creator / 他モーダルは変更しない
+       ========================================================= */
+
+    html body #managePreviewModal.registration-preview-modal,
+    html.form-mobile-layout body #managePreviewModal.registration-preview-modal,
+    html.tablet-device body #managePreviewModal.registration-preview-modal,
+    html.form-mobile-layout.tablet-device body #managePreviewModal.registration-preview-modal {
+      position: fixed !important;
+      top: var(--registration-preview-top, 64px) !important;
+      right: 0 !important;
+      bottom: auto !important;
+      left: 0 !important;
+
+      width: 100% !important;
+      height: var(--registration-preview-height, calc(100dvh - 64px)) !important;
+      min-height: 0 !important;
+      max-height: var(--registration-preview-height, calc(100dvh - 64px)) !important;
+
+      display: block !important;
+      align-items: initial !important;
+      justify-content: initial !important;
+
+      padding:
+        10px
+        max(8px, env(safe-area-inset-right))
+        calc(104px + env(safe-area-inset-bottom))
+        max(8px, env(safe-area-inset-left)) !important;
+
+      overflow-x: hidden !important;
+      overflow-y: auto !important;
+      overscroll-behavior-y: contain !important;
+      -webkit-overflow-scrolling: touch !important;
+
+      scroll-padding-top: 10px !important;
+      scroll-padding-bottom: calc(104px + env(safe-area-inset-bottom)) !important;
+
+      box-sizing: border-box !important;
+    }
+
+    html body #managePreviewModal.registration-preview-modal.hidden,
+    html.form-mobile-layout body #managePreviewModal.registration-preview-modal.hidden,
+    html.tablet-device body #managePreviewModal.registration-preview-modal.hidden,
+    html.form-mobile-layout.tablet-device body #managePreviewModal.registration-preview-modal.hidden {
+      display: none !important;
+    }
+
+    html body #managePreviewModal .registration-preview-modal-card,
+    html.form-mobile-layout body #managePreviewModal .registration-preview-modal-card,
+    html.tablet-device body #managePreviewModal .registration-preview-modal-card,
+    html.form-mobile-layout.tablet-device body #managePreviewModal .registration-preview-modal-card {
+      position: relative !important;
+      inset: auto !important;
+
+      width: min(760px, 100%) !important;
+      height: auto !important;
+      min-height: 0 !important;
+      max-height: none !important;
+
+      display: block !important;
+      margin: 0 auto !important;
+      padding: 16px 14px 18px !important;
+
+      overflow: visible !important;
+      transform: none !important;
+      box-sizing: border-box !important;
+    }
+
+    html body #managePreviewModal .eyebrow,
+    html.form-mobile-layout body #managePreviewModal .eyebrow,
+    html.tablet-device body #managePreviewModal .eyebrow {
+      margin-top: 0 !important;
+      margin-bottom: 4px !important;
+    }
+
+    html body #managePreviewModal h2,
+    html.form-mobile-layout body #managePreviewModal h2,
+    html.tablet-device body #managePreviewModal h2 {
+      margin: 0 !important;
+      line-height: 1.15 !important;
+    }
+
+    html body #managePreviewModal .registration-preview-note,
+    html.form-mobile-layout body #managePreviewModal .registration-preview-note,
+    html.tablet-device body #managePreviewModal .registration-preview-note {
+      margin: 8px 0 12px !important;
+      line-height: 1.6 !important;
+    }
+
+    html body #managePreviewCard,
+    html.form-mobile-layout body #managePreviewCard,
+    html.tablet-device body #managePreviewCard {
+      display: block !important;
+      width: 100% !important;
+      height: auto !important;
+      min-height: 0 !important;
+      max-height: none !important;
+      overflow: visible !important;
+      padding-bottom: 0 !important;
+    }
+
+    html body #managePreviewModal .registration-preview-actions,
+    html.form-mobile-layout body #managePreviewModal .registration-preview-actions,
+    html.tablet-device body #managePreviewModal .registration-preview-actions {
+      position: static !important;
+      inset: auto !important;
+      z-index: auto !important;
+
+      display: grid !important;
+      grid-template-columns: minmax(0, .9fr) minmax(0, 1.1fr) !important;
+      gap: 10px !important;
+
+      margin: 16px 0 8px !important;
+      padding: 0 !important;
+
+      border: 0 !important;
+      background: transparent !important;
+      box-shadow: none !important;
+      transform: none !important;
+    }
+
+    html body #managePreviewModal .registration-preview-actions .btn,
+    html.form-mobile-layout body #managePreviewModal .registration-preview-actions .btn,
+    html.tablet-device body #managePreviewModal .registration-preview-actions .btn {
+      width: 100% !important;
+      min-width: 0 !important;
+      min-height: 52px !important;
+      margin: 0 !important;
+      padding: 10px 8px !important;
+      line-height: 1.2 !important;
+    }
+
+    @media screen and (max-width: 420px) {
+      html body #managePreviewModal .registration-preview-modal-card,
+      html.form-mobile-layout body #managePreviewModal .registration-preview-modal-card {
+        padding: 14px 12px 18px !important;
+      }
+
+      html body #managePreviewModal .registration-preview-actions,
+      html.form-mobile-layout body #managePreviewModal .registration-preview-actions {
+        gap: 8px !important;
+      }
+
+      html body #managePreviewModal .registration-preview-actions .btn,
+      html.form-mobile-layout body #managePreviewModal .registration-preview-actions .btn {
+        min-height: 50px !important;
+        font-size: 12.5px !important;
+      }
+    }
+  </style>
+
 </head>
 
 
