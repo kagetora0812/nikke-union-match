@@ -214,7 +214,8 @@
        - サイト既存の赤 var(--red) = #ff5364 を使用
        ========================================================= */
 
-    /* 募集登録 / PASS編集：画像削除UIをチェック式で統一 */
+    /* 募集登録 / PASS編集：画像削除UIをチェック式で統一。
+       既存の登録処理は触らず、旧解除ボタンを内部トリガーとして残す。 */
     .image-remove-check-row {
       display: flex !important;
       align-items: center !important;
@@ -239,6 +240,11 @@
       flex: 0 0 auto !important;
       accent-color: var(--red, #ff5364);
       cursor: pointer;
+    }
+
+    /* app.js互換用。画面には出さないがIDは残す。 */
+    #previewImageClearBtn {
+      display: none !important;
     }
 
     #closeLoadedRecruitmentBtn {
@@ -454,7 +460,16 @@
     }
 
     .manage-remove-image-row {
+      display: flex !important;
+      align-items: center;
+      gap: 8px;
       margin-top: 12px;
+      color: #ff9ca7 !important;
+    }
+
+    .manage-remove-image-row input {
+      width: auto !important;
+      margin: 0 !important;
     }
 
     .manage-same-pass-warning {
@@ -1333,12 +1348,12 @@
       color: var(--cyan, #18abf4) !important;
     }
 
-    /* 利用確認完了のチェックだけ少し大きく */
+    /* 利用確認完了：チェックを少し大きくし、文言は1行のまま */
     #manageMembershipConfirmedNotice {
       display: flex !important;
       align-items: center !important;
       flex-wrap: nowrap !important;
-      gap: 0 !important;
+      gap: 5px !important;
       white-space: nowrap !important;
       font-size: clamp(9px, 2.55vw, 11px) !important;
       line-height: 1.35 !important;
@@ -1352,7 +1367,7 @@
       line-height: 1;
       vertical-align: -2px;
     }
-    #manageMembershipConfirmedNotice .manage-confirm-text {
+    #manageMembershipConfirmedNotice > span:last-child {
       display: inline-block;
       min-width: 0;
       white-space: nowrap !important;
@@ -1862,6 +1877,17 @@
                       >
                       <span>選択画像を削除する</span>
                     </div>
+
+                    <!-- app.jsの既存処理を壊さないため内部トリガーとして残す -->
+                    <button
+                      id="previewImageClearBtn"
+                      class="btn hidden"
+                      type="button"
+                      aria-hidden="true"
+                      tabindex="-1"
+                    >
+                      ✕ 選択画像を解除
+                    </button>
                   </label>
                 </div>
 
@@ -2153,7 +2179,7 @@
               </small>
             </label>
 
-            <label class="manage-remove-image-row image-remove-check-row">
+            <label class="manage-remove-image-row">
               <input id="manageRemoveImage" type="checkbox">
               現在の登録画像を削除する
             </label>
@@ -2940,7 +2966,39 @@
 
   <!-- アプリ本体 -->
 
-  <script src="./app.js?v=51.11"></script>
+  <script src="./app.js?v=51.14"></script>
+
+  <script id="preview-image-check-adapter-v5114">
+    (() => {
+      const input = document.getElementById("previewImage");
+      const legacyButton = document.getElementById("previewImageClearBtn");
+      const row = document.getElementById("previewImageClearRow");
+      const check = document.getElementById("previewImageClearCheck");
+
+      if (!input || !legacyButton || !row || !check) return;
+
+      const sync = () => {
+        const hasFile = Boolean(input.files && input.files.length);
+        row.classList.toggle("hidden", !hasFile);
+        if (!hasFile) check.checked = false;
+      };
+
+      input.addEventListener("change", () => {
+        queueMicrotask(sync);
+      });
+
+      check.addEventListener("change", () => {
+        if (!check.checked) return;
+        legacyButton.click();
+        check.checked = false;
+        sync();
+      });
+
+      const observer = new MutationObserver(sync);
+      observer.observe(legacyButton, { attributes: true, attributeFilter: ["class"] });
+      sync();
+    })();
+  </script>
 
 
 </body>
