@@ -38,7 +38,7 @@
 
   <link
     rel="stylesheet"
-    href="./style.css?v=51.7"
+    href="./style.css?v=51.8"
   >
 
 
@@ -1229,6 +1229,90 @@
         min-height: 50px !important;
         font-size: 12.5px !important;
       }
+    }
+  </style>
+
+
+  <style id="v51-8-register-scroll-and-mobile-title-fix">
+    /* =========================================================
+       v51.8 REGISTER FINAL TOUCH
+       - スマホ登録画面の REGISTER（シアン）を復元
+       - 最終確認画面は実際の表示可能高さに合わせる
+       - 下端に十分なスクロール余白を確保し登録ボタンを押せるようにする
+       - PC / smartphone / tablet 共通。登録画面だけに限定
+       ========================================================= */
+
+    /*
+      style.css のスマホ用 .hero .eyebrow { display:none; } が
+      HERO内にある登録タイトルの REGISTER まで隠していたため、
+      register-mode の登録見出しだけ明示的に復元する。
+    */
+    @media screen and (max-width: 600px) {
+      body.register-mode #registerPage .register-inline-title .eyebrow {
+        display: block !important;
+        visibility: visible !important;
+        opacity: 1 !important;
+        color: var(--cyan, #1ab0f1) !important;
+        margin: 0 0 2px !important;
+      }
+    }
+
+    /*
+      bottom:0 の決め打ちをやめ、visualViewport からJSが渡す
+      「実際に見えている高さ」を使用。Safari / iPadOS のブラウザUIに
+      登録ボタンが潜り込むのを防ぐ。
+    */
+    html body #registrationPreviewModal.registration-preview-modal,
+    html.form-mobile-layout body #registrationPreviewModal.registration-preview-modal,
+    html.tablet-device body #registrationPreviewModal.registration-preview-modal,
+    html.form-mobile-layout.tablet-device body #registrationPreviewModal.registration-preview-modal {
+      top: var(--registration-preview-top, 66px) !important;
+      bottom: auto !important;
+      height: var(--registration-preview-height, calc(100dvh - 66px)) !important;
+      max-height: var(--registration-preview-height, calc(100dvh - 66px)) !important;
+      min-height: 0 !important;
+
+      overflow-x: hidden !important;
+      overflow-y: auto !important;
+      -webkit-overflow-scrolling: touch !important;
+
+      /* PCでも最後のボタンを少し上まで送れる余白 */
+      padding-bottom: 48px !important;
+      scroll-padding-bottom: 48px !important;
+    }
+
+    /* スマホ / タブレットはブラウザ下部UI分を多めに確保。 */
+    @media screen and (max-width: 1024px) {
+      html body #registrationPreviewModal.registration-preview-modal,
+      html.form-mobile-layout body #registrationPreviewModal.registration-preview-modal,
+      html.tablet-device body #registrationPreviewModal.registration-preview-modal,
+      html.form-mobile-layout.tablet-device body #registrationPreviewModal.registration-preview-modal {
+        padding-bottom: calc(124px + env(safe-area-inset-bottom)) !important;
+        scroll-padding-bottom: calc(124px + env(safe-area-inset-bottom)) !important;
+      }
+    }
+
+    /* iPad横向き等、幅1024pxを超えてtablet-device判定される場合も同じ余白。 */
+    html.tablet-device body #registrationPreviewModal.registration-preview-modal,
+    html.form-mobile-layout.tablet-device body #registrationPreviewModal.registration-preview-modal {
+      padding-bottom: calc(124px + env(safe-area-inset-bottom)) !important;
+      scroll-padding-bottom: calc(124px + env(safe-area-inset-bottom)) !important;
+    }
+
+    /* アクションは通常フローのまま。クリック領域を確実に前面へ。 */
+    html body #registrationPreviewModal .registration-preview-actions,
+    html.form-mobile-layout body #registrationPreviewModal .registration-preview-actions,
+    html.tablet-device body #registrationPreviewModal .registration-preview-actions {
+      position: relative !important;
+      z-index: 2 !important;
+      margin-bottom: 0 !important;
+      pointer-events: auto !important;
+    }
+
+    #registrationPreviewBack,
+    #registrationPreviewConfirm {
+      pointer-events: auto !important;
+      touch-action: manipulation;
     }
   </style>
 
