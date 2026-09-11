@@ -3292,16 +3292,9 @@ function clearInitialPreviewImageSelection(showMessage = true) {
     registrationPreviewObjectUrl = null;
   }
 
-  $("#previewImageClearRow")
+  $("#previewImageClearBtn")
     ?.classList
     .add("hidden");
-
-  const clearCheck =
-    $("#previewImageClearCheck");
-
-  if (clearCheck) {
-    clearCheck.checked = false;
-  }
 
   const status =
     $("#previewImageStatus");
@@ -3668,16 +3661,9 @@ $("#previewImage")
       const status = $("#previewImageStatus");
 
       if (!file) {
-        $("#previewImageClearRow")
+        $("#previewImageClearBtn")
           ?.classList
           .add("hidden");
-
-        const clearCheck =
-          $("#previewImageClearCheck");
-
-        if (clearCheck) {
-          clearCheck.checked = false;
-        }
 
         if (status) {
           status.textContent = "";
@@ -3688,16 +3674,9 @@ $("#previewImage")
       if (!validatePreviewImageFile(file)) {
         event.target.value = "";
 
-        $("#previewImageClearRow")
+        $("#previewImageClearBtn")
           ?.classList
           .add("hidden");
-
-        const clearCheck =
-          $("#previewImageClearCheck");
-
-        if (clearCheck) {
-          clearCheck.checked = false;
-        }
 
         if (status) {
           status.textContent = "";
@@ -3705,17 +3684,9 @@ $("#previewImage")
         return;
       }
 
-      const clearRow =
-        $("#previewImageClearRow");
-
-      const clearCheck =
-        $("#previewImageClearCheck");
-
-      clearRow?.classList.remove("hidden");
-
-      if (clearCheck) {
-        clearCheck.checked = false;
-      }
+      $("#previewImageClearBtn")
+        ?.classList
+        .remove("hidden");
 
       if (status) {
         status.textContent =
@@ -3725,14 +3696,10 @@ $("#previewImage")
   );
 
 
-$("#previewImageClearCheck")
+$("#previewImageClearBtn")
   ?.addEventListener(
-    "change",
-    event => {
-      if (!event.target?.checked) {
-        return;
-      }
-
+    "click",
+    () => {
       clearInitialPreviewImageSelection(true);
     }
   );
@@ -4968,7 +4935,7 @@ function renderLoadedManageRecruitment() {
 
       membershipNotice.innerHTML =
         `<span class="manage-confirm-check" aria-hidden="true">✅</span>`
-        + `<span class="manage-confirm-text">利用確認が完了しました。次回確認期限：${nextDate}</span>`;
+        + `<span>利用確認が完了しました。次回確認期限：${nextDate}</span>`;
       membershipNotice.classList.remove("hidden");
     } else {
       membershipNotice.classList.add("hidden");
