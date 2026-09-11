@@ -3978,6 +3978,15 @@ body .bottom-nav .nav-btn.active:hover {
   box-shadow: none !important;
 }
 
+/* PASS編集：「編集をやめる」を他の境界線ボタンと同じ四角形に統一 */
+#cancelManageEditBtn {
+  clip-path: none !important;
+  border: 1px solid #686b70 !important;
+  background: #ffffff !important;
+  color: #222428 !important;
+  box-shadow: none !important;
+}
+
 .registration-preview-platform {
   margin-bottom: 9px;
   color: #7b8085;
