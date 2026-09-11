@@ -3292,9 +3292,16 @@ function clearInitialPreviewImageSelection(showMessage = true) {
     registrationPreviewObjectUrl = null;
   }
 
-  $("#previewImageClearBtn")
+  $("#previewImageClearRow")
     ?.classList
     .add("hidden");
+
+  const clearCheck =
+    $("#previewImageClearCheck");
+
+  if (clearCheck) {
+    clearCheck.checked = false;
+  }
 
   const status =
     $("#previewImageStatus");
@@ -3661,9 +3668,16 @@ $("#previewImage")
       const status = $("#previewImageStatus");
 
       if (!file) {
-        $("#previewImageClearBtn")
+        $("#previewImageClearRow")
           ?.classList
           .add("hidden");
+
+        const clearCheck =
+          $("#previewImageClearCheck");
+
+        if (clearCheck) {
+          clearCheck.checked = false;
+        }
 
         if (status) {
           status.textContent = "";
@@ -3674,9 +3688,16 @@ $("#previewImage")
       if (!validatePreviewImageFile(file)) {
         event.target.value = "";
 
-        $("#previewImageClearBtn")
+        $("#previewImageClearRow")
           ?.classList
           .add("hidden");
+
+        const clearCheck =
+          $("#previewImageClearCheck");
+
+        if (clearCheck) {
+          clearCheck.checked = false;
+        }
 
         if (status) {
           status.textContent = "";
@@ -3684,9 +3705,17 @@ $("#previewImage")
         return;
       }
 
-      $("#previewImageClearBtn")
-        ?.classList
-        .remove("hidden");
+      const clearRow =
+        $("#previewImageClearRow");
+
+      const clearCheck =
+        $("#previewImageClearCheck");
+
+      clearRow?.classList.remove("hidden");
+
+      if (clearCheck) {
+        clearCheck.checked = false;
+      }
 
       if (status) {
         status.textContent =
@@ -3696,10 +3725,14 @@ $("#previewImage")
   );
 
 
-$("#previewImageClearBtn")
+$("#previewImageClearCheck")
   ?.addEventListener(
-    "click",
-    () => {
+    "change",
+    event => {
+      if (!event.target?.checked) {
+        return;
+      }
+
       clearInitialPreviewImageSelection(true);
     }
   );
@@ -4935,7 +4968,7 @@ function renderLoadedManageRecruitment() {
 
       membershipNotice.innerHTML =
         `<span class="manage-confirm-check" aria-hidden="true">✅</span>`
-        + `<span>利用確認が完了しました。次回確認期限：${nextDate}</span>`;
+        + `<span class="manage-confirm-text">利用確認が完了しました。次回確認期限：${nextDate}</span>`;
       membershipNotice.classList.remove("hidden");
     } else {
       membershipNotice.classList.add("hidden");
@@ -5011,7 +5044,10 @@ function renderLoadedManageRecruitment() {
     $("#openManageActionBtn");
 
   if (editButton) {
-    editButton.textContent = "✏️ 登録内容を編集";
+    editButton.textContent =
+      isUnion && !isUnionRecruiting
+        ? "📣 募集を開始"
+        : "✏️ 編集";
     editButton.classList.toggle("hidden", !isUnion);
   }
 
@@ -6497,7 +6533,7 @@ $("#deleteUnionMembershipBtn")
 
       const ok =
         window.confirm(
-          "ユニオン会員登録を解除しますか？\n\n・TOTAL UNIONSから外れます\n・募集中なら求人広告も終了します\n・BOTとのユニオン連携も解除されます\n・再利用する場合は新規登録が必要です"
+          "UNION MATCHから登録を削除しますか？\n\n・TOTAL UNIONSから外れます\n・募集中なら求人広告も終了します\n・BOTとのユニオン連携も解除されます\n・再利用する場合は新規登録が必要です"
         );
 
       if (!ok) {
@@ -6526,13 +6562,13 @@ $("#deleteUnionMembershipBtn")
           error || data
         );
         alert(
-          "会員登録を解除できませんでした。"
+          "登録を削除できませんでした。"
         );
         return;
       }
 
       alert(
-        "ユニオン会員登録を解除しました。\n再び利用する場合は新規登録してください。"
+        "UNION MATCHから登録を削除しました。\n再び利用する場合は新規登録してください。"
       );
 
       clearLoadedManageRecruitment();
