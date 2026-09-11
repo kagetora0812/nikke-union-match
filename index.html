@@ -38,7 +38,7 @@
 
   <link
     rel="stylesheet"
-    href="./style.css?v=51.5"
+    href="./style.css?v=51.6"
   >
 
 
@@ -886,6 +886,159 @@
         font-size: 10.5px !important;
         line-height: 1.45 !important;
       }
+    }
+  </style>
+
+
+  <style id="v51-6-preview-below-topbar-universal-scroll">
+    /* =========================================================
+       v51.6 FINAL CONFIRMATION POSITION / SCROLL
+       - PC / smartphone / tablet 共通
+       - 登録確認画面は上部メニューバー直下から表示
+       - 確認カード全体を1本の縦スクロールにする
+       - 「修正する / この内容で登録」は固定せず最下部に通常配置
+       - 上部タイトルが画面外へ切れないようにする
+       ※ 登録確認モーダルの見た目だけ。登録処理は変更しない。
+       ========================================================= */
+
+    #registrationPreviewModal.registration-preview-modal {
+      position: fixed !important;
+      top: 66px !important;
+      right: 0 !important;
+      bottom: 0 !important;
+      left: 0 !important;
+
+      width: 100% !important;
+      height: auto !important;
+      min-height: 0 !important;
+      max-height: none !important;
+
+      display: block !important;
+      padding:
+        12px
+        max(8px, env(safe-area-inset-left))
+        calc(24px + env(safe-area-inset-bottom))
+        max(8px, env(safe-area-inset-right)) !important;
+
+      overflow-x: hidden !important;
+      overflow-y: auto !important;
+      overscroll-behavior: contain;
+      -webkit-overflow-scrolling: touch;
+      scroll-padding-top: 12px !important;
+      scroll-padding-bottom: 24px !important;
+    }
+
+    #registrationPreviewModal.registration-preview-modal.hidden {
+      display: none !important;
+    }
+
+    #registrationPreviewModal .registration-preview-modal-card {
+      position: relative !important;
+      inset: auto !important;
+
+      width: min(760px, 100%) !important;
+      height: auto !important;
+      min-height: 0 !important;
+      max-height: none !important;
+
+      display: block !important;
+      margin: 0 auto !important;
+      padding: 16px 14px !important;
+
+      overflow: visible !important;
+      transform: none !important;
+    }
+
+    #registrationPreviewModal .eyebrow {
+      margin-top: 0 !important;
+      margin-bottom: 5px !important;
+    }
+
+    #registrationPreviewModal h2 {
+      margin: 0 !important;
+      line-height: 1.15 !important;
+    }
+
+    #registrationPreviewModal .registration-preview-note {
+      margin: 8px 0 12px !important;
+      line-height: 1.6 !important;
+    }
+
+    #registrationPreviewCard {
+      display: block !important;
+      width: 100% !important;
+      min-height: 0 !important;
+      max-height: none !important;
+      overflow: visible !important;
+      padding-bottom: 0 !important;
+    }
+
+    #registrationPreviewModal .registration-preview-actions {
+      position: static !important;
+      inset: auto !important;
+      z-index: auto !important;
+
+      display: grid !important;
+      grid-template-columns: minmax(0, 1fr) minmax(0, 1fr) !important;
+      gap: 10px !important;
+
+      margin: 14px 0 0 !important;
+      padding: 0 !important;
+
+      border: 0 !important;
+      background: transparent !important;
+      box-shadow: none !important;
+      transform: none !important;
+    }
+
+    #registrationPreviewModal .registration-preview-actions .btn {
+      width: 100% !important;
+      min-width: 0 !important;
+      min-height: 52px !important;
+      margin: 0 !important;
+    }
+
+    /* PCの「修正する」はホバーでシアン。 */
+    @media (hover: hover) and (pointer: fine) {
+      #registrationPreviewBack:hover,
+      #registrationPreviewBack:active {
+        border-color: var(--cyan, #1ab0f1) !important;
+        background:
+          linear-gradient(
+            180deg,
+            var(--cyan-2, #28b8f4) 0%,
+            var(--cyan, #1ab0f1) 100%
+          ) !important;
+        color: #fff !important;
+        box-shadow: 0 4px 12px rgba(26,176,241,.28) !important;
+      }
+    }
+
+    /* スマホはボタンを縦積みにして押しやすくする。 */
+    @media screen and (max-width: 600px) {
+      #registrationPreviewModal.registration-preview-modal {
+        padding-top: 8px !important;
+      }
+
+      #registrationPreviewModal .registration-preview-modal-card {
+        padding: 14px 12px !important;
+      }
+
+      #registrationPreviewModal .registration-preview-actions {
+        grid-template-columns: 1fr !important;
+        gap: 8px !important;
+      }
+
+      #registrationPreviewModal .registration-preview-actions .btn {
+        min-height: 50px !important;
+      }
+    }
+
+    /* タブレットも同じくメニューバー直下から自然にスクロール。 */
+    html.tablet-device body #registrationPreviewModal.registration-preview-modal {
+      top: 66px !important;
+      bottom: 0 !important;
+      height: auto !important;
     }
   </style>
 
@@ -2390,7 +2543,7 @@
 
   <!-- アプリ本体 -->
 
-  <script src="./app.js?v=51.5"></script>
+  <script src="./app.js?v=51.6"></script>
 
 
 </body>
