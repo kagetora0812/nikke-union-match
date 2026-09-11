@@ -7299,8 +7299,24 @@ function applyInitialRecruitmentView() {
 
   }
 
+  const requestedHash =
+    window.location.hash;
+
+  // BOT / Creator のハンバーガー・フッターから
+  // 募集登録 / PASS管理へ直接入れるようにする。
+  // 既存の showPage() を使い、画面切替ロジックは増やさない。
+  if (requestedHash === "#registerPage") {
+    showPage("register");
+    return;
+  }
+
+  if (requestedHash === "#managePage") {
+    showPage("manage");
+    return;
+  }
+
   if (
-    window.location.hash ===
+    requestedHash ===
     "#listPage"
   ) {
 
