@@ -1316,6 +1316,182 @@
     }
   </style>
 
+
+  <style id="v51-9-pass-manage-final">
+    /* =========================================================
+       v51.9 PASS MANAGEMENT
+       - 3本線 / フッター / 見出しを「PASS管理」に統一
+       - 呼び出し後はPASS入力を隠して管理画面へ切替
+       - ユニオン操作を整理、指揮官は締切のみ
+       - 固定フッターでカード上下が隠れない余白を確保
+       ========================================================= */
+
+    .manage-pass-lead {
+      margin: 8px 0 14px !important;
+      color: var(--muted, #7b8085);
+      font-size: 12px;
+      font-weight: 700;
+      line-height: 1.7;
+    }
+
+    #managePage.manage-loaded-mode #closeForm,
+    #managePage.manage-loaded-mode .manage-pass-lead,
+    #managePage.manage-loaded-mode .manage-pass-notice {
+      display: none !important;
+    }
+
+    body.manage-mode #heroManageArea,
+    body.manage-mode #managePage,
+    body.manage-mode #manageLoadedPanel,
+    body.manage-mode #manageEditPanel {
+      height: auto !important;
+      min-height: 0 !important;
+      max-height: none !important;
+      overflow: visible !important;
+    }
+
+    body.manage-mode #heroManageArea {
+      width: 100% !important;
+      padding-bottom: 48px !important;
+    }
+
+    body.manage-mode #manageLoadedPanel,
+    body.manage-mode #manageEditPanel {
+      scroll-margin-top: 82px !important;
+      scroll-margin-bottom: 138px !important;
+    }
+
+    .manage-octagon {
+      border-radius: 0 !important;
+      clip-path: polygon(
+        8px 0,
+        calc(100% - 8px) 0,
+        100% 8px,
+        100% calc(100% - 8px),
+        calc(100% - 8px) 100%,
+        8px 100%,
+        0 calc(100% - 8px),
+        0 8px
+      ) !important;
+    }
+
+    .manage-main-actions {
+      margin-top: 26px;
+    }
+
+    .manage-renew-main {
+      min-height: 58px !important;
+    }
+
+    .manage-renew-state-note {
+      margin: 9px 2px 18px;
+      color: var(--muted, #7b8085);
+      font-size: 11px;
+      font-weight: 700;
+      line-height: 1.7;
+    }
+
+    .manage-sub-actions {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+      gap: 9px;
+    }
+
+    .manage-sub-actions.single {
+      grid-template-columns: 1fr;
+    }
+
+    .manage-sub-actions .btn {
+      width: 100%;
+      min-width: 0;
+      min-height: 52px;
+      margin: 0;
+    }
+
+    .manage-delete-area {
+      margin-top: 72px;
+      padding-top: 24px;
+      border-top: 1px solid #d8dcdf;
+    }
+
+    .manage-delete-btn {
+      width: 100%;
+      min-height: 52px;
+      border: 1px solid var(--red, #ff5364) !important;
+      color: #d43f4f !important;
+      background: #fff !important;
+      box-shadow: none !important;
+    }
+
+    .manage-delete-btn:hover,
+    .manage-delete-btn:active {
+      border-color: var(--red, #ff5364) !important;
+      color: #fff !important;
+      background: var(--red, #ff5364) !important;
+    }
+
+    .manage-delete-note {
+      margin-top: 10px;
+      color: #89545a;
+      font-size: 11px;
+      font-weight: 700;
+      line-height: 1.8;
+    }
+
+    .manage-commander-actions {
+      margin-top: 26px;
+    }
+
+    .manage-commander-note {
+      margin-top: 9px;
+      color: var(--muted, #7b8085);
+      font-size: 11px;
+      line-height: 1.7;
+    }
+
+    #bottomNav .nav-key-icon {
+      display: block;
+      width: 22px;
+      height: 22px;
+      margin: 0 auto 2px;
+      fill: none;
+      stroke: currentColor;
+      stroke-width: 2;
+      stroke-linecap: square;
+      stroke-linejoin: miter;
+      flex: 0 0 auto;
+    }
+
+    #manageRecruitmentEditFields.hidden {
+      display: none !important;
+    }
+
+    @media screen and (max-width: 1024px) {
+      body.manage-mode #heroManageArea {
+        padding-bottom: calc(102px + env(safe-area-inset-bottom)) !important;
+      }
+
+      body.manage-mode #managePage {
+        padding-bottom: calc(38px + env(safe-area-inset-bottom)) !important;
+      }
+    }
+
+    @media screen and (max-width: 600px) {
+      .manage-sub-actions {
+        gap: 7px;
+      }
+
+      .manage-sub-actions .btn {
+        padding: 9px 5px;
+        font-size: 11.5px;
+      }
+
+      .manage-delete-area {
+        margin-top: 60px;
+      }
+    }
+  </style>
+
 </head>
 
 
@@ -1380,7 +1556,7 @@
     <button type="button" data-menu-action="commander">指揮官を見る</button>
     <button type="button" data-menu-action="union">ユニオンを見る</button>
     <button type="button" data-menu-action="register">募集登録</button>
-    <button type="button" data-menu-action="manage">編集・締切</button>
+    <button type="button" data-menu-action="manage">PASS管理</button>
     <a href="./bot.html">Discord BOT</a>
     <a href="./creators.html">応援クリエイター</a>
   </aside>
@@ -1800,14 +1976,18 @@
 
             <div class="manage-inline-title">
               <div class="eyebrow">MANAGE</div>
-              <h2>PASSで利用確認・編集・締切</h2>
+              <h2>PASS管理</h2>
             </div>
 
           </div>
 
+          <p class="manage-pass-lead">
+            PASSを入力して登録内容を呼び出してください。
+          </p>
+
           <form
             id="closeForm"
-            class="panel"
+            class="panel manage-pass-input-panel"
           >
 
             <label>
@@ -1843,7 +2023,7 @@
             </strong>
 
             <span>
-              ユニオンPASSで登録内容を呼び出すと利用確認が完了し、次回確認期限が14日後へ更新されます。BOT連携中はBOTから自動確認されます。
+              登録内容を確認し、更新してください。更新すると次回確認期限が14日後に更新されます。引き続きBOTも利用可能です。
             </span>
 
           </div>
@@ -1893,78 +2073,89 @@
               <img id="manageCurrentImage" alt="現在の募集画像">
             </div>
 
-            <!-- まず「編集 / 締切」の2択 -->
+            <!-- ========================================
+                 PASS管理アクション
+                 ユニオン：更新 / 編集 / 締切 / 登録削除
+                 指揮官：締切のみ
+            ========================================= -->
+
             <div
-              id="managePrimaryActions"
-              class="manage-action-stack"
+              id="manageUnionActions"
+              class="manage-main-actions hidden"
             >
 
               <button
-                id="openManageActionBtn"
-                class="btn primary wide"
+                id="renewUnchangedBtn"
+                class="btn primary wide manage-octagon manage-renew-main"
                 type="button"
               >
-                ✏️ 編集
+                🔄 内容そのままで14日再延長
               </button>
 
-              <button
-                id="closeLoadedRecruitmentBtn"
-                class="btn wide"
-                type="button"
+              <div
+                id="manageRenewStateNote"
+                class="manage-renew-state-note"
+              ></div>
+
+              <div
+                id="manageUnionSubActions"
+                class="manage-sub-actions"
               >
-                募集を締め切る
-              </button>
-
-              <button
-                id="deleteUnionMembershipBtn"
-                class="btn danger wide hidden"
-                type="button"
-              >
-                会員登録を解除
-              </button>
-
-            </div>
-
-            <!-- 「編集」を押した時だけ、延長 / 再編集を表示 -->
-            <div
-              id="manageEditActionChoices"
-              class="manage-edit-choice-panel hidden"
-            >
-
-              <div class="manage-edit-choice-title">
-                編集方法を選んでください
-              </div>
-
-              <div class="manage-action-stack">
-
-                <button
-                  id="renewUnchangedBtn"
-                  class="btn primary wide"
-                  type="button"
-                >
-                  🔄 内容そのままで14日再延長
-                </button>
 
                 <button
                   id="openManageEditBtn"
-                  class="btn wide"
+                  class="btn manage-octagon"
                   type="button"
                 >
-                  ✏️ 内容を編集して再登録
+                  ✏️ 登録内容を編集
                 </button>
 
                 <button
-                  id="backManageActionBtn"
-                  class="text-btn wide"
+                  id="closeLoadedRecruitmentBtn"
+                  class="btn manage-octagon"
                   type="button"
                 >
-                  ← 編集／締切に戻る
+                  ■ 求人広告を締め切る
                 </button>
 
               </div>
 
-              <div class="manage-renew-note">
-                再延長・再登録すると、掲載期限は本日から14日間に更新され、一覧の一番上へ移動して <strong>🔥 NEW</strong> 表示も復活します。
+              <div
+                id="manageDeleteArea"
+                class="manage-delete-area"
+              >
+
+                <button
+                  id="deleteUnionMembershipBtn"
+                  class="btn manage-octagon manage-delete-btn"
+                  type="button"
+                >
+                  🗑 UNION MATCHから登録を削除
+                </button>
+
+                <div class="manage-delete-note">
+                  登録情報・求人広告・BOT連携がすべて解除され、再利用する場合は新規登録が必要です。
+                </div>
+
+              </div>
+
+            </div>
+
+            <div
+              id="manageCommanderActions"
+              class="manage-commander-actions hidden"
+            >
+
+              <button
+                id="closeCommanderRecruitmentBtn"
+                class="btn wide manage-octagon"
+                type="button"
+              >
+                ■ 募集を締め切る
+              </button>
+
+              <div class="manage-commander-note">
+                募集終了後は一覧から非表示になります。
               </div>
 
             </div>
@@ -1976,8 +2167,8 @@
             class="panel manage-edit-panel hidden"
           >
 
-            <div class="eyebrow">EDIT & REREGISTER</div>
-            <h3 id="manageEditTitle">募集内容を編集</h3>
+            <div class="eyebrow">EDIT</div>
+            <h3 id="manageEditTitle">登録内容を編集</h3>
 
             <div class="manage-fixed-name">
               <span id="manageEditNameLabel">指揮官名</span>
@@ -2011,7 +2202,41 @@
                   <option value="駆け出しユニオン">駆け出しユニオン</option>
                 </select>
               </label>
+
+              <section id="manageUnionUsageBlock" class="register-usage-block">
+                <div class="register-usage-head">
+                  <div class="register-usage-title">利用方法</div>
+                  <div class="register-usage-bot-note">募集する・登録のみでもBOTをご利用できます。</div>
+                </div>
+
+                <div class="register-usage-options" role="group" aria-label="ユニオンの利用方法">
+                  <button
+                    id="manageUnionRecruitModeBtn"
+                    class="register-usage-option active"
+                    type="button"
+                    aria-pressed="true"
+                  >
+                    <strong>募集する</strong>
+                  </button>
+
+                  <button
+                    id="manageUnionRegisterOnlyModeBtn"
+                    class="register-usage-option"
+                    type="button"
+                    aria-pressed="false"
+                  >
+                    <strong>登録のみ</strong>
+                  </button>
+                </div>
+
+                <p id="manageUnionUsageNote" class="register-usage-note">
+                  求人広告を掲載します。
+                </p>
+              </section>
+
             </div>
+
+            <div id="manageRecruitmentEditFields">
 
             <label>
               募集記事URL
@@ -2052,13 +2277,15 @@
               <img id="manageEditSelectedImage" alt="差し替え画像プレビュー">
             </div>
 
+            </div>
+
             <div class="manage-action-stack">
               <button
                 id="manageEditPreviewBtn"
                 class="btn primary wide"
                 type="button"
               >
-                再登録内容を確認する
+                登録内容を確認する
               </button>
 
               <button
@@ -2381,8 +2608,17 @@
       class="nav-btn"
       type="button"
     >
-      <span>▣</span>
-      編集・締切
+      <svg
+        class="nav-key-icon"
+        viewBox="0 0 24 24"
+        aria-hidden="true"
+      >
+        <circle cx="7.5" cy="12" r="4"></circle>
+        <path d="M11.5 12H21"></path>
+        <path d="M17 12V15"></path>
+        <path d="M20 12V15"></path>
+      </svg>
+      PASS管理
     </button>
 
   </nav>
@@ -2528,7 +2764,7 @@
 
       <p id="registrationPassWarning" class="warning registration-pass-warning">
         <strong id="registrationPassWarningTitle">PASSを必ず保存してください。</strong>
-        <span id="registrationPassWarningText">次回の編集・再延長・締切に必要です。</span>
+        <span id="registrationPassWarningText">「PASS管理」で募集を締め切る際に使用します。</span>
       </p>
 
 
@@ -2601,13 +2837,11 @@
         ×
       </button>
 
-      <div class="eyebrow">REREGISTER PREVIEW</div>
+      <div id="managePreviewEyebrow" class="eyebrow">EDIT PREVIEW</div>
 
-      <h2>再登録内容を確認</h2>
+      <h2 id="managePreviewTitle">登録内容を確認</h2>
 
-      <p class="registration-preview-note">
-        再登録すると掲載期限が本日から14日間になり、一覧の一番上へ移動してNEW表示が復活します。
-      </p>
+      <p id="managePreviewNote" class="registration-preview-note"></p>
 
       <div id="managePreviewCard"></div>
 
@@ -2625,7 +2859,7 @@
           class="btn primary"
           type="button"
         >
-          🔥 この内容で再登録
+          この内容で更新
         </button>
       </div>
 
@@ -2675,11 +2909,11 @@
 
       <p class="warning manage-same-pass-warning">
         ※ PASSは前回と同じです。<br>
-        次回の編集・再延長・締切にも、このPASSをそのまま使用してください。
+        次回も同じPASSを「PASS管理」で使用してください。
       </p>
 
       <div class="result-row">
-        <span>新しい掲載期限</span>
+        <span id="manageResultExpiryLabel">新しい期限</span>
         <strong id="manageResultExpiry">-</strong>
       </div>
 
@@ -2817,7 +3051,7 @@
 
   <!-- アプリ本体 -->
 
-  <script src="./app.js?v=51.7"></script>
+  <script src="./app.js?v=51.9"></script>
 
 
 </body>
