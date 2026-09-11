@@ -618,6 +618,48 @@
       }
     }
   </style>
+
+
+  <style id="subpage-browser-ui-lock-v23">
+    /* v23: mobile/tablet viewport lock.
+       Keep the document itself from scrolling so Safari/Chrome browser UI
+       does not collapse/expand with page scroll. Only <main> scrolls. */
+    @media screen and (max-width: 1366px) {
+      html,
+      body {
+        width: 100% !important;
+        height: 100% !important;
+        min-height: 0 !important;
+        overflow: hidden !important;
+        overscroll-behavior: none !important;
+      }
+
+      body {
+        box-sizing: border-box !important;
+        height: 100dvh !important;
+        padding-top: 64px !important;
+        padding-bottom: calc(68px + env(safe-area-inset-bottom)) !important;
+      }
+
+      body > main.container {
+        box-sizing: border-box !important;
+        height: 100% !important;
+        min-height: 0 !important;
+        max-height: 100% !important;
+        overflow-x: hidden !important;
+        overflow-y: auto !important;
+        overscroll-behavior-y: contain !important;
+        -webkit-overflow-scrolling: touch !important;
+        touch-action: pan-y !important;
+      }
+    }
+
+    @media screen and (max-width: 600px) {
+      body {
+        padding-top: 58px !important;
+      }
+    }
+  </style>
 </head>
 <body>
   <header class="topbar bot-topbar">
