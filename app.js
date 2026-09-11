@@ -7695,3 +7695,107 @@ applyInitialRecruitmentView();
 
 })();
 
+// ========================================
+// v51.7 登録最終確認画面 安定化
+// PC / smartphone / tablet 共通
+// - 実際の上部メニューバー下端を取得
+// - 最終確認中だけ下部固定ナビを隠す
+// - 開くたびスクロール先頭へ戻す
+// ========================================
+(() => {
+  const root = document.documentElement;
+  const body = document.body;
+  const modal = document.getElementById("registrationPreviewModal");
+  const topbar = document.querySelector(".topbar");
+
+  if (!body || !modal) {
+    return;
+  }
+
+  let wasOpen = false;
+  let syncFrame = 0;
+
+  function updatePreviewTop() {
+    const rect = topbar?.getBoundingClientRect();
+    const bottom = rect?.bottom;
+    const fallback = rect?.height || 66;
+    const safeTop = Number.isFinite(bottom) && bottom > 0
+      ? bottom
+      : fallback;
+
+    root.style.setProperty(
+      "--registration-preview-top",
+      `${Math.max(0, Math.round(safeTop))}px`
+    );
+  }
+
+  function syncRegistrationPreviewLayout() {
+    updatePreviewTop();
+
+    const open = !modal.classList.contains("hidden");
+
+    body.classList.toggle(
+      "registration-preview-open",
+      open
+    );
+
+    if (open && !wasOpen) {
+      requestAnimationFrame(() => {
+        modal.scrollTop = 0;
+
+        const previewCard =
+          document.getElementById("registrationPreviewCard");
+
+        if (previewCard) {
+          previewCard.scrollTop = 0;
+        }
+      });
+    }
+
+    wasOpen = open;
+  }
+
+  function schedulePreviewLayoutSync() {
+    if (syncFrame) {
+      cancelAnimationFrame(syncFrame);
+    }
+
+    syncFrame = requestAnimationFrame(() => {
+      syncFrame = 0;
+      syncRegistrationPreviewLayout();
+    });
+  }
+
+  const observer = new MutationObserver(
+    schedulePreviewLayoutSync
+  );
+
+  observer.observe(
+    modal,
+    {
+      attributes: true,
+      attributeFilter: ["class"]
+    }
+  );
+
+  window.addEventListener(
+    "resize",
+    schedulePreviewLayoutSync,
+    { passive: true }
+  );
+
+  window.visualViewport?.addEventListener(
+    "resize",
+    schedulePreviewLayoutSync,
+    { passive: true }
+  );
+
+  window.visualViewport?.addEventListener(
+    "scroll",
+    schedulePreviewLayoutSync,
+    { passive: true }
+  );
+
+  syncRegistrationPreviewLayout();
+})();
+
