@@ -586,6 +586,116 @@
     }
   </style>
 
+
+  <style id="manage-match-register-v512">
+    /* =========================================================
+       v51.2 MANAGE DESIGN MATCH
+       PASS管理ページを募集登録ページと同じ見た目へ統一。
+       ロジック・ID・Supabase/BOT処理は変更しない。
+       ========================================================= */
+
+    body.manage-mode .manage-inline-top {
+      display: flex !important;
+      align-items: center !important;
+      gap: 12px !important;
+    }
+
+    body.manage-mode .manage-inline-title {
+      min-width: 0;
+    }
+
+    body.manage-mode .manage-inline-title .eyebrow {
+      margin-bottom: 2px;
+      color: var(--cyan) !important;
+    }
+
+    body.manage-mode .manage-inline-title h2 {
+      margin: 0;
+    }
+
+    /* PASS入力部は募集登録フォームと同じ白ベース＋シアン枠 */
+    #managePage #closeForm {
+      margin-top: 0;
+    }
+
+    #managePage .manage-pass-notice {
+      margin-top: 14px;
+    }
+
+    /* 呼び出し後の現在情報も登録フォームと同じ明るいUIへ */
+    #managePage .manage-current-grid > div,
+    #managePage .manage-current-url,
+    #managePage .manage-fixed-name {
+      padding: 13px;
+      border: 1px solid #c8ccd0 !important;
+      background: #fff !important;
+      color: var(--ink) !important;
+    }
+
+    #managePage .manage-current-grid span,
+    #managePage .manage-current-url span,
+    #managePage .manage-fixed-name span,
+    #managePage .manage-current-image-box > span {
+      color: #727980 !important;
+    }
+
+    #managePage .manage-current-grid strong,
+    #managePage .manage-fixed-name strong {
+      color: var(--ink) !important;
+    }
+
+    #managePage .manage-current-image-box {
+      border: 1px solid #c8ccd0 !important;
+      background: #fff !important;
+    }
+
+    #managePage .manage-current-image-box img {
+      background: #f2f5f7 !important;
+    }
+
+    #managePage .manage-status-chip {
+      border-color: var(--cyan) !important;
+      color: var(--cyan-dark) !important;
+      background: rgba(26,176,241,.06);
+    }
+
+    #managePage .manage-edit-choice-panel {
+      margin-top: 16px;
+      padding: 14px;
+      border: 1px solid rgba(26,176,241,.24) !important;
+      background: rgba(26,176,241,.035) !important;
+    }
+
+    #managePage .manage-edit-choice-title {
+      color: #222428 !important;
+      font-size: 13px;
+      letter-spacing: 0;
+    }
+
+    #managePage .manage-renew-note,
+    #managePage .manage-result-new-note,
+    #managePage .manage-result-summary,
+    #managePage .manage-fixed-name small {
+      color: #6e7379 !important;
+    }
+
+    #managePage .manage-remove-image-row {
+      color: #d84555 !important;
+    }
+
+    /* スマホでも募集登録ページと同じタイトル並びを維持 */
+    @media screen and (max-width: 600px) {
+      body.manage-mode .manage-inline-top {
+        align-items: center !important;
+      }
+
+      body.manage-mode .manage-inline-title h2 {
+        font-size: clamp(22px, 7vw, 30px);
+        line-height: 1.15;
+      }
+    }
+  </style>
+
 </head>
 
 
@@ -1065,20 +1175,9 @@
               <span aria-hidden="true">↩</span>
             </button>
 
-          </div>
-
-          <div class="section-head">
-
-            <div>
-
-              <div class="eyebrow">
-                MANAGE
-              </div>
-
-              <h2>
-                PASSで利用確認・編集・締切
-              </h2>
-
+            <div class="manage-inline-title">
+              <div class="eyebrow">MANAGE</div>
+              <h2>PASSで利用確認・編集・締切</h2>
             </div>
 
           </div>
