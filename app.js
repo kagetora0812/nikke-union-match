@@ -7670,6 +7670,8 @@ applyInitialRecruitmentView();
           updateViewportState();
 
           requestAnimationFrame(() => {
+            previewModal.scrollTop = 0;
+
             const previewCard =
               document.getElementById("registrationPreviewCard");
 
