@@ -38,7 +38,7 @@
 
   <link
     rel="stylesheet"
-    href="./style.css?v=51.4"
+    href="./style.css?v=51.5"
   >
 
 
@@ -697,17 +697,44 @@
   </style>
 
 
-  <style id="v51-4-mobile-register-viewport-fix">
+  <style id="v51-5-mobile-tablet-preview-scroll-fix">
     /* =========================================================
-       v51.4 MOBILE / TABLET REGISTER FINISH
-       - 登録確認モーダルを visual viewport の上端に固定
-       - ソフトキーボード中も登録フォームを自然にスクロール可能
-       - 入力中は固定下部ナビを退避
-       ※ 登録画面 / 登録確認だけに限定。TOP・募集一覧・BOT・CREATORは変更しない。
+       v51.5 MOBILE / TABLET PREVIEW SCROLL FIX
+       - スマホ / タブレットの登録確認は画面全体を自然にスクロール
+       - 下部アクションを固定せず、PCと同じく内容の最後へ配置
+       - 上部タイトル / 説明が切れないようにする
+       - PCの「修正する」はマウスオーバーでシアンへ
+       ※ 登録確認画面だけを変更。登録ロジック / Supabase / BOTは変更しない。
        ========================================================= */
 
-    /* JSがスマホ / タブレット判定時に html へ付けるクラス。
-       iPad横向きなど1024pxを超えるタブレットにも同じ挙動を適用する。 */
+    /* PC: 「修正する」をホバー時にシアン表示 */
+    @media (hover: hover) and (pointer: fine) {
+      #registrationPreviewBack:hover,
+      #registrationPreviewBack:active,
+      #managePreviewBack:hover,
+      #managePreviewBack:active {
+        border-color: var(--cyan, #1ab0f1) !important;
+        background:
+          linear-gradient(
+            180deg,
+            var(--cyan-2, #28b8f4) 0%,
+            var(--cyan, #1ab0f1) 100%
+          ) !important;
+        color: #fff !important;
+        box-shadow: 0 4px 12px rgba(26,176,241,.28) !important;
+        transform: translateY(-1px);
+      }
+    }
+
+    #registrationPreviewBack:focus-visible,
+    #managePreviewBack:focus-visible {
+      border-color: var(--cyan, #1ab0f1) !important;
+      background: var(--cyan, #1ab0f1) !important;
+      color: #fff !important;
+    }
+
+    /* スマホ / タブレット共通。
+       form-mobile-layout は app.js が1024px以下または tablet-device に付与する。 */
     html.form-mobile-layout body #registrationPreviewModal.registration-preview-modal {
       position: fixed !important;
       top: var(--app-vv-offset-top, 0px) !important;
@@ -720,77 +747,101 @@
       min-height: 0 !important;
       max-height: none !important;
 
-      display: flex !important;
-      align-items: stretch !important;
-      justify-content: center !important;
-
+      display: block !important;
       padding:
-        max(8px, env(safe-area-inset-top))
-        6px
-        max(8px, env(safe-area-inset-bottom)) !important;
+        max(10px, env(safe-area-inset-top))
+        8px
+        max(18px, env(safe-area-inset-bottom)) !important;
 
-      overflow: hidden !important;
+      overflow-x: hidden !important;
+      overflow-y: auto !important;
+      overscroll-behavior: contain;
+      -webkit-overflow-scrolling: touch;
+      scroll-padding-top: max(10px, env(safe-area-inset-top));
     }
 
-    /* hidden を必ず優先。 */
     html.form-mobile-layout body #registrationPreviewModal.registration-preview-modal.hidden {
       display: none !important;
     }
 
+    /* カード自体は固定高にしない。上から下まで1本のスクロールにする。 */
     html.form-mobile-layout body #registrationPreviewModal .registration-preview-modal-card {
-      align-self: stretch !important;
-      flex: 1 1 auto !important;
-
+      position: relative !important;
       width: min(720px, 100%) !important;
       height: auto !important;
       min-height: 0 !important;
       max-height: none !important;
 
-      display: flex !important;
-      flex-direction: column !important;
-
+      display: block !important;
       margin: 0 auto !important;
-      padding: 14px 14px 0 !important;
-      overflow: hidden !important;
+      padding: 16px 14px !important;
+
+      overflow: visible !important;
     }
 
     html.form-mobile-layout body #registrationPreviewModal .eyebrow {
-      flex: 0 0 auto;
       margin-top: 0 !important;
-      margin-bottom: 4px !important;
+      margin-bottom: 5px !important;
     }
 
     html.form-mobile-layout body #registrationPreviewModal h2 {
-      flex: 0 0 auto;
       margin: 0 !important;
-      line-height: 1.12 !important;
+      line-height: 1.15 !important;
     }
 
     html.form-mobile-layout body #registrationPreviewModal .registration-preview-note {
-      flex: 0 0 auto !important;
-      margin: 7px 0 9px !important;
+      margin: 8px 0 12px !important;
+      line-height: 1.6 !important;
     }
 
+    /* 募集カードだけを別スクロールにしない。 */
     html.form-mobile-layout body #registrationPreviewCard {
-      flex: 1 1 auto !important;
+      display: block !important;
+      width: 100% !important;
       min-height: 0 !important;
-      overflow-x: hidden !important;
-      overflow-y: auto !important;
-      overscroll-behavior: contain;
-      -webkit-overflow-scrolling: touch;
-      padding-bottom: 8px !important;
+      overflow: visible !important;
+      padding-bottom: 0 !important;
     }
 
+    /* 下部固定を廃止。PCと同じくカードの下に通常配置。 */
     html.form-mobile-layout body #registrationPreviewModal .registration-preview-actions {
-      flex: 0 0 auto !important;
-      margin: 8px -14px 0 !important;
-      padding:
-        9px 14px
-        calc(9px + env(safe-area-inset-bottom)) !important;
+      position: static !important;
+      inset: auto !important;
+      z-index: auto !important;
+
+      display: grid !important;
+      grid-template-columns: minmax(0, 1fr) minmax(0, 1fr) !important;
+      gap: 10px !important;
+
+      margin: 14px 0 0 !important;
+      padding: 0 !important;
+
+      border-top: 0 !important;
+      background: transparent !important;
+      box-shadow: none !important;
     }
 
-    /* 入力中は固定ナビを隠し、キーボード分のスクロール余白を追加。
-       これでキーボードを閉じずに最後の登録確認ボタンまで送れる。 */
+    html.form-mobile-layout body #registrationPreviewModal .registration-preview-actions .btn {
+      width: 100% !important;
+      min-width: 0 !important;
+      min-height: 52px !important;
+      margin: 0 !important;
+      padding: 10px 8px !important;
+      font-size: 13px !important;
+      line-height: 1.2 !important;
+    }
+
+    /* スマホでは修正ボタンも完全な四角のまま。 */
+    html.form-mobile-layout body #registrationPreviewBack {
+      clip-path: none !important;
+      border: 1px solid #686b70 !important;
+      background: #fff !important;
+      color: #222428 !important;
+      box-shadow: none !important;
+    }
+
+    /* 登録フォーム入力中は、従来どおり入力欄をキーボード上へ追従。
+       下部ナビだけ退避して、最後の登録ボタンまでスクロールできる。 */
     html.form-mobile-layout body.register-mode.form-input-active #bottomNav.bottom-nav,
     html.form-mobile-layout body.register-mode.form-keyboard-open #bottomNav.bottom-nav {
       opacity: 0 !important;
@@ -804,7 +855,7 @@
       padding-bottom:
         calc(
           max(var(--app-keyboard-height, 0px), 240px)
-          + 28px
+          + 32px
           + env(safe-area-inset-bottom)
         ) !important;
 
@@ -812,31 +863,28 @@
       scroll-padding-bottom:
         calc(
           max(var(--app-keyboard-height, 0px), 240px)
-          + 36px
+          + 42px
         ) !important;
     }
 
-    /* タブレット登録画面は通常フッター分だけ下端を空けている。
-       入力中だけその予約を解除して、キーボード分の余白へ置き換える。 */
     html.form-mobile-layout.tablet-device body.register-mode.form-input-active .mobile-scroll-shell {
       bottom: 0 !important;
     }
 
-    /* 横向きなど高さが少ない時も、確認画面の上部を優先して残す。 */
+    /* 横向き端末でもタイトルを先頭に残し、全体スクロールで最後まで到達可能。 */
     @media screen and (max-height: 520px) {
+      html.form-mobile-layout body #registrationPreviewModal.registration-preview-modal {
+        padding-top: max(6px, env(safe-area-inset-top)) !important;
+      }
+
       html.form-mobile-layout body #registrationPreviewModal .registration-preview-modal-card {
-        padding-top: 10px !important;
+        padding-top: 12px !important;
       }
 
       html.form-mobile-layout body #registrationPreviewModal .registration-preview-note {
-        margin: 4px 0 6px !important;
+        margin: 5px 0 8px !important;
         font-size: 10.5px !important;
         line-height: 1.45 !important;
-      }
-
-      html.form-mobile-layout body #registrationPreviewModal .registration-preview-actions {
-        padding-top: 7px !important;
-        padding-bottom: calc(7px + env(safe-area-inset-bottom)) !important;
       }
     }
   </style>
@@ -2342,7 +2390,7 @@
 
   <!-- アプリ本体 -->
 
-  <script src="./app.js?v=51.4"></script>
+  <script src="./app.js?v=51.5"></script>
 
 
 </body>
