@@ -1085,6 +1085,132 @@
 
   </style>
 
+
+  <style id="subpage-hard-fixed-v22">
+    /* v22: BOT / CREATOR mobile+tablet hard fixed navigation.
+       Embedded here so this does not depend on subpage-nav.css loading/cache. */
+    @media screen and (max-width: 1366px) {
+      html {
+        scroll-padding-top: 64px !important;
+      }
+
+      body {
+        padding-top: 64px !important;
+        padding-bottom: calc(72px + env(safe-area-inset-bottom)) !important;
+      }
+
+      body > .topbar.bot-topbar,
+      body > .topbar.creator-topbar {
+        position: fixed !important;
+        inset: 0 0 auto 0 !important;
+        top: 0 !important;
+        left: 0 !important;
+        right: 0 !important;
+        bottom: auto !important;
+        width: 100% !important;
+        margin: 0 !important;
+        z-index: 1000 !important;
+        transform: none !important;
+        translate: none !important;
+        will-change: auto !important;
+      }
+
+      body > .subpage-bottom-nav.bot-bottom-nav,
+      body > .subpage-bottom-nav.creator-bottom-nav {
+        position: fixed !important;
+        inset: auto 0 0 0 !important;
+        top: auto !important;
+        left: 0 !important;
+        right: 0 !important;
+        bottom: 0 !important;
+        width: 100% !important;
+        height: calc(68px + env(safe-area-inset-bottom)) !important;
+        margin: 0 !important;
+        padding-bottom: env(safe-area-inset-bottom) !important;
+        display: grid !important;
+        visibility: visible !important;
+        opacity: 1 !important;
+        grid-template-columns: repeat(3, minmax(0, 1fr)) !important;
+        z-index: 1000 !important;
+        transform: none !important;
+        translate: none !important;
+        pointer-events: auto !important;
+      }
+
+      /* Keep the slide-out menu below the fixed header. */
+      .site-menu-backdrop {
+        top: 64px !important;
+        inset: 64px 0 0 !important;
+      }
+
+      .site-menu-drawer {
+        top: 64px !important;
+        height: calc(100dvh - 64px) !important;
+      }
+    }
+
+    @media screen and (max-width: 600px) {
+      html {
+        scroll-padding-top: 58px !important;
+      }
+
+      body {
+        padding-top: 58px !important;
+      }
+
+      .site-menu-backdrop {
+        top: 58px !important;
+        inset: 58px 0 0 !important;
+      }
+
+      .site-menu-drawer {
+        top: 58px !important;
+        height: calc(100dvh - 58px) !important;
+      }
+    }
+  </style>
+
+
+  <style id="subpage-browser-ui-lock-v23">
+    /* v23: mobile/tablet viewport lock.
+       Keep the document itself from scrolling so Safari/Chrome browser UI
+       does not collapse/expand with page scroll. Only <main> scrolls. */
+    @media screen and (max-width: 1366px) {
+      html,
+      body {
+        width: 100% !important;
+        height: 100% !important;
+        min-height: 0 !important;
+        overflow: hidden !important;
+        overscroll-behavior: none !important;
+      }
+
+      body {
+        box-sizing: border-box !important;
+        height: 100dvh !important;
+        padding-top: 64px !important;
+        padding-bottom: calc(68px + env(safe-area-inset-bottom)) !important;
+      }
+
+      body > main.container {
+        box-sizing: border-box !important;
+        height: 100% !important;
+        min-height: 0 !important;
+        max-height: 100% !important;
+        overflow-x: hidden !important;
+        overflow-y: auto !important;
+        overscroll-behavior-y: contain !important;
+        -webkit-overflow-scrolling: touch !important;
+        touch-action: pan-y !important;
+      }
+    }
+
+    @media screen and (max-width: 600px) {
+      body {
+        padding-top: 58px !important;
+      }
+    }
+  </style>
 </head>
 
 
