@@ -1599,6 +1599,18 @@
       line-height: 1.2 !important;
     }
 
+    /* PASS再登録確認：「修正する」を登録確認と同じ境界線だけの四角へ */
+    html body #managePreviewBack,
+    html.form-mobile-layout body #managePreviewBack,
+    html.tablet-device body #managePreviewBack {
+      border-radius: 0 !important;
+      clip-path: none !important;
+      border: 1px solid #686b70 !important;
+      background: #ffffff !important;
+      color: #222428 !important;
+      box-shadow: none !important;
+    }
+
     @media screen and (max-width: 420px) {
       html body #managePreviewModal .registration-preview-modal-card,
       html.form-mobile-layout body #managePreviewModal .registration-preview-modal-card {
