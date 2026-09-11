@@ -3140,7 +3140,9 @@ function setUnionRegistrationMode(mode) {
 
   if (unionUsageNote) {
     unionUsageNote.textContent =
-      "募集する・登録のみでもBOTをご利用できます。";
+      registerOnly
+        ? "登録のみ行い、求人広告は掲載しません。"
+        : "求人広告を掲載します。";
   }
 
   updateRegistrationFields();
@@ -3710,7 +3712,8 @@ $("#previewImageClearBtn")
 function showRegistrationResult(
   pass,
   result,
-  registerOnly = false
+  registerOnly = false,
+  isUnion = false
 ) {
 
 
@@ -3769,6 +3772,24 @@ function showRegistrationResult(
 
   const registrationShareChoice =
     $("#registrationShareChoice");
+
+  const registrationPassWarningTitle =
+    $("#registrationPassWarningTitle");
+
+  const registrationPassWarningText =
+    $("#registrationPassWarningText");
+
+  if (registrationPassWarningTitle) {
+    registrationPassWarningTitle.textContent =
+      "PASSを必ず保存してください。";
+  }
+
+  if (registrationPassWarningText) {
+    registrationPassWarningText.textContent =
+      isUnion
+        ? "利用確認・募集の編集／締切・BOT連携・UNION MATCHの会員登録解除に必要です。"
+        : "次回の編集・再延長・締切に必要です。";
+  }
 
   if (resultModeNote) {
     resultModeNote.textContent =
@@ -4142,7 +4163,8 @@ $("#registerForm")
           showRegistrationResult(
             pass,
             result,
-            registerOnly
+            registerOnly,
+            true
           );
 
           // 登録完了後は、PASSモーダルを表示したまま
@@ -7349,3 +7371,325 @@ setSearchType(
 
 loadTotalRegisteredUnionCount();
 applyInitialRecruitmentView();
+
+// ========================================
+// v51.4 スマホ / タブレット登録フォーム
+// キーボード追従 + 登録確認モーダル visual viewport 対応
+// 登録画面のみに限定し、他ページの挙動は変更しない。
+// ========================================
+(() => {
+
+  const root = document.documentElement;
+  const body = document.body;
+  const visualViewport = window.visualViewport || null;
+  const mobileQuery = window.matchMedia("(max-width: 1024px)");
+
+  let baselineViewportHeight =
+    visualViewport?.height || window.innerHeight || 0;
+
+  let followFrame = 0;
+  let lastLayoutWidth = window.innerWidth;
+
+  function isTabletDevice() {
+    return root.classList.contains("tablet-device");
+  }
+
+  function isMobileFormLayout() {
+    return mobileQuery.matches || isTabletDevice();
+  }
+
+  function isEditableField(element) {
+    if (!element || !(element instanceof HTMLElement)) {
+      return false;
+    }
+
+    if (element.tagName === "TEXTAREA") {
+      return true;
+    }
+
+    if (element.tagName !== "INPUT") {
+      return false;
+    }
+
+    const type = String(element.getAttribute("type") || "text").toLowerCase();
+
+    return ![
+      "button",
+      "submit",
+      "reset",
+      "checkbox",
+      "radio",
+      "file",
+      "hidden",
+      "range",
+      "color"
+    ].includes(type);
+  }
+
+  function activeRegisterField() {
+    if (!body.classList.contains("register-mode")) {
+      return null;
+    }
+
+    const active = document.activeElement;
+
+    if (!isEditableField(active)) {
+      return null;
+    }
+
+    return active.closest("#registerPage") ? active : null;
+  }
+
+  function readViewportMetrics() {
+    const height =
+      visualViewport?.height || window.innerHeight || 0;
+
+    const offsetTop =
+      Math.max(0, visualViewport?.offsetTop || 0);
+
+    const activeField = activeRegisterField();
+
+    /* キーボードが閉じている時にだけ通常時の最大高さを更新。
+       アドレスバーの開閉では基準値が自然に追従する。 */
+    if (!activeField && height > 0) {
+      baselineViewportHeight =
+        Math.max(baselineViewportHeight, height);
+    }
+
+    const keyboardHeight =
+      Math.max(0, baselineViewportHeight - height);
+
+    return {
+      height,
+      offsetTop,
+      keyboardHeight,
+      keyboardOpen:
+        Boolean(activeField) && keyboardHeight >= 110
+    };
+  }
+
+  function updateMobileLayoutClass() {
+    root.classList.toggle(
+      "form-mobile-layout",
+      isMobileFormLayout()
+    );
+  }
+
+  function updateViewportState() {
+    updateMobileLayoutClass();
+
+    const metrics = readViewportMetrics();
+    const field = activeRegisterField();
+
+    root.style.setProperty(
+      "--app-vv-height",
+      `${Math.max(1, Math.round(metrics.height))}px`
+    );
+
+    root.style.setProperty(
+      "--app-vv-offset-top",
+      `${Math.round(metrics.offsetTop)}px`
+    );
+
+    root.style.setProperty(
+      "--app-keyboard-height",
+      `${Math.round(metrics.keyboardHeight)}px`
+    );
+
+    body.classList.toggle(
+      "form-input-active",
+      isMobileFormLayout() && Boolean(field)
+    );
+
+    body.classList.toggle(
+      "form-keyboard-open",
+      isMobileFormLayout() && metrics.keyboardOpen
+    );
+
+    if (field) {
+      scheduleFieldFollow(field, false);
+    }
+  }
+
+  function followField(field, smooth = true) {
+    if (
+      !isMobileFormLayout()
+      ||
+      !body.classList.contains("register-mode")
+      ||
+      !isEditableField(field)
+      ||
+      !field.closest("#registerPage")
+    ) {
+      return;
+    }
+
+    const shell =
+      document.getElementById("mobileScrollShell");
+
+    if (!shell) {
+      return;
+    }
+
+    const metrics = readViewportMetrics();
+    const rect = field.getBoundingClientRect();
+
+    /* 66pxヘッダーの下に少し余白を取り、
+       下側はキーボードのすぐ上に約80pxの作業領域を残す。 */
+    const safeTop =
+      metrics.offsetTop + 82;
+
+    const safeBottom =
+      metrics.offsetTop + metrics.height - 20;
+
+    const reserveBelowField =
+      metrics.keyboardOpen ? 84 : 34;
+
+    let delta = 0;
+
+    if (rect.bottom + reserveBelowField > safeBottom) {
+      delta =
+        rect.bottom + reserveBelowField - safeBottom;
+    } else if (rect.top < safeTop) {
+      delta = rect.top - safeTop;
+    }
+
+    if (Math.abs(delta) < 2) {
+      return;
+    }
+
+    shell.scrollBy({
+      top: delta,
+      left: 0,
+      behavior: smooth ? "smooth" : "auto"
+    });
+  }
+
+  function scheduleFieldFollow(field, smooth = true) {
+    if (followFrame) {
+      cancelAnimationFrame(followFrame);
+    }
+
+    followFrame = requestAnimationFrame(() => {
+      followFrame = 0;
+      followField(field, smooth);
+    });
+  }
+
+  function settleFocusedField(field) {
+    /* iOS / Androidでキーボードの開く速度が違うため、
+       3段階だけ追従して最終位置を合わせる。 */
+    [60, 180, 320].forEach((delay, index) => {
+      setTimeout(() => {
+        updateViewportState();
+        followField(field, index === 0);
+      }, delay);
+    });
+  }
+
+  document.addEventListener(
+    "focusin",
+    event => {
+      const field = event.target;
+
+      if (
+        !isMobileFormLayout()
+        ||
+        !body.classList.contains("register-mode")
+        ||
+        !isEditableField(field)
+        ||
+        !field.closest("#registerPage")
+      ) {
+        return;
+      }
+
+      body.classList.add("form-input-active");
+      updateViewportState();
+      settleFocusedField(field);
+    },
+    true
+  );
+
+  document.addEventListener(
+    "focusout",
+    () => {
+      setTimeout(() => {
+        updateViewportState();
+      }, 80);
+    },
+    true
+  );
+
+  function handleViewportChange() {
+    const width = window.innerWidth;
+
+    /* 端末回転時だけ基準高さを作り直す。 */
+    if (Math.abs(width - lastLayoutWidth) > 80) {
+      lastLayoutWidth = width;
+      baselineViewportHeight =
+        visualViewport?.height || window.innerHeight || baselineViewportHeight;
+    }
+
+    updateViewportState();
+  }
+
+  window.addEventListener(
+    "resize",
+    handleViewportChange,
+    { passive: true }
+  );
+
+  visualViewport?.addEventListener(
+    "resize",
+    handleViewportChange,
+    { passive: true }
+  );
+
+  visualViewport?.addEventListener(
+    "scroll",
+    handleViewportChange,
+    { passive: true }
+  );
+
+  if (typeof mobileQuery.addEventListener === "function") {
+    mobileQuery.addEventListener(
+      "change",
+      handleViewportChange
+    );
+  }
+
+  /* 登録確認モーダル表示時、visual viewport の最新値を即反映。 */
+  const previewModal =
+    document.getElementById("registrationPreviewModal");
+
+  if (previewModal) {
+    const previewObserver =
+      new MutationObserver(() => {
+        if (!previewModal.classList.contains("hidden")) {
+          updateViewportState();
+
+          requestAnimationFrame(() => {
+            const previewCard =
+              document.getElementById("registrationPreviewCard");
+
+            if (previewCard) {
+              previewCard.scrollTop = 0;
+            }
+          });
+        }
+      });
+
+    previewObserver.observe(
+      previewModal,
+      {
+        attributes: true,
+        attributeFilter: ["class"]
+      }
+    );
+  }
+
+  updateViewportState();
+
+})();
+
