@@ -1377,8 +1377,7 @@
     #managePage #openManageActionBtn,
     #managePage #closeLoadedRecruitmentBtn,
     #managePage #deleteUnionMembershipBtn,
-    #managePage #manageEditPreviewBtn,
-    #managePage #cancelManageEditBtn {
+    #managePage #manageEditPreviewBtn {
       border-radius: 0 !important;
       clip-path: polygon(
         8px 0,
@@ -1390,6 +1389,16 @@
         0 calc(100% - 8px),
         0 8px
       ) !important;
+    }
+
+    /* PASS編集：「編集をやめる」だけ境界線の四角ボタンへ統一 */
+    #managePage #cancelManageEditBtn {
+      border-radius: 0 !important;
+      clip-path: none !important;
+      border: 1px solid #686b70 !important;
+      background: #ffffff !important;
+      color: #222428 !important;
+      box-shadow: none !important;
     }
 
     /* 登録削除は通常操作から離し、危険操作として赤で明確に分離 */
