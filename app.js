@@ -7715,22 +7715,47 @@ applyInitialRecruitmentView();
   let wasOpen = false;
   let syncFrame = 0;
 
-  function updatePreviewTop() {
+  function updatePreviewViewportMetrics() {
     const rect = topbar?.getBoundingClientRect();
-    const bottom = rect?.bottom;
-    const fallback = rect?.height || 66;
-    const safeTop = Number.isFinite(bottom) && bottom > 0
-      ? bottom
-      : fallback;
+
+    /*
+      上端は実際のヘッダー高さ、縦幅は visualViewport を使用する。
+      iPhone / iPad のアドレスバー・下部ブラウザUIが出入りしても、
+      最終確認画面のスクロール領域を「今見えている画面」に合わせる。
+    */
+    const headerHeight =
+      Number.isFinite(rect?.height) && rect.height > 0
+        ? rect.height
+        : 66;
+
+    const viewportHeight =
+      window.visualViewport?.height
+      ||
+      window.innerHeight
+      ||
+      document.documentElement.clientHeight
+      ||
+      1;
+
+    const safeTop =
+      Math.max(0, Math.round(headerHeight));
+
+    const availableHeight =
+      Math.max(180, Math.round(viewportHeight - safeTop));
 
     root.style.setProperty(
       "--registration-preview-top",
-      `${Math.max(0, Math.round(safeTop))}px`
+      `${safeTop}px`
+    );
+
+    root.style.setProperty(
+      "--registration-preview-height",
+      `${availableHeight}px`
     );
   }
 
   function syncRegistrationPreviewLayout() {
-    updatePreviewTop();
+    updatePreviewViewportMetrics();
 
     const open = !modal.classList.contains("hidden");
 
