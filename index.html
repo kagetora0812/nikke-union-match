@@ -214,22 +214,31 @@
        - サイト既存の赤 var(--red) = #ff5364 を使用
        ========================================================= */
 
-    #previewImageClearBtn {
-      width: 100%;
-      margin-top: 10px;
-      min-height: 44px;
-      border: 1px solid var(--red, #ff5364) !important;
-      background: var(--red, #ff5364) !important;
-      color: #fff !important;
-      font-weight: 900;
-      box-shadow: 0 7px 18px rgba(255,83,100,.24) !important;
+    /* 募集登録 / PASS編集：画像削除UIをチェック式で統一 */
+    .image-remove-check-row {
+      display: flex !important;
+      align-items: center !important;
+      gap: 8px !important;
+      margin-top: 12px !important;
+      color: var(--red, #ff5364) !important;
+      font-size: 12px !important;
+      font-weight: 900 !important;
+      line-height: 1.4 !important;
+      cursor: pointer;
+      user-select: none;
     }
 
-    #previewImageClearBtn:hover,
-    #previewImageClearBtn:active {
-      border-color: #ff7180 !important;
-      background: #e94759 !important;
-      color: #fff !important;
+    .image-remove-check-row.hidden {
+      display: none !important;
+    }
+
+    .image-remove-check-row input[type="checkbox"] {
+      width: 16px !important;
+      height: 16px !important;
+      margin: 0 !important;
+      flex: 0 0 auto !important;
+      accent-color: var(--red, #ff5364);
+      cursor: pointer;
     }
 
     #closeLoadedRecruitmentBtn {
@@ -445,16 +454,7 @@
     }
 
     .manage-remove-image-row {
-      display: flex !important;
-      align-items: center;
-      gap: 8px;
       margin-top: 12px;
-      color: #ff9ca7 !important;
-    }
-
-    .manage-remove-image-row input {
-      width: auto !important;
-      margin: 0 !important;
     }
 
     .manage-same-pass-warning {
@@ -1335,14 +1335,27 @@
 
     /* 利用確認完了のチェックだけ少し大きく */
     #manageMembershipConfirmedNotice {
-      align-items: center;
+      display: flex !important;
+      align-items: center !important;
+      flex-wrap: nowrap !important;
+      gap: 0 !important;
+      white-space: nowrap !important;
+      font-size: clamp(9px, 2.55vw, 11px) !important;
+      line-height: 1.35 !important;
+      overflow: hidden;
     }
     #manageMembershipConfirmedNotice .manage-confirm-check {
       display: inline-block;
-      margin-right: 7px;
+      flex: 0 0 auto;
+      margin-right: 0 !important;
       font-size: 20px;
       line-height: 1;
       vertical-align: -2px;
+    }
+    #manageMembershipConfirmedNotice .manage-confirm-text {
+      display: inline-block;
+      min-width: 0;
+      white-space: nowrap !important;
     }
 
     /* PASS管理の操作ボタンだけ8角形。全サイトの.btnには触れない */
@@ -1362,6 +1375,29 @@
         0 calc(100% - 8px),
         0 8px
       ) !important;
+    }
+
+    /* 登録削除は通常操作から離し、危険操作として赤で明確に分離 */
+    #managePage #deleteUnionMembershipBtn.manage-delete-btn {
+      margin-top: 72px !important;
+      min-height: 52px !important;
+      border: 1px solid var(--red, #ff5364) !important;
+      color: #fff !important;
+      background: var(--red, #ff5364) !important;
+      box-shadow: none !important;
+    }
+
+    #managePage #deleteUnionMembershipBtn.manage-delete-btn:hover,
+    #managePage #deleteUnionMembershipBtn.manage-delete-btn:active {
+      border-color: #d43f4f !important;
+      background: #d43f4f !important;
+      color: #fff !important;
+    }
+
+    @media screen and (max-width: 600px) {
+      #managePage #deleteUnionMembershipBtn.manage-delete-btn {
+        margin-top: 60px !important;
+      }
     }
 
     /* 管理カードが固定UIの下に潜りにくいようPASS画面だけ余白確保 */
@@ -1815,13 +1851,17 @@
                     <small class="register-field-help">画像を選択した場合は登録画像を優先表示します。20MBまで。</small>
                     <small id="previewImageStatus" class="preview-file-help"></small>
 
-                    <button
-                      id="previewImageClearBtn"
-                      class="btn hidden"
-                      type="button"
+                    <div
+                      id="previewImageClearRow"
+                      class="image-remove-check-row hidden"
                     >
-                      ✕ 選択画像を解除
-                    </button>
+                      <input
+                        id="previewImageClearCheck"
+                        type="checkbox"
+                        aria-label="選択画像を削除する"
+                      >
+                      <span>選択画像を削除する</span>
+                    </div>
                   </label>
                 </div>
 
@@ -1986,7 +2026,7 @@
                 class="btn primary wide"
                 type="button"
               >
-                ✏️ 登録内容を編集
+                ✏️ 編集
               </button>
 
               <button
@@ -1999,10 +2039,10 @@
 
               <button
                 id="deleteUnionMembershipBtn"
-                class="btn danger wide hidden"
+                class="btn danger wide hidden manage-delete-btn"
                 type="button"
               >
-                会員登録を解除
+                UNION MATCHから登録を削除
               </button>
 
             </div>
@@ -2113,7 +2153,7 @@
               </small>
             </label>
 
-            <label class="manage-remove-image-row">
+            <label class="manage-remove-image-row image-remove-check-row">
               <input id="manageRemoveImage" type="checkbox">
               現在の登録画像を削除する
             </label>
@@ -2900,7 +2940,7 @@
 
   <!-- アプリ本体 -->
 
-  <script src="./app.js?v=51.10"></script>
+  <script src="./app.js?v=51.11"></script>
 
 
 </body>
