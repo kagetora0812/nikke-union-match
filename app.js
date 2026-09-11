@@ -4793,6 +4793,10 @@ function clearLoadedManageRecruitment() {
   resetManageImageState();
   resetManageActionMenu();
 
+  $("#managePage")
+    ?.classList
+    .remove("manage-loaded-mode");
+
   $("#manageLoadedPanel")
     ?.classList
     .add("hidden");
@@ -4857,6 +4861,10 @@ function renderLoadedManageRecruitment() {
     $("#manageLoadedPanel")
       ?.classList
       .add("hidden");
+
+    $("#managePage")
+      ?.classList
+      .remove("manage-loaded-mode");
     return;
   }
 
@@ -4889,8 +4897,7 @@ function renderLoadedManageRecruitment() {
   }
 
   if ($("#manageCurrentDetail")) {
-    $("#manageCurrentDetail").textContent =
-      detail;
+    $("#manageCurrentDetail").textContent = detail;
   }
 
   if ($("#manageCurrentExpiryLabel")) {
@@ -4921,12 +4928,14 @@ function renderLoadedManageRecruitment() {
 
   if (membershipNotice) {
     if (isUnion) {
-      membershipNotice.textContent =
-        `✅ 利用確認が完了しました。次回確認期限：${
-          item.member_expires_at
-            ? formatDate(item.member_expires_at)
-            : "14日後"
-        }`;
+      const nextDate =
+        item.member_expires_at
+          ? formatDate(item.member_expires_at)
+          : "14日後";
+
+      membershipNotice.innerHTML =
+        `<span class="manage-confirm-check" aria-hidden="true">✅</span>`
+        + `<span>利用確認が完了しました。次回確認期限：${nextDate}</span>`;
       membershipNotice.classList.remove("hidden");
     } else {
       membershipNotice.classList.add("hidden");
@@ -4966,8 +4975,7 @@ function renderLoadedManageRecruitment() {
   }
 
   if (urlLink) {
-    urlLink.textContent =
-      item.x_url || "--";
+    urlLink.textContent = item.x_url || "--";
 
     if (item.x_url) {
       urlLink.href = item.x_url;
@@ -4982,19 +4990,13 @@ function renderLoadedManageRecruitment() {
   const image =
     $("#manageCurrentImage");
 
-  if (
-    isUnionRecruiting
-    || !isUnion
-  ) {
+  if (isUnionRecruiting || !isUnion) {
     if (
       item.preview_image_url
-      &&
-      imageBox
-      &&
-      image
+      && imageBox
+      && image
     ) {
-      image.src =
-        item.preview_image_url;
+      image.src = item.preview_image_url;
       imageBox.classList.remove("hidden");
     } else {
       imageBox?.classList.add("hidden");
@@ -5009,16 +5011,16 @@ function renderLoadedManageRecruitment() {
     $("#openManageActionBtn");
 
   if (editButton) {
-    editButton.textContent =
-      isUnion && !isUnionRecruiting
-        ? "📣 募集を開始"
-        : "✏️ 編集";
+    editButton.textContent = "✏️ 登録内容を編集";
+    editButton.classList.toggle("hidden", !isUnion);
   }
 
   const closeButton =
     $("#closeLoadedRecruitmentBtn");
 
   if (closeButton) {
+    closeButton.textContent =
+      isUnion ? "求人広告を締め切る" : "募集を締め切る";
     closeButton.classList.toggle(
       "hidden",
       isUnion && !isUnionRecruiting
@@ -5029,43 +5031,31 @@ function renderLoadedManageRecruitment() {
     $("#deleteUnionMembershipBtn");
 
   if (deleteMembershipButton) {
+    deleteMembershipButton.textContent =
+      "UNION MATCHから登録を削除";
     deleteMembershipButton.classList.toggle(
       "hidden",
       !isUnion
     );
   }
 
-  const renewButton =
-    $("#renewUnchangedBtn");
+  // 手動の14日更新は表示しない。
+  // ユニオンPASSを呼び出した時点で既存RPCが14日利用確認を行う。
+  $("#renewUnchangedBtn")
+    ?.classList
+    .add("hidden");
 
-  if (renewButton) {
-    renewButton.classList.toggle(
-      "hidden",
-      isUnion && !isUnionRecruiting
-    );
-  }
+  $("#manageEditActionChoices")
+    ?.classList
+    .add("hidden");
 
-  const editDetailButton =
-    $("#openManageEditBtn");
+  $("#managePrimaryActions")
+    ?.classList
+    .remove("hidden");
 
-  if (editDetailButton) {
-    editDetailButton.textContent =
-      isUnion && !isUnionRecruiting
-        ? "📣 求人広告を掲載する"
-        : "✏️ 内容を編集して再登録";
-  }
-
-  const renewNote =
-    document.querySelector(
-      "#manageEditActionChoices .manage-renew-note"
-    );
-
-  if (renewNote) {
-    renewNote.innerHTML =
-      isUnion && !isUnionRecruiting
-        ? "募集記事URLと必要な内容を入力すると、<strong>登録のみ</strong> から <strong>募集中</strong> に切り替わります。会員登録は同じ1件のままです。"
-        : "再延長・再登録すると、掲載期限は本日から14日間に更新され、一覧の一番上へ移動して <strong>🔥 NEW</strong> 表示も復活します。";
-  }
+  $("#managePage")
+    ?.classList
+    .add("manage-loaded-mode");
 
   $("#manageLoadedPanel")
     ?.classList
@@ -5424,7 +5414,16 @@ $("#closePass")
 $("#openManageActionBtn")
   ?.addEventListener(
     "click",
-    showManageEditActionChoices
+    () => {
+      if (
+        !loadedManagedRecruitment
+        || loadedManagedRecruitment.type !== "union"
+      ) {
+        return;
+      }
+
+      populateManageEditForm();
+    }
   );
 
 
@@ -5468,15 +5467,16 @@ $("#cancelManageEditBtn")
     "click",
     () => {
       resetManageImageState();
+
       $("#manageEditPanel")
         ?.classList
         .add("hidden");
 
-      $("#managePrimaryActions")
+      $("#manageEditActionChoices")
         ?.classList
         .add("hidden");
 
-      $("#manageEditActionChoices")
+      $("#managePrimaryActions")
         ?.classList
         .remove("hidden");
 
