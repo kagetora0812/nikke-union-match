@@ -2316,11 +2316,11 @@ async function loadRecruitments() {
   );
 
 
-  // 卒業ちしかん更新
-  await loadGraduatedCommanderCount();
-
-  // 総登録ユニオン数（読み取り専用）
-  await loadTotalRegisteredUnionCount();
+  // カウンターは一覧表示を待たせずバックグラウンド更新
+  void Promise.allSettled([
+    loadGraduatedCommanderCount(),
+    loadTotalRegisteredUnionCount()
+  ]);
 
 
   // ======================================
@@ -7388,7 +7388,6 @@ setSearchType(
   "commander"
 );
 
-loadTotalRegisteredUnionCount();
 applyInitialRecruitmentView();
 
 // ========================================
