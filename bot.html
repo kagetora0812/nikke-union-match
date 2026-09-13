@@ -1006,7 +1006,7 @@
         <a
           class="hero-install-btn"
           id="botInviteBtn"
-          href="https://discord.com/oauth2/authorize?client_id=1548613088557793370"
+          href="https://discord.com/oauth2/authorize?client_id=1548613088557793370&scope=bot%20applications.commands"
           target="_blank"
           rel="noopener noreferrer"
         >BOTを導入する</a>
@@ -1291,7 +1291,7 @@
 
   <script>
     // 招待URLが確定したらここへ設定する。
-    const BOT_INVITE_URL = "https://discord.com/oauth2/authorize?client_id=1548613088557793370";
+    const BOT_INVITE_URL = "https://discord.com/oauth2/authorize?client_id=1548613088557793370&scope=bot%20applications.commands";
     const inviteBtn = document.getElementById("botInviteBtn");
     if (BOT_INVITE_URL && inviteBtn) {
       inviteBtn.href = BOT_INVITE_URL;
