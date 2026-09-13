@@ -1,542 +1,1397 @@
 <!doctype html>
 <html lang="ja">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>NIKKE UNION MATCH - Discord BOT 構成イメージ v2</title>
-<style>
-@import url("https://fonts.googleapis.com/css2?family=Teko:wght@500;600;700&family=Zen+Kaku+Gothic+New:wght@500;700;900&display=swap");
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="theme-color" content="#08090c">
+  <title>NIKKE UNION MATCH - Discord BOT</title>
+  <meta name="description" content="NIKKE UNION MATCH Discord BOTの導入方法・コマンド・キャラクター設定・通知機能の案内ページです。">
 
-:root{
-  --bg:#08090c;
-  --panel:#121419;
-  --panel2:#171a20;
-  --line:#2b2e35;
-  --text:#f1f2f4;
-  --muted:#9ba1a8;
-  --accent:#28b9e8;
-  --accent2:#8edcff;
-  --green:#35d78c;
-}
-*{box-sizing:border-box}
-html{background:var(--bg);scroll-behavior:smooth}
-body{
-  margin:0;
-  color:var(--text);
-  background:
-    radial-gradient(circle at 83% 4%,rgba(40,185,232,.06),transparent 24%),
-    linear-gradient(180deg,#0d0f13 0%,#08090c 65%,#07080a 100%);
-  font-family:"Zen Kaku Gothic New",sans-serif;
-  font-weight:700;
-}
-a{color:inherit;text-decoration:none}
-button{font:inherit}
+  <style>
+    @import url("https://fonts.googleapis.com/css2?family=Teko:wght@500;600;700&family=Zen+Kaku+Gothic+New:wght@500;700;900&display=swap");
 
-.topbar{
-  position:sticky; top:0; z-index:20;
-  height:64px; padding:0 22px;
-  display:flex; align-items:center; justify-content:space-between;
-  border-bottom:1px solid rgba(255,255,255,.08);
-  background:rgba(8,9,12,.94);
-  backdrop-filter:blur(14px);
-}
-.brand{
-  display:flex; align-items:center; gap:10px;
-  font:700 23px/1 "Teko",sans-serif;
-  letter-spacing:.13em;
-}
-.brand::before{content:"";width:5px;height:22px;background:var(--accent)}
-.menu{font-size:24px;color:#fff}
+    :root {
+      --bg:#08090c;
+      --bg2:#0d0f13;
+      --panel:#121419;
+      --panel2:#171a20;
+      --panel3:#1d2027;
+      --line:#2b2e35;
+      --line-soft:rgba(255,255,255,.07);
+      --text:#f1f2f4;
+      --muted:#969ba3;
+      --muted2:#6f747c;
+      --accent:#28b9e8;
+      --accent2:#8edcff;
+      --orange:#e7a22d;
+      --cyan:#28b9e8;
+      --red:#ff6977;
+      --green:#35d78c;
+      --purple:#b66cff;
+    }
 
-.wrap{width:min(1180px,calc(100% - 28px));margin:0 auto;padding:28px 0 48px}
+    * { box-sizing:border-box; }
+    html { background:var(--bg); scroll-behavior:smooth; }
+    body {
+      margin:0;
+      min-height:100vh;
+      color:var(--text);
+      background:
+        radial-gradient(circle at 82% 7%, rgba(255,255,255,.045), transparent 24%),
+        linear-gradient(180deg,#0d0f13 0%,#08090c 56%,#07080a 100%);
+      font-family:"Gothic MB101","Zen Kaku Gothic New",sans-serif;
+      font-weight:700;
+      -webkit-font-smoothing:antialiased;
+      text-rendering:optimizeLegibility;
+    }
 
-.hero{
-  padding:38px 34px;
-  border:1px solid #292c32;
-  border-top:3px solid #3a3d43;
-  background:linear-gradient(110deg,#17191e 0%,#111318 58%,#0d0f13 100%);
-}
-.eyebrow{
-  color:var(--accent);
-  font:800 11px "Teko",sans-serif;
-  letter-spacing:2.5px;
-}
-h1,h2,h3{margin:0;color:#fff;font-weight:900;letter-spacing:-.04em}
-h1{margin-top:6px;font-size:clamp(34px,5vw,52px);line-height:1.05}
-h2{font-size:clamp(24px,4vw,31px)}
-h3{font-size:17px}
-.lead{
-  margin:14px 0 0;
-  max-width:760px;
-  color:#b4bac1;
-  font-size:13px;
-  line-height:1.9;
-}
-.hero-actions{margin-top:22px;display:flex;gap:9px;flex-wrap:wrap}
-.btn{
-  min-height:46px;padding:0 18px;
-  display:inline-flex;align-items:center;justify-content:center;
-  border:1px solid #287da0;
-  background:linear-gradient(180deg,#28b9e8,#148dbb);
-  color:#fff;font-size:12px;font-weight:900;
-}
-.btn.sub{border-color:#4b4f55;background:linear-gradient(180deg,#2a2d33,#1c1f24)}
-.quick-note{
-  margin-top:12px;padding:13px 15px;
-  border:1px solid rgba(40,185,232,.38);
-  border-left:4px solid var(--accent);
-  background:linear-gradient(90deg,rgba(40,185,232,.11),rgba(40,185,232,.03));
-  color:#dbeef6;font-size:11.5px;line-height:1.75;
-}
+    body::before {
+      content:"";
+      position:fixed;
+      inset:0;
+      z-index:-1;
+      pointer-events:none;
+      opacity:.32;
+      background:linear-gradient(135deg,transparent 0 74%,rgba(255,255,255,.025) 74% 74.35%,transparent 74.35% 100%);
+    }
 
-.section{
-  margin-top:16px;padding:25px 24px;
-  border:1px solid #292c32;
-  background:linear-gradient(180deg,#14171c,#0f1115);
-}
-.section-head{
-  display:flex;justify-content:space-between;gap:20px;align-items:flex-end;margin-bottom:18px;
-}
-.section-note{
-  max-width:540px;color:var(--muted);font-size:11px;line-height:1.7;text-align:right;
-}
+    a { color:inherit; }
+    button { font:inherit; }
 
-/* combined feature section */
-.feature-grid{
-  display:grid;
-  grid-template-columns:repeat(3,minmax(0,1fr));
-  gap:12px;
-}
-.feature-card{
-  min-width:0;
-  min-height:150px;
-  padding:18px;
-  border:1px solid var(--line);
-  background:var(--panel2);
-  overflow-wrap:anywhere;
-  word-break:normal;
-}
-.feature-card .icon{font-size:22px;line-height:1}
-.feature-card h3{
-  margin-top:9px;
-  font-size:16px;
-  line-height:1.4;
-}
-.feature-card p{
-  margin:8px 0 0;
-  color:#9ea3aa;
-  font-size:11.5px;
-  line-height:1.75;
-}
-.feature-card.soon{border-left:4px solid var(--accent)}
-.feature-card.green{border-left:4px solid var(--green)}
+    .topbar {
+      height:64px;
+      padding:0 20px;
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      position:sticky;
+      top:0;
+      z-index:20;
+      border-bottom:1px solid var(--line-soft);
+      background:rgba(8,9,12,.92);
+      backdrop-filter:blur(14px);
+    }
 
-.steps{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px}
-.step{padding:18px 17px;border:1px solid var(--line);background:var(--panel2)}
-.step-no{
-  width:28px;height:28px;display:grid;place-items:center;margin-bottom:12px;
-  background:var(--accent);color:#081018;font:900 17px "Teko",sans-serif;
-}
-.step p{margin:8px 0 0;color:#a8adb4;font-size:11.5px;line-height:1.75}
-code{color:#91defd;font:800 12px Consolas,monospace}
+    .brand {
+      display:flex;
+      flex-direction:column;
+      font-family:"Futura PT Condensed","Industry","Azonix","Teko",sans-serif;
+      line-height:.82;
+    }
+    .brand-small { color:var(--accent); font-size:9px; font-weight:800; letter-spacing:3.7px; }
+    .brand-main { margin-top:5px; color:#fff; font-size:23px; font-weight:800; letter-spacing:-.035em; line-height:.82; }
+    .status { display:inline-flex; align-items:center; gap:8px; color:#c7cbd0; font:800 11px "Teko",sans-serif; letter-spacing:1.6px; }
+    .status::before { content:""; width:5px; height:15px; background:var(--accent); box-shadow:0 0 8px rgba(40,185,232,.25); }
 
-.character-grid{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:12px}
-.character-card{overflow:hidden;border:1px solid var(--line);background:var(--panel2)}
-.character-card.adaptive{border-color:rgba(40,185,232,.5);box-shadow:inset 0 2px 0 rgba(40,185,232,.6)}
-.character-visual{
-  position:relative;height:205px;display:grid;place-items:center;overflow:hidden;
-  border-bottom:1px solid var(--line);background:linear-gradient(145deg,#181b21,#0e1014);
-}
-.character-visual img{width:100%;height:100%;object-fit:cover;display:none}
-.fallback{
-  position:absolute;inset:0;display:grid;place-items:center;font-size:70px;
-  background:radial-gradient(circle at 50% 42%,rgba(40,185,232,.10),transparent 52%);
-}
-.character-body{padding:15px 16px 17px}
-.tag{color:var(--accent);font:800 10px "Teko",sans-serif;letter-spacing:1.7px}
-.character-name{margin-top:3px;color:#fff;font-size:19px;font-weight:900}
-.character-desc{margin-top:7px;color:#9da2aa;font-size:11.5px;line-height:1.7}
+    .container { width:min(1180px,calc(100% - 28px)); margin:0 auto; padding:28px 0 46px; }
+    .eyebrow { margin-bottom:7px; color:var(--accent); font:800 11px "Teko",sans-serif; letter-spacing:2.4px; text-transform:uppercase; }
+    h1,h2,h3 { margin:0; color:#fff; font-weight:900; letter-spacing:-.045em; }
+    h1 { font-size:clamp(31px,6vw,52px); line-height:1.05; }
+    .bot-hero h1 { font-size:clamp(28px,3.2vw,42px); white-space:nowrap; letter-spacing:-.055em; }
+    h2 { font-size:clamp(22px,4vw,30px); line-height:1.15; }
+    h3 { font-size:17px; }
+    .lead { max-width:730px; margin:13px 0 0; color:#b5bac1; font-size:13px; line-height:1.9; }
 
-/* command cards */
-.command-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}
-.command-card{
-  position:relative;
-  padding:16px 122px 16px 16px;
-  min-height:118px;
-  border:1px solid var(--line);
-  background:#15181d;
-}
-.command-card .cmd{
-  display:inline-flex;align-items:center;gap:8px;
-  color:#91defd;
-  font:900 14px Consolas,monospace;
-}
-.command-card .badge{
-  padding:2px 6px;
-  color:#081018;background:var(--accent);
-  font:900 9px "Zen Kaku Gothic New",sans-serif;
-}
-.command-card .desc{
-  margin-top:8px;
-  color:#c4c8cd;
-  font-size:11.5px;
-  line-height:1.65;
-}
-.command-card .natural{
-  margin-top:8px;
-  color:#8edcff;
-  font-size:10.5px;
-  line-height:1.6;
-}
-.copy-btn{
-  position:absolute;
-  top:16px;right:14px;
-  min-width:92px;height:36px;
-  border:1px solid #3d6678;
-  background:#101a20;
-  color:#aee8ff;
-  font-size:10.5px;
-  font-weight:900;
-  cursor:pointer;
-}
-.copy-btn:hover{border-color:var(--accent);background:#122631;color:#fff}
-.copy-btn.copied{border-color:#2f946a;background:#10291f;color:#8ff3c4}
+    .bot-hero {
+      position:relative;
+      overflow:hidden;
+      min-height:270px;
+      padding:32px 34px;
+      display:grid;
+      grid-template-columns:minmax(0,1fr) 330px;
+      align-items:center;
+      gap:30px;
+      border:1px solid #292c32;
+      border-top:3px solid #3a3d43;
+      background:linear-gradient(110deg,#17191e 0%,#111318 56%,#0d0f13 100%);
+      box-shadow:0 20px 45px rgba(0,0,0,.22);
+    }
+    .bot-hero::before {
+      content:"";
+      position:absolute;
+      width:330px;
+      height:330px;
+      right:-74px;
+      top:-100px;
+      border:34px solid rgba(40,185,232,.035);
+      box-shadow:0 0 0 34px rgba(255,255,255,.014),0 0 0 68px rgba(255,255,255,.009);
+      border-radius:50%;
+      pointer-events:none;
+    }
+    .hero-copy,.hero-side { position:relative; z-index:1; }
+    .hero-side { border-left:1px solid #30333a; padding-left:25px; }
+    .hero-mini { color:#7f858d; font:800 10px "Teko",sans-serif; letter-spacing:2px; }
+    .hero-feature { margin-top:12px; display:grid; gap:9px; }
+    .hero-feature div { display:flex; gap:8px; align-items:flex-start; color:#d7dade; font-size:12px; line-height:1.55; }
+    .hero-feature b { color:var(--accent2); }
 
-.important{
-  padding:16px;border:1px solid #314a56;
-  background:rgba(40,185,232,.055);
-  color:#b8d9e7;font-size:11px;line-height:1.8;
-}
-footer{
-  margin-top:18px;padding-top:18px;border-top:1px solid rgba(255,255,255,.08);
-  color:#6e747b;text-align:center;font:800 10px "Teko",sans-serif;letter-spacing:1.5px;
-}
-.mobile-nav{display:none}
+    .top-actions { margin-top:20px; display:flex; flex-wrap:wrap; gap:8px; }
+    .action-btn {
+      min-height:44px;
+      padding:0 16px;
+      display:inline-flex;
+      align-items:center;
+      justify-content:center;
+      border:1px solid #5b5d61;
+      color:#f6f7f8;
+      background:linear-gradient(180deg,#48494d,#35363a);
+      font-size:12px;
+      font-weight:900;
+      text-decoration:none;
+      clip-path:polygon(8px 0,calc(100% - 8px) 0,100% 8px,100% calc(100% - 8px),calc(100% - 8px) 100%,8px 100%,0 calc(100% - 8px),0 8px);
+      cursor:pointer;
+    }
+    .action-btn.primary { border-color:#287da0; background:linear-gradient(180deg,#28b9e8,#148dbb); }
+    .action-btn:hover { border-color:var(--accent); background:linear-gradient(180deg,#2cc5ff,#159cca); }
+    .action-btn.disabled { opacity:.55; cursor:not-allowed; }
 
-@media(max-width:900px){
-  .character-grid{grid-template-columns:repeat(2,minmax(0,1fr))}
-  .command-grid{grid-template-columns:1fr}
-}
-@media(max-width:600px){
-  body{padding-bottom:68px}
-  .topbar{height:58px;padding:0 14px}
-  .brand{font-size:20px}
-  .wrap{width:min(100% - 18px,1180px);padding-top:14px}
-  .hero{padding:23px 16px}
-  .hero-actions{display:grid}
-  .btn{width:100%}
-  .section{padding:19px 14px}
-  .section-head{display:block}
-  .section-note{margin-top:7px;text-align:left}
-  .steps,.character-grid,.command-grid{grid-template-columns:1fr}
-  .feature-grid{
+    .section { margin-top:16px; padding:25px 24px; border:1px solid #292c32; background:linear-gradient(180deg,#14171c,#0f1115); }
+    .section-head { display:flex; justify-content:space-between; gap:18px; align-items:flex-end; margin-bottom:18px; }
+    .section-note { max-width:600px; color:var(--muted); font-size:11px; line-height:1.7; text-align:right; }
+    .section-note.cyan-note {
+      color:var(--accent2);
+      font-weight:900;
+      text-shadow:0 0 14px rgba(40,185,232,.12);
+    }
+
+    .union-required-note {
+      margin:14px 0 0;
+      padding:14px 16px;
+      border:1px solid rgba(40,185,232,.46);
+      border-left:4px solid var(--accent);
+      background:linear-gradient(90deg,rgba(40,185,232,.12),rgba(40,185,232,.035));
+      color:#dfeff7;
+      font-size:12px;
+      line-height:1.75;
+    }
+    .union-required-note strong { color:var(--accent2); }
+    .union-required-note .required-title {
+      display:block;
+      margin-bottom:4px;
+      color:#79d9f6;
+      font-size:13px;
+      font-weight:900;
+    }
+
+    .reassurance-box {
+      margin-top:16px;
+      padding:20px 22px;
+      border:1px solid #2b596c;
+      border-left:4px solid var(--accent);
+      background:linear-gradient(135deg,rgba(40,185,232,.075),rgba(18,20,25,.96) 45%,#101217 100%);
+    }
+    .reassurance-box h2 { font-size:clamp(20px,3.8vw,28px); }
+    .reassurance-box p { margin:10px 0 0; color:#b9c4ca; font-size:12px; line-height:1.85; }
+    .reassurance-box strong { color:#fff; }
+    .privacy-note {
+      margin-top:12px;
+      padding:11px 12px;
+      border:1px solid rgba(142,220,255,.22);
+      background:rgba(40,185,232,.055);
+      color:#aee8ff;
+      font-size:11px;
+      line-height:1.75;
+    }
+    .privacy-note strong { color:#e8f8ff; }
+    .reassurance-points { margin-top:13px; display:grid; grid-template-columns:repeat(3,minmax(0,1fr)); gap:8px; }
+    .reassurance-point { padding:11px 12px; border:1px solid rgba(142,220,255,.18); background:rgba(8,16,20,.42); color:#c9d7dd; font-size:11px; line-height:1.65; }
+    .reassurance-point b { color:var(--accent2); }
+
+    .steps { display:grid; grid-template-columns:repeat(4,minmax(0,1fr)); gap:10px; }
+    .step { position:relative; min-height:186px; padding:18px 16px; border:1px solid var(--line); background:var(--panel2); }
+    .step-no { width:28px; height:28px; display:grid; place-items:center; margin-bottom:13px; color:#081018; background:var(--accent); font:900 17px "Teko",sans-serif; }
+    .step h3 { margin-bottom:8px; }
+    .step p { margin:0; color:#a9aeb5; font-size:11.5px; line-height:1.75; }
+    .step strong { color:#fff; }
+
+    .character-grid { display:grid; grid-template-columns:repeat(3,minmax(0,1fr)); gap:12px; }
+    .character-card { overflow:hidden; border:1px solid var(--line); background:var(--panel2); }
+    .character-visual { position:relative; height:190px; display:grid; place-items:center; overflow:hidden; background:linear-gradient(145deg,#181b21,#0e1014); border-bottom:1px solid var(--line); }
+    .character-visual img { width:100%; height:100%; object-fit:cover; display:none; }
+    .character-fallback { position:absolute; inset:0; display:grid; place-items:center; font-size:72px; background:radial-gradient(circle at 50% 42%,rgba(40,185,232,.10),transparent 52%); }
+    .character-body { padding:15px 16px 17px; }
+    .character-tag { color:var(--accent); font:800 10px "Teko",sans-serif; letter-spacing:1.7px; }
+    .character-name { margin-top:3px; color:#fff; font-size:20px; font-weight:900; }
+    .character-desc { margin-top:7px; color:#9da2aa; font-size:11.5px; line-height:1.7; }
+    .character-call { margin-top:10px; padding-top:9px; border-top:1px solid var(--line); color:#dfe2e6; font-size:11px; }
+
+    .feature-grid { display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); gap:10px; }
+    .feature-card { padding:17px; border:1px solid var(--line); background:var(--panel2); }
+    .feature-card .icon { font-size:21px; }
+    .feature-card h3 { margin-top:7px; }
+    .feature-card p { margin:7px 0 0; color:#9ea3aa; font-size:11.5px; line-height:1.75; }
+
+    .command-list { display:grid; gap:7px; }
+    .command-row { display:grid; grid-template-columns:150px minmax(0,1fr) auto; gap:12px; align-items:center; padding:11px 12px; border:1px solid var(--line); background:#15181d; }
+    .copy-command { min-width:86px; min-height:34px; padding:0 10px; border:1px solid #3d6678; background:#101a20; color:#aee8ff; font-size:10.5px; font-weight:900; cursor:pointer; }
+    .copy-command:hover { border-color:var(--accent); background:#122631; color:#fff; }
+    .copy-command.copied { border-color:#2f946a; background:#10291f; color:#8ff3c4; }
+    .profile-copy { margin-top:12px; }
+    code { color:#91defd; font-family:Consolas,"SFMono-Regular",monospace; font-size:12px; font-weight:800; }
+    .command-desc { color:#aeb3ba; font-size:11.5px; line-height:1.6; }
+    .recommended { color:#081018; background:var(--accent); padding:2px 6px; margin-left:6px; font-size:9px; font-weight:900; }
+
+    .talk-box { display:grid; grid-template-columns:minmax(0,1fr) minmax(0,1fr); gap:10px; }
+    .talk-card { padding:17px; border:1px solid var(--line); background:var(--panel2); }
+    .talk-card h3 { margin-bottom:10px; }
+    .chat-example { margin-top:7px; padding:9px 11px; border-left:3px solid var(--accent); background:#0d1014; color:#dfe3e7; font-size:11.5px; line-height:1.65; }
+    .chat-note { margin-top:9px; color:#8d939b; font-size:10.5px; line-height:1.65; }
+
+    .relist-flow { display:grid; grid-template-columns:1fr 1fr; gap:10px; }
+    .relist-card { padding:17px; border:1px solid var(--line); background:var(--panel2); }
+    .relist-card.green { border-left:4px solid var(--green); }
+    .relist-card.red { border-left:4px solid var(--red); }
+    .relist-label { font-size:13px; font-weight:900; color:#fff; }
+    .relist-card p { margin:8px 0 0; color:#9ea3aa; font-size:11.5px; line-height:1.75; }
+
+    .notice { margin-top:12px; padding:13px 14px; border:1px solid #314a56; background:rgba(40,185,232,.055); color:#b8d9e7; font-size:11px; line-height:1.75; }
+    .notice strong { color:#fff; }
+
+    .bottom-area { margin-top:18px; padding:18px 0 0; display:flex; justify-content:space-between; align-items:center; gap:12px; color:#686e75; font:800 10px "Teko",sans-serif; letter-spacing:1.6px; }
+    .bottom-area .action-btn { min-height:38px; }
+
+    @media (max-width:850px) {
+      .bot-hero { grid-template-columns:1fr; min-height:0; padding:25px 20px 22px; gap:20px; }
+      .hero-side { border-left:0; border-top:1px solid #30333a; padding:15px 0 0; }
+      .steps { grid-template-columns:repeat(2,minmax(0,1fr)); }
+    }
+
+    @media (max-width:600px) {
+      .topbar { height:58px; padding:0 14px; }
+      .brand-main { font-size:20px; }
+      .container { width:min(100% - 18px,1180px); padding-top:14px; }
+      .bot-hero { padding:22px 16px 18px; }
+      h1 { font-size:34px; }
+      .bot-hero h1 { font-size:clamp(16.5px,4.8vw,20px); white-space:nowrap; letter-spacing:-.06em; }
+      .lead { font-size:11.5px; }
+      .top-actions { display:grid; grid-template-columns:1fr; }
+      .action-btn { width:100%; }
+      .section { padding:19px 14px; }
+      .section-head { display:block; }
+      .section-note { margin-top:7px; text-align:left; }
+      .reassurance-box { padding:17px 14px; }
+      .reassurance-points { grid-template-columns:1fr; }
+      .steps,.character-grid,.feature-grid,.talk-box,.relist-flow { grid-template-columns:1fr; }
+      .step { min-height:0; }
+      .character-visual { height:210px; }
+      .command-row { grid-template-columns:1fr auto; gap:6px 8px; }
+      .command-row .command-desc { grid-column:1 / -1; }
+      .copy-command { min-width:78px; min-height:32px; }
+      .bottom-area { flex-direction:column; align-items:stretch; text-align:center; }
+    }
+  </style>
+  <link rel="stylesheet" href="./subpage-nav.css?v=21.0">
+
+  <style id="bot-menu-creator-rule-v16">
+    .bot-topbar { z-index: 120; }
+
+    .bot-brand {
+      gap: 9px;
+      color: #fff;
+      font: 700 22px/1 "Teko", sans-serif;
+      letter-spacing: .16em;
+    }
+
+    .bot-brand::before {
+      width: 5px;
+      height: 22px;
+      flex: 0 0 5px;
+    }
+
+    .site-menu-button {
+      width: 46px;
+      height: 46px;
+      display: grid;
+      place-content: center;
+      gap: 5px;
+      padding: 0;
+      border: 0;
+      background: transparent;
+      cursor: pointer;
+    }
+
+    .site-menu-button span {
+      display: block;
+      width: 25px;
+      height: 2px;
+      border-radius: 99px;
+      background: #fff;
+      transition: transform .22s ease, opacity .22s ease;
+    }
+
+    body.menu-open .site-menu-button span:nth-child(1) {
+      transform: translateY(7px) rotate(45deg);
+    }
+
+    body.menu-open .site-menu-button span:nth-child(2) {
+      opacity: 0;
+    }
+
+    body.menu-open .site-menu-button span:nth-child(3) {
+      transform: translateY(-7px) rotate(-45deg);
+    }
+
+    .site-menu-backdrop {
+      position: fixed;
+      inset: 64px 0 0;
+      z-index: 108;
+      background: rgba(0, 0, 0, .48);
+      backdrop-filter: blur(2px);
+      -webkit-backdrop-filter: blur(2px);
+    }
+
+    .site-menu-drawer {
+      position: fixed;
+      top: 64px;
+      right: 0;
+      z-index: 110;
+      width: min(86vw, 340px);
+      height: calc(100dvh - 64px);
+      padding: 12px;
+      transform: translateX(105%);
+      overflow-y: auto;
+      background: rgba(17, 19, 24, .98);
+      box-shadow: -18px 0 50px rgba(0, 0, 0, .32);
+      transition: transform .24s ease;
+    }
+
+    body.menu-open .site-menu-drawer {
+      transform: translateX(0);
+    }
+
+    .site-menu-head {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      min-height: 48px;
+      padding: 0 6px 10px;
+      color: rgba(255,255,255,.7);
+      font: 800 12px "Teko", sans-serif;
+      letter-spacing: .24em;
+    }
+
+    .site-menu-head button {
+      width: 38px;
+      height: 38px;
+      border: 0;
+      color: #fff;
+      background: transparent;
+      font-size: 28px;
+      line-height: 1;
+      cursor: pointer;
+    }
+
+    .site-menu-drawer > a {
+      width: 100%;
+      min-height: 52px;
+      display: flex;
+      align-items: center;
+      padding: 0 14px;
+      border: 0;
+      border-bottom: 1px solid rgba(255,255,255,.09);
+      color: #fff;
+      background: transparent;
+      font-size: 14px;
+      font-weight: 800;
+      text-align: left;
+      text-decoration: none;
+      cursor: pointer;
+      transition: background .18s ease, color .18s ease;
+    }
+
+    .site-menu-drawer > a:hover {
+      color: var(--cyan);
+      background: rgba(255,255,255,.06);
+    }
+
+    .bot-pc-home-row { display: none; }
+
+    @media screen and (min-width: 1025px) {
+      .bot-pc-home-row {
+        display: flex;
+        padding: 12px 0 0 20px;
+      }
+
+      .bot-pc-home {
+        position: fixed;
+        top: 76px;
+        left: 20px;
+        z-index: 105;
+        width: 44px;
+        height: 44px;
+        display: grid;
+        place-items: center;
+        overflow: hidden;
+        border: 1px solid rgba(26, 176, 241, .38);
+        background: rgba(26, 176, 241, .055);
+        color: #dcecf4;
+        text-decoration: none;
+        font: 800 23px/1 "Teko", sans-serif;
+        box-shadow: none;
+        transition: .18s ease;
+      }
+
+      .bot-pc-home::before,
+      .bot-pc-home::after {
+        display: none;
+      }
+
+      .bot-pc-home:hover,
+      .bot-pc-home:active {
+        border-color: #a9dff6;
+        background: #f7fbfd;
+        color: #079fd9;
+        transform: none;
+        box-shadow: none;
+      }
+    }
+
+    @media screen and (max-width: 1024px) {
+      .site-menu-backdrop {
+        background: rgba(0, 0, 0, .18) !important;
+        backdrop-filter: blur(4px) !important;
+        -webkit-backdrop-filter: blur(4px) !important;
+      }
+
+      .site-menu-drawer {
+        background: rgba(13, 16, 22, .62) !important;
+        border-left: 1px solid rgba(255,255,255,.12) !important;
+        box-shadow: -12px 0 34px rgba(0,0,0,.18) !important;
+        backdrop-filter: blur(14px) saturate(118%) !important;
+        -webkit-backdrop-filter: blur(14px) saturate(118%) !important;
+      }
+
+      .site-menu-drawer > a {
+        border-bottom-color: rgba(255,255,255,.12) !important;
+      }
+
+      .bot-bottom-nav {
+        grid-template-columns: repeat(3, minmax(0, 1fr)) !important;
+      }
+
+      .bot-bottom-nav > a {
+        display: flex !important;
+        flex-direction: column !important;
+        align-items: center !important;
+        justify-content: center !important;
+        gap: 4px !important;
+        padding: 6px 3px 8px !important;
+        color: rgba(255,255,255,.72) !important;
+        background: rgba(16,18,22,.96) !important;
+        font-size: 10px !important;
+        font-weight: 900 !important;
+        line-height: 1 !important;
+        text-align: center !important;
+      }
+
+      .bot-bottom-nav .bot-nav-icon {
+        display: block !important;
+        min-height: 19px;
+        color: rgba(255,255,255,.94);
+        font-family: "Teko", "Zen Kaku Gothic New", sans-serif;
+        font-size: 21px;
+        font-weight: 800;
+        line-height: .9;
+      }
+
+      .bot-bottom-nav .bot-nav-label {
+        display: block !important;
+        font-size: 10px;
+        font-weight: 900;
+        line-height: 1;
+        white-space: nowrap;
+      }
+
+      .bot-bottom-nav > a:nth-child(2) {
+        color: #fff !important;
+        background: rgba(40,185,232,.13) !important;
+        box-shadow:
+          inset 0 2px 0 rgba(40,185,232,.92),
+          inset 1px 0 0 rgba(255,255,255,.04),
+          inset -1px 0 0 rgba(255,255,255,.04) !important;
+      }
+
+      .bot-bottom-nav > a:nth-child(2) .bot-nav-icon {
+        color: var(--cyan) !important;
+      }
+
+      .bot-bottom-nav > a:active {
+        background: rgba(40,185,232,.22) !important;
+        color: #fff !important;
+      }
+    }
+
+    @media screen and (max-width: 600px) {
+      .bot-brand { font-size: 19px; }
+
+      .site-menu-backdrop {
+        inset: 58px 0 0;
+      }
+
+      .site-menu-drawer {
+        top: 58px;
+        height: calc(100dvh - 58px);
+      }
+    }
+  </style>
+
+  <style id="subpage-hard-fixed-v22">
+    /* v22: BOT / CREATOR mobile+tablet hard fixed navigation.
+       Embedded here so this does not depend on subpage-nav.css loading/cache. */
+    @media screen and (max-width: 1366px) {
+      html {
+        scroll-padding-top: 64px !important;
+      }
+
+      body {
+        padding-top: 64px !important;
+        padding-bottom: calc(72px + env(safe-area-inset-bottom)) !important;
+      }
+
+      body > .topbar.bot-topbar,
+      body > .topbar.creator-topbar {
+        position: fixed !important;
+        inset: 0 0 auto 0 !important;
+        top: 0 !important;
+        left: 0 !important;
+        right: 0 !important;
+        bottom: auto !important;
+        width: 100% !important;
+        margin: 0 !important;
+        z-index: 1000 !important;
+        transform: none !important;
+        translate: none !important;
+        will-change: auto !important;
+      }
+
+      body > .subpage-bottom-nav.bot-bottom-nav,
+      body > .subpage-bottom-nav.creator-bottom-nav {
+        position: fixed !important;
+        inset: auto 0 0 0 !important;
+        top: auto !important;
+        left: 0 !important;
+        right: 0 !important;
+        bottom: 0 !important;
+        width: 100% !important;
+        height: calc(68px + env(safe-area-inset-bottom)) !important;
+        margin: 0 !important;
+        padding-bottom: env(safe-area-inset-bottom) !important;
+        display: grid !important;
+        visibility: visible !important;
+        opacity: 1 !important;
+        grid-template-columns: repeat(3, minmax(0, 1fr)) !important;
+        z-index: 1000 !important;
+        transform: none !important;
+        translate: none !important;
+        pointer-events: auto !important;
+      }
+
+      /* Keep the slide-out menu below the fixed header. */
+      .site-menu-backdrop {
+        top: 64px !important;
+        inset: 64px 0 0 !important;
+      }
+
+      .site-menu-drawer {
+        top: 64px !important;
+        height: calc(100dvh - 64px) !important;
+      }
+    }
+
+    @media screen and (max-width: 600px) {
+      html {
+        scroll-padding-top: 58px !important;
+      }
+
+      body {
+        padding-top: 58px !important;
+      }
+
+      .site-menu-backdrop {
+        top: 58px !important;
+        inset: 58px 0 0 !important;
+      }
+
+      .site-menu-drawer {
+        top: 58px !important;
+        height: calc(100dvh - 58px) !important;
+      }
+    }
+  </style>
+
+
+  <style id="subpage-browser-ui-lock-v23">
+    /* v23: mobile/tablet viewport lock.
+       Keep the document itself from scrolling so Safari/Chrome browser UI
+       does not collapse/expand with page scroll. Only <main> scrolls. */
+    @media screen and (max-width: 1366px) {
+      html,
+      body {
+        width: 100% !important;
+        height: 100% !important;
+        min-height: 0 !important;
+        overflow: hidden !important;
+        overscroll-behavior: none !important;
+      }
+
+      body {
+        box-sizing: border-box !important;
+        height: 100dvh !important;
+        padding-top: 64px !important;
+        padding-bottom: calc(68px + env(safe-area-inset-bottom)) !important;
+      }
+
+      body > main.container {
+        box-sizing: border-box !important;
+        height: 100% !important;
+        min-height: 0 !important;
+        max-height: 100% !important;
+        overflow-x: hidden !important;
+        overflow-y: auto !important;
+        overscroll-behavior-y: contain !important;
+        -webkit-overflow-scrolling: touch !important;
+        touch-action: pan-y !important;
+      }
+    }
+
+    @media screen and (max-width: 600px) {
+      body {
+        padding-top: 58px !important;
+      }
+    }
+  </style>
+
+  <style id="site-menu-fansite-note-v1">
+    .site-menu-disclaimer {
+      margin: 22px 8px 8px;
+      padding: 14px 10px 0;
+      border-top: 1px solid rgba(255,255,255,.12);
+      color: rgba(255,255,255,.48);
+      font-size: 10px;
+      font-weight: 700;
+      line-height: 1.7;
+      letter-spacing: .01em;
+    }
+  </style>
+
+
+<style id="bot-redesign-v20">
+  .bot-redesign .bot-hero {
+    grid-template-columns:minmax(0,1fr) 190px;
+    gap:22px;
+  }
+
+  .bot-redesign .hero-install-panel {
+    position:relative;
+    z-index:1;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    border-left:1px solid #30333a;
+    padding-left:18px;
+  }
+
+  .bot-redesign .hero-install-btn {
+    width:150px;
+    min-height:56px;
+    padding:9px 12px;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    border:1px solid #287da0;
+    color:#fff;
+    background:linear-gradient(180deg,#28b9e8,#148dbb);
+    font-size:12.5px;
+    font-weight:900;
+    line-height:1.35;
+    text-align:center;
+    text-decoration:none;
+    clip-path:polygon(
+      7px 0,
+      calc(100% - 7px) 0,
+      100% 7px,
+      100% calc(100% - 7px),
+      calc(100% - 7px) 100%,
+      7px 100%,
+      0 calc(100% - 7px),
+      0 7px
+    );
+  }
+
+  .bot-redesign .hero-install-btn:hover {
+    border-color:var(--accent2);
+    background:linear-gradient(180deg,#2cc5ff,#159cca);
+  }
+
+  .bot-redesign .feature-grid {
+    grid-template-columns:repeat(3,minmax(0,1fr));
+    gap:10px;
+  }
+
+  .bot-redesign .feature-card {
+    min-width:0;
+    min-height:150px;
+    overflow-wrap:anywhere;
+  }
+
+  .bot-redesign .feature-card.green {
+    border-left:4px solid var(--green);
+  }
+
+  .bot-redesign .feature-card.soon {
+    border-left:4px solid var(--accent);
+  }
+
+  .bot-redesign .steps {
+    grid-template-columns:repeat(3,minmax(0,1fr));
+  }
+
+  .bot-redesign .character-grid {
+    grid-template-columns:repeat(4,minmax(0,1fr));
+  }
+
+  .bot-redesign .character-card.adaptive {
+    border-color:rgba(40,185,232,.5);
+    box-shadow:inset 0 2px 0 rgba(40,185,232,.6);
+  }
+
+  .bot-redesign .command-grid {
+    display:grid;
     grid-template-columns:repeat(2,minmax(0,1fr));
-    gap:8px;
+    gap:10px;
   }
-  .feature-card{
-    min-height:158px;
-    padding:13px 11px;
+
+  .bot-redesign .command-card {
+    position:relative;
+    min-height:118px;
+    padding:16px 122px 16px 16px;
+    border:1px solid var(--line);
+    background:#15181d;
   }
-  .feature-card .icon{
-    font-size:20px;
+
+  .bot-redesign .command-card .cmd {
+    color:#91defd;
+    font:900 14px Consolas,"SFMono-Regular",monospace;
   }
-  .feature-card h3{
-    margin-top:7px;
-    font-size:13.5px;
-    line-height:1.45;
+
+  .bot-redesign .command-card .badge {
+    margin-left:6px;
+    padding:2px 6px;
+    color:#081018;
+    background:var(--accent);
+    font:900 9px "Zen Kaku Gothic New",sans-serif;
   }
-  .feature-card p{
-    margin-top:6px;
+
+  .bot-redesign .command-card .desc {
+    margin-top:8px;
+    color:#c4c8cd;
+    font-size:11.5px;
+    line-height:1.65;
+  }
+
+  .bot-redesign .command-card .natural {
+    margin-top:8px;
+    color:#8edcff;
     font-size:10.5px;
     line-height:1.65;
   }
-  .character-visual{height:230px}
-  .command-card{padding:14px 14px 58px}
-  .copy-btn{left:14px;right:auto;top:auto;bottom:13px}
-  .mobile-nav{
-    position:fixed;left:0;right:0;bottom:0;z-index:30;height:64px;
-    display:grid;grid-template-columns:repeat(3,1fr);
-    border-top:1px solid var(--line);background:rgba(16,18,22,.97);
+
+  .bot-redesign .command-card .copy-command {
+    position:absolute;
+    top:16px;
+    right:14px;
   }
-  .mobile-nav a{display:grid;place-items:center;color:#d7dce1;font-size:10px;font-weight:900}
-  .mobile-nav a:nth-child(2){color:#fff;background:rgba(40,185,232,.12);box-shadow:inset 0 2px 0 var(--accent)}
-}
+
+  .bot-redesign .bot-important {
+    margin-top:15px;
+    color:#b8d9e7;
+    line-height:1.8;
+  }
+
+  @media (max-width:900px) and (min-width:601px) {
+    .bot-redesign .bot-hero {
+      grid-template-columns:minmax(0,1fr) 165px;
+      gap:16px;
+    }
+
+    .bot-redesign .hero-install-panel {
+      padding-left:14px;
+    }
+
+    .bot-redesign .hero-install-btn {
+      width:138px;
+      min-height:52px;
+      font-size:12px;
+    }
+
+    .bot-redesign .feature-grid {
+      grid-template-columns:repeat(3,minmax(0,1fr));
+    }
+
+    .bot-redesign .character-grid {
+      grid-template-columns:repeat(2,minmax(0,1fr));
+    }
+
+    .bot-redesign .command-grid {
+      grid-template-columns:1fr;
+    }
+  }
+
+  @media (max-width:600px) {
+    .bot-redesign .bot-hero {
+      grid-template-columns:1fr;
+      gap:13px;
+    }
+
+    .bot-redesign .bot-hero h1 {
+      font-size:clamp(18px,6.5vw,27px);
+      white-space:nowrap;
+      letter-spacing:-.06em;
+    }
+
+    .bot-redesign .hero-install-panel {
+      border-left:0;
+      border-top:1px solid #30333a;
+      padding:12px 0 0;
+    }
+
+    .bot-redesign .hero-install-btn {
+      width:min(100%,220px);
+      min-height:46px;
+      margin:0 auto;
+      font-size:12px;
+    }
+
+    .bot-redesign .feature-grid {
+      grid-template-columns:repeat(2,minmax(0,1fr));
+      gap:8px;
+    }
+
+    .bot-redesign .feature-card {
+      min-height:158px;
+      padding:13px 11px;
+    }
+
+    .bot-redesign .feature-card h3 {
+      font-size:13.5px;
+      line-height:1.45;
+    }
+
+    .bot-redesign .feature-card p {
+      font-size:10.5px;
+      line-height:1.65;
+    }
+
+    .bot-redesign .steps,
+    .bot-redesign .character-grid,
+    .bot-redesign .command-grid {
+      grid-template-columns:1fr;
+    }
+
+    .bot-redesign .command-card {
+      padding:14px 14px 58px;
+    }
+
+    .bot-redesign .command-card .copy-command {
+      top:auto;
+      right:auto;
+      bottom:13px;
+      left:14px;
+    }
+  }
 </style>
+
 </head>
 <body>
-<header class="topbar">
-  <div class="brand">DISCORD BOT</div>
-  <div class="menu">☰</div>
-</header>
+  <header class="topbar bot-topbar">
+    <div class="status bot-brand">DISCORD BOT</div>
 
-<main class="wrap">
-  <section class="hero">
-    <div class="eyebrow">UNION MATCH DISCORD BOT</div>
-    <h1>Discordでもっとラクに。</h1>
-    <p class="lead">
-      募集通知・期限通知・AIキャラ会話・育成キャラまで。<br>
-      UNION MATCHとDiscordをつないで、ユニオン運営をもっと手軽に。
-    </p>
-    <div class="hero-actions">
-      <a class="btn" href="#">🤖 BOTを導入する</a>
-      <a class="btn sub" href="#howto">使い方を見る</a>
+    <button
+      id="siteMenuButton"
+      class="site-menu-button"
+      type="button"
+      aria-label="メニューを開く"
+      aria-expanded="false"
+      aria-controls="siteMenuDrawer"
+    >
+      <span></span>
+      <span></span>
+      <span></span>
+    </button>
+  </header>
+
+  <div id="siteMenuBackdrop" class="site-menu-backdrop" hidden></div>
+
+  <aside
+    id="siteMenuDrawer"
+    class="site-menu-drawer"
+    aria-hidden="true"
+  >
+    <div class="site-menu-head">
+      <span>MENU</span>
+      <button
+        id="siteMenuClose"
+        type="button"
+        aria-label="メニューを閉じる"
+      >×</button>
     </div>
-  </section>
 
-  <div class="quick-note">
-    ⚠️ このBOTは、コマンドやメンションなど必要な操作に応じて動作します。<br>
-    <strong>運営がDiscord内のやり取りを常時確認しているわけではありません。</strong><br>
-    <strong>もし不具合が発生した場合は、状況が分かるスクリーンショットを添えてフィードバックをお願いします。</strong>
+    <a href="./index.html#videoHero">TOP</a>
+    <a href="./index.html?view=commander#listPage">指揮官を見る</a>
+    <a href="./index.html?view=union#listPage">ユニオンを見る</a>
+    <a href="./index.html#registerPage">募集登録</a>
+    <a href="./index.html#managePage">PASS管理</a>
+    <a href="./bot.html">Discord BOT</a>
+    <a href="./creators.html">応援クリエイター</a>
+    <div class="site-menu-disclaimer">
+      このサイトはSHIFT UPが提供する「勝利の女神：NIKKE」の公式サイトではありません。<br>
+      ファンサイトです。
+    </div>
+  </aside>
+
+  <div class="bot-pc-home-row">
+    <a
+      class="bot-pc-home"
+      href="./index.html#videoHero"
+      aria-label="UNION MATCH TOPへ戻る"
+      title="HOME"
+    >
+      <span aria-hidden="true">⌂</span>
+    </a>
   </div>
 
-  <section class="section">
-    <div class="section-head">
-      <div>
-        <div class="eyebrow">WHAT YOU CAN DO</div>
-        <h2>このBOTでできること</h2>
+  <main class="container bot-redesign">
+
+    <section class="bot-hero">
+      <div class="hero-copy">
+        <div class="eyebrow">UNION MATCH DISCORD BOT</div>
+        <h1>Discordでもっとラクに。</h1>
+        <p class="lead">
+          募集通知・期限通知・AIキャラ会話・キャラ設定まで。<br>
+          UNION MATCHとDiscordをつないで、ユニオン運営をもっと手軽に。
+        </p>
       </div>
-      <div class="section-note">通知先チャンネルや、期限通知でメンションするロールもサーバーごとに設定できます。</div>
-    </div>
 
-    <div class="feature-grid">
-      <article class="feature-card">
-        <div class="icon">🔔</div>
-        <h3>新規募集通知</h3>
-        <p>新しい指揮官募集を、設定したDiscordチャンネルへお知らせ。</p>
-      </article>
-
-      <article class="feature-card green">
-        <div class="icon">⏰</div>
-        <h3>期限通知・メンション</h3>
-        <p>募集期限が近づいたら自動で通知します。通知時にメンションするロールも選択できます。<br>
-        見落とし防止のため、ユニオン管理者や募集担当者のロールを設定することをおすすめします。</p>
-      </article>
-
-      <article class="feature-card">
-        <div class="icon">🔄</div>
-        <h3>BOTから再掲載</h3>
-        <p>期限通知からUNION MATCHを開き、募集をスムーズに再掲載。</p>
-      </article>
-
-      <article class="feature-card">
-        <div class="icon">💬</div>
-        <h3>AIキャラ会話</h3>
-        <p>BOTをメンションして話しかけるだけ。選んだキャラと会話できます。</p>
-      </article>
-
-      <article class="feature-card">
-        <div class="icon">🧬</div>
-        <h3>キャラ設定</h3>
-        <p>キャラクター・名前・画像などを、サーバーごとにカスタマイズ。</p>
-      </article>
-
-      <article class="feature-card soon">
-        <div class="icon">🔎</div>
-        <h3>X指揮官速報</h3>
-        <p>Xでユニオンを探している指揮官をピックアップして配信予定。</p>
-      </article>
-    </div>
-  </section>
-
-  <section class="section" id="howto">
-    <div class="section-head">
-      <div>
-        <div class="eyebrow">GET STARTED</div>
-        <h2>導入は3ステップ</h2>
+      <div class="hero-install-panel">
+        <a
+          class="hero-install-btn"
+          id="botInviteBtn"
+          href="https://discord.com/oauth2/authorize?client_id=1548613088557793370"
+          target="_blank"
+          rel="noopener noreferrer"
+        >BOTを導入する</a>
       </div>
-      <div class="section-note">導入説明は短く、ここだけ見れば始められる形に。</div>
+    </section>
+
+    <div class="union-required-note">
+      <strong>⚠️ 利用にはUNION MATCHへのユニオン登録が必要です。</strong><br>
+      ユニオン募集を登録後、<code>/setup</code> でPASSを1回入力すると利用できます。
     </div>
 
-    <div class="steps">
-      <article class="step">
-        <div class="step-no">1</div>
-        <h3>BOTをDiscordへ追加</h3>
-        <p>サーバー管理者がNIKKE UNION MATCH BOTを招待します。</p>
-      </article>
-      <article class="step">
-        <div class="step-no">2</div>
-        <h3><code>/setup</code> を実行</h3>
-        <p>通知先・キャラクター・話し方などを設定します。</p>
-      </article>
-      <article class="step">
-        <div class="step-no">3</div>
-        <h3>ユニオンを連携</h3>
-        <p>UNION MATCHで発行されたPASSを最初の1回だけ入力して連携完了。</p>
-      </article>
-    </div>
-  </section>
-
-  <section class="section">
-    <div class="section-head">
-      <div>
-        <div class="eyebrow">CHARACTERS</div>
-        <h2>選べる4キャラクター</h2>
+    <section class="section">
+      <div class="section-head">
+        <div>
+          <div class="eyebrow">WHAT YOU CAN DO</div>
+          <h2>このBOTでできること</h2>
+        </div>
+        <div class="section-note">
+          通知先チャンネルや、期限通知でメンションするロールもサーバーごとに設定できます。
+        </div>
       </div>
-      <div class="section-note">固定3人＋サーバーごとに育てられる育成キャラ。</div>
-    </div>
 
-    <div class="character-grid">
-      <article class="character-card">
-        <div class="character-visual">
-          <div class="fallback">🌹</div>
-          <img src="./bot-avatars/kairi.png" alt="カイリ" onload="this.style.display='block';this.previousElementSibling.style.display='none';">
-        </div>
-        <div class="character-body">
-          <div class="tag">TSUNDERE</div>
-          <div class="character-name">🌹 カイリ</div>
-          <div class="character-desc">強気だけど面倒見のいいツンデレ。</div>
-        </div>
-      </article>
+      <div class="feature-grid">
+        <article class="feature-card">
+          <div class="icon">🔔</div>
+          <h3>新規募集通知</h3>
+          <p>新しい指揮官募集を、設定したDiscordチャンネルへお知らせ。</p>
+        </article>
 
-      <article class="character-card">
-        <div class="character-visual">
-          <div class="fallback">🎩</div>
-          <img src="./bot-avatars/sebastian.png" alt="セバスチャン" onload="this.style.display='block';this.previousElementSibling.style.display='none';">
-        </div>
-        <div class="character-body">
-          <div class="tag">BUTLER</div>
-          <div class="character-name">🎩 セバスチャン</div>
-          <div class="character-desc">落ち着いた男性執事。</div>
-        </div>
-      </article>
+        <article class="feature-card green">
+          <div class="icon">⏰</div>
+          <h3>期限通知・メンション</h3>
+          <p>
+            募集期限が近づいたら自動で通知します。通知時にメンションするロールも選択できます。<br>
+            見落とし防止のため、ユニオン管理者や募集担当者のロールを設定することをおすすめします。
+          </p>
+        </article>
 
-      <article class="character-card">
-        <div class="character-visual">
-          <div class="fallback">😈</div>
-          <img src="./bot-avatars/natsuki.png" alt="なつき" onload="this.style.display='block';this.previousElementSibling.style.display='none';">
-        </div>
-        <div class="character-body">
-          <div class="tag">LITTLE SISTER</div>
-          <div class="character-name">😈 なつき</div>
-          <div class="character-desc">生意気でからかい好きな妹キャラ。</div>
-        </div>
-      </article>
+        <article class="feature-card">
+          <div class="icon">🔄</div>
+          <h3>BOTから再掲載</h3>
+          <p>期限通知からUNION MATCHを開き、募集をスムーズに再掲載。</p>
+        </article>
 
-      <article class="character-card adaptive">
-        <div class="character-visual"><div class="fallback">🧬</div></div>
-        <div class="character-body">
-          <div class="tag">ADAPTIVE CHARACTER</div>
-          <div class="character-name">🧬 育成キャラ</div>
-          <div class="character-desc">名前・性格・呼び方などを設定して育てるサーバー専用キャラ。</div>
-        </div>
-      </article>
-    </div>
-  </section>
+        <article class="feature-card">
+          <div class="icon">💬</div>
+          <h3>AIキャラ会話</h3>
+          <p>BOTをメンションして話しかけるだけ。選んだキャラと会話できます。</p>
+        </article>
 
-  <section class="section">
-    <div class="section-head">
-      <div>
-        <div class="eyebrow">COMMANDS</div>
-        <h2>これだけ覚えればOK</h2>
+        <article class="feature-card">
+          <div class="icon">🧬</div>
+          <h3>キャラ設定</h3>
+          <p>キャラクター・名前・画像などを、サーバーごとにカスタマイズ。</p>
+        </article>
+
+        <article class="feature-card soon">
+          <div class="icon">🔎</div>
+          <h3>X指揮官速報</h3>
+          <p>Xでユニオンを探している指揮官をピックアップして配信予定。</p>
+        </article>
       </div>
-      <div class="section-note">コマンド名 → 何ができるか → 言葉でできること → コピー、の順で分かりやすく。</div>
-    </div>
+    </section>
 
-    <div class="command-grid">
-      <article class="command-card">
-        <div class="cmd">/setup <span class="badge">最初に使う</span></div>
-        <div class="desc">通知先・キャラクター・話し方・ユニオンPASS連携をまとめて設定。</div>
-        <div class="natural">💬 最初の設定はこのコマンドから。</div>
-        <button class="copy-btn" data-copy="/setup">📋 コピー</button>
-      </article>
-
-      <article class="command-card">
-        <div class="cmd">/botprofiles</div>
-        <div class="desc">キャラクターの名前・画像・プロフィール設定をまとめて変更。</div>
-        
-        <button class="copy-btn" data-copy="/botprofiles">📋 コピー</button>
-      </article>
-
-      <article class="command-card">
-        <div class="cmd">/botname</div>
-        <div class="desc">現在選択中のキャラクターのBOT名を変更。</div>
-        <div class="natural">💬 例：<code>/botname</code> → 新しいBOT名を入力</div>
-        <button class="copy-btn" data-copy="/botname">📋 コピー</button>
-      </article>
-
-      <article class="command-card">
-        <div class="cmd">/botimage</div>
-        <div class="desc">現在選択中のキャラクターのBOT画像を変更。</div>
-        <div class="natural">
-          💬 例：<code>/botimage</code> → 変更したい画像を選択<br>
-          ⚠️ Discord側の制限により、短時間に何度も画像を変更すると一時的に変更できない場合があります。その場合は少し時間を置いてから再度お試しください。
+    <section class="section" id="install">
+      <div class="section-head">
+        <div>
+          <div class="eyebrow">GET STARTED</div>
+          <h2>導入は3ステップ</h2>
         </div>
-        <button class="copy-btn" data-copy="/botimage">📋 コピー</button>
-      </article>
+      </div>
 
-      <article class="command-card">
-        <div class="cmd">/botreset</div>
-        <div class="desc">現在選択中のキャラクターを標準名・標準画像へ戻す。</div>
-        <div class="natural">💬 例：<code>/botreset</code> → 現在のキャラを標準名・標準画像へ戻す</div>
-        <button class="copy-btn" data-copy="/botreset">📋 コピー</button>
-      </article>
+      <div class="steps">
+        <article class="step">
+          <div class="step-no">1</div>
+          <h3>BOTをDiscordへ追加</h3>
+          <p>サーバー管理者がNIKKE UNION MATCH BOTを招待します。</p>
+        </article>
 
-      <article class="command-card">
-        <div class="cmd">/guide</div>
-        <div class="desc">Discord内でBOTの使い方をもう一度表示。</div>
-        <div class="natural">💬 使い方を忘れたらこのコマンド。</div>
-        <button class="copy-btn" data-copy="/guide">📋 コピー</button>
-      </article>
+        <article class="step">
+          <div class="step-no">2</div>
+          <h3><code>/setup</code> を実行</h3>
+          <p>通知先・キャラクター・話し方などを設定します。</p>
+        </article>
 
-      <article class="command-card">
-        <div class="cmd">@BOT キャラを変更</div>
-        <div class="desc">キャラクター変更はコマンドを覚えなくても、BOTへ普通に話しかけて変更できます。</div>
-        <div class="natural">
-          💬 キャラ変更はBOTに話しかけるだけでもOK。<br>
-          例：@カイリ セバスチャンに変えて<br>
-          例：@セバスチャン なつきにかえて
+        <article class="step">
+          <div class="step-no">3</div>
+          <h3>ユニオンを連携</h3>
+          <p>UNION MATCHで発行されたPASSを最初の1回だけ入力して連携完了。</p>
+        </article>
+      </div>
+    </section>
+
+    <section class="section">
+      <div class="section-head">
+        <div>
+          <div class="eyebrow">CHARACTERS</div>
+          <h2>選べる4キャラクター</h2>
         </div>
-        <button class="copy-btn" data-copy="セバスチャンに変えて">📋 コピー</button>
-      </article>
+        <div class="section-note">
+          固定3人＋サーバーごとに育てられる育成キャラ。
+        </div>
+      </div>
 
-      <article class="command-card">
-        <div class="cmd">@BOT 会話</div>
-        <div class="desc">BOTをメンションして送れば、選択中のAIキャラクターとそのまま会話。</div>
-        <div class="natural">💬 例：「今日のユニレどう？」</div>
-        <button class="copy-btn" data-copy="今日のユニレどう？">📋 コピー</button>
-      </article>
-    </div>
-  </section>
+      <div class="character-grid">
+        <article class="character-card">
+          <div class="character-visual">
+            <div class="character-fallback">🌹</div>
+            <img
+              src="./bot-avatars/kairi.png"
+              alt="カイリ"
+              onload="this.style.display='block';this.previousElementSibling.style.display='none';"
+            >
+          </div>
+          <div class="character-body">
+            <div class="character-tag">TSUNDERE</div>
+            <div class="character-name">🌹 カイリ</div>
+            <div class="character-desc">強気だけど面倒見のいいツンデレ。</div>
+          </div>
+        </article>
 
-  <section class="section">
-    <div class="eyebrow">IMPORTANT</div>
-    <h2>最初に知っておくこと</h2>
-    <div class="important" style="margin-top:15px">
-      ・BOTの初期設定やユニオン連携は、基本的にサーバー管理者が行います。<br>
-      ・ユニオンPASSは連携確認に使用します。<br>
-      ・ユニオン未連携サーバーには、そのユニオン専用の期限通知は届きません。<br>
-      ・NIKKE UNION MATCH Discord BOTは非公式ファンBOTです。
-    </div>
-  </section>
+        <article class="character-card">
+          <div class="character-visual">
+            <div class="character-fallback">🎩</div>
+            <img
+              src="./bot-avatars/sebastian.png"
+              alt="セバスチャン"
+              onload="this.style.display='block';this.previousElementSibling.style.display='none';"
+            >
+          </div>
+          <div class="character-body">
+            <div class="character-tag">BUTLER</div>
+            <div class="character-name">🎩 セバスチャン</div>
+            <div class="character-desc">落ち着いた男性執事。</div>
+          </div>
+        </article>
 
-  <footer>NIKKE UNION MATCH · DISCORD BOT · LAYOUT PREVIEW v2</footer>
-</main>
+        <article class="character-card">
+          <div class="character-visual">
+            <div class="character-fallback">😈</div>
+            <img
+              src="./bot-avatars/natsuki.png"
+              alt="なつき"
+              onload="this.style.display='block';this.previousElementSibling.style.display='none';"
+            >
+          </div>
+          <div class="character-body">
+            <div class="character-tag">LITTLE SISTER</div>
+            <div class="character-name">😈 なつき</div>
+            <div class="character-desc">生意気でからかい好きな妹キャラ。</div>
+          </div>
+        </article>
 
-<nav class="mobile-nav">
-  <a href="#">⌂<br>TOP</a>
-  <a href="#">＋<br>募集登録</a>
-  <a href="#">✦<br>CREATOR</a>
-</nav>
+        <article class="character-card adaptive">
+          <div class="character-visual">
+            <div class="character-fallback">🧬</div>
+          </div>
+          <div class="character-body">
+            <div class="character-tag">ADAPTIVE CHARACTER</div>
+            <div class="character-name">🧬 育成キャラ</div>
+            <div class="character-desc">
+              名前・性格・呼び方などを設定して育てるサーバー専用キャラ。
+            </div>
+          </div>
+        </article>
+      </div>
+    </section>
 
-<script>
-document.querySelectorAll(".copy-btn").forEach(button => {
-  button.addEventListener("click", async () => {
-    const text = button.dataset.copy || "";
-    const original = button.textContent;
-    try{
-      await navigator.clipboard.writeText(text);
-      button.textContent = "✓ コピー済み";
-      button.classList.add("copied");
-      setTimeout(() => {
-        button.textContent = original;
-        button.classList.remove("copied");
-      }, 1200);
-    }catch(e){
-      button.textContent = "コピー失敗";
-      setTimeout(() => button.textContent = original, 1200);
+    <section class="section">
+      <div class="section-head">
+        <div>
+          <div class="eyebrow">COMMANDS</div>
+          <h2>これだけ覚えればOK</h2>
+        </div>
+        <div class="section-note">
+          コマンドと、話しかけるだけで使える操作をまとめています。
+        </div>
+      </div>
+
+      <div class="command-grid">
+
+        <article class="command-card">
+          <div class="cmd">/setup <span class="badge">最初に使う</span></div>
+          <div class="desc">
+            通知先・キャラクター・話し方・ユニオンPASS連携をまとめて設定。
+          </div>
+          <div class="natural">💬 最初の設定はこのコマンドから。</div>
+          <button class="copy-command" type="button" data-copy="/setup">📋 コピー</button>
+        </article>
+
+        <article class="command-card">
+          <div class="cmd">/botprofiles</div>
+          <div class="desc">
+            キャラクターの名前・画像・プロフィール設定をまとめて変更。
+          </div>
+          <button class="copy-command" type="button" data-copy="/botprofiles">📋 コピー</button>
+        </article>
+
+        <article class="command-card">
+          <div class="cmd">/botname</div>
+          <div class="desc">現在選択中のキャラクターのBOT名を変更。</div>
+          <div class="natural">
+            💬 例：<code>/botname</code> → 新しいBOT名を入力
+          </div>
+          <button class="copy-command" type="button" data-copy="/botname">📋 コピー</button>
+        </article>
+
+        <article class="command-card">
+          <div class="cmd">/botimage</div>
+          <div class="desc">現在選択中のキャラクターのBOT画像を変更。</div>
+          <div class="natural">
+            💬 例：<code>/botimage</code> → 変更したい画像を選択<br>
+            ⚠️ Discord側の制限により、短時間に何度も画像を変更すると一時的に変更できない場合があります。その場合は少し時間を置いてから再度お試しください。
+          </div>
+          <button class="copy-command" type="button" data-copy="/botimage">📋 コピー</button>
+        </article>
+
+        <article class="command-card">
+          <div class="cmd">/botreset</div>
+          <div class="desc">
+            現在選択中のキャラクターを標準名・標準画像へ戻す。
+          </div>
+          <div class="natural">
+            💬 例：<code>/botreset</code> → 現在のキャラを標準名・標準画像へ戻す
+          </div>
+          <button class="copy-command" type="button" data-copy="/botreset">📋 コピー</button>
+        </article>
+
+        <article class="command-card">
+          <div class="cmd">/guide</div>
+          <div class="desc">Discord内でBOTの使い方をもう一度表示。</div>
+          <div class="natural">💬 使い方を忘れたらこのコマンド。</div>
+          <button class="copy-command" type="button" data-copy="/guide">📋 コピー</button>
+        </article>
+
+        <article class="command-card">
+          <div class="cmd">@BOT キャラを変更</div>
+          <div class="desc">
+            キャラ変更はコマンド不要。BOTへ普通に話しかけて変更できます。
+          </div>
+          <div class="natural">
+            💬 キャラ変更はBOTに話しかけるだけでもOK。<br>
+            例：@カイリ セバスチャンに変えて<br>
+            例：@セバスチャン なつきにかえて
+          </div>
+          <button class="copy-command" type="button" data-copy="セバスチャンに変えて">📋 コピー</button>
+        </article>
+
+        <article class="command-card">
+          <div class="cmd">@BOT 会話</div>
+          <div class="desc">
+            BOTをメンションして送れば、選択中のAIキャラクターとそのまま会話。
+          </div>
+          <div class="natural">💬 例：「今日のユニレどう？」</div>
+          <button class="copy-command" type="button" data-copy="今日のユニレどう？">📋 コピー</button>
+        </article>
+
+      </div>
+    </section>
+
+    <section class="section">
+      <div class="eyebrow">IMPORTANT</div>
+      <h2>最初に知っておくこと</h2>
+
+      <div class="notice bot-important">
+        ・BOTの初期設定やユニオン連携は、基本的にサーバー管理者が行います。<br>
+        ・ユニオンPASSは連携確認に使用します。<br>
+        ・ユニオン未連携サーバーには、そのユニオン専用の期限通知は届きません。<br>
+        ・このBOTは、コマンドやメンションなど必要な操作に応じて動作します。通常の会話を収集・保存することを目的としたBOTではありません。<br>
+        ・もし不具合があった場合は、状況が分かるスクリーンショットを添えてフィードバックにご協力いただけると助かります。<br>
+        ・NIKKE UNION MATCH Discord BOTは非公式ファンBOTです。
+      </div>
+    </section>
+
+    <footer class="bottom-area">
+      <div>NIKKE UNION MATCH · DISCORD BOT</div>
+      <div style="display:flex;gap:8px;flex-wrap:wrap;">
+        <a class="action-btn" href="./creators.html">📺 応援クリエイター</a>
+        <a class="action-btn" href="./index.html">UNION MATCHへ戻る</a>
+      </div>
+    </footer>
+
+  </main>
+
+  <script>
+    // 招待URLが確定したらここへ設定する。
+    const BOT_INVITE_URL = "https://discord.com/oauth2/authorize?client_id=1548613088557793370";
+    const inviteBtn = document.getElementById("botInviteBtn");
+    if (BOT_INVITE_URL && inviteBtn) {
+      inviteBtn.href = BOT_INVITE_URL;
+      inviteBtn.textContent = "BOTを導入する";
+      inviteBtn.classList.remove("disabled");
+      inviteBtn.removeAttribute("aria-disabled");
+      inviteBtn.target = "_blank";
+      inviteBtn.rel = "noopener noreferrer";
     }
-  });
-});
-</script>
+  </script>
+
+  <script>
+    document.querySelectorAll(".copy-command").forEach((button) => {
+      button.addEventListener("click", async () => {
+        const text = button.dataset.copy || "";
+        if (!text) return;
+
+        const original = button.textContent;
+
+        try {
+          if (navigator.clipboard && window.isSecureContext) {
+            await navigator.clipboard.writeText(text);
+          } else {
+            const input = document.createElement("textarea");
+            input.value = text;
+            input.setAttribute("readonly", "");
+            input.style.position = "fixed";
+            input.style.opacity = "0";
+            document.body.appendChild(input);
+            input.select();
+            document.execCommand("copy");
+            input.remove();
+          }
+
+          button.textContent = "✓ コピー済み";
+          button.classList.add("copied");
+          window.setTimeout(() => {
+            button.textContent = original;
+            button.classList.remove("copied");
+          }, 1400);
+        } catch (error) {
+          button.textContent = "コピー失敗";
+          window.setTimeout(() => {
+            button.textContent = original;
+          }, 1400);
+        }
+      });
+    });
+  </script>
+
+
+
+  <script>
+    function closeSiteMenu() {
+      document.body.classList.remove("menu-open");
+      const button = document.getElementById("siteMenuButton");
+      const drawer = document.getElementById("siteMenuDrawer");
+      const backdrop = document.getElementById("siteMenuBackdrop");
+
+      button?.setAttribute("aria-expanded", "false");
+      drawer?.setAttribute("aria-hidden", "true");
+
+      if (backdrop) {
+        backdrop.hidden = true;
+      }
+    }
+
+    function openSiteMenu() {
+      document.body.classList.add("menu-open");
+      const button = document.getElementById("siteMenuButton");
+      const drawer = document.getElementById("siteMenuDrawer");
+      const backdrop = document.getElementById("siteMenuBackdrop");
+
+      button?.setAttribute("aria-expanded", "true");
+      drawer?.setAttribute("aria-hidden", "false");
+
+      if (backdrop) {
+        backdrop.hidden = false;
+      }
+    }
+
+    document
+      .getElementById("siteMenuButton")
+      ?.addEventListener("click", () => {
+        if (document.body.classList.contains("menu-open")) {
+          closeSiteMenu();
+        } else {
+          openSiteMenu();
+        }
+      });
+
+    document
+      .getElementById("siteMenuClose")
+      ?.addEventListener("click", closeSiteMenu);
+
+    document
+      .getElementById("siteMenuBackdrop")
+      ?.addEventListener("click", closeSiteMenu);
+
+    document
+      .querySelectorAll("#siteMenuDrawer a")
+      .forEach(link => {
+        link.addEventListener("click", closeSiteMenu);
+      });
+
+    document.addEventListener("keydown", event => {
+      if (event.key === "Escape") {
+        closeSiteMenu();
+      }
+    });
+  </script>
+
+  <nav class="subpage-bottom-nav bot-bottom-nav" aria-label="フッターメニュー">
+    <a href="./index.html#videoHero">
+      <span class="bot-nav-icon" aria-hidden="true">⌂</span>
+      <span class="bot-nav-label">TOP</span>
+    </a>
+
+    <a href="./index.html#registerPage">
+      <span class="bot-nav-icon" aria-hidden="true">＋</span>
+      <span class="bot-nav-label">募集登録</span>
+    </a>
+
+    <a href="./creators.html">
+      <span class="bot-nav-icon" aria-hidden="true">✦</span>
+      <span class="bot-nav-label">CREATOR</span>
+    </a>
+  </nav>
+
 </body>
 </html>
