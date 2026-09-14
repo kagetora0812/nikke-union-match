@@ -406,9 +406,39 @@
     }
 
     @media screen and (max-width: 1366px) {
+      /*
+        登録ユニオン一覧は本体の mobile-scroll-shell を使わない独立ページ。
+        共通 style.css のスマホ / タブレット用 root scroll lock をここだけ解除する。
+      */
+      html,
       body {
+        width: 100% !important;
+        height: auto !important;
+        min-height: 100% !important;
+        max-height: none !important;
+        overflow-x: hidden !important;
+        overflow-y: auto !important;
+        overscroll-behavior-y: auto !important;
+      }
+
+      html.tablet-device,
+      html.tablet-device body {
+        width: 100% !important;
+        height: auto !important;
+        min-height: 100% !important;
+        max-height: none !important;
+        overflow-x: hidden !important;
+        overflow-y: auto !important;
+        overscroll-behavior-y: auto !important;
+      }
+
+      body,
+      html.tablet-device body {
+        position: static !important;
         padding-top: 64px !important;
         padding-bottom: calc(72px + env(safe-area-inset-bottom)) !important;
+        touch-action: pan-y !important;
+        -webkit-overflow-scrolling: touch !important;
       }
 
       .union-list-topbar {
@@ -487,6 +517,14 @@
     }
 
     @media screen and (max-width: 600px) {
+      html,
+      body {
+        height: auto !important;
+        min-height: 100% !important;
+        max-height: none !important;
+        overflow-y: auto !important;
+      }
+
       body {
         padding-top: 58px !important;
       }
