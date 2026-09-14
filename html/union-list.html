@@ -1,0 +1,876 @@
+
+<!doctype html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="theme-color" content="#f2f5f7">
+  <title>NIKKE UNION MATCH - 登録ユニオン一覧</title>
+  <meta name="description" content="NIKKE UNION MATCHを現在利用中のユニオン一覧です。募集中のユニオンは募集記事から応募できます。">
+
+  <link rel="stylesheet" href="../style.css?v=51.8">
+
+  <style>
+    body {
+      min-height: 100vh;
+      padding-bottom: 40px;
+    }
+
+    .union-list-page {
+      width: 100%;
+      max-width: 1380px;
+      margin: 0 auto;
+      padding: 30px 18px 60px;
+    }
+
+    .union-list-hero {
+      position: relative;
+      overflow: hidden;
+      padding: 32px;
+      border: 1px solid var(--line);
+      border-top: 3px solid var(--cyan);
+      background: #fff;
+      box-shadow: var(--shadow-soft);
+    }
+
+    .union-list-hero::after {
+      content: "";
+      position: absolute;
+      width: 240px;
+      height: 240px;
+      right: -100px;
+      top: -110px;
+      border: 26px solid rgba(26,176,241,.06);
+      box-shadow:
+        0 0 0 28px rgba(26,176,241,.025),
+        0 0 0 56px rgba(34,36,40,.018);
+      border-radius: 50% !important;
+      pointer-events: none;
+    }
+
+    .union-list-hero-inner {
+      position: relative;
+      z-index: 1;
+      display: grid;
+      grid-template-columns: minmax(0,1fr) auto;
+      gap: 24px;
+      align-items: end;
+    }
+
+    .union-list-kicker {
+      margin-bottom: 8px;
+      color: var(--cyan-dark);
+      font: 900 11px "Teko", sans-serif;
+      letter-spacing: 2.4px;
+    }
+
+    .union-list-title {
+      margin: 0;
+      color: var(--ink);
+      font-size: clamp(32px, 5vw, 54px);
+      line-height: 1;
+      letter-spacing: -.055em;
+    }
+
+    .union-list-lead {
+      max-width: 760px;
+      margin: 14px 0 0;
+      color: var(--ink-soft);
+      font-size: 13px;
+      line-height: 1.9;
+    }
+
+    .union-list-countbox {
+      min-width: 200px;
+      padding: 18px 20px;
+      border-left: 2px solid var(--cyan);
+      background: #f7fafb;
+    }
+
+    .union-list-count-label {
+      color: var(--muted);
+      font: 900 10px "Teko", sans-serif;
+      letter-spacing: 2px;
+    }
+
+    .union-list-count {
+      margin-top: 5px;
+      color: var(--ink);
+      font-size: 32px;
+      font-weight: 900;
+      line-height: 1;
+    }
+
+    .union-list-count small {
+      margin-left: 4px;
+      color: var(--muted);
+      font-size: 12px;
+    }
+
+    .union-list-actions {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin-top: 20px;
+    }
+
+    .union-list-link {
+      min-height: 42px;
+      padding: 0 15px;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      border: 1px solid var(--line-strong);
+      background: var(--charcoal);
+      color: #fff;
+      font-size: 12px;
+      font-weight: 900;
+      text-decoration: none;
+      clip-path:
+        polygon(
+          7px 0,
+          100% 0,
+          100% calc(100% - 7px),
+          calc(100% - 7px) 100%,
+          0 100%,
+          0 7px
+        );
+    }
+
+    .union-list-link.primary {
+      border-color: var(--cyan-dark);
+      background: var(--cyan-dark);
+    }
+
+    .union-list-link:hover {
+      border-color: var(--cyan);
+      background: var(--cyan);
+    }
+
+    .union-list-toolbar {
+      margin-top: 16px;
+      padding: 16px;
+      display: grid;
+      grid-template-columns: minmax(220px,1fr) minmax(180px,240px) auto;
+      gap: 10px;
+      align-items: end;
+      border: 1px solid var(--line);
+      background: #fff;
+      box-shadow: var(--shadow-soft);
+    }
+
+    .union-list-field label {
+      display: block;
+      margin-bottom: 7px;
+      color: var(--muted);
+      font-size: 11px;
+      font-weight: 900;
+    }
+
+    .union-list-field input,
+    .union-list-field select {
+      width: 100%;
+      min-height: 44px;
+      margin: 0;
+      padding: 10px 12px;
+      border: 1px solid var(--line-strong);
+      background: #fff;
+      color: var(--ink);
+      font-size: 13px;
+      font-weight: 800;
+    }
+
+    .union-list-status-tabs {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 6px;
+    }
+
+    .union-list-status-btn {
+      min-height: 44px;
+      padding: 0 13px;
+      border: 1px solid var(--line-strong);
+      background: #fff;
+      color: var(--ink-soft);
+      font-size: 11px;
+      font-weight: 900;
+      cursor: pointer;
+    }
+
+    .union-list-status-btn.active {
+      border-color: var(--cyan);
+      background: rgba(26,176,241,.09);
+      color: var(--cyan-dark);
+      box-shadow: inset 0 -3px 0 var(--cyan);
+    }
+
+    .union-list-summary {
+      margin-top: 14px;
+      padding: 12px 14px;
+      border-left: 3px solid var(--cyan);
+      background: rgba(26,176,241,.055);
+      color: var(--ink-soft);
+      font-size: 12px;
+      font-weight: 800;
+      line-height: 1.6;
+    }
+
+    .union-list-grid {
+      margin-top: 14px;
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0,1fr));
+      gap: 12px;
+    }
+
+    .union-member-card {
+      min-width: 0;
+      padding: 18px;
+      border: 1px solid var(--line);
+      border-top: 3px solid var(--line-strong);
+      background: #fff;
+      box-shadow: var(--shadow-soft);
+      clip-path:
+        polygon(
+          9px 0,
+          100% 0,
+          100% calc(100% - 9px),
+          calc(100% - 9px) 100%,
+          0 100%,
+          0 9px
+        );
+    }
+
+    .union-member-card.recruiting {
+      border-top-color: var(--cyan);
+    }
+
+    .union-member-head {
+      display: flex;
+      align-items: flex-start;
+      justify-content: space-between;
+      gap: 12px;
+    }
+
+    .union-member-name {
+      min-width: 0;
+      color: var(--ink);
+      font-size: 20px;
+      font-weight: 900;
+      line-height: 1.35;
+      word-break: break-word;
+    }
+
+    .union-member-rank {
+      margin-top: 7px;
+      color: var(--cyan-dark);
+      font-size: 12px;
+      font-weight: 900;
+    }
+
+    .union-member-badge {
+      flex: 0 0 auto;
+      padding: 5px 8px;
+      border: 1px solid var(--line-strong);
+      background: #f2f5f7;
+      color: var(--muted);
+      font-size: 10px;
+      font-weight: 900;
+      white-space: nowrap;
+    }
+
+    .union-member-badge.recruiting {
+      border-color: var(--cyan);
+      background: rgba(26,176,241,.08);
+      color: var(--cyan-dark);
+    }
+
+    .union-member-state {
+      min-height: 42px;
+      margin-top: 17px;
+      display: flex;
+      align-items: center;
+      color: var(--muted);
+      font-size: 12px;
+      font-weight: 800;
+      line-height: 1.6;
+    }
+
+    .union-member-card .union-list-link {
+      width: 100%;
+      margin-top: 14px;
+    }
+
+    .union-list-empty,
+    .union-list-error,
+    .union-list-loading {
+      margin-top: 14px;
+      padding: 26px 18px;
+      border: 1px solid var(--line);
+      background: #fff;
+      color: var(--muted);
+      text-align: center;
+      font-size: 13px;
+      font-weight: 800;
+    }
+
+    .union-list-error {
+      border-color: rgba(255,83,100,.45);
+      color: #d84555;
+    }
+
+    .hidden {
+      display: none !important;
+    }
+
+    .union-list-footer {
+      margin-top: 28px;
+      padding-top: 18px;
+      border-top: 1px solid var(--line);
+      color: var(--muted);
+      font-size: 10px;
+      line-height: 1.8;
+      text-align: center;
+    }
+
+    @media screen and (max-width: 1024px) {
+      .union-list-grid {
+        grid-template-columns: repeat(2, minmax(0,1fr));
+      }
+
+      .union-list-toolbar {
+        grid-template-columns: 1fr 1fr;
+      }
+
+      .union-list-status-tabs {
+        grid-column: 1 / -1;
+      }
+    }
+
+    @media screen and (max-width: 600px) {
+      .union-list-page {
+        padding: 14px 8px 40px;
+      }
+
+      .union-list-hero {
+        padding: 22px 16px;
+      }
+
+      .union-list-hero-inner {
+        grid-template-columns: 1fr;
+      }
+
+      .union-list-countbox {
+        min-width: 0;
+        padding: 14px 0 0;
+        border-left: 0;
+        border-top: 1px solid var(--line);
+      }
+
+      .union-list-toolbar {
+        padding: 12px;
+        grid-template-columns: 1fr;
+      }
+
+      .union-list-status-tabs {
+        grid-column: auto;
+      }
+
+      .union-list-status-btn {
+        flex: 1 1 0;
+        padding: 0 8px;
+      }
+
+      .union-list-grid {
+        grid-template-columns: 1fr;
+        gap: 9px;
+      }
+
+      .union-member-card {
+        padding: 15px;
+      }
+
+      .union-list-link {
+        flex: 1 1 auto;
+      }
+    }
+  </style>
+</head>
+
+<body>
+  <header class="topbar">
+    <div class="brand">
+      <span class="brand-small">NIKKE</span>
+      <span class="brand-main">UNION MATCH</span>
+    </div>
+    <div class="status-dot">
+      <span></span> UNION LIST
+    </div>
+  </header>
+
+  <main class="union-list-page">
+    <section class="union-list-hero">
+      <div class="union-list-hero-inner">
+        <div>
+          <div class="union-list-kicker">UNION MATCH MEMBERS</div>
+          <h1 class="union-list-title">登録ユニオン一覧</h1>
+          <p class="union-list-lead">
+            NIKKE UNION MATCHを現在利用しているユニオンです。<br>
+            「募集中」のユニオンは募集記事から応募できます。
+          </p>
+
+          <div class="union-list-actions">
+            <a class="union-list-link primary" href="../index.html#listPage">
+              募集一覧へ戻る
+            </a>
+            <a class="union-list-link" href="../index.html">
+              UNION MATCH TOP
+            </a>
+          </div>
+        </div>
+
+        <div class="union-list-countbox">
+          <div class="union-list-count-label">TOTAL UNIONS</div>
+          <div class="union-list-count">
+            <span id="totalCount">--</span><small>UNIONS</small>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="union-list-toolbar" aria-label="ユニオン一覧絞り込み">
+      <div class="union-list-field">
+        <label for="unionSearch">ユニオン名</label>
+        <input
+          id="unionSearch"
+          type="search"
+          placeholder="ユニオン名で検索"
+          autocomplete="off"
+        >
+      </div>
+
+      <div class="union-list-field">
+        <label for="rankFilter">ユニオンランク</label>
+        <select id="rankFilter">
+          <option value="">すべて</option>
+          <option value="チャレンジャー">チャレンジャー</option>
+          <option value="ダイヤ">ダイヤ</option>
+          <option value="プラチナ">プラチナ</option>
+          <option value="ゴールド">ゴールド</option>
+          <option value="シルバー">シルバー</option>
+          <option value="駆け出しユニオン">駆け出しユニオン</option>
+        </select>
+      </div>
+
+      <div class="union-list-status-tabs" aria-label="募集状態">
+        <button class="union-list-status-btn active" type="button" data-status="all">
+          全ユニオン
+        </button>
+        <button class="union-list-status-btn" type="button" data-status="open">
+          募集中
+        </button>
+        <button class="union-list-status-btn" type="button" data-status="closed">
+          現在募集なし
+        </button>
+      </div>
+    </section>
+
+    <div id="summary" class="union-list-summary">
+      登録ユニオンを読み込み中...
+    </div>
+
+    <div id="loadingState" class="union-list-loading">
+      登録ユニオンを読み込んでいます...
+    </div>
+
+    <div id="errorState" class="union-list-error hidden">
+      ユニオン情報を読み込めませんでした。
+    </div>
+
+    <div id="emptyState" class="union-list-empty hidden">
+      条件に一致するユニオンはありません。
+    </div>
+
+    <section id="unionGrid" class="union-list-grid" aria-live="polite"></section>
+
+    <footer class="union-list-footer">
+      このサイトはSHIFT UPが提供する「勝利の女神：NIKKE」の公式サイトではありません。ファンサイトです。
+    </footer>
+  </main>
+
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script>
+    const SUPABASE_URL =
+      "https://igoekrvpgnjberppiawf.supabase.co";
+
+    const SUPABASE_ANON_KEY =
+      "sb_publishable_xSjnNTnh667o9IesU5g5Kw_xcdg9bbh";
+
+    const sb =
+      window.supabase.createClient(
+        SUPABASE_URL,
+        SUPABASE_ANON_KEY
+      );
+
+    const state = {
+      items: [],
+      status: "all"
+    };
+
+    const $ = selector =>
+      document.querySelector(selector);
+
+    function escapeHtml(value) {
+      return String(value ?? "").replace(
+        /[&<>"']/g,
+        char => ({
+          "&": "&amp;",
+          "<": "&lt;",
+          ">": "&gt;",
+          '"': "&quot;",
+          "'": "&#039;"
+        }[char])
+      );
+    }
+
+    function safeUrl(value) {
+      try {
+        const url = new URL(String(value || "").trim());
+
+        if (
+          url.protocol !== "https:"
+          &&
+          url.protocol !== "http:"
+        ) {
+          return "";
+        }
+
+        return url.href;
+      } catch {
+        return "";
+      }
+    }
+
+    function isRecruiting(recruitment) {
+      if (!recruitment) {
+        return false;
+      }
+
+      const expires =
+        new Date(recruitment.expires_at).getTime();
+
+      return (
+        String(recruitment.status || "").toLowerCase() === "open"
+        &&
+        Number.isFinite(expires)
+        &&
+        expires > Date.now()
+      );
+    }
+
+    function render() {
+      const grid = $("#unionGrid");
+      const empty = $("#emptyState");
+      const summary = $("#summary");
+
+      const keyword =
+        String($("#unionSearch")?.value || "")
+          .trim()
+          .toLowerCase();
+
+      const rank =
+        String($("#rankFilter")?.value || "");
+
+      let filtered =
+        state.items.filter(item => {
+          if (
+            keyword
+            &&
+            !String(item.union_name || "")
+              .toLowerCase()
+              .includes(keyword)
+          ) {
+            return false;
+          }
+
+          if (
+            rank
+            &&
+            String(item.union_rank || "") !== rank
+          ) {
+            return false;
+          }
+
+          if (
+            state.status === "open"
+            &&
+            !item._recruiting
+          ) {
+            return false;
+          }
+
+          if (
+            state.status === "closed"
+            &&
+            item._recruiting
+          ) {
+            return false;
+          }
+
+          return true;
+        });
+
+      filtered.sort((a, b) => {
+        if (a._recruiting !== b._recruiting) {
+          return a._recruiting ? -1 : 1;
+        }
+
+        return (
+          new Date(b.created_at).getTime()
+          -
+          new Date(a.created_at).getTime()
+        );
+      });
+
+      const openCount =
+        state.items.filter(
+          item => item._recruiting
+        ).length;
+
+      const closedCount =
+        state.items.length - openCount;
+
+      $("#totalCount").textContent =
+        String(state.items.length);
+
+      summary.textContent =
+        `現在利用中 ${state.items.length}ユニオン ｜ 募集中 ${openCount} ｜ 現在募集なし ${closedCount}`;
+
+      grid.innerHTML = "";
+
+      if (!filtered.length) {
+        empty.classList.remove("hidden");
+        return;
+      }
+
+      empty.classList.add("hidden");
+
+      grid.innerHTML =
+        filtered.map(item => {
+          const recruiting =
+            item._recruiting === true;
+
+          const recruitmentUrl =
+            safeUrl(
+              item._recruitment?.x_url || ""
+            );
+
+          const button =
+            recruiting && recruitmentUrl
+              ? `
+                <a
+                  class="union-list-link primary"
+                  href="${escapeHtml(recruitmentUrl)}"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                >
+                  募集を見る ↗
+                </a>
+              `
+              : "";
+
+          return `
+            <article class="union-member-card ${recruiting ? "recruiting" : ""}">
+              <div class="union-member-head">
+                <div>
+                  <div class="union-member-name">
+                    ${escapeHtml(item.union_name || "--")}
+                  </div>
+                  <div class="union-member-rank">
+                    ${escapeHtml(item.union_rank || "--")}
+                  </div>
+                </div>
+
+                <div class="union-member-badge ${recruiting ? "recruiting" : ""}">
+                  ${recruiting ? "募集中" : "現在募集なし"}
+                </div>
+              </div>
+
+              <div class="union-member-state">
+                ${
+                  recruiting
+                    ? "現在メンバーを募集しています。"
+                    : "UNION MATCH利用中のユニオンです。現在は募集していません。"
+                }
+              </div>
+
+              ${button}
+            </article>
+          `;
+        }).join("");
+    }
+
+    async function loadUnions() {
+      const loading = $("#loadingState");
+      const errorBox = $("#errorState");
+
+      loading.classList.remove("hidden");
+      errorBox.classList.add("hidden");
+
+      try {
+        // 本体TOTAL UNIONS / 管理画面と同じルールで
+        // 期限切れ会員を整理してから現在利用中を取得。
+        const countResult =
+          await sb.rpc(
+            "get_active_union_member_count"
+          );
+
+        if (countResult.error) {
+          throw countResult.error;
+        }
+
+        const nowIso =
+          new Date().toISOString();
+
+        const membershipResult =
+          await sb
+            .from("union_registrations")
+            .select(
+              "id, union_name, union_rank, recruitment_id, created_at, expires_at"
+            )
+            .gt(
+              "expires_at",
+              nowIso
+            )
+            .order(
+              "created_at",
+              { ascending: false }
+            );
+
+        if (membershipResult.error) {
+          throw membershipResult.error;
+        }
+
+        const memberships =
+          Array.isArray(membershipResult.data)
+            ? membershipResult.data
+            : [];
+
+        const recruitmentIds =
+          [
+            ...new Set(
+              memberships
+                .map(item => item.recruitment_id)
+                .filter(Boolean)
+                .map(String)
+            )
+          ];
+
+        let recruitmentMap =
+          new Map();
+
+        if (recruitmentIds.length) {
+          const recruitmentResult =
+            await sb
+              .from("union_recruitments")
+              .select(
+                "id, x_url, status, created_at, expires_at"
+              )
+              .in(
+                "id",
+                recruitmentIds
+              );
+
+          if (recruitmentResult.error) {
+            throw recruitmentResult.error;
+          }
+
+          recruitmentMap =
+            new Map(
+              (recruitmentResult.data || [])
+                .map(item => [
+                  String(item.id),
+                  item
+                ])
+            );
+        }
+
+        state.items =
+          memberships.map(item => {
+            const recruitment =
+              item.recruitment_id
+                ? recruitmentMap.get(
+                    String(item.recruitment_id)
+                  ) || null
+                : null;
+
+            return {
+              ...item,
+              _recruitment: recruitment,
+              _recruiting:
+                isRecruiting(recruitment)
+            };
+          });
+
+        render();
+
+      } catch (error) {
+        console.error(
+          "登録ユニオン一覧取得エラー",
+          error
+        );
+
+        state.items = [];
+        $("#totalCount").textContent = "--";
+        $("#summary").textContent =
+          "登録ユニオンを読み込めませんでした。";
+        $("#unionGrid").innerHTML = "";
+        $("#emptyState").classList.add("hidden");
+        errorBox.classList.remove("hidden");
+      } finally {
+        loading.classList.add("hidden");
+      }
+    }
+
+    $("#unionSearch")
+      ?.addEventListener(
+        "input",
+        render
+      );
+
+    $("#rankFilter")
+      ?.addEventListener(
+        "change",
+        render
+      );
+
+    document
+      .querySelectorAll(
+        ".union-list-status-btn"
+      )
+      .forEach(button => {
+        button.addEventListener(
+          "click",
+          () => {
+            state.status =
+              button.dataset.status || "all";
+
+            document
+              .querySelectorAll(
+                ".union-list-status-btn"
+              )
+              .forEach(item =>
+                item.classList.toggle(
+                  "active",
+                  item === button
+                )
+              );
+
+            render();
+          }
+        );
+      });
+
+    loadUnions();
+  </script>
+</body>
+</html>
