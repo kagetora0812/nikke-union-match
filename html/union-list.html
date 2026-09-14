@@ -196,6 +196,8 @@
       position: relative;
       z-index: 1;
       display: block;
+      min-height: 132px;
+      padding-right: 230px;
     }
 
     .union-list-kicker {
@@ -222,10 +224,16 @@
     }
 
     .union-list-countbox {
-      min-width: 200px;
-      padding: 18px 20px;
-      border-left: 2px solid var(--cyan);
-      background: #f7fafb;
+      position: absolute;
+      top: 50%;
+      right: 0;
+      width: 190px;
+      min-width: 190px;
+      padding: 20px 22px;
+      border-left: 1px solid var(--line-strong);
+      background: transparent;
+      text-align: center;
+      transform: translateY(-50%);
     }
 
     .union-list-count-label {
@@ -235,17 +243,18 @@
     }
 
     .union-list-count {
-      margin-top: 5px;
+      margin-top: 8px;
       color: var(--ink);
-      font-size: 32px;
+      font-size: 18px;
       font-weight: 900;
-      line-height: 1;
+      line-height: 1.2;
+      white-space: nowrap;
     }
 
     .union-list-count small {
       margin-left: 4px;
       color: var(--muted);
-      font-size: 12px;
+      font-size: 11px;
     }
 
     .union-list-toolbar {
@@ -423,6 +432,18 @@
     }
 
     @media screen and (max-width: 1024px) {
+      .union-list-hero-inner {
+        min-height: 124px;
+        padding-right: 205px;
+      }
+
+      .union-list-countbox {
+        right: 0;
+        width: 170px;
+        min-width: 170px;
+        padding: 18px 16px;
+      }
+
       .union-list-grid {
         grid-template-columns: repeat(2, minmax(0,1fr));
       }
@@ -593,7 +614,8 @@
       }
 
       .union-list-hero-inner {
-        grid-template-columns: 1fr;
+        min-height: 0;
+        padding-right: 0;
       }
 
       .union-list-grid {
