@@ -1653,6 +1653,145 @@
       }
     }
 
+  
+
+    /* ========================================
+       SYSTEM CHECK（読み取り専用）
+    ======================================== */
+
+    .system-check-summary {
+      margin-top: 18px;
+      padding: 16px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 14px;
+      flex-wrap: wrap;
+      border: 1px solid rgba(54, 150, 255, .32);
+      background: rgba(54, 150, 255, .06);
+    }
+
+    .system-check-overall {
+      font-size: 18px;
+      font-weight: 900;
+    }
+
+    .system-check-overall.ok {
+      color: var(--green);
+    }
+
+    .system-check-overall.warn {
+      color: #ffc36d;
+    }
+
+    .system-check-time {
+      color: var(--muted);
+      font-size: 11px;
+      font-weight: 800;
+    }
+
+    .system-check-columns {
+      margin-top: 16px;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 16px;
+    }
+
+    .system-check-group {
+      min-width: 0;
+      padding: 16px;
+      border: 1px solid var(--line);
+      background: rgba(8, 13, 21, .38);
+    }
+
+    .system-check-group-title {
+      margin-bottom: 12px;
+      color: #d9e5f2;
+      font-size: 13px;
+      font-weight: 900;
+      letter-spacing: .08em;
+    }
+
+    .system-check-list {
+      display: grid;
+      gap: 8px;
+    }
+
+    .system-check-row {
+      padding: 10px 11px;
+      display: grid;
+      grid-template-columns: 24px minmax(0, 1fr) auto;
+      align-items: start;
+      gap: 8px;
+      border: 1px solid rgba(255, 255, 255, .07);
+      background: rgba(16, 22, 33, .72);
+    }
+
+    .system-check-mark {
+      font-size: 16px;
+      font-weight: 900;
+      line-height: 1.3;
+      text-align: center;
+    }
+
+    .system-check-row.ok .system-check-mark {
+      color: var(--green);
+    }
+
+    .system-check-row.warn .system-check-mark,
+    .system-check-row.error .system-check-mark {
+      color: #ffc36d;
+    }
+
+    .system-check-row.unmonitored .system-check-mark,
+    .system-check-row.info .system-check-mark {
+      color: #7f8a99;
+    }
+
+    .system-check-label {
+      color: var(--text);
+      font-size: 12px;
+      font-weight: 900;
+      line-height: 1.4;
+    }
+
+    .system-check-detail {
+      margin-top: 3px;
+      color: var(--muted);
+      font-size: 10px;
+      line-height: 1.55;
+    }
+
+    .system-check-count {
+      min-width: 40px;
+      padding: 3px 6px;
+      color: #ffc36d;
+      border: 1px solid rgba(255, 195, 109, .32);
+      background: rgba(255, 195, 109, .06);
+      font-size: 9px;
+      font-weight: 900;
+      text-align: center;
+      white-space: nowrap;
+    }
+
+    .system-check-note {
+      margin-top: 14px;
+      color: var(--muted);
+      font-size: 10px;
+      line-height: 1.7;
+    }
+
+    @media screen and (max-width: 760px) {
+      .system-check-columns {
+        grid-template-columns: 1fr;
+      }
+
+      .system-check-summary {
+        align-items: flex-start;
+        flex-direction: column;
+      }
+    }
+
   </style>
 
 </head>
@@ -1913,10 +2052,118 @@
           </div>
         </button>
 
+
+        <button
+          id="openSystemCheckBtn"
+          class="menu-card"
+          type="button"
+        >
+          <div class="menu-card-icon">🩺</div>
+          <div class="menu-card-title">
+            SYSTEM CHECK
+          </div>
+          <div class="menu-card-copy">
+            UNION MATCH本体とBOT連携データを読み取り専用で点検します。
+          </div>
+        </button>
+
       </div>
 
     </section>
 
+
+
+    <!-- ========================================
+         SYSTEM CHECK（読み取り専用）
+    ========================================= -->
+
+    <section
+      id="systemCheckSection"
+      class="hidden"
+    >
+
+      <div class="admin-head">
+        <div>
+          <div class="eyebrow">
+            SYSTEM CHECK
+          </div>
+          <h2>
+            🩺 SITE + BOT 点検
+          </h2>
+        </div>
+
+        <div class="admin-head-actions">
+          <button
+            id="reloadSystemCheckBtn"
+            class="btn blue"
+            type="button"
+          >
+            ↻ 再点検
+          </button>
+
+          <button
+            id="backToMenuFromSystemCheckBtn"
+            class="btn"
+            type="button"
+          >
+            ← 管理メニュー
+          </button>
+        </div>
+      </div>
+
+      <p class="lead">
+        現在のSupabaseデータを読み取り専用で点検します。<br>
+        この画面から登録・募集・BOT設定を変更することはありません。
+      </p>
+
+      <div class="system-check-summary">
+        <div
+          id="systemCheckOverall"
+          class="system-check-overall"
+        >
+          読み込み前
+        </div>
+        <div
+          id="systemCheckTime"
+          class="system-check-time"
+        >
+          最終確認 --
+        </div>
+      </div>
+
+      <div class="system-check-columns">
+        <div class="system-check-group">
+          <div class="system-check-group-title">
+            SITE CHECK
+          </div>
+          <div
+            id="systemCheckSiteList"
+            class="system-check-list"
+          ></div>
+        </div>
+
+        <div class="system-check-group">
+          <div class="system-check-group-title">
+            BOT CHECK
+          </div>
+          <div
+            id="systemCheckBotList"
+            class="system-check-list"
+          ></div>
+        </div>
+      </div>
+
+      <div
+        id="systemCheckMessage"
+        class="message"
+      ></div>
+
+      <div class="system-check-note">
+        ※「○ 未監視」は異常ではありません。Oracle上のBOT稼働確認・BOTエラーログ・サイト操作失敗ログは、後でログ送信を追加した時点で監視対象にできます。<br>
+        ※「登録のみ → 募集切替」は、現時点ではDB上の募集リンク不整合を検査します。ボタン操作自体の失敗はサイトエラーログ追加後に完全監視できます。
+      </div>
+
+    </section>
 
 
     <!-- ========================================
@@ -6630,6 +6877,17 @@
       );
 
 
+
+    $("#openSystemCheckBtn")
+      ?.addEventListener(
+        "click",
+        async () => {
+          showSystemCheckAdmin();
+          await loadSystemCheck();
+        }
+      );
+
+
     $("#openXEmbedControlBtn")
       ?.addEventListener(
         "click",
@@ -6647,6 +6905,19 @@
       ?.addEventListener(
         "click",
         showMenu
+      );
+
+
+    $("#backToMenuFromSystemCheckBtn")
+      ?.addEventListener(
+        "click",
+        showMenu
+      );
+
+    $("#reloadSystemCheckBtn")
+      ?.addEventListener(
+        "click",
+        loadSystemCheck
       );
 
     $("#reloadUnionRegistryBtn")
@@ -7388,6 +7659,11 @@
         ?.classList
         .add("hidden");
 
+
+      $("#systemCheckSection")
+        ?.classList
+        .add("hidden");
+
       $("#endingUnionSection")
         ?.classList
         .add("hidden");
@@ -7508,6 +7784,213 @@
 
       clearMessage(
         $("#xUrlRepairMessage")
+      );
+
+    }
+
+
+    function showSystemCheckAdmin() {
+
+      hideAllAdminSections();
+
+      $("#systemCheckSection")
+        ?.classList
+        .remove("hidden");
+
+    }
+
+
+    function getSystemCheckMark(status) {
+      if (status === "ok") return "✓";
+      if (status === "warn" || status === "error") return "⚠";
+      if (status === "info") return "•";
+      return "○";
+    }
+
+
+    function renderSystemCheckList(selector, items) {
+      const list = $(selector);
+      if (!list) return;
+
+      const rows = Array.isArray(items) ? items : [];
+
+      if (!rows.length) {
+        list.innerHTML = `
+          <div class="system-check-row unmonitored">
+            <div class="system-check-mark">○</div>
+            <div>
+              <div class="system-check-label">データなし</div>
+              <div class="system-check-detail">チェック結果を取得できませんでした。</div>
+            </div>
+          </div>
+        `;
+        return;
+      }
+
+      list.innerHTML =
+        rows.map(item => {
+          const status =
+            ["ok", "warn", "error", "info", "unmonitored"]
+              .includes(String(item?.status || ""))
+              ? String(item.status)
+              : "unmonitored";
+
+          const count = Number(item?.issue_count || 0);
+          const countHtml =
+            count > 0
+              ? `<div class="system-check-count">${count}件</div>`
+              : "";
+
+          return `
+            <div class="system-check-row ${escapeHtml(status)}">
+              <div class="system-check-mark">${getSystemCheckMark(status)}</div>
+              <div>
+                <div class="system-check-label">${escapeHtml(item?.label || "--")}</div>
+                <div class="system-check-detail">${escapeHtml(item?.detail || "")}</div>
+              </div>
+              ${countHtml}
+            </div>
+          `;
+        }).join("");
+    }
+
+
+    function setSystemCheckLoading() {
+      const overall = $("#systemCheckOverall");
+      const time = $("#systemCheckTime");
+      const site = $("#systemCheckSiteList");
+      const bot = $("#systemCheckBotList");
+
+      if (overall) {
+        overall.textContent = "点検中...";
+        overall.className = "system-check-overall";
+      }
+
+      if (time) {
+        time.textContent = "最終確認 --";
+      }
+
+      const loadingHtml = `
+        <div class="system-check-row unmonitored">
+          <div class="system-check-mark">○</div>
+          <div>
+            <div class="system-check-label">読み込み中...</div>
+            <div class="system-check-detail">Supabaseの現在状態を確認しています。</div>
+          </div>
+        </div>
+      `;
+
+      if (site) site.innerHTML = loadingHtml;
+      if (bot) bot.innerHTML = loadingHtml;
+    }
+
+
+    async function loadSystemCheck() {
+
+      clearMessage(
+        $("#systemCheckMessage")
+      );
+
+      setSystemCheckLoading();
+
+      const token = getToken();
+
+      if (!token) {
+        showLogin();
+        return;
+      }
+
+      const {
+        data,
+        error
+      } =
+        await sb.rpc(
+          "creator_admin_system_check",
+          {
+            p_token: token
+          }
+        );
+
+      if (error) {
+        const errorText =
+          String(
+            error.message
+            || error.details
+            || ""
+          );
+
+        if (
+          errorText.includes("INVALID_ADMIN_TOKEN")
+          || errorText.includes("ADMIN_SESSION_INVALID")
+        ) {
+          clearToken();
+          showLogin();
+          return;
+        }
+
+        console.error(
+          "SYSTEM CHECK取得エラー",
+          error
+        );
+
+        const overall = $("#systemCheckOverall");
+        if (overall) {
+          overall.textContent = "⚠ 点検できません";
+          overall.className = "system-check-overall warn";
+        }
+
+        showMessage(
+          $("#systemCheckMessage"),
+          "SYSTEM CHECK用SQLが未適用、またはSupabaseから読み込めませんでした。",
+          "error"
+        );
+
+        return;
+      }
+
+      const result = data || {};
+      const summary = result.summary || {};
+      const totalIssues = Number(summary.total_issues || 0);
+      const overall = $("#systemCheckOverall");
+      const time = $("#systemCheckTime");
+
+      if (overall) {
+        overall.textContent =
+          totalIssues > 0
+            ? `⚠ 異常 ${totalIssues}項目`
+            : "✓ 異常 0件";
+        overall.className =
+          `system-check-overall ${totalIssues > 0 ? "warn" : "ok"}`;
+      }
+
+      if (time) {
+        const checkedAt = result.checked_at
+          ? new Date(result.checked_at)
+          : new Date();
+
+        const formatted =
+          Number.isNaN(checkedAt.getTime())
+            ? "--"
+            : checkedAt.toLocaleString("ja-JP", {
+                timeZone: "Asia/Tokyo",
+                month: "2-digit",
+                day: "2-digit",
+                hour: "2-digit",
+                minute: "2-digit",
+                second: "2-digit"
+              });
+
+        time.textContent = `最終確認 ${formatted}`;
+      }
+
+      renderSystemCheckList(
+        "#systemCheckSiteList",
+        result.site
+      );
+
+      renderSystemCheckList(
+        "#systemCheckBotList",
+        result.bot
       );
 
     }
