@@ -631,16 +631,20 @@
     }
 
     .union-registry-card {
+      min-height: 132px;
       padding: 16px;
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) minmax(240px, 300px) auto;
+      grid-template-areas: "main status badge";
+      align-items: center;
+      gap: 18px;
       border: 1px solid var(--line);
       background: rgba(16, 22, 33, .90);
     }
 
-    .union-registry-head {
-      display: flex;
-      align-items: flex-start;
-      justify-content: space-between;
-      gap: 12px;
+    .union-registry-main {
+      grid-area: main;
+      min-width: 0;
     }
 
     .union-registry-name {
@@ -656,7 +660,56 @@
       font-weight: 800;
     }
 
+    .union-registry-status-panel {
+      grid-area: status;
+      display: grid;
+      grid-template-columns: repeat(3, minmax(64px, 1fr));
+      gap: 8px;
+      min-width: 240px;
+      padding: 10px 12px;
+      border-left: 1px solid rgba(255, 255, 255, .08);
+      border-right: 1px solid rgba(255, 255, 255, .08);
+      background: rgba(8, 13, 21, .34);
+    }
+
+    .union-registry-status-item {
+      min-width: 0;
+      text-align: center;
+    }
+
+    .union-registry-status-label {
+      color: var(--muted);
+      font-size: 9px;
+      font-weight: 900;
+      letter-spacing: .04em;
+      white-space: nowrap;
+    }
+
+    .union-registry-status-mark {
+      min-height: 24px;
+      margin-top: 5px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: #596473;
+      font-size: 18px;
+      font-weight: 900;
+      line-height: 1;
+    }
+
+    .union-registry-status-mark.is-on {
+      color: var(--green);
+      text-shadow: 0 0 12px rgba(143, 240, 189, .16);
+    }
+
+    .union-registry-status-mark.is-unknown {
+      color: #ffc36d;
+      font-size: 14px;
+    }
+
     .union-registry-badge {
+      grid-area: badge;
+      align-self: start;
       flex: 0 0 auto;
       padding: 5px 9px;
       border: 1px solid rgba(143, 240, 189, .38);
@@ -664,6 +717,7 @@
       background: rgba(143, 240, 189, .07);
       font-size: 10px;
       font-weight: 900;
+      white-space: nowrap;
     }
 
     .union-registry-badge.listing-only {
@@ -686,9 +740,25 @@
       word-break: break-all;
     }
 
-    @media screen and (max-width: 600px) {
-      .union-registry-head {
-        flex-direction: column;
+    @media screen and (max-width: 760px) {
+      .union-registry-card {
+        min-height: 0;
+        grid-template-columns: minmax(0, 1fr) auto;
+        grid-template-areas:
+          "main badge"
+          "status status";
+        align-items: start;
+        gap: 12px;
+      }
+
+      .union-registry-status-panel {
+        width: 100%;
+        min-width: 0;
+        padding: 10px 0 0;
+        border-left: 0;
+        border-right: 0;
+        border-top: 1px solid rgba(255, 255, 255, .08);
+        background: transparent;
       }
     }
 
@@ -3397,6 +3467,7 @@
 
     let creators = [];
     let unionRegistryItems = [];
+    let unionRegistryBotStatusAvailable = false;
     let passReissueTargets = [];
 
     // アイコン画像状態
@@ -5434,6 +5505,16 @@
 
       empty.classList.add("hidden");
 
+      const statusMark = active => {
+        if (!unionRegistryBotStatusAvailable) {
+          return '<span class="union-registry-status-mark is-unknown">?</span>';
+        }
+
+        return active
+          ? '<span class="union-registry-status-mark is-on">✓</span>'
+          : '<span class="union-registry-status-mark">—</span>';
+      };
+
       list.innerHTML = displayItems.map(item => {
         const kind = getUnionRegistryKind(item);
         const listingOnly = kind === "listing_only";
@@ -5446,35 +5527,58 @@
         const url =
           String(item._recruitment?.x_url || "").trim();
 
+        const botStatus = item._botStatus || null;
+        const botEnabled = botStatus?.bot_enabled === true;
+        const xEnabled =
+          botEnabled
+          && botStatus?.x_recruitment_enabled === true;
+        const loginEnabled =
+          botEnabled
+          && botStatus?.morning_login_enabled === true;
+
         return `
           <article class="union-registry-card">
-            <div class="union-registry-head">
-              <div>
-                <div class="union-registry-name">
-                  ${escapeHtml(item.union_name || "--")}
-                </div>
-                <div class="union-registry-rank">
-                  ${escapeHtml(item.union_rank || "--")}
-                </div>
+            <div class="union-registry-main">
+              <div class="union-registry-name">
+                ${escapeHtml(item.union_name || "--")}
               </div>
-              <div class="union-registry-badge${listingOnly ? " listing-only" : ""}">
-                ${listingOnly ? "掲載のみ" : "募集中"}
+              <div class="union-registry-rank">
+                ${escapeHtml(item.union_rank || "--")}
               </div>
-            </div>
-            <div class="union-registry-meta">
-              会員登録：${escapeHtml(created)}<br>
-              次回利用確認期限：${escapeHtml(memberExpiry)}
+              <div class="union-registry-meta">
+                会員登録：${escapeHtml(created)}<br>
+                次回利用確認期限：${escapeHtml(memberExpiry)}
+                ${
+                  !listingOnly && recruitmentExpiry
+                    ? `<br>募集掲載期限：${escapeHtml(recruitmentExpiry)}`
+                    : ""
+                }
+              </div>
               ${
-                !listingOnly && recruitmentExpiry
-                  ? `<br>募集掲載期限：${escapeHtml(recruitmentExpiry)}`
+                !listingOnly && url
+                  ? `<div class="union-registry-url">募集記事：${escapeHtml(url)}</div>`
                   : ""
               }
             </div>
-            ${
-              !listingOnly && url
-                ? `<div class="union-registry-url">募集記事：${escapeHtml(url)}</div>`
-                : ""
-            }
+
+            <div class="union-registry-status-panel" aria-label="BOT利用状況">
+              <div class="union-registry-status-item">
+                <div class="union-registry-status-label">BOT</div>
+                ${statusMark(botEnabled)}
+              </div>
+              <div class="union-registry-status-item">
+                <div class="union-registry-status-label">X配信</div>
+                ${statusMark(xEnabled)}
+              </div>
+              <div class="union-registry-status-item">
+                <div class="union-registry-status-label">ログイン</div>
+                ${statusMark(loginEnabled)}
+              </div>
+            </div>
+
+            <div class="union-registry-badge${listingOnly ? " listing-only" : ""}">
+              ${listingOnly ? "掲載のみ" : "募集中"}
+            </div>
           </article>
         `;
       }).join("");
@@ -5553,7 +5657,7 @@
       const membershipResult =
         await sb
           .from("union_registrations")
-          .select("id, union_name, union_rank, recruitment_id, created_at, last_confirmed_at, expires_at")
+          .select("id, union_name, union_rank, recruitment_id, union_identity_id, created_at, last_confirmed_at, expires_at")
           .gt("expires_at", nowIso)
           .order("created_at", { ascending: false });
 
@@ -5632,6 +5736,58 @@
         }
       }
 
+      // BOT利用状況は管理トークン必須のRPC経由で取得する。
+      // 公開ANONキーからdiscord_guild_settingsを直接読まない。
+      unionRegistryBotStatusAvailable = false;
+
+      const botStatusResult =
+        await sb.rpc(
+          "creator_admin_union_bot_status",
+          {
+            p_token: token
+          }
+        );
+
+      const botStatusRows =
+        !botStatusResult.error
+        && Array.isArray(botStatusResult.data)
+          ? botStatusResult.data
+          : [];
+
+      if (botStatusResult.error) {
+        console.warn(
+          "ユニオンBOT利用状況取得エラー",
+          botStatusResult.error
+        );
+      } else {
+        unionRegistryBotStatusAvailable = true;
+      }
+
+      const botStatusByIdentity = new Map();
+      const botStatusByRecruitment = new Map();
+      const botStatusByName = new Map();
+
+      botStatusRows.forEach(row => {
+        const identity =
+          String(row.union_identity_id || "").trim();
+        const recruitmentId =
+          String(row.union_recruitment_id || "").trim();
+        const unionName =
+          String(row.union_name || "").trim().toLowerCase();
+
+        if (identity) {
+          botStatusByIdentity.set(identity, row);
+        }
+
+        if (recruitmentId) {
+          botStatusByRecruitment.set(recruitmentId, row);
+        }
+
+        if (unionName && !botStatusByName.has(unionName)) {
+          botStatusByName.set(unionName, row);
+        }
+      });
+
       unionRegistryItems =
         memberships
           .map(item => {
@@ -5652,6 +5808,29 @@
                 new Date(recruitment.expires_at).getTime() > Date.now()
               );
 
+            const botStatus =
+              (
+                item.union_identity_id
+                && botStatusByIdentity.get(
+                  String(item.union_identity_id)
+                )
+              )
+              ||
+              (
+                item.recruitment_id
+                && botStatusByRecruitment.get(
+                  String(item.recruitment_id)
+                )
+              )
+              ||
+              botStatusByName.get(
+                String(item.union_name || "")
+                  .trim()
+                  .toLowerCase()
+              )
+              ||
+              null;
+
             return {
               ...item,
               _registryKind:
@@ -5659,7 +5838,9 @@
                   ? "open"
                   : "listing_only",
               _recruitment:
-                recruitment
+                recruitment,
+              _botStatus:
+                botStatus
             };
 
           })
