@@ -15,342 +15,6 @@
       padding-bottom: 40px;
     }
 
-    .union-list-page {
-      width: 100%;
-      max-width: 1380px;
-      margin: 0 auto;
-      padding: 30px 18px 60px;
-    }
-
-    .union-list-hero {
-      position: relative;
-      overflow: hidden;
-      padding: 32px;
-      border: 1px solid var(--line);
-      border-top: 3px solid var(--cyan);
-      background: #fff;
-      box-shadow: var(--shadow-soft);
-    }
-
-    .union-list-hero::after {
-      content: "";
-      position: absolute;
-      width: 240px;
-      height: 240px;
-      right: -100px;
-      top: -110px;
-      border: 26px solid rgba(26,176,241,.06);
-      box-shadow:
-        0 0 0 28px rgba(26,176,241,.025),
-        0 0 0 56px rgba(34,36,40,.018);
-      border-radius: 50% !important;
-      pointer-events: none;
-    }
-
-    .union-list-hero-inner {
-      position: relative;
-      z-index: 1;
-      display: grid;
-      grid-template-columns: minmax(0,1fr) auto;
-      gap: 24px;
-      align-items: end;
-    }
-
-    .union-list-kicker {
-      margin-bottom: 8px;
-      color: var(--cyan-dark);
-      font: 900 11px "Teko", sans-serif;
-      letter-spacing: 2.4px;
-    }
-
-    .union-list-title {
-      margin: 0;
-      color: var(--ink);
-      font-size: clamp(32px, 5vw, 54px);
-      line-height: 1;
-      letter-spacing: -.055em;
-    }
-
-    .union-list-lead {
-      max-width: 760px;
-      margin: 14px 0 0;
-      color: var(--ink-soft);
-      font-size: 13px;
-      line-height: 1.9;
-    }
-
-    .union-list-countbox {
-      min-width: 200px;
-      padding: 18px 20px;
-      border-left: 2px solid var(--cyan);
-      background: #f7fafb;
-    }
-
-    .union-list-count-label {
-      color: var(--muted);
-      font: 900 10px "Teko", sans-serif;
-      letter-spacing: 2px;
-    }
-
-    .union-list-count {
-      margin-top: 5px;
-      color: var(--ink);
-      font-size: 32px;
-      font-weight: 900;
-      line-height: 1;
-    }
-
-    .union-list-count small {
-      margin-left: 4px;
-      color: var(--muted);
-      font-size: 12px;
-    }
-
-    .union-list-actions {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 8px;
-      margin-top: 20px;
-    }
-
-    .union-list-link {
-      min-height: 42px;
-      padding: 0 15px;
-      display: inline-flex;
-      align-items: center;
-      justify-content: center;
-      border: 1px solid var(--line-strong);
-      background: var(--charcoal);
-      color: #fff;
-      font-size: 12px;
-      font-weight: 900;
-      text-decoration: none;
-      clip-path:
-        polygon(
-          7px 0,
-          100% 0,
-          100% calc(100% - 7px),
-          calc(100% - 7px) 100%,
-          0 100%,
-          0 7px
-        );
-    }
-
-    .union-list-link.primary {
-      border-color: var(--cyan-dark);
-      background: var(--cyan-dark);
-    }
-
-    .union-list-link:hover {
-      border-color: var(--cyan);
-      background: var(--cyan);
-    }
-
-    .union-list-toolbar {
-      margin-top: 16px;
-      padding: 16px;
-      display: grid;
-      grid-template-columns: minmax(220px,1fr) minmax(180px,240px) auto;
-      gap: 10px;
-      align-items: end;
-      border: 1px solid var(--line);
-      background: #fff;
-      box-shadow: var(--shadow-soft);
-    }
-
-    .union-list-field label {
-      display: block;
-      margin-bottom: 7px;
-      color: var(--muted);
-      font-size: 11px;
-      font-weight: 900;
-    }
-
-    .union-list-field input,
-    .union-list-field select {
-      width: 100%;
-      min-height: 44px;
-      margin: 0;
-      padding: 10px 12px;
-      border: 1px solid var(--line-strong);
-      background: #fff;
-      color: var(--ink);
-      font-size: 13px;
-      font-weight: 800;
-    }
-
-    .union-list-status-tabs {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 6px;
-    }
-
-    .union-list-status-btn {
-      min-height: 44px;
-      padding: 0 13px;
-      border: 1px solid var(--line-strong);
-      background: #fff;
-      color: var(--ink-soft);
-      font-size: 11px;
-      font-weight: 900;
-      cursor: pointer;
-    }
-
-    .union-list-status-btn.active {
-      border-color: var(--cyan);
-      background: rgba(26,176,241,.09);
-      color: var(--cyan-dark);
-      box-shadow: inset 0 -3px 0 var(--cyan);
-    }
-
-    .union-list-summary {
-      margin-top: 14px;
-      padding: 12px 14px;
-      border-left: 3px solid var(--cyan);
-      background: rgba(26,176,241,.055);
-      color: var(--ink-soft);
-      font-size: 12px;
-      font-weight: 800;
-      line-height: 1.6;
-    }
-
-    .union-list-grid {
-      margin-top: 14px;
-      display: grid;
-      grid-template-columns: repeat(3, minmax(0,1fr));
-      gap: 12px;
-    }
-
-    .union-member-card {
-      min-width: 0;
-      padding: 18px;
-      border: 1px solid var(--line);
-      border-top: 3px solid var(--line-strong);
-      background: #fff;
-      box-shadow: var(--shadow-soft);
-      clip-path:
-        polygon(
-          9px 0,
-          100% 0,
-          100% calc(100% - 9px),
-          calc(100% - 9px) 100%,
-          0 100%,
-          0 9px
-        );
-    }
-
-    .union-member-card.recruiting {
-      border-top-color: var(--cyan);
-    }
-
-    .union-member-head {
-      display: flex;
-      align-items: flex-start;
-      justify-content: space-between;
-      gap: 12px;
-    }
-
-    .union-member-name {
-      min-width: 0;
-      color: var(--ink);
-      font-size: 20px;
-      font-weight: 900;
-      line-height: 1.35;
-      word-break: break-word;
-    }
-
-    .union-member-rank {
-      margin-top: 7px;
-      color: var(--cyan-dark);
-      font-size: 12px;
-      font-weight: 900;
-    }
-
-    .union-member-badge {
-      flex: 0 0 auto;
-      padding: 5px 8px;
-      border: 1px solid var(--line-strong);
-      background: #f2f5f7;
-      color: var(--muted);
-      font-size: 10px;
-      font-weight: 900;
-      white-space: nowrap;
-    }
-
-    .union-member-badge.recruiting {
-      border-color: var(--cyan);
-      background: rgba(26,176,241,.08);
-      color: var(--cyan-dark);
-    }
-
-    .union-member-state {
-      min-height: 42px;
-      margin-top: 17px;
-      display: flex;
-      align-items: center;
-      color: var(--muted);
-      font-size: 12px;
-      font-weight: 800;
-      line-height: 1.6;
-    }
-
-    .union-member-card .union-list-link {
-      width: 100%;
-      margin-top: 14px;
-    }
-
-    .union-list-empty,
-    .union-list-error,
-    .union-list-loading {
-      margin-top: 14px;
-      padding: 26px 18px;
-      border: 1px solid var(--line);
-      background: #fff;
-      color: var(--muted);
-      text-align: center;
-      font-size: 13px;
-      font-weight: 800;
-    }
-
-    .union-list-error {
-      border-color: rgba(255,83,100,.45);
-      color: #d84555;
-    }
-
-    .hidden {
-      display: none !important;
-    }
-
-    .union-list-footer {
-      margin-top: 28px;
-      padding-top: 18px;
-      border-top: 1px solid var(--line);
-      color: var(--muted);
-      font-size: 10px;
-      line-height: 1.8;
-      text-align: center;
-    }
-
-    @media screen and (max-width: 1024px) {
-      .union-list-grid {
-        grid-template-columns: repeat(2, minmax(0,1fr));
-      }
-
-      .union-list-toolbar {
-        grid-template-columns: 1fr 1fr;
-      }
-
-      .union-list-status-tabs {
-        grid-column: 1 / -1;
-      }
-    }
-
-
-
-    /* =========================================================
-       独立ページ用 3本線メニュー / 固定フッターナビ
-       BOT・CREATORと同じ考え方。既存本体JSには依存しない。
-       ========================================================= */
     .union-list-topbar {
       z-index: 120;
     }
@@ -497,8 +161,248 @@
       line-height: 1.7;
     }
 
+    .union-list-page {
+      width: 100%;
+      max-width: 1380px;
+      margin: 0 auto;
+      padding: 30px 18px 60px;
+    }
+
+    .union-list-hero {
+      position: relative;
+      overflow: hidden;
+      padding: 32px;
+      border: 1px solid var(--line);
+      border-top: 3px solid var(--cyan);
+      background: #fff;
+      box-shadow: var(--shadow-soft);
+    }
+
+    .union-list-hero::after {
+      content: "";
+      position: absolute;
+      width: 240px;
+      height: 240px;
+      right: -100px;
+      top: -110px;
+      border: 26px solid rgba(26,176,241,.06);
+      box-shadow:
+        0 0 0 28px rgba(26,176,241,.025),
+        0 0 0 56px rgba(34,36,40,.018);
+      pointer-events: none;
+    }
+
+    .union-list-hero-inner {
+      position: relative;
+      z-index: 1;
+      display: grid;
+      grid-template-columns: minmax(0,1fr) auto;
+      gap: 24px;
+      align-items: end;
+    }
+
+    .union-list-kicker {
+      margin-bottom: 8px;
+      color: var(--cyan-dark);
+      font: 900 11px "Teko", sans-serif;
+      letter-spacing: 2.4px;
+    }
+
+    .union-list-title {
+      margin: 0;
+      color: var(--ink);
+      font-size: clamp(32px, 5vw, 54px);
+      line-height: 1;
+      letter-spacing: -.055em;
+    }
+
+    .union-list-lead {
+      max-width: 760px;
+      margin: 14px 0 0;
+      color: var(--ink-soft);
+      font-size: 13px;
+      line-height: 1.9;
+    }
+
+    .union-list-countbox {
+      min-width: 200px;
+      padding: 18px 20px;
+      border-left: 2px solid var(--cyan);
+      background: #f7fafb;
+    }
+
+    .union-list-count-label {
+      color: var(--muted);
+      font: 900 10px "Teko", sans-serif;
+      letter-spacing: 2px;
+    }
+
+    .union-list-count {
+      margin-top: 5px;
+      color: var(--ink);
+      font-size: 32px;
+      font-weight: 900;
+      line-height: 1;
+    }
+
+    .union-list-count small {
+      margin-left: 4px;
+      color: var(--muted);
+      font-size: 12px;
+    }
+
+    .union-list-toolbar {
+      margin-top: 16px;
+      padding: 16px;
+      display: grid;
+      grid-template-columns: minmax(220px, 260px) minmax(0, 1fr);
+      gap: 12px;
+      align-items: end;
+      border: 1px solid var(--line);
+      background: #fff;
+      box-shadow: var(--shadow-soft);
+    }
+
+    .union-list-field label {
+      display: block;
+      margin-bottom: 7px;
+      color: var(--muted);
+      font-size: 11px;
+      font-weight: 900;
+    }
+
+    .union-list-field select {
+      width: 100%;
+      min-height: 44px;
+      margin: 0;
+      padding: 10px 12px;
+      border: 1px solid var(--line-strong);
+      background: #fff;
+      color: var(--ink);
+      font-size: 13px;
+      font-weight: 800;
+    }
+
+    .union-list-status-group label {
+      display: block;
+      margin-bottom: 7px;
+      color: var(--muted);
+      font-size: 11px;
+      font-weight: 900;
+    }
+
+    .union-list-status-tabs {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+    }
+
+    .union-list-status-btn {
+      min-height: 44px;
+      padding: 0 14px;
+      border: 1px solid var(--line-strong);
+      background: #fff;
+      color: var(--ink-soft);
+      font-size: 11px;
+      font-weight: 900;
+      cursor: pointer;
+      clip-path:
+        polygon(
+          7px 0,
+          100% 0,
+          100% calc(100% - 7px),
+          calc(100% - 7px) 100%,
+          0 100%,
+          0 7px
+        );
+    }
+
+    .union-list-status-btn.active {
+      border-color: var(--cyan);
+      background: #f4fbfe;
+      color: var(--cyan-dark);
+      box-shadow: inset 0 -2px 0 var(--cyan);
+    }
+
+    .union-list-summary {
+      margin-top: 14px;
+      padding: 12px 14px;
+      border-left: 3px solid var(--cyan);
+      background: rgba(26,176,241,.055);
+      color: var(--ink-soft);
+      font-size: 12px;
+      font-weight: 800;
+      line-height: 1.6;
+    }
+
+    .union-list-grid {
+      margin-top: 14px;
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0,1fr));
+      gap: 12px;
+    }
+
+    .union-list-grid .card {
+      min-width: 0;
+    }
+
+    .union-card-note {
+      margin-top: 10px;
+      color: var(--ink-soft);
+      font-size: 12px;
+      font-weight: 700;
+      line-height: 1.7;
+    }
+
+    .union-card-note.is-idle {
+      color: var(--muted);
+    }
+
+    .union-list-empty,
+    .union-list-error,
+    .union-list-loading {
+      margin-top: 14px;
+      padding: 26px 18px;
+      border: 1px solid var(--line);
+      background: #fff;
+      color: var(--muted);
+      text-align: center;
+      font-size: 13px;
+      font-weight: 800;
+      box-shadow: var(--shadow-soft);
+    }
+
+    .union-list-error {
+      border-color: rgba(255,83,100,.45);
+      color: #d84555;
+    }
+
+    .hidden {
+      display: none !important;
+    }
+
+    .union-list-footer {
+      margin-top: 28px;
+      padding-top: 18px;
+      border-top: 1px solid var(--line);
+      color: var(--muted);
+      font-size: 10px;
+      line-height: 1.8;
+      text-align: center;
+    }
+
     .union-list-bottom-nav {
       display: none;
+    }
+
+    @media screen and (max-width: 1024px) {
+      .union-list-grid {
+        grid-template-columns: repeat(2, minmax(0,1fr));
+      }
+
+      .union-list-toolbar {
+        grid-template-columns: 1fr;
+      }
     }
 
     @media screen and (max-width: 1366px) {
@@ -582,7 +486,6 @@
       }
     }
 
-
     @media screen and (max-width: 600px) {
       body {
         padding-top: 58px !important;
@@ -620,31 +523,14 @@
         border-top: 1px solid var(--line);
       }
 
-      .union-list-toolbar {
-        padding: 12px;
-        grid-template-columns: 1fr;
-      }
-
-      .union-list-status-tabs {
-        grid-column: auto;
-      }
-
-      .union-list-status-btn {
-        flex: 1 1 0;
-        padding: 0 8px;
-      }
-
       .union-list-grid {
         grid-template-columns: 1fr;
         gap: 9px;
       }
 
-      .union-member-card {
-        padding: 15px;
-      }
-
-      .union-list-link {
-        flex: 1 1 auto;
+      .union-list-status-btn {
+        flex: 1 1 0;
+        padding: 0 10px;
       }
     }
   </style>
@@ -709,15 +595,6 @@
             NIKKE UNION MATCHを現在利用しているユニオンです。<br>
             「募集中」のユニオンは募集記事から応募できます。
           </p>
-
-          <div class="union-list-actions">
-            <a class="union-list-link primary" href="../index.html?view=union#listPage">
-              募集一覧へ戻る
-            </a>
-            <a class="union-list-link" href="../index.html">
-              UNION MATCH TOP
-            </a>
-          </div>
         </div>
 
         <div class="union-list-countbox">
@@ -731,16 +608,6 @@
 
     <section class="union-list-toolbar" aria-label="ユニオン一覧絞り込み">
       <div class="union-list-field">
-        <label for="unionSearch">ユニオン名</label>
-        <input
-          id="unionSearch"
-          type="search"
-          placeholder="ユニオン名で検索"
-          autocomplete="off"
-        >
-      </div>
-
-      <div class="union-list-field">
         <label for="rankFilter">ユニオンランク</label>
         <select id="rankFilter">
           <option value="">すべて</option>
@@ -753,16 +620,19 @@
         </select>
       </div>
 
-      <div class="union-list-status-tabs" aria-label="募集状態">
-        <button class="union-list-status-btn active" type="button" data-status="all">
-          全ユニオン
-        </button>
-        <button class="union-list-status-btn" type="button" data-status="open">
-          募集中
-        </button>
-        <button class="union-list-status-btn" type="button" data-status="closed">
-          現在募集なし
-        </button>
+      <div class="union-list-status-group">
+        <label>表示切替</label>
+        <div class="union-list-status-tabs" aria-label="募集状態">
+          <button class="union-list-status-btn active" type="button" data-status="all">
+            全ユニオン
+          </button>
+          <button class="union-list-status-btn" type="button" data-status="open">
+            募集中
+          </button>
+          <button class="union-list-status-btn" type="button" data-status="closed">
+            現在募集なし
+          </button>
+        </div>
       </div>
     </section>
 
@@ -807,6 +677,7 @@
   </nav>
 
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
   <script>
     function closeSiteMenu() {
       document.body.classList.remove("menu-open");
@@ -936,31 +807,28 @@
       );
     }
 
+    function getUnionRankClass(rank) {
+      const classes = {
+        "チャレンジャー": "challenger",
+        "ダイヤ": "diamond",
+        "プラチナ": "platinum",
+        "ゴールド": "gold",
+        "シルバー": "silver",
+        "駆け出しユニオン": "rookie"
+      };
+
+      return classes[String(rank || "")] || "default";
+    }
+
     function render() {
       const grid = $("#unionGrid");
       const empty = $("#emptyState");
       const summary = $("#summary");
-
-      const keyword =
-        String($("#unionSearch")?.value || "")
-          .trim()
-          .toLowerCase();
-
       const rank =
         String($("#rankFilter")?.value || "");
 
       let filtered =
         state.items.filter(item => {
-          if (
-            keyword
-            &&
-            !String(item.union_name || "")
-              .toLowerCase()
-              .includes(keyword)
-          ) {
-            return false;
-          }
-
           if (
             rank
             &&
@@ -1029,42 +897,48 @@
             item._recruiting === true;
 
           const recruitmentUrl =
-            safeUrl(
-              item._recruitment?.x_url || ""
-            );
+            safeUrl(item._recruitment?.x_url || "");
+
+          const rankClass =
+            getUnionRankClass(item.union_rank);
 
           const button =
             recruiting && recruitmentUrl
               ? `
-                <a
-                  class="union-list-link primary"
-                  href="${escapeHtml(recruitmentUrl)}"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                >
-                  募集を見る ↗
-                </a>
+                <div class="x-post-area">
+                  <a
+                    class="x-btn"
+                    href="${escapeHtml(recruitmentUrl)}"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                  >
+                    募集記事を開く ↗
+                  </a>
+                </div>
               `
               : "";
 
           return `
-            <article class="union-member-card ${recruiting ? "recruiting" : ""}">
-              <div class="union-member-head">
-                <div>
-                  <div class="union-member-name">
-                    ${escapeHtml(item.union_name || "--")}
-                  </div>
-                  <div class="union-member-rank">
-                    ${escapeHtml(item.union_rank || "--")}
-                  </div>
+            <article class="card union-card">
+              <div class="card-head">
+                <div class="type-with-new">
+                  <span class="recruitment-type">● ユニオン</span>
                 </div>
 
-                <div class="union-member-badge ${recruiting ? "recruiting" : ""}">
+                <span class="state">
                   ${recruiting ? "募集中" : "現在募集なし"}
-                </div>
+                </span>
               </div>
 
-              <div class="union-member-state">
+              <div class="name">
+                ${escapeHtml(item.union_name || "--")}
+              </div>
+
+              <div class="union-rank rank-${escapeHtml(rankClass)}">
+                ${escapeHtml(item.union_rank || "--")}
+              </div>
+
+              <div class="union-card-note ${recruiting ? "" : "is-idle"}">
                 ${
                   recruiting
                     ? "現在メンバーを募集しています。"
@@ -1086,8 +960,6 @@
       errorBox.classList.add("hidden");
 
       try {
-        // 本体TOTAL UNIONS / 管理画面と同じルールで
-        // 期限切れ会員を整理してから現在利用中を取得。
         const countResult =
           await sb.rpc(
             "get_active_union_member_count"
@@ -1199,12 +1071,6 @@
         loading.classList.add("hidden");
       }
     }
-
-    $("#unionSearch")
-      ?.addEventListener(
-        "input",
-        render
-      );
 
     $("#rankFilter")
       ?.addEventListener(
