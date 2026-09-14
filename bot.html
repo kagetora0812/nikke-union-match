@@ -905,6 +905,154 @@
 
 </head>
 <body>
+
+  <!-- SUPABASE_BOT_PAGE_FLAG_V1 -->
+  <script>
+    (() => {
+      const SUPABASE_URL =
+        "https://igoekrvpgnjberppiawf.supabase.co";
+
+      const SUPABASE_ANON_KEY =
+        "sb_publishable_xSjnNTnh667o9IesU5g5Kw_xcdg9bbh";
+
+      const BOT_PAGE_FLAG =
+        "bot_page_enabled";
+
+      // 判定が終わるまで既存ページを見せない
+      document.documentElement.style.visibility = "hidden";
+
+      function showMaintenancePage() {
+        document.body.innerHTML = `
+          <main style="
+            min-height:100vh;
+            display:grid;
+            place-items:center;
+            padding:24px;
+            background:
+              radial-gradient(circle at 50% 20%, rgba(40,185,232,.12), transparent 34%),
+              linear-gradient(180deg,#0d0f13 0%,#08090c 65%,#06070a 100%);
+            color:#f2f4f7;
+            font-family:system-ui,-apple-system,'Segoe UI',sans-serif;
+            text-align:center;
+          ">
+            <section style="
+              width:min(680px,100%);
+              padding:42px 30px;
+              border:1px solid rgba(255,255,255,.12);
+              border-top:3px solid #28b9e8;
+              background:rgba(18,20,25,.92);
+              box-shadow:0 24px 70px rgba(0,0,0,.35);
+            ">
+              <div style="
+                margin-bottom:12px;
+                color:#8edcff;
+                font-size:12px;
+                font-weight:900;
+                letter-spacing:.18em;
+              ">
+                NIKKE UNION MATCH / DISCORD BOT
+              </div>
+
+              <h1 style="
+                margin:0;
+                color:#fff;
+                font-size:clamp(28px,7vw,44px);
+                line-height:1.15;
+              ">
+                BOTページは一時掲載を休止しています
+              </h1>
+
+              <p style="
+                margin:18px auto 0;
+                max-width:520px;
+                color:#b8bec6;
+                font-size:14px;
+                line-height:1.9;
+              ">
+                現在、Discord BOTの機能調整と安定化作業を行っています。<br>
+                準備が整い次第、あらためて公開します。
+              </p>
+
+              <div style="
+                margin-top:22px;
+                padding:12px 14px;
+                border:1px solid rgba(40,185,232,.24);
+                background:rgba(40,185,232,.06);
+                color:#ccefff;
+                font-size:12px;
+                line-height:1.7;
+              ">
+                既存のUNION MATCH本体ページは引き続きご利用いただけます。
+              </div>
+
+              <a href="./index.html#videoHero" style="
+                display:inline-flex;
+                margin-top:24px;
+                min-height:42px;
+                padding:0 18px;
+                align-items:center;
+                justify-content:center;
+                border:1px solid #2b7c9c;
+                color:#eefaff;
+                background:#126f93;
+                text-decoration:none;
+                font-weight:900;
+                font-size:13px;
+              ">
+                UNION MATCHへ戻る
+              </a>
+            </section>
+          </main>
+        `;
+      }
+
+      async function applyBotPageFlag() {
+        try {
+          const response = await fetch(
+            `${SUPABASE_URL}/rest/v1/rpc/get_site_feature_flag`,
+            {
+              method: "POST",
+              headers: {
+                "Content-Type": "application/json",
+                "apikey": SUPABASE_ANON_KEY,
+                "Authorization": `Bearer ${SUPABASE_ANON_KEY}`
+              },
+              body: JSON.stringify({
+                p_key: BOT_PAGE_FLAG
+              }),
+              cache: "no-store"
+            }
+          );
+
+          if (!response.ok) {
+            throw new Error(`FLAG_HTTP_${response.status}`);
+          }
+
+          const enabled =
+            await response.json();
+
+          if (enabled !== true) {
+            showMaintenancePage();
+          }
+
+        } catch (error) {
+          // 公開可否を確認できない時は安全側に倒して非公開表示
+          console.error(
+            "BOTページ公開フラグ確認エラー",
+            error
+          );
+          showMaintenancePage();
+
+        } finally {
+          document.documentElement.style.visibility =
+            "visible";
+        }
+      }
+
+      applyBotPageFlag();
+    })();
+  </script>
+
   <header class="topbar bot-topbar">
     <div class="status bot-brand">DISCORD BOT</div>
 
