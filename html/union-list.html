@@ -1,4 +1,3 @@
-
 <!doctype html>
 <html lang="ja">
 <head>
@@ -346,7 +345,262 @@
       }
     }
 
+
+
+    /* =========================================================
+       独立ページ用 3本線メニュー / 固定フッターナビ
+       BOT・CREATORと同じ考え方。既存本体JSには依存しない。
+       ========================================================= */
+    .union-list-topbar {
+      z-index: 120;
+    }
+
+    .union-list-brand-label {
+      display: inline-flex;
+      align-items: center;
+      gap: 9px;
+      color: #fff;
+      font: 700 22px/1 "Teko", "Zen Kaku Gothic New", sans-serif;
+      letter-spacing: .12em;
+    }
+
+    .union-list-brand-label::before {
+      content: "";
+      width: 5px;
+      height: 22px;
+      flex: 0 0 5px;
+      background: var(--cyan);
+    }
+
+    .site-menu-button {
+      width: 46px;
+      height: 46px;
+      display: grid;
+      place-content: center;
+      gap: 5px;
+      padding: 0;
+      border: 0;
+      background: transparent;
+      cursor: pointer;
+    }
+
+    .site-menu-button span {
+      display: block;
+      width: 25px;
+      height: 2px;
+      border-radius: 99px !important;
+      background: #fff;
+      transition: transform .22s ease, opacity .22s ease;
+    }
+
+    body.menu-open .site-menu-button span:nth-child(1) {
+      transform: translateY(7px) rotate(45deg);
+    }
+
+    body.menu-open .site-menu-button span:nth-child(2) {
+      opacity: 0;
+    }
+
+    body.menu-open .site-menu-button span:nth-child(3) {
+      transform: translateY(-7px) rotate(-45deg);
+    }
+
+    .site-menu-backdrop {
+      position: fixed;
+      inset: 66px 0 0;
+      z-index: 108;
+      background: rgba(0,0,0,.22);
+      backdrop-filter: blur(4px);
+      -webkit-backdrop-filter: blur(4px);
+    }
+
+    .site-menu-drawer {
+      position: fixed;
+      top: 66px;
+      right: 0;
+      z-index: 110;
+      width: min(86vw, 340px);
+      height: calc(100dvh - 66px);
+      padding: 12px;
+      transform: translateX(105%);
+      overflow-y: auto;
+      background: rgba(13,16,22,.93);
+      border-left: 1px solid rgba(255,255,255,.12);
+      box-shadow: -12px 0 34px rgba(0,0,0,.20);
+      backdrop-filter: blur(14px) saturate(118%);
+      -webkit-backdrop-filter: blur(14px) saturate(118%);
+      transition: transform .24s ease;
+    }
+
+    body.menu-open .site-menu-drawer {
+      transform: translateX(0);
+    }
+
+    .site-menu-head {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      min-height: 48px;
+      padding: 0 6px 10px;
+      color: rgba(255,255,255,.70);
+      font: 800 12px "Teko", sans-serif;
+      letter-spacing: .24em;
+    }
+
+    .site-menu-head button {
+      width: 38px;
+      height: 38px;
+      border: 0;
+      color: #fff;
+      background: transparent;
+      font-size: 28px;
+      line-height: 1;
+      cursor: pointer;
+    }
+
+    .site-menu-drawer > a {
+      width: 100%;
+      min-height: 52px;
+      display: flex;
+      align-items: center;
+      padding: 0 14px;
+      border: 0;
+      border-bottom: 1px solid rgba(255,255,255,.10);
+      color: #fff;
+      background: transparent;
+      font-size: 14px;
+      font-weight: 800;
+      text-align: left;
+      text-decoration: none;
+      cursor: pointer;
+    }
+
+    .site-menu-drawer > a:hover,
+    .site-menu-drawer > a:active {
+      color: var(--cyan);
+      background: rgba(255,255,255,.06);
+    }
+
+    .site-menu-drawer > a.current-page {
+      color: #fff;
+      background: rgba(26,176,241,.15);
+      box-shadow: inset 3px 0 0 var(--cyan);
+    }
+
+    .site-menu-disclaimer {
+      margin: 22px 8px 8px;
+      padding: 14px 10px 0;
+      border-top: 1px solid rgba(255,255,255,.12);
+      color: rgba(255,255,255,.48);
+      font-size: 10px;
+      font-weight: 700;
+      line-height: 1.7;
+    }
+
+    .union-list-bottom-nav {
+      display: none;
+    }
+
+    @media screen and (max-width: 1366px) {
+      body {
+        padding-top: 64px !important;
+        padding-bottom: calc(72px + env(safe-area-inset-bottom)) !important;
+      }
+
+      .union-list-topbar {
+        position: fixed !important;
+        top: 0 !important;
+        left: 0 !important;
+        right: 0 !important;
+        width: 100% !important;
+        z-index: 220 !important;
+        transform: none !important;
+      }
+
+      .union-list-bottom-nav {
+        position: fixed !important;
+        left: 0 !important;
+        right: 0 !important;
+        bottom: 0 !important;
+        z-index: 220 !important;
+        height: calc(68px + env(safe-area-inset-bottom));
+        display: grid !important;
+        grid-template-columns: repeat(3, minmax(0,1fr));
+        padding-bottom: env(safe-area-inset-bottom);
+        border-top: 1px solid rgba(255,255,255,.12);
+        background: rgba(16,18,22,.96);
+        backdrop-filter: blur(14px);
+        -webkit-backdrop-filter: blur(14px);
+        box-shadow: 0 -8px 28px rgba(0,0,0,.22);
+      }
+
+      .union-list-bottom-nav a {
+        min-width: 0;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        gap: 4px;
+        padding: 6px 3px 8px;
+        color: rgba(255,255,255,.72);
+        font-size: 10px;
+        font-weight: 900;
+        line-height: 1;
+        text-align: center;
+        text-decoration: none;
+      }
+
+      .union-list-bottom-nav .union-nav-icon {
+        display: block;
+        min-height: 19px;
+        color: rgba(255,255,255,.94);
+        font: 800 21px/.9 "Teko", "Zen Kaku Gothic New", sans-serif;
+      }
+
+      .union-list-bottom-nav .union-nav-label {
+        display: block;
+        font-size: 10px;
+        font-weight: 900;
+        white-space: nowrap;
+      }
+
+      .union-list-bottom-nav > a:nth-child(3) {
+        color: #fff;
+        background: rgba(26,176,241,.13);
+        box-shadow:
+          inset 0 2px 0 rgba(26,176,241,.92),
+          inset 1px 0 0 rgba(255,255,255,.04),
+          inset -1px 0 0 rgba(255,255,255,.04);
+      }
+
+      .union-list-bottom-nav > a:nth-child(3) .union-nav-icon {
+        color: var(--cyan);
+      }
+
+      .union-list-page {
+        padding-bottom: 86px;
+      }
+    }
+
+
     @media screen and (max-width: 600px) {
+      body {
+        padding-top: 58px !important;
+      }
+
+      .union-list-brand-label {
+        font-size: 19px;
+      }
+
+      .site-menu-backdrop {
+        inset: 58px 0 0;
+      }
+
+      .site-menu-drawer {
+        top: 58px;
+        height: calc(100dvh - 58px);
+      }
+
       .union-list-page {
         padding: 14px 8px 40px;
       }
@@ -397,15 +651,53 @@
 </head>
 
 <body>
-  <header class="topbar">
-    <div class="brand">
-      <span class="brand-small">NIKKE</span>
-      <span class="brand-main">UNION MATCH</span>
-    </div>
-    <div class="status-dot">
-      <span></span> UNION LIST
-    </div>
+  <header class="topbar union-list-topbar">
+    <div class="union-list-brand-label">UNION LIST</div>
+
+    <button
+      id="siteMenuButton"
+      class="site-menu-button"
+      type="button"
+      aria-label="メニューを開く"
+      aria-expanded="false"
+      aria-controls="siteMenuDrawer"
+    >
+      <span></span>
+      <span></span>
+      <span></span>
+    </button>
   </header>
+
+  <div id="siteMenuBackdrop" class="site-menu-backdrop" hidden></div>
+
+  <aside
+    id="siteMenuDrawer"
+    class="site-menu-drawer"
+    aria-hidden="true"
+  >
+    <div class="site-menu-head">
+      <span>MENU</span>
+      <button
+        id="siteMenuClose"
+        type="button"
+        aria-label="メニューを閉じる"
+      >×</button>
+    </div>
+
+    <a href="../index.html#videoHero">TOP</a>
+    <a href="../index.html?view=commander#listPage">指揮官を見る</a>
+    <a href="../index.html?view=union#listPage">ユニオンを見る</a>
+    <a href="../index.html#registerPage">募集登録</a>
+    <a href="../index.html#managePage">PASS管理</a>
+    <a class="current-page" href="./union-list.html">登録ユニオン一覧</a>
+    <a href="../bot.html">Discord BOT</a>
+    <a href="../creators.html">応援クリエイター</a>
+
+    <div class="site-menu-disclaimer">
+      このサイトはSHIFT UPが提供する「勝利の女神：NIKKE」の公式サイトではありません。<br>
+      ファンサイトです。
+    </div>
+  </aside>
 
   <main class="union-list-page">
     <section class="union-list-hero">
@@ -419,7 +711,7 @@
           </p>
 
           <div class="union-list-actions">
-            <a class="union-list-link primary" href="../index.html#listPage">
+            <a class="union-list-link primary" href="../index.html?view=union#listPage">
               募集一覧へ戻る
             </a>
             <a class="union-list-link" href="../index.html">
@@ -497,7 +789,84 @@
     </footer>
   </main>
 
+  <nav class="union-list-bottom-nav" aria-label="フッターメニュー">
+    <a href="../index.html#videoHero">
+      <span class="union-nav-icon" aria-hidden="true">⌂</span>
+      <span class="union-nav-label">ホーム</span>
+    </a>
+
+    <a href="../index.html#registerPage">
+      <span class="union-nav-icon" aria-hidden="true">＋</span>
+      <span class="union-nav-label">登録</span>
+    </a>
+
+    <a href="../index.html?view=union#listPage">
+      <span class="union-nav-icon" aria-hidden="true">⌕</span>
+      <span class="union-nav-label">募集を見る</span>
+    </a>
+  </nav>
+
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script>
+    function closeSiteMenu() {
+      document.body.classList.remove("menu-open");
+      const button = document.getElementById("siteMenuButton");
+      const drawer = document.getElementById("siteMenuDrawer");
+      const backdrop = document.getElementById("siteMenuBackdrop");
+
+      button?.setAttribute("aria-expanded", "false");
+      drawer?.setAttribute("aria-hidden", "true");
+
+      if (backdrop) {
+        backdrop.hidden = true;
+      }
+    }
+
+    function openSiteMenu() {
+      document.body.classList.add("menu-open");
+      const button = document.getElementById("siteMenuButton");
+      const drawer = document.getElementById("siteMenuDrawer");
+      const backdrop = document.getElementById("siteMenuBackdrop");
+
+      button?.setAttribute("aria-expanded", "true");
+      drawer?.setAttribute("aria-hidden", "false");
+
+      if (backdrop) {
+        backdrop.hidden = false;
+      }
+    }
+
+    document
+      .getElementById("siteMenuButton")
+      ?.addEventListener("click", () => {
+        if (document.body.classList.contains("menu-open")) {
+          closeSiteMenu();
+        } else {
+          openSiteMenu();
+        }
+      });
+
+    document
+      .getElementById("siteMenuClose")
+      ?.addEventListener("click", closeSiteMenu);
+
+    document
+      .getElementById("siteMenuBackdrop")
+      ?.addEventListener("click", closeSiteMenu);
+
+    document
+      .querySelectorAll("#siteMenuDrawer a")
+      .forEach(link => {
+        link.addEventListener("click", closeSiteMenu);
+      });
+
+    document.addEventListener("keydown", event => {
+      if (event.key === "Escape") {
+        closeSiteMenu();
+      }
+    });
+  </script>
+
   <script>
     const SUPABASE_URL =
       "https://igoekrvpgnjberppiawf.supabase.co";
