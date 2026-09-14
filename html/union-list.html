@@ -161,6 +161,50 @@
       line-height: 1.7;
     }
 
+    .union-list-pc-home-row {
+      display: none;
+    }
+
+    @media screen and (min-width: 1025px) {
+      .union-list-pc-home-row {
+        display: flex;
+        padding: 12px 0 0 20px;
+      }
+
+      .union-list-pc-home {
+        position: fixed;
+        top: 76px;
+        left: 20px;
+        z-index: 105;
+        width: 44px;
+        height: 44px;
+        display: grid;
+        place-items: center;
+        overflow: hidden;
+        border: 1px solid rgba(26, 176, 241, .38);
+        background: rgba(26, 176, 241, .055);
+        color: #dcecf4;
+        text-decoration: none;
+        font: 800 23px/1 "Teko", sans-serif;
+        box-shadow: none;
+        transition: .18s ease;
+      }
+
+      .union-list-pc-home::before,
+      .union-list-pc-home::after {
+        display: none;
+      }
+
+      .union-list-pc-home:hover,
+      .union-list-pc-home:active {
+        border-color: #a9dff6;
+        background: #f7fbfd;
+        color: #079fd9;
+        transform: none;
+        box-shadow: none;
+      }
+    }
+
     .union-list-page {
       width: 100%;
       max-width: 1380px;
@@ -676,7 +720,7 @@
     <a href="../index.html?view=union#listPage">ユニオンを見る</a>
     <a href="../index.html#registerPage">募集登録</a>
     <a href="../index.html#managePage">PASS管理</a>
-    <a class="current-page" href="./union-list.html">ユニオンリスト</a>
+    <a href="./union-list.html">ユニオンリスト</a>
     <a href="../bot.html">Discord BOT</a>
     <a href="../creators.html">応援クリエイター</a>
 
@@ -685,6 +729,17 @@
       ファンサイトです。
     </div>
   </aside>
+
+  <div class="union-list-pc-home-row">
+    <a
+      class="union-list-pc-home"
+      href="../index.html#videoHero"
+      aria-label="UNION MATCH TOPへ戻る"
+      title="HOME"
+    >
+      <span aria-hidden="true">⌂</span>
+    </a>
+  </div>
 
   <main class="union-list-page">
     <section class="union-list-hero">
