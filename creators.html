@@ -1171,10 +1171,10 @@
   </style>
 
 
-  <style id="subpage-browser-ui-lock-v23">
-    /* v23: mobile/tablet viewport lock.
-       Keep the document itself from scrolling so Safari/Chrome browser UI
-       does not collapse/expand with page scroll. Only <main> scrolls. */
+  <style id="subpage-browser-ui-lock-v24">
+    /* v24: mobile/tablet fixed browser-shell + reliable inner scrolling.
+       Header/footer stay fixed. The document itself stays locked, while
+       main.container gets an explicit top/bottom scroll area. */
     @media screen and (max-width: 1366px) {
       html,
       body {
@@ -1188,26 +1188,35 @@
       body {
         box-sizing: border-box !important;
         height: 100dvh !important;
-        padding-top: 64px !important;
-        padding-bottom: calc(68px + env(safe-area-inset-bottom)) !important;
+        padding: 0 !important;
       }
 
       body > main.container {
-        box-sizing: border-box !important;
-        height: 100% !important;
+        position: fixed !important;
+        top: 64px !important;
+        bottom: calc(68px + env(safe-area-inset-bottom)) !important;
+        left: 50% !important;
+        right: auto !important;
+        width: min(1180px, calc(100% - 28px)) !important;
+        height: auto !important;
         min-height: 0 !important;
-        max-height: 100% !important;
+        max-height: none !important;
+        margin: 0 !important;
+        padding-top: 28px !important;
+        padding-bottom: 46px !important;
         overflow-x: hidden !important;
         overflow-y: auto !important;
         overscroll-behavior-y: contain !important;
         -webkit-overflow-scrolling: touch !important;
         touch-action: pan-y !important;
+        transform: translateX(-50%) !important;
       }
     }
 
     @media screen and (max-width: 600px) {
-      body {
-        padding-top: 58px !important;
+      body > main.container {
+        top: 58px !important;
+        bottom: calc(68px + env(safe-area-inset-bottom)) !important;
       }
     }
   </style>
@@ -1281,6 +1290,7 @@
     <a href="./index.html?view=union#listPage">ユニオンを見る</a>
     <a href="./index.html#registerPage">募集登録</a>
     <a href="./index.html#managePage">PASS管理</a>
+    <a href="./html/union-list.html">登録ユニオン一覧</a>
     <a href="./bot.html">Discord BOT</a>
     <a href="./creators.html">応援クリエイター</a>
     <div class="site-menu-disclaimer">
