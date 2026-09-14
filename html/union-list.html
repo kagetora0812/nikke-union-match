@@ -173,7 +173,7 @@
 
       .union-list-pc-home {
         position: fixed;
-        top: 76px;
+        top: 78px;
         left: 20px;
         z-index: 105;
         width: 44px;
@@ -181,9 +181,9 @@
         display: grid;
         place-items: center;
         overflow: hidden;
-        border: 1px solid rgba(26, 176, 241, .38);
-        background: rgba(26, 176, 241, .055);
-        color: #dcecf4;
+        border: 1px solid rgba(26, 176, 241, .55);
+        background: #0d1016;
+        color: #f3fbff;
         text-decoration: none;
         font: 800 23px/1 "Teko", sans-serif;
         box-shadow: none;
@@ -620,7 +620,58 @@
       }
     }
 
+
+    /* ========================================
+       BOT / CREATOR とナビゲーション基本構成を統一
+       - PC / Tablet header: 64px
+       - Smartphone header: 58px
+       - PC HOME: 44x44 / left 20px / top 76px
+    ======================================== */
+
+    .union-list-topbar {
+      height: 64px !important;
+      padding: 0 20px !important;
+      border-bottom: 1px solid rgba(255,255,255,.07) !important;
+      background: rgba(8,9,12,.92) !important;
+      backdrop-filter: blur(14px);
+      -webkit-backdrop-filter: blur(14px);
+      box-shadow: none !important;
+    }
+
+    .union-list-brand-label {
+      gap: 9px;
+      font: 700 22px/1 "Teko", "Zen Kaku Gothic New", sans-serif;
+      letter-spacing: .16em;
+    }
+
+    .site-menu-backdrop {
+      inset: 64px 0 0;
+    }
+
+    .site-menu-drawer {
+      top: 64px;
+      height: calc(100dvh - 64px);
+    }
+
+    @media screen and (min-width: 1025px) {
+      .union-list-pc-home {
+        top: 76px;
+        left: 20px;
+        width: 44px;
+        height: 44px;
+        border: 1px solid rgba(26,176,241,.55);
+        background: #0d1016;
+        color: #f3fbff;
+        font: 800 23px/1 "Teko", sans-serif;
+      }
+    }
+
     @media screen and (max-width: 600px) {
+      .union-list-topbar {
+        height: 58px !important;
+        padding: 0 12px !important;
+      }
+
       .union-list-countbox {
         display: none !important;
       }
