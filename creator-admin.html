@@ -5528,12 +5528,21 @@
           String(item._recruitment?.x_url || "").trim();
 
         const botStatus = item._botStatus || null;
-        const botEnabled = botStatus?.bot_enabled === true;
+
+        // BOT利用判定は「初回ユニオンPASS連携済み」だけで判定する。
+        // PASS成功時に紐づいたDiscordサーバーの設定を以後そのまま参照する。
+        const passLinked =
+          botStatus?.pass_linked === true;
+
+        const botEnabled =
+          passLinked;
+
         const xEnabled =
-          botEnabled
+          passLinked
           && botStatus?.x_recruitment_enabled === true;
+
         const loginEnabled =
-          botEnabled
+          passLinked
           && botStatus?.morning_login_enabled === true;
 
         return `
@@ -5763,28 +5772,16 @@
         unionRegistryBotStatusAvailable = true;
       }
 
+      // 初回PASS成功時に保存された union_identity_id だけで照合する。
+      // Discordサーバー名・ユニオン名・募集IDは判定に使わない。
       const botStatusByIdentity = new Map();
-      const botStatusByRecruitment = new Map();
-      const botStatusByName = new Map();
 
       botStatusRows.forEach(row => {
         const identity =
           String(row.union_identity_id || "").trim();
-        const recruitmentId =
-          String(row.union_recruitment_id || "").trim();
-        const unionName =
-          String(row.union_name || "").trim().toLowerCase();
 
         if (identity) {
           botStatusByIdentity.set(identity, row);
-        }
-
-        if (recruitmentId) {
-          botStatusByRecruitment.set(recruitmentId, row);
-        }
-
-        if (unionName && !botStatusByName.has(unionName)) {
-          botStatusByName.set(unionName, row);
         }
       });
 
@@ -5814,19 +5811,6 @@
                 && botStatusByIdentity.get(
                   String(item.union_identity_id)
                 )
-              )
-              ||
-              (
-                item.recruitment_id
-                && botStatusByRecruitment.get(
-                  String(item.recruitment_id)
-                )
-              )
-              ||
-              botStatusByName.get(
-                String(item.union_name || "")
-                  .trim()
-                  .toLowerCase()
               )
               ||
               null;
