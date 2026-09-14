@@ -1781,6 +1781,85 @@
       line-height: 1.7;
     }
 
+    .system-check-issues {
+      margin-top: 16px;
+      padding: 16px;
+      border: 1px solid rgba(255, 195, 109, .38);
+      background: rgba(255, 195, 109, .045);
+    }
+
+    .system-check-issues-head {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      flex-wrap: wrap;
+    }
+
+    .system-check-issues-title {
+      color: #ffc36d;
+      font-size: 13px;
+      font-weight: 900;
+      letter-spacing: .06em;
+    }
+
+    .system-check-issue-list {
+      margin-top: 12px;
+      display: grid;
+      gap: 10px;
+    }
+
+    .system-check-issue-card {
+      padding: 12px 13px;
+      border: 1px solid rgba(255, 255, 255, .08);
+      border-left: 3px solid #ffc36d;
+      background: rgba(8, 13, 21, .56);
+    }
+
+    .system-check-issue-head {
+      display: flex;
+      align-items: flex-start;
+      justify-content: space-between;
+      gap: 10px;
+      flex-wrap: wrap;
+    }
+
+    .system-check-issue-label {
+      color: #fff;
+      font-size: 12px;
+      font-weight: 900;
+      line-height: 1.5;
+    }
+
+    .system-check-issue-scope {
+      color: #ffc36d;
+      font-size: 9px;
+      font-weight: 900;
+      letter-spacing: .08em;
+      white-space: nowrap;
+    }
+
+    .system-check-issue-body {
+      margin-top: 8px;
+      color: var(--muted);
+      font-size: 10px;
+      line-height: 1.75;
+      word-break: break-word;
+    }
+
+    .system-check-issue-body strong {
+      color: #c9d6e4;
+      font-weight: 900;
+    }
+
+    .system-check-copy-result {
+      margin-top: 8px;
+      min-height: 18px;
+      color: var(--green);
+      font-size: 10px;
+      font-weight: 800;
+    }
+
     @media screen and (max-width: 760px) {
       .system-check-columns {
         grid-template-columns: 1fr;
@@ -2151,6 +2230,34 @@
             class="system-check-list"
           ></div>
         </div>
+      </div>
+
+      <div
+        id="systemCheckIssuePanel"
+        class="system-check-issues hidden"
+      >
+        <div class="system-check-issues-head">
+          <div class="system-check-issues-title">
+            ⚠ 異常詳細
+          </div>
+          <button
+            id="copySystemCheckBtn"
+            class="btn blue"
+            type="button"
+          >
+            診断情報をコピー
+          </button>
+        </div>
+
+        <div
+          id="systemCheckIssueList"
+          class="system-check-issue-list"
+        ></div>
+
+        <div
+          id="systemCheckCopyResult"
+          class="system-check-copy-result"
+        ></div>
       </div>
 
       <div
@@ -3716,6 +3823,7 @@
     let unionRegistryItems = [];
     let unionRegistryBotStatusAvailable = false;
     let passReissueTargets = [];
+    let lastSystemCheckResult = null;
 
     // アイコン画像状態
     let selectedIconData = "";
@@ -6920,6 +7028,12 @@
         loadSystemCheck
       );
 
+    $("#copySystemCheckBtn")
+      ?.addEventListener(
+        "click",
+        copySystemCheckDiagnostic
+      );
+
     $("#reloadUnionRegistryBtn")
       ?.addEventListener(
         "click",
@@ -7855,11 +7969,190 @@
     }
 
 
+    function renderSystemCheckIssues(items) {
+      const panel = $("#systemCheckIssuePanel");
+      const list = $("#systemCheckIssueList");
+      const copyResult = $("#systemCheckCopyResult");
+
+      const issues =
+        Array.isArray(items)
+          ? items
+          : [];
+
+      if (copyResult) {
+        copyResult.textContent = "";
+      }
+
+      if (!panel || !list) {
+        return;
+      }
+
+      if (!issues.length) {
+        panel.classList.add("hidden");
+        list.innerHTML = "";
+        return;
+      }
+
+      panel.classList.remove("hidden");
+
+      list.innerHTML =
+        issues.map(item => {
+          const scope = String(item?.scope || "CHECK").toUpperCase();
+          const label = item?.label || item?.key || "異常";
+          const subject = item?.subject || "--";
+          const subjectId = item?.subject_id || "";
+          const problem = item?.problem || item?.detail || "異常を検出しました。";
+          const expected = item?.expected || "";
+          const detail = item?.detail || "";
+
+          return `
+            <div class="system-check-issue-card">
+              <div class="system-check-issue-head">
+                <div class="system-check-issue-label">
+                  ${escapeHtml(label)}
+                </div>
+                <div class="system-check-issue-scope">
+                  ${escapeHtml(scope)}
+                </div>
+              </div>
+              <div class="system-check-issue-body">
+                <strong>対象：</strong>${escapeHtml(subject)}
+                ${subjectId ? `<br><strong>ID：</strong>${escapeHtml(subjectId)}` : ""}
+                <br><strong>異常：</strong>${escapeHtml(problem)}
+                ${expected ? `<br><strong>期待値：</strong>${escapeHtml(expected)}` : ""}
+                ${detail && detail !== problem ? `<br><strong>詳細：</strong>${escapeHtml(detail)}` : ""}
+              </div>
+            </div>
+          `;
+        }).join("");
+    }
+
+
+    function formatSystemCheckDate(value) {
+      const date = value
+        ? new Date(value)
+        : new Date();
+
+      if (Number.isNaN(date.getTime())) {
+        return "--";
+      }
+
+      return date.toLocaleString("ja-JP", {
+        timeZone: "Asia/Tokyo",
+        year: "numeric",
+        month: "2-digit",
+        day: "2-digit",
+        hour: "2-digit",
+        minute: "2-digit",
+        second: "2-digit"
+      });
+    }
+
+
+    function buildSystemCheckDiagnosticText(result) {
+      const data = result || {};
+      const summary = data.summary || {};
+      const issues = Array.isArray(data.issues) ? data.issues : [];
+      const site = Array.isArray(data.site) ? data.site : [];
+      const bot = Array.isArray(data.bot) ? data.bot : [];
+      const lines = [];
+
+      lines.push("NIKKE UNION MATCH SYSTEM CHECK");
+      lines.push(`確認時刻: ${formatSystemCheckDate(data.checked_at)}`);
+      lines.push(`異常項目: ${Number(summary.total_issues || 0)}件`);
+      lines.push("");
+      lines.push("=== 異常詳細 ===");
+
+      if (!issues.length) {
+        lines.push("異常なし");
+      } else {
+        issues.forEach((item, index) => {
+          lines.push(`[${index + 1}] ${String(item?.scope || "CHECK").toUpperCase()} / ${item?.label || item?.key || "異常"}`);
+          lines.push(`対象: ${item?.subject || "--"}`);
+          if (item?.subject_id) {
+            lines.push(`ID: ${item.subject_id}`);
+          }
+          lines.push(`異常: ${item?.problem || item?.detail || "異常を検出"}`);
+          if (item?.expected) {
+            lines.push(`期待値: ${item.expected}`);
+          }
+          if (item?.detail && item.detail !== item?.problem) {
+            lines.push(`詳細: ${item.detail}`);
+          }
+          lines.push("");
+        });
+      }
+
+      lines.push("=== SITE CHECK ===");
+      site.forEach(item => {
+        lines.push(`${getSystemCheckMark(item?.status)} ${item?.label || "--"} | ${item?.detail || ""}`);
+      });
+
+      lines.push("");
+      lines.push("=== BOT CHECK ===");
+      bot.forEach(item => {
+        lines.push(`${getSystemCheckMark(item?.status)} ${item?.label || "--"} | ${item?.detail || ""}`);
+      });
+
+      return lines.join("\n");
+    }
+
+
+    async function copySystemCheckDiagnostic() {
+      const copyResult = $("#systemCheckCopyResult");
+
+      if (!lastSystemCheckResult) {
+        if (copyResult) {
+          copyResult.textContent = "先にSYSTEM CHECKを実行してください。";
+        }
+        return;
+      }
+
+      const text =
+        buildSystemCheckDiagnosticText(
+          lastSystemCheckResult
+        );
+
+      try {
+        await navigator.clipboard.writeText(text);
+        if (copyResult) {
+          copyResult.textContent = "診断情報をコピーしました。";
+        }
+      } catch (error) {
+        console.error("SYSTEM CHECK診断コピーエラー", error);
+
+        const textarea = document.createElement("textarea");
+        textarea.value = text;
+        textarea.setAttribute("readonly", "");
+        textarea.style.position = "fixed";
+        textarea.style.opacity = "0";
+        document.body.appendChild(textarea);
+        textarea.select();
+
+        let copied = false;
+        try {
+          copied = document.execCommand("copy");
+        } catch {}
+
+        textarea.remove();
+
+        if (copyResult) {
+          copyResult.textContent = copied
+            ? "診断情報をコピーしました。"
+            : "コピーできませんでした。";
+        }
+      }
+    }
+
+
     function setSystemCheckLoading() {
       const overall = $("#systemCheckOverall");
       const time = $("#systemCheckTime");
       const site = $("#systemCheckSiteList");
       const bot = $("#systemCheckBotList");
+
+      lastSystemCheckResult = null;
+      renderSystemCheckIssues([]);
 
       if (overall) {
         overall.textContent = "点検中...";
@@ -7949,6 +8242,7 @@
       }
 
       const result = data || {};
+      lastSystemCheckResult = result;
       const summary = result.summary || {};
       const totalIssues = Number(summary.total_issues || 0);
       const overall = $("#systemCheckOverall");
@@ -7991,6 +8285,10 @@
       renderSystemCheckList(
         "#systemCheckBotList",
         result.bot
+      );
+
+      renderSystemCheckIssues(
+        result.issues
       );
 
     }
