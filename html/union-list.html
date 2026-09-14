@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta name="theme-color" content="#f2f5f7">
-  <title>NIKKE UNION MATCH - 登録ユニオン一覧</title>
+  <title>NIKKE UNION MATCH - ユニオンリスト</title>
   <meta name="description" content="NIKKE UNION MATCHを現在利用中のユニオン一覧です。募集中のユニオンは募集記事から応募できます。">
 
   <link rel="stylesheet" href="../style.css?v=51.8">
@@ -195,10 +195,7 @@
     .union-list-hero-inner {
       position: relative;
       z-index: 1;
-      display: grid;
-      grid-template-columns: minmax(0,1fr) auto;
-      gap: 24px;
-      align-items: end;
+      display: block;
     }
 
     .union-list-kicker {
@@ -292,29 +289,26 @@
     }
 
     .union-list-status-tabs {
-      display: flex;
-      flex-wrap: wrap;
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
       gap: 8px;
+      width: 100%;
     }
 
     .union-list-status-btn {
-      min-height: 44px;
-      padding: 0 14px;
+      width: 100%;
+      min-height: 46px;
+      padding: 0 12px;
       border: 1px solid var(--line-strong);
+      border-radius: 0 !important;
       background: #fff;
       color: var(--ink-soft);
       font-size: 11px;
       font-weight: 900;
+      text-align: center;
+      white-space: nowrap;
       cursor: pointer;
-      clip-path:
-        polygon(
-          7px 0,
-          100% 0,
-          100% calc(100% - 7px),
-          calc(100% - 7px) 100%,
-          0 100%,
-          0 7px
-        );
+      clip-path: none !important;
     }
 
     .union-list-status-btn.active {
@@ -325,7 +319,7 @@
     }
 
     .union-list-summary {
-      margin-top: 14px;
+      margin-top: 16px;
       padding: 12px 14px;
       border-left: 3px solid var(--cyan);
       background: rgba(26,176,241,.055);
@@ -356,6 +350,28 @@
 
     .union-card-note.is-idle {
       color: var(--muted);
+    }
+
+    .union-list-grid .union-card.status-open {
+      border-color: var(--cyan);
+    }
+
+    .union-list-grid .union-card.status-open::before {
+      background: var(--cyan);
+    }
+
+    .union-list-grid .union-card.status-closed {
+      border-color: #d9d9d9;
+    }
+
+    .union-list-grid .union-card.status-closed::before {
+      background: #FFE860;
+    }
+
+    .union-list-grid .union-card.status-closed .state {
+      border-color: #FFE860;
+      color: #6f6100;
+      background: rgba(255, 232, 96, .28);
     }
 
     .union-list-empty,
@@ -407,38 +423,50 @@
 
     @media screen and (max-width: 1366px) {
       /*
-        登録ユニオン一覧は本体の mobile-scroll-shell を使わない独立ページ。
-        共通 style.css のスマホ / タブレット用 root scroll lock をここだけ解除する。
+        Smartphone / Tablet:
+        browser viewport itself is locked.
+        Header and bottom navigation stay fixed.
+        Only the UNION LIST main area scrolls.
       */
       html,
-      body {
-        width: 100% !important;
-        height: auto !important;
-        min-height: 100% !important;
-        max-height: none !important;
-        overflow-x: hidden !important;
-        overflow-y: auto !important;
-        overscroll-behavior-y: auto !important;
-      }
-
+      body,
       html.tablet-device,
       html.tablet-device body {
         width: 100% !important;
-        height: auto !important;
-        min-height: 100% !important;
-        max-height: none !important;
-        overflow-x: hidden !important;
-        overflow-y: auto !important;
-        overscroll-behavior-y: auto !important;
+        height: 100% !important;
+        min-height: 0 !important;
+        max-height: 100% !important;
+        overflow: hidden !important;
+        overscroll-behavior: none !important;
       }
 
       body,
       html.tablet-device body {
         position: static !important;
-        padding-top: 64px !important;
-        padding-bottom: calc(72px + env(safe-area-inset-bottom)) !important;
-        touch-action: pan-y !important;
+        height: 100dvh !important;
+        min-height: 0 !important;
+        padding: 0 !important;
+        touch-action: none !important;
+      }
+
+      body > main.union-list-page {
+        position: fixed !important;
+        top: 64px !important;
+        bottom: calc(68px + env(safe-area-inset-bottom)) !important;
+        left: 0 !important;
+        right: 0 !important;
+        width: 100% !important;
+        max-width: 1380px !important;
+        height: auto !important;
+        min-height: 0 !important;
+        max-height: none !important;
+        margin: 0 auto !important;
+        padding: 30px 18px 60px !important;
+        overflow-x: hidden !important;
+        overflow-y: auto !important;
+        overscroll-behavior-y: contain !important;
         -webkit-overflow-scrolling: touch !important;
+        touch-action: pan-y !important;
       }
 
       .union-list-topbar {
@@ -517,16 +545,10 @@
     }
 
     @media screen and (max-width: 600px) {
-      html,
-      body {
-        height: auto !important;
-        min-height: 100% !important;
-        max-height: none !important;
-        overflow-y: auto !important;
-      }
-
-      body {
-        padding-top: 58px !important;
+      body > main.union-list-page {
+        top: 58px !important;
+        bottom: calc(68px + env(safe-area-inset-bottom)) !important;
+        padding: 14px 8px 40px !important;
       }
 
       .union-list-brand-label {
@@ -540,10 +562,6 @@
       .site-menu-drawer {
         top: 58px;
         height: calc(100dvh - 58px);
-      }
-
-      .union-list-page {
-        padding: 14px 8px 40px;
       }
 
       .union-list-hero {
@@ -566,9 +584,15 @@
         gap: 9px;
       }
 
+      .union-list-status-tabs {
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+        gap: 6px;
+      }
+
       .union-list-status-btn {
-        flex: 1 1 0;
-        padding: 0 10px;
+        min-height: 42px;
+        padding: 0 6px;
+        font-size: 10px;
       }
     }
   </style>
@@ -613,7 +637,7 @@
     <a href="../index.html?view=union#listPage">ユニオンを見る</a>
     <a href="../index.html#registerPage">募集登録</a>
     <a href="../index.html#managePage">PASS管理</a>
-    <a class="current-page" href="./union-list.html">登録ユニオン一覧</a>
+    <a class="current-page" href="./union-list.html">ユニオンリスト</a>
     <a href="../bot.html">Discord BOT</a>
     <a href="../creators.html">応援クリエイター</a>
 
@@ -628,21 +652,19 @@
       <div class="union-list-hero-inner">
         <div>
           <div class="union-list-kicker">UNION MATCH MEMBERS</div>
-          <h1 class="union-list-title">登録ユニオン一覧</h1>
+          <h1 class="union-list-title">ユニオンリスト</h1>
           <p class="union-list-lead">
             NIKKE UNION MATCHを現在利用しているユニオンです。<br>
             「募集中」のユニオンは募集記事から応募できます。
           </p>
         </div>
 
-        <div class="union-list-countbox">
-          <div class="union-list-count-label">TOTAL UNIONS</div>
-          <div class="union-list-count">
-            <span id="totalCount">--</span><small>UNIONS</small>
-          </div>
-        </div>
       </div>
     </section>
+
+    <div id="summary" class="union-list-summary">
+      ユニオンを読み込み中...
+    </div>
 
     <section class="union-list-toolbar" aria-label="ユニオン一覧絞り込み">
       <div class="union-list-field">
@@ -674,12 +696,8 @@
       </div>
     </section>
 
-    <div id="summary" class="union-list-summary">
-      登録ユニオンを読み込み中...
-    </div>
-
     <div id="loadingState" class="union-list-loading">
-      登録ユニオンを読み込んでいます...
+      ユニオンを読み込んでいます...
     </div>
 
     <div id="errorState" class="union-list-error hidden">
@@ -914,9 +932,6 @@
       const closedCount =
         state.items.length - openCount;
 
-      $("#totalCount").textContent =
-        String(state.items.length);
-
       summary.textContent =
         `現在利用中 ${state.items.length}ユニオン ｜ 募集中 ${openCount} ｜ 現在募集なし ${closedCount}`;
 
@@ -957,7 +972,7 @@
               : "";
 
           return `
-            <article class="card union-card">
+            <article class="card union-card ${recruiting ? "status-open" : "status-closed"}">
               <div class="card-head">
                 <div class="type-with-new">
                   <span class="recruitment-type">● ユニオン</span>
@@ -1094,14 +1109,13 @@
 
       } catch (error) {
         console.error(
-          "登録ユニオン一覧取得エラー",
+          "ユニオンリスト取得エラー",
           error
         );
 
         state.items = [];
-        $("#totalCount").textContent = "--";
         $("#summary").textContent =
-          "登録ユニオンを読み込めませんでした。";
+          "ユニオンを読み込めませんでした。";
         $("#unionGrid").innerHTML = "";
         $("#emptyState").classList.add("hidden");
         errorBox.classList.remove("hidden");
