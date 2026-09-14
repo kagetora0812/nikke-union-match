@@ -64,3 +64,17 @@
     padding-top: 58px !important;
   }
 }
+
+
+/* =========================================================
+   v21.1 SITE MENU LAYER UNIFY
+   - BOT / CREATOR の三本線メニューを下部固定ナビより前面に統一
+   - 表示順だけを変更。レイアウト / 機能は変更しない
+   ========================================================= */
+.site-menu-backdrop {
+  z-index: 1190 !important;
+}
+
+.site-menu-drawer {
+  z-index: 1200 !important;
+}
