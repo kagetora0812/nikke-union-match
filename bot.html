@@ -734,12 +734,23 @@
     overflow-wrap:anywhere;
   }
 
-  .bot-redesign .feature-card.green {
-    border-left:4px solid var(--green);
+  .bot-redesign .feature-card.x-primary {
+    border:1px solid rgba(40,185,232,.72);
+    border-left:5px solid var(--accent);
+    background:linear-gradient(135deg,rgba(40,185,232,.16),rgba(23,26,32,.98) 46%,rgba(13,15,19,.98));
+    box-shadow:inset 0 0 0 1px rgba(142,220,255,.08),0 0 22px rgba(40,185,232,.08);
   }
 
-  .bot-redesign .feature-card.soon {
-    border-left:4px solid var(--accent);
+  .bot-redesign .feature-card.x-primary h3 {
+    color:#dff7ff;
+  }
+
+  .bot-redesign .feature-card.x-primary .icon {
+    color:var(--accent2);
+  }
+
+  .bot-redesign .feature-card.green {
+    border-left:4px solid var(--green);
   }
 
   .bot-redesign .steps {
@@ -1151,44 +1162,40 @@
       </div>
 
       <div class="feature-grid">
+        <article class="feature-card x-primary">
+          <div class="icon">𝕏</div>
+          <h3>指揮官募集通知</h3>
+          <p>Xでユニオンを探している指揮官候補を自動取得し、設定したDiscordチャンネルへ通知します。</p>
+        </article>
+
         <article class="feature-card">
-          <div class="icon">🔔</div>
-          <h3>新規募集通知</h3>
-          <p>新しい指揮官募集を、設定したDiscordチャンネルへお知らせ。</p>
+          <div class="icon">📬</div>
+          <h3>UNION MATCHまとめ通知</h3>
+          <p>新しい指揮官・ユニオン募集を8:00 / 14:00 / 20:00（JST）にまとめて通知。指揮官・ユニオンは個別にON / OFFできます。</p>
+        </article>
+
+        <article class="feature-card">
+          <div class="icon">🎪</div>
+          <h3>NIKKE公式イベント通知</h3>
+          <p>ログインイベント、新イベント、ユニオンレイド、ソロレイド、協同作戦の開催情報を通知します。</p>
         </article>
 
         <article class="feature-card green">
           <div class="icon">⏰</div>
           <h3>期限通知・メンション</h3>
-          <p>
-            募集期限が近づいたら自動で通知します。通知時にメンションするロールも選択できます。<br>
-            見落とし防止のため、ユニオン管理者や募集担当者のロールを設定することをおすすめします。
-          </p>
+          <p>募集掲載終了の48時間前と1時間前に通知。設定したロールへのメンションにも対応します。</p>
         </article>
 
         <article class="feature-card">
-          <div class="icon">🔄</div>
-          <h3>BOTから再掲載</h3>
-          <p>期限通知からUNION MATCHを開き、募集をスムーズに再掲載。</p>
-        </article>
-
-        <article class="feature-card">
-          <div class="icon">💬</div>
-          <h3>AIキャラ会話</h3>
-          <p>BOTをメンションして話しかけるだけ。選んだキャラと会話できます。</p>
+          <div class="icon">🔗</div>
+          <h3>ユニオン連携・14日延長</h3>
+          <p><code>/unionmatch</code> から登録状態・掲載状態・利用期限を確認し、利用期間を14日延長できます。</p>
         </article>
 
         <article class="feature-card">
           <div class="icon">🧬</div>
-          <h3>キャラ設定</h3>
-          <p>キャラクター・名前・画像などを、サーバーごとにカスタマイズ。</p>
-        </article>
-
-        <article class="feature-card soon">
-          <div class="icon">🔎</div>
-          <h3>X指揮官速報</h3>
-          <div class="soon-label">近日実装</div>
-          <p class="future-desc">Xでユニオンを探している指揮官をピックアップして配信</p>
+          <h3>BOTプロフィール設定</h3>
+          <p><code>/botprofiles</code> で3キャラの名前・画像を変更。自由キャラは名前・性別・呼び名・一人称・性格を設定できます。</p>
         </article>
       </div>
     </section>
