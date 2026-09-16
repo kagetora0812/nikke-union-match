@@ -1296,6 +1296,135 @@
       color: var(--green);
     }
 
+
+    .ending-union-card.bot-managed {
+      border-color: rgba(54, 150, 255, .42);
+      background: linear-gradient(135deg, rgba(54, 150, 255, .08), rgba(16, 22, 33, .90) 44%);
+    }
+
+    .ending-union-bot-badge {
+      display: inline-flex;
+      align-items: center;
+      width: fit-content;
+      margin-top: 8px;
+      padding: 5px 9px;
+      border: 1px solid rgba(255,255,255,.14);
+      color: var(--muted);
+      background: rgba(255,255,255,.03);
+      font-size: 10px;
+      font-weight: 900;
+      line-height: 1.4;
+    }
+
+    .ending-union-bot-badge.active {
+      border-color: rgba(54, 150, 255, .52);
+      color: #9ed2ff;
+      background: rgba(54, 150, 255, .10);
+    }
+
+    .ending-union-bot-badge.inactive {
+      border-color: rgba(255, 177, 92, .34);
+      color: #ffc36d;
+      background: rgba(255, 177, 92, .06);
+    }
+
+    .ending-union-bot-badge.unknown {
+      border-color: rgba(255, 195, 109, .32);
+      color: #ffc36d;
+      background: rgba(255, 195, 109, .05);
+    }
+
+    .ending-union-bot-note {
+      margin-top: 10px;
+      padding: 9px 11px;
+      border-left: 3px solid var(--blue);
+      background: rgba(54, 150, 255, .06);
+      color: #b9dcff;
+      font-size: 11px;
+      font-weight: 800;
+      line-height: 1.6;
+    }
+
+    .x-candidate-summary {
+      margin-top: 16px;
+      padding: 12px 14px;
+      border: 1px solid rgba(54, 150, 255, .30);
+      background: rgba(54, 150, 255, .06);
+      color: #b9dcff;
+      font-size: 13px;
+      font-weight: 800;
+    }
+
+    .x-candidate-list {
+      display: grid;
+      gap: 12px;
+      margin-top: 14px;
+    }
+
+    .x-candidate-card {
+      padding: 16px;
+      border: 1px solid var(--line);
+      background: rgba(16, 22, 33, .90);
+    }
+
+    .x-candidate-head {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      gap: 12px;
+    }
+
+    .x-candidate-name {
+      color: #fff;
+      font-size: 17px;
+      font-weight: 900;
+      word-break: break-word;
+    }
+
+    .x-candidate-meta {
+      margin-top: 6px;
+      color: #8cc9ff;
+      font-size: 11px;
+      font-weight: 800;
+      line-height: 1.6;
+    }
+
+    .x-candidate-date {
+      flex: 0 0 auto;
+      color: var(--muted);
+      font-size: 10px;
+      font-weight: 800;
+      text-align: right;
+      line-height: 1.5;
+    }
+
+    .x-candidate-text {
+      margin-top: 12px;
+      padding: 11px 12px;
+      border-left: 3px solid rgba(54,150,255,.56);
+      background: rgba(8,13,21,.42);
+      color: #d7e0e9;
+      font-size: 12px;
+      line-height: 1.7;
+      white-space: pre-wrap;
+      overflow-wrap: anywhere;
+    }
+
+    .x-candidate-actions {
+      display: flex;
+      gap: 8px;
+      flex-wrap: wrap;
+      margin-top: 12px;
+    }
+
+    .x-candidate-actions .btn {
+      min-height: 42px;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      text-decoration: none;
+    }
+
     /* ========================================
        スマホ
     ======================================== */
@@ -1762,6 +1891,18 @@
       line-height: 1.55;
     }
 
+
+    .system-check-reason {
+      margin-top: 7px;
+      padding: 7px 9px;
+      border-left: 3px solid #ffc36d;
+      background: rgba(255, 195, 109, .06);
+      color: #ffd89a;
+      font-size: 10px;
+      font-weight: 800;
+      line-height: 1.6;
+    }
+
     .system-check-count {
       min-width: 40px;
       padding: 3px 6px;
@@ -2038,8 +2179,21 @@
             募集終了ユニオン
           </div>
           <div class="menu-card-copy">
-            48時間以内に掲載終了するユニオンだけを表示し、
-            Xへの連絡と再掲載案内に使います。
+            48時間以内に掲載終了するユニオンを表示。BOT使用中は連絡対象から自動で外します。
+          </div>
+        </button>
+
+        <button
+          id="openXCandidateAdminBtn"
+          class="menu-card"
+          type="button"
+        >
+          <div class="menu-card-icon">𝕏</div>
+          <div class="menu-card-title">
+            X取得記事管理
+          </div>
+          <div class="menu-card-copy">
+            BOTがXから自動取得した指揮官募集を確認し、誤取得の記事だけ配信対象から削除します。
           </div>
         </button>
 
@@ -2150,6 +2304,74 @@
 
     </section>
 
+
+
+    <!-- ========================================
+         X自動取得記事管理
+    ========================================= -->
+
+    <section
+      id="xCandidateAdminSection"
+      class="hidden"
+    >
+
+      <div class="admin-head">
+        <div>
+          <div class="eyebrow">
+            X AUTO COLLECT
+          </div>
+          <h2>
+            𝕏 X取得記事管理
+          </h2>
+        </div>
+
+        <div class="admin-head-actions">
+          <button
+            id="reloadXCandidateAdminBtn"
+            class="btn blue"
+            type="button"
+          >
+            ↻ 再読込
+          </button>
+          <button
+            id="backToMenuFromXCandidateBtn"
+            class="btn"
+            type="button"
+          >
+            ← 管理メニュー
+          </button>
+        </div>
+      </div>
+
+      <p class="lead">
+        BOTがXから自動取得した指揮官募集です。誤取得の記事を削除すると、BOTの候補一覧から非表示になり、未送信の配信予約も取り消します。
+      </p>
+
+      <div
+        id="xCandidateSummary"
+        class="x-candidate-summary"
+      >
+        𝕏 取得記事：読み込み中...
+      </div>
+
+      <div
+        id="xCandidateMessage"
+        class="message hidden"
+      ></div>
+
+      <div
+        id="xCandidateList"
+        class="x-candidate-list"
+      ></div>
+
+      <div
+        id="xCandidateEmpty"
+        class="empty hidden"
+      >
+        現在、削除対象にできるX取得記事はありません。
+      </div>
+
+    </section>
 
 
     <!-- ========================================
@@ -3316,7 +3538,7 @@
       </div>
 
       <p class="lead">
-        掲載期限が48時間以内のユニオン募集だけを表示します。
+        掲載期限が48時間以内のユニオン募集だけを表示します。BOT使用中のユニオンは「連絡不要」と表示し、X連絡ボタンを出しません。
       </p>
 
       <div class="template-box">
@@ -3823,6 +4045,7 @@
     let unionRegistryItems = [];
     let unionRegistryBotStatusAvailable = false;
     let passReissueTargets = [];
+    let xCandidateItems = [];
     let lastSystemCheckResult = null;
 
     // アイコン画像状態
@@ -6383,354 +6606,272 @@
 
     async function loadEndingUnions() {
 
-      const list =
-        $("#endingUnionList");
+      const list = $("#endingUnionList");
+      const empty = $("#endingUnionEmpty");
+      const errorBox = $("#endingUnionError");
+      const count = $("#endingUnionCount");
 
-      const empty =
-        $("#endingUnionEmpty");
-
-      const errorBox =
-        $("#endingUnionError");
-
-      const count =
-        $("#endingUnionCount");
-
-      if (
-        !list ||
-        !empty ||
-        !errorBox ||
-        !count
-      ) {
+      if (!list || !empty || !errorBox || !count) {
         return;
       }
 
-      list.innerHTML =
-        "";
+      list.innerHTML = "";
+      empty.classList.add("hidden");
+      errorBox.classList.add("hidden");
+      count.textContent = "⏰ 募集終了間近：読み込み中...";
 
-      empty.classList.add(
-        "hidden"
-      );
-
-      errorBox.classList.add(
-        "hidden"
-      );
-
-      count.textContent =
-        "⏰ 募集終了間近：読み込み中...";
-
-
-      const token =
-        getToken();
-
+      const token = getToken();
       if (!token) {
-
         showLogin();
-
         return;
       }
 
+      const tokenResult = await sb.rpc(
+        "creator_admin_token_valid",
+        { p_token: token }
+      );
 
-      const tokenResult =
-        await sb.rpc(
-          "creator_admin_token_valid",
-          {
-            p_token:
-              token
-          }
-        );
-
-
-      if (
-        tokenResult.error ||
-        tokenResult.data !== true
-      ) {
-
+      if (tokenResult.error || tokenResult.data !== true) {
         clearToken();
-
         showLogin();
-
         return;
       }
 
+      const now = new Date();
+      const nowIso = now.toISOString();
+      const cutoff = new Date(
+        now.getTime() + 48 * 60 * 60 * 1000
+      );
 
-      const now =
-        new Date();
-
-      const cutoff =
-        new Date(
-          now.getTime()
-          +
-          48 * 60 * 60 * 1000
-        );
-
-
-      const {
-        data,
-        error
-      } =
+      const { data, error } =
         await sb
-          .from(
-            "union_recruitments"
-          )
-          .select(
-            "id, union_name, union_rank, x_url, status, created_at, expires_at"
-          )
-          .eq(
-            "status",
-            "open"
-          )
-          .gt(
-            "expires_at",
-            now.toISOString()
-          )
-          .lte(
-            "expires_at",
-            cutoff.toISOString()
-          )
-          .order(
-            "expires_at",
-            {
-              ascending:
-                true
-            }
-          );
-
+          .from("union_recruitments")
+          .select("id, union_name, union_rank, x_url, status, created_at, expires_at")
+          .eq("status", "open")
+          .gt("expires_at", nowIso)
+          .lte("expires_at", cutoff.toISOString())
+          .order("expires_at", { ascending: true });
 
       if (error) {
-
-        console.error(
-          "募集終了ユニオン取得エラー",
-          error
-        );
-
-        count.textContent =
-          "⏰ 募集終了間近：--";
-
-        errorBox.textContent =
-          "ユニオン情報を読み込めませんでした。";
-
-        errorBox.classList.remove(
-          "hidden"
-        );
-
+        console.error("募集終了ユニオン取得エラー", error);
+        count.textContent = "⏰ 募集終了間近：--";
+        errorBox.textContent = "ユニオン情報を読み込めませんでした。";
+        errorBox.classList.remove("hidden");
         return;
       }
 
+      const unions = Array.isArray(data) ? data : [];
+      const recruitmentIds = unions.map(item => String(item.id));
 
-      const unions =
-        Array.isArray(data)
-          ? data
-          : [];
+      // BOT利用判定は既存の管理仕様と同じく、
+      // 初回ユニオンPASS成功時の union_identity_id + union_linked_at のみを採用する。
+      let botStatusAvailable = true;
+      let membershipByRecruitment = new Map();
+      let botStatusByIdentity = new Map();
 
+      if (recruitmentIds.length) {
+        const membershipResult =
+          await sb
+            .from("union_registrations")
+            .select("recruitment_id, union_identity_id, expires_at")
+            .in("recruitment_id", recruitmentIds)
+            .gt("expires_at", nowIso);
 
-      const contactedIds =
-        getContactedUnionIds();
-
-      const contactedCount =
-        unions.filter(
-          item =>
-            contactedIds.has(
-              String(item.id)
-            )
-        ).length;
-
-      const pendingCount =
-        unions.length
-        -
-        contactedCount;
-
-      count.textContent =
-        `⏰ 48時間以内：${unions.length}件　📨 未連絡 ${pendingCount}件　✓ 連絡済み ${contactedCount}件`;
-
-
-      if (
-        unions.length ===
-        0
-      ) {
-
-        empty.classList.remove(
-          "hidden"
-        );
-
-        return;
-      }
-
-
-      const displayUnions =
-        [...unions]
-          .sort(
-            (a, b) => {
-
-              const aContacted =
-                contactedIds.has(
-                  String(a.id)
-                )
-                  ? 1
-                  : 0;
-
-              const bContacted =
-                contactedIds.has(
-                  String(b.id)
-                )
-                  ? 1
-                  : 0;
-
-              if (
-                aContacted !==
-                bContacted
-              ) {
-                return aContacted - bContacted;
-              }
-
-              return (
-                new Date(a.expires_at)
-                -
-                new Date(b.expires_at)
-              );
-
+        if (membershipResult.error) {
+          console.warn(
+            "募集終了ユニオン会員情報取得エラー",
+            membershipResult.error
+          );
+          botStatusAvailable = false;
+        } else {
+          (membershipResult.data || []).forEach(row => {
+            const recruitmentId = String(row.recruitment_id || "").trim();
+            if (recruitmentId) {
+              membershipByRecruitment.set(recruitmentId, row);
             }
+          });
+        }
+
+        const botStatusResult =
+          await sb.rpc(
+            "creator_admin_union_bot_status",
+            { p_token: token }
           );
 
+        if (botStatusResult.error) {
+          console.warn(
+            "募集終了ユニオンBOT利用状況取得エラー",
+            botStatusResult.error
+          );
+          botStatusAvailable = false;
+        } else {
+          (botStatusResult.data || []).forEach(row => {
+            const identity = String(row.union_identity_id || "").trim();
+            if (identity) {
+              botStatusByIdentity.set(identity, row);
+            }
+          });
+        }
+      }
+
+      const enrichedUnions = unions.map(item => {
+        const membership = membershipByRecruitment.get(String(item.id)) || null;
+        const identity = String(membership?.union_identity_id || "").trim();
+        const botStatus = identity
+          ? botStatusByIdentity.get(identity) || null
+          : null;
+
+        return {
+          ...item,
+          _botStatusKnown: botStatusAvailable,
+          _botInUse:
+            botStatusAvailable
+            && Boolean(botStatus?.pass_linked),
+          _botStatus: botStatus
+        };
+      });
+
+      const contactedIds = getContactedUnionIds();
+      const botUsingCount = enrichedUnions.filter(item => item._botInUse).length;
+      const contactTargets = enrichedUnions.filter(item => !item._botInUse);
+      const contactedCount = contactTargets.filter(
+        item => contactedIds.has(String(item.id))
+      ).length;
+      const pendingCount = contactTargets.length - contactedCount;
+
+      count.textContent =
+        `⏰ 48時間以内：${enrichedUnions.length}件　🤖 BOT使用 ${botUsingCount}件　📨 連絡対象 ${pendingCount}件　✓ 連絡済み ${contactedCount}件`;
+
+      if (enrichedUnions.length === 0) {
+        empty.classList.remove("hidden");
+        return;
+      }
+
+      if (!botStatusAvailable) {
+        errorBox.textContent =
+          "BOT利用状況の一部を判定できませんでした。「BOT判定不明」のユニオンは連絡前に確認してください。";
+        errorBox.classList.remove("hidden");
+      }
+
+      const displayUnions =
+        [...enrichedUnions].sort((a, b) => {
+          const group = item => {
+            if (item._botInUse) return 2;
+            return contactedIds.has(String(item.id)) ? 1 : 0;
+          };
+
+          const groupDiff = group(a) - group(b);
+          if (groupDiff !== 0) return groupDiff;
+
+          return new Date(a.expires_at) - new Date(b.expires_at);
+        });
 
       list.innerHTML =
-        displayUnions
-          .map(
-            item => {
+        displayUnions.map(item => {
+          const botInUse = item._botInUse === true;
+          const rawContacted = contactedIds.has(String(item.id));
+          const contacted = !botInUse && rawContacted;
+          const xUrl = safeUrl(item.x_url);
 
-              const contacted =
-                contactedIds.has(
-                  String(item.id)
-                );
+          let botBadge = "";
+          if (!item._botStatusKnown) {
+            botBadge = `
+              <div class="ending-union-bot-badge unknown">
+                ⚠ BOT判定不明｜連絡前に確認
+              </div>
+            `;
+          } else if (botInUse) {
+            botBadge = `
+              <div class="ending-union-bot-badge active">
+                🤖 BOT使用中｜X連絡不要
+              </div>
+            `;
+          } else {
+            botBadge = `
+              <div class="ending-union-bot-badge inactive">
+                BOT未使用｜X連絡対象
+              </div>
+            `;
+          }
 
-              const xUrl =
-                safeUrl(
-                  item.x_url
-                );
+          const contactedBadge = contacted
+            ? `<div class="contacted-badge">✓ 連絡済み</div>`
+            : "";
 
-              const xButton =
-                xUrl
-                  ? `
-                    <a
-                      class="btn blue"
-                      href="${escapeHtml(
-                        xUrl
-                      )}"
-                      target="_blank"
-                      rel="noopener noreferrer"
-                    >
-                      𝕏 募集投稿を開く ↗
-                    </a>
-                  `
-                  : `
-                    <button
-                      class="btn"
-                      type="button"
-                      disabled
-                    >
-                      X URLなし
-                    </button>
-                  `;
+          let actions = "";
 
-
-              const contactedBadge =
-                contacted
-                  ? `
-                    <div class="contacted-badge">
-                      ✓ 連絡済み
-                    </div>
-                  `
-                  : "";
-
-              const contactStateButton =
-                `
-                  <button
-                    class="btn contact-state-btn ${
-                      contacted
-                        ? "done"
-                        : "green"
-                    }"
-                    type="button"
-                    data-union-id="${escapeHtml(
-                      item.id
-                    )}"
-                    data-contacted="${
-                      contacted
-                        ? "1"
-                        : "0"
-                    }"
-                  >
-                    ${
-                      contacted
-                        ? "↩ 未連絡に戻す"
-                        : "✓ 連絡済みにする"
-                    }
-                  </button>
-                `;
-
-
-              return `
-                <article class="ending-union-card ${
-                  contacted
-                    ? "contacted"
-                    : ""
-                }">
-
-                  <div class="ending-union-head">
-
-                    <div>
-                      <div class="ending-union-name">
-                        ${escapeHtml(
-                          item.union_name
-                        )}
-                      </div>
-
-                      <div class="ending-union-rank">
-                        ${escapeHtml(
-                          item.union_rank || "ランク未設定"
-                        )}
-                      </div>
-
-                      ${contactedBadge}
-                    </div>
-
-                    <div class="ending-union-deadline">
-                      掲載終了<br>
-                      ${escapeHtml(
-                        formatAdminDate(
-                          item.expires_at
-                        )
-                      )}
-                    </div>
-
-                  </div>
-
-                  <div
-                    class="ending-union-remaining"
-                    data-admin-expires="${escapeHtml(
-                      item.expires_at
-                    )}"
-                  >
-                    ${escapeHtml(
-                      getAdminRemainingText(
-                        item.expires_at
-                      )
-                    )}
-                  </div>
-
-                  <div class="ending-union-actions">
-                    ${xButton}
-                    ${contactStateButton}
-                  </div>
-
-                </article>
+          if (botInUse) {
+            actions = `
+              <div class="ending-union-bot-note">
+                🤖 このユニオンはUNION MATCH BOTを使用中です。BOT側の期限通知に任せるため、X連絡は不要です。
+              </div>
+            `;
+          } else {
+            const xButton = xUrl
+              ? `
+                <a
+                  class="btn blue"
+                  href="${escapeHtml(xUrl)}"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                >
+                  𝕏 募集投稿を開く ↗
+                </a>
+              `
+              : `
+                <button class="btn" type="button" disabled>
+                  X URLなし
+                </button>
               `;
 
-            }
-          )
-          .join("");
+            const contactStateButton = `
+              <button
+                class="btn contact-state-btn ${contacted ? "done" : "green"}"
+                type="button"
+                data-union-id="${escapeHtml(item.id)}"
+                data-contacted="${contacted ? "1" : "0"}"
+              >
+                ${contacted ? "↩ 未連絡に戻す" : "✓ 連絡済みにする"}
+              </button>
+            `;
+
+            actions = `
+              <div class="ending-union-actions">
+                ${xButton}
+                ${contactStateButton}
+              </div>
+            `;
+          }
+
+          return `
+            <article class="ending-union-card ${contacted ? "contacted" : ""} ${botInUse ? "bot-managed" : ""}">
+              <div class="ending-union-head">
+                <div>
+                  <div class="ending-union-name">${escapeHtml(item.union_name)}</div>
+                  <div class="ending-union-rank">${escapeHtml(item.union_rank || "ランク未設定")}</div>
+                  ${botBadge}
+                  ${contactedBadge}
+                </div>
+
+                <div class="ending-union-deadline">
+                  掲載終了<br>
+                  ${escapeHtml(formatAdminDate(item.expires_at))}
+                </div>
+              </div>
+
+              <div
+                class="ending-union-remaining"
+                data-admin-expires="${escapeHtml(item.expires_at)}"
+              >
+                ${escapeHtml(getAdminRemainingText(item.expires_at))}
+              </div>
+
+              ${actions}
+            </article>
+          `;
+        }).join("");
 
     }
-
 
     function updateEndingUnionCountdowns() {
 
@@ -6921,6 +7062,16 @@
       );
 
 
+    $("#openXCandidateAdminBtn")
+      ?.addEventListener(
+        "click",
+        async () => {
+          showXCandidateAdmin();
+          await loadXCandidates();
+        }
+      );
+
+
     $("#openCreatorAdminBtn")
       ?.addEventListener(
         "click",
@@ -7007,6 +7158,31 @@
       ?.addEventListener(
         "click",
         showMenu
+      );
+
+
+    $("#backToMenuFromXCandidateBtn")
+      ?.addEventListener(
+        "click",
+        showMenu
+      );
+
+    $("#reloadXCandidateAdminBtn")
+      ?.addEventListener(
+        "click",
+        loadXCandidates
+      );
+
+    $("#xCandidateList")
+      ?.addEventListener(
+        "click",
+        async event => {
+          const button = event.target.closest(".x-candidate-delete-btn");
+          if (!button) return;
+          const candidateId = button.dataset.candidateId;
+          if (!candidateId) return;
+          await deleteXCandidate(candidateId);
+        }
       );
 
     $("#backToMenuFromUnionRegistryBtn")
@@ -7752,6 +7928,208 @@
 
 
     // ========================================
+    // X自動取得記事管理
+    // ========================================
+
+    function renderXCandidates() {
+      const list = $("#xCandidateList");
+      const empty = $("#xCandidateEmpty");
+      const summary = $("#xCandidateSummary");
+
+      if (!list || !empty || !summary) return;
+
+      summary.textContent = `𝕏 取得記事：${xCandidateItems.length}件`;
+      list.innerHTML = "";
+
+      if (!xCandidateItems.length) {
+        empty.classList.remove("hidden");
+        return;
+      }
+
+      empty.classList.add("hidden");
+
+      list.innerHTML = xCandidateItems.map(item => {
+        const url = safeUrl(item.source_url);
+        const name = String(item.commander_name || "").trim() || "指揮官名未判定";
+        const handle = String(item.author_handle || "").trim();
+        const slv = Number.isFinite(Number(item.slv)) ? Number(item.slv) : null;
+        const excerpt = String(item.text_excerpt || "").trim() || "本文抜粋なし";
+        const postedAt = item.posted_at ? formatAdminDate(item.posted_at) : "--";
+        const seenAt = item.last_seen_at ? formatAdminDate(item.last_seen_at) : "--";
+
+        return `
+          <article class="x-candidate-card" data-candidate-id="${escapeHtml(item.candidate_id)}">
+            <div class="x-candidate-head">
+              <div>
+                <div class="x-candidate-name">${escapeHtml(name)}</div>
+                <div class="x-candidate-meta">
+                  ${handle ? `@${escapeHtml(handle.replace(/^@/, ""))}` : "@--"}
+                  ${slv !== null ? `　/　SLV ${escapeHtml(slv)}` : ""}
+                </div>
+              </div>
+              <div class="x-candidate-date">
+                投稿日 ${escapeHtml(postedAt)}<br>
+                最終確認 ${escapeHtml(seenAt)}
+              </div>
+            </div>
+
+            <div class="x-candidate-text">${escapeHtml(excerpt)}</div>
+
+            <div class="x-candidate-actions">
+              ${url ? `
+                <a
+                  class="btn blue"
+                  href="${escapeHtml(url)}"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                >
+                  𝕏 記事を確認 ↗
+                </a>
+              ` : ""}
+
+              <button
+                class="btn danger x-candidate-delete-btn"
+                type="button"
+                data-candidate-id="${escapeHtml(item.candidate_id)}"
+              >
+                誤取得として削除
+              </button>
+            </div>
+          </article>
+        `;
+      }).join("");
+    }
+
+
+    async function loadXCandidates() {
+      clearMessage($("#xCandidateMessage"));
+
+      const summary = $("#xCandidateSummary");
+      if (summary) {
+        summary.textContent = "𝕏 取得記事：読み込み中...";
+      }
+
+      const token = getToken();
+      if (!token) {
+        showLogin();
+        return;
+      }
+
+      const { data, error } =
+        await sb.rpc(
+          "creator_admin_x_candidate_list",
+          {
+            p_token: token,
+            p_limit: 100
+          }
+        );
+
+      if (error) {
+        const errorText = String(error.message || error.details || "");
+
+        if (
+          errorText.includes("INVALID_ADMIN_TOKEN")
+          || errorText.includes("ADMIN_SESSION_INVALID")
+        ) {
+          clearToken();
+          showLogin();
+          return;
+        }
+
+        console.error("X取得記事一覧エラー", error);
+        xCandidateItems = [];
+        renderXCandidates();
+        showMessage(
+          $("#xCandidateMessage"),
+          errorText.includes("creator_admin_x_candidate_list") || String(error.code || "").includes("PGRST")
+            ? "X取得記事管理用SQLが未適用です。付属SQLをSupabaseで1回Runしてください。"
+            : "X取得記事を読み込めませんでした。",
+          "error"
+        );
+        return;
+      }
+
+      xCandidateItems = Array.isArray(data) ? data : [];
+      renderXCandidates();
+    }
+
+
+    async function deleteXCandidate(candidateId) {
+      const item = xCandidateItems.find(
+        row => String(row.candidate_id) === String(candidateId)
+      );
+
+      if (!item) return;
+
+      const label =
+        String(item.commander_name || "").trim()
+        || String(item.author_handle || "").trim()
+        || "このX記事";
+
+      const confirmed = window.confirm(
+        `${label} を「誤取得」として削除しますか？\n\n候補一覧から非表示にし、未送信の配信予約も取り消します。`
+      );
+
+      if (!confirmed) return;
+
+      const token = getToken();
+      if (!token) {
+        showLogin();
+        return;
+      }
+
+      const { data, error } =
+        await sb.rpc(
+          "creator_admin_x_candidate_delete",
+          {
+            p_token: token,
+            p_id: String(candidateId),
+            p_reason: "admin_wrong_article"
+          }
+        );
+
+      if (error) {
+        const errorText = String(error.message || error.details || "");
+
+        if (
+          errorText.includes("INVALID_ADMIN_TOKEN")
+          || errorText.includes("ADMIN_SESSION_INVALID")
+        ) {
+          clearToken();
+          showLogin();
+          return;
+        }
+
+        console.error("X取得記事削除エラー", error);
+        showMessage(
+          $("#xCandidateMessage"),
+          "誤取得の記事を削除できませんでした。",
+          "error"
+        );
+        return;
+      }
+
+      if (!data?.ok) {
+        showMessage(
+          $("#xCandidateMessage"),
+          "対象の記事が見つからないか、すでに削除されています。",
+          "error"
+        );
+        await loadXCandidates();
+        return;
+      }
+
+      showMessage(
+        $("#xCandidateMessage"),
+        `誤取得の記事を削除しました。未送信予約 ${Number(data.cancelled_deliveries || 0)}件も取り消しました。`,
+        "ok"
+      );
+
+      await loadXCandidates();
+    }
+
+
+    // ========================================
     // 画面表示切替
     // ========================================
 
@@ -7775,6 +8153,10 @@
 
 
       $("#systemCheckSection")
+        ?.classList
+        .add("hidden");
+
+      $("#xCandidateAdminSection")
         ?.classList
         .add("hidden");
 
@@ -7853,6 +8235,17 @@
     }
 
 
+    function showXCandidateAdmin() {
+
+      hideAllAdminSections();
+
+      $("#xCandidateAdminSection")
+        ?.classList
+        .remove("hidden");
+
+    }
+
+
     function showUnionRegistryAdmin() {
 
       hideAllAdminSections();
@@ -7922,11 +8315,12 @@
     }
 
 
-    function renderSystemCheckList(selector, items) {
+    function renderSystemCheckList(selector, items, issues, scope) {
       const list = $(selector);
       if (!list) return;
 
       const rows = Array.isArray(items) ? items : [];
+      const issueRows = Array.isArray(issues) ? issues : [];
 
       if (!rows.length) {
         list.innerHTML = `
@@ -7955,12 +8349,33 @@
               ? `<div class="system-check-count">${count}件</div>`
               : "";
 
+          const matched = issueRows.filter(issue =>
+            String(issue?.key || "") === String(item?.key || "")
+            && (!scope || String(issue?.scope || "").toLowerCase() === String(scope).toLowerCase())
+          );
+
+          const reasonTexts = [];
+          matched.forEach(issue => {
+            const problem = String(issue?.problem || issue?.detail || "").trim();
+            if (problem && !reasonTexts.includes(problem)) {
+              reasonTexts.push(problem);
+            }
+          });
+
+          const visibleReasons = reasonTexts.slice(0, 2);
+          const moreCount = Math.max(0, matched.length - visibleReasons.length);
+          const reasonHtml =
+            (status === "warn" || status === "error") && visibleReasons.length
+              ? `<div class="system-check-reason">NG理由：${visibleReasons.map(text => escapeHtml(text)).join(" / ")}${moreCount > 0 ? `（ほか${moreCount}件は異常詳細に表示）` : ""}</div>`
+              : "";
+
           return `
             <div class="system-check-row ${escapeHtml(status)}">
               <div class="system-check-mark">${getSystemCheckMark(status)}</div>
               <div>
                 <div class="system-check-label">${escapeHtml(item?.label || "--")}</div>
                 <div class="system-check-detail">${escapeHtml(item?.detail || "")}</div>
+                ${reasonHtml}
               </div>
               ${countHtml}
             </div>
@@ -8279,12 +8694,16 @@
 
       renderSystemCheckList(
         "#systemCheckSiteList",
-        result.site
+        result.site,
+        result.issues,
+        "site"
       );
 
       renderSystemCheckList(
         "#systemCheckBotList",
-        result.bot
+        result.bot,
+        result.issues,
+        "bot"
       );
 
       renderSystemCheckIssues(
