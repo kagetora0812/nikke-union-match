@@ -136,12 +136,14 @@ const $ = selector =>
 let lastRegisteredRecruitment = null;
 
 // ========================================
-// X収集カード 表示テスト
-// true の間だけ、既存の公開X募集URLを1件借りて
-// 紫のX収集カードとTOPの X LISTED 1 を表示する。
-// Supabaseのデータは変更しない。
+// X収集カード 公開表示
+// BOTが x_recruitment_candidates に保存した候補を
+// public_x_recruitment_list RPC 経由で安全に取得する。
+// DB側・画面側の両方で48時間以内だけを表示する。
 // ========================================
-const X_COLLECTED_VISUAL_TEST = false;
+const X_LISTED_PUBLIC_RPC = "public_x_recruitment_list";
+const X_LISTED_MAX_ITEMS = 100;
+const X_LISTED_HOURS = 48;
 
 // 登録前プレビューの確定フラグ
 let registrationPreviewApproved = false;
@@ -2278,7 +2280,7 @@ function buildXShareText(
 
 
 // ========================================
-// X収集カード 表示テスト helpers
+// X収集カード 公開表示 helpers
 // ========================================
 
 function updateXListedTopCount(count) {
@@ -2297,7 +2299,7 @@ function updateXListedTopCount(count) {
   }
 
   if (safeCount <= 0) {
-    counter.textContent = "0";
+    counter.textContent = "";
     stat.classList.add("hidden");
     return;
   }
@@ -2309,18 +2311,98 @@ function updateXListedTopCount(count) {
 }
 
 
-function buildXCollectedTestCard(url) {
+function isPublicXListedCandidate(item) {
+
+  const url =
+    String(item?.source_url || "").trim();
 
   if (!url || !isXRecruitmentUrl(url)) {
+    return false;
+  }
+
+  const postedTime =
+    new Date(item?.posted_at).getTime();
+
+  if (!Number.isFinite(postedTime)) {
+    return false;
+  }
+
+  const age =
+    Date.now() - postedTime;
+
+  return (
+    age >= 0
+    &&
+    age < X_LISTED_HOURS * 60 * 60 * 1000
+  );
+}
+
+
+async function loadPublicXListedCandidates() {
+
+  if (!sb) {
+    return [];
+  }
+
+  const {
+    data,
+    error
+  } =
+    await sb.rpc(
+      X_LISTED_PUBLIC_RPC,
+      {
+        p_limit:
+          X_LISTED_MAX_ITEMS
+      }
+    );
+
+  if (error) {
+    console.error(
+      "X収集記事読み込みエラー",
+      error
+    );
+    return [];
+  }
+
+  return (
+    Array.isArray(data)
+      ? data
+      : []
+  )
+    .filter(
+      isPublicXListedCandidate
+    )
+    .sort(
+      (a, b) =>
+        new Date(b.posted_at)
+        -
+        new Date(a.posted_at)
+    );
+}
+
+
+function buildXCollectedCard(item) {
+
+  const url =
+    String(item?.source_url || "").trim();
+
+  if (!isPublicXListedCandidate(item)) {
     return "";
   }
 
+  const newBadge =
+    isNewRecruitment(
+      item.posted_at
+    )
+      ? '<span class="new-badge">🔥 NEW</span>'
+      : "";
+
   return `
-    <article class="card x-collected-card x-collected-test-card">
+    <article class="card x-collected-card">
       <div class="card-head x-collected-card-head">
         <div class="type-with-new">
           <span class="x-listed-badge">𝕏 LISTED</span>
-          <span class="new-badge">🔥 NEW</span>
+          ${newBadge}
         </div>
       </div>
 
@@ -2456,14 +2538,16 @@ async function loadRecruitments() {
   const [
 
     commanderResult,
-    unionResult
+    unionResult,
+    xCollectedCandidates
 
   ] =
 
     await Promise.all([
 
       commanderQuery,
-      unionQuery
+      unionQuery,
+      loadPublicXListedCandidates()
 
     ]);
 
@@ -2516,20 +2600,10 @@ async function loadRecruitments() {
     [];
 
 
-  // 表示テスト中は、すでに公開されているX募集URLを1件だけ借りる。
-  // DBへの追加・更新は行わない。
-  const xCollectedTestUrl =
-    X_COLLECTED_VISUAL_TEST
-      ? [
-          ...commanders,
-          ...unions
-        ]
-          .map(item => item?.x_url || "")
-          .find(url => isXRecruitmentUrl(url)) || ""
-      : "";
-
+  // X収集候補はBOT側の48時間ライフサイクルに加え、
+  // 公開RPCと画面側でも48時間以内だけに限定する。
   updateXListedTopCount(
-    xCollectedTestUrl ? 1 : 0
+    xCollectedCandidates.length
   );
 
 
@@ -2712,6 +2786,9 @@ async function loadRecruitments() {
     if (
       filtered.length ===
       0
+      &&
+      xCollectedCandidates.length ===
+      0
     ) {
 
       showEmpty(
@@ -2877,12 +2954,14 @@ const deadlineBadge =
         )
         .join("");
 
-    if (xCollectedTestUrl) {
+    if (xCollectedCandidates.length) {
       list.insertAdjacentHTML(
         "afterbegin",
-        buildXCollectedTestCard(
-          xCollectedTestUrl
-        )
+        xCollectedCandidates
+          .map(
+            buildXCollectedCard
+          )
+          .join("")
       );
     }
 
