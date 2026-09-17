@@ -2954,9 +2954,11 @@ const deadlineBadge =
         )
         .join("");
 
+    // UNION MATCHへ直接登録してくれた指揮官を最優先。
+    // X自動収集カードは、その後ろの第2グループとして表示する。
     if (xCollectedCandidates.length) {
       list.insertAdjacentHTML(
-        "afterbegin",
+        "beforeend",
         xCollectedCandidates
           .map(
             buildXCollectedCard
