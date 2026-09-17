@@ -1370,7 +1370,7 @@ body .card.x-collected-card {
     linear-gradient(
       180deg,
       #ffffff 0%,
-      #f7f4ff 100%
+      #fbfaff 100%
     ) !important;
 }
 
@@ -4340,7 +4340,7 @@ body .video-x-listed-stat.hidden {
 
 body .video-x-listed-stat strong {
   display: block;
-  color: #8B5CF6 !important;
+  color: #fff !important;
   font-family: "Teko", "Arial Narrow", sans-serif;
   font-size: clamp(34px, 4.2vw, 58px);
   font-weight: 700;
@@ -4352,7 +4352,7 @@ body .video-x-listed-stat strong {
 body .video-x-listed-stat span {
   display: block;
   margin-top: 6px;
-  color: #8B5CF6;
+  color: #fff !important;
   font-family: "Teko", "Arial Narrow", sans-serif;
   font-size: clamp(9px, 1.15vw, 12px);
   font-weight: 700;
@@ -5699,7 +5699,7 @@ body.register-mode .hero {
 
 
 /* =========================================================
-   v51.9 X LISTED TOP responsive test
+   v51.10 X LISTED TOP white + responsive
    ========================================================= */
 @media screen and (max-width: 600px) {
   html body .video-x-listed-stat {
