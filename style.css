@@ -1360,6 +1360,51 @@ h3 {
 
 
 /* =========================================================
+   X COLLECTED CARD / VISUAL TEST
+   指揮官=orange、ユニオン=blue と分離する紫 #8B5CF6
+   ========================================================= */
+
+body .card.x-collected-card {
+  border-color: #8B5CF6 !important;
+  background:
+    linear-gradient(
+      180deg,
+      #ffffff 0%,
+      #f7f4ff 100%
+    ) !important;
+}
+
+body .card.x-collected-card::before {
+  background: #8B5CF6 !important;
+}
+
+body .card.x-collected-card::after {
+  border-color: rgba(139, 92, 246, .20) !important;
+}
+
+body .x-collected-card-head {
+  justify-content: flex-start;
+}
+
+body .x-listed-badge {
+  display: inline-flex;
+  align-items: center;
+  width: fit-content;
+  padding: 4px 8px;
+  border: 1px solid #8B5CF6;
+  color: #7C3AED;
+  background: rgba(139, 92, 246, .09);
+  font-size: 10px;
+  font-weight: 900;
+  white-space: nowrap;
+}
+
+body .card.x-collected-card .x-post-area {
+  margin-top: 12px;
+}
+
+
+/* =========================================================
    X
    ========================================================= */
 
@@ -4269,10 +4314,52 @@ body .video-hero-stats {
 }
 
 body .video-current-row {
+  position: relative;
   display: flex;
   justify-content: center;
   align-items: flex-start;
   gap: clamp(46px, 11vw, 150px);
+}
+
+/* X LISTED はabsoluteで中央に重ねるため、
+   COMMANDERS / UNIONS の既存位置・サイズを一切動かさない。 */
+body .video-x-listed-stat {
+  position: absolute;
+  left: 50%;
+  top: 0;
+  z-index: 2;
+  transform: translate(-50%, -7px);
+  min-width: 92px;
+  text-align: center;
+  pointer-events: none;
+}
+
+body .video-x-listed-stat.hidden {
+  display: none !important;
+}
+
+body .video-x-listed-stat strong {
+  display: block;
+  color: #8B5CF6 !important;
+  font-family: "Teko", "Arial Narrow", sans-serif;
+  font-size: clamp(34px, 4.2vw, 58px);
+  font-weight: 700;
+  line-height: .86;
+  letter-spacing: -.02em;
+  text-shadow: 0 3px 18px rgba(0,0,0,.62);
+}
+
+body .video-x-listed-stat span {
+  display: block;
+  margin-top: 6px;
+  color: #8B5CF6;
+  font-family: "Teko", "Arial Narrow", sans-serif;
+  font-size: clamp(9px, 1.15vw, 12px);
+  font-weight: 700;
+  line-height: 1;
+  letter-spacing: .16em;
+  text-shadow: 0 3px 18px rgba(0,0,0,.62);
+  white-space: nowrap;
 }
 
 body .video-current-stat {
@@ -5608,4 +5695,35 @@ body.register-mode .hero {
 
 .site-menu-drawer {
   z-index: 1200 !important;
+}
+
+
+/* =========================================================
+   v51.9 X LISTED TOP responsive test
+   ========================================================= */
+@media screen and (max-width: 600px) {
+  html body .video-x-listed-stat {
+    transform: translate(-50%, -5px);
+    min-width: 78px;
+  }
+
+  html body .video-x-listed-stat strong {
+    font-size: clamp(40px, 11vw, 52px) !important;
+  }
+
+  html body .video-x-listed-stat span {
+    margin-top: 7px !important;
+    font-size: clamp(9px, 2.7vw, 11px) !important;
+    letter-spacing: .13em !important;
+  }
+}
+
+@media screen and (min-width: 601px) and (max-width: 1024px) {
+  html body .video-x-listed-stat {
+    transform: translate(-50%, -6px);
+  }
+
+  html body .video-x-listed-stat strong {
+    font-size: clamp(42px, 6vw, 56px) !important;
+  }
 }
