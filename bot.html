@@ -742,7 +742,8 @@
   }
 
   .bot-redesign .feature-card.x-primary h3 {
-    color:#dff7ff;
+    color:#28b9e8;
+    text-shadow:0 0 12px rgba(40,185,232,.18);
   }
 
   .bot-redesign .feature-card.x-primary .icon {
@@ -782,7 +783,7 @@
 
   .bot-redesign .command-card .cmd {
     color:#91defd;
-    font:900 14px Consolas,"SFMono-Regular",monospace;
+    font:900 17px Consolas,"SFMono-Regular",monospace;
   }
 
   .bot-redesign .command-card .badge {
@@ -817,6 +818,16 @@
     margin-top:15px;
     color:#b8d9e7;
     line-height:1.8;
+  }
+
+  .bot-redesign .hero-main-copy {
+    white-space:nowrap;
+  }
+
+  @media (max-width:1024px) and (min-width:601px) {
+    .bot-redesign .character-grid {
+      grid-template-columns:repeat(2,minmax(0,1fr));
+    }
   }
 
   @media (max-width:900px) and (min-width:601px) {
@@ -894,9 +905,48 @@
     }
 
     .bot-redesign .steps,
-    .bot-redesign .character-grid,
     .bot-redesign .command-grid {
       grid-template-columns:1fr;
+    }
+
+    .bot-redesign .character-grid {
+      grid-template-columns:repeat(2,minmax(0,1fr));
+      gap:8px;
+    }
+
+    .bot-redesign .character-visual {
+      height:118px;
+    }
+
+    .bot-redesign .character-fallback {
+      font-size:46px;
+    }
+
+    .bot-redesign .character-body {
+      padding:11px 10px 13px;
+    }
+
+    .bot-redesign .character-tag {
+      font-size:8.5px;
+      letter-spacing:1.2px;
+    }
+
+    .bot-redesign .character-name {
+      font-size:15px;
+      line-height:1.35;
+    }
+
+    .bot-redesign .character-desc {
+      margin-top:5px;
+      font-size:9.5px;
+      line-height:1.55;
+    }
+
+    .bot-redesign .hero-main-copy {
+      display:block;
+      font-size:clamp(9.5px,3vw,12px);
+      letter-spacing:-.035em;
+      white-space:nowrap;
     }
 
     .bot-redesign .command-card {
@@ -1129,7 +1179,7 @@
         <div class="eyebrow">UNION MATCH DISCORD BOT</div>
         <h1>Discordでもっとラクに。</h1>
         <p class="lead">
-          <strong>募集通知・期限通知・AIキャラ会話・キャラ設定まで。</strong><br>
+          <strong class="hero-main-copy">X募集通知・募集指揮官通知・掲載期限通知・キャラ設定まで。</strong><br>
           <strong>UNION MATCHとDiscordをつないで、もっと手軽に。</strong>
         </p>
       </div>
@@ -1171,7 +1221,7 @@
         <article class="feature-card">
           <div class="icon">📬</div>
           <h3>UNION MATCHまとめ通知</h3>
-          <p>新しい指揮官・ユニオン募集を8:00 / 14:00 / 20:00（JST）にまとめて通知。指揮官・ユニオンは個別にON / OFFできます。</p>
+          <p>新しい指揮官・ユニオン募集をまとめて通知。指揮官・ユニオンは個別にON / OFFできます。</p>
         </article>
 
         <article class="feature-card">
@@ -1189,7 +1239,7 @@
         <article class="feature-card">
           <div class="icon">🔗</div>
           <h3>ユニオン連携・14日延長</h3>
-          <p><code>/unionmatch</code> から登録状態・掲載状態・利用期限を確認し、利用期間を14日延長できます。</p>
+          <p><code>/unionmatch</code> から登録状態・掲載状態・利用期限を確認し、「登録のみ」から「募集中」への変更や、利用期間の14日延長ができます。</p>
         </article>
 
         <article class="feature-card">
@@ -1217,14 +1267,14 @@
 
         <article class="step">
           <div class="step-no">2</div>
-          <h3><code>/setup</code> を実行</h3>
-          <p>通知先・キャラクター・話し方などを設定します。</p>
+          <h3><code>/setup</code> を実行してPASSを入力</h3>
+          <p>UNION MATCHで発行されたPASSを入力してユニオンを連携します。</p>
         </article>
 
         <article class="step">
           <div class="step-no">3</div>
-          <h3>ユニオンを連携</h3>
-          <p>UNION MATCHで発行されたPASSを最初の1回だけ入力して連携完了。</p>
+          <h3>案内にしたがって設定</h3>
+          <p>表示される案内にしたがって、各通知の送信先チャンネル・期限通知でメンションするロール・使用キャラなどを設定します。</p>
         </article>
       </div>
     </section>
@@ -1236,7 +1286,7 @@
           <h2>選べる4キャラクター</h2>
         </div>
         <div class="section-note">
-          固定3人＋サーバーごとに育てられる育成キャラ。
+          固定3人＋サーバーごとに設定できる自由キャラ。
         </div>
       </div>
 
@@ -1291,13 +1341,13 @@
 
         <article class="character-card adaptive">
           <div class="character-visual">
-            <div class="character-fallback">🧬</div>
+            <div class="character-fallback">🧩</div>
           </div>
           <div class="character-body">
-            <div class="character-tag">ADAPTIVE CHARACTER</div>
-            <div class="character-name">🧬 育成キャラ</div>
+            <div class="character-tag">FREE CHARACTER</div>
+            <div class="character-name">🧩 自由キャラ</div>
             <div class="character-desc">
-              名前・性格・呼び方などを設定して育てるサーバー専用キャラ。
+              名前・性別・呼び名・一人称・性格などを設定できるサーバー専用キャラ。
             </div>
           </div>
         </article>
@@ -1311,7 +1361,7 @@
           <h2>これだけ覚えればOK</h2>
         </div>
         <div class="section-note">
-          コマンドと、話しかけるだけで使える操作をまとめています。
+          よく使う4つのコマンドをまとめています。
         </div>
       </div>
 
@@ -1320,78 +1370,31 @@
         <article class="command-card">
           <div class="cmd">/setup <span class="badge">最初に使う</span></div>
           <div class="desc">
-            通知先・キャラクター・話し方・ユニオンPASS連携をまとめて設定。<br>
-            初期設定後の設定変更・ユニオン連携解除・BOTの完全初期化にも使います。
+            初回設定や設定変更に使用します。UNION MATCHのPASSを入力して連携し、案内にしたがって通知先・期限メンション・使用キャラなどを設定できます。
           </div>
-          <div class="natural">💬 最初の設定も、あとからの変更・解除もこのコマンドから。</div>
           <button class="copy-command" type="button" data-copy="/setup">📋 コピー</button>
         </article>
 
         <article class="command-card">
           <div class="cmd">/botprofiles</div>
           <div class="desc">
-            キャラクターの名前・画像・プロフィール設定をまとめて変更。
+            固定3キャラの名前・画像変更や、自由キャラのプロフィール設定をまとめて行います。使用するキャラもここから選択できます。
           </div>
           <button class="copy-command" type="button" data-copy="/botprofiles">📋 コピー</button>
         </article>
 
         <article class="command-card">
-          <div class="cmd">/botname</div>
-          <div class="desc">現在選択中のキャラクターのBOT名を変更。</div>
-          <div class="natural">
-            💬 例：<code>/botname</code> → 新しいBOT名を入力
-          </div>
-          <button class="copy-command" type="button" data-copy="/botname">📋 コピー</button>
-        </article>
-
-        <article class="command-card">
-          <div class="cmd">/botimage</div>
-          <div class="desc">現在選択中のキャラクターのBOT画像を変更。</div>
-          <div class="natural">
-            💬 例：<code>/botimage</code> → 変更したい画像を選択<br>
-            ⚠️ Discord側の制限により、短時間に何度も画像を変更すると一時的に変更できない場合があります。その場合は少し時間を置いてから再度お試しください。
-          </div>
-          <button class="copy-command" type="button" data-copy="/botimage">📋 コピー</button>
-        </article>
-
-        <article class="command-card">
-          <div class="cmd">/botreset</div>
+          <div class="cmd">/unionmatch</div>
           <div class="desc">
-            現在選択中のキャラクターを標準名・標準画像へ戻す。
+            登録状態・掲載状態・利用期限を確認し、「登録のみ」から「募集中」への変更や、利用期間の14日延長ができます。
           </div>
-          <div class="natural">
-            💬 例：<code>/botreset</code> → 現在のキャラを標準名・標準画像へ戻す
-          </div>
-          <button class="copy-command" type="button" data-copy="/botreset">📋 コピー</button>
+          <button class="copy-command" type="button" data-copy="/unionmatch">📋 コピー</button>
         </article>
 
         <article class="command-card">
           <div class="cmd">/guide</div>
-          <div class="desc">Discord内でBOTの使い方をもう一度表示。</div>
-          <div class="natural">💬 使い方を忘れたらこのコマンド。</div>
+          <div class="desc">Discord内でBOTの使い方をもう一度確認できます。</div>
           <button class="copy-command" type="button" data-copy="/guide">📋 コピー</button>
-        </article>
-
-        <article class="command-card">
-          <div class="cmd">@BOT キャラを変更</div>
-          <div class="desc">
-            キャラ変更はコマンド不要。BOTへ普通に話しかけて変更できます。
-          </div>
-          <div class="natural">
-            💬 キャラ変更はBOTに話しかけるだけでもOK。<br>
-            例：@カイリ セバスチャンに変えて<br>
-            例：@セバスチャン なつきにかえて
-          </div>
-          <button class="copy-command" type="button" data-copy="セバスチャンに変えて">📋 コピー</button>
-        </article>
-
-        <article class="command-card">
-          <div class="cmd">@BOT 会話</div>
-          <div class="desc">
-            BOTをメンションして送れば、選択中のAIキャラクターとそのまま会話。
-          </div>
-          <div class="natural">💬 例：「今日のユニレどう？」</div>
-          <button class="copy-command" type="button" data-copy="今日のユニレどう？">📋 コピー</button>
         </article>
 
       </div>
@@ -1403,11 +1406,10 @@
 
       <div class="notice bot-important">
         ・BOTの初期設定やユニオン連携は、基本的にサーバー管理者が行います。<br>
-        ・ユニオンPASSは連携確認に使用します。<br>
-        ・ユニオン未連携サーバーには、そのユニオン専用の期限通知は届きません。<br>
-        ・このBOTは、コマンドやメンションなど必要な操作に応じて動作します。通常の会話を収集・保存することを目的としたBOTではありません。<br>
-        ・もし不具合があった場合は、状況が分かるスクリーンショットを添えてフィードバックにご協力いただけると助かります。<br>
-        ・NIKKE UNION MATCH Discord BOTは非公式ファンBOTです。
+        ・ユニオンPASSは、UNION MATCHとの連携確認に使用します。<br>
+        ・ユニオン未連携のサーバーには、そのユニオン専用の期限通知は届きません。<br>
+        ・BOTは、設定した通知やコマンド操作に応じて動作します。<br>
+        ・不具合があった場合は、状況が分かるスクリーンショットを添えてフィードバックにご協力いただけると助かります。
       </div>
     </section>
 
