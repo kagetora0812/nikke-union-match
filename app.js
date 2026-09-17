@@ -141,7 +141,7 @@ let lastRegisteredRecruitment = null;
 // 紫のX収集カードとTOPの X LISTED 1 を表示する。
 // Supabaseのデータは変更しない。
 // ========================================
-const X_COLLECTED_VISUAL_TEST = true;
+const X_COLLECTED_VISUAL_TEST = false;
 
 // 登録前プレビューの確定フラグ
 let registrationPreviewApproved = false;
