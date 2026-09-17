@@ -135,6 +135,14 @@ const $ = selector =>
 
 let lastRegisteredRecruitment = null;
 
+// ========================================
+// X収集カード 表示テスト
+// true の間だけ、既存の公開X募集URLを1件借りて
+// 紫のX収集カードとTOPの X LISTED 1 を表示する。
+// Supabaseのデータは変更しない。
+// ========================================
+const X_COLLECTED_VISUAL_TEST = true;
+
 // 登録前プレビューの確定フラグ
 let registrationPreviewApproved = false;
 let registrationPreviewObjectUrl = null;
@@ -2270,6 +2278,66 @@ function buildXShareText(
 
 
 // ========================================
+// X収集カード 表示テスト helpers
+// ========================================
+
+function updateXListedTopCount(count) {
+
+  const stat =
+    $("#xListedTopStat");
+
+  const counter =
+    $("#xListedCountTop");
+
+  const safeCount =
+    Math.max(0, Number(count) || 0);
+
+  if (!stat || !counter) {
+    return;
+  }
+
+  if (safeCount <= 0) {
+    counter.textContent = "0";
+    stat.classList.add("hidden");
+    return;
+  }
+
+  counter.textContent =
+    String(safeCount);
+
+  stat.classList.remove("hidden");
+}
+
+
+function buildXCollectedTestCard(url) {
+
+  if (!url || !isXRecruitmentUrl(url)) {
+    return "";
+  }
+
+  return `
+    <article class="card x-collected-card x-collected-test-card">
+      <div class="card-head x-collected-card-head">
+        <div class="type-with-new">
+          <span class="x-listed-badge">𝕏 LISTED</span>
+          <span class="new-badge">🔥 NEW</span>
+        </div>
+      </div>
+
+      <div class="x-post-area">
+        ${buildRecruitmentPreviewMedia(
+          url,
+          "",
+          true,
+          false
+        )}
+      </div>
+    </article>
+  `;
+}
+
+
+// ========================================
 // 募集一覧
 // ========================================
 
@@ -2446,6 +2514,23 @@ async function loadRecruitments() {
   const unions =
     unionResult.data ||
     [];
+
+
+  // 表示テスト中は、すでに公開されているX募集URLを1件だけ借りる。
+  // DBへの追加・更新は行わない。
+  const xCollectedTestUrl =
+    X_COLLECTED_VISUAL_TEST
+      ? [
+          ...commanders,
+          ...unions
+        ]
+          .map(item => item?.x_url || "")
+          .find(url => isXRecruitmentUrl(url)) || ""
+      : "";
+
+  updateXListedTopCount(
+    xCollectedTestUrl ? 1 : 0
+  );
 
 
   // ======================================
@@ -2791,6 +2876,15 @@ const deadlineBadge =
           }
         )
         .join("");
+
+    if (xCollectedTestUrl) {
+      list.insertAdjacentHTML(
+        "afterbegin",
+        buildXCollectedTestCard(
+          xCollectedTestUrl
+        )
+      );
+    }
 
   }
 
