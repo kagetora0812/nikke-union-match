@@ -1714,105 +1714,175 @@
 
     /* =========================================================
        FINAL RED ACCENT UNIFICATION
-       - return background saturation a bit
-       - replace remaining blue accents with red on this page
+       - vivid red accent: #FF0030
+       - background saturation: 68%
        ========================================================= */
     :root{
-      --cyan:#E5485B;
-      --cyan2:#FF6B78;
+      --cyan:#FF0030;
+      --cyan2:#FF4D68;
     }
+
+    /* Background video */
     .bot-motion-bg video{
       filter:saturate(.68) contrast(1.03) brightness(.92)!important;
     }
-    .section-en{
-      color:#E5485B!important;
+
+    /* HERO: pure white only — no line / glow / gradient */
+    .hero-title,
+    .hero-title .hero-title-base{
+      color:#ffffff!important;
       background:none!important;
       -webkit-background-clip:initial!important;
       background-clip:initial!important;
-      -webkit-text-fill-color:#E5485B!important;
+      -webkit-text-fill-color:#ffffff!important;
+      mix-blend-mode:normal!important;
+      text-shadow:none!important;
+      filter:none!important;
+      animation:none!important;
+      -webkit-text-stroke:0!important;
+      text-decoration:none!important;
+      border:0!important;
+      box-shadow:none!important;
+    }
+    .hero-title::before,
+    .hero-title::after,
+    .hero-title .hero-title-base::before,
+    .hero-title .hero-title-base::after{
+      display:none!important;
+      content:none!important;
+    }
+
+    /* Section headings: vivid red */
+    .section-en{
+      color:#FF0030!important;
+      background:none!important;
+      -webkit-background-clip:initial!important;
+      background-clip:initial!important;
+      -webkit-text-fill-color:#FF0030!important;
       mix-blend-mode:normal!important;
       opacity:1!important;
       filter:none!important;
       animation:none!important;
       text-shadow:none!important;
     }
+
+    /* Header / home */
     .bot-brand::before{
-      background:#E5485B!important;
-      box-shadow:0 0 16px rgba(229,72,91,.20)!important;
+      background:#FF0030!important;
+      box-shadow:0 0 14px rgba(255,0,48,.22)!important;
     }
-    .site-menu-drawer>a:hover{color:#FF6B78!important}
+    .site-menu-drawer>a:hover{color:#FF4D68!important}
     .bot-pc-home{
-      border-color:rgba(229,72,91,.52)!important;
+      border-color:rgba(255,0,48,.62)!important;
       color:#ffffff!important;
     }
     .bot-pc-home:hover{
-      border-color:#FF6B78!important;
-      background:rgba(229,72,91,.12)!important;
+      border-color:#FF0030!important;
+      background:rgba(255,0,48,.13)!important;
+      box-shadow:0 0 14px rgba(255,0,48,.14)!important;
     }
+
+    /* Main CTA */
     .invite-btn{
-      border-color:rgba(229,72,91,.54)!important;
+      border-color:rgba(255,0,48,.66)!important;
       background:rgba(18,7,9,.12)!important;
       box-shadow:inset 0 0 0 1px rgba(255,255,255,.012),0 8px 26px rgba(0,0,0,.10)!important;
     }
     .invite-btn::before{
-      background:linear-gradient(92deg,transparent 0%,rgba(229,72,91,.10) 28%,rgba(255,107,120,.26) 48%,rgba(255,151,160,.16) 64%,transparent 100%)!important;
+      background:linear-gradient(92deg,transparent 0%,rgba(255,0,48,.10) 28%,rgba(255,77,104,.30) 50%,rgba(255,126,143,.16) 66%,transparent 100%)!important;
     }
     .invite-btn::after{
-      border-color:rgba(229,72,91,0)!important;
-      box-shadow:0 0 0 rgba(229,72,91,0),inset 0 0 0 rgba(255,107,120,0)!important;
+      border-color:rgba(255,0,48,0)!important;
+      box-shadow:0 0 0 rgba(255,0,48,0),inset 0 0 0 rgba(255,77,104,0)!important;
     }
     .invite-btn:hover,
     .invite-btn:focus-visible{
-      border-color:#FF6B78!important;
-      background:rgba(94,18,29,.12)!important;
-      box-shadow:0 12px 36px rgba(0,0,0,.16),0 0 18px rgba(229,72,91,.16),0 0 38px rgba(229,72,91,.10),inset 0 0 16px rgba(255,107,120,.06)!important;
+      border-color:#FF0030!important;
+      background:rgba(110,0,23,.14)!important;
+      box-shadow:0 12px 36px rgba(0,0,0,.16),0 0 20px rgba(255,0,48,.18),0 0 38px rgba(255,0,48,.11)!important;
     }
     .invite-btn:hover::after,
     .invite-btn:focus-visible::after{
       opacity:1!important;
-      border-color:rgba(229,72,91,.34)!important;
-      box-shadow:0 0 22px rgba(229,72,91,.14),inset 0 0 14px rgba(255,107,120,.06)!important;
+      border-color:rgba(255,0,48,.40)!important;
+      box-shadow:0 0 22px rgba(255,0,48,.16),inset 0 0 14px rgba(255,77,104,.07)!important;
     }
-    .stay-toggle .swap{color:#E5485B!important}
-    .glass-card{border-color:rgba(229,72,91,.24)!important}
-    .feature-card::after{background:#E5485B!important}
+
+    /* STAY CONNECTED */
+    .stay-toggle .swap{
+      color:#FF0030!important;
+      -webkit-text-fill-color:#FF0030!important;
+      text-shadow:none!important;
+      filter:none!important;
+    }
+
+    /* BOT FEATURES — red gradient borders */
+    .feature-card{
+      border:1px solid transparent!important;
+      background:
+        linear-gradient(145deg,rgba(17,22,29,.82),rgba(6,9,14,.68)) padding-box,
+        linear-gradient(135deg,#FF0030 0%,#FF3657 44%,#FF7188 100%) border-box!important;
+    }
+    .feature-card::after{
+      background:linear-gradient(90deg,#FF0030 0%,#FF3657 48%,#FF7188 100%)!important;
+    }
     .feature-card:hover{
-      border-color:rgba(229,72,91,.40)!important;
-      box-shadow:0 22px 55px rgba(0,0,0,.26),0 0 26px rgba(229,72,91,.09)!important;
+      border-color:transparent!important;
+      background:
+        linear-gradient(145deg,rgba(19,27,35,.88),rgba(7,11,16,.72)) padding-box,
+        linear-gradient(135deg,#FF0030 0%,#FF3657 44%,#FF7188 100%) border-box!important;
+      box-shadow:0 22px 55px rgba(0,0,0,.26),0 0 28px rgba(255,0,48,.10)!important;
     }
-    .feature-no,
+    .feature-no{
+      color:#FF4D68!important;
+    }
+    .feature-shared{
+      border-left:2px solid transparent!important;
+      border-image:linear-gradient(180deg,#FF0030,#FF7188) 1!important;
+    }
+
+    /* Other cards / controls — red accent */
+    .glass-card{border-color:rgba(255,0,48,.25)!important}
+    .feature-card{border-color:transparent!important}
+    code{color:#FF4D68!important}
+    .profile-demo-avatar{
+      background:linear-gradient(135deg,#FF0030,#FF7188)!important;
+    }
+    .profile-actions span{
+      border-color:rgba(255,0,48,.28)!important;
+      background:rgba(255,0,48,.08)!important;
+      color:#fff4f6!important;
+    }
     .character-card .first-tag,
     .first-tag,
     .site-menu-drawer .accent,
     .feature-shared strong,
     .slider-status,
-    .cmd{color:#FF6B78!important}
+    .cmd{color:#FF4D68!important}
     .first-tag{
-      background:#FF6B78!important;
+      background:#FF4D68!important;
       color:#120609!important;
-    }
-    .feature-shared{
-      border-left-color:#E5485B!important;
     }
     .copy-command,
     .slider-arrow{
-      border-color:rgba(229,72,91,.44)!important;
+      border-color:rgba(255,0,48,.52)!important;
     }
     .copy-command:hover,
     .slider-arrow:hover,
     .slider-arrow:focus-visible{
-      border-color:#FF6B78!important;
-      background:rgba(229,72,91,.11)!important;
-      box-shadow:0 0 16px rgba(229,72,91,.14)!important;
+      border-color:#FF0030!important;
+      background:rgba(255,0,48,.12)!important;
+      box-shadow:0 0 16px rgba(255,0,48,.16)!important;
     }
     .bot-bottom-nav>a:nth-child(2){
-      background:rgba(229,72,91,.09)!important;
-      box-shadow:inset 0 2px 0 rgba(229,72,91,.72)!important;
+      background:rgba(255,0,48,.10)!important;
+      box-shadow:inset 0 2px 0 rgba(255,0,48,.78)!important;
     }
-    .command-card .cmd{color:#FF6B78!important}
+    .command-card .cmd{color:#FF4D68!important}
     .important-side .kv strong,
     .important-side .kv b,
-    .important-side .kv .label{color:#FF6B78!important}
+    .important-side .kv .label{color:#FF4D68!important}
+
     @media (max-width:600px){
       .hero-center{transform:translateY(7.2vh)!important}
     }
