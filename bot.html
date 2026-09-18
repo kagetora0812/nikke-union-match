@@ -1372,39 +1372,22 @@
       position:relative;
       z-index:1;
       display:block;
-      color:rgba(242,249,255,.52);
+      color:#ffffff;
       background:none;
       -webkit-background-clip:initial;
       background-clip:initial;
-      -webkit-text-fill-color:rgba(242,249,255,.52);
+      -webkit-text-fill-color:#ffffff;
       animation:none;
       filter:none;
       mix-blend-mode:screen;
       text-shadow:
-        0 0 10px rgba(95,220,255,.14),
-        0 0 26px rgba(154,124,255,.08);
+        0 0 10px rgba(255,255,255,.14),
+        0 0 22px rgba(120,220,255,.10);
       -webkit-text-stroke:0 transparent;
     }
-    .hero-title-fire-canvas{
-      position:absolute;
-      z-index:2;
-      inset:0;
-      width:100%;
-      height:100%;
-      pointer-events:none;
-      mix-blend-mode:screen;
-      opacity:1;
-      filter:saturate(1.9) brightness(2.05) contrast(1.32) drop-shadow(0 0 10px rgba(255,126,48,.22)) drop-shadow(0 0 18px rgba(255,170,80,.14));
-    }
+    .hero-title-fire-canvas,
     .hero-title-fire-source{
-      position:absolute;
-      z-index:-10;
-      width:2px;
-      height:2px;
-      left:50%;
-      top:50%;
-      opacity:.001;
-      pointer-events:none;
+      display:none!important;
     }
 
     /* Shared slider navigation. Hidden on full desktop. */
@@ -1608,7 +1591,7 @@
        ========================================================= */
     .bot-motion-bg video{
       opacity:1!important;
-      filter:none!important;
+      filter:grayscale(1) contrast(1.04) brightness(.92)!important;
       transform:scale(1.01);
     }
     .bot-motion-bg::after{
@@ -2348,13 +2331,17 @@
   </script>
 
   <script>
-    // DISCORD BOT の文字部分だけに title-fire.mp4 を描画する。
+    // DISCORD BOT の炎演出は無効化。タイトルは白100%で表示する。
     (() => {
       const title = document.querySelector(".hero-title");
       const textEl = document.querySelector(".hero-title-base");
       const canvas = document.getElementById("heroTitleFireCanvas");
       const video = document.getElementById("heroTitleFireVideo");
       if (!title || !textEl || !canvas || !video) return;
+      canvas.style.display = "none";
+      video.pause?.();
+      video.style.display = "none";
+      return;
 
       const ctx = canvas.getContext("2d", { alpha:true });
       if (!ctx) return;
