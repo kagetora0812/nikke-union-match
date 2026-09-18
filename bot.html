@@ -1803,7 +1803,6 @@
     }
     .invite-btn:hover::after,
     .invite-btn:focus-visible::after{
-      opacity:1!important;
       border-color:rgba(255,0,48,.40)!important;
       box-shadow:0 0 22px rgba(255,0,48,.16),inset 0 0 14px rgba(255,77,104,.07)!important;
     }
@@ -1886,6 +1885,154 @@
     @media (max-width:600px){
       .hero-center{transform:translateY(7.2vh)!important}
     }
+
+    /* =========================================================
+       FINAL SYNCED RED EFFECTS — 4s cycle
+       T corner spark / CTA border orbit / swap triple flash
+       ========================================================= */
+
+    /* BOT FEATURES: keep the red gradient border, remove the red/black fill gradient */
+    .feature-card,
+    .feature-card:hover{
+      border:1px solid transparent!important;
+      background:
+        linear-gradient(rgba(8,10,14,.78),rgba(8,10,14,.78)) padding-box,
+        linear-gradient(135deg,#FF0030 0%,#FF3657 44%,#FF7188 100%) border-box!important;
+    }
+    .feature-card:hover{
+      box-shadow:0 22px 55px rgba(0,0,0,.26),0 0 28px rgba(255,0,48,.10)!important;
+    }
+
+    /* Final T only: small pure-red sparkle at the upper-right edge */
+    .hero-title .spark-t{
+      position:relative;
+      display:inline-block;
+      color:inherit;
+      -webkit-text-fill-color:inherit;
+    }
+    .hero-title .spark-t::after{
+      content:""!important;
+      display:block!important;
+      position:absolute;
+      z-index:3;
+      width:.105em;
+      height:.105em;
+      right:-.035em;
+      top:.015em;
+      border-radius:50%;
+      background:#FF0000;
+      opacity:0;
+      transform:scale(.22);
+      box-shadow:
+        0 0 .045em #FF0000,
+        0 0 .12em rgba(255,0,0,.95),
+        0 0 .24em rgba(255,0,0,.62),
+        -.08em 0 .04em rgba(255,0,0,.38),
+        0 .08em .04em rgba(255,0,0,.32);
+      animation:tCornerSpark4s 4s ease-in-out infinite!important;
+      pointer-events:none;
+    }
+
+    /* CTA: static red border + one bright segment running once around the edge */
+    .invite-btn{
+      isolation:isolate;
+      border-color:rgba(255,0,48,.72)!important;
+    }
+    .invite-btn::after{
+      content:""!important;
+      display:block!important;
+      position:absolute;
+      inset:-1px;
+      z-index:0;
+      padding:2px;
+      border:0!important;
+      background:conic-gradient(
+        from 0deg,
+        transparent 0deg,
+        transparent 294deg,
+        rgba(255,0,0,.18) 306deg,
+        #FF0000 326deg,
+        #FF5A6E 338deg,
+        transparent 354deg,
+        transparent 360deg
+      )!important;
+      -webkit-mask:
+        linear-gradient(#000 0 0) content-box,
+        linear-gradient(#000 0 0);
+      -webkit-mask-composite:xor;
+      mask-composite:exclude;
+      opacity:0;
+      transform:rotate(0deg);
+      transform-origin:50% 50%;
+      box-shadow:none!important;
+      animation:ctaBorderOrbit4s 4s linear infinite!important;
+      pointer-events:none;
+    }
+    .invite-btn span{position:relative;z-index:2}
+
+    /* ⇄ : three restrained flashes in the same 4s cycle */
+    .stay-toggle .swap{
+      color:#FF0030!important;
+      -webkit-text-fill-color:#FF0030!important;
+      animation:swapTripleFlash4s 4s ease-in-out infinite!important;
+      will-change:filter,text-shadow,transform,color;
+    }
+
+    @keyframes tCornerSpark4s{
+      0%,2%,13%,100%{
+        opacity:0;
+        transform:scale(.22);
+      }
+      4%{
+        opacity:1;
+        transform:scale(1.12);
+      }
+      7%{
+        opacity:.92;
+        transform:scale(.78);
+      }
+      10%{
+        opacity:.38;
+        transform:scale(.45);
+      }
+    }
+
+    @keyframes ctaBorderOrbit4s{
+      0%{
+        opacity:0;
+        transform:rotate(0deg);
+      }
+      2%{opacity:1}
+      24%{
+        opacity:1;
+        transform:rotate(360deg);
+      }
+      28%,100%{
+        opacity:0;
+        transform:rotate(360deg);
+      }
+    }
+
+    @keyframes swapTripleFlash4s{
+      0%,3%,7%,11%,15%,19%,100%{
+        color:#FF0030;
+        -webkit-text-fill-color:#FF0030;
+        text-shadow:none;
+        filter:none;
+        transform:scale(1);
+      }
+      2%,6%,10%{
+        color:#FF0000;
+        -webkit-text-fill-color:#FF0000;
+        text-shadow:
+          0 0 5px rgba(255,0,0,.95),
+          0 0 13px rgba(255,0,0,.72),
+          0 0 24px rgba(255,0,0,.42);
+        filter:brightness(1.32);
+        transform:scale(1.025);
+      }
+    }
+
   </style>
 
   <script>
@@ -2064,7 +2211,7 @@
     <section class="hero" aria-label="UNION MATCH Discord BOT">
       <div class="hero-center">
         <h1 class="hero-title" aria-label="DISCORD BOT">
-          <span class="hero-title-base">DISCORD BOT</span>
+          <span class="hero-title-base">DISCORD BO<span class="spark-t" aria-hidden="true">T</span></span>
         </h1>
 
         <a
