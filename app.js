@@ -2602,9 +2602,11 @@ async function loadRecruitments() {
 
   // X収集候補はBOT側の48時間ライフサイクルに加え、
   // 公開RPCと画面側でも48時間以内だけに限定する。
-  updateXListedTopCount(
-    xCollectedCandidates.length
-  );
+  // TOPのCOMMANDERSだけ、サイト登録中 + X掲載中を合算する。
+  // X掲載中の指揮官はMATCHEDには加算しない。
+  const topCommanderCount =
+    commanders.length +
+    xCollectedCandidates.length;
 
 
   // ======================================
@@ -2617,7 +2619,7 @@ async function loadRecruitments() {
 
     $("#commanderCountTop")
       .textContent =
-      commanders.length;
+      topCommanderCount;
 
   }
 
