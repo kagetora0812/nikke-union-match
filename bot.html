@@ -1073,23 +1073,24 @@
       content:"";
       position:absolute;
       z-index:-1;
-      left:-12%;
-      right:-12%;
-      top:8%;
-      bottom:2%;
+      left:-16%;
+      right:-16%;
+      top:-18%;
+      bottom:-18%;
       pointer-events:none;
-      opacity:.34;
-      filter:blur(42px);
-      transform:translate3d(-10%,0,0) scaleX(.92);
+      opacity:.44;
+      filter:blur(34px);
+      transform:translate3d(-8%,0,0) scaleX(.94);
       background:
         linear-gradient(
           100deg,
-          transparent 4%,
-          rgba(49,196,243,.10) 20%,
-          rgba(111,224,255,.36) 39%,
-          rgba(154,124,255,.28) 61%,
-          rgba(92,160,255,.16) 77%,
-          transparent 96%
+          transparent 2%,
+          rgba(255,255,255,.10) 16%,
+          rgba(120,224,255,.28) 38%,
+          rgba(255,255,255,.18) 52%,
+          rgba(154,124,255,.16) 68%,
+          rgba(120,220,255,.14) 82%,
+          transparent 98%
         );
       animation:heroAuraDrift 14s ease-in-out infinite;
     }
@@ -1319,7 +1320,7 @@
 
     /* =========================================================
        2026-09-18 FINAL BOT PAGE TUNE
-       - HERO title: title-fire.mp4 is clipped to DISCORD BOT letters only
+       - HERO title: solid white with transparent glow
        - Section titles: bright screen-style treatment (no faded opacity)
        - FEATURES / CHARACTERS: tablet + mobile sliders with arrows + page count
        - CHARACTERS: compact mobile/tablet cards
@@ -1381,13 +1382,10 @@
       filter:none;
       mix-blend-mode:screen;
       text-shadow:
-        0 0 10px rgba(255,255,255,.14),
-        0 0 22px rgba(120,220,255,.10);
+        0 0 6px rgba(255,255,255,.28),
+        0 0 18px rgba(255,255,255,.18),
+        0 0 34px rgba(120,220,255,.14);
       -webkit-text-stroke:0 transparent;
-    }
-    .hero-title-fire-canvas,
-    .hero-title-fire-source{
-      display:none!important;
     }
 
     /* Shared slider navigation. Hidden on full desktop. */
@@ -1599,6 +1597,56 @@
       content:none!important;
       background:none!important;
     }
+
+    /* =========================================================
+       SMARTPHONE HERO CENTER + WHITE GLOW
+       - DISCORD BOT title is vertically centered in the visible area
+       - install button sits below without pulling the title upward
+       ========================================================= */
+    @media (max-width:600px){
+      .hero{
+        box-sizing:border-box;
+        min-height:calc(100dvh - var(--header-h) - var(--bottom-h) - env(safe-area-inset-bottom));
+        height:calc(100dvh - var(--header-h) - var(--bottom-h) - env(safe-area-inset-bottom));
+        padding:0 18px;
+      }
+      .hero-center{
+        width:100%;
+        height:100%;
+        display:grid;
+        grid-template-rows:1fr auto 1fr;
+        align-items:center;
+        justify-items:center;
+        gap:0;
+      }
+      .hero-title{
+        grid-row:2;
+        align-self:center;
+        justify-self:center;
+        margin:0;
+      }
+      .invite-btn{
+        grid-row:3;
+        align-self:start;
+        justify-self:center;
+        margin-top:30px;
+      }
+      .hero-title::before{
+        left:-20%;
+        right:-20%;
+        top:-34%;
+        bottom:-34%;
+        opacity:.50;
+        filter:blur(30px);
+      }
+      .hero-title .hero-title-base{
+        text-shadow:
+          0 0 6px rgba(255,255,255,.34),
+          0 0 18px rgba(255,255,255,.22),
+          0 0 32px rgba(120,220,255,.16);
+      }
+    }
+
   </style>
 
   <script>
@@ -1778,10 +1826,6 @@
       <div class="hero-center">
         <h1 class="hero-title" aria-label="DISCORD BOT">
           <span class="hero-title-base">DISCORD BOT</span>
-          <canvas id="heroTitleFireCanvas" class="hero-title-fire-canvas" aria-hidden="true"></canvas>
-          <video id="heroTitleFireVideo" class="hero-title-fire-source" autoplay muted loop playsinline preload="auto" aria-hidden="true">
-            <source src="./assets/bot/title-fire.mp4" type="video/mp4">
-          </video>
         </h1>
 
         <a
@@ -2330,108 +2374,6 @@
     })();
   </script>
 
-  <script>
-    // DISCORD BOT の炎演出は無効化。タイトルは白100%で表示する。
-    (() => {
-      const title = document.querySelector(".hero-title");
-      const textEl = document.querySelector(".hero-title-base");
-      const canvas = document.getElementById("heroTitleFireCanvas");
-      const video = document.getElementById("heroTitleFireVideo");
-      if (!title || !textEl || !canvas || !video) return;
-      canvas.style.display = "none";
-      video.pause?.();
-      video.style.display = "none";
-      return;
-
-      const ctx = canvas.getContext("2d", { alpha:true });
-      if (!ctx) return;
-      const label = "DISCORD BOT";
-      let cssWidth = 1;
-      let cssHeight = 1;
-      let dpr = 1;
-      let frameId = 0;
-
-      function resizeCanvas() {
-        const rect = textEl.getBoundingClientRect();
-        cssWidth = Math.max(1, rect.width);
-        cssHeight = Math.max(1, rect.height);
-        dpr = Math.min(window.devicePixelRatio || 1, 1.5);
-        canvas.width = Math.max(1, Math.round(cssWidth * dpr));
-        canvas.height = Math.max(1, Math.round(cssHeight * dpr));
-        canvas.style.width = `${cssWidth}px`;
-        canvas.style.height = `${cssHeight}px`;
-      }
-
-      function drawVideoCover(w, h) {
-        const vw = video.videoWidth || 1;
-        const vh = video.videoHeight || 1;
-
-        // 元素材の炎が小さいため、炎が出る下側エリアだけをかなり強く切り出して
-        // タイトル全体へ複数回引き伸ばして見せる。
-        const sx = vw * 0.04;
-        const sy = vh * 0.50;
-        const sw = vw * 0.92;
-        const sh = vh * 0.44;
-        const t = (video.currentTime || 0) * 0.55;
-        const drift = Math.sin(t * 1.7) * w * 0.04;
-
-        ctx.save();
-        ctx.globalAlpha = 1;
-        ctx.drawImage(video, sx, sy, sw, sh, -w * 0.08 + drift, -h * 0.03, w * 0.72, h * 1.08);
-        ctx.globalAlpha = .95;
-        ctx.drawImage(video, sx, sy, sw, sh,  w * 0.24 + drift, -h * 0.02, w * 0.74, h * 1.06);
-        ctx.globalAlpha = .88;
-        ctx.drawImage(video, sx, sy, sw, sh,  w * 0.54 + drift, -h * 0.01, w * 0.66, h * 1.04);
-        ctx.restore();
-      }
-
-      function render() {
-        const w = canvas.width;
-        const h = canvas.height;
-        ctx.clearRect(0, 0, w, h);
-
-        if (video.readyState >= 2) {
-          const style = getComputedStyle(textEl);
-          const fontSize = parseFloat(style.fontSize) * dpr;
-          const fontWeight = style.fontWeight || "700";
-          const fontFamily = style.fontFamily || "Teko, sans-serif";
-
-          ctx.save();
-          ctx.fillStyle = "#fff";
-          ctx.textAlign = "center";
-          ctx.textBaseline = "middle";
-          ctx.font = `${fontWeight} ${fontSize}px ${fontFamily}`;
-          if ("letterSpacing" in ctx) ctx.letterSpacing = style.letterSpacing;
-          ctx.fillText(label, w / 2, h / 2 + fontSize * 0.015);
-          ctx.globalCompositeOperation = "source-in";
-          drawVideoCover(w, h);
-          ctx.globalCompositeOperation = "lighter";
-          ctx.globalAlpha = .34;
-          drawVideoCover(w, h);
-          ctx.restore();
-        }
-
-        frameId = requestAnimationFrame(render);
-      }
-
-      const start = async () => {
-        try { if (document.fonts?.ready) await document.fonts.ready; } catch (_) {}
-        resizeCanvas();
-        video.muted = true;
-        video.loop = true;
-        video.playsInline = true;
-        video.play().catch(() => {});
-        cancelAnimationFrame(frameId);
-        render();
-      };
-
-      const ro = "ResizeObserver" in window ? new ResizeObserver(resizeCanvas) : null;
-      ro?.observe(textEl);
-      window.addEventListener("resize", resizeCanvas, { passive:true });
-      video.addEventListener("loadeddata", start, { once:true });
-      if (video.readyState >= 2) start();
-    })();
-  </script>
 
   <script>
     // 背景動画をできるだけ途切れず連続再生する。
