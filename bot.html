@@ -366,65 +366,53 @@
     }
     .stay-toggle .swap{
       position:relative;
-      display:inline-block;
-      flex:0 0 1.46em;
-      width:1.46em;
-      height:.82em;
-      color:#FF4D68;
+      color:#E5485B;
       font-family:"Teko",sans-serif;
-      font-size:.86em;
+      font-size:.9em;
       font-weight:600;
       line-height:1;
+      display:inline-block;
       vertical-align:middle;
-    }
-    .stay-toggle .swap-right,
-    .stay-toggle .swap-left{
-      position:absolute;
-      width:1.02em;
-      display:block;
-      color:#FF4D68;
-      -webkit-text-fill-color:#FF4D68;
       text-shadow:none;
-      filter:none;
-      line-height:.58;
-      will-change:color,text-shadow,filter;
     }
-    .stay-toggle .swap-right{
-      top:.03em;
-      left:.28em;
-      text-align:left;
-      animation:swapRightRhythm 1.2s steps(1,end) infinite;
+    .stay-toggle .swap::before,
+    .stay-toggle .swap::after{
+      content:"⇄";
+      position:absolute;
+      inset:0;
+      color:#FF0000;
+      -webkit-text-fill-color:#FF0000;
+      pointer-events:none;
+      opacity:0;
     }
-    .stay-toggle .swap-left{
-      bottom:.03em;
-      left:-.02em;
-      text-align:right;
-      animation:swapLeftRhythm 1.2s steps(1,end) infinite;
+    .stay-toggle .swap::before{
+      clip-path:inset(0 0 50% 0);
+      animation:swapTopRhythm 1.2s steps(1,end) infinite;
     }
-    @keyframes swapRightRhythm{
+    .stay-toggle .swap::after{
+      clip-path:inset(50% 0 0 0);
+      animation:swapBottomRhythm 1.2s steps(1,end) infinite;
+    }
+    @keyframes swapTopRhythm{
       0%,49.999%{
-        color:#FF0000;
-        -webkit-text-fill-color:#FF0000;
+        opacity:1;
         text-shadow:0 0 5px #FF0000,0 0 14px rgba(255,0,0,.78);
         filter:brightness(1.5);
       }
       50%,100%{
-        color:#FF4D68;
-        -webkit-text-fill-color:#FF4D68;
+        opacity:0;
         text-shadow:none;
         filter:none;
       }
     }
-    @keyframes swapLeftRhythm{
+    @keyframes swapBottomRhythm{
       0%,49.999%{
-        color:#FF4D68;
-        -webkit-text-fill-color:#FF4D68;
+        opacity:0;
         text-shadow:none;
         filter:none;
       }
       50%,100%{
-        color:#FF0000;
-        -webkit-text-fill-color:#FF0000;
+        opacity:1;
         text-shadow:0 0 5px #FF0000,0 0 14px rgba(255,0,0,.78);
         filter:brightness(1.5);
       }
@@ -1462,7 +1450,7 @@
       <div class="stay-copy reveal-up" style="--delay:90ms">
         <div class="stay-toggle">
           <span>募集中</span>
-          <span class="swap" aria-label="切り替え"><span class="swap-right" aria-hidden="true">→</span><span class="swap-left" aria-hidden="true">←</span></span>
+          <span class="swap" aria-label="切り替え">⇄</span>
           <span>登録のみ</span>
         </div>
 
