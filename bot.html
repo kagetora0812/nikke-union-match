@@ -1017,6 +1017,297 @@
         transform:none!important;
       }
     }
+
+
+    /* =========================================================
+       2026-09-18 BOT PAGE VISUAL TUNE
+       - 動画を濃く見せる
+       - 見出しを透過トーンへ
+       - HEROを DISCORD BOT に統一
+       - タイトルの青 / シアン / 紫の光を強化
+       - BOT導入ボタンを透明化し hover 時の光を残す
+       ========================================================= */
+
+    /* 背景動画：以前よりかなり見える濃さ */
+    .bot-motion-bg video{
+      opacity:.96;
+      filter:brightness(.78) saturate(.92) contrast(1.04);
+      transform:scale(1.01);
+    }
+    .bot-motion-bg::after{
+      background:
+        linear-gradient(
+          180deg,
+          rgba(3,5,8,.08),
+          rgba(3,5,8,.14) 46%,
+          rgba(3,5,8,.28)
+        ),
+        radial-gradient(
+          circle at 50% 34%,
+          transparent 0 24%,
+          rgba(2,4,7,.06) 62%,
+          rgba(2,4,7,.22) 100%
+        );
+    }
+
+    /* HEROタイトル：文字そのものに流れる光 + 背面の淡いオーラ */
+    .hero-title{
+      position:relative;
+      isolation:isolate;
+      overflow:visible;
+      color:transparent;
+      background:none;
+      -webkit-text-fill-color:initial;
+      animation:none;
+      text-shadow:none;
+      white-space:nowrap;
+    }
+    .hero-title::before{
+      content:"";
+      position:absolute;
+      z-index:-1;
+      left:-12%;
+      right:-12%;
+      top:8%;
+      bottom:2%;
+      pointer-events:none;
+      opacity:.34;
+      filter:blur(42px);
+      transform:translate3d(-10%,0,0) scaleX(.92);
+      background:
+        linear-gradient(
+          100deg,
+          transparent 4%,
+          rgba(49,196,243,.10) 20%,
+          rgba(111,224,255,.36) 39%,
+          rgba(154,124,255,.28) 61%,
+          rgba(92,160,255,.16) 77%,
+          transparent 96%
+        );
+      animation:heroAuraDrift 14s ease-in-out infinite;
+    }
+    .hero-title span{
+      background:
+        linear-gradient(
+          108deg,
+          rgba(255,255,255,.98) 0%,
+          rgba(255,255,255,.98) 16%,
+          rgba(113,224,255,.98) 31%,
+          rgba(229,249,255,1) 42%,
+          rgba(164,139,255,.98) 58%,
+          rgba(241,235,255,1) 68%,
+          rgba(112,213,255,.96) 82%,
+          rgba(255,255,255,.98) 100%
+        );
+      background-size:340% 100%;
+      background-position:0% 50%;
+      -webkit-background-clip:text;
+      background-clip:text;
+      -webkit-text-fill-color:transparent;
+      filter:
+        drop-shadow(0 0 5px rgba(105,220,255,.10))
+        drop-shadow(0 0 18px rgba(112,202,255,.07));
+      animation:heroTitlePrism 13.5s cubic-bezier(.45,.05,.22,.98) infinite;
+    }
+    @keyframes heroTitlePrism{
+      0%{
+        background-position:0% 50%;
+        filter:
+          drop-shadow(0 0 4px rgba(105,220,255,.08))
+          drop-shadow(0 0 16px rgba(112,202,255,.05));
+      }
+      28%{
+        background-position:38% 50%;
+        filter:
+          drop-shadow(0 0 7px rgba(78,211,255,.17))
+          drop-shadow(0 0 22px rgba(78,211,255,.08));
+      }
+      58%{
+        background-position:72% 50%;
+        filter:
+          drop-shadow(0 0 8px rgba(168,139,255,.16))
+          drop-shadow(0 0 24px rgba(154,124,255,.08));
+      }
+      82%{
+        background-position:100% 50%;
+        filter:
+          drop-shadow(0 0 6px rgba(97,220,255,.14))
+          drop-shadow(0 0 19px rgba(97,220,255,.06));
+      }
+      100%{
+        background-position:0% 50%;
+        filter:
+          drop-shadow(0 0 4px rgba(105,220,255,.08))
+          drop-shadow(0 0 16px rgba(112,202,255,.05));
+      }
+    }
+    @keyframes heroAuraDrift{
+      0%,100%{
+        opacity:.22;
+        transform:translate3d(-18%,0,0) scaleX(.86);
+      }
+      38%{
+        opacity:.42;
+        transform:translate3d(2%,0,0) scaleX(1.02);
+      }
+      72%{
+        opacity:.32;
+        transform:translate3d(17%,0,0) scaleX(.94);
+      }
+    }
+
+    /* 各セクション見出し：動画を邪魔しない透過トーン */
+    .section-en{
+      color:rgba(255,255,255,.82);
+      text-shadow:
+        0 1px 0 rgba(255,255,255,.03),
+        0 8px 28px rgba(0,0,0,.16);
+    }
+    .section-ja{
+      color:rgba(236,244,252,.46);
+    }
+
+    /* STAY CONNECTED 内の大見出しも少し透過 */
+    .stay-toggle{
+      color:rgba(255,255,255,.90);
+      text-shadow:0 10px 28px rgba(0,0,0,.18);
+    }
+
+    /* BOTを導入する：通常は透明、hoverで光を残す */
+    .invite-btn{
+      border:1px solid rgba(149,230,255,.42);
+      background:rgba(3,7,11,.10);
+      box-shadow:
+        inset 0 0 0 1px rgba(255,255,255,.015),
+        0 8px 26px rgba(0,0,0,.10);
+      backdrop-filter:blur(3px);
+      -webkit-backdrop-filter:blur(3px);
+      transition:
+        transform .25s ease,
+        border-color .30s ease,
+        background .30s ease,
+        box-shadow .35s ease,
+        color .30s ease;
+    }
+    .invite-btn::before{
+      background:
+        linear-gradient(
+          92deg,
+          transparent 0%,
+          rgba(73,210,255,.08) 26%,
+          rgba(111,230,255,.38) 48%,
+          rgba(161,132,255,.26) 62%,
+          transparent 100%
+        );
+      transition:transform .72s cubic-bezier(.2,.7,.2,1);
+    }
+    .invite-btn::after{
+      content:"";
+      position:absolute;
+      inset:-1px;
+      pointer-events:none;
+      opacity:0;
+      border:1px solid rgba(143,231,255,.0);
+      box-shadow:
+        0 0 0 rgba(49,196,243,0),
+        inset 0 0 0 rgba(154,124,255,0);
+      transition:opacity .35s ease,border-color .35s ease,box-shadow .35s ease;
+    }
+    .invite-btn:hover,
+    .invite-btn:focus-visible{
+      transform:translateY(-2px);
+      color:#fff;
+      border-color:rgba(174,239,255,.92);
+      background:rgba(26,91,118,.09);
+      box-shadow:
+        0 12px 36px rgba(0,0,0,.16),
+        0 0 16px rgba(55,205,255,.19),
+        0 0 38px rgba(55,205,255,.10),
+        0 0 52px rgba(154,124,255,.07),
+        inset 0 0 22px rgba(56,192,238,.07);
+    }
+    .invite-btn:hover::after,
+    .invite-btn:focus-visible::after{
+      opacity:1;
+      border-color:rgba(143,231,255,.34);
+      box-shadow:
+        0 0 24px rgba(49,196,243,.16),
+        inset 0 0 18px rgba(154,124,255,.07);
+    }
+    .invite-btn:focus-visible{
+      outline:none;
+    }
+
+    /* ---------- TABLET BOT FEATURES FIX ----------
+       タブレットはスマホと同じ「1枚ずつ横スライド」のカード表示にする。
+       iPad Pro系の横向き(〜1366px)も pointer:coarse で確実に対象化。 */
+    @media (min-width:601px) and (max-width:1366px) and (pointer:coarse),
+           (min-width:601px) and (max-width:1180px){
+      .feature-section{
+        min-height:0;
+      }
+      .feature-grid{
+        display:flex!important;
+        grid-template-columns:none!important;
+        gap:16px;
+        margin-left:-17px;
+        margin-right:-17px;
+        padding:0 17px 12px;
+        overflow-x:auto;
+        overflow-y:hidden;
+        scroll-snap-type:x mandatory;
+        scroll-padding-inline:17px;
+        scrollbar-width:none;
+        -ms-overflow-style:none;
+        -webkit-overflow-scrolling:touch;
+        touch-action:pan-x;
+      }
+      .feature-grid::-webkit-scrollbar{
+        display:none;
+      }
+      .feature-card{
+        box-sizing:border-box;
+        flex:0 0 min(78vw,560px)!important;
+        width:min(78vw,560px)!important;
+        min-width:min(78vw,560px)!important;
+        max-width:min(78vw,560px)!important;
+        min-height:360px;
+        padding:26px 26px 24px;
+        scroll-snap-align:center;
+        scroll-snap-stop:always;
+      }
+      .feature-card h3{
+        font-size:24px;
+        line-height:1.35;
+      }
+      .feature-lead{
+        font-size:13.5px;
+        line-height:1.7;
+      }
+      .feature-card p{
+        font-size:12.5px;
+        line-height:1.82;
+      }
+      .feature-tip{
+        font-size:11px!important;
+      }
+      .slider-status{
+        display:block;
+      }
+    }
+
+    /* タブレット・スマホでも HERO は折り返させない */
+    @media (max-width:1024px){
+      .hero-title{white-space:nowrap}
+    }
+    @media (max-width:600px){
+      .hero-title::before{
+        left:-18%;
+        right:-18%;
+        filter:blur(32px);
+      }
+    }
+
   </style>
 
   <script>
@@ -1140,7 +1431,7 @@
   </script>
 
   <div class="bot-motion-bg" aria-hidden="true">
-    <video id="botBackgroundVideo" autoplay muted loop playsinline preload="metadata">
+    <video id="botBackgroundVideo" autoplay muted loop playsinline preload="auto">
       <source src="./assets/bot/hero.mp4" type="video/mp4">
     </video>
   </div>
@@ -1195,7 +1486,7 @@
     <section class="hero" aria-label="UNION MATCH Discord BOT">
       <div class="hero-center">
         <h1 class="hero-title">
-          <span class="hero-pc-title">UNION MATCH&nbsp;&nbsp;DISCORD BOT</span>
+          <span class="hero-pc-title">DISCORD BOT</span>
           <span class="hero-mobile-title">DISCORD BOT</span>
         </h1>
 
@@ -1694,9 +1985,46 @@
       window.addEventListener("resize", updateFeatureStatus);
       updateFeatureStatus();
 
-      if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
-        document.getElementById("botBackgroundVideo")?.pause();
-      }
+    })();
+  </script>
+
+
+  <script>
+    // 背景動画をできるだけ途切れず連続再生する。
+    (() => {
+      const video = document.getElementById("botBackgroundVideo");
+      if (!video) return;
+
+      video.muted = true;
+      video.loop = true;
+      video.playsInline = true;
+
+      const keepPlaying = () => {
+        if (document.hidden) return;
+        const playPromise = video.play();
+        if (playPromise && typeof playPromise.catch === "function") {
+          playPromise.catch(() => {});
+        }
+      };
+
+      video.addEventListener("ended", () => {
+        video.currentTime = 0;
+        keepPlaying();
+      });
+
+      video.addEventListener("pause", () => {
+        if (!document.hidden && !video.ended) {
+          window.setTimeout(keepPlaying, 120);
+        }
+      });
+
+      video.addEventListener("canplay", keepPlaying, { once:true });
+      document.addEventListener("visibilitychange", () => {
+        if (!document.hidden) keepPlaying();
+      });
+      window.addEventListener("pageshow", keepPlaying);
+
+      keepPlaying();
     })();
   </script>
 
