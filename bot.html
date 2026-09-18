@@ -1308,6 +1308,268 @@
       }
     }
 
+  
+
+    /* =========================================================
+       2026-09-18 FINAL BOT PAGE TUNE
+       - HERO title: title-fire.mp4 is clipped to DISCORD BOT letters only
+       - Section titles: bright screen-style treatment (no faded opacity)
+       - FEATURES / CHARACTERS: tablet + mobile sliders with arrows + page count
+       - CHARACTERS: compact mobile/tablet cards
+       ========================================================= */
+
+    /* Section titles: keep them bright, but blend the glow into the movie. */
+    .section-en{
+      color:#f8fdff;
+      background:linear-gradient(105deg,#ffffff 0%,#dff8ff 28%,#8fe8ff 48%,#c8b7ff 70%,#ffffff 100%);
+      background-size:220% 100%;
+      -webkit-background-clip:text;
+      background-clip:text;
+      -webkit-text-fill-color:transparent;
+      mix-blend-mode:screen;
+      opacity:1;
+      filter:drop-shadow(0 0 7px rgba(93,220,255,.18)) drop-shadow(0 0 18px rgba(154,124,255,.08));
+      animation:sectionScreenFlow 12s ease-in-out infinite;
+    }
+    .section-ja{
+      color:#eef8ff;
+      opacity:1;
+      mix-blend-mode:screen;
+      text-shadow:0 0 10px rgba(97,220,255,.10);
+    }
+    .stay-toggle{
+      color:#ffffff;
+      opacity:1;
+      mix-blend-mode:screen;
+      text-shadow:0 0 11px rgba(95,220,255,.10),0 10px 28px rgba(0,0,0,.18);
+    }
+    @keyframes sectionScreenFlow{
+      0%,100%{background-position:0% 50%}
+      50%{background-position:100% 50%}
+    }
+
+    /* HERO: fire movie is rendered only inside the title letters. */
+    .hero-title{
+      position:relative;
+      display:inline-block;
+      width:max-content;
+      max-width:100%;
+      isolation:isolate;
+      color:inherit;
+      background:none;
+      -webkit-text-fill-color:initial;
+      animation:none;
+      white-space:nowrap;
+    }
+    .hero-title .hero-title-base{
+      position:relative;
+      z-index:1;
+      display:block;
+      color:#b9c7cf;
+      background:none;
+      -webkit-background-clip:initial;
+      background-clip:initial;
+      -webkit-text-fill-color:#b9c7cf;
+      animation:none;
+      filter:none;
+      text-shadow:0 0 11px rgba(95,220,255,.13),0 0 28px rgba(154,124,255,.07);
+      -webkit-text-stroke:.35px rgba(236,251,255,.50);
+    }
+    .hero-title-fire-canvas{
+      position:absolute;
+      z-index:2;
+      inset:0;
+      width:100%;
+      height:100%;
+      pointer-events:none;
+      mix-blend-mode:screen;
+      filter:saturate(1.18) brightness(1.18) contrast(1.08) drop-shadow(0 0 8px rgba(83,215,255,.15));
+    }
+    .hero-title-fire-source{
+      position:absolute;
+      z-index:-10;
+      width:2px;
+      height:2px;
+      left:50%;
+      top:50%;
+      opacity:.001;
+      pointer-events:none;
+    }
+
+    /* Shared slider navigation. Hidden on full desktop. */
+    .slider-controls{
+      display:none;
+      align-items:center;
+      justify-content:center;
+      gap:15px;
+      margin-top:16px;
+    }
+    .slider-controls .slider-status{
+      display:block;
+      min-width:64px;
+      margin:0;
+      color:#effbff;
+      font:700 15px/1 "Teko",sans-serif;
+      letter-spacing:.14em;
+      text-align:center;
+      mix-blend-mode:screen;
+    }
+    .slider-arrow{
+      width:42px;
+      height:42px;
+      display:grid;
+      place-items:center;
+      padding:0 0 3px;
+      border:1px solid rgba(151,232,255,.42);
+      border-radius:999px;
+      background:rgba(5,12,18,.20);
+      color:#f7fdff;
+      font:500 31px/1 "Teko",sans-serif;
+      cursor:pointer;
+      backdrop-filter:blur(7px);
+      -webkit-backdrop-filter:blur(7px);
+      transition:transform .2s ease,border-color .2s ease,box-shadow .25s ease,background .2s ease,opacity .2s ease;
+    }
+    .slider-arrow:hover,
+    .slider-arrow:focus-visible{
+      transform:translateY(-1px);
+      border-color:rgba(172,241,255,.92);
+      background:rgba(45,182,231,.10);
+      box-shadow:0 0 16px rgba(49,196,243,.17),0 0 28px rgba(154,124,255,.08);
+      outline:none;
+    }
+    .slider-arrow:disabled{
+      opacity:.28;
+      cursor:default;
+      transform:none;
+      box-shadow:none;
+    }
+
+    /* Tablet + mobile sliders. 1180px covers normal tablets; coarse pointer catches iPad Pro landscape. */
+    @media (max-width:1180px), (min-width:1181px) and (max-width:1366px) and (pointer:coarse){
+      .slider-controls{display:flex}
+
+      .feature-grid,
+      .character-grid{
+        display:flex!important;
+        grid-template-columns:none!important;
+        gap:14px;
+        margin-left:-17px;
+        margin-right:-17px;
+        padding:2px 17px 10px;
+        overflow-x:auto;
+        overflow-y:hidden;
+        scroll-snap-type:x mandatory;
+        scroll-padding-inline:17px;
+        scrollbar-width:none;
+        -ms-overflow-style:none;
+        -webkit-overflow-scrolling:touch;
+        touch-action:pan-x pan-y;
+        overscroll-behavior-x:contain;
+      }
+      .feature-grid::-webkit-scrollbar,
+      .character-grid::-webkit-scrollbar{display:none}
+
+      .feature-card,
+      .character-card{
+        box-sizing:border-box;
+        flex:0 0 min(82vw,560px)!important;
+        width:min(82vw,560px)!important;
+        min-width:min(82vw,560px)!important;
+        max-width:min(82vw,560px)!important;
+        scroll-snap-align:center;
+        scroll-snap-stop:always;
+      }
+
+      /* Characters are intentionally shorter than before. */
+      .character-card{
+        min-height:0!important;
+        height:auto;
+        padding:21px 22px 20px;
+      }
+      .character-card h3{font-size:20px}
+      .character-card>.sub{
+        margin-top:6px;
+        font-size:10.5px;
+        line-height:1.6;
+      }
+      .character-types{
+        margin-top:14px;
+        gap:0;
+      }
+      .type-row{
+        min-height:49px;
+        padding:7px 8px;
+        grid-template-columns:30px 108px 1fr;
+      }
+      .type-symbol{font-size:18px}
+      .type-row b{font-size:12px}
+      .type-row span:last-child{font-size:9.8px;line-height:1.45}
+      .profile-demo{
+        margin-top:13px;
+        padding:12px;
+      }
+      .profile-demo-title{margin-bottom:6px}
+      .profile-demo-row{
+        min-height:32px;
+        padding:5px 7px;
+        margin-top:4px;
+      }
+      .profile-demo-avatar{
+        width:20px;
+        height:20px;
+        flex-basis:20px;
+      }
+      .profile-custom{
+        margin-top:6px;
+        padding:8px;
+        line-height:1.45;
+      }
+      .profile-actions{margin-top:6px}
+      .customize-copy{
+        margin-top:10px;
+        padding-top:10px;
+        line-height:1.6;
+      }
+    }
+
+    @media (max-width:600px){
+      .feature-grid,
+      .character-grid{
+        margin-left:-14px;
+        margin-right:-14px;
+        padding-left:14px;
+        padding-right:14px;
+      }
+      .feature-card,
+      .character-card{
+        flex-basis:86vw!important;
+        width:86vw!important;
+        min-width:86vw!important;
+        max-width:86vw!important;
+      }
+      .character-card{padding:18px 17px}
+      .type-row{grid-template-columns:28px 94px 1fr}
+      .slider-arrow{width:40px;height:40px}
+    }
+
+
+
+    /* =========================================================
+       2026-09-18 BACKGROUND FULL VISIBILITY
+       - hero.mp4: 100% visibility
+       - no dark overlay
+       ========================================================= */
+    .bot-motion-bg video{
+      opacity:1!important;
+      filter:none!important;
+      transform:scale(1.01);
+    }
+    .bot-motion-bg::after{
+      display:none!important;
+      content:none!important;
+      background:none!important;
+    }
   </style>
 
   <script>
@@ -1485,9 +1747,12 @@
 
     <section class="hero" aria-label="UNION MATCH Discord BOT">
       <div class="hero-center">
-        <h1 class="hero-title">
-          <span class="hero-pc-title">DISCORD BOT</span>
-          <span class="hero-mobile-title">DISCORD BOT</span>
+        <h1 class="hero-title" aria-label="DISCORD BOT">
+          <span class="hero-title-base">DISCORD BOT</span>
+          <canvas id="heroTitleFireCanvas" class="hero-title-fire-canvas" aria-hidden="true"></canvas>
+          <video id="heroTitleFireVideo" class="hero-title-fire-source" autoplay muted loop playsinline preload="auto" aria-hidden="true">
+            <source src="./assets/bot/title-fire.mp4" type="video/mp4">
+          </video>
         </h1>
 
         <a
@@ -1598,7 +1863,11 @@
         </article>
       </div>
 
-      <div class="slider-status" id="featureSliderStatus">1 / 6</div>
+      <div class="slider-controls" id="featureSliderControls" aria-label="BOT FEATURES カード操作">
+        <button class="slider-arrow" type="button" data-slider-target="featureSlider" data-slider-dir="-1" aria-label="前の機能を見る">‹</button>
+        <div class="slider-status" id="featureSliderStatus" aria-live="polite">1 / 6</div>
+        <button class="slider-arrow" type="button" data-slider-target="featureSlider" data-slider-dir="1" aria-label="次の機能を見る">›</button>
+      </div>
 
       <div class="feature-shared reveal-up">
         <strong>募集通知について</strong>
@@ -1655,7 +1924,7 @@
         <div class="section-ja">キャラクター</div>
       </header>
 
-      <div class="character-grid">
+      <div class="character-grid" id="characterSlider">
         <article class="glass-card character-card reveal-up">
           <h3>性格を選ぶ</h3>
           <p class="sub">用意されたタイプから選ぶか、カスタムキャラを設定できます。</p>
@@ -1686,7 +1955,6 @@
 
         <article class="glass-card character-card reveal-up" style="--delay:90ms">
           <h3>自分たちだけのキャラクターに</h3>
-          <p class="sub">実際のBOTプロフィール設定をイメージした画面です。</p>
 
           <div class="profile-demo" aria-label="BOTプロフィール設定イメージ">
             <div class="profile-demo-title">BOTプロフィール</div>
@@ -1717,10 +1985,15 @@
           </div>
 
           <div class="customize-copy">
-            <code>/botprofiles</code> から、<strong>好きな名前やプロフィール画像に変更できます。</strong><br>
-            用意されているキャラクターも、自分たちの好きな名前・画像へ変更して、サーバー独自のキャラクターとして利用できます。
+            <strong>自分たちの好きな名前・画像へ変更してご利用できます。</strong>
           </div>
         </article>
+      </div>
+
+      <div class="slider-controls" id="characterSliderControls" aria-label="CHARACTERS カード操作">
+        <button class="slider-arrow" type="button" data-slider-target="characterSlider" data-slider-dir="-1" aria-label="前のキャラクターカードを見る">‹</button>
+        <div class="slider-status" id="characterSliderStatus" aria-live="polite">1 / 2</div>
+        <button class="slider-arrow" type="button" data-slider-target="characterSlider" data-slider-dir="1" aria-label="次のキャラクターカードを見る">›</button>
       </div>
     </section>
 
@@ -1941,53 +2214,174 @@
             }
           });
         },
-        {
-          root:null,
-          threshold:.12,
-          rootMargin:"0px 0px -6% 0px"
-        }
+        { root:null, threshold:.12, rootMargin:"0px 0px -6% 0px" }
       );
 
-      document.querySelectorAll(".reveal-up").forEach((el) => {
-        observer.observe(el);
-      });
+      document.querySelectorAll(".reveal-up").forEach((el) => observer.observe(el));
 
-      const slider = document.getElementById("featureSlider");
-      const status = document.getElementById("featureSliderStatus");
+      const sliders = [
+        { id:"featureSlider", card:".feature-card", status:"featureSliderStatus", controls:"featureSliderControls" },
+        { id:"characterSlider", card:".character-card", status:"characterSliderStatus", controls:"characterSliderControls" }
+      ];
 
-      function updateFeatureStatus() {
-        if (!slider || !status || window.innerWidth > 1024) return;
-
-        const cards = [...slider.querySelectorAll(".feature-card")];
-        if (!cards.length) return;
-
+      function nearestIndex(slider, cards) {
         const center = slider.scrollLeft + slider.clientWidth / 2;
         let nearest = 0;
         let distance = Infinity;
-
         cards.forEach((card, index) => {
           const cardCenter = card.offsetLeft + card.offsetWidth / 2;
           const current = Math.abs(cardCenter - center);
-
           if (current < distance) {
             distance = current;
             nearest = index;
           }
         });
-
-        status.textContent = `${nearest + 1} / ${cards.length}`;
+        return nearest;
       }
 
-      slider?.addEventListener("scroll", () => {
-        window.requestAnimationFrame(updateFeatureStatus);
-      }, {passive:true});
+      function setSliderState(config) {
+        const slider = document.getElementById(config.id);
+        const status = document.getElementById(config.status);
+        const controls = document.getElementById(config.controls);
+        if (!slider || !status || !controls) return;
 
-      window.addEventListener("resize", updateFeatureStatus);
-      updateFeatureStatus();
+        const cards = [...slider.querySelectorAll(config.card)];
+        if (!cards.length) return;
 
+        const active = slider.scrollWidth > slider.clientWidth + 6;
+        controls.classList.toggle("is-active", active);
+        if (!active) return;
+
+        const index = nearestIndex(slider, cards);
+        status.textContent = `${index + 1} / ${cards.length}`;
+
+        const prev = controls.querySelector('[data-slider-dir="-1"]');
+        const next = controls.querySelector('[data-slider-dir="1"]');
+        if (prev) prev.disabled = index <= 0;
+        if (next) next.disabled = index >= cards.length - 1;
+      }
+
+      function goToCard(sliderId, direction) {
+        const config = sliders.find((item) => item.id === sliderId);
+        if (!config) return;
+        const slider = document.getElementById(config.id);
+        if (!slider) return;
+        const cards = [...slider.querySelectorAll(config.card)];
+        if (!cards.length) return;
+
+        const current = nearestIndex(slider, cards);
+        const targetIndex = Math.max(0, Math.min(cards.length - 1, current + direction));
+        const card = cards[targetIndex];
+        const left = card.offsetLeft - (slider.clientWidth - card.offsetWidth) / 2;
+        slider.scrollTo({ left, behavior:"smooth" });
+      }
+
+      document.querySelectorAll(".slider-arrow[data-slider-target]").forEach((button) => {
+        button.addEventListener("click", () => {
+          goToCard(button.dataset.sliderTarget, Number(button.dataset.sliderDir || 0));
+        });
+      });
+
+      sliders.forEach((config) => {
+        const slider = document.getElementById(config.id);
+        if (!slider) return;
+        let frame = 0;
+        slider.addEventListener("scroll", () => {
+          cancelAnimationFrame(frame);
+          frame = requestAnimationFrame(() => setSliderState(config));
+        }, { passive:true });
+      });
+
+      const refreshSliders = () => sliders.forEach(setSliderState);
+      window.addEventListener("resize", refreshSliders, { passive:true });
+      window.addEventListener("orientationchange", () => setTimeout(refreshSliders, 180), { passive:true });
+      refreshSliders();
     })();
   </script>
 
+  <script>
+    // DISCORD BOT の文字部分だけに title-fire.mp4 を描画する。
+    (() => {
+      const title = document.querySelector(".hero-title");
+      const textEl = document.querySelector(".hero-title-base");
+      const canvas = document.getElementById("heroTitleFireCanvas");
+      const video = document.getElementById("heroTitleFireVideo");
+      if (!title || !textEl || !canvas || !video) return;
+
+      const ctx = canvas.getContext("2d", { alpha:true });
+      if (!ctx) return;
+      const label = "DISCORD BOT";
+      let cssWidth = 1;
+      let cssHeight = 1;
+      let dpr = 1;
+      let frameId = 0;
+
+      function resizeCanvas() {
+        const rect = textEl.getBoundingClientRect();
+        cssWidth = Math.max(1, rect.width);
+        cssHeight = Math.max(1, rect.height);
+        dpr = Math.min(window.devicePixelRatio || 1, 1.5);
+        canvas.width = Math.max(1, Math.round(cssWidth * dpr));
+        canvas.height = Math.max(1, Math.round(cssHeight * dpr));
+        canvas.style.width = `${cssWidth}px`;
+        canvas.style.height = `${cssHeight}px`;
+      }
+
+      function drawVideoCover(w, h) {
+        const vw = video.videoWidth || 1;
+        const vh = video.videoHeight || 1;
+        const scale = Math.max(w / vw, h / vh);
+        const dw = vw * scale;
+        const dh = vh * scale;
+        const dx = (w - dw) / 2;
+        const dy = (h - dh) / 2;
+        ctx.drawImage(video, dx, dy, dw, dh);
+      }
+
+      function render() {
+        const w = canvas.width;
+        const h = canvas.height;
+        ctx.clearRect(0, 0, w, h);
+
+        if (video.readyState >= 2) {
+          const style = getComputedStyle(textEl);
+          const fontSize = parseFloat(style.fontSize) * dpr;
+          const fontWeight = style.fontWeight || "700";
+          const fontFamily = style.fontFamily || "Teko, sans-serif";
+
+          ctx.save();
+          ctx.fillStyle = "#fff";
+          ctx.textAlign = "center";
+          ctx.textBaseline = "middle";
+          ctx.font = `${fontWeight} ${fontSize}px ${fontFamily}`;
+          if ("letterSpacing" in ctx) ctx.letterSpacing = style.letterSpacing;
+          ctx.fillText(label, w / 2, h / 2 + fontSize * 0.015);
+          ctx.globalCompositeOperation = "source-in";
+          drawVideoCover(w, h);
+          ctx.restore();
+        }
+
+        frameId = requestAnimationFrame(render);
+      }
+
+      const start = async () => {
+        try { if (document.fonts?.ready) await document.fonts.ready; } catch (_) {}
+        resizeCanvas();
+        video.muted = true;
+        video.loop = true;
+        video.playsInline = true;
+        video.play().catch(() => {});
+        cancelAnimationFrame(frameId);
+        render();
+      };
+
+      const ro = "ResizeObserver" in window ? new ResizeObserver(resizeCanvas) : null;
+      ro?.observe(textEl);
+      window.addEventListener("resize", resizeCanvas, { passive:true });
+      video.addEventListener("loadeddata", start, { once:true });
+      if (video.readyState >= 2) start();
+    })();
+  </script>
 
   <script>
     // 背景動画をできるだけ途切れず連続再生する。
