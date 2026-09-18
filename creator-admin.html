@@ -1426,6 +1426,151 @@
     }
 
     /* ========================================
+       X配信スケジュール（1週間 / 読み取り専用）
+    ======================================== */
+
+    .x-schedule-stats {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 12px;
+      margin-top: 16px;
+    }
+
+    .x-schedule-stat {
+      padding: 16px;
+      border: 1px solid var(--line);
+      background: #0b111b;
+    }
+
+    .x-schedule-stat-label {
+      color: var(--muted);
+      font-size: 10px;
+      font-weight: 900;
+      letter-spacing: .06em;
+    }
+
+    .x-schedule-stat-value {
+      margin-top: 7px;
+      color: #fff;
+      font-size: 18px;
+      font-weight: 900;
+      line-height: 1.4;
+      word-break: break-word;
+    }
+
+    .x-schedule-stat-value.ok {
+      color: var(--green);
+    }
+
+    .x-schedule-stat-value.info {
+      color: #86c5ff;
+    }
+
+    .x-schedule-table-wrap {
+      margin-top: 16px;
+      overflow-x: auto;
+      border: 1px solid var(--line);
+      background: rgba(8, 13, 21, .42);
+    }
+
+    .x-schedule-table {
+      width: 100%;
+      min-width: 760px;
+      border-collapse: collapse;
+      font-size: 12px;
+    }
+
+    .x-schedule-table th,
+    .x-schedule-table td {
+      padding: 12px 10px;
+      border-bottom: 1px solid rgba(255, 255, 255, .07);
+      vertical-align: top;
+      text-align: left;
+    }
+
+    .x-schedule-table th {
+      color: var(--muted);
+      font-size: 10px;
+      font-weight: 900;
+      letter-spacing: .05em;
+      white-space: nowrap;
+      background: rgba(16, 22, 33, .78);
+    }
+
+    .x-schedule-table tbody tr:last-child td {
+      border-bottom: 0;
+    }
+
+    .x-schedule-date {
+      color: #fff;
+      font-weight: 900;
+      white-space: nowrap;
+    }
+
+    .x-schedule-time {
+      color: #9ed2ff;
+      font-weight: 900;
+      white-space: nowrap;
+    }
+
+    .x-schedule-phase {
+      color: var(--muted);
+      font-size: 11px;
+      white-space: nowrap;
+    }
+
+    .x-schedule-status {
+      display: inline-flex;
+      align-items: center;
+      gap: 5px;
+      padding: 4px 7px;
+      border: 1px solid rgba(54, 150, 255, .30);
+      color: #9ed2ff;
+      background: rgba(54, 150, 255, .06);
+      font-size: 10px;
+      font-weight: 900;
+      white-space: nowrap;
+    }
+
+    .x-schedule-status.done {
+      border-color: rgba(143, 240, 189, .38);
+      color: var(--green);
+      background: rgba(143, 240, 189, .07);
+    }
+
+    .x-schedule-status.fail {
+      border-color: rgba(255, 104, 120, .40);
+      color: #ff9ca7;
+      background: rgba(255, 104, 120, .07);
+    }
+
+    .x-schedule-status.wait {
+      border-color: rgba(255, 195, 109, .32);
+      color: #ffc36d;
+      background: rgba(255, 195, 109, .06);
+    }
+
+    .x-schedule-result {
+      color: #d7e0e9;
+      font-size: 11px;
+      line-height: 1.65;
+      min-width: 230px;
+    }
+
+    .x-schedule-note {
+      margin-top: 12px;
+      color: var(--muted);
+      font-size: 10px;
+      line-height: 1.7;
+    }
+
+    @media screen and (max-width: 760px) {
+      .x-schedule-stats {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    /* ========================================
        スマホ
     ======================================== */
 
@@ -2287,6 +2432,21 @@
 
 
         <button
+          id="openXScheduleBtn"
+          class="menu-card"
+          type="button"
+        >
+          <div class="menu-card-icon">🗓️</div>
+          <div class="menu-card-title">
+            X配信スケジュール
+          </div>
+          <div class="menu-card-copy">
+            X自動収集・Discord配信の1週間の予定と実績をまとめて確認します。
+          </div>
+        </button>
+
+
+        <button
           id="openSystemCheckBtn"
           class="menu-card"
           type="button"
@@ -2369,6 +2529,97 @@
         class="empty hidden"
       >
         現在、削除対象にできるX取得記事はありません。
+      </div>
+
+    </section>
+
+
+    <!-- ========================================
+         X配信スケジュール（1週間 / 読み取り専用）
+    ========================================= -->
+
+    <section
+      id="xScheduleSection"
+      class="hidden"
+    >
+
+      <div class="admin-head">
+        <div>
+          <div class="eyebrow">
+            X DELIVERY SCHEDULE
+          </div>
+          <h2>
+            🗓️ X配信スケジュール
+          </h2>
+        </div>
+
+        <div class="admin-head-actions">
+          <button
+            id="reloadXScheduleBtn"
+            class="btn blue"
+            type="button"
+          >
+            ↻ 再読込
+          </button>
+
+          <button
+            id="backToMenuFromXScheduleBtn"
+            class="btn"
+            type="button"
+          >
+            ← 管理メニュー
+          </button>
+        </div>
+      </div>
+
+      <p class="lead">
+        X自動収集・Discord配信の、今日から7日間の予定と実績を読み取り専用で表示します。<br>
+        実行済みは「✅ 実行済み / 候補○件 / Discord配信○件」の形式で確認できます。
+      </p>
+
+      <div class="x-schedule-stats">
+        <div class="x-schedule-stat">
+          <div class="x-schedule-stat-label">次回X検索予定</div>
+          <div id="xScheduleNextAt" class="x-schedule-stat-value info">--</div>
+        </div>
+        <div class="x-schedule-stat">
+          <div class="x-schedule-stat-label">現在フェーズ</div>
+          <div id="xSchedulePhase" class="x-schedule-stat-value">--</div>
+        </div>
+        <div class="x-schedule-stat">
+          <div class="x-schedule-stat-label">今月API使用量</div>
+          <div id="xScheduleBudget" class="x-schedule-stat-value ok">--</div>
+        </div>
+      </div>
+
+      <div class="x-schedule-table-wrap">
+        <table class="x-schedule-table">
+          <thead>
+            <tr>
+              <th>日付</th>
+              <th>X検索時刻</th>
+              <th>状態</th>
+              <th>フェーズ</th>
+              <th>検索間隔</th>
+              <th>実績</th>
+            </tr>
+          </thead>
+          <tbody id="xScheduleTableBody">
+            <tr>
+              <td colspan="6">読み込み前</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div
+        id="xScheduleMessage"
+        class="message hidden"
+      ></div>
+
+      <div class="x-schedule-note">
+        ※ 次回1件はBOTが保持している実予定を表示し、それ以降はAdaptiveスケジュールから算出した7日予測を表示します。再計算が入った場合は再読込時に更新されます。<br>
+        ※ この画面からX検索時刻やBOT設定を変更することはありません。
       </div>
 
     </section>
@@ -7137,6 +7388,16 @@
 
 
 
+    $("#openXScheduleBtn")
+      ?.addEventListener(
+        "click",
+        async () => {
+          showXScheduleAdmin();
+          await loadXSchedule();
+        }
+      );
+
+
     $("#openSystemCheckBtn")
       ?.addEventListener(
         "click",
@@ -7189,6 +7450,19 @@
       ?.addEventListener(
         "click",
         showMenu
+      );
+
+
+    $("#backToMenuFromXScheduleBtn")
+      ?.addEventListener(
+        "click",
+        showMenu
+      );
+
+    $("#reloadXScheduleBtn")
+      ?.addEventListener(
+        "click",
+        loadXSchedule
       );
 
 
@@ -8130,6 +8404,243 @@
 
 
     // ========================================
+    // X配信スケジュール（1週間 / 読み取り専用）
+    // ========================================
+
+    function formatXScheduleDate(value, withTime = true) {
+      if (!value) return "--";
+      const date = new Date(value);
+      if (Number.isNaN(date.getTime())) return "--";
+
+      return date.toLocaleString("ja-JP", {
+        timeZone: "Asia/Tokyo",
+        month: "2-digit",
+        day: "2-digit",
+        ...(withTime
+          ? { hour: "2-digit", minute: "2-digit" }
+          : {}),
+        hour12: false
+      });
+    }
+
+
+    function normalizeXScheduleRows(data) {
+      const rawRows = Array.isArray(data?.rows)
+        ? data.rows
+        : Array.isArray(data?.schedule)
+          ? data.schedule
+          : Array.isArray(data)
+            ? data
+            : [];
+
+      return rawRows.slice(0, 64).map((row, index) => {
+        const plannedAt =
+          row?.planned_at
+          || row?.plannedAt
+          || row?.next_run_at
+          || row?.nextRunAt
+          || null;
+
+        const executedAt =
+          row?.executed_at
+          || row?.executedAt
+          || row?.last_run_at
+          || row?.lastRunAt
+          || null;
+
+        const candidateCount = Number(
+          row?.candidate_count
+          ?? row?.candidates
+          ?? row?.candidateCount
+          ?? 0
+        );
+
+        const deliveryCountRaw =
+          row?.discord_delivery_count
+          ?? row?.discord_deliveries
+          ?? row?.delivery_count
+          ?? row?.sent_count
+          ?? row?.discordDeliveryCount;
+
+        const deliveryCount =
+          deliveryCountRaw === null || deliveryCountRaw === undefined
+            ? null
+            : Number(deliveryCountRaw);
+
+        const statusRaw = String(
+          row?.status
+          || (executedAt ? "done" : index === 0 ? "next" : "planned")
+        ).toLowerCase();
+
+        return {
+          date:
+            row?.date
+            || row?.jst_date
+            || plannedAt
+            || executedAt
+            || null,
+          plannedAt,
+          executedAt,
+          phase: String(row?.phase || data?.phase || "--"),
+          cadenceHours:
+            row?.cadence_hours
+            ?? row?.cadenceHours
+            ?? data?.cadence_hours
+            ?? data?.cadenceHours
+            ?? null,
+          candidateCount: Number.isFinite(candidateCount) ? candidateCount : 0,
+          deliveryCount:
+            deliveryCount !== null && Number.isFinite(deliveryCount)
+              ? deliveryCount
+              : null,
+          status:
+            ["done", "executed", "success"].includes(statusRaw)
+              ? "done"
+              : ["failed", "error"].includes(statusRaw)
+                ? "failed"
+                : ["next", "waiting", "wait"].includes(statusRaw)
+                  ? "next"
+                  : "planned"
+        };
+      });
+    }
+
+
+    function renderXSchedule(result) {
+      const data = result || {};
+      const rows = normalizeXScheduleRows(data);
+      const body = $("#xScheduleTableBody");
+      const nextAt = $("#xScheduleNextAt");
+      const phase = $("#xSchedulePhase");
+      const budget = $("#xScheduleBudget");
+
+      const nextValue =
+        data?.next_run_at
+        || data?.nextRunAt
+        || rows.find(row => row.status !== "done")?.plannedAt
+        || null;
+
+      if (nextAt) {
+        nextAt.textContent = nextValue
+          ? `${formatXScheduleDate(nextValue)} JST`
+          : "--";
+      }
+
+      if (phase) {
+        phase.textContent = String(
+          data?.phase
+          || rows.find(row => row.phase && row.phase !== "--")?.phase
+          || "--"
+        );
+      }
+
+      if (budget) {
+        const used = Number(data?.api_units ?? data?.apiUnits ?? NaN);
+        const limit = Number(data?.budget_limit ?? data?.limit ?? data?.hard_limit ?? data?.hardLimit ?? NaN);
+        budget.textContent =
+          Number.isFinite(used) && Number.isFinite(limit)
+            ? `${used} / ${limit}`
+            : "--";
+      }
+
+      if (!body) return;
+
+      if (!rows.length) {
+        body.innerHTML = `
+          <tr>
+            <td colspan="6">
+              X配信スケジュールのデータはまだありません。
+            </td>
+          </tr>
+        `;
+        return;
+      }
+
+      body.innerHTML = rows.map(row => {
+        const statusHtml = row.status === "done"
+          ? '<span class="x-schedule-status done">✅ 実行済み</span>'
+          : row.status === "failed"
+            ? '<span class="x-schedule-status fail">⚠ 実行失敗</span>'
+            : row.status === "next"
+              ? '<span class="x-schedule-status wait">🟢 次回予定</span>'
+              : '<span class="x-schedule-status">🔵 予定</span>';
+
+        const actual = row.status === "done"
+          ? `✅ 実行済み / 候補${row.candidateCount}件 / Discord配信${row.deliveryCount === null ? "--" : row.deliveryCount}件`
+          : row.status === "failed"
+            ? `⚠ 実行失敗 / 候補${row.candidateCount}件 / Discord配信${row.deliveryCount === null ? "--" : row.deliveryCount}件`
+            : "—";
+
+        return `
+          <tr>
+            <td class="x-schedule-date">${escapeHtml(formatXScheduleDate(row.date, false))}</td>
+            <td class="x-schedule-time">${escapeHtml((row.plannedAt || row.executedAt) ? `${formatXScheduleDate(row.plannedAt || row.executedAt)} JST` : "--")}</td>
+            <td>${statusHtml}</td>
+            <td class="x-schedule-phase">${escapeHtml(row.phase || "--")}</td>
+            <td>${escapeHtml(row.cadenceHours ? `${row.cadenceHours}時間` : "--")}</td>
+            <td class="x-schedule-result">${escapeHtml(actual)}</td>
+          </tr>
+        `;
+      }).join("");
+    }
+
+
+    async function loadXSchedule() {
+      clearMessage($("#xScheduleMessage"));
+
+      const body = $("#xScheduleTableBody");
+      if (body) {
+        body.innerHTML = `
+          <tr>
+            <td colspan="6">読み込み中...</td>
+          </tr>
+        `;
+      }
+
+      const token = getToken();
+      if (!token) {
+        showLogin();
+        return;
+      }
+
+      const { data, error } =
+        await sb.rpc(
+          "creator_admin_x_schedule_week",
+          {
+            p_token: token,
+            p_days: 7
+          }
+        );
+
+      if (!error) {
+        renderXSchedule(data || {});
+        return;
+      }
+
+      const errorText = String(error.message || error.details || "");
+
+      if (
+        errorText.includes("INVALID_ADMIN_TOKEN")
+        || errorText.includes("ADMIN_SESSION_INVALID")
+      ) {
+        clearToken();
+        showLogin();
+        return;
+      }
+
+      // 読み取り専用RPCに失敗しても、既存のX取得・Discord配信には影響させない。
+      console.warn("X配信スケジュール取得エラー", error);
+      renderXSchedule({});
+
+      showMessage(
+        $("#xScheduleMessage"),
+        "X配信スケジュールを取得できませんでした。Supabase連携SQLとShared BOTのスケジュール連携が適用済みか確認してください。既存のX取得・配信機能には影響ありません。",
+        "error"
+      );
+    }
+
+
+    // ========================================
     // 画面表示切替
     // ========================================
 
@@ -8151,6 +8662,10 @@
         ?.classList
         .add("hidden");
 
+
+      $("#xScheduleSection")
+        ?.classList
+        .add("hidden");
 
       $("#systemCheckSection")
         ?.classList
@@ -8292,6 +8807,17 @@
       clearMessage(
         $("#xUrlRepairMessage")
       );
+
+    }
+
+
+    function showXScheduleAdmin() {
+
+      hideAllAdminSections();
+
+      $("#xScheduleSection")
+        ?.classList
+        .remove("hidden");
 
     }
 
