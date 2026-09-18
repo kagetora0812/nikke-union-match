@@ -2,984 +2,1037 @@
 <html lang="ja">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <meta name="theme-color" content="#08090c">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+  <meta name="theme-color" content="#06070a">
   <title>NIKKE UNION MATCH - Discord BOT</title>
-  <meta name="description" content="NIKKE UNION MATCH Discord BOTの導入方法・コマンド・キャラクター設定・通知機能の案内ページです。">
+  <meta name="description" content="NIKKE UNION MATCH Discord BOTの導入方法・通知機能・キャラクター設定・コマンドを紹介するページです。">
+
+  <link rel="stylesheet" href="./subpage-nav.css?v=21.0">
 
   <style>
     @import url("https://fonts.googleapis.com/css2?family=Teko:wght@500;600;700&family=Zen+Kaku+Gothic+New:wght@500;700;900&display=swap");
 
-    :root {
-      --bg:#08090c;
-      --bg2:#0d0f13;
-      --panel:#121419;
-      --panel2:#171a20;
-      --panel3:#1d2027;
-      --line:#2b2e35;
-      --line-soft:rgba(255,255,255,.07);
-      --text:#f1f2f4;
-      --muted:#969ba3;
-      --muted2:#6f747c;
-      --accent:#28b9e8;
-      --accent2:#8edcff;
-      --orange:#e7a22d;
-      --cyan:#28b9e8;
-      --red:#ff6977;
-      --green:#35d78c;
-      --purple:#b66cff;
+    :root{
+      --bg:#06070a;
+      --panel:rgba(10,13,18,.70);
+      --panel-strong:rgba(11,14,20,.84);
+      --line:rgba(255,255,255,.12);
+      --line-soft:rgba(255,255,255,.075);
+      --text:#f6f8fb;
+      --muted:#a9b0ba;
+      --muted2:#7b838d;
+      --cyan:#31c4f3;
+      --cyan2:#95e6ff;
+      --purple:#9a7cff;
+      --green:#72e0ad;
+      --header-h:64px;
+      --bottom-h:68px;
+      --content:1180px;
     }
 
-    * { box-sizing:border-box; }
-    html { background:var(--bg); scroll-behavior:smooth; }
-    body {
+    *{box-sizing:border-box}
+    html{
+      background:var(--bg);
+      scroll-behavior:smooth;
+    }
+    body{
       margin:0;
       min-height:100vh;
       color:var(--text);
-      background:
-        radial-gradient(circle at 82% 7%, rgba(255,255,255,.045), transparent 24%),
-        linear-gradient(180deg,#0d0f13 0%,#08090c 56%,#07080a 100%);
-      font-family:"Gothic MB101","Zen Kaku Gothic New",sans-serif;
+      background:var(--bg);
+      font-family:"Zen Kaku Gothic New",system-ui,-apple-system,"Segoe UI",sans-serif;
       font-weight:700;
       -webkit-font-smoothing:antialiased;
       text-rendering:optimizeLegibility;
     }
+    a{color:inherit}
+    button{font:inherit}
 
-    body::before {
-      content:"";
+    /* ---------- fixed background movie ---------- */
+    .bot-motion-bg{
       position:fixed;
       inset:0;
-      z-index:-1;
+      z-index:0;
+      overflow:hidden;
       pointer-events:none;
-      opacity:.32;
-      background:linear-gradient(135deg,transparent 0 74%,rgba(255,255,255,.025) 74% 74.35%,transparent 74.35% 100%);
+      background:
+        radial-gradient(circle at 70% 20%,rgba(49,196,243,.06),transparent 34%),
+        #050609;
+    }
+    .bot-motion-bg video{
+      width:100%;
+      height:100%;
+      object-fit:cover;
+      object-position:center center;
+      opacity:.72;
+      filter:brightness(.42) saturate(.72) contrast(1.08);
+      transform:scale(1.015);
+    }
+    .bot-motion-bg::after{
+      content:"";
+      position:absolute;
+      inset:0;
+      background:
+        linear-gradient(180deg,rgba(3,5,8,.26),rgba(3,5,8,.48) 45%,rgba(3,5,8,.70)),
+        radial-gradient(circle at 50% 34%,transparent 0 18%,rgba(2,4,7,.16) 58%,rgba(2,4,7,.46) 100%);
     }
 
-    a { color:inherit; }
-    button { font:inherit; }
-
-    .topbar {
-      height:64px;
+    /* ---------- header / menu ---------- */
+    .topbar{
+      height:var(--header-h);
       padding:0 20px;
       display:flex;
       align-items:center;
       justify-content:space-between;
-      position:sticky;
+      position:fixed;
       top:0;
-      z-index:20;
-      border-bottom:1px solid var(--line-soft);
-      background:rgba(8,9,12,.92);
-      backdrop-filter:blur(14px);
+      left:0;
+      right:0;
+      z-index:120;
+      border-bottom:1px solid rgba(255,255,255,.08);
+      background:rgba(5,7,10,.72);
+      backdrop-filter:blur(15px) saturate(120%);
+      -webkit-backdrop-filter:blur(15px) saturate(120%);
+    }
+    .bot-brand{
+      display:inline-flex;
+      align-items:center;
+      gap:10px;
+      color:#fff;
+      font:700 22px/1 "Teko",sans-serif;
+      letter-spacing:.16em;
+    }
+    .bot-brand::before{
+      content:"";
+      width:5px;
+      height:22px;
+      background:var(--cyan);
+      box-shadow:0 0 18px rgba(49,196,243,.28);
+    }
+    .site-menu-button{
+      width:46px;
+      height:46px;
+      display:grid;
+      place-content:center;
+      gap:5px;
+      padding:0;
+      border:0;
+      background:transparent;
+      cursor:pointer;
+    }
+    .site-menu-button span{
+      display:block;
+      width:25px;
+      height:2px;
+      border-radius:99px;
+      background:#fff;
+      transition:transform .22s ease,opacity .22s ease;
+    }
+    body.menu-open .site-menu-button span:nth-child(1){transform:translateY(7px) rotate(45deg)}
+    body.menu-open .site-menu-button span:nth-child(2){opacity:0}
+    body.menu-open .site-menu-button span:nth-child(3){transform:translateY(-7px) rotate(-45deg)}
+
+    .site-menu-backdrop{
+      position:fixed;
+      inset:var(--header-h) 0 0;
+      z-index:108;
+      background:rgba(0,0,0,.28);
+      backdrop-filter:blur(4px);
+      -webkit-backdrop-filter:blur(4px);
+    }
+    .site-menu-drawer{
+      position:fixed;
+      top:var(--header-h);
+      right:0;
+      z-index:110;
+      width:min(86vw,340px);
+      height:calc(100dvh - var(--header-h));
+      padding:12px;
+      transform:translateX(105%);
+      overflow-y:auto;
+      background:rgba(12,15,21,.78);
+      border-left:1px solid rgba(255,255,255,.10);
+      box-shadow:-18px 0 50px rgba(0,0,0,.30);
+      backdrop-filter:blur(18px) saturate(120%);
+      -webkit-backdrop-filter:blur(18px) saturate(120%);
+      transition:transform .24s ease;
+    }
+    body.menu-open .site-menu-drawer{transform:translateX(0)}
+    .site-menu-head{
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      min-height:48px;
+      padding:0 6px 10px;
+      color:rgba(255,255,255,.7);
+      font:800 12px "Teko",sans-serif;
+      letter-spacing:.24em;
+    }
+    .site-menu-head button{
+      width:38px;
+      height:38px;
+      border:0;
+      color:#fff;
+      background:transparent;
+      font-size:28px;
+      line-height:1;
+      cursor:pointer;
+    }
+    .site-menu-drawer>a{
+      width:100%;
+      min-height:52px;
+      display:flex;
+      align-items:center;
+      padding:0 14px;
+      border-bottom:1px solid rgba(255,255,255,.09);
+      color:#fff;
+      text-decoration:none;
+      font-size:14px;
+      font-weight:800;
+      transition:background .18s ease,color .18s ease;
+    }
+    .site-menu-drawer>a:hover{
+      color:var(--cyan2);
+      background:rgba(255,255,255,.05);
+    }
+    .site-menu-disclaimer{
+      margin:22px 8px 8px;
+      padding:14px 10px 0;
+      border-top:1px solid rgba(255,255,255,.12);
+      color:rgba(255,255,255,.48);
+      font-size:10px;
+      line-height:1.7;
     }
 
-    .brand {
+    .bot-pc-home{
+      position:fixed;
+      top:76px;
+      left:20px;
+      z-index:105;
+      width:44px;
+      height:44px;
+      display:grid;
+      place-items:center;
+      border:1px solid rgba(49,196,243,.34);
+      background:rgba(4,9,13,.42);
+      color:#e8f8ff;
+      text-decoration:none;
+      font:800 23px/1 "Teko",sans-serif;
+      backdrop-filter:blur(10px);
+      -webkit-backdrop-filter:blur(10px);
+      transition:.2s ease;
+    }
+    .bot-pc-home:hover{
+      border-color:var(--cyan2);
+      background:rgba(49,196,243,.12);
+    }
+
+    /* ---------- page ---------- */
+    body{padding-top:var(--header-h)}
+    main.lux-page{
+      position:relative;
+      z-index:2;
+      width:100%;
+      margin:0;
+      padding:0 0 52px;
+    }
+
+    .hero{
+      min-height:calc(100vh - var(--header-h));
+      display:grid;
+      place-items:center;
+      padding:48px 24px;
+      position:relative;
+      isolation:isolate;
+    }
+    .hero-center{
+      width:min(1100px,100%);
+      text-align:center;
       display:flex;
       flex-direction:column;
-      font-family:"Futura PT Condensed","Industry","Azonix","Teko",sans-serif;
-      line-height:.82;
-    }
-    .brand-small { color:var(--accent); font-size:9px; font-weight:800; letter-spacing:3.7px; }
-    .brand-main { margin-top:5px; color:#fff; font-size:23px; font-weight:800; letter-spacing:-.035em; line-height:.82; }
-    .status { display:inline-flex; align-items:center; gap:8px; color:#c7cbd0; font:800 11px "Teko",sans-serif; letter-spacing:1.6px; }
-    .status::before { content:""; width:5px; height:15px; background:var(--accent); box-shadow:0 0 8px rgba(40,185,232,.25); }
-
-    .container { width:min(1180px,calc(100% - 28px)); margin:0 auto; padding:28px 0 46px; }
-    .eyebrow { margin-bottom:7px; color:var(--accent); font:800 11px "Teko",sans-serif; letter-spacing:2.4px; text-transform:uppercase; }
-    h1,h2,h3 { margin:0; color:#fff; font-weight:900; letter-spacing:-.045em; }
-    h1 { font-size:clamp(31px,6vw,52px); line-height:1.05; }
-    .bot-hero h1 { font-size:clamp(28px,3.2vw,42px); white-space:nowrap; letter-spacing:-.055em; }
-    h2 { font-size:clamp(22px,4vw,30px); line-height:1.15; }
-    h3 { font-size:17px; }
-    .lead { max-width:730px; margin:13px 0 0; color:#b5bac1; font-size:13px; line-height:1.9; }
-
-    .bot-hero {
-      position:relative;
-      overflow:hidden;
-      min-height:270px;
-      padding:32px 34px;
-      display:grid;
-      grid-template-columns:minmax(0,1fr) 330px;
       align-items:center;
-      gap:30px;
-      border:1px solid #292c32;
-      border-top:3px solid #3a3d43;
-      background:linear-gradient(110deg,#17191e 0%,#111318 56%,#0d0f13 100%);
-      box-shadow:0 20px 45px rgba(0,0,0,.22);
+      justify-content:center;
+      gap:34px;
     }
-    .bot-hero::before {
-      content:"";
-      position:absolute;
-      width:330px;
-      height:330px;
-      right:-74px;
-      top:-100px;
-      border:34px solid rgba(40,185,232,.035);
-      box-shadow:0 0 0 34px rgba(255,255,255,.014),0 0 0 68px rgba(255,255,255,.009);
-      border-radius:50%;
-      pointer-events:none;
+    .hero-title{
+      margin:0;
+      font-family:"Teko","Zen Kaku Gothic New",sans-serif;
+      font-size:clamp(58px,7.2vw,112px);
+      font-weight:700;
+      line-height:.88;
+      letter-spacing:.045em;
+      text-transform:uppercase;
+      color:#fff;
+      background:
+        linear-gradient(
+          105deg,
+          #fff 0%,
+          #fff 22%,
+          #8ce7ff 35%,
+          #fff 47%,
+          #bea9ff 58%,
+          #fff 72%,
+          #fff 100%
+        );
+      background-size:280% 100%;
+      -webkit-background-clip:text;
+      background-clip:text;
+      -webkit-text-fill-color:transparent;
+      animation:heroTextFlow 13s ease-in-out infinite;
+      text-shadow:0 0 28px rgba(255,255,255,.07);
     }
-    .hero-copy,.hero-side { position:relative; z-index:1; }
-    .hero-side { border-left:1px solid #30333a; padding-left:25px; }
-    .hero-mini { color:#7f858d; font:800 10px "Teko",sans-serif; letter-spacing:2px; }
-    .hero-feature { margin-top:12px; display:grid; gap:9px; }
-    .hero-feature div { display:flex; gap:8px; align-items:flex-start; color:#d7dade; font-size:12px; line-height:1.55; }
-    .hero-feature b { color:var(--accent2); }
+    .hero-mobile-title{display:none}
+    @keyframes heroTextFlow{
+      0%,100%{background-position:0% 50%;filter:drop-shadow(0 0 0 rgba(49,196,243,0))}
+      38%{background-position:52% 50%;filter:drop-shadow(0 0 13px rgba(49,196,243,.12))}
+      72%{background-position:100% 50%;filter:drop-shadow(0 0 16px rgba(154,124,255,.11))}
+    }
 
-    .top-actions { margin-top:20px; display:flex; flex-wrap:wrap; gap:8px; }
-    .action-btn {
-      min-height:44px;
-      padding:0 16px;
+    .invite-btn{
+      min-width:190px;
+      min-height:54px;
+      padding:0 24px;
       display:inline-flex;
       align-items:center;
       justify-content:center;
-      border:1px solid #5b5d61;
-      color:#f6f7f8;
-      background:linear-gradient(180deg,#48494d,#35363a);
-      font-size:12px;
-      font-weight:900;
+      position:relative;
+      overflow:hidden;
+      border:1px solid rgba(149,230,255,.62);
+      color:#fff;
+      background:rgba(5,10,14,.38);
       text-decoration:none;
-      clip-path:polygon(8px 0,calc(100% - 8px) 0,100% 8px,100% calc(100% - 8px),calc(100% - 8px) 100%,8px 100%,0 calc(100% - 8px),0 8px);
-      cursor:pointer;
-    }
-    .action-btn.primary { border-color:#287da0; background:linear-gradient(180deg,#28b9e8,#148dbb); }
-    .action-btn:hover { border-color:var(--accent); background:linear-gradient(180deg,#2cc5ff,#159cca); }
-    .action-btn.disabled { opacity:.55; cursor:not-allowed; }
-
-    .section { margin-top:16px; padding:25px 24px; border:1px solid #292c32; background:linear-gradient(180deg,#14171c,#0f1115); }
-    .section-head { display:flex; justify-content:space-between; gap:18px; align-items:flex-end; margin-bottom:18px; }
-    .section-note { max-width:600px; color:var(--muted); font-size:11px; line-height:1.7; text-align:right; }
-    .section-note.cyan-note {
-      color:var(--accent2);
-      font-weight:900;
-      text-shadow:0 0 14px rgba(40,185,232,.12);
-    }
-
-    .union-required-note {
-      margin:14px 0 0;
-      padding:14px 16px;
-      border:1px solid rgba(40,185,232,.46);
-      border-left:4px solid var(--accent);
-      background:linear-gradient(90deg,rgba(40,185,232,.12),rgba(40,185,232,.035));
-      color:#dfeff7;
-      font-size:12px;
-      line-height:1.75;
-    }
-    .union-required-note strong { color:var(--accent2); }
-    .union-required-note .required-title {
-      display:block;
-      margin-bottom:4px;
-      color:#79d9f6;
       font-size:13px;
       font-weight:900;
+      letter-spacing:.055em;
+      backdrop-filter:blur(10px);
+      -webkit-backdrop-filter:blur(10px);
+      transition:transform .25s ease,border-color .25s ease,background .25s ease,box-shadow .25s ease;
     }
-
-    .reassurance-box {
-      margin-top:16px;
-      padding:20px 22px;
-      border:1px solid #2b596c;
-      border-left:4px solid var(--accent);
-      background:linear-gradient(135deg,rgba(40,185,232,.075),rgba(18,20,25,.96) 45%,#101217 100%);
+    .invite-btn::before{
+      content:"";
+      position:absolute;
+      inset:0;
+      transform:translateX(-105%);
+      background:linear-gradient(90deg,transparent,rgba(49,196,243,.30),rgba(154,124,255,.18),transparent);
+      transition:transform .6s ease;
     }
-    .reassurance-box h2 { font-size:clamp(20px,3.8vw,28px); }
-    .reassurance-box p { margin:10px 0 0; color:#b9c4ca; font-size:12px; line-height:1.85; }
-    .reassurance-box strong { color:#fff; }
-    .privacy-note {
-      margin-top:12px;
-      padding:11px 12px;
-      border:1px solid rgba(142,220,255,.22);
-      background:rgba(40,185,232,.055);
-      color:#aee8ff;
-      font-size:11px;
-      line-height:1.75;
+    .invite-btn:hover{
+      transform:translateY(-2px);
+      border-color:#b9f0ff;
+      background:rgba(20,87,112,.20);
+      box-shadow:0 12px 35px rgba(0,0,0,.24),0 0 28px rgba(49,196,243,.10);
     }
-    .privacy-note strong { color:#e8f8ff; }
-    .reassurance-points { margin-top:13px; display:grid; grid-template-columns:repeat(3,minmax(0,1fr)); gap:8px; }
-    .reassurance-point { padding:11px 12px; border:1px solid rgba(142,220,255,.18); background:rgba(8,16,20,.42); color:#c9d7dd; font-size:11px; line-height:1.65; }
-    .reassurance-point b { color:var(--accent2); }
-
-    .steps { display:grid; grid-template-columns:repeat(4,minmax(0,1fr)); gap:10px; }
-    .step { position:relative; min-height:186px; padding:18px 16px; border:1px solid var(--line); background:var(--panel2); }
-    .step-no { width:28px; height:28px; display:grid; place-items:center; margin-bottom:13px; color:#081018; background:var(--accent); font:900 17px "Teko",sans-serif; }
-    .step h3 { margin-bottom:8px; }
-    .step p { margin:0; color:#a9aeb5; font-size:11.5px; line-height:1.75; }
-    .step strong { color:#fff; }
-
-    .character-grid { display:grid; grid-template-columns:repeat(3,minmax(0,1fr)); gap:12px; }
-    .character-card { overflow:hidden; border:1px solid var(--line); background:var(--panel2); }
-    .character-visual { position:relative; height:190px; display:grid; place-items:center; overflow:hidden; background:linear-gradient(145deg,#181b21,#0e1014); border-bottom:1px solid var(--line); }
-    .character-visual img { width:100%; height:100%; object-fit:cover; display:none; }
-    .character-fallback { position:absolute; inset:0; display:grid; place-items:center; font-size:72px; background:radial-gradient(circle at 50% 42%,rgba(40,185,232,.10),transparent 52%); }
-    .character-body { padding:15px 16px 17px; }
-    .character-tag { color:var(--accent); font:800 10px "Teko",sans-serif; letter-spacing:1.7px; }
-    .character-name { margin-top:3px; color:#fff; font-size:20px; font-weight:900; }
-    .character-desc { margin-top:7px; color:#9da2aa; font-size:11.5px; line-height:1.7; }
-    .character-call { margin-top:10px; padding-top:9px; border-top:1px solid var(--line); color:#dfe2e6; font-size:11px; }
-
-    .feature-grid { display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); gap:10px; }
-    .feature-card { padding:17px; border:1px solid var(--line); background:var(--panel2); }
-    .feature-card .icon { font-size:21px; }
-    .feature-card h3 { margin-top:7px; }
-    .feature-card p { margin:7px 0 0; color:#9ea3aa; font-size:11.5px; line-height:1.75; }
-
-    .command-list { display:grid; gap:7px; }
-    .command-row { display:grid; grid-template-columns:150px minmax(0,1fr) auto; gap:12px; align-items:center; padding:11px 12px; border:1px solid var(--line); background:#15181d; }
-    .copy-command { min-width:86px; min-height:34px; padding:0 10px; border:1px solid #3d6678; background:#101a20; color:#aee8ff; font-size:10.5px; font-weight:900; cursor:pointer; }
-    .copy-command:hover { border-color:var(--accent); background:#122631; color:#fff; }
-    .copy-command.copied { border-color:#2f946a; background:#10291f; color:#8ff3c4; }
-    .profile-copy { margin-top:12px; }
-    code { color:#91defd; font-family:Consolas,"SFMono-Regular",monospace; font-size:12px; font-weight:800; }
-    .command-desc { color:#aeb3ba; font-size:11.5px; line-height:1.6; }
-    .recommended { color:#081018; background:var(--accent); padding:2px 6px; margin-left:6px; font-size:9px; font-weight:900; }
-
-    .talk-box { display:grid; grid-template-columns:minmax(0,1fr) minmax(0,1fr); gap:10px; }
-    .talk-card { padding:17px; border:1px solid var(--line); background:var(--panel2); }
-    .talk-card h3 { margin-bottom:10px; }
-    .chat-example { margin-top:7px; padding:9px 11px; border-left:3px solid var(--accent); background:#0d1014; color:#dfe3e7; font-size:11.5px; line-height:1.65; }
-    .chat-note { margin-top:9px; color:#8d939b; font-size:10.5px; line-height:1.65; }
-
-    .relist-flow { display:grid; grid-template-columns:1fr 1fr; gap:10px; }
-    .relist-card { padding:17px; border:1px solid var(--line); background:var(--panel2); }
-    .relist-card.green { border-left:4px solid var(--green); }
-    .relist-card.red { border-left:4px solid var(--red); }
-    .relist-label { font-size:13px; font-weight:900; color:#fff; }
-    .relist-card p { margin:8px 0 0; color:#9ea3aa; font-size:11.5px; line-height:1.75; }
-
-    .notice { margin-top:12px; padding:13px 14px; border:1px solid #314a56; background:rgba(40,185,232,.055); color:#b8d9e7; font-size:11px; line-height:1.75; }
-    .notice strong { color:#fff; }
-
-    .bottom-area { margin-top:18px; padding:18px 0 0; display:flex; justify-content:space-between; align-items:center; gap:12px; color:#686e75; font:800 10px "Teko",sans-serif; letter-spacing:1.6px; }
-    .bottom-area .action-btn { min-height:38px; }
-
-    @media (max-width:850px) {
-      .bot-hero { grid-template-columns:1fr; min-height:0; padding:25px 20px 22px; gap:20px; }
-      .hero-side { border-left:0; border-top:1px solid #30333a; padding:15px 0 0; }
-      .steps { grid-template-columns:repeat(2,minmax(0,1fr)); }
-    }
-
-    @media (max-width:600px) {
-      .topbar { height:58px; padding:0 14px; }
-      .brand-main { font-size:20px; }
-      .container { width:min(100% - 18px,1180px); padding-top:14px; }
-      .bot-hero { padding:22px 16px 18px; }
-      h1 { font-size:34px; }
-      .bot-hero h1 { font-size:clamp(16.5px,4.8vw,20px); white-space:nowrap; letter-spacing:-.06em; }
-      .lead { font-size:11.5px; }
-      .top-actions { display:grid; grid-template-columns:1fr; }
-      .action-btn { width:100%; }
-      .section { padding:19px 14px; }
-      .section-head { display:block; }
-      .section-note { margin-top:7px; text-align:left; }
-      .reassurance-box { padding:17px 14px; }
-      .reassurance-points { grid-template-columns:1fr; }
-      .steps,.character-grid,.feature-grid,.talk-box,.relist-flow { grid-template-columns:1fr; }
-      .step { min-height:0; }
-      .character-visual { height:210px; }
-      .command-row { grid-template-columns:1fr auto; gap:6px 8px; }
-      .command-row .command-desc { grid-column:1 / -1; }
-      .copy-command { min-width:78px; min-height:32px; }
-      .bottom-area { flex-direction:column; align-items:stretch; text-align:center; }
-    }
-  </style>
-  <link rel="stylesheet" href="./subpage-nav.css?v=21.0">
-
-  <style id="bot-menu-creator-rule-v16">
-    .bot-topbar { z-index: 120; }
-
-    .bot-brand {
-      gap: 9px;
-      color: #fff;
-      font: 700 22px/1 "Teko", sans-serif;
-      letter-spacing: .16em;
-    }
-
-    .bot-brand::before {
-      width: 5px;
-      height: 22px;
-      flex: 0 0 5px;
-    }
-
-    .site-menu-button {
-      width: 46px;
-      height: 46px;
-      display: grid;
-      place-content: center;
-      gap: 5px;
-      padding: 0;
-      border: 0;
-      background: transparent;
-      cursor: pointer;
-    }
-
-    .site-menu-button span {
-      display: block;
-      width: 25px;
-      height: 2px;
-      border-radius: 99px;
-      background: #fff;
-      transition: transform .22s ease, opacity .22s ease;
-    }
-
-    body.menu-open .site-menu-button span:nth-child(1) {
-      transform: translateY(7px) rotate(45deg);
-    }
-
-    body.menu-open .site-menu-button span:nth-child(2) {
-      opacity: 0;
-    }
-
-    body.menu-open .site-menu-button span:nth-child(3) {
-      transform: translateY(-7px) rotate(-45deg);
-    }
-
-    .site-menu-backdrop {
-      position: fixed;
-      inset: 64px 0 0;
-      z-index: 108;
-      background: rgba(0, 0, 0, .48);
-      backdrop-filter: blur(2px);
-      -webkit-backdrop-filter: blur(2px);
-    }
-
-    .site-menu-drawer {
-      position: fixed;
-      top: 64px;
-      right: 0;
-      z-index: 110;
-      width: min(86vw, 340px);
-      height: calc(100dvh - 64px);
-      padding: 12px;
-      transform: translateX(105%);
-      overflow-y: auto;
-      background: rgba(17, 19, 24, .98);
-      box-shadow: -18px 0 50px rgba(0, 0, 0, .32);
-      transition: transform .24s ease;
-    }
-
-    body.menu-open .site-menu-drawer {
-      transform: translateX(0);
-    }
-
-    .site-menu-head {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      min-height: 48px;
-      padding: 0 6px 10px;
-      color: rgba(255,255,255,.7);
-      font: 800 12px "Teko", sans-serif;
-      letter-spacing: .24em;
-    }
-
-    .site-menu-head button {
-      width: 38px;
-      height: 38px;
-      border: 0;
-      color: #fff;
-      background: transparent;
-      font-size: 28px;
-      line-height: 1;
-      cursor: pointer;
-    }
-
-    .site-menu-drawer > a {
-      width: 100%;
-      min-height: 52px;
-      display: flex;
-      align-items: center;
-      padding: 0 14px;
-      border: 0;
-      border-bottom: 1px solid rgba(255,255,255,.09);
-      color: #fff;
-      background: transparent;
-      font-size: 14px;
-      font-weight: 800;
-      text-align: left;
-      text-decoration: none;
-      cursor: pointer;
-      transition: background .18s ease, color .18s ease;
-    }
-
-    .site-menu-drawer > a:hover {
-      color: var(--cyan);
-      background: rgba(255,255,255,.06);
-    }
-
-    .bot-pc-home-row { display: none; }
-
-    @media screen and (min-width: 1025px) {
-      .bot-pc-home-row {
-        display: flex;
-        padding: 12px 0 0 20px;
-      }
-
-      .bot-pc-home {
-        position: fixed;
-        top: 76px;
-        left: 20px;
-        z-index: 105;
-        width: 44px;
-        height: 44px;
-        display: grid;
-        place-items: center;
-        overflow: hidden;
-        border: 1px solid rgba(26, 176, 241, .38);
-        background: rgba(26, 176, 241, .055);
-        color: #dcecf4;
-        text-decoration: none;
-        font: 800 23px/1 "Teko", sans-serif;
-        box-shadow: none;
-        transition: .18s ease;
-      }
-
-      .bot-pc-home::before,
-      .bot-pc-home::after {
-        display: none;
-      }
-
-      .bot-pc-home:hover,
-      .bot-pc-home:active {
-        border-color: #a9dff6;
-        background: #f7fbfd;
-        color: #079fd9;
-        transform: none;
-        box-shadow: none;
-      }
-    }
-
-    @media screen and (max-width: 1024px) {
-      .site-menu-backdrop {
-        background: rgba(0, 0, 0, .18) !important;
-        backdrop-filter: blur(4px) !important;
-        -webkit-backdrop-filter: blur(4px) !important;
-      }
-
-      .site-menu-drawer {
-        background: rgba(13, 16, 22, .62) !important;
-        border-left: 1px solid rgba(255,255,255,.12) !important;
-        box-shadow: -12px 0 34px rgba(0,0,0,.18) !important;
-        backdrop-filter: blur(14px) saturate(118%) !important;
-        -webkit-backdrop-filter: blur(14px) saturate(118%) !important;
-      }
-
-      .site-menu-drawer > a {
-        border-bottom-color: rgba(255,255,255,.12) !important;
-      }
-
-      .bot-bottom-nav {
-        grid-template-columns: repeat(3, minmax(0, 1fr)) !important;
-      }
-
-      .bot-bottom-nav > a {
-        display: flex !important;
-        flex-direction: column !important;
-        align-items: center !important;
-        justify-content: center !important;
-        gap: 4px !important;
-        padding: 6px 3px 8px !important;
-        color: rgba(255,255,255,.72) !important;
-        background: rgba(16,18,22,.96) !important;
-        font-size: 10px !important;
-        font-weight: 900 !important;
-        line-height: 1 !important;
-        text-align: center !important;
-      }
-
-      .bot-bottom-nav .bot-nav-icon {
-        display: block !important;
-        min-height: 19px;
-        color: rgba(255,255,255,.94);
-        font-family: "Teko", "Zen Kaku Gothic New", sans-serif;
-        font-size: 21px;
-        font-weight: 800;
-        line-height: .9;
-      }
-
-      .bot-bottom-nav .bot-nav-label {
-        display: block !important;
-        font-size: 10px;
-        font-weight: 900;
-        line-height: 1;
-        white-space: nowrap;
-      }
-
-      .bot-bottom-nav > a:nth-child(2) {
-        color: #fff !important;
-        background: rgba(40,185,232,.13) !important;
-        box-shadow:
-          inset 0 2px 0 rgba(40,185,232,.92),
-          inset 1px 0 0 rgba(255,255,255,.04),
-          inset -1px 0 0 rgba(255,255,255,.04) !important;
-      }
-
-      .bot-bottom-nav > a:nth-child(2) .bot-nav-icon {
-        color: var(--cyan) !important;
-      }
-
-      .bot-bottom-nav > a:active {
-        background: rgba(40,185,232,.22) !important;
-        color: #fff !important;
-      }
-    }
-
-    @media screen and (max-width: 600px) {
-      .bot-brand { font-size: 19px; }
-
-      .site-menu-backdrop {
-        inset: 58px 0 0;
-      }
-
-      .site-menu-drawer {
-        top: 58px;
-        height: calc(100dvh - 58px);
-      }
-    }
-  </style>
-
-  <style id="subpage-hard-fixed-v22">
-    /* v22: BOT / CREATOR mobile+tablet hard fixed navigation.
-       Embedded here so this does not depend on subpage-nav.css loading/cache. */
-    @media screen and (max-width: 1366px) {
-      html {
-        scroll-padding-top: 64px !important;
-      }
-
-      body {
-        padding-top: 64px !important;
-        padding-bottom: calc(72px + env(safe-area-inset-bottom)) !important;
-      }
-
-      body > .topbar.bot-topbar,
-      body > .topbar.creator-topbar {
-        position: fixed !important;
-        inset: 0 0 auto 0 !important;
-        top: 0 !important;
-        left: 0 !important;
-        right: 0 !important;
-        bottom: auto !important;
-        width: 100% !important;
-        margin: 0 !important;
-        z-index: 1000 !important;
-        transform: none !important;
-        translate: none !important;
-        will-change: auto !important;
-      }
-
-      body > .subpage-bottom-nav.bot-bottom-nav,
-      body > .subpage-bottom-nav.creator-bottom-nav {
-        position: fixed !important;
-        inset: auto 0 0 0 !important;
-        top: auto !important;
-        left: 0 !important;
-        right: 0 !important;
-        bottom: 0 !important;
-        width: 100% !important;
-        height: calc(68px + env(safe-area-inset-bottom)) !important;
-        margin: 0 !important;
-        padding-bottom: env(safe-area-inset-bottom) !important;
-        display: grid !important;
-        visibility: visible !important;
-        opacity: 1 !important;
-        grid-template-columns: repeat(3, minmax(0, 1fr)) !important;
-        z-index: 1000 !important;
-        transform: none !important;
-        translate: none !important;
-        pointer-events: auto !important;
-      }
-
-      /* Keep the slide-out menu below the fixed header. */
-      .site-menu-backdrop {
-        top: 64px !important;
-        inset: 64px 0 0 !important;
-      }
-
-      .site-menu-drawer {
-        top: 64px !important;
-        height: calc(100dvh - 64px) !important;
-      }
-    }
-
-    @media screen and (max-width: 600px) {
-      html {
-        scroll-padding-top: 58px !important;
-      }
-
-      body {
-        padding-top: 58px !important;
-      }
-
-      .site-menu-backdrop {
-        top: 58px !important;
-        inset: 58px 0 0 !important;
-      }
-
-      .site-menu-drawer {
-        top: 58px !important;
-        height: calc(100dvh - 58px) !important;
-      }
-    }
-  </style>
-
-
-  <style id="subpage-browser-ui-lock-v23">
-    /* v23: mobile/tablet viewport lock.
-       Keep the document itself from scrolling so Safari/Chrome browser UI
-       does not collapse/expand with page scroll. Only <main> scrolls. */
-    @media screen and (max-width: 1366px) {
-      html,
-      body {
-        width: 100% !important;
-        height: 100% !important;
-        min-height: 0 !important;
-        overflow: hidden !important;
-        overscroll-behavior: none !important;
-      }
-
-      body {
-        box-sizing: border-box !important;
-        height: 100dvh !important;
-        padding-top: 64px !important;
-        padding-bottom: calc(68px + env(safe-area-inset-bottom)) !important;
-      }
-
-      body > main.container {
-        box-sizing: border-box !important;
-        height: 100% !important;
-        min-height: 0 !important;
-        max-height: 100% !important;
-        overflow-x: hidden !important;
-        overflow-y: auto !important;
-        overscroll-behavior-y: contain !important;
-        -webkit-overflow-scrolling: touch !important;
-        touch-action: pan-y !important;
-      }
-    }
-
-    @media screen and (max-width: 600px) {
-      body {
-        padding-top: 58px !important;
-      }
-    }
-  </style>
-
-  <style id="site-menu-fansite-note-v1">
-    .site-menu-disclaimer {
-      margin: 22px 8px 8px;
-      padding: 14px 10px 0;
-      border-top: 1px solid rgba(255,255,255,.12);
-      color: rgba(255,255,255,.48);
-      font-size: 10px;
-      font-weight: 700;
-      line-height: 1.7;
-      letter-spacing: .01em;
-    }
-  </style>
-
-
-<style id="bot-redesign-v20">
-  .bot-redesign .bot-hero {
-    grid-template-columns:minmax(0,1fr) 190px;
-    gap:22px;
-  }
-
-  .bot-redesign .hero-install-panel {
-    position:relative;
-    z-index:1;
-    display:flex;
-    align-items:center;
-    justify-content:center;
-    border-left:1px solid #30333a;
-    padding-left:18px;
-  }
-
-  .bot-redesign .hero-install-btn {
-    width:150px;
-    min-height:56px;
-    padding:9px 12px;
-    display:flex;
-    align-items:center;
-    justify-content:center;
-    border:1px solid #287da0;
-    color:#fff;
-    background:linear-gradient(180deg,#28b9e8,#148dbb);
-    font-size:12.5px;
-    font-weight:900;
-    line-height:1.35;
-    text-align:center;
-    text-decoration:none;
-    clip-path:polygon(
-      7px 0,
-      calc(100% - 7px) 0,
-      100% 7px,
-      100% calc(100% - 7px),
-      calc(100% - 7px) 100%,
-      7px 100%,
-      0 calc(100% - 7px),
-      0 7px
-    );
-  }
-
-  .bot-redesign .hero-install-btn:hover {
-    border-color:var(--accent2);
-    background:linear-gradient(180deg,#2cc5ff,#159cca);
-  }
-
-  .bot-redesign .feature-grid {
-    grid-template-columns:repeat(3,minmax(0,1fr));
-    gap:10px;
-  }
-
-  .bot-redesign .feature-card {
-    min-width:0;
-    min-height:150px;
-    overflow-wrap:anywhere;
-  }
-
-  .bot-redesign .feature-card.x-primary {
-    border:1px solid rgba(40,185,232,.72);
-    border-left:5px solid var(--accent);
-    background:linear-gradient(135deg,rgba(40,185,232,.16),rgba(23,26,32,.98) 46%,rgba(13,15,19,.98));
-    box-shadow:inset 0 0 0 1px rgba(142,220,255,.08),0 0 22px rgba(40,185,232,.08);
-  }
-
-  .bot-redesign .feature-card.x-primary h3 {
-    color:#28b9e8;
-    text-shadow:0 0 12px rgba(40,185,232,.18);
-  }
-
-  .bot-redesign .feature-card.x-primary .icon {
-    color:var(--accent2);
-  }
-
-  .bot-redesign .feature-card.green {
-    border-left:4px solid var(--green);
-  }
-
-  .bot-redesign .steps {
-    grid-template-columns:repeat(3,minmax(0,1fr));
-  }
-
-  .bot-redesign .character-grid {
-    grid-template-columns:repeat(4,minmax(0,1fr));
-  }
-
-  .bot-redesign .character-card.adaptive {
-    border-color:rgba(40,185,232,.5);
-    box-shadow:inset 0 2px 0 rgba(40,185,232,.6);
-  }
-
-  .bot-redesign .command-grid {
-    display:grid;
-    grid-template-columns:repeat(2,minmax(0,1fr));
-    gap:10px;
-  }
-
-  .bot-redesign .command-card {
-    position:relative;
-    min-height:118px;
-    padding:16px 122px 16px 16px;
-    border:1px solid var(--line);
-    background:#15181d;
-  }
-
-  .bot-redesign .command-card .cmd {
-    color:#91defd;
-    font:900 17px Consolas,"SFMono-Regular",monospace;
-  }
-
-  .bot-redesign .command-card .badge {
-    margin-left:6px;
-    padding:2px 6px;
-    color:#081018;
-    background:var(--accent);
-    font:900 9px "Zen Kaku Gothic New",sans-serif;
-  }
-
-  .bot-redesign .command-card .desc {
-    margin-top:8px;
-    color:#c4c8cd;
-    font-size:11.5px;
-    line-height:1.65;
-  }
-
-  .bot-redesign .command-card .natural {
-    margin-top:8px;
-    color:#8edcff;
-    font-size:10.5px;
-    line-height:1.65;
-  }
-
-  .bot-redesign .command-card .copy-command {
-    position:absolute;
-    top:16px;
-    right:14px;
-  }
-
-  .bot-redesign .bot-important {
-    margin-top:15px;
-    color:#b8d9e7;
-    line-height:1.8;
-  }
-
-  .bot-redesign .hero-main-copy {
-    white-space:nowrap;
-  }
-
-  @media (max-width:1024px) and (min-width:601px) {
-    .bot-redesign .character-grid {
-      grid-template-columns:repeat(2,minmax(0,1fr));
-    }
-  }
-
-  @media (max-width:900px) and (min-width:601px) {
-    .bot-redesign .bot-hero {
-      grid-template-columns:minmax(0,1fr) 165px;
-      gap:16px;
-    }
-
-    .bot-redesign .hero-install-panel {
-      padding-left:14px;
-    }
-
-    .bot-redesign .hero-install-btn {
-      width:138px;
-      min-height:52px;
-      font-size:12px;
-    }
-
-    .bot-redesign .feature-grid {
-      grid-template-columns:repeat(3,minmax(0,1fr));
-    }
-
-    .bot-redesign .character-grid {
-      grid-template-columns:repeat(2,minmax(0,1fr));
-    }
-
-    .bot-redesign .command-grid {
-      grid-template-columns:1fr;
-    }
-  }
-
-  @media (max-width:600px) {
-    .bot-redesign .bot-hero {
-      grid-template-columns:1fr;
-      gap:13px;
-    }
-
-    .bot-redesign .bot-hero h1 {
-      font-size:clamp(18px,6.5vw,27px);
-      white-space:nowrap;
-      letter-spacing:-.06em;
-    }
-
-    .bot-redesign .hero-install-panel {
-      border-left:0;
-      border-top:1px solid #30333a;
-      padding:12px 0 0;
-    }
-
-    .bot-redesign .hero-install-btn {
-      width:min(100%,220px);
-      min-height:46px;
+    .invite-btn:hover::before{transform:translateX(105%)}
+    .invite-btn span{position:relative;z-index:1}
+
+    .lux-section{
+      width:min(var(--content),calc(100% - 48px));
       margin:0 auto;
-      font-size:12px;
+      padding:104px 0;
+      position:relative;
+    }
+    .section-heading{
+      margin:0 0 38px;
+      text-align:left;
+    }
+    .section-en{
+      margin:0;
+      font-family:"Teko",sans-serif;
+      font-size:clamp(46px,5.8vw,78px);
+      font-weight:700;
+      line-height:.92;
+      letter-spacing:.055em;
+      color:#fff;
+      text-transform:uppercase;
+    }
+    .section-ja{
+      margin-top:8px;
+      color:#bcc4cd;
+      font-size:14px;
+      font-weight:700;
+      letter-spacing:.035em;
     }
 
-    .bot-redesign .feature-grid {
-      grid-template-columns:repeat(2,minmax(0,1fr));
-      gap:8px;
+    /* ---------- STAY CONNECTED ---------- */
+    .stay-section{
+      min-height:74vh;
+      display:flex;
+      flex-direction:column;
+      justify-content:center;
+    }
+    .stay-copy{
+      width:min(760px,78%);
+    }
+    .stay-toggle{
+      margin:4px 0 26px;
+      display:flex;
+      align-items:center;
+      flex-wrap:wrap;
+      gap:22px;
+      color:#fff;
+      font-size:clamp(34px,5vw,66px);
+      font-weight:900;
+      line-height:1.15;
+      letter-spacing:-.035em;
+    }
+    .stay-toggle .swap{
+      color:var(--cyan2);
+      font-family:"Teko",sans-serif;
+      font-size:.9em;
+      font-weight:600;
+      animation:swapPulse 3.8s ease-in-out infinite;
+    }
+    @keyframes swapPulse{
+      0%,100%{transform:translateX(0);opacity:.72}
+      50%{transform:translateX(6px);opacity:1}
+    }
+    .stay-copy p{
+      margin:0;
+      color:#c4cbd3;
+      font-size:14px;
+      line-height:2;
+    }
+    .stay-copy strong{color:#fff}
+    .stay-bot-note{
+      margin-top:26px!important;
+      padding-top:20px;
+      border-top:1px solid rgba(255,255,255,.15);
+      color:#e5f8ff!important;
+      font-weight:900;
     }
 
-    .bot-redesign .feature-card {
-      min-height:158px;
-      padding:13px 11px;
+    /* ---------- BOT FEATURES ---------- */
+    .feature-section{
+      min-height:calc(100vh - var(--header-h));
+      display:flex;
+      flex-direction:column;
+      justify-content:center;
+    }
+    .feature-grid{
+      display:grid;
+      grid-template-columns:repeat(3,minmax(0,1fr));
+      gap:14px;
+    }
+    .glass-card{
+      border:1px solid rgba(255,255,255,.12);
+      background:
+        linear-gradient(145deg,rgba(17,22,29,.78),rgba(6,9,14,.63));
+      box-shadow:inset 0 1px 0 rgba(255,255,255,.035),0 18px 50px rgba(0,0,0,.18);
+      backdrop-filter:blur(12px) saturate(112%);
+      -webkit-backdrop-filter:blur(12px) saturate(112%);
+    }
+    .feature-card{
+      min-height:255px;
+      padding:22px 22px 20px;
+      position:relative;
+      overflow:hidden;
+      display:flex;
+      flex-direction:column;
+      transition:transform .35s ease,border-color .35s ease,background .35s ease,box-shadow .35s ease;
+      scroll-snap-align:center;
+    }
+    .feature-card::after{
+      content:"";
+      position:absolute;
+      top:0;
+      left:0;
+      width:0;
+      height:2px;
+      background:linear-gradient(90deg,var(--cyan),var(--purple));
+      transition:width .45s ease;
+    }
+    .feature-card:hover{
+      transform:translateY(-5px);
+      border-color:rgba(149,230,255,.34);
+      background:linear-gradient(145deg,rgba(19,27,35,.86),rgba(7,11,16,.70));
+      box-shadow:0 22px 55px rgba(0,0,0,.26),0 0 30px rgba(49,196,243,.055);
+    }
+    .feature-card:hover::after{width:100%}
+    .feature-no{
+      color:var(--cyan2);
+      font:700 14px "Teko",sans-serif;
+      letter-spacing:.16em;
+    }
+    .feature-card h3{
+      margin:9px 0 0;
+      color:#fff;
+      font-size:20px;
+      line-height:1.35;
+      letter-spacing:-.02em;
+    }
+    .feature-lead{
+      margin:10px 0 0;
+      color:#f0f5f8;
+      font-size:12.5px;
+      line-height:1.7;
+      font-weight:900;
+    }
+    .feature-card p{
+      margin:10px 0 0;
+      color:#aeb7c1;
+      font-size:11.5px;
+      line-height:1.85;
+    }
+    .feature-tip{
+      margin-top:auto!important;
+      padding-top:12px;
+      border-top:1px solid rgba(255,255,255,.08);
+      color:#ccefff!important;
+      font-size:10.5px!important;
+    }
+    .feature-shared{
+      margin-top:14px;
+      padding:14px 17px;
+      display:grid;
+      grid-template-columns:auto 1fr;
+      gap:14px;
+      align-items:start;
+      border-left:2px solid rgba(49,196,243,.76);
+      background:rgba(4,10,14,.50);
+      color:#b9c5cf;
+      font-size:11px;
+      line-height:1.8;
+      backdrop-filter:blur(10px);
+      -webkit-backdrop-filter:blur(10px);
+    }
+    .feature-shared strong{
+      color:#fff;
+      white-space:nowrap;
+    }
+    .slider-status{
+      display:none;
+      margin-top:16px;
+      color:#dce9ef;
+      font:700 14px "Teko",sans-serif;
+      letter-spacing:.12em;
+      text-align:center;
     }
 
-    .bot-redesign .feature-card h3 {
-      font-size:13.5px;
+    /* ---------- GET STARTED ---------- */
+    .step-grid{
+      display:grid;
+      grid-template-columns:repeat(3,minmax(0,1fr));
+      gap:14px;
+    }
+    .step-card{
+      min-height:315px;
+      padding:25px 24px;
+      display:flex;
+      flex-direction:column;
+    }
+    .step-no{
+      color:var(--cyan2);
+      font:700 16px "Teko",sans-serif;
+      letter-spacing:.18em;
+    }
+    .step-card h3{
+      margin:13px 0 0;
+      color:#fff;
+      font-size:21px;
       line-height:1.45;
     }
-
-    .bot-redesign .feature-card p {
-      font-size:10.5px;
-      line-height:1.65;
+    .step-card p{
+      margin:15px 0 0;
+      color:#aeb7c1;
+      font-size:12px;
+      line-height:1.95;
+    }
+    .step-note{
+      margin-top:auto!important;
+      padding-top:14px;
+      border-top:1px solid rgba(255,255,255,.10);
+      color:#d8f3ff!important;
+      font-size:10.5px!important;
+      font-weight:800;
+    }
+    code{
+      color:#9ae8ff;
+      font-family:Consolas,"SFMono-Regular",monospace;
+      font-weight:800;
     }
 
-    .bot-redesign .steps,
-    .bot-redesign .command-grid {
-      grid-template-columns:1fr;
-    }
-
-    .bot-redesign .character-grid {
+    /* ---------- CHARACTERS ---------- */
+    .character-grid{
+      display:grid;
       grid-template-columns:repeat(2,minmax(0,1fr));
+      gap:14px;
+    }
+    .character-card{
+      min-height:440px;
+      padding:26px;
+      overflow:hidden;
+    }
+    .character-card h3{
+      margin:0;
+      color:#fff;
+      font-size:22px;
+      line-height:1.4;
+    }
+    .character-card>.sub{
+      margin:8px 0 0;
+      color:#99a3ad;
+      font-size:11.5px;
+      line-height:1.8;
+    }
+    .character-types{
+      margin-top:24px;
+      display:grid;
+      gap:10px;
+    }
+    .type-row{
+      display:grid;
+      grid-template-columns:36px 120px 1fr;
       gap:8px;
+      align-items:center;
+      min-height:62px;
+      padding:10px 12px;
+      border-bottom:1px solid rgba(255,255,255,.08);
     }
+    .type-row:last-child{border-bottom:0}
+    .type-symbol{font-size:21px}
+    .type-row b{color:#fff;font-size:13px}
+    .type-row span:last-child{color:#aab4bd;font-size:10.5px;line-height:1.55}
 
-    .bot-redesign .character-visual {
-      height:118px;
+    .profile-demo{
+      margin-top:20px;
+      padding:16px;
+      border:1px solid rgba(255,255,255,.11);
+      background:rgba(13,13,32,.80);
+      box-shadow:0 14px 40px rgba(0,0,0,.24);
     }
-
-    .bot-redesign .character-fallback {
-      font-size:46px;
+    .profile-demo-title{
+      color:#fff;
+      font-size:13px;
+      font-weight:900;
+      margin-bottom:10px;
     }
-
-    .bot-redesign .character-body {
-      padding:11px 10px 13px;
+    .profile-demo-row{
+      display:flex;
+      align-items:center;
+      gap:9px;
+      min-height:38px;
+      padding:7px 9px;
+      margin-top:6px;
+      border:1px solid rgba(255,255,255,.075);
+      background:rgba(255,255,255,.035);
+      color:#f1f4f6;
+      font-size:10.5px;
     }
-
-    .bot-redesign .character-tag {
+    .profile-demo-avatar{
+      width:24px;
+      height:24px;
+      flex:0 0 24px;
+      border-radius:4px;
+      background:
+        linear-gradient(135deg,rgba(49,196,243,.50),rgba(154,124,255,.55));
+      opacity:.75;
+    }
+    .profile-custom{
+      margin-top:9px;
+      padding:10px;
+      background:rgba(255,255,255,.04);
+      color:#dfe6eb;
+      font-size:10px;
+      line-height:1.6;
+    }
+    .profile-actions{
+      margin-top:9px;
+      display:grid;
+      grid-template-columns:repeat(3,1fr);
+      gap:6px;
+    }
+    .profile-actions span{
+      min-height:29px;
+      display:grid;
+      place-items:center;
+      border:1px solid rgba(149,230,255,.16);
+      background:rgba(49,196,243,.08);
+      color:#dff8ff;
       font-size:8.5px;
-      letter-spacing:1.2px;
+      font-weight:900;
     }
-
-    .bot-redesign .character-name {
-      font-size:15px;
-      line-height:1.35;
+    .customize-copy{
+      margin-top:18px;
+      color:#b9c3cc;
+      font-size:11.5px;
+      line-height:1.85;
     }
+    .customize-copy strong{color:#fff}
 
-    .bot-redesign .character-desc {
-      margin-top:5px;
-      font-size:9.5px;
-      line-height:1.55;
+    /* ---------- COMMANDS ---------- */
+    .command-grid{
+      display:grid;
+      grid-template-columns:repeat(2,minmax(0,1fr));
+      gap:14px;
     }
-
-    .bot-redesign .hero-main-copy {
-      display:block;
-      font-size:clamp(9.5px,3vw,12px);
-      letter-spacing:-.035em;
+    .command-card{
+      min-height:255px;
+      padding:24px;
+      position:relative;
+      display:flex;
+      flex-direction:column;
+    }
+    .command-top{
+      display:flex;
+      align-items:flex-start;
+      justify-content:space-between;
+      gap:18px;
+    }
+    .cmd{
+      color:#9ae8ff;
+      font:700 clamp(25px,3vw,36px) Consolas,"SFMono-Regular",monospace;
+      letter-spacing:-.04em;
+    }
+    .first-tag{
+      display:inline-block;
+      margin-top:7px;
+      color:#071015;
+      background:var(--cyan2);
+      padding:4px 7px;
+      font-size:8px;
+      font-weight:900;
+      letter-spacing:.08em;
+    }
+    .command-card h3{
+      margin:15px 0 0;
+      color:#fff;
+      font-size:16px;
+    }
+    .command-card p{
+      margin:10px 0 0;
+      color:#aeb7c1;
+      font-size:11.5px;
+      line-height:1.85;
+      max-width:590px;
+    }
+    .copy-command{
+      min-width:140px;
+      min-height:42px;
+      padding:0 14px;
+      border:1px solid rgba(149,230,255,.40);
+      color:#e9fbff;
+      background:rgba(6,12,16,.40);
+      font:700 11px "Teko",sans-serif;
+      letter-spacing:.10em;
+      cursor:pointer;
+      transition:.25s ease;
       white-space:nowrap;
     }
-
-    .bot-redesign .command-card {
-      padding:14px 14px 58px;
+    .copy-command:hover{
+      border-color:var(--cyan2);
+      background:rgba(49,196,243,.12);
+      transform:translateY(-2px);
+      box-shadow:0 0 24px rgba(49,196,243,.08);
+    }
+    .copy-command.copied{
+      border-color:rgba(114,224,173,.62);
+      color:#bdffdf;
+      background:rgba(29,111,72,.14);
     }
 
-    .bot-redesign .command-card .copy-command {
-      top:auto;
-      right:auto;
-      bottom:13px;
-      left:14px;
+    /* ---------- IMPORTANT ---------- */
+    .important-section{
+      min-height:82vh;
+      display:flex;
+      flex-direction:column;
+      justify-content:center;
     }
-  }
-</style>
+    .important-layout{
+      width:min(700px,62%);
+    }
+    .important-item{
+      display:grid;
+      grid-template-columns:54px 1fr;
+      gap:14px;
+      padding:19px 0;
+      border-bottom:1px solid rgba(255,255,255,.12);
+    }
+    .important-item:last-child{border-bottom:0}
+    .important-no{
+      color:var(--cyan2);
+      font:700 16px "Teko",sans-serif;
+      letter-spacing:.14em;
+    }
+    .important-item h3{
+      margin:0;
+      color:#fff;
+      font-size:14px;
+    }
+    .important-item p{
+      margin:7px 0 0;
+      color:#aeb7c1;
+      font-size:11.5px;
+      line-height:1.85;
+    }
 
+    .bottom-area{
+      width:min(var(--content),calc(100% - 48px));
+      margin:0 auto;
+      padding:28px 0 14px;
+      border-top:1px solid rgba(255,255,255,.08);
+      color:#747d86;
+      font:700 11px "Teko",sans-serif;
+      letter-spacing:.16em;
+    }
 
+    /* ---------- reveal ---------- */
+    .js .reveal-up{
+      opacity:0;
+      transform:translateY(56px) scale(.985);
+    }
+    .js .reveal-up.is-visible{
+      opacity:1;
+      transform:translateY(0) scale(1);
+      transition:
+        opacity .75s cubic-bezier(.2,.72,.2,1) var(--delay,0ms),
+        transform .88s cubic-bezier(.2,.72,.2,1) var(--delay,0ms);
+    }
 
+    /* ---------- bottom nav ---------- */
+    .bot-bottom-nav{
+      display:none;
+    }
+
+    @media (max-width:1366px){
+      html,body{
+        width:100%;
+        height:100%;
+        min-height:0;
+        overflow:hidden;
+        overscroll-behavior:none;
+      }
+      body{
+        height:100dvh;
+        padding-top:var(--header-h);
+        padding-bottom:calc(var(--bottom-h) + env(safe-area-inset-bottom));
+      }
+      main.lux-page{
+        box-sizing:border-box;
+        height:100%;
+        max-height:100%;
+        overflow-x:hidden;
+        overflow-y:auto;
+        overscroll-behavior-y:contain;
+        -webkit-overflow-scrolling:touch;
+      }
+      .hero{
+        min-height:100%;
+      }
+      .bot-bottom-nav{
+        position:fixed!important;
+        left:0;
+        right:0;
+        bottom:0;
+        z-index:1000!important;
+        min-height:var(--bottom-h);
+        padding-bottom:env(safe-area-inset-bottom);
+        display:grid!important;
+        grid-template-columns:repeat(3,minmax(0,1fr));
+        border-top:1px solid rgba(255,255,255,.09);
+        background:rgba(10,12,16,.96);
+      }
+      .bot-bottom-nav>a{
+        min-width:0;
+        display:flex!important;
+        flex-direction:column;
+        align-items:center;
+        justify-content:center;
+        gap:4px;
+        color:rgba(255,255,255,.72)!important;
+        text-decoration:none;
+        font-size:10px;
+        font-weight:900;
+      }
+      .bot-bottom-nav .bot-nav-icon{
+        color:rgba(255,255,255,.94);
+        font:800 21px/.9 "Teko",sans-serif;
+      }
+      .bot-bottom-nav>a:nth-child(2){
+        background:rgba(49,196,243,.09);
+        box-shadow:inset 0 2px 0 rgba(49,196,243,.72);
+      }
+    }
+
+    /* tablet + mobile: feature slider */
+    @media (max-width:1024px){
+      .bot-pc-home{display:none}
+      .lux-section{
+        width:min(100% - 34px,var(--content));
+        padding:82px 0;
+      }
+      .hero-pc-title{display:none}
+      .hero-mobile-title{display:inline}
+      .hero-title{
+        font-size:clamp(56px,10vw,92px);
+      }
+      .feature-section{min-height:0}
+      .feature-grid{
+        display:flex;
+        gap:14px;
+        margin-left:-17px;
+        margin-right:-17px;
+        padding:0 17px 8px;
+        overflow-x:auto;
+        scroll-snap-type:x mandatory;
+        scrollbar-width:none;
+      }
+      .feature-grid::-webkit-scrollbar{display:none}
+      .feature-card{
+        flex:0 0:min(72vw,520px);
+        min-height:330px;
+      }
+      .slider-status{display:block}
+      .feature-shared{
+        grid-template-columns:1fr;
+        gap:4px;
+      }
+      .feature-shared strong{white-space:normal}
+      .stay-copy{width:min(760px,88%)}
+      .section-en{font-size:clamp(44px,8vw,66px)}
+      .character-grid{
+        grid-template-columns:repeat(2,minmax(0,1fr));
+      }
+      .command-grid{
+        grid-template-columns:repeat(2,minmax(0,1fr));
+      }
+      .command-top{
+        display:block;
+      }
+      .copy-command{
+        margin-top:16px;
+      }
+      .important-layout{width:min(700px,82%)}
+    }
+
+    @media (max-width:900px){
+      .step-grid{grid-template-columns:1fr}
+      .step-card{min-height:0}
+    }
+
+    @media (max-width:600px){
+      :root{--header-h:58px}
+      .topbar{padding:0 14px}
+      .bot-brand{font-size:19px}
+      .site-menu-backdrop{inset:var(--header-h) 0 0}
+      .site-menu-drawer{
+        top:var(--header-h);
+        height:calc(100dvh - var(--header-h));
+      }
+
+      .hero{
+        padding:32px 18px;
+      }
+      .hero-center{gap:28px}
+      .hero-title{
+        font-size:clamp(50px,17vw,76px);
+        line-height:.88;
+      }
+      .invite-btn{
+        min-width:220px;
+        min-height:50px;
+      }
+
+      .lux-section{
+        width:calc(100% - 28px);
+        padding:70px 0;
+      }
+      .section-heading{margin-bottom:28px}
+      .section-en{
+        font-size:clamp(41px,14vw,58px);
+      }
+      .section-ja{
+        font-size:12px;
+      }
+
+      .stay-section{min-height:70vh}
+      .stay-copy{width:100%}
+      .stay-toggle{
+        gap:12px;
+        font-size:clamp(31px,11vw,46px);
+      }
+      .stay-copy p{font-size:12px}
+
+      .feature-grid{
+        margin-left:-14px;
+        margin-right:-14px;
+        padding:0 14px 8px;
+      }
+      .feature-card{
+        flex-basis:86vw;
+        min-height:350px;
+        padding:22px 20px;
+      }
+      .feature-card h3{font-size:19px}
+      .feature-lead{font-size:12px}
+      .feature-card p{font-size:11px}
+
+      .character-grid{
+        display:flex;
+        gap:12px;
+        margin-left:-14px;
+        margin-right:-14px;
+        padding:0 14px 8px;
+        overflow-x:auto;
+        scroll-snap-type:x mandatory;
+        scrollbar-width:none;
+      }
+      .character-grid::-webkit-scrollbar{display:none}
+      .character-card{
+        flex:0 0 86vw;
+        min-height:470px;
+        scroll-snap-align:center;
+      }
+      .type-row{
+        grid-template-columns:34px 105px 1fr;
+      }
+
+      .command-grid{grid-template-columns:1fr}
+      .command-card{min-height:0}
+      .copy-command{
+        width:100%;
+        min-height:46px;
+      }
+
+      .important-section{min-height:0}
+      .important-layout{width:100%}
+      .important-item{
+        grid-template-columns:42px 1fr;
+        gap:10px;
+      }
+      .bottom-area{
+        width:calc(100% - 28px);
+        padding-bottom:18px;
+      }
+    }
+
+    @media (prefers-reduced-motion:reduce){
+      *,*::before,*::after{
+        animation-duration:.001ms!important;
+        animation-iteration-count:1!important;
+        scroll-behavior:auto!important;
+        transition-duration:.001ms!important;
+      }
+      .js .reveal-up{
+        opacity:1!important;
+        transform:none!important;
+      }
+    }
+  </style>
+
+  <script>
+    document.documentElement.classList.add("js");
+  </script>
 </head>
+
 <body>
 
   <!-- SUPABASE_BOT_PAGE_FLAG_V1 -->
   <script>
     (() => {
-      const SUPABASE_URL =
-        "https://igoekrvpgnjberppiawf.supabase.co";
+      const SUPABASE_URL = "https://igoekrvpgnjberppiawf.supabase.co";
+      const SUPABASE_ANON_KEY = "sb_publishable_xSjnNTnh667o9IesU5g5Kw_xcdg9bbh";
+      const BOT_PAGE_FLAG = "bot_page_enabled";
 
-      const SUPABASE_ANON_KEY =
-        "sb_publishable_xSjnNTnh667o9IesU5g5Kw_xcdg9bbh";
-
-      const BOT_PAGE_FLAG =
-        "bot_page_enabled";
-
-      // 判定が終わるまで既存ページを見せない
       document.documentElement.style.visibility = "hidden";
 
       function showMaintenancePage() {
@@ -1010,19 +1063,13 @@
                 font-size:12px;
                 font-weight:900;
                 letter-spacing:.18em;
-              ">
-                NIKKE UNION MATCH / DISCORD BOT
-              </div>
-
+              ">NIKKE UNION MATCH / DISCORD BOT</div>
               <h1 style="
                 margin:0;
                 color:#fff;
                 font-size:clamp(28px,7vw,44px);
                 line-height:1.15;
-              ">
-                BOTページは一時掲載を休止しています
-              </h1>
-
+              ">BOTページは一時掲載を休止しています</h1>
               <p style="
                 margin:18px auto 0;
                 max-width:520px;
@@ -1033,7 +1080,6 @@
                 現在、Discord BOTの機能調整と安定化作業を行っています。<br>
                 準備が整い次第、あらためて公開します。
               </p>
-
               <div style="
                 margin-top:22px;
                 padding:12px 14px;
@@ -1042,10 +1088,7 @@
                 color:#ccefff;
                 font-size:12px;
                 line-height:1.7;
-              ">
-                既存のUNION MATCH本体ページは引き続きご利用いただけます。
-              </div>
-
+              ">既存のUNION MATCH本体ページは引き続きご利用いただけます。</div>
               <a href="./index.html#videoHero" style="
                 display:inline-flex;
                 margin-top:24px;
@@ -1059,9 +1102,7 @@
                 text-decoration:none;
                 font-weight:900;
                 font-size:13px;
-              ">
-                UNION MATCHへ戻る
-              </a>
+              ">UNION MATCHへ戻る</a>
             </section>
           </main>
         `;
@@ -1072,41 +1113,25 @@
           const response = await fetch(
             `${SUPABASE_URL}/rest/v1/rpc/get_site_feature_flag`,
             {
-              method: "POST",
-              headers: {
-                "Content-Type": "application/json",
-                "apikey": SUPABASE_ANON_KEY,
-                "Authorization": `Bearer ${SUPABASE_ANON_KEY}`
+              method:"POST",
+              headers:{
+                "Content-Type":"application/json",
+                "apikey":SUPABASE_ANON_KEY,
+                "Authorization":`Bearer ${SUPABASE_ANON_KEY}`
               },
-              body: JSON.stringify({
-                p_key: BOT_PAGE_FLAG
-              }),
-              cache: "no-store"
+              body:JSON.stringify({p_key:BOT_PAGE_FLAG}),
+              cache:"no-store"
             }
           );
 
-          if (!response.ok) {
-            throw new Error(`FLAG_HTTP_${response.status}`);
-          }
-
-          const enabled =
-            await response.json();
-
-          if (enabled !== true) {
-            showMaintenancePage();
-          }
-
+          if (!response.ok) throw new Error(`FLAG_HTTP_${response.status}`);
+          const enabled = await response.json();
+          if (enabled !== true) showMaintenancePage();
         } catch (error) {
-          // 公開可否を確認できない時は安全側に倒して非公開表示
-          console.error(
-            "BOTページ公開フラグ確認エラー",
-            error
-          );
+          console.error("BOTページ公開フラグ確認エラー",error);
           showMaintenancePage();
-
         } finally {
-          document.documentElement.style.visibility =
-            "visible";
+          document.documentElement.style.visibility = "visible";
         }
       }
 
@@ -1114,8 +1139,14 @@
     })();
   </script>
 
+  <div class="bot-motion-bg" aria-hidden="true">
+    <video id="botBackgroundVideo" autoplay muted loop playsinline preload="metadata">
+      <source src="./assets/bot/hero.mp4" type="video/mp4">
+    </video>
+  </div>
+
   <header class="topbar bot-topbar">
-    <div class="status bot-brand">DISCORD BOT</div>
+    <div class="bot-brand">DISCORD BOT</div>
 
     <button
       id="siteMenuButton"
@@ -1125,26 +1156,16 @@
       aria-expanded="false"
       aria-controls="siteMenuDrawer"
     >
-      <span></span>
-      <span></span>
-      <span></span>
+      <span></span><span></span><span></span>
     </button>
   </header>
 
   <div id="siteMenuBackdrop" class="site-menu-backdrop" hidden></div>
 
-  <aside
-    id="siteMenuDrawer"
-    class="site-menu-drawer"
-    aria-hidden="true"
-  >
+  <aside id="siteMenuDrawer" class="site-menu-drawer" aria-hidden="true">
     <div class="site-menu-head">
       <span>MENU</span>
-      <button
-        id="siteMenuClose"
-        type="button"
-        aria-label="メニューを閉じる"
-      >×</button>
+      <button id="siteMenuClose" type="button" aria-label="メニューを閉じる">×</button>
     </div>
 
     <a href="./index.html#videoHero">TOP</a>
@@ -1155,279 +1176,378 @@
     <a href="./html/union-list.html">ユニオンリスト</a>
     <a href="./bot.html">Discord BOT</a>
     <a href="./creators.html">応援クリエイター</a>
+
     <div class="site-menu-disclaimer">
       このサイトはSHIFT UPが提供する「勝利の女神：NIKKE」の公式サイトではありません。<br>
       ファンサイトです。
     </div>
   </aside>
 
-  <div class="bot-pc-home-row">
-    <a
-      class="bot-pc-home"
-      href="./index.html#videoHero"
-      aria-label="UNION MATCH TOPへ戻る"
-      title="HOME"
-    >
-      <span aria-hidden="true">⌂</span>
-    </a>
-  </div>
+  <a
+    class="bot-pc-home"
+    href="./index.html#videoHero"
+    aria-label="UNION MATCH TOPへ戻る"
+    title="HOME"
+  >⌂</a>
 
-  <main class="container bot-redesign">
+  <main class="container bot-redesign lux-page">
 
-    <section class="bot-hero">
-      <div class="hero-copy">
-        <div class="eyebrow">UNION MATCH DISCORD BOT</div>
-        <h1>Discordでもっとラクに。</h1>
-        <p class="lead">
-          <strong class="hero-main-copy">X募集通知・募集指揮官通知・掲載期限通知・キャラ設定まで。</strong><br>
-          <strong>UNION MATCHとDiscordをつないで、もっと手軽に。</strong>
-        </p>
-      </div>
+    <section class="hero" aria-label="UNION MATCH Discord BOT">
+      <div class="hero-center">
+        <h1 class="hero-title">
+          <span class="hero-pc-title">UNION MATCH&nbsp;&nbsp;DISCORD BOT</span>
+          <span class="hero-mobile-title">DISCORD BOT</span>
+        </h1>
 
-      <div class="hero-install-panel">
         <a
-          class="hero-install-btn"
+          class="invite-btn"
           id="botInviteBtn"
           href="https://discord.com/oauth2/authorize?client_id=1548613088557793370&scope=bot%20applications.commands"
           target="_blank"
           rel="noopener noreferrer"
-        >BOTを導入する</a>
+        ><span>BOTを導入する</span></a>
       </div>
     </section>
 
-    <div class="union-required-note">
-      <strong>⚠️ 利用にはUNION MATCHへのユニオン登録が必要です。</strong><br>
-      ユニオン募集を登録後、<code>/setup</code> でPASSを1回入力すると利用できます。
-    </div>
+    <section class="lux-section stay-section">
+      <header class="section-heading reveal-up">
+        <div class="section-en">STAY CONNECTED</div>
+        <div class="section-ja">UNION MATCHを継続して利用するために</div>
+      </header>
 
-    <section class="section">
-      <div class="section-head">
-        <div>
-          <div class="eyebrow">WHAT YOU CAN DO</div>
-          <h2>このBOTでできること</h2>
+      <div class="stay-copy reveal-up" style="--delay:90ms">
+        <div class="stay-toggle">
+          <span>募集中</span>
+          <span class="swap">⇄</span>
+          <span>登録のみ</span>
         </div>
-        <div class="section-note">
-          通知先チャンネルや、期限通知でメンションするロールもサーバーごとに設定できます。
-        </div>
+
+        <p>
+          メンバーを募集するときは<strong>「募集中」</strong>。<br>
+          募集していない期間は<strong>「登録のみ」</strong>。<br>
+          状況に合わせて切り替えながら、UNION MATCHを継続して利用できます。
+        </p>
+
+        <p class="stay-bot-note">
+          Discord BOTを利用するには、UNION MATCHへのユニオン登録が必要です。
+        </p>
       </div>
+    </section>
 
-      <div class="feature-grid">
-        <article class="feature-card x-primary">
-          <div class="icon">𝕏</div>
-          <h3>指揮官募集通知</h3>
-          <p>Xでユニオンを探している指揮官候補を自動取得し、設定したDiscordチャンネルへ通知します。</p>
+    <section class="lux-section feature-section" id="features">
+      <header class="section-heading reveal-up">
+        <div class="section-en">BOT FEATURES</div>
+        <div class="section-ja">主な機能</div>
+      </header>
+
+      <div class="feature-grid" id="featureSlider">
+        <article class="glass-card feature-card reveal-up" style="--delay:0ms">
+          <div class="feature-no">01</div>
+          <h3>X 指揮官募集通知</h3>
+          <div class="feature-lead">ユニオンを探している指揮官を、Discordでチェック。</div>
+          <p>
+            Xからユニオンを探している指揮官候補を自動で取得し、設定したDiscordチャンネルへ通知します。
+            何度もXを検索しなくても、募集候補をDiscordから確認できます。
+          </p>
         </article>
 
-        <article class="feature-card">
-          <div class="icon">📬</div>
-          <h3>UNION MATCHまとめ通知</h3>
-          <p>新しい指揮官・ユニオン募集をまとめて通知。指揮官・ユニオンは個別にON / OFFできます。</p>
+        <article class="glass-card feature-card reveal-up" style="--delay:70ms">
+          <div class="feature-no">02</div>
+          <h3>UNION MATCH通知</h3>
+          <div class="feature-lead">新しい募集をDiscordですぐ確認。</div>
+          <p>
+            UNION MATCHに掲載された新しい指揮官募集・ユニオン募集をDiscordへ通知します。
+            指揮官・ユニオンそれぞれの通知を個別にON / OFFできます。
+          </p>
         </article>
 
-        <article class="feature-card">
-          <div class="icon">🎪</div>
-          <h3>NIKKE公式イベント通知</h3>
-          <p>ログインイベント、新イベント、ユニオンレイド、ソロレイド、協同作戦の開催情報を通知します。</p>
+        <article class="glass-card feature-card reveal-up" style="--delay:140ms">
+          <div class="feature-no">03</div>
+          <h3>NIKKEイベント通知</h3>
+          <div class="feature-lead">イベント情報を、いつものDiscordへ。</div>
+          <p>
+            ユニオンレイド、ソロレイド、協同作戦などの開催情報・開催期間をお知らせします。
+          </p>
+          <p class="feature-tip">
+            雑談チャンネルなど、普段みんなが集まる場所への通知がおすすめ。
+            選択中のキャラクターが、自然なひと言を添えて届けます。
+          </p>
         </article>
 
-        <article class="feature-card green">
-          <div class="icon">⏰</div>
+        <article class="glass-card feature-card reveal-up" style="--delay:210ms">
+          <div class="feature-no">04</div>
           <h3>期限通知・メンション</h3>
-          <p>募集掲載終了の48時間前と1時間前に通知。設定したロールへのメンションにも対応します。</p>
+          <div class="feature-lead">14日間の利用期限を、忘れないために。</div>
+          <p>
+            UNION MATCHの登録とBOT連携は14日間で利用期限を迎えます。
+            期限が近づくと48時間前と1時間前にDiscordへ通知し、更新忘れを防ぎます。
+            設定したロールへのメンション通知にも対応しています。
+          </p>
         </article>
 
-        <article class="feature-card">
-          <div class="icon">🔗</div>
-          <h3>ユニオン連携・14日延長</h3>
-          <p><code>/unionmatch</code> から登録状態・掲載状態・利用期限を確認し、「登録のみ」から「募集中」への変更や、利用期間の14日延長ができます。</p>
+        <article class="glass-card feature-card reveal-up" style="--delay:280ms">
+          <div class="feature-no">05</div>
+          <h3>ユニオン管理</h3>
+          <div class="feature-lead">Discordから、登録状況をすぐ確認。</div>
+          <p>
+            UNION MATCHへの登録状態・募集状態・利用期限をBOTから確認できます。
+            「登録のみ」から「募集中」への切り替えや、利用期限の14日延長もDiscordから操作できます。
+          </p>
         </article>
 
-        <article class="feature-card">
-          <div class="icon">🧬</div>
-          <h3>BOTプロフィール設定</h3>
-          <p><code>/botprofiles</code> で3キャラの名前・画像を変更。自由キャラは名前・性別・呼び名・一人称・性格を設定できます。</p>
+        <article class="glass-card feature-card reveal-up" style="--delay:350ms">
+          <div class="feature-no">06</div>
+          <h3>キャラクター設定</h3>
+          <div class="feature-lead">好きな見た目と名前で、自分たちだけのBOTキャラクターに。</div>
+          <p>
+            すべてのキャラクターで名前とプロフィール画像を変更できます。
+            好きな名前・画像に入れ替えて、サーバー独自のキャラクターとして利用できます。
+            自由キャラクターでは性格タイプやユーザーの呼び方も設定できます。
+          </p>
         </article>
+      </div>
+
+      <div class="slider-status" id="featureSliderStatus">1 / 6</div>
+
+      <div class="feature-shared reveal-up">
+        <strong>募集通知について</strong>
+        <span>
+          X指揮官募集通知・UNION MATCH通知・期限通知は、すべて同じ通知チャンネルへ届きます。
+          募集情報をまとめて確認できるよう、専用の募集通知チャンネルを設定するのがおすすめです。
+        </span>
       </div>
     </section>
 
-    <section class="section" id="install">
-      <div class="section-head">
-        <div>
-          <div class="eyebrow">GET STARTED</div>
-          <h2>導入は3ステップ</h2>
-        </div>
-      </div>
+    <section class="lux-section" id="install">
+      <header class="section-heading reveal-up">
+        <div class="section-en">GET STARTED</div>
+        <div class="section-ja">導入は3ステップ</div>
+      </header>
 
-      <div class="steps">
-        <article class="step">
-          <div class="step-no">1</div>
+      <div class="step-grid">
+        <article class="glass-card step-card reveal-up" style="--delay:0ms">
+          <div class="step-no">STEP 01</div>
           <h3>BOTをDiscordへ追加</h3>
-          <p>サーバー管理者がNIKKE UNION MATCH BOTを招待します。</p>
+          <p>
+            「BOTを導入する」ボタンから、NIKKE UNION MATCH BOTを利用したいDiscordサーバーへ追加します。
+            BOTの追加は、サーバーを管理できる権限を持つメンバーが行ってください。
+          </p>
+          <p class="step-note">Discordへ追加するだけで準備完了</p>
         </article>
 
-        <article class="step">
-          <div class="step-no">2</div>
-          <h3><code>/setup</code> を実行してPASSを入力</h3>
-          <p>UNION MATCHで発行されたPASSを入力してユニオンを連携します。</p>
+        <article class="glass-card step-card reveal-up" style="--delay:90ms">
+          <div class="step-no">STEP 02</div>
+          <h3><code>/setup</code> でユニオンを連携</h3>
+          <p>
+            Discordのメッセージ入力欄に <code>/setup</code> と入力して実行します。
+            表示された案内に沿って、UNION MATCHで発行されたユニオンPASSを入力してください。
+            PASSを確認すると、登録ユニオンとDiscordサーバーが連携されます。
+          </p>
+          <p class="step-note">PASSはUNION MATCHの登録情報との連携に使用します</p>
         </article>
 
-        <article class="step">
-          <div class="step-no">3</div>
-          <h3>案内にしたがって設定</h3>
-          <p>表示される案内にしたがって、各通知の送信先チャンネル・期限通知でメンションするロール・使用キャラなどを設定します。</p>
+        <article class="glass-card step-card reveal-up" style="--delay:180ms">
+          <div class="step-no">STEP 03</div>
+          <h3>案内に沿って初期設定</h3>
+          <p>
+            連携後に表示される案内から、募集通知を届けるチャンネル・期限通知でメンションするロール・使用するキャラクターなどを順番に設定できます。
+            設定が完了したら、そのままBOTを利用できます。
+          </p>
+          <p class="step-note">設定はあとから <code>/setup</code> で変更できます</p>
         </article>
       </div>
     </section>
 
-    <section class="section">
-      <div class="section-head">
-        <div>
-          <div class="eyebrow">CHARACTERS</div>
-          <h2>選べる4キャラクター</h2>
-        </div>
-        <div class="section-note">
-          固定3人＋サーバーごとに設定できる自由キャラ。
-        </div>
-      </div>
+    <section class="lux-section">
+      <header class="section-heading reveal-up">
+        <div class="section-en">CHARACTERS</div>
+        <div class="section-ja">キャラクター</div>
+      </header>
 
       <div class="character-grid">
-        <article class="character-card">
-          <div class="character-visual">
-            <div class="character-fallback">🌹</div>
-            <img
-              src="./bot-avatars/kairi.png"
-              alt="カイリ"
-              onload="this.style.display='block';this.previousElementSibling.style.display='none';"
-            >
-          </div>
-          <div class="character-body">
-            <div class="character-tag">TSUNDERE</div>
-            <div class="character-name">🌹 カイリ</div>
-            <div class="character-desc">強気だけど面倒見のいいツンデレ。</div>
-          </div>
-        </article>
+        <article class="glass-card character-card reveal-up">
+          <h3>性格を選ぶ</h3>
+          <p class="sub">用意されたタイプから選ぶか、カスタムキャラを設定できます。</p>
 
-        <article class="character-card">
-          <div class="character-visual">
-            <div class="character-fallback">🎩</div>
-            <img
-              src="./bot-avatars/sebastian.png"
-              alt="セバスチャン"
-              onload="this.style.display='block';this.previousElementSibling.style.display='none';"
-            >
-          </div>
-          <div class="character-body">
-            <div class="character-tag">BUTLER</div>
-            <div class="character-name">🎩 セバスチャン</div>
-            <div class="character-desc">落ち着いた男性執事。</div>
-          </div>
-        </article>
-
-        <article class="character-card">
-          <div class="character-visual">
-            <div class="character-fallback">😈</div>
-            <img
-              src="./bot-avatars/natsuki.png"
-              alt="なつき"
-              onload="this.style.display='block';this.previousElementSibling.style.display='none';"
-            >
-          </div>
-          <div class="character-body">
-            <div class="character-tag">LITTLE SISTER</div>
-            <div class="character-name">😈 なつき</div>
-            <div class="character-desc">生意気でからかい好きな妹キャラ。</div>
-          </div>
-        </article>
-
-        <article class="character-card adaptive">
-          <div class="character-visual">
-            <div class="character-fallback">🧩</div>
-          </div>
-          <div class="character-body">
-            <div class="character-tag">FREE CHARACTER</div>
-            <div class="character-name">🧩 自由キャラ</div>
-            <div class="character-desc">
-              名前・性別・呼び名・一人称・性格などを設定できるサーバー専用キャラ。
+          <div class="character-types">
+            <div class="type-row">
+              <span class="type-symbol">🌹</span>
+              <b>ツンデレ系</b>
+              <span>強気だけど面倒見のいいタイプ</span>
+            </div>
+            <div class="type-row">
+              <span class="type-symbol">🎩</span>
+              <b>丁寧な執事系</b>
+              <span>落ち着いた丁寧なタイプ</span>
+            </div>
+            <div class="type-row">
+              <span class="type-symbol">😈</span>
+              <b>生意気な妹系</b>
+              <span>からかい好きな妹タイプ</span>
+            </div>
+            <div class="type-row">
+              <span class="type-symbol">🧩</span>
+              <b>カスタムキャラ</b>
+              <span>サーバーに合わせて設定できる自由タイプ</span>
             </div>
           </div>
         </article>
+
+        <article class="glass-card character-card reveal-up" style="--delay:90ms">
+          <h3>自分たちだけのキャラクターに</h3>
+          <p class="sub">実際のBOTプロフィール設定をイメージした画面です。</p>
+
+          <div class="profile-demo" aria-label="BOTプロフィール設定イメージ">
+            <div class="profile-demo-title">BOTプロフィール</div>
+
+            <div class="profile-demo-row">
+              <span class="profile-demo-avatar"></span>
+              <span>🌹 ツンデレ系</span>
+            </div>
+            <div class="profile-demo-row">
+              <span class="profile-demo-avatar"></span>
+              <span>🎩 丁寧な執事系</span>
+            </div>
+            <div class="profile-demo-row">
+              <span class="profile-demo-avatar"></span>
+              <span>😈 生意気な妹系</span>
+            </div>
+
+            <div class="profile-custom">
+              <strong>🧩 カスタムキャラ</strong><br>
+              名前・性格タイプ・ユーザーの呼び方などを設定
+            </div>
+
+            <div class="profile-actions">
+              <span>使う</span>
+              <span>名前変更</span>
+              <span>画像変更</span>
+            </div>
+          </div>
+
+          <div class="customize-copy">
+            <code>/botprofiles</code> から、<strong>好きな名前やプロフィール画像に変更できます。</strong><br>
+            用意されているキャラクターも、自分たちの好きな名前・画像へ変更して、サーバー独自のキャラクターとして利用できます。
+          </div>
+        </article>
       </div>
     </section>
 
-    <section class="section">
-      <div class="section-head">
-        <div>
-          <div class="eyebrow">COMMANDS</div>
-          <h2>これだけ覚えればOK</h2>
-        </div>
-        <div class="section-note">
-          よく使う4つのコマンドをまとめています。
-        </div>
-      </div>
+    <section class="lux-section">
+      <header class="section-heading reveal-up">
+        <div class="section-en">COMMANDS</div>
+        <div class="section-ja">よく使うコマンド</div>
+      </header>
 
       <div class="command-grid">
-
-        <article class="command-card">
-          <div class="cmd">/setup <span class="badge">最初に使う</span></div>
-          <div class="desc">
-            初回設定や設定変更に使用します。UNION MATCHのPASSを入力して連携し、案内にしたがって通知先・期限メンション・使用キャラなどを設定できます。
+        <article class="glass-card command-card reveal-up">
+          <div class="command-top">
+            <div>
+              <div class="cmd">/setup</div>
+              <span class="first-tag">FIRST SETUP</span>
+            </div>
+            <button class="copy-command" type="button" data-copy="/setup">COPY COMMAND →</button>
           </div>
-          <button class="copy-command" type="button" data-copy="/setup">📋 コピー</button>
+          <h3>初回設定・設定変更</h3>
+          <p>
+            UNION MATCHで発行されたPASSを入力して、Discordサーバーとユニオンを連携します。
+            募集通知の送信先、期限通知でメンションするロール、使用するキャラクターなどをまとめて設定できます。
+          </p>
         </article>
 
-        <article class="command-card">
-          <div class="cmd">/botprofiles</div>
-          <div class="desc">
-            固定3キャラの名前・画像変更や、自由キャラのプロフィール設定をまとめて行います。使用するキャラもここから選択できます。
+        <article class="glass-card command-card reveal-up" style="--delay:70ms">
+          <div class="command-top">
+            <div class="cmd">/botprofiles</div>
+            <button class="copy-command" type="button" data-copy="/botprofiles">COPY COMMAND →</button>
           </div>
-          <button class="copy-command" type="button" data-copy="/botprofiles">📋 コピー</button>
+          <h3>キャラクター設定</h3>
+          <p>
+            BOTで使用するキャラクターを選択できます。
+            すべてのキャラクターの名前・プロフィール画像の変更や、自由キャラクターの設定もここから行えます。
+          </p>
         </article>
 
-        <article class="command-card">
-          <div class="cmd">/unionmatch</div>
-          <div class="desc">
-            登録状態・掲載状態・利用期限を確認し、「登録のみ」から「募集中」への変更や、利用期間の14日延長ができます。
+        <article class="glass-card command-card reveal-up" style="--delay:140ms">
+          <div class="command-top">
+            <div class="cmd">/unionmatch</div>
+            <button class="copy-command" type="button" data-copy="/unionmatch">COPY COMMAND →</button>
           </div>
-          <button class="copy-command" type="button" data-copy="/unionmatch">📋 コピー</button>
+          <h3>登録・募集状態を管理</h3>
+          <p>
+            UNION MATCHへの登録状態、現在の募集状態、利用期限をDiscordから確認できます。
+            「登録のみ」から「募集中」への変更や、利用期限の14日延長も行えます。
+          </p>
         </article>
 
-        <article class="command-card">
-          <div class="cmd">/guide</div>
-          <div class="desc">Discord内でBOTの使い方をもう一度確認できます。</div>
-          <button class="copy-command" type="button" data-copy="/guide">📋 コピー</button>
+        <article class="glass-card command-card reveal-up" style="--delay:210ms">
+          <div class="command-top">
+            <div class="cmd">/guide</div>
+            <button class="copy-command" type="button" data-copy="/guide">COPY COMMAND →</button>
+          </div>
+          <h3>使い方をいつでも確認</h3>
+          <p>
+            BOTの基本的な使い方や、よく使うコマンドをDiscord内でもう一度確認できます。
+            操作方法が分からなくなったときに、いつでも呼び出せます。
+          </p>
         </article>
-
       </div>
     </section>
 
-    <section class="section">
-      <div class="eyebrow">IMPORTANT</div>
-      <h2>最初に知っておくこと</h2>
+    <section class="lux-section important-section">
+      <header class="section-heading reveal-up">
+        <div class="section-en">IMPORTANT</div>
+        <div class="section-ja">最初に知っておくこと</div>
+      </header>
 
-      <div class="notice bot-important">
-        ・BOTの初期設定やユニオン連携は、基本的にサーバー管理者が行います。<br>
-        ・ユニオンPASSは、UNION MATCHとの連携確認に使用します。<br>
-        ・ユニオン未連携のサーバーには、そのユニオン専用の期限通知は届きません。<br>
-        ・BOTは、設定した通知やコマンド操作に応じて動作します。<br>
-        ・不具合があった場合は、状況が分かるスクリーンショットを添えてフィードバックにご協力いただけると助かります。
+      <div class="important-layout">
+        <div class="important-item reveal-up">
+          <div class="important-no">01</div>
+          <div>
+            <h3>初期設定について</h3>
+            <p>BOTの初期設定・ユニオン連携は、Discordサーバーを管理できるメンバーが行います。</p>
+          </div>
+        </div>
+
+        <div class="important-item reveal-up" style="--delay:70ms">
+          <div class="important-no">02</div>
+          <div>
+            <h3>ユニオンPASSについて</h3>
+            <p>UNION MATCHで発行されたPASSを使って、Discordサーバーと登録ユニオンを連携します。</p>
+          </div>
+        </div>
+
+        <div class="important-item reveal-up" style="--delay:140ms">
+          <div class="important-no">03</div>
+          <div>
+            <h3>14日間の利用期限について</h3>
+            <p>UNION MATCHの登録とBOT連携には14日間の利用期限があります。期限が近づくと48時間前と1時間前にDiscordへお知らせします。</p>
+          </div>
+        </div>
+
+        <div class="important-item reveal-up" style="--delay:210ms">
+          <div class="important-no">04</div>
+          <div>
+            <h3>ユニオン連携について</h3>
+            <p>ユニオンが連携されていないサーバーでは、そのユニオン専用の期限通知や管理機能は利用できません。</p>
+          </div>
+        </div>
       </div>
     </section>
 
     <footer class="bottom-area">
-      <div>NIKKE UNION MATCH · DISCORD BOT</div>
+      NIKKE UNION MATCH · DISCORD BOT
     </footer>
 
   </main>
 
   <script>
-    // 招待URLが確定したらここへ設定する。
-    const BOT_INVITE_URL = "https://discord.com/oauth2/authorize?client_id=1548613088557793370&scope=bot%20applications.commands";
+    const BOT_INVITE_URL =
+      "https://discord.com/oauth2/authorize?client_id=1548613088557793370&scope=bot%20applications.commands";
+
     const inviteBtn = document.getElementById("botInviteBtn");
+
     if (BOT_INVITE_URL && inviteBtn) {
       inviteBtn.href = BOT_INVITE_URL;
-      inviteBtn.textContent = "BOTを導入する";
-      inviteBtn.classList.remove("disabled");
-      inviteBtn.removeAttribute("aria-disabled");
       inviteBtn.target = "_blank";
       inviteBtn.rel = "noopener noreferrer";
     }
@@ -1456,14 +1576,16 @@
             input.remove();
           }
 
-          button.textContent = "✓ コピー済み";
+          button.textContent = "COPIED";
           button.classList.add("copied");
+
           window.setTimeout(() => {
             button.textContent = original;
             button.classList.remove("copied");
           }, 1400);
+
         } catch (error) {
-          button.textContent = "コピー失敗";
+          button.textContent = "COPY FAILED";
           window.setTimeout(() => {
             button.textContent = original;
           }, 1400);
@@ -1471,8 +1593,6 @@
       });
     });
   </script>
-
-
 
   <script>
     function closeSiteMenu() {
@@ -1484,9 +1604,7 @@
       button?.setAttribute("aria-expanded", "false");
       drawer?.setAttribute("aria-hidden", "true");
 
-      if (backdrop) {
-        backdrop.hidden = true;
-      }
+      if (backdrop) backdrop.hidden = true;
     }
 
     function openSiteMenu() {
@@ -1498,42 +1616,89 @@
       button?.setAttribute("aria-expanded", "true");
       drawer?.setAttribute("aria-hidden", "false");
 
-      if (backdrop) {
-        backdrop.hidden = false;
-      }
+      if (backdrop) backdrop.hidden = false;
     }
 
-    document
-      .getElementById("siteMenuButton")
-      ?.addEventListener("click", () => {
-        if (document.body.classList.contains("menu-open")) {
-          closeSiteMenu();
-        } else {
-          openSiteMenu();
-        }
-      });
-
-    document
-      .getElementById("siteMenuClose")
-      ?.addEventListener("click", closeSiteMenu);
-
-    document
-      .getElementById("siteMenuBackdrop")
-      ?.addEventListener("click", closeSiteMenu);
-
-    document
-      .querySelectorAll("#siteMenuDrawer a")
-      .forEach(link => {
-        link.addEventListener("click", closeSiteMenu);
-      });
-
-    document.addEventListener("keydown", event => {
-      if (event.key === "Escape") {
+    document.getElementById("siteMenuButton")?.addEventListener("click", () => {
+      if (document.body.classList.contains("menu-open")) {
         closeSiteMenu();
+      } else {
+        openSiteMenu();
       }
+    });
+
+    document.getElementById("siteMenuClose")?.addEventListener("click", closeSiteMenu);
+    document.getElementById("siteMenuBackdrop")?.addEventListener("click", closeSiteMenu);
+
+    document.querySelectorAll("#siteMenuDrawer a").forEach((link) => {
+      link.addEventListener("click", closeSiteMenu);
+    });
+
+    document.addEventListener("keydown", (event) => {
+      if (event.key === "Escape") closeSiteMenu();
     });
   </script>
 
+  <script>
+    (() => {
+      const observer = new IntersectionObserver(
+        (entries) => {
+          entries.forEach((entry) => {
+            if (entry.isIntersecting) {
+              entry.target.classList.add("is-visible");
+              observer.unobserve(entry.target);
+            }
+          });
+        },
+        {
+          root:null,
+          threshold:.12,
+          rootMargin:"0px 0px -6% 0px"
+        }
+      );
+
+      document.querySelectorAll(".reveal-up").forEach((el) => {
+        observer.observe(el);
+      });
+
+      const slider = document.getElementById("featureSlider");
+      const status = document.getElementById("featureSliderStatus");
+
+      function updateFeatureStatus() {
+        if (!slider || !status || window.innerWidth > 1024) return;
+
+        const cards = [...slider.querySelectorAll(".feature-card")];
+        if (!cards.length) return;
+
+        const center = slider.scrollLeft + slider.clientWidth / 2;
+        let nearest = 0;
+        let distance = Infinity;
+
+        cards.forEach((card, index) => {
+          const cardCenter = card.offsetLeft + card.offsetWidth / 2;
+          const current = Math.abs(cardCenter - center);
+
+          if (current < distance) {
+            distance = current;
+            nearest = index;
+          }
+        });
+
+        status.textContent = `${nearest + 1} / ${cards.length}`;
+      }
+
+      slider?.addEventListener("scroll", () => {
+        window.requestAnimationFrame(updateFeatureStatus);
+      }, {passive:true});
+
+      window.addEventListener("resize", updateFeatureStatus);
+      updateFeatureStatus();
+
+      if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
+        document.getElementById("botBackgroundVideo")?.pause();
+      }
+    })();
+  </script>
 
   <nav class="subpage-bottom-nav bot-bottom-nav" aria-label="フッターメニュー">
     <a href="./index.html#videoHero">
