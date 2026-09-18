@@ -2332,6 +2332,132 @@
       background:rgba(9,11,14,.97)!important;
       box-shadow:0 22px 55px rgba(0,0,0,.26),0 0 16px rgba(255,0,48,.10)!important;
     }
+
+
+    /* =========================================================
+       FEATURE CARDS — REBUILT TO MATCH OTHER GLASS CARDS
+       Same translucent dark tone as .glass-card; red gradient only on border.
+       ========================================================= */
+    .feature-card,
+    .feature-card:hover{
+      background:linear-gradient(
+        145deg,
+        rgba(17,22,29,.78),
+        rgba(6,9,14,.63)
+      )!important;
+      background-image:linear-gradient(
+        145deg,
+        rgba(17,22,29,.78),
+        rgba(6,9,14,.63)
+      )!important;
+      border:1px solid transparent!important;
+      border-image:linear-gradient(
+        135deg,
+        #FF0030 0%,
+        #FF3657 50%,
+        #FF7188 100%
+      ) 1!important;
+      backdrop-filter:blur(12px) saturate(112%)!important;
+      -webkit-backdrop-filter:blur(12px) saturate(112%)!important;
+      box-shadow:
+        inset 0 1px 0 rgba(255,255,255,.035),
+        0 18px 50px rgba(0,0,0,.18)!important;
+    }
+    .feature-card:hover{
+      transform:translateY(-5px);
+      box-shadow:
+        inset 0 1px 0 rgba(255,255,255,.035),
+        0 22px 55px rgba(0,0,0,.24),
+        0 0 16px rgba(255,0,48,.08)!important;
+    }
+
+
+    /* =========================================================
+       FINAL REQUESTED PATCH
+       - BOT FEATURES cards: same translucent dark tone as other cards
+       - CTA: white by default, periodic inner red sweep, hover makes border/text red
+       ========================================================= */
+
+    /* BOT FEATURES: match other cards, keep only red gradient border */
+    .feature-card,
+    .feature-card:hover{
+      border:1px solid transparent!important;
+      background:
+        linear-gradient(145deg,rgba(17,22,29,.78),rgba(6,9,14,.63)) padding-box,
+        linear-gradient(135deg,#FF0030 0%,#FF3657 48%,#FF7188 100%) border-box!important;
+      box-shadow:inset 0 1px 0 rgba(255,255,255,.035),0 18px 50px rgba(0,0,0,.18)!important;
+      backdrop-filter:blur(12px) saturate(112%)!important;
+      -webkit-backdrop-filter:blur(12px) saturate(112%)!important;
+    }
+    .feature-card::after{
+      height:2px!important;
+      background:linear-gradient(90deg,#FF0030 0%,#FF3657 52%,#FF7188 100%)!important;
+    }
+
+    /* CTA button */
+    .invite-btn{
+      border:1px solid rgba(255,255,255,.88)!important;
+      color:#ffffff!important;
+      background:rgba(6,10,14,.18)!important;
+      box-shadow:0 10px 26px rgba(0,0,0,.12)!important;
+      overflow:hidden!important;
+      position:relative!important;
+      isolation:isolate;
+    }
+    .invite-btn span{
+      position:relative;
+      z-index:2!important;
+      color:inherit!important;
+      transition:color .18s ease;
+    }
+    .invite-btn::after{
+      display:none!important;
+      content:none!important;
+    }
+    .invite-btn::before{
+      content:""!important;
+      position:absolute!important;
+      inset:-1px!important;
+      z-index:1!important;
+      opacity:.92!important;
+      transform:translateX(-155%) skewX(-18deg)!important;
+      background:linear-gradient(90deg,
+        transparent 0%,
+        rgba(255,0,0,0) 28%,
+        rgba(255,0,0,.10) 38%,
+        rgba(255,0,0,.52) 50%,
+        rgba(255,95,95,.24) 62%,
+        transparent 76%
+      )!important;
+      pointer-events:none!important;
+      animation:ctaIdleRedSweep 4s ease-in-out infinite!important;
+    }
+    .invite-btn:hover,
+    .invite-btn:focus-visible{
+      border-color:#FF0000!important;
+      color:#FF0000!important;
+      background:rgba(28,8,12,.18)!important;
+      box-shadow:0 12px 30px rgba(0,0,0,.14),0 0 14px rgba(255,0,0,.10)!important;
+    }
+    .invite-btn:hover span,
+    .invite-btn:focus-visible span{
+      color:#FF0000!important;
+    }
+    .invite-btn:hover::before,
+    .invite-btn:focus-visible::before{
+      animation:ctaHoverRedSweep .9s ease-out infinite!important;
+      opacity:1!important;
+    }
+    @keyframes ctaIdleRedSweep{
+      0%,72%{transform:translateX(-155%) skewX(-18deg);opacity:0}
+      76%{opacity:1}
+      100%{transform:translateX(155%) skewX(-18deg);opacity:1}
+    }
+    @keyframes ctaHoverRedSweep{
+      0%{transform:translateX(-155%) skewX(-18deg);opacity:0}
+      8%{opacity:1}
+      100%{transform:translateX(155%) skewX(-18deg);opacity:1}
+    }
 </style>
 
   <script>
