@@ -2197,7 +2197,103 @@
         transform:scaleX(1.05) scale(1.12);
       }
     }
-  </style>
+  
+
+    /* =========================================================
+       FINAL PATCH
+       - CTA: white border by default, clearer red inner sweep on hover
+       - SWAP arrows: faster 3s alternating blink
+       - FEATURE cards: black interior, visible red gradient border
+       ========================================================= */
+    .feature-card,
+    .feature-card:hover{
+      border:1px solid transparent!important;
+      background:
+        linear-gradient(145deg,rgba(6,6,8,.86),rgba(8,8,10,.82)) padding-box,
+        linear-gradient(135deg,#FF0030 0%,#FF3657 48%,#FF7188 100%) border-box!important;
+      box-shadow:inset 0 1px 0 rgba(255,255,255,.018),0 18px 50px rgba(0,0,0,.18)!important;
+    }
+    .feature-card::after{
+      height:2px!important;
+      background:linear-gradient(90deg,#FF0030 0%,#FF3657 52%,#FF7188 100%)!important;
+    }
+
+    .invite-btn{
+      border:1px solid rgba(255,255,255,.84)!important;
+      background:rgba(6,8,12,.16)!important;
+      box-shadow:0 10px 26px rgba(0,0,0,.12)!important;
+      overflow:hidden!important;
+    }
+    .invite-btn::after{
+      display:none!important;
+      content:none!important;
+    }
+    .invite-btn::before{
+      content:""!important;
+      position:absolute!important;
+      inset:0!important;
+      z-index:1!important;
+      opacity:0!important;
+      transform:translateX(-135%) skewX(-18deg)!important;
+      background:linear-gradient(90deg,
+        transparent 0%,
+        rgba(255,0,0,0) 24%,
+        rgba(255,0,0,.10) 36%,
+        rgba(255,0,0,.48) 50%,
+        rgba(255,92,92,.24) 61%,
+        transparent 76%
+      )!important;
+      transition:none!important;
+      pointer-events:none!important;
+    }
+    .invite-btn:hover,
+    .invite-btn:focus-visible{
+      border-color:#FF0000!important;
+      background:rgba(28,8,12,.18)!important;
+      box-shadow:0 12px 30px rgba(0,0,0,.14)!important;
+    }
+    .invite-btn:hover::before,
+    .invite-btn:focus-visible::before{
+      opacity:1!important;
+      animation:ctaInnerRedSweep .9s ease-out 1!important;
+    }
+    @keyframes ctaInnerRedSweep{
+      0%{transform:translateX(-135%) skewX(-18deg);opacity:0}
+      10%{opacity:1}
+      100%{transform:translateX(135%) skewX(-18deg);opacity:1}
+    }
+
+    .stay-toggle .swap-right{
+      animation:swapRightAlternating3s 3s ease-in-out infinite!important;
+    }
+    .stay-toggle .swap-left{
+      animation:swapLeftAlternating3s 3s ease-in-out infinite!important;
+    }
+    @keyframes swapRightAlternating3s{
+      0%,8%,30%,100%{
+        color:#ff5c73;
+        -webkit-text-fill-color:#ff5c73;
+        text-shadow:none;
+      }
+      10%,18%,48%,56%,72%,80%{
+        color:#FF0000;
+        -webkit-text-fill-color:#FF0000;
+        text-shadow:0 0 4px #FF0000, 0 0 10px rgba(255,0,0,.36);
+      }
+    }
+    @keyframes swapLeftAlternating3s{
+      0%,18%,40%,100%{
+        color:#ff5c73;
+        -webkit-text-fill-color:#ff5c73;
+        text-shadow:none;
+      }
+      22%,30%,58%,66%,82%,90%{
+        color:#FF0000;
+        -webkit-text-fill-color:#FF0000;
+        text-shadow:0 0 4px #FF0000, 0 0 10px rgba(255,0,0,.36);
+      }
+    }
+</style>
 
   <script>
     document.documentElement.classList.add("js");
