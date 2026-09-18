@@ -388,17 +388,24 @@
     }
     .stay-copy p{
       margin:0;
-      color:#c4cbd3;
-      font-size:14px;
-      line-height:2;
+      color:rgba(255,255,255,.92);
+      font-size:15px;
+      line-height:2.02;
+      font-weight:800;
+      text-shadow:0 2px 10px rgba(0,0,0,.24);
     }
-    .stay-copy strong{color:#fff}
+    .stay-copy strong{
+      color:#ffffff;
+      font-weight:900;
+      text-shadow:0 2px 12px rgba(0,0,0,.28);
+    }
     .stay-bot-note{
       margin-top:26px!important;
       padding-top:20px;
-      border-top:1px solid rgba(255,255,255,.15);
-      color:#e5f8ff!important;
+      border-top:1px solid rgba(255,255,255,.20);
+      color:#f5fcff!important;
       font-weight:900;
+      text-shadow:0 2px 14px rgba(0,0,0,.30);
     }
 
     /* ---------- BOT FEATURES ---------- */
@@ -950,7 +957,7 @@
         gap:12px;
         font-size:clamp(31px,11vw,46px);
       }
-      .stay-copy p{font-size:12px}
+      .stay-copy p{font-size:13.5px;line-height:1.92;font-weight:800}
 
       .feature-grid{
         margin-left:-14px;
@@ -1338,10 +1345,10 @@
       text-shadow:0 0 8px rgba(97,220,255,.06);
     }
     .stay-toggle{
-      color:rgba(255,255,255,.84);
-      opacity:.84;
+      color:rgba(255,255,255,.96);
+      opacity:1;
       mix-blend-mode:screen;
-      text-shadow:0 0 8px rgba(95,220,255,.08),0 8px 24px rgba(0,0,0,.12);
+      text-shadow:0 0 10px rgba(95,220,255,.11),0 8px 24px rgba(0,0,0,.16);
     }
     @keyframes sectionScreenFlow{
       0%,100%{background-position:0% 50%}
@@ -1365,17 +1372,17 @@
       position:relative;
       z-index:1;
       display:block;
-      color:rgba(232,246,255,.28);
+      color:rgba(242,249,255,.52);
       background:none;
       -webkit-background-clip:initial;
       background-clip:initial;
-      -webkit-text-fill-color:rgba(232,246,255,.28);
+      -webkit-text-fill-color:rgba(242,249,255,.52);
       animation:none;
       filter:none;
       mix-blend-mode:screen;
       text-shadow:
-        0 0 8px rgba(95,220,255,.10),
-        0 0 22px rgba(154,124,255,.05);
+        0 0 10px rgba(95,220,255,.14),
+        0 0 26px rgba(154,124,255,.08);
       -webkit-text-stroke:0 transparent;
     }
     .hero-title-fire-canvas{
@@ -1387,7 +1394,7 @@
       pointer-events:none;
       mix-blend-mode:screen;
       opacity:1;
-      filter:saturate(1.55) brightness(1.62) contrast(1.18) drop-shadow(0 0 7px rgba(255,126,48,.16)) drop-shadow(0 0 12px rgba(83,215,255,.06));
+      filter:saturate(1.9) brightness(2.05) contrast(1.32) drop-shadow(0 0 10px rgba(255,126,48,.22)) drop-shadow(0 0 18px rgba(255,170,80,.14));
     }
     .hero-title-fire-source{
       position:absolute;
@@ -2372,15 +2379,23 @@
         const vw = video.videoWidth || 1;
         const vh = video.videoHeight || 1;
 
-        // 元素材は炎が画面下側の細い帯に集中しているため、
-        // その帯だけを切り出してタイトル全体へ広げる。
-        // これで DISCORD BOT の文字の中を炎がはっきり横切る。
-        const sx = 0;
-        const sy = vh * 0.28;
-        const sw = vw;
-        const sh = vh * 0.66;
+        // 元素材の炎が小さいため、炎が出る下側エリアだけをかなり強く切り出して
+        // タイトル全体へ複数回引き伸ばして見せる。
+        const sx = vw * 0.04;
+        const sy = vh * 0.50;
+        const sw = vw * 0.92;
+        const sh = vh * 0.44;
+        const t = (video.currentTime || 0) * 0.55;
+        const drift = Math.sin(t * 1.7) * w * 0.04;
 
-        ctx.drawImage(video, sx, sy, sw, sh, 0, 0, w, h);
+        ctx.save();
+        ctx.globalAlpha = 1;
+        ctx.drawImage(video, sx, sy, sw, sh, -w * 0.08 + drift, -h * 0.03, w * 0.72, h * 1.08);
+        ctx.globalAlpha = .95;
+        ctx.drawImage(video, sx, sy, sw, sh,  w * 0.24 + drift, -h * 0.02, w * 0.74, h * 1.06);
+        ctx.globalAlpha = .88;
+        ctx.drawImage(video, sx, sy, sw, sh,  w * 0.54 + drift, -h * 0.01, w * 0.66, h * 1.04);
+        ctx.restore();
       }
 
       function render() {
@@ -2402,6 +2417,9 @@
           if ("letterSpacing" in ctx) ctx.letterSpacing = style.letterSpacing;
           ctx.fillText(label, w / 2, h / 2 + fontSize * 0.015);
           ctx.globalCompositeOperation = "source-in";
+          drawVideoCover(w, h);
+          ctx.globalCompositeOperation = "lighter";
+          ctx.globalAlpha = .34;
           drawVideoCover(w, h);
           ctx.restore();
         }
