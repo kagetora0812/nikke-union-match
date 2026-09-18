@@ -106,8 +106,8 @@
       content:"";
       width:5px;
       height:22px;
-      background:var(--cyan);
-      box-shadow:0 0 18px rgba(49,196,243,.28);
+      background:#ff4d5d;
+      box-shadow:0 0 16px rgba(255,77,93,.22);
     }
     .site-menu-button{
       width:46px;
@@ -1591,7 +1591,7 @@
        ========================================================= */
     .bot-motion-bg video{
       opacity:1!important;
-      filter:grayscale(1) contrast(1.04) brightness(.92)!important;
+      filter:saturate(.56) contrast(1.03) brightness(.91)!important;
       transform:scale(1.01);
     }
     .bot-motion-bg::after{
@@ -1620,6 +1620,7 @@
         align-items:center;
         justify-items:center;
         gap:0;
+        transform:translateY(3.2vh);
       }
       .hero-title{
         grid-row:2;
@@ -1634,20 +1635,78 @@
         margin-top:30px;
       }
       .hero-title::before{
-        left:-20%;
-        right:-20%;
-        top:-34%;
-        bottom:-34%;
-        opacity:.50;
-        filter:blur(30px);
+        left:-24%;
+        right:-24%;
+        top:-42%;
+        bottom:-42%;
+        opacity:.86;
+        filter:blur(26px);
+        background:
+          linear-gradient(
+            96deg,
+            transparent 0%,
+            rgba(66,205,255,.10) 10%,
+            rgba(79,218,255,.52) 34%,
+            rgba(196,248,255,.26) 50%,
+            rgba(84,211,255,.48) 66%,
+            rgba(151,126,255,.13) 82%,
+            transparent 100%
+          );
+      }
+      .hero-title::after{
+        content:"";
+        position:absolute;
+        z-index:-1;
+        left:-8%;
+        right:-8%;
+        top:25%;
+        height:50%;
+        pointer-events:none;
+        border-radius:50%;
+        background:rgba(72,208,255,.24);
+        filter:blur(22px);
+        mix-blend-mode:screen;
+        opacity:.92;
       }
       .hero-title .hero-title-base{
         text-shadow:
-          0 0 6px rgba(255,255,255,.36),
-          0 0 18px rgba(255,255,255,.24),
-          0 0 28px rgba(126,230,255,.24),
-          0 0 42px rgba(72,203,255,.20),
-          0 0 62px rgba(151,126,255,.09);
+          0 0 5px rgba(255,255,255,.46),
+          0 0 14px rgba(255,255,255,.28),
+          0 0 22px rgba(126,230,255,.46),
+          0 0 38px rgba(72,203,255,.40),
+          0 0 58px rgba(54,186,255,.28),
+          0 0 74px rgba(151,126,255,.10);
+      }
+    }
+
+    /* =========================================================
+       HERO TITLE FINAL TUNE
+       - solid white title, no inner light
+       - no outer glow / no gradient blur
+       - mobile title sits slightly lower for visual centering
+       ========================================================= */
+    .hero-title::before,
+    .hero-title::after{
+      display:none!important;
+      content:none!important;
+    }
+    .hero-title .hero-title-base{
+      color:#ffffff!important;
+      background:none!important;
+      -webkit-background-clip:initial!important;
+      background-clip:initial!important;
+      -webkit-text-fill-color:#ffffff!important;
+      mix-blend-mode:normal;
+      text-shadow:
+        0 1px 0 rgba(0,0,0,.12),
+        0 10px 22px rgba(0,0,0,.14)!important;
+      filter:none!important;
+      animation:none!important;
+      -webkit-text-stroke:.7px rgba(10,12,16,.18);
+    }
+    @media (max-width:600px){
+      .hero-center{
+        transform:translateY(7.2vh);
       }
     }
 
