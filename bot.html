@@ -1365,11 +1365,11 @@
       position:relative;
       z-index:1;
       display:block;
-      color:rgba(232,246,255,.42);
+      color:rgba(232,246,255,.28);
       background:none;
       -webkit-background-clip:initial;
       background-clip:initial;
-      -webkit-text-fill-color:rgba(232,246,255,.42);
+      -webkit-text-fill-color:rgba(232,246,255,.28);
       animation:none;
       filter:none;
       mix-blend-mode:screen;
@@ -1386,8 +1386,8 @@
       height:100%;
       pointer-events:none;
       mix-blend-mode:screen;
-      opacity:.96;
-      filter:saturate(1.30) brightness(1.24) contrast(1.12) drop-shadow(0 0 6px rgba(83,215,255,.10));
+      opacity:1;
+      filter:saturate(1.55) brightness(1.62) contrast(1.18) drop-shadow(0 0 7px rgba(255,126,48,.16)) drop-shadow(0 0 12px rgba(83,215,255,.06));
     }
     .hero-title-fire-source{
       position:absolute;
@@ -2371,12 +2371,16 @@
       function drawVideoCover(w, h) {
         const vw = video.videoWidth || 1;
         const vh = video.videoHeight || 1;
-        const scale = Math.max(w / vw, h / vh);
-        const dw = vw * scale;
-        const dh = vh * scale;
-        const dx = (w - dw) / 2;
-        const dy = (h - dh) / 2;
-        ctx.drawImage(video, dx, dy, dw, dh);
+
+        // 元素材は炎が画面下側の細い帯に集中しているため、
+        // その帯だけを切り出してタイトル全体へ広げる。
+        // これで DISCORD BOT の文字の中を炎がはっきり横切る。
+        const sx = 0;
+        const sy = vh * 0.28;
+        const sw = vw;
+        const sh = vh * 0.66;
+
+        ctx.drawImage(video, sx, sy, sw, sh, 0, 0, w, h);
       }
 
       function render() {
