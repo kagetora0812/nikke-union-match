@@ -2556,6 +2556,112 @@
       90%{left:118%;opacity:1}
       100%{left:118%;opacity:0}
     }
+
+
+    /* =========================================================
+       REPAIR PATCH
+       - feature cards: true glass-card interior, red border only (no red fill bleed)
+       - CTA: clearly visible periodic red sweep + hover red border/text
+       ========================================================= */
+    .feature-card,
+    .feature-card:hover{
+      position:relative!important;
+      overflow:hidden!important;
+      background:linear-gradient(145deg,rgba(17,22,29,.78),rgba(6,9,14,.63))!important;
+      background-image:linear-gradient(145deg,rgba(17,22,29,.78),rgba(6,9,14,.63))!important;
+      border:1px solid rgba(255,255,255,.04)!important;
+      border-image:none!important;
+      backdrop-filter:blur(12px) saturate(112%)!important;
+      -webkit-backdrop-filter:blur(12px) saturate(112%)!important;
+      box-shadow:inset 0 1px 0 rgba(255,255,255,.035),0 18px 50px rgba(0,0,0,.18)!important;
+    }
+    .feature-card::before{
+      content:""!important;
+      position:absolute!important;
+      inset:0!important;
+      padding:1px!important;
+      background:linear-gradient(135deg,#FF0030 0%,#FF3657 52%,#FF7188 100%)!important;
+      -webkit-mask:linear-gradient(#fff 0 0) content-box,linear-gradient(#fff 0 0)!important;
+      -webkit-mask-composite:xor!important;
+      mask-composite:exclude!important;
+      pointer-events:none!important;
+      z-index:1!important;
+    }
+    .feature-card > *{position:relative;z-index:2}
+    .feature-card::after{
+      height:2px!important;
+      background:linear-gradient(90deg,#FF0030 0%,#FF3657 52%,#FF7188 100%)!important;
+      z-index:2!important;
+    }
+
+    .invite-btn{
+      position:relative!important;
+      overflow:hidden!important;
+      isolation:isolate!important;
+      border:1px solid rgba(255,255,255,.92)!important;
+      color:#ffffff!important;
+      background:rgba(8,10,14,.14)!important;
+      box-shadow:0 10px 26px rgba(0,0,0,.12)!important;
+    }
+    .invite-btn span{
+      position:relative!important;
+      z-index:3!important;
+      color:inherit!important;
+      transition:color .18s ease!important;
+    }
+    .invite-btn::before{
+      content:""!important;
+      position:absolute!important;
+      top:-24%!important;
+      bottom:-24%!important;
+      left:-58%!important;
+      width:42%!important;
+      z-index:2!important;
+      opacity:0!important;
+      transform:skewX(-18deg)!important;
+      background:linear-gradient(90deg,
+        rgba(255,0,0,0) 0%,
+        rgba(255,0,0,.08) 18%,
+        rgba(255,0,0,.34) 34%,
+        rgba(255,0,0,.96) 50%,
+        rgba(255,100,100,.50) 64%,
+        rgba(255,0,0,.10) 82%,
+        rgba(255,0,0,0) 100%
+      )!important;
+      filter:blur(4px)!important;
+      box-shadow:0 0 20px rgba(255,0,0,.30)!important;
+      pointer-events:none!important;
+      animation:ctaVisibleSweep 4s linear infinite!important;
+    }
+    .invite-btn::after{
+      display:none!important;
+      content:none!important;
+    }
+    .invite-btn:hover,
+    .invite-btn:focus-visible{
+      border-color:#FF0000!important;
+      color:#FF0000!important;
+      background:rgba(20,7,10,.18)!important;
+      box-shadow:0 12px 30px rgba(0,0,0,.14),0 0 14px rgba(255,0,0,.14)!important;
+    }
+    .invite-btn:hover span,
+    .invite-btn:focus-visible span{color:#FF0000!important}
+    .invite-btn:hover::before,
+    .invite-btn:focus-visible::before{
+      animation:ctaVisibleSweepHover 1.1s linear infinite!important;
+    }
+    @keyframes ctaVisibleSweep{
+      0%,72%{left:-58%;opacity:0}
+      75%{opacity:1}
+      95%{left:118%;opacity:1}
+      100%{left:118%;opacity:0}
+    }
+    @keyframes ctaVisibleSweepHover{
+      0%{left:-58%;opacity:0}
+      8%{opacity:1}
+      92%{left:118%;opacity:1}
+      100%{left:118%;opacity:0}
+    }
 </style>
 
   <script>
