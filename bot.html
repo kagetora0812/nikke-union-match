@@ -2662,6 +2662,128 @@
       92%{left:118%;opacity:1}
       100%{left:118%;opacity:0}
     }
+
+
+    /* =========================================================
+       FORCED FIX 2026-09-19
+       Cause: too many older overrides were competing.
+       This block uses stronger selectors and a simpler structure.
+       ========================================================= */
+    main.container.bot-redesign .feature-section .feature-grid .feature-card,
+    main.container.bot-redesign .feature-section .feature-grid .feature-card:hover{
+      position:relative!important;
+      overflow:hidden!important;
+      box-sizing:border-box!important;
+      background:linear-gradient(145deg,rgba(17,22,29,.78),rgba(6,9,14,.63))!important;
+      background-image:linear-gradient(145deg,rgba(17,22,29,.78),rgba(6,9,14,.63))!important;
+      border:1px solid transparent!important;
+      border-image:none!important;
+      backdrop-filter:blur(12px) saturate(112%)!important;
+      -webkit-backdrop-filter:blur(12px) saturate(112%)!important;
+      box-shadow:inset 0 1px 0 rgba(255,255,255,.035),0 18px 50px rgba(0,0,0,.18)!important;
+    }
+    main.container.bot-redesign .feature-section .feature-grid .feature-card::before{
+      content:""!important;
+      position:absolute!important;
+      inset:0!important;
+      box-sizing:border-box!important;
+      border:1px solid transparent!important;
+      border-image:linear-gradient(135deg,#FF0030 0%,#FF3657 52%,#FF7188 100%) 1!important;
+      pointer-events:none!important;
+      z-index:1!important;
+      background:none!important;
+      -webkit-mask:none!important;
+      mask:none!important;
+    }
+    main.container.bot-redesign .feature-section .feature-grid .feature-card::after{
+      content:""!important;
+      position:absolute!important;
+      left:0!important;
+      right:0!important;
+      top:0!important;
+      height:2px!important;
+      width:100%!important;
+      background:linear-gradient(90deg,#FF0030 0%,#FF3657 52%,#FF7188 100%)!important;
+      z-index:2!important;
+      pointer-events:none!important;
+    }
+    main.container.bot-redesign .feature-section .feature-grid .feature-card > *{
+      position:relative!important;
+      z-index:3!important;
+    }
+
+    main.container.bot-redesign .hero .invite-btn{
+      position:relative!important;
+      overflow:hidden!important;
+      isolation:isolate!important;
+      border:1px solid rgba(255,255,255,.92)!important;
+      color:#ffffff!important;
+      background:rgba(8,10,14,.16)!important;
+      box-shadow:0 10px 26px rgba(0,0,0,.12)!important;
+    }
+    main.container.bot-redesign .hero .invite-btn span{
+      position:relative!important;
+      z-index:3!important;
+      color:inherit!important;
+      transition:color .18s ease!important;
+    }
+    main.container.bot-redesign .hero .invite-btn::after{
+      display:none!important;
+      content:none!important;
+    }
+    main.container.bot-redesign .hero .invite-btn::before{
+      content:""!important;
+      position:absolute!important;
+      top:-32%!important;
+      bottom:-32%!important;
+      left:-62%!important;
+      width:34%!important;
+      z-index:2!important;
+      opacity:0!important;
+      transform:skewX(-18deg)!important;
+      background:linear-gradient(90deg,
+        rgba(255,0,0,0) 0%,
+        rgba(255,0,0,.06) 14%,
+        rgba(255,0,0,.28) 34%,
+        rgba(255,255,255,.40) 46%,
+        rgba(255,0,0,.98) 54%,
+        rgba(255,110,110,.48) 70%,
+        rgba(255,0,0,.08) 84%,
+        rgba(255,0,0,0) 100%
+      )!important;
+      filter:blur(7px)!important;
+      box-shadow:0 0 28px rgba(255,0,0,.36)!important;
+      pointer-events:none!important;
+      animation:forcedCtaSweep 4s linear infinite!important;
+    }
+    main.container.bot-redesign .hero .invite-btn:hover,
+    main.container.bot-redesign .hero .invite-btn:focus-visible{
+      border-color:#FF0000!important;
+      color:#FF0000!important;
+      background:rgba(20,7,10,.18)!important;
+      box-shadow:0 12px 30px rgba(0,0,0,.14),0 0 14px rgba(255,0,0,.14)!important;
+    }
+    main.container.bot-redesign .hero .invite-btn:hover span,
+    main.container.bot-redesign .hero .invite-btn:focus-visible span{
+      color:#FF0000!important;
+    }
+    main.container.bot-redesign .hero .invite-btn:hover::before,
+    main.container.bot-redesign .hero .invite-btn:focus-visible::before{
+      animation:forcedCtaSweepHover 1.05s linear infinite!important;
+    }
+    @keyframes forcedCtaSweep{
+      0%,72%{left:-62%;opacity:0}
+      75%{opacity:1}
+      95%{left:118%;opacity:1}
+      100%{left:118%;opacity:0}
+    }
+    @keyframes forcedCtaSweepHover{
+      0%{left:-62%;opacity:0}
+      8%{opacity:1}
+      92%{left:118%;opacity:1}
+      100%{left:118%;opacity:0}
+    }
+
 </style>
 
   <script>
