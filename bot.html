@@ -1318,30 +1318,30 @@
        - CHARACTERS: compact mobile/tablet cards
        ========================================================= */
 
-    /* Section titles: keep them bright, but blend the glow into the movie. */
+    /* Section titles: brighter than plain transparency, but with airy see-through glow. */
     .section-en{
       color:#f8fdff;
-      background:linear-gradient(105deg,#ffffff 0%,#dff8ff 28%,#8fe8ff 48%,#c8b7ff 70%,#ffffff 100%);
+      background:linear-gradient(105deg,rgba(255,255,255,.92) 0%,rgba(223,248,255,.84) 28%,rgba(143,232,255,.78) 48%,rgba(200,183,255,.72) 70%,rgba(255,255,255,.90) 100%);
       background-size:220% 100%;
       -webkit-background-clip:text;
       background-clip:text;
       -webkit-text-fill-color:transparent;
       mix-blend-mode:screen;
-      opacity:1;
-      filter:drop-shadow(0 0 7px rgba(93,220,255,.18)) drop-shadow(0 0 18px rgba(154,124,255,.08));
+      opacity:.66;
+      filter:drop-shadow(0 0 5px rgba(93,220,255,.12)) drop-shadow(0 0 14px rgba(154,124,255,.06));
       animation:sectionScreenFlow 12s ease-in-out infinite;
     }
     .section-ja{
-      color:#eef8ff;
-      opacity:1;
+      color:rgba(238,248,255,.60);
+      opacity:.60;
       mix-blend-mode:screen;
-      text-shadow:0 0 10px rgba(97,220,255,.10);
+      text-shadow:0 0 8px rgba(97,220,255,.06);
     }
     .stay-toggle{
-      color:#ffffff;
-      opacity:1;
+      color:rgba(255,255,255,.84);
+      opacity:.84;
       mix-blend-mode:screen;
-      text-shadow:0 0 11px rgba(95,220,255,.10),0 10px 28px rgba(0,0,0,.18);
+      text-shadow:0 0 8px rgba(95,220,255,.08),0 8px 24px rgba(0,0,0,.12);
     }
     @keyframes sectionScreenFlow{
       0%,100%{background-position:0% 50%}
@@ -1365,15 +1365,18 @@
       position:relative;
       z-index:1;
       display:block;
-      color:#b9c7cf;
+      color:rgba(232,246,255,.42);
       background:none;
       -webkit-background-clip:initial;
       background-clip:initial;
-      -webkit-text-fill-color:#b9c7cf;
+      -webkit-text-fill-color:rgba(232,246,255,.42);
       animation:none;
       filter:none;
-      text-shadow:0 0 11px rgba(95,220,255,.13),0 0 28px rgba(154,124,255,.07);
-      -webkit-text-stroke:.35px rgba(236,251,255,.50);
+      mix-blend-mode:screen;
+      text-shadow:
+        0 0 8px rgba(95,220,255,.10),
+        0 0 22px rgba(154,124,255,.05);
+      -webkit-text-stroke:0 transparent;
     }
     .hero-title-fire-canvas{
       position:absolute;
@@ -1383,7 +1386,8 @@
       height:100%;
       pointer-events:none;
       mix-blend-mode:screen;
-      filter:saturate(1.18) brightness(1.18) contrast(1.08) drop-shadow(0 0 8px rgba(83,215,255,.15));
+      opacity:.96;
+      filter:saturate(1.30) brightness(1.24) contrast(1.12) drop-shadow(0 0 6px rgba(83,215,255,.10));
     }
     .hero-title-fire-source{
       position:absolute;
@@ -1481,6 +1485,34 @@
         scroll-snap-stop:always;
       }
 
+      /* FEATURES: shrink empty space and make mobile/tablet copy easier to read. */
+      .feature-card{
+        min-height:0!important;
+        height:auto;
+        padding:22px 22px 18px;
+      }
+      .feature-no{font-size:16px}
+      .feature-card h3{
+        margin-top:10px;
+        font-size:26px;
+        line-height:1.32;
+      }
+      .feature-lead{
+        margin-top:11px;
+        font-size:15px;
+        line-height:1.72;
+      }
+      .feature-card p{
+        margin-top:12px;
+        font-size:14px;
+        line-height:1.88;
+      }
+      .feature-tip{
+        margin-top:10px;
+        font-size:13px!important;
+        line-height:1.82!important;
+      }
+
       /* Characters are intentionally shorter than before. */
       .character-card{
         min-height:0!important;
@@ -1548,6 +1580,13 @@
         min-width:86vw!important;
         max-width:86vw!important;
       }
+      .feature-card{
+        padding:19px 18px 16px;
+      }
+      .feature-card h3{font-size:22px;line-height:1.34}
+      .feature-lead{font-size:14.5px;line-height:1.72}
+      .feature-card p{font-size:13.5px;line-height:1.84}
+      .feature-tip{font-size:12.5px!important;line-height:1.78!important}
       .character-card{padding:18px 17px}
       .type-row{grid-template-columns:28px 94px 1fr}
       .slider-arrow{width:40px;height:40px}
@@ -1844,21 +1883,23 @@
         <article class="glass-card feature-card reveal-up" style="--delay:280ms">
           <div class="feature-no">05</div>
           <h3>ユニオン管理</h3>
-          <div class="feature-lead">Discordから、登録状況をすぐ確認。</div>
+          <div class="feature-lead">Discordから、<br>登録状況をすぐ確認。</div>
           <p>
-            UNION MATCHへの登録状態・募集状態・利用期限をBOTから確認できます。
-            「登録のみ」から「募集中」への切り替えや、利用期限の14日延長もDiscordから操作できます。
+            UNION MATCHへの登録状態・募集状態・利用期限を、BOTから確認できます。<br>
+            「登録のみ」から「募集中」への切り替えや、
+            利用期限の14日延長もDiscordから操作できます。
           </p>
         </article>
 
         <article class="glass-card feature-card reveal-up" style="--delay:350ms">
           <div class="feature-no">06</div>
           <h3>キャラクター設定</h3>
-          <div class="feature-lead">好きな見た目と名前で、自分たちだけのBOTキャラクターに。</div>
+          <div class="feature-lead">好きな見た目と名前で、<br>自分たちだけのBOTキャラクターに。</div>
           <p>
-            すべてのキャラクターで名前とプロフィール画像を変更できます。
-            好きな名前・画像に入れ替えて、サーバー独自のキャラクターとして利用できます。
-            自由キャラクターでは性格タイプやユーザーの呼び方も設定できます。
+            すべてのキャラクターで、
+            名前とプロフィール画像を変更できます。<br>
+            自分たちの好きな名前・画像へ変更して
+            ご利用できます。
           </p>
         </article>
       </div>
