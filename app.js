@@ -5732,6 +5732,7 @@ function renderLoadedManageRecruitment() {
       isUnion && !isUnionRecruiting
         ? "募集を開始"
         : "✏️ 編集";
+
     editButton.classList.toggle("hidden", !isUnion);
   }
 
@@ -5768,8 +5769,8 @@ function renderLoadedManageRecruitment() {
         );
       }
 
-      closeButtonNote.textContent =
-        "現在の募集掲載だけを終了します。UNION MATCHへの登録情報は残ります。";
+      closeButtonNote.innerHTML =
+        "<strong>現在の募集掲載だけを終了します。UNION MATCHへの登録情報は残ります。</strong><br>ユニオンリストよりご確認できます。";
 
       closeButtonNote.classList.toggle(
         "hidden",
