@@ -3658,14 +3658,6 @@ async function initializeDiscordRepublishV2() {
 
     setUnionRegistrationMode("recruit");
 
-    if (unionRecruitModeBtn) {
-      unionRecruitModeBtn.disabled = true;
-    }
-
-    if (unionRegisterOnlyModeBtn) {
-      unionRegisterOnlyModeBtn.disabled = true;
-    }
-
     const unionNameInput =
       $("#unionName");
 
@@ -4277,14 +4269,16 @@ function showRegistrationResult(
 }
 
 
-function showDiscordRepublishV2Result(result) {
+function showDiscordRepublishV2Result(result, registerOnly = false) {
 
   const registrationResultTitle =
     $("#registrationResultTitle");
 
   if (registrationResultTitle) {
     registrationResultTitle.textContent =
-      "再掲載完了";
+      registerOnly
+        ? "更新完了"
+        : "再掲載完了";
   }
 
   const passBox =
@@ -4304,7 +4298,9 @@ function showDiscordRepublishV2Result(result) {
 
   if (resultModeNote) {
     resultModeNote.textContent =
-      "BOT連携も自動で最新の募集へ更新されました。";
+      registerOnly
+        ? "登録のみで更新しました。BOT連携は維持されています。"
+        : "BOT連携も自動で最新の募集へ更新されました。";
     resultModeNote.classList.remove("hidden");
   }
 
@@ -4313,26 +4309,28 @@ function showDiscordRepublishV2Result(result) {
 
   if (resultExpiryLabel) {
     resultExpiryLabel.textContent =
-      "掲載期限";
+      registerOnly
+        ? "管理期限"
+        : "掲載期限";
   }
 
   if ($("#resultExpiry")) {
     $("#resultExpiry").textContent =
       formatDate(
-        result?.expires_at
-        || result?.member_expires_at
+        registerOnly
+          ? result?.member_expires_at
+          : (result?.expires_at || result?.member_expires_at)
       );
   }
 
   $("#registrationShareChoice")
     ?.classList
-    .remove("hidden");
+    .toggle("hidden", registerOnly);
 
   $("#resultModal")
     ?.classList
     .remove("hidden");
 }
-
 
 // ========================================
 // 募集登録
@@ -4461,14 +4459,27 @@ $("#registerForm")
 
         if (discordRepublishV2Mode) {
 
+          const discordRpcName =
+            registerOnly
+              ? "set_union_registration_only_from_discord_v2"
+              : "republish_union_from_discord_v2";
+
+          const discordRpcParams =
+            registerOnly
+              ? {
+                  p_token_hash: discordRepublishV2TokenHash,
+                  p_union_rank: unionRank
+                }
+              : {
+                  p_token_hash: discordRepublishV2TokenHash,
+                  p_union_rank: unionRank,
+                  p_x_url: xUrl
+                };
+
           const { data, error } =
             await sb.rpc(
-              "republish_union_from_discord_v2",
-              {
-                p_token_hash: discordRepublishV2TokenHash,
-                p_union_rank: unionRank,
-                p_x_url: xUrl
-              }
+              discordRpcName,
+              discordRpcParams
             );
 
           if (error) {
@@ -4494,9 +4505,17 @@ $("#registerForm")
               alert(
                 "募集記事URLが正しくありません。http:// または https:// から始まるURLを入力してください。"
               );
+            } else if (
+              errorText.includes("INVALID_UNION_RANK")
+            ) {
+              alert(
+                "ユニオンランクが正しくありません。"
+              );
             } else {
               alert(
-                "BOT経由の再掲載に失敗しました。もう一度お試しください。"
+                registerOnly
+                  ? "BOT経由の登録のみ更新に失敗しました。もう一度お試しください。"
+                  : "BOT経由の再掲載に失敗しました。もう一度お試しください。"
               );
             }
 
@@ -4508,7 +4527,7 @@ $("#registerForm")
               ? data[0]
               : data;
 
-          if (previewFile && result?.id) {
+          if (!registerOnly && previewFile && result?.id) {
             try {
               await uploadDiscordRepublishV2PreviewImage(
                 result.id,
@@ -4526,21 +4545,26 @@ $("#registerForm")
             }
           }
 
-          lastRegisteredRecruitment = {
-            type: "union",
-            name: unionName,
-            rank: unionRank,
-            xUrl
-          };
+          lastRegisteredRecruitment =
+            registerOnly
+              ? null
+              : {
+                  type: "union",
+                  name: unionName,
+                  rank: unionRank,
+                  xUrl
+                };
 
-          showDiscordRepublishV2Result(result);
+          showDiscordRepublishV2Result(
+            result,
+            registerOnly
+          );
           clearDiscordRepublishV2Mode();
 
           await loadRecruitments();
           returnToVideoTop();
           return;
         }
-
 
         for (
 
