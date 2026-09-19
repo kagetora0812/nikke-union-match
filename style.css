@@ -5727,3 +5727,65 @@ body.register-mode .hero {
     font-size: clamp(42px, 6vw, 56px) !important;
   }
 }
+
+/* =========================================================
+   MANAGE ACTION BUTTONS
+   2026-09-19
+   Scope: loaded UNION MATCH management actions only
+   ========================================================= */
+
+#openManageActionBtn {
+  border-color: #126db3 !important;
+  color: #ffffff !important;
+  background:
+    linear-gradient(
+      180deg,
+      #258bd5 0%,
+      #126db3 100%
+    ) !important;
+}
+
+#openManageActionBtn:hover,
+#openManageActionBtn:active {
+  border-color: #0d5f9f !important;
+  color: #ffffff !important;
+  background:
+    linear-gradient(
+      180deg,
+      #3198e2 0%,
+      #1679c2 100%
+    ) !important;
+}
+
+#closeLoadedRecruitmentBtn {
+  border-color: #151619 !important;
+  color: #ffffff !important;
+  background:
+    linear-gradient(
+      180deg,
+      #303136 0%,
+      #17181b 100%
+    ) !important;
+}
+
+#closeLoadedRecruitmentBtn:hover,
+#closeLoadedRecruitmentBtn:active {
+  border-color: #090a0b !important;
+  color: #ffffff !important;
+  background:
+    linear-gradient(
+      180deg,
+      #3a3b40 0%,
+      #1d1e21 100%
+    ) !important;
+}
+
+#closeLoadedRecruitmentNote {
+  margin: 8px 0 0;
+  color: var(--ink-soft);
+  font-size: 11px;
+  font-weight: 700;
+  line-height: 1.65;
+  text-align: left;
+}
+
