@@ -5732,11 +5732,12 @@ body.register-mode .hero {
    MANAGE ACTION BUTTONS
    2026-09-19
    Scope: loaded UNION MATCH management actions only
+   Both buttons: black -> cyan on hover/active -> black
    ========================================================= */
 
 #openManageActionBtn,
 #closeLoadedRecruitmentBtn {
-  border-color: #56585c !important;
+  border: 1px solid #56585c !important;
   color: #ffffff !important;
   background:
     linear-gradient(
@@ -5744,12 +5745,16 @@ body.register-mode .hero {
       #48494d 0%,
       #35363a 100%
     ) !important;
+  box-shadow:
+    0 3px 8px rgba(0, 0, 0, .15) !important;
 }
 
 #openManageActionBtn:hover,
 #openManageActionBtn:active,
+#openManageActionBtn:focus-visible,
 #closeLoadedRecruitmentBtn:hover,
-#closeLoadedRecruitmentBtn:active {
+#closeLoadedRecruitmentBtn:active,
+#closeLoadedRecruitmentBtn:focus-visible {
   border-color: var(--cyan) !important;
   color: #ffffff !important;
   background:
@@ -5759,7 +5764,7 @@ body.register-mode .hero {
       var(--cyan)
     ) !important;
   box-shadow:
-    0 4px 12px rgba(26, 176, 241, .28);
+    0 4px 12px rgba(26, 176, 241, .28) !important;
 }
 
 #closeLoadedRecruitmentNote {
