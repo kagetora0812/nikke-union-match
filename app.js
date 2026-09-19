@@ -5740,11 +5740,46 @@ function renderLoadedManageRecruitment() {
 
   if (closeButton) {
     closeButton.textContent =
-      isUnion ? "求人広告を締め切る" : "募集を締め切る";
+      isUnion
+        ? "募集を終了して登録のみの状態に戻す"
+        : "募集を締め切る";
+
     closeButton.classList.toggle(
       "hidden",
       isUnion && !isUnionRecruiting
     );
+
+    let closeButtonNote =
+      document.getElementById(
+        "closeLoadedRecruitmentNote"
+      );
+
+    if (isUnion) {
+      if (!closeButtonNote) {
+        closeButtonNote =
+          document.createElement("div");
+
+        closeButtonNote.id =
+          "closeLoadedRecruitmentNote";
+
+        closeButton.insertAdjacentElement(
+          "afterend",
+          closeButtonNote
+        );
+      }
+
+      closeButtonNote.textContent =
+        "現在の募集掲載だけを終了します。UNION MATCHへの登録情報は残ります。";
+
+      closeButtonNote.classList.toggle(
+        "hidden",
+        !isUnionRecruiting
+      );
+    } else {
+      closeButtonNote
+        ?.classList
+        .add("hidden");
+    }
   }
 
   const deleteMembershipButton =
