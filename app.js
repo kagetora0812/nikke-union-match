@@ -5569,6 +5569,99 @@ function getManagedRecruitmentStatus(item) {
 }
 
 
+function applyManageActionButtonState(button) {
+
+  if (!button) {
+    return;
+  }
+
+  const setBlack = () => {
+    button.style.setProperty(
+      "border-color",
+      "#56585c",
+      "important"
+    );
+
+    button.style.setProperty(
+      "color",
+      "#ffffff",
+      "important"
+    );
+
+    button.style.setProperty(
+      "background",
+      "linear-gradient(180deg, #48494d 0%, #35363a 100%)",
+      "important"
+    );
+
+    button.style.setProperty(
+      "box-shadow",
+      "0 3px 8px rgba(0, 0, 0, .15)",
+      "important"
+    );
+  };
+
+  const setBlue = () => {
+    button.style.setProperty(
+      "border-color",
+      "var(--cyan)",
+      "important"
+    );
+
+    button.style.setProperty(
+      "color",
+      "#ffffff",
+      "important"
+    );
+
+    button.style.setProperty(
+      "background",
+      "linear-gradient(180deg, var(--cyan-2), var(--cyan))",
+      "important"
+    );
+
+    button.style.setProperty(
+      "box-shadow",
+      "0 4px 12px rgba(26, 176, 241, .28)",
+      "important"
+    );
+  };
+
+  setBlack();
+
+  if (
+    button.dataset
+      .manageActionHoverBound
+    !==
+    "1"
+  ) {
+    button.addEventListener(
+      "mouseenter",
+      setBlue
+    );
+
+    button.addEventListener(
+      "mouseleave",
+      setBlack
+    );
+
+    button.addEventListener(
+      "focus",
+      setBlue
+    );
+
+    button.addEventListener(
+      "blur",
+      setBlack
+    );
+
+    button.dataset
+      .manageActionHoverBound =
+      "1";
+  }
+}
+
+
 function renderLoadedManageRecruitment() {
 
   const item =
@@ -5733,6 +5826,10 @@ function renderLoadedManageRecruitment() {
         ? "募集を開始"
         : "✏️ 編集";
 
+    applyManageActionButtonState(
+      editButton
+    );
+
     editButton.classList.toggle("hidden", !isUnion);
   }
 
@@ -5781,6 +5878,10 @@ function renderLoadedManageRecruitment() {
         ?.classList
         .add("hidden");
     }
+
+    applyManageActionButtonState(
+      closeButton
+    );
   }
 
   const deleteMembershipButton =
@@ -7082,9 +7183,13 @@ async function closeLoadedRecruitment() {
   if (
     !loadedManagedRecruitment
     ||
-    !loadedManagePassHash
+    (
+      !loadedManagePassHash
+      &&
+      !discordManageV1SessionHash
+    )
   ) {
-    alert("先にPASSから登録内容を呼び出してください。");
+    alert("編集認証を取得できませんでした。もう一度呼び出してください。");
     return;
   }
 
@@ -7106,16 +7211,30 @@ async function closeLoadedRecruitment() {
       return;
     }
 
+    const useDiscordManage =
+      discordManageV1Mode
+      &&
+      Boolean(
+        discordManageV1SessionHash
+      );
+
     const {
       data,
       error
     } =
       await sb.rpc(
-        "stop_union_recruiting_by_membership_pass",
-        {
-          p_pass_hash:
-            loadedManagePassHash
-        }
+        useDiscordManage
+          ? "stop_union_recruiting_by_discord_manage_v1"
+          : "stop_union_recruiting_by_membership_pass",
+        useDiscordManage
+          ? {
+              p_session_hash:
+                discordManageV1SessionHash
+            }
+          : {
+              p_pass_hash:
+                loadedManagePassHash
+            }
       );
 
     if (
@@ -7128,7 +7247,7 @@ async function closeLoadedRecruitment() {
         error || data
       );
       alert(
-        "募集を締め切れませんでした。PASSを確認してもう一度お試しください。"
+        "募集を終了できませんでした。もう一度お試しください。"
       );
       return;
     }
