@@ -163,6 +163,11 @@ let discordRepublishV2Mode = false;
 let discordRepublishV2TokenHash = "";
 let discordRepublishV2Info = null;
 
+// Discord /unionmatch 経由 編集 V1
+const DISCORD_MANAGE_V1_PARAM = "discord_manage_v1";
+let discordManageV1Mode = false;
+let discordManageV1SessionHash = "";
+
 
 
 function escapeHtml(value) {
@@ -768,6 +773,48 @@ async function uploadRecruitmentPreviewImage(
 }
 
 
+async function uploadDiscordManageV1PreviewImage(
+  recruitmentId,
+  sessionHash,
+  file
+) {
+  if (!file) return null;
+
+  const extMap = {
+    "image/jpeg": "jpg",
+    "image/png": "png",
+    "image/webp": "webp"
+  };
+  const ext = extMap[file.type] || "jpg";
+  const objectPath = "union/" + recruitmentId + "/" + Date.now() + "." + ext;
+
+  const { error: uploadError } = await sb.storage
+    .from("recruitment-previews")
+    .upload(objectPath, file, {
+      cacheControl: "3600",
+      upsert: false,
+      contentType: file.type
+    });
+  if (uploadError) throw uploadError;
+
+  const { data: publicData } = sb.storage
+    .from("recruitment-previews")
+    .getPublicUrl(objectPath);
+  const publicUrl = publicData?.publicUrl || "";
+  if (!publicUrl) throw new Error("PREVIEW_PUBLIC_URL_FAILED");
+
+  const { data, error: attachError } = await sb.rpc(
+    "set_discord_union_manage_preview_v1",
+    {
+      p_session_hash: sessionHash,
+      p_recruitment_id: String(recruitmentId),
+      p_preview_image_url: publicUrl
+    }
+  );
+  if (attachError || data !== true) throw attachError || new Error("PREVIEW_ATTACH_FAILED");
+  return publicUrl;
+}
+
 async function uploadDiscordRepublishV2PreviewImage(
   recruitmentId,
   tokenHash,
@@ -1015,6 +1062,18 @@ function getDiscordRepublishV2TokenFromUrl() {
   return String(
     hashParams.get(DISCORD_REPUBLISH_V2_PARAM) || ""
   ).trim();
+}
+
+function getDiscordManageV1TokenFromUrl() {
+  const hashText = String(window.location.hash || "").replace(/^#/, "");
+  const hashParams = new URLSearchParams(hashText);
+  return String(hashParams.get(DISCORD_MANAGE_V1_PARAM) || "").trim();
+}
+
+function createDiscordManageSessionSeed() {
+  const bytes = new Uint8Array(32);
+  window.crypto.getRandomValues(bytes);
+  return Array.from(bytes).map(v => v.toString(16).padStart(2, "0")).join("");
 }
 
 
@@ -3611,6 +3670,47 @@ function clearDiscordRepublishV2Mode() {
   );
 }
 
+
+async function initializeDiscordManageV1() {
+  const rawToken = getDiscordManageV1TokenFromUrl();
+  if (!rawToken || !sb) return;
+
+  try {
+    const tokenHash = await sha256(rawToken);
+    const sessionHash = await sha256(createDiscordManageSessionSeed());
+
+    const { data, error } = await sb.rpc(
+      "consume_discord_union_manage_v1",
+      { p_token_hash: tokenHash, p_session_hash: sessionHash }
+    );
+    if (error) throw error;
+
+    const info = Array.isArray(data) ? data[0] : data;
+    if (!info?.valid) {
+      alert("編集リンクが無効・使用済み、または有効期限が切れています。Discordの /unionmatch から新しいリンクを発行してください。");
+      return;
+    }
+
+    discordManageV1Mode = true;
+    discordManageV1SessionHash = sessionHash;
+    loadedManagedRecruitment = info;
+    loadedManagePass = "";
+    loadedManagePassHash = "";
+
+    const cleanUrl = new URL(window.location.href);
+    cleanUrl.hash = "";
+    window.history.replaceState({}, "", cleanUrl.toString());
+
+    showPage("manage");
+    resetManageImageState();
+    resetManageActionMenu();
+    renderLoadedManageRecruitment();
+    populateManageEditForm();
+  } catch (error) {
+    console.error("Discord編集リンク初期化エラー", error);
+    alert("編集リンクを確認できませんでした。Discordの /unionmatch からもう一度発行してください。");
+  }
+}
 
 async function initializeDiscordRepublishV2() {
 
@@ -6538,7 +6638,7 @@ function showManageResult(mode, result) {
 
   if ($("#manageResultPass")) {
     $("#manageResultPass").textContent =
-      loadedManagePass || "--------";
+      loadedManagePass || (discordManageV1Mode ? "既存PASSは変更されません" : "--------");
   }
 
   if ($("#manageResultExpiry")) {
@@ -6707,9 +6807,9 @@ $("#managePreviewConfirm")
       if (
         !loadedManagedRecruitment
         ||
-        !loadedManagePassHash
+        (!loadedManagePassHash && !discordManageV1SessionHash)
       ) {
-        alert("PASS情報を取得できませんでした。もう一度呼び出してください。");
+        alert("編集認証を取得できませんでした。もう一度呼び出してください。");
         return;
       }
 
@@ -6769,35 +6869,38 @@ $("#managePreviewConfirm")
             loadedManagedRecruitment
           ) === "登録のみ";
 
+        const useDiscordManage =
+          isUnion && discordManageV1Mode && discordManageV1SessionHash;
+
         const rpcName =
-          isUnion
-            ? "set_union_membership_recruiting_by_pass"
-            : "reregister_recruitment_by_pass";
+          useDiscordManage
+            ? "set_union_membership_recruiting_by_discord_manage_v1"
+            : isUnion
+              ? "set_union_membership_recruiting_by_pass"
+              : "reregister_recruitment_by_pass";
 
         const rpcParams =
-          isUnion
+          useDiscordManage
             ? {
-                p_pass_hash:
-                  loadedManagePassHash,
-                p_union_rank:
-                  values.unionRank,
-                p_x_url:
-                  values.url,
-                p_remove_preview_image:
-                  removeImage
+                p_session_hash: discordManageV1SessionHash,
+                p_union_rank: values.unionRank,
+                p_x_url: values.url,
+                p_remove_preview_image: removeImage
               }
-            : {
-                p_pass_hash:
-                  loadedManagePassHash,
-                p_slv:
-                  values.slv,
-                p_union_rank:
-                  values.unionRank,
-                p_x_url:
-                  values.url,
-                p_remove_preview_image:
-                  removeImage
-              };
+            : isUnion
+              ? {
+                  p_pass_hash: loadedManagePassHash,
+                  p_union_rank: values.unionRank,
+                  p_x_url: values.url,
+                  p_remove_preview_image: removeImage
+                }
+              : {
+                  p_pass_hash: loadedManagePassHash,
+                  p_slv: values.slv,
+                  p_union_rank: values.unionRank,
+                  p_x_url: values.url,
+                  p_remove_preview_image: removeImage
+                };
 
         const {
           data,
@@ -6849,12 +6952,18 @@ $("#managePreviewConfirm")
         ) {
           try {
             uploadedImageUrl =
-              await uploadRecruitmentPreviewImage(
-                loadedManagedRecruitment.type,
-                resultData.id,
-                loadedManagePassHash,
-                manageEditPreparedFile
-              );
+              discordManageV1Mode
+                ? await uploadDiscordManageV1PreviewImage(
+                    resultData.id,
+                    discordManageV1SessionHash,
+                    manageEditPreparedFile
+                  )
+                : await uploadRecruitmentPreviewImage(
+                    loadedManagedRecruitment.type,
+                    resultData.id,
+                    loadedManagePassHash,
+                    manageEditPreparedFile
+                  );
           } catch (previewError) {
             console.error("再登録画像アップロードエラー", previewError);
             alert(
@@ -8007,6 +8116,7 @@ setSearchType(
 
 applyInitialRecruitmentView();
 void initializeDiscordRepublishV2();
+void initializeDiscordManageV1();
 
 // ========================================
 // v51.4 スマホ / タブレット登録フォーム
