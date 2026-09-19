@@ -5734,50 +5734,32 @@ body.register-mode .hero {
    Scope: loaded UNION MATCH management actions only
    ========================================================= */
 
-#openManageActionBtn {
-  border-color: #126db3 !important;
+#openManageActionBtn,
+#closeLoadedRecruitmentBtn {
+  border-color: #56585c !important;
   color: #ffffff !important;
   background:
     linear-gradient(
       180deg,
-      #258bd5 0%,
-      #126db3 100%
+      #48494d 0%,
+      #35363a 100%
     ) !important;
 }
 
 #openManageActionBtn:hover,
-#openManageActionBtn:active {
-  border-color: #0d5f9f !important;
-  color: #ffffff !important;
-  background:
-    linear-gradient(
-      180deg,
-      #3198e2 0%,
-      #1679c2 100%
-    ) !important;
-}
-
-#closeLoadedRecruitmentBtn {
-  border-color: #151619 !important;
-  color: #ffffff !important;
-  background:
-    linear-gradient(
-      180deg,
-      #303136 0%,
-      #17181b 100%
-    ) !important;
-}
-
+#openManageActionBtn:active,
 #closeLoadedRecruitmentBtn:hover,
 #closeLoadedRecruitmentBtn:active {
-  border-color: #090a0b !important;
+  border-color: var(--cyan) !important;
   color: #ffffff !important;
   background:
     linear-gradient(
       180deg,
-      #3a3b40 0%,
-      #1d1e21 100%
+      var(--cyan-2),
+      var(--cyan)
     ) !important;
+  box-shadow:
+    0 4px 12px rgba(26, 176, 241, .28);
 }
 
 #closeLoadedRecruitmentNote {
@@ -5787,5 +5769,10 @@ body.register-mode .hero {
   font-weight: 700;
   line-height: 1.65;
   text-align: left;
+}
+
+#closeLoadedRecruitmentNote strong {
+  color: var(--ink);
+  font-weight: 900;
 }
 
