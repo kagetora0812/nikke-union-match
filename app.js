@@ -157,6 +157,12 @@ let loadedManagePassHash = "";
 let manageEditPreparedFile = null;
 let manageEditObjectUrl = null;
 
+// Discord BOT経由 再掲載 V2
+const DISCORD_REPUBLISH_V2_PARAM = "discord_republish_v2";
+let discordRepublishV2Mode = false;
+let discordRepublishV2TokenHash = "";
+let discordRepublishV2Info = null;
+
 
 
 function escapeHtml(value) {
@@ -762,6 +768,74 @@ async function uploadRecruitmentPreviewImage(
 }
 
 
+async function uploadDiscordRepublishV2PreviewImage(
+  recruitmentId,
+  tokenHash,
+  file
+) {
+
+  if (!file) {
+    return null;
+  }
+
+  const extMap = {
+    "image/jpeg": "jpg",
+    "image/png": "png",
+    "image/webp": "webp"
+  };
+
+  const ext =
+    extMap[file.type] || "jpg";
+
+  const objectPath =
+    `union/${recruitmentId}/${Date.now()}.${ext}`;
+
+  const { error: uploadError } =
+    await sb.storage
+      .from("recruitment-previews")
+      .upload(
+        objectPath,
+        file,
+        {
+          cacheControl: "3600",
+          upsert: false,
+          contentType: file.type
+        }
+      );
+
+  if (uploadError) {
+    throw uploadError;
+  }
+
+  const { data: publicData } =
+    sb.storage
+      .from("recruitment-previews")
+      .getPublicUrl(objectPath);
+
+  const publicUrl =
+    publicData?.publicUrl || "";
+
+  if (!publicUrl) {
+    throw new Error("PREVIEW_PUBLIC_URL_FAILED");
+  }
+
+  const { error: attachError } =
+    await sb.rpc(
+      "set_discord_union_republish_preview_v2",
+      {
+        p_token_hash: tokenHash,
+        p_preview_image_url: publicUrl
+      }
+    );
+
+  if (attachError) {
+    throw attachError;
+  }
+
+  return publicUrl;
+}
+
+
 
 // ========================================
 // 日付
@@ -926,6 +1000,21 @@ async function sha256(text) {
     )
     .join("");
 
+}
+
+
+function getDiscordRepublishV2TokenFromUrl() {
+
+  const hashText =
+    String(window.location.hash || "")
+      .replace(/^#/, "");
+
+  const hashParams =
+    new URLSearchParams(hashText);
+
+  return String(
+    hashParams.get(DISCORD_REPUBLISH_V2_PARAM) || ""
+  ).trim();
 }
 
 
@@ -3448,6 +3537,173 @@ registrationTypeSelect
 updateRegistrationFields();
 
 
+function showDiscordRepublishV2Banner(info) {
+
+  const form =
+    $("#registerForm");
+
+  if (!form) {
+    return;
+  }
+
+  let banner =
+    $("#discordRepublishV2Banner");
+
+  if (!banner) {
+    banner = document.createElement("div");
+    banner.id = "discordRepublishV2Banner";
+    banner.className = "notice";
+    form.prepend(banner);
+  }
+
+  banner.innerHTML =
+    "<strong>🟢 BOTから再掲載｜PASS不要</strong><br>" +
+    "BOT経由でUNION MATCHの募集を再掲載してください。<br>" +
+    "再掲載後はBOT連携も自動で更新されます。";
+
+  const unionName =
+    String(info?.current_union_name || "").trim();
+
+  if (unionName) {
+    banner.innerHTML +=
+      `<br><small>対象ユニオン：${escapeHtml(unionName)}</small>`;
+  }
+}
+
+
+function clearDiscordRepublishV2Mode() {
+
+  discordRepublishV2Mode = false;
+  discordRepublishV2TokenHash = "";
+  discordRepublishV2Info = null;
+
+  if (registrationTypeSelect) {
+    registrationTypeSelect.disabled = false;
+  }
+
+  const unionNameInput =
+    $("#unionName");
+
+  if (unionNameInput) {
+    unionNameInput.disabled = false;
+  }
+
+  if (unionRecruitModeBtn) {
+    unionRecruitModeBtn.disabled = false;
+  }
+
+  if (unionRegisterOnlyModeBtn) {
+    unionRegisterOnlyModeBtn.disabled = false;
+  }
+
+  $("#discordRepublishV2Banner")
+    ?.remove();
+
+  const cleanUrl =
+    new URL(window.location.href);
+
+  cleanUrl.hash = "";
+
+  window.history.replaceState(
+    {},
+    "",
+    cleanUrl.toString()
+  );
+}
+
+
+async function initializeDiscordRepublishV2() {
+
+  const rawToken =
+    getDiscordRepublishV2TokenFromUrl();
+
+  if (!rawToken || !sb) {
+    return;
+  }
+
+  try {
+    const tokenHash =
+      await sha256(rawToken);
+
+    const { data, error } =
+      await sb.rpc(
+        "validate_discord_union_republish_v2",
+        {
+          p_token_hash: tokenHash
+        }
+      );
+
+    if (error) {
+      throw error;
+    }
+
+    const info =
+      Array.isArray(data)
+        ? data[0]
+        : data;
+
+    if (!info?.valid) {
+      alert(
+        "BOTの再掲載リンクが無効か、有効期限が切れています。Discordからもう一度「BOTから再掲載」を押してください。"
+      );
+      return;
+    }
+
+    discordRepublishV2Mode = true;
+    discordRepublishV2TokenHash = tokenHash;
+    discordRepublishV2Info = info;
+
+    registrationTypeSelect.value = "union";
+    registrationTypeSelect.disabled = true;
+
+    setUnionRegistrationMode("recruit");
+
+    if (unionRecruitModeBtn) {
+      unionRecruitModeBtn.disabled = true;
+    }
+
+    if (unionRegisterOnlyModeBtn) {
+      unionRegisterOnlyModeBtn.disabled = true;
+    }
+
+    const unionNameInput =
+      $("#unionName");
+
+    if (unionNameInput) {
+      unionNameInput.value =
+        info.current_union_name || "";
+      unionNameInput.disabled = true;
+    }
+
+    const unionRankInput =
+      $("#unionRank");
+
+    if (
+      unionRankInput
+      &&
+      info.current_union_rank
+    ) {
+      unionRankInput.value =
+        info.current_union_rank;
+    }
+
+    updateRegistrationFields();
+    showDiscordRepublishV2Banner(info);
+    showPage("register");
+
+  } catch (error) {
+    console.error(
+      "BOT経由再掲載V2 初期化エラー",
+      error
+    );
+
+    alert(
+      "BOTの再掲載リンクを確認できませんでした。Discordからもう一度「BOTから再掲載」を押してください。"
+    );
+  }
+}
+
+
 // ========================================
 // 登録前プレビュー
 // ========================================
@@ -3893,6 +4149,26 @@ function showRegistrationResult(
   isUnion = false
 ) {
 
+  const registrationResultTitle =
+    $("#registrationResultTitle");
+
+  if (registrationResultTitle) {
+    registrationResultTitle.textContent =
+      "登録完了";
+  }
+
+  const passBox =
+    $("#passValue")
+      ?.closest(".pass-box");
+
+  if (passBox) {
+    passBox.style.display = "";
+  }
+
+  $("#registrationPassWarning")
+    ?.classList
+    .remove("hidden");
+
 
   if (
     $("#passValue")
@@ -3998,6 +4274,63 @@ function showRegistrationResult(
       "hidden"
     );
 
+}
+
+
+function showDiscordRepublishV2Result(result) {
+
+  const registrationResultTitle =
+    $("#registrationResultTitle");
+
+  if (registrationResultTitle) {
+    registrationResultTitle.textContent =
+      "再掲載完了";
+  }
+
+  const passBox =
+    $("#passValue")
+      ?.closest(".pass-box");
+
+  if (passBox) {
+    passBox.style.display = "none";
+  }
+
+  $("#registrationPassWarning")
+    ?.classList
+    .add("hidden");
+
+  const resultModeNote =
+    $("#registrationResultModeNote");
+
+  if (resultModeNote) {
+    resultModeNote.textContent =
+      "BOT連携も自動で最新の募集へ更新されました。";
+    resultModeNote.classList.remove("hidden");
+  }
+
+  const resultExpiryLabel =
+    $("#resultExpiryLabel");
+
+  if (resultExpiryLabel) {
+    resultExpiryLabel.textContent =
+      "掲載期限";
+  }
+
+  if ($("#resultExpiry")) {
+    $("#resultExpiry").textContent =
+      formatDate(
+        result?.expires_at
+        || result?.member_expires_at
+      );
+  }
+
+  $("#registrationShareChoice")
+    ?.classList
+    .remove("hidden");
+
+  $("#resultModal")
+    ?.classList
+    .remove("hidden");
 }
 
 
@@ -4123,6 +4456,89 @@ $("#registerForm")
 
           return;
 
+        }
+
+
+        if (discordRepublishV2Mode) {
+
+          const { data, error } =
+            await sb.rpc(
+              "republish_union_from_discord_v2",
+              {
+                p_token_hash: discordRepublishV2TokenHash,
+                p_union_rank: unionRank,
+                p_x_url: xUrl
+              }
+            );
+
+          if (error) {
+            console.error(
+              "BOT経由再掲載V2 エラー",
+              error
+            );
+
+            const errorText =
+              getErrorText(error);
+
+            if (
+              errorText.includes("DISCORD_REPUBLISH_TOKEN_INVALID")
+              || errorText.includes("DISCORD_REPUBLISH_MEMBERSHIP_NOT_FOUND")
+            ) {
+              alert(
+                "BOTの再掲載リンクが無効か、有効期限が切れています。Discordからもう一度「BOTから再掲載」を押してください。"
+              );
+            } else if (
+              errorText.includes("INVALID_RECRUITMENT_URL")
+              || errorText.includes("INVALID_X_POST_URL")
+            ) {
+              alert(
+                "募集記事URLが正しくありません。http:// または https:// から始まるURLを入力してください。"
+              );
+            } else {
+              alert(
+                "BOT経由の再掲載に失敗しました。もう一度お試しください。"
+              );
+            }
+
+            return;
+          }
+
+          const result =
+            Array.isArray(data)
+              ? data[0]
+              : data;
+
+          if (previewFile && result?.id) {
+            try {
+              await uploadDiscordRepublishV2PreviewImage(
+                result.id,
+                discordRepublishV2TokenHash,
+                previewFile
+              );
+            } catch (previewError) {
+              console.error(
+                "BOT経由再掲載V2 画像アップロードエラー",
+                previewError
+              );
+              alert(
+                "再掲載は完了しましたが、画像の登録だけ失敗しました。\n募集自体とBOT連携は正常に更新されています。"
+              );
+            }
+          }
+
+          lastRegisteredRecruitment = {
+            type: "union",
+            name: unionName,
+            rank: unionRank,
+            xUrl
+          };
+
+          showDiscordRepublishV2Result(result);
+          clearDiscordRepublishV2Mode();
+
+          await loadRecruitments();
+          returnToVideoTop();
+          return;
         }
 
 
@@ -7566,6 +7982,7 @@ setSearchType(
 );
 
 applyInitialRecruitmentView();
+void initializeDiscordRepublishV2();
 
 // ========================================
 // v51.4 スマホ / タブレット登録フォーム
