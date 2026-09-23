@@ -2122,147 +2122,6 @@ async function loadGraduatedCommanderCount() {
 
 
 // ========================================
-// Xシェア用
-// 現在募集中の指揮官数
-// ========================================
-
-async function getCurrentCommanderCount() {
-
-  if (!sb) {
-
-    return 0;
-
-  }
-
-
-  const {
-    count,
-    error
-  } =
-    await sb
-      .from(
-        "recruitments"
-      )
-      .select(
-        "id",
-        {
-          count: "exact",
-          head: true
-        }
-      )
-      .eq(
-        "status",
-        "open"
-      )
-      .gt(
-        "expires_at",
-        new Date()
-          .toISOString()
-      );
-
-
-  if (error) {
-
-    console.error(
-      "登録指揮官数取得エラー",
-      error
-    );
-
-
-    return Number(
-
-      $("#commanderCountTop")
-        ?.textContent
-      ||
-      $("#commanderCount")
-        ?.textContent
-      ||
-      0
-
-    );
-
-  }
-
-
-  return Number(
-    count || 0
-  );
-
-}
-
-
-// ========================================
-// Xシェア用
-// 現在募集中のユニオン数
-// ========================================
-
-async function getCurrentUnionCount() {
-
-  if (!sb) {
-
-    return 0;
-
-  }
-
-
-  const {
-    count,
-    error
-  } =
-    await sb
-      .from(
-        "union_recruitments"
-      )
-      .select(
-        "id",
-        {
-          count: "exact",
-          head: true
-        }
-      )
-      .eq(
-        "status",
-        "open"
-      )
-      .gt(
-        "expires_at",
-        new Date()
-          .toISOString()
-      );
-
-
-  if (error) {
-
-    console.error(
-      "登録ユニオン数取得エラー",
-      error
-    );
-
-
-    return Number(
-
-      $("#unionCountTop")
-        ?.textContent
-      ||
-      $("#unionCount")
-        ?.textContent
-      ||
-      0
-
-    );
-
-  }
-
-
-  return Number(
-    count || 0
-  );
-
-}
-
-
-
-// ========================================
 // TOP表示用：現在利用中ユニオン数
 // TOTAL UNIONS = 現在の会員台帳だけを数える。
 // 過去の募集履歴・終了済み募集は集計しない。
@@ -2335,17 +2194,10 @@ async function loadTotalRegisteredUnionCount() {
 
 // ========================================
 // Xシェア文
-//
-// 通常Xアカウント用
-// 短縮版
+// 登録直後の募集情報を宣伝する
 // ========================================
 
-function buildXShareText(
-  registration,
-  commanderCount,
-  unionCount,
-  graduatedCount
-) {
+function buildXShareText(registration) {
 
   if (!registration) {
 
@@ -2356,20 +2208,16 @@ function buildXShareText(
 
   const commonTop =
 
-    "🔎 指揮官とユニオンをつなぐマッチングアプリ\n" +
+    "ユニオン・指揮官探し、募集応募まで\n\n" +
     "「NIKKE UNION MATCH」に募集登録しました！\n\n";
 
 
-  const commonStats =
+  const commonBottom =
 
-    "📊 現在の登録状況\n" +
-    `👤 ${commanderCount}名\n` +
-    `🏢 ${unionCount}\n` +
-    `🎓 ${graduatedCount}名\n\n`;
-
-
-  const appUrl =
-    "https://x.gd/4tEJo";
+    "Xから移籍先を探している指揮官を見つけDiscordへ届けるBOTも完備\n\n" +
+    "必要な時だけの利用や、継続掲載も。\n\n" +
+    "https://x.gd/4tEJo\n\n" +
+    registration.xUrl;
 
 
   // ======================================
@@ -2388,14 +2236,7 @@ function buildXShareText(
       `👤 ${registration.name}\n` +
       `⚡ ${registration.slv}\n\n` +
 
-      commonStats +
-
-      "👇 UNION MATCH\n" +
-      appUrl +
-      "\n\n" +
-
-      "👇 募集投稿\n" +
-      registration.xUrl
+      commonBottom
 
     );
 
@@ -2413,14 +2254,7 @@ function buildXShareText(
     `🏢 ${registration.name}\n` +
     `🏆 ${registration.rank}\n\n` +
 
-    commonStats +
-
-    "👇 UNION MATCH\n" +
-    appUrl +
-    "\n\n" +
-
-    "👇 募集投稿\n" +
-    registration.xUrl
+    commonBottom
 
   );
 
@@ -5312,53 +5146,6 @@ $("#shareXBtn")
 
 
       // ======================================
-      // 最新カウンター取得
-      // ======================================
-
-      const [
-
-        commanderCount,
-        unionCount,
-        graduatedCountResult
-
-      ] =
-
-        await Promise.all([
-
-          getCurrentCommanderCount(),
-
-          getCurrentUnionCount(),
-
-          loadGraduatedCommanderCount()
-
-        ]);
-
-
-      const graduatedCount =
-
-        Number.isFinite(
-          Number(
-            graduatedCountResult
-          )
-        )
-
-          ?
-
-          Number(
-            graduatedCountResult
-          )
-
-          :
-
-          Number(
-            $("#graduatedCommanderCount")
-              ?.textContent
-            ||
-            0
-          );
-
-
-      // ======================================
       // X文章
       // ======================================
 
@@ -5366,13 +5153,7 @@ $("#shareXBtn")
 
         buildXShareText(
 
-          lastRegisteredRecruitment,
-
-          commanderCount,
-
-          unionCount,
-
-          graduatedCount
+          lastRegisteredRecruitment
 
         );
 
