@@ -2214,9 +2214,8 @@ function buildXShareText(registration) {
 
   const commonBottom =
 
-    "Xから移籍先を探している指揮官を見つけDiscordへ届けるBOTも完備\n\n" +
-    "必要な時だけの利用や、継続掲載も。\n\n" +
-    "https://x.gd/4tEJo\n\n" +
+    "UNION MATCHをもっと便利にするDiscord BOT機能も利用できます。\n\n" +
+    "https://kagetora0812.github.io/nikke-union-match/\n\n" +
     registration.xUrl;
 
 
