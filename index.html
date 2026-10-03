@@ -1631,6 +1631,133 @@
   </style>
 
 
+  <style id="topbar-bot-button-v1">
+    /* =========================================================
+       TOPBAR BOT BUTTON
+       - 三本線メニューの左にBOT導線を常時表示
+       - 通常は白枠 / 白文字 / 透明背景
+       - hover時だけ枠にレインボーが流れる
+       - 既存メニューボタンの位置・処理は変更しない
+       ========================================================= */
+    .topbar-bot-link {
+      position: absolute;
+      top: 50%;
+      right: 72px;
+      z-index: 3;
+
+      min-width: 52px;
+      height: 32px;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+
+      padding: 0 12px;
+      border: 1px solid rgba(255,255,255,.9);
+      border-radius: 2px;
+      background: transparent;
+      color: #fff;
+
+      font-size: 11px;
+      font-weight: 900;
+      line-height: 1;
+      letter-spacing: .14em;
+      text-decoration: none;
+      white-space: nowrap;
+
+      box-sizing: border-box;
+      transform: translateY(-50%);
+      transition:
+        border-color .18s ease,
+        color .18s ease,
+        box-shadow .18s ease;
+      -webkit-tap-highlight-color: transparent;
+    }
+
+    .topbar-bot-link::before {
+      content: "";
+      position: absolute;
+      inset: -1px;
+      border-radius: 2px;
+      padding: 1px;
+      pointer-events: none;
+
+      background:
+        linear-gradient(
+          90deg,
+          #ff003c 0%,
+          #ff7a00 16%,
+          #ffe600 32%,
+          #22d66f 48%,
+          #00c8ff 64%,
+          #5555ff 80%,
+          #ff00c8 100%
+        );
+      background-size: 300% 100%;
+
+      -webkit-mask:
+        linear-gradient(#000 0 0) content-box,
+        linear-gradient(#000 0 0);
+      -webkit-mask-composite: xor;
+      mask-composite: exclude;
+
+      opacity: 0;
+    }
+
+    @media (hover: hover) and (pointer: fine) {
+      .topbar-bot-link:hover {
+        border-color: transparent;
+        color: #fff;
+        box-shadow:
+          0 0 10px rgba(0,200,255,.16),
+          0 0 14px rgba(255,0,180,.10);
+      }
+
+      .topbar-bot-link:hover::before {
+        opacity: 1;
+        animation: topbarBotRainbow 1.15s linear infinite;
+      }
+    }
+
+    .topbar-bot-link:focus-visible {
+      outline: 2px solid #fff;
+      outline-offset: 3px;
+    }
+
+    @keyframes topbarBotRainbow {
+      from { background-position: 0% 50%; }
+      to   { background-position: 300% 50%; }
+    }
+
+    @media screen and (max-width: 600px) {
+      .topbar-bot-link {
+        right: 62px;
+        min-width: 46px;
+        height: 29px;
+        padding: 0 9px;
+        font-size: 10px;
+        letter-spacing: .12em;
+      }
+    }
+
+    @media screen and (max-width: 360px) {
+      .topbar-bot-link {
+        right: 58px;
+        min-width: 43px;
+        height: 28px;
+        padding: 0 8px;
+        font-size: 9px;
+      }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      .topbar-bot-link:hover::before {
+        animation: none;
+        background-position: 50% 50%;
+      }
+    }
+  </style>
+
+
   <style id="site-menu-fansite-note-v1">
     .site-menu-disclaimer {
       margin: 22px 8px 8px;
@@ -1668,6 +1795,12 @@
         alt="UNION MATCH"
       >
     </button>
+
+    <a
+      class="topbar-bot-link"
+      href="./bot.html"
+      aria-label="Discord BOTページへ"
+    >BOT</a>
 
     <button
       id="siteMenuButton"
