@@ -1633,10 +1633,10 @@
 
   <style id="topbar-bot-button-v1">
     /* =========================================================
-       TOPBAR BOT BUTTON
-       - 三本線メニューの左にBOT導線を常時表示
-       - 通常は白枠 / 白文字 / 透明背景
-       - hover時だけ枠にレインボーが流れる
+       TOPBAR DISCORD BOT BUTTON
+       - 三本線メニューの左に常時表示
+       - DISCORD BOT + 小さく「導入する」
+       - 通常は白枠 / hover時だけレインボー
        - 既存メニューボタンの位置・処理は変更しない
        ========================================================= */
     .topbar-bot-link {
@@ -1645,32 +1645,48 @@
       right: 72px;
       z-index: 3;
 
-      min-width: 52px;
-      height: 32px;
+      min-width: 104px;
+      height: 40px;
       display: inline-flex;
+      flex-direction: column;
       align-items: center;
       justify-content: center;
+      gap: 2px;
 
-      padding: 0 12px;
-      border: 1px solid rgba(255,255,255,.9);
+      padding: 4px 13px 5px;
+      border: 1px solid rgba(255,255,255,.92);
       border-radius: 2px;
       background: transparent;
       color: #fff;
 
-      font-size: 11px;
-      font-weight: 900;
-      line-height: 1;
-      letter-spacing: .14em;
       text-decoration: none;
       white-space: nowrap;
-
       box-sizing: border-box;
       transform: translateY(-50%);
+
       transition:
         border-color .18s ease,
         color .18s ease,
         box-shadow .18s ease;
       -webkit-tap-highlight-color: transparent;
+    }
+
+    .topbar-bot-main {
+      display: block;
+      color: #fff;
+      font-size: 10px;
+      font-weight: 900;
+      line-height: 1;
+      letter-spacing: .11em;
+    }
+
+    .topbar-bot-sub {
+      display: block;
+      color: rgba(255,255,255,.58);
+      font-size: 7px;
+      font-weight: 800;
+      line-height: 1;
+      letter-spacing: .08em;
     }
 
     .topbar-bot-link::before {
@@ -1716,6 +1732,10 @@
         opacity: 1;
         animation: topbarBotRainbow 1.15s linear infinite;
       }
+
+      .topbar-bot-link:hover .topbar-bot-sub {
+        color: rgba(255,255,255,.78);
+      }
     }
 
     .topbar-bot-link:focus-visible {
@@ -1731,21 +1751,36 @@
     @media screen and (max-width: 600px) {
       .topbar-bot-link {
         right: 62px;
-        min-width: 46px;
-        height: 29px;
-        padding: 0 9px;
-        font-size: 10px;
-        letter-spacing: .12em;
+        min-width: 92px;
+        height: 36px;
+        padding: 3px 10px 4px;
+      }
+
+      .topbar-bot-main {
+        font-size: 9px;
+        letter-spacing: .09em;
+      }
+
+      .topbar-bot-sub {
+        font-size: 6.5px;
       }
     }
 
     @media screen and (max-width: 360px) {
       .topbar-bot-link {
         right: 58px;
-        min-width: 43px;
-        height: 28px;
-        padding: 0 8px;
-        font-size: 9px;
+        min-width: 84px;
+        height: 34px;
+        padding-left: 8px;
+        padding-right: 8px;
+      }
+
+      .topbar-bot-main {
+        font-size: 8.5px;
+      }
+
+      .topbar-bot-sub {
+        font-size: 6px;
       }
     }
 
@@ -1799,8 +1834,11 @@
     <a
       class="topbar-bot-link"
       href="./bot.html"
-      aria-label="Discord BOTページへ"
-    >BOT</a>
+      aria-label="Discord BOT導入ページへ"
+    >
+      <span class="topbar-bot-main">DISCORD BOT</span>
+      <span class="topbar-bot-sub">導入する</span>
+    </a>
 
     <button
       id="siteMenuButton"
