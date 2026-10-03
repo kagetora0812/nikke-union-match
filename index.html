@@ -1634,11 +1634,12 @@
   <style id="topbar-bot-button-v1">
     /* =========================================================
        TOPBAR DISCORD BOT BUTTON
-       - 三本線メニューの左に常時表示
-       - DISCORD BOT + 小さく「導入する」
-       - 通常は白枠 / hover時だけレインボー
-       - 既存メニューボタンの位置・処理は変更しない
+       PC      : 現行サイズを維持
+       Tablet  : 横長2段のまま縦だけ縮小
+       Mobile  : 三本線メニューに合わせた正方形 / BOT + 導入
+       hover   : レインボー枠
        ========================================================= */
+
     .topbar-bot-link {
       position: absolute;
       top: 50%;
@@ -1647,6 +1648,7 @@
 
       min-width: 104px;
       height: 40px;
+
       display: inline-flex;
       flex-direction: column;
       align-items: center;
@@ -1654,20 +1656,24 @@
       gap: 2px;
 
       padding: 4px 13px 5px;
+
       border: 1px solid rgba(255,255,255,.92);
       border-radius: 2px;
+
       background: transparent;
       color: #fff;
 
       text-decoration: none;
       white-space: nowrap;
       box-sizing: border-box;
+
       transform: translateY(-50%);
 
       transition:
         border-color .18s ease,
         color .18s ease,
         box-shadow .18s ease;
+
       -webkit-tap-highlight-color: transparent;
     }
 
@@ -1689,6 +1695,11 @@
       letter-spacing: .08em;
     }
 
+    .topbar-bot-main-mobile,
+    .topbar-bot-sub-mobile {
+      display: none;
+    }
+
     .topbar-bot-link::before {
       content: "";
       position: absolute;
@@ -1708,11 +1719,13 @@
           #5555ff 80%,
           #ff00c8 100%
         );
+
       background-size: 300% 100%;
 
       -webkit-mask:
         linear-gradient(#000 0 0) content-box,
         linear-gradient(#000 0 0);
+
       -webkit-mask-composite: xor;
       mask-composite: exclude;
 
@@ -1723,6 +1736,7 @@
       .topbar-bot-link:hover {
         border-color: transparent;
         color: #fff;
+
         box-shadow:
           0 0 10px rgba(0,200,255,.16),
           0 0 14px rgba(255,0,180,.10);
@@ -1734,7 +1748,7 @@
       }
 
       .topbar-bot-link:hover .topbar-bot-sub {
-        color: rgba(255,255,255,.78);
+        color: rgba(255,255,255,.80);
       }
     }
 
@@ -1748,12 +1762,14 @@
       to   { background-position: 300% 50%; }
     }
 
-    @media screen and (max-width: 600px) {
+    /* ---------- Tablet ---------- */
+    @media screen and (min-width: 601px) and (max-width: 1024px) {
       .topbar-bot-link {
-        right: 62px;
-        min-width: 92px;
-        height: 36px;
-        padding: 3px 10px 4px;
+        right: 66px;
+        min-width: 94px;
+        height: 32px;
+        gap: 1px;
+        padding: 2px 10px 3px;
       }
 
       .topbar-bot-main {
@@ -1762,25 +1778,61 @@
       }
 
       .topbar-bot-sub {
-        font-size: 6.5px;
+        font-size: 6px;
+        letter-spacing: .06em;
+      }
+    }
+
+    /* ---------- Smartphone ---------- */
+    @media screen and (max-width: 600px) {
+      .topbar-bot-link {
+        right: 61px;
+
+        width: 44px;
+        min-width: 44px;
+        height: 44px;
+
+        gap: 3px;
+        padding: 0;
+
+        border-radius: 0;
+      }
+
+      .topbar-bot-main-wide,
+      .topbar-bot-sub-wide {
+        display: none;
+      }
+
+      .topbar-bot-main-mobile,
+      .topbar-bot-sub-mobile {
+        display: block;
+      }
+
+      .topbar-bot-main-mobile {
+        font-size: 10px;
+        letter-spacing: .08em;
+      }
+
+      .topbar-bot-sub-mobile {
+        font-size: 6px;
+        letter-spacing: .08em;
       }
     }
 
     @media screen and (max-width: 360px) {
       .topbar-bot-link {
         right: 58px;
-        min-width: 84px;
-        height: 34px;
-        padding-left: 8px;
-        padding-right: 8px;
+        width: 40px;
+        min-width: 40px;
+        height: 40px;
       }
 
-      .topbar-bot-main {
-        font-size: 8.5px;
+      .topbar-bot-main-mobile {
+        font-size: 9px;
       }
 
-      .topbar-bot-sub {
-        font-size: 6px;
+      .topbar-bot-sub-mobile {
+        font-size: 5.5px;
       }
     }
 
@@ -1836,8 +1888,11 @@
       href="./bot.html"
       aria-label="Discord BOT導入ページへ"
     >
-      <span class="topbar-bot-main">DISCORD BOT</span>
-      <span class="topbar-bot-sub">導入する</span>
+      <span class="topbar-bot-main topbar-bot-main-wide">DISCORD BOT</span>
+      <span class="topbar-bot-sub topbar-bot-sub-wide">導入する</span>
+
+      <span class="topbar-bot-main topbar-bot-main-mobile">BOT</span>
+      <span class="topbar-bot-sub topbar-bot-sub-mobile">導入</span>
     </a>
 
     <button
