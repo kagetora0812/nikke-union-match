@@ -1785,16 +1785,33 @@
 
     /* ---------- Smartphone ---------- */
     @media screen and (max-width: 600px) {
+      /* 右側のBOT + 三本線をひとまとまりに見せる */
+      .topbar {
+        padding-right: 14px !important;
+      }
+
+      .site-menu-button {
+        width: 34px !important;
+        height: 34px !important;
+        margin: 0 !important;
+        padding: 0 !important;
+      }
+
+      .site-menu-button span {
+        width: 24px !important;
+      }
+
       .topbar-bot-link {
         right: 58px;
 
-        width: 34px;
-        min-width: 34px;
-        height: 34px;
+        width: 30px;
+        min-width: 30px;
+        height: 30px;
 
-        gap: 2px;
+        gap: 1px;
         padding: 0;
 
+        border-color: rgba(255,255,255,.58);
         border-radius: 0;
       }
 
@@ -1809,30 +1826,43 @@
       }
 
       .topbar-bot-main-mobile {
-        font-size: 8px;
-        letter-spacing: .06em;
-      }
-
-      .topbar-bot-sub-mobile {
-        font-size: 5px;
-        letter-spacing: .05em;
-      }
-    }
-
-    @media screen and (max-width: 360px) {
-      .topbar-bot-link {
-        right: 56px;
-        width: 32px;
-        min-width: 32px;
-        height: 32px;
-      }
-
-      .topbar-bot-main-mobile {
         font-size: 7.5px;
+        letter-spacing: .05em;
       }
 
       .topbar-bot-sub-mobile {
         font-size: 4.8px;
+        letter-spacing: .04em;
+      }
+    }
+
+    @media screen and (max-width: 360px) {
+      .topbar {
+        padding-right: 12px !important;
+      }
+
+      .site-menu-button {
+        width: 32px !important;
+        height: 32px !important;
+      }
+
+      .site-menu-button span {
+        width: 22px !important;
+      }
+
+      .topbar-bot-link {
+        right: 54px;
+        width: 28px;
+        min-width: 28px;
+        height: 28px;
+      }
+
+      .topbar-bot-main-mobile {
+        font-size: 7px;
+      }
+
+      .topbar-bot-sub-mobile {
+        font-size: 4.5px;
       }
     }
 
