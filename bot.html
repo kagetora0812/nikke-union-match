@@ -349,6 +349,7 @@
       align-items:center;
       justify-content:center;
       position:relative;
+      isolation:isolate;
       border:1px solid rgba(255,255,255,.92);
       color:#fff;
       background:rgba(5,10,14,.20);
@@ -359,23 +360,80 @@
       backdrop-filter:blur(6px);
       -webkit-backdrop-filter:blur(6px);
       box-shadow:0 10px 26px rgba(0,0,0,.12);
-      transition:border-color .20s ease,color .20s ease,background .20s ease;
+      transition:border-color .20s ease,box-shadow .20s ease,background .20s ease;
     }
-    .invite-btn::before,
+
+    .invite-btn::before{
+      content:"";
+      position:absolute;
+      inset:-1px;
+      z-index:-1;
+      padding:1px;
+      pointer-events:none;
+      opacity:0;
+
+      background:
+        linear-gradient(
+          90deg,
+          #ff003c 0%,
+          #ff7a00 16%,
+          #ffe600 32%,
+          #22d66f 48%,
+          #00c8ff 64%,
+          #5555ff 80%,
+          #ff00c8 100%
+        );
+      background-size:300% 100%;
+
+      -webkit-mask:
+        linear-gradient(#000 0 0) content-box,
+        linear-gradient(#000 0 0);
+      -webkit-mask-composite:xor;
+      mask-composite:exclude;
+    }
+
     .invite-btn::after{
       display:none;
       content:none;
     }
-    .invite-btn:hover,
-    .invite-btn:focus-visible{
-      border-color:#FF0000;
-      color:#FF0000;
-      background:rgba(30,6,10,.18);
-      outline:none;
+
+    @media (hover:hover) and (pointer:fine){
+      .invite-btn:hover{
+        border-color:transparent;
+        color:#fff;
+        background:rgba(5,10,14,.20);
+        box-shadow:
+          0 10px 26px rgba(0,0,0,.12),
+          0 0 12px rgba(0,200,255,.15),
+          0 0 16px rgba(255,0,180,.10);
+      }
+
+      .invite-btn:hover::before{
+        opacity:1;
+        animation:inviteRainbowBorder 1.15s linear infinite;
+      }
     }
+
+    .invite-btn:focus-visible{
+      border-color:transparent;
+      color:#fff;
+      outline:2px solid #fff;
+      outline-offset:3px;
+    }
+
+    .invite-btn:focus-visible::before{
+      opacity:1;
+    }
+
     .invite-btn span{
       position:relative;
+      z-index:1;
       color:inherit;
+    }
+
+    @keyframes inviteRainbowBorder{
+      from{background-position:0% 50%}
+      to{background-position:300% 50%}
     }
 
     .lux-section{
