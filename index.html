@@ -1785,6 +1785,12 @@
 
     /* ---------- Smartphone ---------- */
     @media screen and (max-width: 600px) {
+      /* 左ロゴを少し大きくして、右側との視覚バランスを取る */
+      .video-logo-switch img {
+        transform: scale(1.12);
+        transform-origin: left center;
+      }
+
       /* 右側のBOT + 三本線をひとまとまりに見せる */
       .topbar {
         padding-right: 14px !important;
@@ -1801,14 +1807,15 @@
         width: 24px !important;
       }
 
+      /* BOTは幅を変えず、高さだけ縮めて横長にする */
       .topbar-bot-link {
         right: 58px;
 
         width: 30px;
         min-width: 30px;
-        height: 30px;
+        height: 24px;
 
-        gap: 1px;
+        gap: 0;
         padding: 0;
 
         border-color: rgba(255,255,255,.58);
@@ -1827,18 +1834,25 @@
 
       .topbar-bot-main-mobile {
         font-size: 7.5px;
+        line-height: .95;
         letter-spacing: .05em;
       }
 
       .topbar-bot-sub-mobile {
-        font-size: 4.8px;
-        letter-spacing: .04em;
+        margin-top: 1px;
+        font-size: 4.6px;
+        line-height: .95;
+        letter-spacing: .03em;
       }
     }
 
     @media screen and (max-width: 360px) {
       .topbar {
         padding-right: 12px !important;
+      }
+
+      .video-logo-switch img {
+        transform: scale(1.09);
       }
 
       .site-menu-button {
@@ -1854,7 +1868,7 @@
         right: 54px;
         width: 28px;
         min-width: 28px;
-        height: 28px;
+        height: 22px;
       }
 
       .topbar-bot-main-mobile {
@@ -1862,7 +1876,7 @@
       }
 
       .topbar-bot-sub-mobile {
-        font-size: 4.5px;
+        font-size: 4.3px;
       }
     }
 
