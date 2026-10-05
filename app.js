@@ -5766,17 +5766,38 @@ function populateManageEditForm() {
       item.x_url || "";
   }
 
-  $("#manageEditPanel")
+  const loadedPanel =
+    $("#manageLoadedPanel");
+
+  const editPanel =
+    $("#manageEditPanel");
+
+  loadedPanel
+    ?.classList
+    .add("hidden");
+
+  editPanel
     ?.classList
     .remove("hidden");
 
-  setTimeout(() => {
-    $("#manageEditPanel")
-      ?.scrollIntoView({
-        behavior: "smooth",
-        block: "start"
-      });
-  }, 50);
+  if (
+    editPanel
+    &&
+    typeof editPanel.animate === "function"
+    &&
+    !window.matchMedia("(prefers-reduced-motion: reduce)").matches
+  ) {
+    editPanel.animate(
+      [
+        { transform: "translateX(32px)", opacity: 0.65 },
+        { transform: "translateX(0)", opacity: 1 }
+      ],
+      {
+        duration: 220,
+        easing: "ease-out"
+      }
+    );
+  }
 }
 
 
@@ -6081,11 +6102,31 @@ $("#backManageActionBtn")
 
       resetManageActionMenu();
 
-      $("#manageLoadedPanel")
-        ?.scrollIntoView({
-          behavior: "smooth",
-          block: "start"
-        });
+      const loadedPanel =
+        $("#manageLoadedPanel");
+
+      loadedPanel
+        ?.classList
+        .remove("hidden");
+
+      if (
+        loadedPanel
+        &&
+        typeof loadedPanel.animate === "function"
+        &&
+        !window.matchMedia("(prefers-reduced-motion: reduce)").matches
+      ) {
+        loadedPanel.animate(
+          [
+            { transform: "translateX(-32px)", opacity: 0.65 },
+            { transform: "translateX(0)", opacity: 1 }
+          ],
+          {
+            duration: 220,
+            easing: "ease-out"
+          }
+        );
+      }
     }
   );
 
@@ -6122,11 +6163,31 @@ $("#cancelManageEditBtn")
         ?.classList
         .remove("hidden");
 
-      $("#manageLoadedPanel")
-        ?.scrollIntoView({
-          behavior: "smooth",
-          block: "start"
-        });
+      const loadedPanel =
+        $("#manageLoadedPanel");
+
+      loadedPanel
+        ?.classList
+        .remove("hidden");
+
+      if (
+        loadedPanel
+        &&
+        typeof loadedPanel.animate === "function"
+        &&
+        !window.matchMedia("(prefers-reduced-motion: reduce)").matches
+      ) {
+        loadedPanel.animate(
+          [
+            { transform: "translateX(-32px)", opacity: 0.65 },
+            { transform: "translateX(0)", opacity: 1 }
+          ],
+          {
+            duration: 220,
+            easing: "ease-out"
+          }
+        );
+      }
     }
   );
 
