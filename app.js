@@ -5766,38 +5766,17 @@ function populateManageEditForm() {
       item.x_url || "";
   }
 
-  const loadedPanel =
-    $("#manageLoadedPanel");
-
-  const editPanel =
-    $("#manageEditPanel");
-
-  loadedPanel
-    ?.classList
-    .add("hidden");
-
-  editPanel
+  $("#manageEditPanel")
     ?.classList
     .remove("hidden");
 
-  if (
-    editPanel
-    &&
-    typeof editPanel.animate === "function"
-    &&
-    !window.matchMedia("(prefers-reduced-motion: reduce)").matches
-  ) {
-    editPanel.animate(
-      [
-        { transform: "translateX(32px)", opacity: 0.65 },
-        { transform: "translateX(0)", opacity: 1 }
-      ],
-      {
-        duration: 220,
-        easing: "ease-out"
-      }
-    );
-  }
+  setTimeout(() => {
+    $("#manageEditPanel")
+      ?.scrollIntoView({
+        behavior: "smooth",
+        block: "start"
+      });
+  }, 50);
 }
 
 
@@ -6102,31 +6081,11 @@ $("#backManageActionBtn")
 
       resetManageActionMenu();
 
-      const loadedPanel =
-        $("#manageLoadedPanel");
-
-      loadedPanel
-        ?.classList
-        .remove("hidden");
-
-      if (
-        loadedPanel
-        &&
-        typeof loadedPanel.animate === "function"
-        &&
-        !window.matchMedia("(prefers-reduced-motion: reduce)").matches
-      ) {
-        loadedPanel.animate(
-          [
-            { transform: "translateX(-32px)", opacity: 0.65 },
-            { transform: "translateX(0)", opacity: 1 }
-          ],
-          {
-            duration: 220,
-            easing: "ease-out"
-          }
-        );
-      }
+      $("#manageLoadedPanel")
+        ?.scrollIntoView({
+          behavior: "smooth",
+          block: "start"
+        });
     }
   );
 
@@ -6163,31 +6122,11 @@ $("#cancelManageEditBtn")
         ?.classList
         .remove("hidden");
 
-      const loadedPanel =
-        $("#manageLoadedPanel");
-
-      loadedPanel
-        ?.classList
-        .remove("hidden");
-
-      if (
-        loadedPanel
-        &&
-        typeof loadedPanel.animate === "function"
-        &&
-        !window.matchMedia("(prefers-reduced-motion: reduce)").matches
-      ) {
-        loadedPanel.animate(
-          [
-            { transform: "translateX(-32px)", opacity: 0.65 },
-            { transform: "translateX(0)", opacity: 1 }
-          ],
-          {
-            duration: 220,
-            easing: "ease-out"
-          }
-        );
-      }
+      $("#manageLoadedPanel")
+        ?.scrollIntoView({
+          behavior: "smooth",
+          block: "start"
+        });
     }
   );
 
