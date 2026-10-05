@@ -3544,7 +3544,6 @@ async function initializeDiscordManageV1() {
     resetManageImageState();
     resetManageActionMenu();
     renderLoadedManageRecruitment();
-    populateManageEditForm();
   } catch (error) {
     console.error("Discord編集リンク初期化エラー", error);
     alert("編集リンクを確認できませんでした。Discordの /unionmatch からもう一度発行してください。");
