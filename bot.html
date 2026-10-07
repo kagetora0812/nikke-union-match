@@ -3610,6 +3610,374 @@
       object-position:center center !important;
     }
 
+  
+    /* =========================================================
+       SPECIAL CARD — simplified layout
+       ========================================================= */
+    .special-command-card{
+      display:flex !important;
+      flex-direction:column !important;
+      justify-content:flex-start !important;
+      align-items:stretch !important;
+      text-align:left;
+    }
+
+    .special-command-top{
+      color:#8EDCFF;
+      font:700 15px/1 "Teko",sans-serif;
+      letter-spacing:.13em;
+      text-shadow:none;
+      margin:0;
+    }
+
+    .special-command-card h3{
+      flex:1;
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      width:100%;
+      margin:0 !important;
+      text-align:center;
+      font-size:clamp(32px,2.6vw,44px) !important;
+      line-height:1.05 !important;
+    }
+
+    /* Remove legacy spacing/elements no longer used in SPECIAL. */
+    .special-command-card p,
+    .special-command-cta,
+    .special-command-label{
+      display:none !important;
+    }
+
+    @media (hover:hover) and (pointer:fine){
+      .special-command-card:hover .special-command-top{
+        color:#8EDCFF;
+        text-shadow:none;
+      }
+    }
+
+    @media (max-width:1024px){
+      .special-command-card{
+        display:none !important;
+      }
+    }
+
+  
+    /* =========================================================
+       IMPORTANT — improve readability over bright video
+       ========================================================= */
+    .important-item p{
+      color:#8EDCFF !important;
+      text-shadow:
+        0 1px 2px rgba(0,0,0,.92),
+        0 2px 6px rgba(0,0,0,.50) !important;
+    }
+
+  
+    /* =========================================================
+       SPECIAL FINAL SEQUENCE
+       Slow reverse scroll -> TOP -> SPECIAL video above TOP
+       ========================================================= */
+
+    /* IMPORTANT: blue text on PC / tablet / mobile */
+    .important-item p{
+      color:#8EDCFF !important;
+      text-shadow:
+        0 1px 2px rgba(0,0,0,.92),
+        0 2px 6px rgba(0,0,0,.50) !important;
+    }
+
+    /* SPECIAL card stays PC-only */
+    @media (max-width:1024px){
+      .special-command-card{
+        display:none !important;
+      }
+    }
+
+    @media (min-width:1025px){
+      .special-command-card{
+        display:flex !important;
+      }
+    }
+
+    /* Clean hover: only border + title rainbow. */
+    .special-command-card::after{
+      content:"";
+      position:absolute;
+      inset:0;
+      z-index:3;
+      pointer-events:none;
+      padding:2px;
+      opacity:0;
+      background:
+        linear-gradient(
+          90deg,
+          #ff3b6b 0%,
+          #ff9b31 14%,
+          #ffe65b 28%,
+          #5cff9b 42%,
+          #38d9ff 56%,
+          #6e7cff 70%,
+          #c45cff 84%,
+          #ff58d6 100%
+        );
+      background-size:320% 100%;
+      -webkit-mask:
+        linear-gradient(#000 0 0) content-box,
+        linear-gradient(#000 0 0);
+      -webkit-mask-composite:xor;
+      mask-composite:exclude;
+    }
+
+    @keyframes specialBorderRainbowFinal{
+      from{background-position:0% 50%}
+      to{background-position:320% 50%}
+    }
+
+    @media (hover:hover) and (pointer:fine){
+      .special-command-card:hover{
+        background:
+          linear-gradient(145deg,rgba(28,36,46,.56),rgba(12,17,24,.42)) !important;
+        border-color:transparent !important;
+        box-shadow:
+          inset 0 1px 0 rgba(255,255,255,.045),
+          0 14px 36px rgba(0,0,0,.12) !important;
+        transform:none !important;
+        animation:none !important;
+      }
+
+      .special-command-card:hover::after{
+        opacity:1;
+        animation:specialBorderRainbowFinal 2.8s linear infinite;
+      }
+
+      .special-command-card:hover h3{
+        color:transparent !important;
+        background:
+          linear-gradient(
+            90deg,
+            #ff3b6b 0%,
+            #ff9b31 14%,
+            #ffe65b 28%,
+            #5cff9b 42%,
+            #38d9ff 56%,
+            #6e7cff 70%,
+            #c45cff 84%,
+            #ff58d6 100%
+          );
+        background-size:320% 100%;
+        -webkit-background-clip:text;
+        background-clip:text;
+        animation:specialTitleRainbow 2.8s linear infinite;
+        transform:none !important;
+        filter:none !important;
+        text-shadow:none !important;
+      }
+
+      .special-command-card:hover .special-command-top{
+        color:#8EDCFF !important;
+        text-shadow:none !important;
+      }
+    }
+
+    /* Overlay initially transparent so the real page can reverse-scroll first. */
+    .special-overlay{
+      opacity:0 !important;
+      visibility:hidden !important;
+      pointer-events:none !important;
+      background:#000;
+      transition:
+        opacity .72s ease,
+        visibility 0s linear .72s !important;
+    }
+
+    .special-overlay.is-active{
+      opacity:1 !important;
+      visibility:visible !important;
+      pointer-events:auto !important;
+      transition:
+        opacity .72s ease,
+        visibility 0s linear 0s !important;
+    }
+
+    .special-overlay__video-wrap{
+      position:absolute;
+      inset:0;
+      width:100%;
+      height:100%;
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      overflow:hidden;
+      background:#000;
+    }
+
+    /* Blurred fill layer: fills the screen without making the main video look zoomed. */
+    .special-overlay__video-bg{
+      position:absolute;
+      inset:-5%;
+      width:110%;
+      height:110%;
+      object-fit:cover;
+      object-position:center center;
+      opacity:.55;
+      filter:
+        blur(28px)
+        brightness(.36)
+        saturate(.72)
+        sepia(.10);
+      transform:scale(1.08);
+      transition:
+        filter 3.8s ease,
+        opacity 1s ease;
+    }
+
+    /* Main video: show the full 16:9 frame, no crop. */
+    .special-overlay__video{
+      position:relative;
+      z-index:1;
+      width:100%;
+      height:100%;
+      object-fit:contain !important;
+      object-position:center center !important;
+      opacity:1;
+      filter:
+        brightness(.72)
+        saturate(.92)
+        contrast(1.04)
+        sepia(.10);
+      transform:none !important;
+      transition:
+        filter 4.6s ease;
+    }
+
+    .special-overlay.is-gold .special-overlay__video-bg{
+      opacity:.72;
+      filter:
+        blur(30px)
+        brightness(.58)
+        saturate(1.18)
+        sepia(.78)
+        hue-rotate(-8deg);
+    }
+
+    .special-overlay.is-gold .special-overlay__video{
+      filter:
+        brightness(.90)
+        saturate(1.24)
+        contrast(1.08)
+        sepia(.72)
+        hue-rotate(-8deg);
+    }
+
+    .special-overlay__gold{
+      opacity:0 !important;
+      background:
+        radial-gradient(circle at 50% 26%,rgba(255,236,160,.28),transparent 30%),
+        radial-gradient(circle at 50% 60%,rgba(255,210,98,.22),transparent 42%),
+        linear-gradient(180deg,rgba(255,210,92,.14),rgba(86,48,8,.20) 60%,rgba(0,0,0,.30));
+      mix-blend-mode:screen;
+      transition:opacity 4.6s ease !important;
+      z-index:2;
+    }
+
+    .special-overlay.is-gold .special-overlay__gold{
+      opacity:.96 !important;
+    }
+
+    .special-overlay__vignette{
+      z-index:2;
+    }
+
+    /* BOT arrives only after the special video has been visible. */
+    .special-overlay__bot-wrap{
+      left:50%;
+      top:50%;
+      z-index:4;
+      transform:translate(-50%,-185vh) scale(.92);
+      opacity:0;
+      width:min(48vw,620px);
+      max-width:88vw;
+      pointer-events:none;
+      will-change:transform,opacity;
+    }
+
+    @keyframes specialBotDropFinal{
+      0%{
+        transform:translate(-50%,-185vh) scale(.92);
+        opacity:0;
+      }
+      14%{ opacity:1; }
+      72%{
+        transform:translate(-50%,-55%) scale(1.03);
+        opacity:1;
+      }
+      84%{
+        transform:translate(-50%,-50%) scale(.985);
+      }
+      93%{
+        transform:translate(-50%,-50%) scale(1.015);
+      }
+      100%{
+        transform:translate(-50%,-50%) scale(1);
+        opacity:1;
+      }
+    }
+
+    .special-overlay.is-bot-drop .special-overlay__bot-wrap{
+      animation:specialBotDropFinal 1.95s cubic-bezier(.16,.83,.18,1) forwards;
+    }
+
+    /* White-out only after BOT has fully stopped and sparkled. */
+    .special-overlay__flash{
+      z-index:6;
+    }
+
+    .special-overlay.is-finish .special-overlay__flash{
+      animation:specialWhiteOutFinal 1.05s ease forwards !important;
+    }
+
+    @keyframes specialWhiteOutFinal{
+      0%{opacity:0}
+      30%{opacity:.46}
+      62%{opacity:1}
+      82%{opacity:1}
+      100%{opacity:0}
+    }
+
+    .special-overlay__skip{
+      z-index:7;
+    }
+
+    /* Gold wash over the actual BOT page while it reverses upward. */
+    #specialPageGoldWash{
+      position:fixed;
+      inset:0;
+      z-index:1350;
+      pointer-events:none;
+      opacity:0;
+      background:
+        radial-gradient(circle at 50% 38%,rgba(255,230,140,.18),transparent 38%),
+        linear-gradient(180deg,rgba(255,207,82,.04),rgba(153,86,13,.12));
+      mix-blend-mode:screen;
+      transition:opacity 5.8s ease;
+    }
+
+    body.special-reverse-running #specialPageGoldWash{
+      opacity:.88;
+    }
+
+    /* Do NOT translate the page by CSS anymore; real scrolling is handled by JS. */
+    .special-sequence-active .lux-page,
+    .special-sequence-active .topbar,
+    .special-sequence-active .bot-pc-home,
+    .special-sequence-active .subpage-bottom-nav{
+      transform:none !important;
+      opacity:1 !important;
+      filter:none !important;
+      transition:none !important;
+    }
+
   </style>
 
   <script>
@@ -4155,20 +4523,13 @@
           class="glass-card command-card special-command-card reveal-up"
           id="specialCommandCard"
           href="https://discord.com/oauth2/authorize?client_id=1548613088557793370&scope=bot%20applications.commands"
-          target="_blank"
+          target="_self"
           rel="noopener noreferrer"
           aria-label="SPECIAL演出でBOTを導入する"
           style="--delay:350ms"
         >
-          <div class="command-top">
-            <div class="special-command-label">SPECIAL</div>
-          </div>
+          <div class="special-command-top">SPECIAL START →</div>
           <h3>BOTを導入する</h3>
-          <p>
-            PCでは、特別演出のあとにBOT導入画面へ進みます。<br>
-            スマホ・タブレットでは通常の導入画面を開きます。
-          </p>
-          <span class="special-command-cta">SPECIAL START →</span>
         </a>
       </div>
     </section>
@@ -4558,10 +4919,23 @@
   </script>
 
 
+  <div id="specialPageGoldWash" aria-hidden="true"></div>
+
   <div id="specialOverlay" class="special-overlay" aria-hidden="true">
     <div class="special-overlay__shade"></div>
 
     <div class="special-overlay__video-wrap">
+      <video
+        id="specialOverlayVideoBg"
+        class="special-overlay__video-bg"
+        muted
+        playsinline
+        preload="auto"
+        aria-hidden="true"
+      >
+        <source src="assets/bot/special-goddessfall.mp4" type="video/mp4">
+      </video>
+
       <video
         id="specialOverlayVideo"
         class="special-overlay__video"
@@ -4622,7 +4996,9 @@
       const specialCard = document.getElementById("specialCommandCard");
       const overlay = document.getElementById("specialOverlay");
       const overlayVideo = document.getElementById("specialOverlayVideo");
+      const overlayVideoBg = document.getElementById("specialOverlayVideoBg");
       const skipButton = document.getElementById("specialOverlaySkip");
+      const goldWash = document.getElementById("specialPageGoldWash");
       const inviteUrl = "https://discord.com/oauth2/authorize?client_id=1548613088557793370&scope=bot%20applications.commands";
 
       if (!specialCard || !overlay || !overlayVideo) return;
@@ -4631,78 +5007,176 @@
       const reducedMotion = () => window.matchMedia("(prefers-reduced-motion: reduce)").matches;
 
       let timers = [];
+      let reverseRAF = 0;
+      let running = false;
 
       const clearTimers = () => {
         timers.forEach((id) => window.clearTimeout(id));
         timers = [];
+        if (reverseRAF) {
+          cancelAnimationFrame(reverseRAF);
+          reverseRAF = 0;
+        }
+      };
+
+      const pageScroller = () => {
+        const page = document.querySelector(".lux-page");
+        if (
+          page &&
+          page.scrollHeight > page.clientHeight + 2 &&
+          getComputedStyle(page).overflowY !== "visible"
+        ) {
+          return page;
+        }
+        return document.scrollingElement || document.documentElement;
+      };
+
+      const getScrollTop = (scroller) => {
+        if (scroller === document.documentElement || scroller === document.body || scroller === document.scrollingElement) {
+          return window.scrollY || document.documentElement.scrollTop || document.body.scrollTop || 0;
+        }
+        return scroller.scrollTop;
+      };
+
+      const setScrollTop = (scroller, value) => {
+        if (scroller === document.documentElement || scroller === document.body || scroller === document.scrollingElement) {
+          window.scrollTo(0, value);
+        } else {
+          scroller.scrollTop = value;
+        }
+      };
+
+      const easeInOutSine = (t) => -(Math.cos(Math.PI * t) - 1) / 2;
+
+      const slowReverseToTop = (done) => {
+        const scroller = pageScroller();
+        const startTop = getScrollTop(scroller);
+
+        /* Long enough to visibly travel through the page instead of snapping back. */
+        const duration = Math.min(7600, Math.max(5200, 3200 + startTop * 0.62));
+        const startTime = performance.now();
+
+        document.body.classList.add("special-reverse-running");
+
+        const step = (now) => {
+          const elapsed = now - startTime;
+          const t = Math.min(1, elapsed / duration);
+          const eased = easeInOutSine(t);
+
+          setScrollTop(scroller, Math.max(0, startTop * (1 - eased)));
+
+          if (t < 1) {
+            reverseRAF = requestAnimationFrame(step);
+          } else {
+            reverseRAF = 0;
+            setScrollTop(scroller, 0);
+            done();
+          }
+        };
+
+        reverseRAF = requestAnimationFrame(step);
+      };
+
+      const playSpecialVideo = () => {
+        try {
+          overlayVideo.currentTime = 0;
+          overlayVideoBg.currentTime = 0;
+
+          const p1 = overlayVideo.play();
+          const p2 = overlayVideoBg.play();
+
+          if (p1 && typeof p1.catch === "function") p1.catch(() => {});
+          if (p2 && typeof p2.catch === "function") p2.catch(() => {});
+        } catch (error) {}
+      };
+
+      const cleanupSpecial = () => {
+        clearTimers();
+        running = false;
+
+        document.body.classList.remove(
+          "special-sequence-active",
+          "special-reverse-running"
+        );
+
+        overlay.classList.remove(
+          "is-active",
+          "is-gold",
+          "is-bot-drop",
+          "is-finish"
+        );
+
+        overlay.setAttribute("aria-hidden","true");
+
+        try {
+          overlayVideo.pause();
+          overlayVideo.currentTime = 0;
+          overlayVideoBg.pause();
+          overlayVideoBg.currentTime = 0;
+        } catch (error) {}
       };
 
       const goInvite = () => {
         window.location.href = inviteUrl;
       };
 
-      const cleanupSpecial = () => {
-        document.body.classList.remove("special-sequence-active");
-        overlay.classList.remove("is-active", "is-finish");
-        overlay.setAttribute("aria-hidden", "true");
-        clearTimers();
+      const beginOverlaySequence = () => {
+        document.body.classList.add("special-sequence-active");
 
-        try {
-          overlayVideo.pause();
-          overlayVideo.currentTime = 0;
-        } catch (error) {}
+        overlay.classList.add("is-active");
+        overlay.setAttribute("aria-hidden","false");
+
+        playSpecialVideo();
+
+        /* Video appears above the page TOP, then becomes gold gradually. */
+        timers.push(window.setTimeout(() => {
+          overlay.classList.add("is-gold");
+        }, 450));
+
+        /* Let the full-frame video breathe before BOT drops. */
+        timers.push(window.setTimeout(() => {
+          overlay.classList.add("is-bot-drop");
+        }, 3000));
+
+        /* BOT is now fully down; keep it visible and sparkling. */
+        timers.push(window.setTimeout(() => {
+          overlay.classList.add("is-finish");
+        }, 6200));
+
+        /* Navigate only after the white-out has clearly completed. */
+        timers.push(window.setTimeout(() => {
+          goInvite();
+        }, 7100));
       };
 
       const startSpecial = () => {
+        if (running) return;
+
         if (!isDesktop() || reducedMotion()) {
-          window.location.href = inviteUrl;
+          goInvite();
           return;
         }
 
-        document.body.classList.add("special-sequence-active");
-        overlay.classList.add("is-active");
-        overlay.setAttribute("aria-hidden", "false");
+        running = true;
 
-        try {
-          overlayVideo.currentTime = 0;
-          const playPromise = overlayVideo.play();
-
-          if (playPromise && typeof playPromise.catch === "function") {
-            playPromise.catch((error) => {
-              console.warn("SPECIAL_VIDEO_PLAY_FAILED", error);
-            });
-          }
-        } catch (error) {
-          console.warn("SPECIAL_VIDEO_START_FAILED", error);
-        }
-
-        timers.push(window.setTimeout(() => {
-          overlay.classList.add("is-finish");
-        }, 7380));
-
-        timers.push(window.setTimeout(() => {
-          goInvite();
-        }, 7700));
-
-        timers.push(window.setTimeout(() => {
-          cleanupSpecial();
-        }, 8320));
+        /* First travel back through the actual BOT page, slowly enough to follow. */
+        slowReverseToTop(() => {
+          beginOverlaySequence();
+        });
       };
 
       specialCard.addEventListener("click", (event) => {
-        if (!isDesktop() || reducedMotion()) return;
-
         event.preventDefault();
         startSpecial();
       });
 
       skipButton?.addEventListener("click", () => {
-        goInvite();
         cleanupSpecial();
+        goInvite();
       });
 
       document.addEventListener("keydown", (event) => {
-        if (event.key === "Escape" && overlay.classList.contains("is-active")) {
+        if (event.key === "Escape" && running) {
           cleanupSpecial();
         }
       });
