@@ -467,7 +467,7 @@
       letter-spacing:.035em;
     }
 
-    /* ---------- INTRO / STAY CONNECTED / UNION MATCH + BOT ---------- */
+    /* ---------- INTRO / STAY CONNECTED / UNION MATCH+BOT ---------- */
     .intro-section,
     .stay-section,
     .union-bot-section{
@@ -1597,7 +1597,7 @@
       margin-bottom:10px;
     }
 
-    /* UNION MATCH + BOT should read as the strongest chapter title. */
+    /* UNION MATCH+BOT should read as the strongest chapter title. */
     .union-bot-section .section-en{
       font-size:clamp(54px,6.2vw,82px);
       line-height:.9;
@@ -1715,7 +1715,7 @@
       margin-top:0 !important;
     }
 
-    /* UNION MATCH + BOT keeps a little extra separation before its main headline. */
+    /* UNION MATCH+BOT keeps a little extra separation before its main headline. */
     .union-bot-lead{
       margin-top:20px !important;
     }
@@ -1838,6 +1838,26 @@
       .union-bot-section .section-en{
         font-size:clamp(38px,11.5vw,48px) !important;
         line-height:.82 !important;
+      }
+    }
+
+  
+    /* ---------- mobile overflow + sentence break fix ---------- */
+    .mobile-period-break{
+      display:none;
+    }
+
+    @media (max-width:600px){
+      /* Keep EASY / STAY large, but fit the longer UNION MATCH+BOT title. */
+      .union-bot-section .section-en{
+        font-size:clamp(33px,9vw,38px) !important;
+        letter-spacing:.035em !important;
+        white-space:nowrap !important;
+        max-width:100%;
+      }
+
+      .mobile-period-break{
+        display:block;
       }
     }
 
@@ -2095,14 +2115,14 @@
         </p>
 
         <p class="stay-closing reveal-up" style="--delay:310ms">
-          <strong class="inline-accent">イベント情報も、募集情報も。必要な情報を、いつものDiscordへ。</strong>
+          <strong class="inline-accent">イベント情報も、募集情報も。<br class="mobile-period-break">必要な情報を、いつものDiscordへ。</strong>
         </p>
       </div>
     </section>
 
     <section class="lux-section union-bot-section" id="unionMatchBot">
       <header class="section-heading reveal-up">
-        <div class="section-en">UNION MATCH + BOT</div>
+        <div class="section-en">UNION MATCH+BOT</div>
         <div class="section-ja">メンバー募集を、Discordでもっとスムーズに。<br></div>
       </header>
 
