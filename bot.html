@@ -2518,424 +2518,11 @@
     }
 
   
+
     /* =========================================================
-       PC SPECIAL EFFECT + compact 3x2 command grid
+       PC COMMANDS — compact 3 x 2 grid
        ========================================================= */
 
-    .command-grid-pc-six{
-      grid-template-columns:repeat(3,minmax(0,1fr)) !important;
-      gap:16px !important;
-      align-items:stretch;
-    }
-
-    .command-grid-pc-six .command-card{
-      min-height:242px;
-    }
-
-    .command-grid-pc-six .command-card-channelcheck{
-      grid-column:auto !important;
-    }
-
-    .special-command-card{
-      display:flex;
-      flex-direction:column;
-      justify-content:flex-start;
-      gap:0;
-      text-decoration:none;
-      color:inherit;
-      position:relative;
-      overflow:hidden;
-      isolation:isolate;
-      border-color:rgba(40,192,252,.28) !important;
-      background:
-        radial-gradient(circle at 18% 14%,rgba(40,192,252,.10),transparent 42%),
-        linear-gradient(145deg,rgba(28,36,46,.56),rgba(12,17,24,.42)) !important;
-    }
-
-    .special-command-card::before{
-      content:"";
-      position:absolute;
-      inset:-1px;
-      border:1px solid rgba(255,255,255,.12);
-      pointer-events:none;
-      z-index:-1;
-    }
-
-    .special-command-label{
-      color:#8EDCFF;
-      font:700 14px/1 "Teko",sans-serif;
-      letter-spacing:.15em;
-      text-shadow:none;
-    }
-
-    .special-command-chip{
-      display:inline-flex;
-      align-items:center;
-      justify-content:center;
-      min-height:30px;
-      padding:0 12px;
-      border:1px solid rgba(40,192,252,.62);
-      color:#fff;
-      font:700 10px/1 "Teko",sans-serif;
-      letter-spacing:.15em;
-      text-transform:uppercase;
-      text-shadow:none;
-      white-space:nowrap;
-      background:rgba(4,13,20,.24);
-    }
-
-    .special-command-cta{
-      margin-top:auto;
-      padding-top:16px;
-      color:#8EDCFF;
-      font:700 15px/1 "Teko",sans-serif;
-      letter-spacing:.12em;
-      text-shadow:none;
-    }
-
-    @media (hover:hover) and (pointer:fine){
-      .special-command-card:hover{
-        border-color:rgba(40,192,252,.52) !important;
-        transform:translateY(-4px);
-        box-shadow:
-          inset 0 1px 0 rgba(255,255,255,.06),
-          0 18px 42px rgba(0,0,0,.18),
-          0 0 18px rgba(40,192,252,.08) !important;
-      }
-    }
-
-    @media (max-width:1024px){
-      .command-grid-pc-six{
-        grid-template-columns:repeat(2,minmax(0,1fr)) !important;
-      }
-    }
-
-    @media (max-width:760px){
-      .command-grid-pc-six{
-        grid-template-columns:1fr !important;
-      }
-
-      .command-grid-pc-six .command-card{
-        min-height:0;
-      }
-    }
-
-    /* Special overlay */
-    .special-overlay{
-      position:fixed;
-      inset:0;
-      z-index:1400;
-      opacity:0;
-      visibility:hidden;
-      pointer-events:none;
-      overflow:hidden;
-      background:#000;
-      transition:
-        opacity .36s ease,
-        visibility 0s linear .36s;
-    }
-
-    .special-overlay.is-active{
-      opacity:1;
-      visibility:visible;
-      pointer-events:auto;
-      transition:
-        opacity .36s ease,
-        visibility 0s linear 0s;
-    }
-
-    .special-overlay__shade,
-    .special-overlay__video-wrap,
-    .special-overlay__bot,
-    .special-overlay__skip{
-      position:absolute;
-    }
-
-    .special-overlay__shade{
-      inset:0;
-      background:
-        radial-gradient(circle at center,rgba(255,255,255,.06),rgba(0,0,0,.42) 42%,rgba(0,0,0,.92) 100%);
-      opacity:0;
-      transition:opacity .45s ease;
-    }
-
-    .special-overlay.is-active .special-overlay__shade{
-      opacity:1;
-    }
-
-    .special-overlay__video-wrap{
-      inset:0;
-      overflow:hidden;
-      transform:scale(1.02);
-    }
-
-    .special-overlay__video{
-      position:absolute;
-      inset:-6%;
-      width:112%;
-      height:112%;
-      object-fit:cover;
-      opacity:0;
-      filter:grayscale(.28) brightness(.24) contrast(1.08) sepia(.52) saturate(1.32) hue-rotate(-10deg);
-      transform:translateY(26px) scale(1.02);
-      transition:
-        opacity .52s ease .18s,
-        transform 2.7s cubic-bezier(.2,.7,.2,1),
-        filter 2.2s ease;
-    }
-
-    .special-overlay.is-active .special-overlay__video{
-      opacity:1;
-      transform:translateY(-84px) scale(1.14);
-      filter:grayscale(.05) brightness(.58) contrast(1.12) sepia(.98) saturate(2.3) hue-rotate(-14deg);
-    }
-
-    .special-overlay__gold,
-    .special-overlay__vignette{
-      position:absolute;
-      inset:0;
-      pointer-events:none;
-    }
-
-    .special-overlay__gold{
-      background:
-        radial-gradient(circle at 50% 24%,rgba(255,232,148,.24),transparent 34%),
-        radial-gradient(circle at 50% 58%,rgba(255,204,85,.14),transparent 42%),
-        linear-gradient(180deg,rgba(255,205,76,.18),rgba(65,34,2,.18) 56%,rgba(0,0,0,.46));
-      mix-blend-mode:screen;
-      opacity:.72;
-      transition:opacity .6s ease .18s;
-    }
-
-    .special-overlay__vignette{
-      background:
-        radial-gradient(circle at center,transparent 30%,rgba(0,0,0,.20) 52%,rgba(0,0,0,.72) 100%);
-    }
-
-    .special-overlay__bot{
-      left:50%;
-      top:50%;
-      transform:translate(-50%,-155vh) scale(1.18);
-      opacity:0;
-      font:900 clamp(130px,16vw,280px)/.86 "Teko",sans-serif;
-      letter-spacing:.06em;
-      white-space:nowrap;
-      color:transparent;
-      background:
-        linear-gradient(180deg,#fff5c9 0%,#f0cf6b 18%,#fff6d4 32%,#c68c18 52%,#f0d47b 74%,#fff8dc 100%);
-      -webkit-background-clip:text;
-      background-clip:text;
-      text-shadow:
-        0 0 10px rgba(255,224,143,.18),
-        0 8px 24px rgba(0,0,0,.48),
-        0 0 28px rgba(255,195,72,.20);
-      will-change:transform,opacity;
-    }
-
-    .special-overlay.is-active .special-overlay__bot{
-      animation:specialBotDrop 1.85s cubic-bezier(.16,.83,.18,1) .62s forwards,
-                specialBotGlow 1.15s ease 1.84s 1;
-    }
-
-    @keyframes specialBotDrop{
-      0%{
-        transform:translate(-50%,-155vh) scale(1.18);
-        opacity:0;
-      }
-      18%{
-        opacity:1;
-      }
-      74%{
-        transform:translate(-50%,-48%) scale(1.06);
-        opacity:1;
-      }
-      85%{
-        transform:translate(-50%,-50%) scale(.985);
-      }
-      92%{
-        transform:translate(-50%,-50%) scale(1.015);
-      }
-      100%{
-        transform:translate(-50%,-50%) scale(1);
-        opacity:1;
-      }
-    }
-
-    @keyframes specialBotGlow{
-      0%,100%{
-        text-shadow:
-          0 0 10px rgba(255,224,143,.18),
-          0 8px 24px rgba(0,0,0,.48),
-          0 0 28px rgba(255,195,72,.20);
-      }
-      50%{
-        text-shadow:
-          0 0 18px rgba(255,235,173,.46),
-          0 0 40px rgba(255,202,79,.42),
-          0 12px 30px rgba(0,0,0,.56);
-      }
-    }
-
-    .special-overlay__skip{
-      right:28px;
-      top:26px;
-      z-index:2;
-      min-height:38px;
-      padding:0 16px;
-      border:1px solid rgba(255,255,255,.62);
-      background:rgba(0,0,0,.22);
-      color:#fff;
-      font:700 14px/1 "Teko",sans-serif;
-      letter-spacing:.16em;
-      text-transform:uppercase;
-      opacity:0;
-      transition:opacity .28s ease .24s,border-color .25s ease,color .25s ease;
-    }
-
-    .special-overlay.is-active .special-overlay__skip{
-      opacity:1;
-    }
-
-    @media (hover:hover) and (pointer:fine){
-      .special-overlay__skip:hover{
-        border-color:#8EDCFF;
-        color:#8EDCFF;
-      }
-    }
-
-    /* Page movement into the special effect */
-    .special-sequence-active .lux-page,
-    .special-sequence-active .topbar,
-    .special-sequence-active .bot-pc-home,
-    .special-sequence-active .subpage-bottom-nav{
-      transition:
-        transform .72s cubic-bezier(.18,.78,.18,1),
-        opacity .62s ease,
-        filter .72s ease;
-    }
-
-    .special-sequence-active .lux-page{
-      transform:translateY(-82px) scale(1.02);
-      opacity:.08;
-      filter:blur(10px) saturate(.55);
-    }
-
-    .special-sequence-active .topbar,
-    .special-sequence-active .bot-pc-home,
-    .special-sequence-active .subpage-bottom-nav{
-      transform:translateY(-36px);
-      opacity:.06;
-      filter:blur(8px);
-    }
-
-    @media (max-width:1024px){
-      .special-overlay__bot{
-        font-size:clamp(92px,18vw,180px);
-      }
-    }
-
-    @media (max-width:760px){
-      .special-overlay__skip{
-        right:16px;
-        top:16px;
-      }
-    }
-
-    @media (prefers-reduced-motion:reduce){
-      .special-overlay,
-      .special-overlay__video,
-      .special-overlay__shade,
-      .special-overlay__skip,
-      .special-sequence-active .lux-page,
-      .special-sequence-active .topbar,
-      .special-sequence-active .bot-pc-home,
-      .special-sequence-active .subpage-bottom-nav{
-        transition:none !important;
-      }
-
-      .special-overlay__bot{
-        animation:none !important;
-        transform:translate(-50%,-50%);
-        opacity:1;
-      }
-    }
-
-  
-    /* =========================================================
-       PC COMMAND GRID FIX
-       ========================================================= */
-
-    @media (min-width:1025px){
-      .command-grid-pc-six{
-        grid-template-columns:repeat(3,minmax(0,1fr)) !important;
-        gap:16px !important;
-      }
-
-      .command-grid-pc-six .command-card{
-        min-width:0;
-        min-height:242px;
-        padding:24px 22px 22px !important;
-        overflow:hidden;
-      }
-
-      /* Keep command name and copy button inside each card. */
-      .command-grid-pc-six .command-top{
-        display:grid !important;
-        grid-template-columns:minmax(0,1fr) auto;
-        gap:12px;
-        align-items:start;
-        width:100%;
-      }
-
-      .command-grid-pc-six .cmd{
-        min-width:0;
-        max-width:100%;
-        font-size:clamp(25px,2.05vw,35px) !important;
-        line-height:1 !important;
-        letter-spacing:-.025em;
-        overflow-wrap:anywhere;
-      }
-
-      .command-grid-pc-six .copy-command{
-        position:static !important;
-        flex:none;
-        width:auto !important;
-        min-width:116px;
-        max-width:130px;
-        height:43px;
-        padding:0 12px !important;
-        font-size:8px !important;
-        white-space:nowrap;
-      }
-
-      .command-grid-pc-six .command-card h3{
-        margin-top:16px;
-      }
-
-      .command-grid-pc-six .command-card p{
-        font-size:11.5px;
-        line-height:1.72;
-      }
-
-      /* SPECIAL occupies exactly the same cell size as the other five. */
-      .command-grid-pc-six .special-command-card{
-        min-height:242px;
-        height:auto;
-      }
-
-      .command-grid-pc-six .special-command-chip{
-        min-width:94px;
-        min-height:31px;
-        padding:0 10px;
-      }
-    }
-
-  
-    /* =========================================================
-       SPECIAL FINAL — hover rainbow + long upward motion
-       ========================================================= */
-
-    /* 3x2 PC command grid */
     @media (min-width:1025px){
       .command-grid-pc-six{
         grid-template-columns:repeat(3,minmax(0,1fr)) !important;
@@ -2969,7 +2556,6 @@
 
       .command-grid-pc-six .copy-command{
         position:static !important;
-        flex:none;
         width:auto !important;
         min-width:116px;
         max-width:130px;
@@ -2987,685 +2573,16 @@
         font-size:11.5px;
         line-height:1.72;
       }
-
-      .command-grid-pc-six .special-command-card{
-        min-height:242px;
-      }
     }
 
-    /* SPECIAL card */
-    .special-command-card{
-      position:relative;
-      overflow:hidden;
-      isolation:isolate;
-      display:flex;
-      flex-direction:column;
-      text-decoration:none;
-      color:inherit;
-      border-color:rgba(40,192,252,.28) !important;
-      background:
-        linear-gradient(145deg,rgba(28,36,46,.56),rgba(12,17,24,.42)) !important;
-      transition:
-        transform .28s ease,
-        border-color .28s ease,
-        box-shadow .28s ease,
-        background .28s ease;
-    }
-
-    .special-command-label{
-      color:#8EDCFF;
-      font:700 14px/1 "Teko",sans-serif;
-      letter-spacing:.15em;
-      text-shadow:none;
-    }
-
-    .special-command-card h3{
-      margin-top:18px !important;
-      color:#fff !important;
-      font-size:clamp(28px,2.2vw,40px) !important;
-      line-height:1.08 !important;
-      font-weight:900 !important;
-      letter-spacing:-.025em !important;
-      text-shadow:0 1px 2px rgba(0,0,0,.72);
-      transition:
-        transform .28s ease,
-        filter .28s ease;
-    }
-
-    .special-command-card p{
-      transition:
-        color .28s ease,
-        text-shadow .28s ease;
-    }
-
-    .special-command-cta{
-      margin-top:auto;
-      padding-top:16px;
-      color:#8EDCFF;
-      font:700 15px/1 "Teko",sans-serif;
-      letter-spacing:.12em;
-      text-shadow:none;
-      transition:
-        transform .28s ease,
-        color .28s ease,
-        text-shadow .28s ease;
-    }
-
-    @keyframes specialTitleRainbow{
-      from{background-position:0% 50%}
-      to{background-position:320% 50%}
-    }
-
-    @keyframes specialCardGlow{
-      0%,100%{
-        box-shadow:
-          inset 0 1px 0 rgba(255,255,255,.06),
-          0 18px 42px rgba(0,0,0,.18),
-          0 0 14px rgba(40,192,252,.06);
-      }
-      50%{
-        box-shadow:
-          inset 0 1px 0 rgba(255,255,255,.10),
-          0 24px 50px rgba(0,0,0,.24),
-          0 0 18px rgba(255,110,220,.28),
-          0 0 30px rgba(64,214,255,.32),
-          0 0 46px rgba(255,221,92,.24);
-      }
-    }
-
-    @media (hover:hover) and (pointer:fine){
-      .special-command-card:hover{
-        transform:translateY(-4px) scale(1.012);
-        border-color:rgba(255,255,255,.78) !important;
-        background:
-          radial-gradient(circle at 20% 14%,rgba(255,85,196,.22),transparent 34%),
-          radial-gradient(circle at 80% 76%,rgba(56,217,255,.20),transparent 34%),
-          radial-gradient(circle at 50% 50%,rgba(255,225,88,.15),transparent 48%),
-          linear-gradient(145deg,rgba(40,28,54,.78),rgba(16,21,30,.66)) !important;
-        animation:specialCardGlow 1.7s linear infinite;
-      }
-
-      .special-command-card:hover h3{
-        color:transparent !important;
-        background:
-          linear-gradient(
-            90deg,
-            #ff3b6b 0%,
-            #ff9b31 14%,
-            #ffe65b 28%,
-            #5cff9b 42%,
-            #38d9ff 56%,
-            #6e7cff 70%,
-            #c45cff 84%,
-            #ff58d6 100%
-          );
-        background-size:320% 100%;
-        -webkit-background-clip:text;
-        background-clip:text;
-        animation:specialTitleRainbow 2.7s linear infinite;
-        transform:scale(1.05);
-        filter:
-          drop-shadow(0 0 10px rgba(255,255,255,.18))
-          drop-shadow(0 0 18px rgba(56,217,255,.12));
-      }
-
-      .special-command-card:hover p{
-        color:#fff;
-        text-shadow:
-          0 0 8px rgba(255,255,255,.14),
-          0 1px 2px rgba(0,0,0,.88),
-          0 2px 8px rgba(0,0,0,.46);
-      }
-
-      .special-command-card:hover .special-command-cta{
-        color:#fff48c;
-        transform:translateX(7px) scale(1.02);
-        text-shadow:
-          0 0 10px rgba(255,240,130,.48),
-          0 0 24px rgba(56,217,255,.26);
-      }
-    }
-
-    /* =========================================================
-       SPECIAL overlay
-       ========================================================= */
-    .special-overlay{
-      position:fixed;
-      inset:0;
-      z-index:1400;
-      opacity:0;
-      visibility:hidden;
-      pointer-events:none;
-      overflow:hidden;
-      background:#000;
-      transition:
-        opacity .26s ease,
-        visibility 0s linear .26s;
-    }
-
-    .special-overlay.is-active{
-      opacity:1;
-      visibility:visible;
-      pointer-events:auto;
-      transition:
-        opacity .26s ease,
-        visibility 0s linear 0s;
-    }
-
-    .special-overlay__shade,
-    .special-overlay__video-wrap,
-    .special-overlay__bot-wrap,
-    .special-overlay__flash,
-    .special-overlay__skip{
-      position:absolute;
-    }
-
-    .special-overlay__shade{
-      inset:0;
-      z-index:1;
-      background:
-        radial-gradient(circle at center,rgba(255,255,255,.05),rgba(0,0,0,.50) 46%,rgba(0,0,0,.96) 100%);
-      opacity:0;
-      transition:opacity .18s ease;
-    }
-
-    .special-overlay.is-active .special-overlay__shade{
-      opacity:1;
-    }
-
-    .special-overlay__video-wrap{
-      inset:0;
-      z-index:0;
-      display:flex;
-      align-items:center;
-      justify-content:center;
-      background:#000;
-      overflow:hidden;
-    }
-
-    .special-overlay__video{
-      width:100vw;
-      height:100vh;
-      object-fit:cover;
-      object-position:center center;
-      opacity:0;
-      filter:
-        brightness(.28)
-        saturate(.70)
-        contrast(1.03)
-        sepia(.06);
-      transform:translateY(0) scale(1);
-      transition:
-        opacity .72s ease .18s,
-        filter 6.8s ease .15s;
-    }
-
-    .special-overlay.is-active .special-overlay__video{
-      opacity:1;
-      filter:
-        brightness(.88)
-        saturate(1.28)
-        contrast(1.08)
-        sepia(.68)
-        hue-rotate(-8deg);
-    }
-
-    .special-overlay__gold,
-    .special-overlay__vignette{
-      position:absolute;
-      inset:0;
-      pointer-events:none;
-    }
-
-    .special-overlay__gold{
-      opacity:0;
-      background:
-        radial-gradient(circle at 50% 26%,rgba(255,236,160,.26),transparent 30%),
-        radial-gradient(circle at 50% 60%,rgba(255,210,98,.20),transparent 42%),
-        linear-gradient(180deg,rgba(255,210,92,.12),rgba(86,48,8,.20) 60%,rgba(0,0,0,.38));
-      mix-blend-mode:screen;
-      transition:opacity 6.6s ease .12s;
-    }
-
-    .special-overlay.is-active .special-overlay__gold{
-      opacity:.95;
-    }
-
-    .special-overlay__vignette{
-      background:
-        radial-gradient(circle at center,transparent 30%,rgba(0,0,0,.14) 52%,rgba(0,0,0,.72) 100%);
-    }
-
-    /* BOT image */
-    .special-overlay__bot-wrap{
-      left:50%;
-      top:50%;
-      z-index:3;
-      transform:translate(-50%,-190vh) scale(.92);
-      opacity:0;
-      width:min(48vw,620px);
-      max-width:88vw;
-      will-change:transform,opacity;
-      pointer-events:none;
-    }
-
-    .special-overlay__bot-img{
-      display:block;
-      width:100%;
-      height:auto;
-      filter:
-        drop-shadow(0 10px 24px rgba(0,0,0,.52))
-        drop-shadow(0 0 8px rgba(255,218,109,.10));
-      animation:botIdleGlow 2.1s ease-in-out infinite;
-    }
-
-    .special-overlay__bot-shine{
-      position:absolute;
-      inset:0;
-      background:
-        linear-gradient(
-          108deg,
-          rgba(255,255,255,0) 0%,
-          rgba(255,255,255,.08) 26%,
-          rgba(255,255,255,.72) 42%,
-          rgba(255,255,255,.12) 58%,
-          rgba(255,255,255,0) 74%
-        );
-      mix-blend-mode:screen;
-      transform:translateX(-150%) skewX(-22deg);
-      animation:botShineSweep 2.15s linear infinite;
-      pointer-events:none;
-    }
-
-    .special-overlay__bot-spark{
-      position:absolute;
-      width:11px;
-      height:11px;
-      border-radius:50%;
-      background:
-        radial-gradient(circle,#fff 0%,rgba(255,255,255,.86) 34%,rgba(255,235,168,.30) 58%,rgba(255,255,255,0) 100%);
-      box-shadow:
-        0 0 14px rgba(255,255,255,.95),
-        0 0 28px rgba(255,223,111,.70);
-      animation:botSparkTwinkle 1.3s ease-in-out infinite;
-    }
-
-    .spark-1{ top:11%; left:15%; animation-delay:.05s; }
-    .spark-2{ top:21%; right:16%; animation-delay:.46s; }
-    .spark-3{ bottom:17%; left:47%; animation-delay:.86s; }
-    .spark-4{ bottom:31%; right:8%; animation-delay:1.12s; }
-
-    @keyframes botIdleGlow{
-      0%,100%{
-        filter:
-          drop-shadow(0 10px 24px rgba(0,0,0,.52))
-          drop-shadow(0 0 8px rgba(255,218,109,.12));
-      }
-      50%{
-        filter:
-          drop-shadow(0 12px 28px rgba(0,0,0,.56))
-          drop-shadow(0 0 20px rgba(255,242,178,.34))
-          drop-shadow(0 0 36px rgba(255,208,74,.28));
-      }
-    }
-
-    @keyframes botShineSweep{
-      from{ transform:translateX(-150%) skewX(-22deg); }
-      to{ transform:translateX(155%) skewX(-22deg); }
-    }
-
-    @keyframes botSparkTwinkle{
-      0%,100%{ opacity:.18; transform:scale(.60); }
-      50%{ opacity:1; transform:scale(1.34); }
-    }
-
-    @keyframes specialBotDrop{
-      0%{
-        transform:translate(-50%,-190vh) scale(.92);
-        opacity:0;
-      }
-      14%{
-        opacity:1;
-      }
-      70%{
-        transform:translate(-50%,-55%) scale(1.035);
-        opacity:1;
-      }
-      82%{
-        transform:translate(-50%,-50%) scale(.982);
-      }
-      92%{
-        transform:translate(-50%,-50%) scale(1.018);
-      }
-      100%{
-        transform:translate(-50%,-50%) scale(1);
-        opacity:1;
-      }
-    }
-
-    .special-overlay.is-active .special-overlay__bot-wrap{
-      animation:specialBotDrop 1.82s cubic-bezier(.16,.83,.18,1) 6.0s forwards;
-    }
-
-    /* White flash */
-    .special-overlay__flash{
-      inset:0;
-      z-index:4;
-      background:
-        radial-gradient(
-          circle at center,
-          rgba(255,255,255,1) 0%,
-          rgba(255,255,255,.98) 26%,
-          rgba(255,255,255,.82) 42%,
-          rgba(255,255,255,.18) 64%,
-          rgba(255,255,255,0) 78%
-        );
-      opacity:0;
-      pointer-events:none;
-    }
-
-    .special-overlay.is-finish .special-overlay__flash{
-      animation:specialWhiteOut .95s ease forwards;
-    }
-
-    @keyframes specialWhiteOut{
-      0%{ opacity:0; }
-      28%{ opacity:.48; }
-      62%{ opacity:1; }
-      78%{ opacity:1; }
-      100%{ opacity:0; }
-    }
-
-    /* Skip */
-    .special-overlay__skip{
-      right:26px;
-      top:24px;
-      z-index:5;
-      min-height:38px;
-      padding:0 16px;
-      border:1px solid rgba(255,255,255,.62);
-      background:rgba(0,0,0,.24);
-      color:#fff;
-      font:700 14px/1 "Teko",sans-serif;
-      letter-spacing:.16em;
-      opacity:0;
-      transition:
-        opacity .25s ease .2s,
-        border-color .25s ease,
-        color .25s ease;
-    }
-
-    .special-overlay.is-active .special-overlay__skip{
-      opacity:1;
-    }
-
-    @media (hover:hover) and (pointer:fine){
-      .special-overlay__skip:hover{
-        border-color:#8EDCFF;
-        color:#8EDCFF;
-      }
-    }
-
-    /* Long upward movement feeling */
-    .special-sequence-active .lux-page,
-    .special-sequence-active .topbar,
-    .special-sequence-active .bot-pc-home,
-    .special-sequence-active .subpage-bottom-nav{
-      transition:
-        transform 7.4s cubic-bezier(.14,.72,.12,1),
-        opacity .68s ease,
-        filter 6.8s ease;
-    }
-
-    .special-sequence-active .lux-page{
-      transform:translateY(-132vh);
-      opacity:0;
-      filter:blur(10px) saturate(.56);
-    }
-
-    .special-sequence-active .topbar,
-    .special-sequence-active .bot-pc-home,
-    .special-sequence-active .subpage-bottom-nav{
-      transform:translateY(-78vh);
-      opacity:0;
-      filter:blur(8px);
-    }
-
-    @media (max-width:1024px){
-      .special-overlay__bot-wrap{
-        width:min(58vw,470px);
-      }
-    }
-
-    @media (prefers-reduced-motion:reduce){
-      .special-overlay__video,
-      .special-overlay__gold,
-      .special-overlay__bot-wrap,
-      .special-overlay__bot-img,
-      .special-overlay__bot-shine,
-      .special-overlay__bot-spark,
-      .special-sequence-active .lux-page,
-      .special-sequence-active .topbar,
-      .special-sequence-active .bot-pc-home,
-      .special-sequence-active .subpage-bottom-nav{
-        animation:none !important;
-        transition:none !important;
-      }
-    }
-
-    /* Bottom invite CTA must remain visible and keep existing rainbow behavior */
+    /* Bottom invite CTA remains visible. */
     .bottom-invite-wrap{
       opacity:1 !important;
       transform:none !important;
       visibility:visible !important;
     }
 
-  
-    /* =========================================================
-       SPECIAL CARD — PC ONLY
-       ========================================================= */
-
-    /* Tablet / mobile: hide the SPECIAL card completely. */
-    @media (max-width:1024px){
-      .special-command-card{
-        display:none !important;
-      }
-    }
-
-    /* PC: SPECIAL remains the sixth tile in the 3 x 2 grid. */
-    @media (min-width:1025px){
-      .special-command-card{
-        display:flex !important;
-      }
-    }
-
-  
-    /* =========================================================
-       SPECIAL HOVER CLEANUP
-       Only rainbow border + rainbow title
-       ========================================================= */
-
-    .special-command-card{
-      position:relative;
-      isolation:isolate;
-      overflow:hidden;
-    }
-
-    /* Animated rainbow border is invisible until hover */
-    .special-command-card::after{
-      content:"";
-      position:absolute;
-      inset:0;
-      z-index:3;
-      pointer-events:none;
-      padding:2px;
-      opacity:0;
-      background:
-        linear-gradient(
-          90deg,
-          #ff3b6b 0%,
-          #ff9b31 14%,
-          #ffe65b 28%,
-          #5cff9b 42%,
-          #38d9ff 56%,
-          #6e7cff 70%,
-          #c45cff 84%,
-          #ff58d6 100%
-        );
-      background-size:320% 100%;
-      -webkit-mask:
-        linear-gradient(#000 0 0) content-box,
-        linear-gradient(#000 0 0);
-      -webkit-mask-composite:xor;
-      mask-composite:exclude;
-    }
-
-    @keyframes specialBorderRainbowClean{
-      from{background-position:0% 50%}
-      to{background-position:320% 50%}
-    }
-
-    @media (hover:hover) and (pointer:fine){
-      .special-command-card:hover{
-        /* keep the normal interior exactly as-is */
-        background:
-          linear-gradient(145deg,rgba(28,36,46,.56),rgba(12,17,24,.42)) !important;
-        border-color:transparent !important;
-        transform:none !important;
-        box-shadow:
-          inset 0 1px 0 rgba(255,255,255,.045),
-          0 14px 36px rgba(0,0,0,.12) !important;
-        animation:none !important;
-      }
-
-      .special-command-card:hover::after{
-        opacity:1;
-        animation:specialBorderRainbowClean 2.8s linear infinite;
-      }
-
-      .special-command-card:hover h3{
-        color:transparent !important;
-        background:
-          linear-gradient(
-            90deg,
-            #ff3b6b 0%,
-            #ff9b31 14%,
-            #ffe65b 28%,
-            #5cff9b 42%,
-            #38d9ff 56%,
-            #6e7cff 70%,
-            #c45cff 84%,
-            #ff58d6 100%
-          );
-        background-size:320% 100%;
-        -webkit-background-clip:text;
-        background-clip:text;
-        animation:specialTitleRainbow 2.8s linear infinite;
-        transform:none !important;
-        filter:none !important;
-        text-shadow:none !important;
-      }
-
-      .special-command-card:hover p{
-        color:#f2f2f2 !important;
-        text-shadow:
-          0 1px 2px rgba(0,0,0,.95),
-          0 2px 6px rgba(0,0,0,.55) !important;
-      }
-
-      .special-command-card:hover .special-command-cta{
-        color:#8EDCFF !important;
-        transform:none !important;
-        text-shadow:none !important;
-      }
-    }
-
-    /* Keep title white when not hovered */
-    .special-command-card:not(:hover) h3{
-      color:#fff !important;
-      background:none !important;
-      -webkit-background-clip:initial !important;
-      background-clip:initial !important;
-      animation:none !important;
-      filter:none !important;
-    }
-
-  
-    /* =========================================================
-       SPECIAL FULLSCREEN FIX
-       ========================================================= */
-    .special-overlay,
-    .special-overlay__video-wrap{
-      width:100vw !important;
-      height:100vh !important;
-      inset:0 !important;
-    }
-
-    .special-overlay__video{
-      width:100vw !important;
-      height:100vh !important;
-      min-width:100vw !important;
-      min-height:100vh !important;
-      object-fit:cover !important;
-      object-position:center center !important;
-    }
-
-  
-    /* =========================================================
-       SPECIAL CARD — simplified layout
-       ========================================================= */
-    .special-command-card{
-      display:flex !important;
-      flex-direction:column !important;
-      justify-content:flex-start !important;
-      align-items:stretch !important;
-      text-align:left;
-    }
-
-    .special-command-top{
-      color:#8EDCFF;
-      font:700 15px/1 "Teko",sans-serif;
-      letter-spacing:.13em;
-      text-shadow:none;
-      margin:0;
-    }
-
-    .special-command-card h3{
-      flex:1;
-      display:flex;
-      align-items:center;
-      justify-content:center;
-      width:100%;
-      margin:0 !important;
-      text-align:center;
-      font-size:clamp(32px,2.6vw,44px) !important;
-      line-height:1.05 !important;
-    }
-
-    /* Remove legacy spacing/elements no longer used in SPECIAL. */
-    .special-command-card p,
-    .special-command-cta,
-    .special-command-label{
-      display:none !important;
-    }
-
-    @media (hover:hover) and (pointer:fine){
-      .special-command-card:hover .special-command-top{
-        color:#8EDCFF;
-        text-shadow:none;
-      }
-    }
-
-    @media (max-width:1024px){
-      .special-command-card{
-        display:none !important;
-      }
-    }
-
-  
-    /* =========================================================
-       IMPORTANT — improve readability over bright video
-       ========================================================= */
+    /* IMPORTANT text readability stays unchanged. */
     .important-item p{
       color:#8EDCFF !important;
       text-shadow:
@@ -3673,546 +2590,15 @@
         0 2px 6px rgba(0,0,0,.50) !important;
     }
 
-  
     /* =========================================================
-       SPECIAL FINAL SEQUENCE
-       Slow reverse scroll -> TOP -> SPECIAL video above TOP
-       ========================================================= */
-
-    /* IMPORTANT: blue text on PC / tablet / mobile */
-    .important-item p{
-      color:#8EDCFF !important;
-      text-shadow:
-        0 1px 2px rgba(0,0,0,.92),
-        0 2px 6px rgba(0,0,0,.50) !important;
-    }
-
-    /* SPECIAL card stays PC-only */
-    @media (max-width:1024px){
-      .special-command-card{
-        display:none !important;
-      }
-    }
-
-    @media (min-width:1025px){
-      .special-command-card{
-        display:flex !important;
-      }
-    }
-
-    /* Clean hover: only border + title rainbow. */
-    .special-command-card::after{
-      content:"";
-      position:absolute;
-      inset:0;
-      z-index:3;
-      pointer-events:none;
-      padding:2px;
-      opacity:0;
-      background:
-        linear-gradient(
-          90deg,
-          #ff3b6b 0%,
-          #ff9b31 14%,
-          #ffe65b 28%,
-          #5cff9b 42%,
-          #38d9ff 56%,
-          #6e7cff 70%,
-          #c45cff 84%,
-          #ff58d6 100%
-        );
-      background-size:320% 100%;
-      -webkit-mask:
-        linear-gradient(#000 0 0) content-box,
-        linear-gradient(#000 0 0);
-      -webkit-mask-composite:xor;
-      mask-composite:exclude;
-    }
-
-    @keyframes specialBorderRainbowFinal{
-      from{background-position:0% 50%}
-      to{background-position:320% 50%}
-    }
-
-    @media (hover:hover) and (pointer:fine){
-      .special-command-card:hover{
-        background:
-          linear-gradient(145deg,rgba(28,36,46,.56),rgba(12,17,24,.42)) !important;
-        border-color:transparent !important;
-        box-shadow:
-          inset 0 1px 0 rgba(255,255,255,.045),
-          0 14px 36px rgba(0,0,0,.12) !important;
-        transform:none !important;
-        animation:none !important;
-      }
-
-      .special-command-card:hover::after{
-        opacity:1;
-        animation:specialBorderRainbowFinal 2.8s linear infinite;
-      }
-
-      .special-command-card:hover h3{
-        color:transparent !important;
-        background:
-          linear-gradient(
-            90deg,
-            #ff3b6b 0%,
-            #ff9b31 14%,
-            #ffe65b 28%,
-            #5cff9b 42%,
-            #38d9ff 56%,
-            #6e7cff 70%,
-            #c45cff 84%,
-            #ff58d6 100%
-          );
-        background-size:320% 100%;
-        -webkit-background-clip:text;
-        background-clip:text;
-        animation:specialTitleRainbow 2.8s linear infinite;
-        transform:none !important;
-        filter:none !important;
-        text-shadow:none !important;
-      }
-
-      .special-command-card:hover .special-command-top{
-        color:#8EDCFF !important;
-        text-shadow:none !important;
-      }
-    }
-
-    /* Overlay initially transparent so the real page can reverse-scroll first. */
-    .special-overlay{
-      opacity:0 !important;
-      visibility:hidden !important;
-      pointer-events:none !important;
-      background:#000;
-      transition:
-        opacity .72s ease,
-        visibility 0s linear .72s !important;
-    }
-
-    .special-overlay.is-active{
-      opacity:1 !important;
-      visibility:visible !important;
-      pointer-events:auto !important;
-      transition:
-        opacity .72s ease,
-        visibility 0s linear 0s !important;
-    }
-
-    .special-overlay__video-wrap{
-      position:absolute;
-      inset:0;
-      width:100%;
-      height:100%;
-      display:flex;
-      align-items:center;
-      justify-content:center;
-      overflow:hidden;
-      background:#000;
-    }
-
-    /* Blurred fill layer: fills the screen without making the main video look zoomed. */
-    .special-overlay__video-bg{
-      position:absolute;
-      inset:-5%;
-      width:110%;
-      height:110%;
-      object-fit:cover;
-      object-position:center center;
-      opacity:.55;
-      filter:
-        blur(28px)
-        brightness(.36)
-        saturate(.72)
-        sepia(.10);
-      transform:scale(1.08);
-      transition:
-        filter 3.8s ease,
-        opacity 1s ease;
-    }
-
-    /* Main video: show the full 16:9 frame, no crop. */
-    .special-overlay__video{
-      position:relative;
-      z-index:1;
-      width:100%;
-      height:100%;
-      object-fit:contain !important;
-      object-position:center center !important;
-      opacity:1;
-      filter:
-        brightness(.72)
-        saturate(.92)
-        contrast(1.04)
-        sepia(.10);
-      transform:none !important;
-      transition:
-        filter 4.6s ease;
-    }
-
-    .special-overlay.is-gold .special-overlay__video-bg{
-      opacity:.72;
-      filter:
-        blur(30px)
-        brightness(.58)
-        saturate(1.18)
-        sepia(.78)
-        hue-rotate(-8deg);
-    }
-
-    .special-overlay.is-gold .special-overlay__video{
-      filter:
-        brightness(.90)
-        saturate(1.24)
-        contrast(1.08)
-        sepia(.72)
-        hue-rotate(-8deg);
-    }
-
-    .special-overlay__gold{
-      opacity:0 !important;
-      background:
-        radial-gradient(circle at 50% 26%,rgba(255,236,160,.28),transparent 30%),
-        radial-gradient(circle at 50% 60%,rgba(255,210,98,.22),transparent 42%),
-        linear-gradient(180deg,rgba(255,210,92,.14),rgba(86,48,8,.20) 60%,rgba(0,0,0,.30));
-      mix-blend-mode:screen;
-      transition:opacity 4.6s ease !important;
-      z-index:2;
-    }
-
-    .special-overlay.is-gold .special-overlay__gold{
-      opacity:.96 !important;
-    }
-
-    .special-overlay__vignette{
-      z-index:2;
-    }
-
-    /* BOT arrives only after the special video has been visible. */
-    .special-overlay__bot-wrap{
-      left:50%;
-      top:50%;
-      z-index:4;
-      transform:translate(-50%,-185vh) scale(.92);
-      opacity:0;
-      width:min(48vw,620px);
-      max-width:88vw;
-      pointer-events:none;
-      will-change:transform,opacity;
-    }
-
-    @keyframes specialBotDropFinal{
-      0%{
-        transform:translate(-50%,-185vh) scale(.92);
-        opacity:0;
-      }
-      14%{ opacity:1; }
-      72%{
-        transform:translate(-50%,-55%) scale(1.03);
-        opacity:1;
-      }
-      84%{
-        transform:translate(-50%,-50%) scale(.985);
-      }
-      93%{
-        transform:translate(-50%,-50%) scale(1.015);
-      }
-      100%{
-        transform:translate(-50%,-50%) scale(1);
-        opacity:1;
-      }
-    }
-
-    .special-overlay.is-bot-drop .special-overlay__bot-wrap{
-      animation:specialBotDropFinal 1.95s cubic-bezier(.16,.83,.18,1) forwards;
-    }
-
-    /* White-out only after BOT has fully stopped and sparkled. */
-    .special-overlay__flash{
-      z-index:6;
-    }
-
-    .special-overlay.is-finish .special-overlay__flash{
-      animation:specialWhiteOutFinal 1.05s ease forwards !important;
-    }
-
-    @keyframes specialWhiteOutFinal{
-      0%{opacity:0}
-      30%{opacity:.46}
-      62%{opacity:1}
-      82%{opacity:1}
-      100%{opacity:0}
-    }
-
-    .special-overlay__skip{
-      z-index:7;
-    }
-
-    /* Gold wash over the actual BOT page while it reverses upward. */
-    #specialPageGoldWash{
-      position:fixed;
-      inset:0;
-      z-index:1350;
-      pointer-events:none;
-      opacity:0;
-      background:
-        radial-gradient(circle at 50% 38%,rgba(255,230,140,.18),transparent 38%),
-        linear-gradient(180deg,rgba(255,207,82,.04),rgba(153,86,13,.12));
-      mix-blend-mode:screen;
-      transition:opacity 5.8s ease;
-    }
-
-    body.special-reverse-running #specialPageGoldWash{
-      opacity:.88;
-    }
-
-    /* Do NOT translate the page by CSS anymore; real scrolling is handled by JS. */
-    .special-sequence-active .lux-page,
-    .special-sequence-active .topbar,
-    .special-sequence-active .bot-pc-home,
-    .special-sequence-active .subpage-bottom-nav{
-      transform:none !important;
-      opacity:1 !important;
-      filter:none !important;
-      transition:none !important;
-    }
-
-  
-    /* =========================================================
-       SPECIAL — immediate click response + slower reverse scroll
-       ========================================================= */
-
-    .special-command-card{
-      transition:
-        transform .18s ease,
-        box-shadow .18s ease,
-        border-color .18s ease,
-        background .18s ease !important;
-    }
-
-    .special-command-card.is-triggered{
-      transform:scale(.985) !important;
-      border-color:#8EDCFF !important;
-      box-shadow:
-        inset 0 0 0 1px rgba(142,220,255,.35),
-        0 0 18px rgba(40,192,252,.28),
-        0 0 34px rgba(142,220,255,.16) !important;
-    }
-
-    .special-command-card.is-triggered h3{
-      color:#fff !important;
-      text-shadow:
-        0 0 8px rgba(255,255,255,.30),
-        0 0 18px rgba(40,192,252,.22) !important;
-    }
-
-    #specialPageGoldWash{
-      transition:opacity 8.8s ease !important;
-    }
-
-    body.special-reverse-running #specialPageGoldWash{
-      opacity:.72 !important;
-    }
-
-  
-    /* =========================================================
-       SPECIAL CROSSFADE RISE
-       Current background fades out while SPECIAL video fades in
-       underneath the page during the slow reverse scroll.
-       ========================================================= */
-
-    .bot-motion-bg video{
-      transition:
-        opacity 1.15s ease,
-        filter .35s ease !important;
-    }
-
-    body.special-reverse-running .bot-motion-bg video{
-      opacity:0 !important;
-    }
-
-    /* During reverse-scroll, SPECIAL sits behind page content but above old background. */
-    .special-overlay{
-      --special-rise-duration:9000ms;
-      z-index:1 !important;
-      opacity:0 !important;
-      visibility:hidden !important;
-      pointer-events:none !important;
-      background:#000;
-      transition:
-        opacity var(--special-rise-duration) linear,
-        visibility 0s linear var(--special-rise-duration) !important;
-    }
-
-    .special-overlay.is-prelude{
-      z-index:1 !important;
-      visibility:visible !important;
-      opacity:.90 !important;
-      pointer-events:none !important;
-      transition:
-        opacity var(--special-rise-duration) linear,
-        visibility 0s linear 0s !important;
-    }
-
-    /* Once TOP is reached, SPECIAL becomes the full foreground screen. */
-    .special-overlay.is-active{
-      z-index:1400 !important;
-      visibility:visible !important;
-      opacity:1 !important;
-      pointer-events:auto !important;
-      transition:
-        opacity .55s ease,
-        visibility 0s linear 0s !important;
-    }
-
-    .special-overlay__video-wrap{
-      position:absolute;
-      inset:0;
-      width:100%;
-      height:100%;
-      overflow:hidden;
-      background:#000;
-    }
-
-    /* One SPECIAL video only. Fill screen; no duplicate video / blur layer. */
-    .special-overlay__video{
-      position:absolute;
-      inset:0;
-      width:100%;
-      height:100%;
-      object-fit:cover !important;
-      object-position:center center !important;
-      opacity:1 !important;
-      transform:none !important;
-      filter:
-        brightness(.60)
-        saturate(.86)
-        contrast(1.04)
-        sepia(.08);
-      transition:
-        filter var(--special-rise-duration) ease !important;
-    }
-
-    /* Gold develops gradually while the user is physically moving back toward TOP. */
-    .special-overlay.is-gold .special-overlay__video{
-      filter:
-        brightness(.86)
-        saturate(1.20)
-        contrast(1.08)
-        sepia(.68)
-        hue-rotate(-8deg);
-    }
-
-    .special-overlay__gold{
-      opacity:0 !important;
-      background:
-        radial-gradient(circle at 50% 28%,rgba(255,235,152,.24),transparent 32%),
-        radial-gradient(circle at 50% 64%,rgba(255,208,92,.16),transparent 44%),
-        linear-gradient(180deg,rgba(255,207,82,.10),rgba(108,61,12,.15) 60%,rgba(0,0,0,.26));
-      mix-blend-mode:screen;
-      transition:
-        opacity var(--special-rise-duration) ease !important;
-    }
-
-    .special-overlay.is-gold .special-overlay__gold{
-      opacity:.80 !important;
-    }
-
-    .special-overlay__shade{
-      z-index:2;
-      pointer-events:none;
-      opacity:.30 !important;
-    }
-
-    .special-overlay__vignette{
-      z-index:2;
-      background:
-        radial-gradient(circle at center,transparent 38%,rgba(0,0,0,.10) 60%,rgba(0,0,0,.48) 100%) !important;
-    }
-
-    /* Page content remains visible and really scrolls upward; no fake CSS translation. */
-    .special-sequence-active .lux-page,
-    .special-sequence-active .topbar,
-    .special-sequence-active .bot-pc-home,
-    .special-sequence-active .subpage-bottom-nav,
-    .special-reverse-running .lux-page,
-    .special-reverse-running .topbar,
-    .special-reverse-running .bot-pc-home,
-    .special-reverse-running .subpage-bottom-nav{
-      transform:none !important;
-      opacity:1 !important;
-      filter:none !important;
-      transition:none !important;
-    }
-
-    /* Light gold veil over the real page while it travels upward. */
-    #specialPageGoldWash{
-      position:fixed;
-      inset:0;
-      z-index:20;
-      pointer-events:none;
-      opacity:0;
-      background:
-        linear-gradient(
-          180deg,
-          rgba(255,217,112,.07),
-          rgba(176,104,24,.10)
-        );
-      transition:
-        opacity var(--special-rise-duration,9000ms) ease !important;
-    }
-
-    body.special-reverse-running #specialPageGoldWash{
-      opacity:.42 !important;
-    }
-
-    /* BOT PNG: only its contour glows; no rectangular white panel. */
-    .special-overlay__bot-wrap{
-      z-index:4;
-    }
-
-    .special-overlay__bot-img{
-      filter:
-        drop-shadow(0 0 8px rgba(255,239,170,.36))
-        drop-shadow(0 0 18px rgba(255,207,72,.24))
-        drop-shadow(0 10px 24px rgba(0,0,0,.48)) !important;
-    }
-
-    .special-overlay__bot-shine{
-      background:
-        linear-gradient(
-          108deg,
-          rgba(255,255,255,0) 0%,
-          rgba(255,255,255,0) 31%,
-          rgba(255,255,255,.58) 44%,
-          rgba(255,255,255,.06) 55%,
-          rgba(255,255,255,0) 68%
-        ) !important;
-    }
-
-    /* Fewer spark elements for lower GPU load. */
-    .spark-1{top:13%;left:17%}
-    .spark-2{bottom:20%;right:13%}
-
-    .special-overlay__flash{
-      z-index:6;
-    }
-
-    .special-overlay__skip{
-      z-index:7;
-    }
-
-  
-    /* =========================================================
-       SPECIAL CARD FINAL
+       SPECIAL CARD — current version only
        ========================================================= */
 
     .special-command-card{
       position:relative;
       display:flex !important;
-      flex-direction:column !important;
       min-width:0;
+      min-height:242px;
       overflow:hidden;
       isolation:isolate;
       text-decoration:none;
@@ -4220,10 +2606,6 @@
       background:
         linear-gradient(145deg,rgba(28,36,46,.56),rgba(12,17,24,.42)) !important;
       border-color:rgba(255,255,255,.14) !important;
-      transition:
-        border-color .22s ease,
-        box-shadow .22s ease,
-        transform .18s ease !important;
     }
 
     .special-command-top{
@@ -4259,9 +2641,6 @@
       text-shadow:
         0 1px 2px rgba(0,0,0,.75),
         0 5px 14px rgba(0,0,0,.32);
-      transition:
-        color .22s ease,
-        filter .22s ease;
     }
 
     .special-command-sub{
@@ -4276,16 +2655,6 @@
         0 2px 6px rgba(0,0,0,.50);
     }
 
-    /* hide obsolete SPECIAL-card elements from earlier versions */
-    .special-command-card h3,
-    .special-command-card p,
-    .special-command-label,
-    .special-command-cta,
-    .special-command-chip{
-      display:none !important;
-    }
-
-    /* animated rainbow frame */
     .special-command-card::after{
       content:"";
       position:absolute;
@@ -4314,32 +2683,26 @@
       mask-composite:exclude;
     }
 
-    @keyframes specialBorderRainbowFinal2{
+    @keyframes specialBorderRainbowCleanOnly{
       from{background-position:0% 50%}
       to{background-position:320% 50%}
     }
 
-    @keyframes specialBotRainbowFinal{
+    @keyframes specialBotRainbowCleanOnly{
       from{background-position:0% 50%}
       to{background-position:320% 50%}
     }
 
     @media (hover:hover) and (pointer:fine){
       .special-command-card:hover{
-        /* inside stays clean / unchanged */
+        border-color:transparent !important;
         background:
           linear-gradient(145deg,rgba(28,36,46,.56),rgba(12,17,24,.42)) !important;
-        border-color:transparent !important;
-        transform:none !important;
-        box-shadow:
-          inset 0 1px 0 rgba(255,255,255,.045),
-          0 14px 36px rgba(0,0,0,.12) !important;
-        animation:none !important;
       }
 
       .special-command-card:hover::after{
         opacity:1;
-        animation:specialBorderRainbowFinal2 2.8s linear infinite;
+        animation:specialBorderRainbowCleanOnly 2.8s linear infinite;
       }
 
       .special-command-card:hover .special-command-bot{
@@ -4359,10 +2722,15 @@
         background-size:320% 100%;
         -webkit-background-clip:text;
         background-clip:text;
-        animation:specialBotRainbowFinal 2.8s linear infinite;
-        filter:none !important;
-        text-shadow:none !important;
+        animation:specialBotRainbowCleanOnly 2.8s linear infinite;
+        text-shadow:none;
       }
+    }
+
+    .special-command-card.is-triggered{
+      transform:scale(.985) !important;
+      opacity:.92 !important;
+      transition:transform .08s ease,opacity .08s ease !important;
     }
 
     @media (max-width:1024px){
@@ -4372,151 +2740,89 @@
     }
 
     /* =========================================================
-       BOT PNG — contour glow only
-       ========================================================= */
-
-    .special-overlay__bot-shine{
-      display:none !important;
-    }
-
-    .special-overlay__bot-img{
-      filter:
-        drop-shadow(0 0 7px rgba(255,244,190,.42))
-        drop-shadow(0 0 16px rgba(255,210,92,.28))
-        drop-shadow(0 8px 20px rgba(0,0,0,.46)) !important;
-    }
-
-    .special-overlay__bot-spark{
-      width:9px !important;
-      height:9px !important;
-    }
-
-    /* =========================================================
-       CROSSFADE ORDER FIX
-       click -> old video fades -> reverse scroll starts immediately
-       -> SPECIAL video fades in progressively while travelling upward
+       SPECIAL SEQUENCE — clean rebuild
+       No legacy gold / shine / spark / flash / finish effects.
        ========================================================= */
 
     .bot-motion-bg video{
-      transition:opacity .65s ease !important;
+      transition:opacity .22s linear !important;
     }
 
-    body.special-reverse-running .bot-motion-bg video{
+    body.special-running .bot-motion-bg video{
       opacity:0 !important;
     }
 
     .special-overlay{
-      opacity:0 !important;
-      visibility:hidden !important;
-      pointer-events:none !important;
-      z-index:1 !important;
+      position:fixed;
+      inset:0;
+      z-index:1200;
+      width:100vw;
+      height:100vh;
+      overflow:hidden;
+      visibility:hidden;
+      opacity:0;
+      pointer-events:none;
       background:#000;
     }
 
-    .special-overlay.is-prelude{
-      visibility:visible !important;
-      pointer-events:none !important;
-      z-index:1 !important;
-      /* JS increases opacity continuously as page travels upward */
-      opacity:var(--special-progress,0) !important;
-    }
-
-    .special-overlay.is-active{
-      visibility:visible !important;
-      pointer-events:auto !important;
-      z-index:1400 !important;
-      opacity:1 !important;
+    .special-overlay.is-running{
+      visibility:visible;
+      opacity:var(--special-opacity,0);
     }
 
     .special-overlay__video{
-      opacity:1 !important;
+      position:absolute;
+      inset:0;
       width:100%;
       height:100%;
-      object-fit:cover !important;
-      object-position:center center !important;
-      transform:none !important;
+      object-fit:cover;
+      object-position:center center;
+      opacity:1;
+      filter:none;
+      transform:none;
     }
 
-    .special-overlay__gold{
-      opacity:calc(var(--special-progress,0) * .74) !important;
-      transition:none !important;
+    .special-overlay__bot-wrap{
+      position:absolute;
+      inset:0;
+      z-index:2;
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      pointer-events:none;
+      opacity:0;
+      transform:translateY(-130vh);
     }
 
-    #specialPageGoldWash{
-      opacity:calc(var(--special-progress,0) * .46) !important;
-      transition:none !important;
+    .special-overlay.is-bot-drop .special-overlay__bot-wrap{
+      opacity:1;
+      animation:specialBotDropClean .86s cubic-bezier(.18,.82,.25,1) forwards;
     }
-
-    /* No fake movement; JS performs the actual reverse scroll. */
-    .special-sequence-active .lux-page,
-    .special-sequence-active .topbar,
-    .special-sequence-active .bot-pc-home,
-    .special-sequence-active .subpage-bottom-nav,
-    .special-reverse-running .lux-page,
-    .special-reverse-running .topbar,
-    .special-reverse-running .bot-pc-home,
-    .special-reverse-running .subpage-bottom-nav{
-      transform:none !important;
-      opacity:1 !important;
-      filter:none !important;
-      transition:none !important;
-    }
-
-  
-    /* =========================================================
-       SPECIAL PERFORMANCE FIX
-       Start scrolling first; keep reverse phase lightweight.
-       ========================================================= */
-
-    body.special-reverse-running .special-overlay__video{
-      filter:none !important;
-    }
-
-    body.special-reverse-running .special-overlay__gold{
-      mix-blend-mode:normal !important;
-      background:
-        linear-gradient(
-          180deg,
-          rgba(255,214,110,.08),
-          rgba(140,82,18,.10)
-        ) !important;
-    }
-
-    body.special-reverse-running #specialPageGoldWash{
-      mix-blend-mode:normal !important;
-    }
-
-    /* Immediate visual reaction on click without waiting for media playback. */
-    .special-command-card.is-triggered{
-      transform:scale(.985) !important;
-      opacity:.92 !important;
-      transition:
-        transform .08s ease,
-        opacity .08s ease !important;
-    }
-
-  
-    /* =========================================================
-       SPECIAL FINAL LIGHTWEIGHT FINISH
-       BOT PNG drops -> direct navigation
-       ========================================================= */
 
     .special-overlay__bot-img{
-      filter:none !important;
-    }
-
-    .special-overlay__bot-spark,
-    .special-overlay__bot-shine,
-    .special-overlay__flash{
-      display:none !important;
-    }
-
-    .special-overlay.is-finish .special-overlay__bot-img,
-    .special-overlay.is-finish .special-overlay__bot-wrap,
-    .special-overlay.is-finish .special-overlay__flash{
-      animation:none !important;
+      display:block;
+      width:min(58vw,760px);
+      max-height:64vh;
+      object-fit:contain;
       filter:none !important;
       box-shadow:none !important;
+    }
+
+    @keyframes specialBotDropClean{
+      0%{
+        opacity:1;
+        transform:translateY(-130vh);
+      }
+      100%{
+        opacity:1;
+        transform:translateY(0);
+      }
+    }
+
+    @media (prefers-reduced-motion:reduce){
+      .special-overlay__bot-wrap{
+        animation:none !important;
+      }
     }
 
   </style>
@@ -5462,27 +3768,16 @@
       keepPlaying();
     })();
   </script>
-
-
-  <div id="specialPageGoldWash" aria-hidden="true"></div>
-
   <div id="specialOverlay" class="special-overlay" aria-hidden="true">
-    <div class="special-overlay__shade"></div>
-
-    <div class="special-overlay__video-wrap">
-      <video
-        id="specialOverlayVideo"
-        class="special-overlay__video"
-        muted
-        playsinline
-        preload="auto"
-      >
-        <source src="assets/bot/special-goddessfall.mp4" type="video/mp4">
-      </video>
-
-      <div class="special-overlay__gold"></div>
-      <div class="special-overlay__vignette"></div>
-    </div>
+    <video
+      id="specialOverlayVideo"
+      class="special-overlay__video"
+      muted
+      playsinline
+      preload="metadata"
+    >
+      <source src="assets/bot/special-goddessfall.mp4" type="video/mp4">
+    </video>
 
     <div class="special-overlay__bot-wrap" aria-hidden="true">
       <img
@@ -5490,18 +3785,7 @@
         alt=""
         class="special-overlay__bot-img"
       >
-      <span class="special-overlay__bot-spark spark-1"></span>
-      <span class="special-overlay__bot-spark spark-2"></span>
     </div>
-
-    <div class="special-overlay__flash"></div>
-
-    <button
-      id="specialOverlaySkip"
-      class="special-overlay__skip"
-      type="button"
-      aria-label="演出をスキップしてBOT導入画面へ進む"
-    >SKIP</button>
   </div>
 
   <nav class="subpage-bottom-nav bot-bottom-nav" aria-label="フッターメニュー">
@@ -5524,36 +3808,22 @@
 
   <script>
     (() => {
-      const specialCard = document.getElementById("specialCommandCard");
+      const card = document.getElementById("specialCommandCard");
       const overlay = document.getElementById("specialOverlay");
-      const overlayVideo = document.getElementById("specialOverlayVideo");
-      const skipButton = document.getElementById("specialOverlaySkip");
-      const normalBackgroundVideo = document.getElementById("botBackgroundVideo");
+      const video = document.getElementById("specialOverlayVideo");
+      const normalVideo = document.getElementById("botBackgroundVideo");
       const inviteUrl = "https://discord.com/oauth2/authorize?client_id=1548613088557793370&scope=bot%20applications.commands";
 
-      if (!specialCard || !overlay || !overlayVideo) return;
+      if (!card || !overlay || !video) return;
 
-      const isDesktop = () => window.matchMedia("(min-width: 1025px)").matches;
-      const reducedMotion = () => window.matchMedia("(prefers-reduced-motion: reduce)").matches;
-
-      let timers = [];
-      let reverseRAF = 0;
       let running = false;
-      let specialStarted = false;
+      let rafId = 0;
+      let videoStarted = false;
 
-      const clearTimers = () => {
-        timers.forEach((id) => window.clearTimeout(id));
-        timers = [];
+      const isDesktop = () => window.matchMedia("(min-width:1025px)").matches;
 
-        if (reverseRAF) {
-          cancelAnimationFrame(reverseRAF);
-          reverseRAF = 0;
-        }
-      };
-
-      const pageScroller = () => {
+      const getScroller = () => {
         const page = document.querySelector(".lux-page");
-
         if (
           page &&
           page.scrollHeight > page.clientHeight + 2 &&
@@ -5561,30 +3831,28 @@
         ) {
           return page;
         }
-
         return document.scrollingElement || document.documentElement;
       };
 
-      const getScrollTop = (scroller) => {
+      const getTop = (scroller) => {
         if (
+          scroller === document.scrollingElement ||
           scroller === document.documentElement ||
-          scroller === document.body ||
-          scroller === document.scrollingElement
+          scroller === document.body
         ) {
           return window.scrollY ||
             document.documentElement.scrollTop ||
             document.body.scrollTop ||
             0;
         }
-
         return scroller.scrollTop;
       };
 
-      const setScrollTop = (scroller,value) => {
+      const setTop = (scroller,value) => {
         if (
+          scroller === document.scrollingElement ||
           scroller === document.documentElement ||
-          scroller === document.body ||
-          scroller === document.scrollingElement
+          scroller === document.body
         ) {
           window.scrollTo(0,value);
         } else {
@@ -5592,185 +3860,85 @@
         }
       };
 
-      const easeSlowRise = (t) => t * t * (3 - 2 * t);
-
-      const startSpecialVideo = () => {
-        if (specialStarted) return;
-        specialStarted = true;
-
+      const startVideo = () => {
+        if (videoStarted) return;
+        videoStarted = true;
         try {
-          overlayVideo.currentTime = 0;
-          const p = overlayVideo.play();
-          if (p && typeof p.catch === "function") p.catch(() => {});
-        } catch (error) {}
-      };
-
-      const pauseNormalBackground = () => {
-        if (!normalBackgroundVideo) return;
-        try { normalBackgroundVideo.pause(); } catch (error) {}
-      };
-
-      const resumeNormalBackground = () => {
-        if (!normalBackgroundVideo) return;
-        try {
-          const p = normalBackgroundVideo.play();
-          if (p && typeof p.catch === "function") p.catch(() => {});
-        } catch (error) {}
-      };
-
-      const cleanupSpecial = () => {
-        clearTimers();
-        running = false;
-        specialStarted = false;
-
-        specialCard.classList.remove("is-triggered");
-
-        document.body.classList.remove(
-          "special-sequence-active",
-          "special-reverse-running"
-        );
-
-        overlay.classList.remove(
-          "is-prelude",
-          "is-active",
-          "is-gold",
-          "is-bot-drop",
-          "is-finish"
-        );
-
-        overlay.style.removeProperty("--special-progress");
-        overlay.setAttribute("aria-hidden","true");
-
-        try {
-          overlayVideo.pause();
-          overlayVideo.currentTime = 0;
-        } catch (error) {}
-
-        resumeNormalBackground();
+          video.currentTime = 0;
+          const promise = video.play();
+          if (promise && typeof promise.catch === "function") {
+            promise.catch(() => {});
+          }
+        } catch (_) {}
       };
 
       const goInvite = () => {
         window.location.href = inviteUrl;
       };
 
-      const finishAtTop = () => {
-        document.body.classList.remove("special-reverse-running");
-        document.body.classList.add("special-sequence-active");
-
-        startSpecialVideo();
-
-        overlay.style.setProperty("--special-progress","1");
-        overlay.classList.remove("is-prelude");
-        overlay.classList.add("is-active","is-gold");
-        overlay.setAttribute("aria-hidden","false");
-
-        timers.push(window.setTimeout(() => {
-          overlay.classList.add("is-bot-drop");
-        }, 850));
-
-        /* BOT PNG lands, then move straight to the BOT invite page.
-           No glow sequence, no sparkle hold, no white flash. */
-        timers.push(window.setTimeout(() => {
-          goInvite();
-        }, 2350));
-      };
-
-      const slowReverseToTop = () => {
-        const scroller = pageScroller();
-        const startTop = getScrollTop(scroller);
-
-        /* 6.5–8 seconds: visible, but no long waiting feeling. */
-        const duration = Math.min(
-          8000,
-          Math.max(6500, 5000 + startTop * 0.42)
-        );
-
-        const startTime = performance.now();
-
-        const step = (now) => {
-          const elapsed = now - startTime;
-          const t = Math.min(1, elapsed / duration);
-          const eased = easeSlowRise(t);
-
-          /* This happens from the very first animation frame. */
-          setScrollTop(
-            scroller,
-            Math.max(0, startTop * (1 - eased))
-          );
-
-          /*
-            SPECIAL video stays completely hidden at first.
-            After the page has already begun moving, it fades in gradually.
-          */
-          const visibleProgress = Math.max(
-            0,
-            Math.min(1, t / 0.12)
-          );
-
-          overlay.style.setProperty(
-            "--special-progress",
-            visibleProgress.toFixed(3)
-          );
-
-          if (t < 1) {
-            reverseRAF = requestAnimationFrame(step);
-          } else {
-            reverseRAF = 0;
-            setScrollTop(scroller,0);
-            finishAtTop();
-          }
-        };
-
-        reverseRAF = requestAnimationFrame(step);
-      };
-
-      const startSpecial = () => {
+      const start = () => {
         if (running) return;
 
-        if (!isDesktop() || reducedMotion()) {
+        if (!isDesktop()) {
           goInvite();
           return;
         }
 
         running = true;
-        specialStarted = false;
-        specialCard.classList.add("is-triggered");
+        videoStarted = false;
+        card.classList.add("is-triggered");
+        document.body.classList.add("special-running");
 
-        /*
-          Correct order:
-          1. old background starts disappearing now
-          2. reverse-scroll starts now
-          3. special video begins only after movement has already started
-        */
-        pauseNormalBackground();
+        if (normalVideo) {
+          try { normalVideo.pause(); } catch (_) {}
+        }
 
-        document.body.classList.add("special-reverse-running");
+        const scroller = getScroller();
+        const startTop = getTop(scroller);
+        const duration = Math.min(8000,Math.max(6500,5200 + startTop * .38));
+        const startedAt = performance.now();
 
-        overlay.style.setProperty("--special-progress","0");
-        overlay.classList.add("is-prelude");
+        overlay.style.setProperty("--special-opacity","0");
+        overlay.classList.add("is-running");
         overlay.setAttribute("aria-hidden","false");
 
-        /* Start SPECIAL video immediately. */
-        startSpecialVideo();
+        const frame = (now) => {
+          const elapsed = now - startedAt;
+          const t = Math.min(1,elapsed / duration);
 
-        /* No timeout before movement. */
-        slowReverseToTop();
+          /* Linear travel = visible movement from the first frame. */
+          setTop(scroller,startTop * (1 - t));
+
+          /* Start media only after the page has already begun moving. */
+          if (!videoStarted && t > 0) {
+            startVideo();
+          }
+
+          /* SPECIAL becomes fully opaque quickly (~first 1 sec). */
+          const opacity = Math.min(1,t / .16);
+          overlay.style.setProperty("--special-opacity",opacity.toFixed(3));
+
+          if (t < 1) {
+            rafId = requestAnimationFrame(frame);
+            return;
+          }
+
+          rafId = 0;
+          setTop(scroller,0);
+          overlay.style.setProperty("--special-opacity","1");
+          overlay.classList.add("is-bot-drop");
+
+          /* Drop is .86s; switch immediately after it lands. */
+          window.setTimeout(goInvite,900);
+        };
+
+        /* The first requested frame performs the first scroll movement. */
+        rafId = requestAnimationFrame(frame);
       };
 
-      specialCard.addEventListener("click",(event) => {
+      card.addEventListener("click",(event) => {
         event.preventDefault();
-        startSpecial();
-      });
-
-      skipButton?.addEventListener("click",() => {
-        cleanupSpecial();
-        goInvite();
-      });
-
-      document.addEventListener("keydown",(event) => {
-        if (event.key === "Escape" && running) {
-          cleanupSpecial();
-        }
+        start();
       });
     })();
   </script>
