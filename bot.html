@@ -1862,6 +1862,212 @@
       }
     }
 
+  
+    /* =========================================================
+       BOT FEATURES / GET STARTED — editorial cardless rebuild
+       ========================================================= */
+
+    /* Unified chapter-title scale. */
+    .intro-section .section-en,
+    .stay-section .section-en,
+    .union-bot-section .section-en,
+    .feature-section .section-en,
+    .install-section .section-en{
+      font-size:clamp(64px,7vw,96px) !important;
+      line-height:.82 !important;
+      letter-spacing:.045em;
+      text-shadow:none !important;
+    }
+
+    .feature-section .section-heading,
+    .install-section .section-heading{
+      margin-bottom:18px;
+    }
+
+    .feature-section .section-ja,
+    .install-section .section-ja{
+      margin-top:4px;
+    }
+
+    /* No cards: simple editorial rows separated by fine rules. */
+    .editorial-list{
+      width:min(860px,78%);
+      border-top:1px solid rgba(255,255,255,.18);
+    }
+
+    .editorial-item{
+      position:relative;
+      padding:24px 0 23px;
+      border-bottom:1px solid rgba(255,255,255,.14);
+      background:none;
+      box-shadow:none;
+      backdrop-filter:none;
+      -webkit-backdrop-filter:none;
+    }
+
+    .editorial-kicker{
+      margin:0 0 5px;
+      color:#5B8CFF;
+      font:700 14px/1 "Teko",sans-serif;
+      letter-spacing:.15em;
+      text-shadow:none;
+    }
+
+    .editorial-item h3{
+      margin:0;
+      color:#fff;
+      font-family:"Gothic MB101","Zen Kaku Gothic New",sans-serif;
+      font-size:21px;
+      font-weight:900;
+      line-height:1.42;
+      letter-spacing:-.02em;
+      text-shadow:0 1px 2px rgba(0,0,0,.82),0 2px 5px rgba(0,0,0,.38);
+    }
+
+    .editorial-item p{
+      margin:8px 0 0;
+      color:#f2f2f2;
+      font-family:"Gothic MB101","Zen Kaku Gothic New",sans-serif;
+      font-size:12.5px;
+      font-weight:700;
+      line-height:1.82;
+      text-shadow:0 1px 2px rgba(0,0,0,.95),0 2px 6px rgba(0,0,0,.55);
+    }
+
+    .editorial-item strong{
+      color:#8EDCFF;
+      text-shadow:none;
+    }
+
+    /* GET STARTED keeps the same cardless language, with stronger step numbers. */
+    .step-editorial-item{
+      display:grid;
+      grid-template-columns:74px minmax(0,1fr);
+      gap:18px;
+      align-items:start;
+    }
+
+    .step-index{
+      color:#28C0FC;
+      font:700 38px/.9 "Teko",sans-serif;
+      letter-spacing:.05em;
+      text-shadow:none;
+    }
+
+    .step-editorial-copy{
+      min-width:0;
+    }
+
+    /* Subtle section-specific motion. */
+    .js .reveal-up.motion-left{
+      opacity:0;
+      transform:translateX(-24px);
+    }
+    .js .reveal-up.motion-right{
+      opacity:0;
+      transform:translateX(24px);
+    }
+    .js .reveal-up.motion-rise{
+      opacity:0;
+      transform:translateY(22px);
+    }
+    .js .reveal-up.motion-step{
+      opacity:0;
+      transform:translateY(18px) translateX(8px);
+    }
+
+    .js .reveal-up.motion-left.is-visible,
+    .js .reveal-up.motion-right.is-visible,
+    .js .reveal-up.motion-rise.is-visible,
+    .js .reveal-up.motion-step.is-visible{
+      opacity:1;
+      transform:translate(0,0);
+      transition:
+        opacity .64s cubic-bezier(.2,.72,.2,1) var(--delay,0ms),
+        transform .72s cubic-bezier(.2,.72,.2,1) var(--delay,0ms);
+    }
+
+    @media (max-width:1024px){
+      .intro-section .section-en,
+      .stay-section .section-en,
+      .union-bot-section .section-en,
+      .feature-section .section-en,
+      .install-section .section-en{
+        font-size:clamp(48px,8vw,66px) !important;
+      }
+
+      .editorial-list{
+        width:min(900px,94%);
+      }
+
+      .editorial-item{
+        padding:21px 0 20px;
+      }
+    }
+
+    @media (max-width:600px){
+      .intro-section .section-en,
+      .stay-section .section-en,
+      .union-bot-section .section-en,
+      .feature-section .section-en,
+      .install-section .section-en{
+        font-size:clamp(38px,11.5vw,48px) !important;
+        line-height:.82 !important;
+      }
+
+      .feature-section .section-heading,
+      .install-section .section-heading{
+        margin-bottom:12px;
+      }
+
+      .editorial-list{
+        width:100%;
+      }
+
+      .editorial-item{
+        padding:17px 0 16px;
+      }
+
+      .editorial-kicker{
+        margin-bottom:4px;
+        font-size:12px;
+      }
+
+      .editorial-item h3{
+        font-size:17px;
+        line-height:1.45;
+      }
+
+      .editorial-item p{
+        margin-top:6px;
+        font-size:12px;
+        line-height:1.76;
+      }
+
+      .step-editorial-item{
+        grid-template-columns:46px minmax(0,1fr);
+        gap:10px;
+      }
+
+      .step-index{
+        font-size:31px;
+      }
+
+      /* Reduce travel distance on small screens; still visibly different. */
+      .js .reveal-up.motion-left{
+        transform:translateX(-14px);
+      }
+      .js .reveal-up.motion-right{
+        transform:translateX(14px);
+      }
+      .js .reveal-up.motion-rise{
+        transform:translateY(16px);
+      }
+      .js .reveal-up.motion-step{
+        transform:translateY(14px) translateX(5px);
+      }
+    }
+
   </style>
 
   <script>
@@ -2160,132 +2366,96 @@
     </section>
 
     <section class="lux-section feature-section" id="features">
-      <header class="section-heading reveal-up">
+      <header class="section-heading reveal-up motion-left">
         <div class="section-en">BOT FEATURES</div>
-        <div class="section-ja">主な機能</div>
+        <div class="section-ja">必要な機能だけ、自由に使えます。</div>
       </header>
 
-      <div class="feature-grid" id="featureSlider">
-        <article class="glass-card feature-card reveal-up" style="--delay:0ms">
-          <div class="feature-no">01</div>
-          <h3>X 指揮官募集通知</h3>
-          <div class="feature-lead">ユニオンを探している指揮官を、Discordでチェック。</div>
-          <p>
-            Xからユニオンを探している指揮官候補を自動で取得し、設定したDiscordチャンネルへ通知します。
-            何度もXを検索しなくても、募集候補をDiscordから確認できます。
-          </p>
-        </article>
-
-        <article class="glass-card feature-card reveal-up" style="--delay:70ms">
-          <div class="feature-no">02</div>
-          <h3>UNION MATCH通知</h3>
-          <div class="feature-lead">新しい募集をDiscordですぐ確認。</div>
-          <p>
-            UNION MATCHに掲載された新しい指揮官募集・ユニオン募集をDiscordへ通知します。
-            指揮官・ユニオンそれぞれの通知を個別にON / OFFできます。
-          </p>
-        </article>
-
-        <article class="glass-card feature-card reveal-up" style="--delay:140ms">
-          <div class="feature-no">03</div>
+      <div class="editorial-list feature-editorial-list">
+        <section class="editorial-item reveal-up motion-rise" style="--delay:40ms">
+          <div class="editorial-kicker">EVENT</div>
           <h3>NIKKEイベント通知</h3>
-          <div class="feature-lead">イベント情報を、いつものDiscordへ。</div>
           <p>
-            ユニオンレイド、ソロレイド、協同作戦などの開催情報・開催期間をお知らせします。
+            ユニオンレイド・ソロレイド・協同作戦・新キャラクター情報などをDiscordへ。<br>
+            必要な通知だけ選んで利用できます。
           </p>
-          <p class="feature-tip">
-            雑談チャンネルなど、普段みんなが集まる場所への通知がおすすめ。
-            選択中のキャラクターが、自然なひと言を添えて届けます。
-          </p>
-        </article>
+        </section>
 
-        <article class="glass-card feature-card reveal-up" style="--delay:210ms">
-          <div class="feature-no">04</div>
-          <h3>期限通知・メンション</h3>
-          <div class="feature-lead">14日間の利用期限を、忘れないために。</div>
+        <section class="editorial-item reveal-up motion-rise" style="--delay:100ms">
+          <div class="editorial-kicker">RECRUITMENT</div>
+          <h3>募集情報をDiscordへ</h3>
           <p>
-            UNION MATCHの登録とBOT連携は14日間で利用期限を迎えます。
-            期限が近づくと48時間前と1時間前にDiscordへ通知し、更新忘れを防ぎます。
-            設定したロールへのメンション通知にも対応しています。
+            UNION MATCHに登録されたユニオン募集・指揮官募集をお知らせ。<br>
+            Xでユニオンを探している指揮官情報も確認できます。
           </p>
-        </article>
+        </section>
 
-        <article class="glass-card feature-card reveal-up" style="--delay:280ms">
-          <div class="feature-no">05</div>
-          <h3>ユニオン管理</h3>
-          <div class="feature-lead">Discordから、<br>登録状況をすぐ確認。</div>
+        <section class="editorial-item reveal-up motion-rise" style="--delay:160ms">
+          <div class="editorial-kicker">DEADLINE</div>
+          <h3>募集期限を忘れない</h3>
           <p>
-            UNION MATCHへの登録状態・募集状態・利用期限を、BOTから確認できます。<br>
-            「登録のみ」から「募集中」への切り替えや、
-            利用期限の14日延長もDiscordから操作できます。
+            掲載期限の<strong>48時間前・1時間前</strong>にDiscordへ通知。<br>
+            延長・再掲載もスムーズに進められます。
           </p>
-        </article>
+        </section>
 
-        <article class="glass-card feature-card reveal-up" style="--delay:350ms">
-          <div class="feature-no">06</div>
-          <h3>キャラクター設定</h3>
-          <div class="feature-lead">好きな見た目と名前で、<br>自分たちだけのBOTキャラクターに。</div>
+        <section class="editorial-item reveal-up motion-rise" style="--delay:220ms">
+          <div class="editorial-kicker">CHANNEL CHECK</div>
+          <h3>通知できない理由がすぐ分かる</h3>
           <p>
-            すべてのキャラクターで、
-            名前とプロフィール画像を変更できます。<br>
-            自分たちの好きな名前・画像へ変更して
-            ご利用できます。
+            通知先チャンネルの権限をBOTが確認。<br>
+            利用できない場合も、不足している権限をその場で確認できます。
           </p>
-        </article>
-      </div>
+        </section>
 
-      <div class="slider-controls" id="featureSliderControls" aria-label="BOT FEATURES カード操作">
-        <button class="slider-arrow" type="button" data-slider-target="featureSlider" data-slider-dir="-1" aria-label="前の機能を見る">‹</button>
-        <div class="slider-status" id="featureSliderStatus" aria-live="polite">1 / 6</div>
-        <button class="slider-arrow" type="button" data-slider-target="featureSlider" data-slider-dir="1" aria-label="次の機能を見る">›</button>
-      </div>
-
-      <div class="feature-shared reveal-up">
-        <strong>募集通知について</strong>
-        <span>
-          X指揮官募集通知・UNION MATCH通知・期限通知は、すべて同じ通知チャンネルへ届きます。
-          募集情報をまとめて確認できるよう、専用の募集通知チャンネルを設定するのがおすすめです。
-        </span>
+        <section class="editorial-item reveal-up motion-rise" style="--delay:280ms">
+          <div class="editorial-kicker">CHARACTER</div>
+          <h3>通知キャラクターを選べる</h3>
+          <p>
+            用意されたキャラクターだけでなく、名前・画像・性格などを設定した自由キャラクターも利用できます。
+          </p>
+        </section>
       </div>
     </section>
 
-    <section class="lux-section" id="install">
-      <header class="section-heading reveal-up">
+    <section class="lux-section install-section" id="install">
+      <header class="section-heading reveal-up motion-right">
         <div class="section-en">GET STARTED</div>
-        <div class="section-ja">導入は3ステップ</div>
+        <div class="section-ja">導入は3ステップ。</div>
       </header>
 
-      <div class="step-grid">
-        <article class="glass-card step-card reveal-up" style="--delay:0ms">
-          <div class="step-no">STEP 01</div>
-          <h3>BOTをDiscordへ追加</h3>
-          <p>
-            「BOTを導入する」ボタンから、NIKKE UNION MATCH BOTを利用したいDiscordサーバーへ追加します。
-            BOTの追加は、サーバーを管理できる権限を持つメンバーが行ってください。
-          </p>
-          <p class="step-note">Discordへ追加するだけで準備完了</p>
-        </article>
+      <div class="editorial-list step-editorial-list">
+        <section class="editorial-item step-editorial-item reveal-up motion-step" style="--delay:40ms">
+          <div class="step-index">01</div>
+          <div class="step-editorial-copy">
+            <h3>BOTをDiscordへ追加</h3>
+            <p>
+              「BOTを導入する」ボタンから、利用したいDiscordサーバーへBOTを追加します。
+            </p>
+          </div>
+        </section>
 
-        <article class="glass-card step-card reveal-up" style="--delay:90ms">
-          <div class="step-no">STEP 02</div>
-          <h3><code>/setup</code> でユニオンを連携</h3>
-          <p>
-            Discordのメッセージ入力欄に <code>/setup</code> と入力して実行します。
-            表示された案内に沿って、UNION MATCHで発行されたユニオンPASSを入力してください。
-            PASSを確認すると、登録ユニオンとDiscordサーバーが連携されます。
-          </p>
-          <p class="step-note">PASSはUNION MATCHの登録情報との連携に使用します</p>
-        </article>
+        <section class="editorial-item step-editorial-item reveal-up motion-step" style="--delay:120ms">
+          <div class="step-index">02</div>
+          <div class="step-editorial-copy">
+            <h3><code>/setup</code> を実行</h3>
+            <p>
+              Discordの入力欄で <code>/setup</code> を実行。<br>
+              表示される案内に沿って、ユニオン連携・通知先・使いたい機能を設定します。
+            </p>
+          </div>
+        </section>
 
-        <article class="glass-card step-card reveal-up" style="--delay:180ms">
-          <div class="step-no">STEP 03</div>
-          <h3>案内に沿って初期設定</h3>
-          <p>
-            連携後に表示される案内から、募集通知を届けるチャンネル・期限通知でメンションするロール・使用するキャラクターなどを順番に設定できます。
-            設定が完了したら、そのままBOTを利用できます。
-          </p>
-          <p class="step-note">設定はあとから <code>/setup</code> で変更できます</p>
-        </article>
+        <section class="editorial-item step-editorial-item reveal-up motion-step" style="--delay:200ms">
+          <div class="step-index">03</div>
+          <div class="step-editorial-copy">
+            <h3>設定完了</h3>
+            <p>
+              設定後は、必要な情報をBOTがDiscordへお知らせ。<br>
+              設定内容はあとから <code>/setup</code> で変更できます。
+            </p>
+          </div>
+        </section>
       </div>
     </section>
 
