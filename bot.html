@@ -3184,9 +3184,10 @@
     }
 
     .special-overlay__video{
-      width:100%;
-      height:100%;
-      object-fit:contain;
+      width:100vw;
+      height:100vh;
+      object-fit:cover;
+      object-position:center center;
       opacity:0;
       filter:
         brightness(.28)
@@ -3476,6 +3477,137 @@
       .special-command-card{
         display:flex !important;
       }
+    }
+
+  
+    /* =========================================================
+       SPECIAL HOVER CLEANUP
+       Only rainbow border + rainbow title
+       ========================================================= */
+
+    .special-command-card{
+      position:relative;
+      isolation:isolate;
+      overflow:hidden;
+    }
+
+    /* Animated rainbow border is invisible until hover */
+    .special-command-card::after{
+      content:"";
+      position:absolute;
+      inset:0;
+      z-index:3;
+      pointer-events:none;
+      padding:2px;
+      opacity:0;
+      background:
+        linear-gradient(
+          90deg,
+          #ff3b6b 0%,
+          #ff9b31 14%,
+          #ffe65b 28%,
+          #5cff9b 42%,
+          #38d9ff 56%,
+          #6e7cff 70%,
+          #c45cff 84%,
+          #ff58d6 100%
+        );
+      background-size:320% 100%;
+      -webkit-mask:
+        linear-gradient(#000 0 0) content-box,
+        linear-gradient(#000 0 0);
+      -webkit-mask-composite:xor;
+      mask-composite:exclude;
+    }
+
+    @keyframes specialBorderRainbowClean{
+      from{background-position:0% 50%}
+      to{background-position:320% 50%}
+    }
+
+    @media (hover:hover) and (pointer:fine){
+      .special-command-card:hover{
+        /* keep the normal interior exactly as-is */
+        background:
+          linear-gradient(145deg,rgba(28,36,46,.56),rgba(12,17,24,.42)) !important;
+        border-color:transparent !important;
+        transform:none !important;
+        box-shadow:
+          inset 0 1px 0 rgba(255,255,255,.045),
+          0 14px 36px rgba(0,0,0,.12) !important;
+        animation:none !important;
+      }
+
+      .special-command-card:hover::after{
+        opacity:1;
+        animation:specialBorderRainbowClean 2.8s linear infinite;
+      }
+
+      .special-command-card:hover h3{
+        color:transparent !important;
+        background:
+          linear-gradient(
+            90deg,
+            #ff3b6b 0%,
+            #ff9b31 14%,
+            #ffe65b 28%,
+            #5cff9b 42%,
+            #38d9ff 56%,
+            #6e7cff 70%,
+            #c45cff 84%,
+            #ff58d6 100%
+          );
+        background-size:320% 100%;
+        -webkit-background-clip:text;
+        background-clip:text;
+        animation:specialTitleRainbow 2.8s linear infinite;
+        transform:none !important;
+        filter:none !important;
+        text-shadow:none !important;
+      }
+
+      .special-command-card:hover p{
+        color:#f2f2f2 !important;
+        text-shadow:
+          0 1px 2px rgba(0,0,0,.95),
+          0 2px 6px rgba(0,0,0,.55) !important;
+      }
+
+      .special-command-card:hover .special-command-cta{
+        color:#8EDCFF !important;
+        transform:none !important;
+        text-shadow:none !important;
+      }
+    }
+
+    /* Keep title white when not hovered */
+    .special-command-card:not(:hover) h3{
+      color:#fff !important;
+      background:none !important;
+      -webkit-background-clip:initial !important;
+      background-clip:initial !important;
+      animation:none !important;
+      filter:none !important;
+    }
+
+  
+    /* =========================================================
+       SPECIAL FULLSCREEN FIX
+       ========================================================= */
+    .special-overlay,
+    .special-overlay__video-wrap{
+      width:100vw !important;
+      height:100vh !important;
+      inset:0 !important;
+    }
+
+    .special-overlay__video{
+      width:100vw !important;
+      height:100vh !important;
+      min-width:100vw !important;
+      min-height:100vh !important;
+      object-fit:cover !important;
+      object-position:center center !important;
     }
 
   </style>
@@ -4498,7 +4630,6 @@
       const isDesktop = () => window.matchMedia("(min-width: 1025px)").matches;
       const reducedMotion = () => window.matchMedia("(prefers-reduced-motion: reduce)").matches;
 
-      let inviteWindow = null;
       let timers = [];
 
       const clearTimers = () => {
@@ -4506,25 +4637,8 @@
         timers = [];
       };
 
-      const openInvitePlaceholder = () => {
-        try {
-          inviteWindow = window.open("about:blank", "_blank");
-        } catch (error) {
-          inviteWindow = null;
-        }
-      };
-
-      const goInviteBlank = () => {
-        if (inviteWindow && !inviteWindow.closed) {
-          try {
-            inviteWindow.opener = null;
-            inviteWindow.location.replace(inviteUrl);
-            inviteWindow.focus();
-            return;
-          } catch (error) {}
-        }
-
-        window.open(inviteUrl, "_blank", "noopener,noreferrer");
+      const goInvite = () => {
+        window.location.href = inviteUrl;
       };
 
       const cleanupSpecial = () => {
@@ -4541,11 +4655,9 @@
 
       const startSpecial = () => {
         if (!isDesktop() || reducedMotion()) {
-          window.open(inviteUrl, "_blank", "noopener,noreferrer");
+          window.location.href = inviteUrl;
           return;
         }
-
-        openInvitePlaceholder();
 
         document.body.classList.add("special-sequence-active");
         overlay.classList.add("is-active");
@@ -4554,17 +4666,22 @@
         try {
           overlayVideo.currentTime = 0;
           const playPromise = overlayVideo.play();
+
           if (playPromise && typeof playPromise.catch === "function") {
-            playPromise.catch(() => {});
+            playPromise.catch((error) => {
+              console.warn("SPECIAL_VIDEO_PLAY_FAILED", error);
+            });
           }
-        } catch (error) {}
+        } catch (error) {
+          console.warn("SPECIAL_VIDEO_START_FAILED", error);
+        }
 
         timers.push(window.setTimeout(() => {
           overlay.classList.add("is-finish");
         }, 7380));
 
         timers.push(window.setTimeout(() => {
-          goInviteBlank();
+          goInvite();
         }, 7700));
 
         timers.push(window.setTimeout(() => {
@@ -4580,7 +4697,7 @@
       });
 
       skipButton?.addEventListener("click", () => {
-        goInviteBlank();
+        goInvite();
         cleanupSpecial();
       });
 
