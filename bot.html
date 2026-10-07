@@ -4203,6 +4203,265 @@
       z-index:7;
     }
 
+  
+    /* =========================================================
+       SPECIAL CARD FINAL
+       ========================================================= */
+
+    .special-command-card{
+      position:relative;
+      display:flex !important;
+      flex-direction:column !important;
+      min-width:0;
+      overflow:hidden;
+      isolation:isolate;
+      text-decoration:none;
+      color:inherit;
+      background:
+        linear-gradient(145deg,rgba(28,36,46,.56),rgba(12,17,24,.42)) !important;
+      border-color:rgba(255,255,255,.14) !important;
+      transition:
+        border-color .22s ease,
+        box-shadow .22s ease,
+        transform .18s ease !important;
+    }
+
+    .special-command-top{
+      position:absolute;
+      left:22px;
+      top:22px;
+      z-index:2;
+      color:#8EDCFF;
+      font:700 15px/1 "Teko",sans-serif;
+      letter-spacing:.13em;
+      text-shadow:none;
+      white-space:nowrap;
+    }
+
+    .special-command-center{
+      position:absolute;
+      left:50%;
+      top:50%;
+      transform:translate(-50%,-50%);
+      width:100%;
+      display:flex;
+      flex-direction:column;
+      align-items:center;
+      justify-content:center;
+      text-align:center;
+      pointer-events:none;
+    }
+
+    .special-command-bot{
+      color:#fff;
+      font:900 clamp(64px,5.2vw,88px)/.78 "Teko",sans-serif;
+      letter-spacing:.045em;
+      text-shadow:
+        0 1px 2px rgba(0,0,0,.75),
+        0 5px 14px rgba(0,0,0,.32);
+      transition:
+        color .22s ease,
+        filter .22s ease;
+    }
+
+    .special-command-sub{
+      margin-top:10px;
+      color:#f1f3f5;
+      font-family:"Gothic MB101","Zen Kaku Gothic New",sans-serif;
+      font-size:12px;
+      font-weight:800;
+      letter-spacing:.08em;
+      text-shadow:
+        0 1px 2px rgba(0,0,0,.92),
+        0 2px 6px rgba(0,0,0,.50);
+    }
+
+    /* hide obsolete SPECIAL-card elements from earlier versions */
+    .special-command-card h3,
+    .special-command-card p,
+    .special-command-label,
+    .special-command-cta,
+    .special-command-chip{
+      display:none !important;
+    }
+
+    /* animated rainbow frame */
+    .special-command-card::after{
+      content:"";
+      position:absolute;
+      inset:0;
+      z-index:3;
+      pointer-events:none;
+      padding:2px;
+      opacity:0;
+      background:
+        linear-gradient(
+          90deg,
+          #ff3b6b 0%,
+          #ff9b31 14%,
+          #ffe65b 28%,
+          #5cff9b 42%,
+          #38d9ff 56%,
+          #6e7cff 70%,
+          #c45cff 84%,
+          #ff58d6 100%
+        );
+      background-size:320% 100%;
+      -webkit-mask:
+        linear-gradient(#000 0 0) content-box,
+        linear-gradient(#000 0 0);
+      -webkit-mask-composite:xor;
+      mask-composite:exclude;
+    }
+
+    @keyframes specialBorderRainbowFinal2{
+      from{background-position:0% 50%}
+      to{background-position:320% 50%}
+    }
+
+    @keyframes specialBotRainbowFinal{
+      from{background-position:0% 50%}
+      to{background-position:320% 50%}
+    }
+
+    @media (hover:hover) and (pointer:fine){
+      .special-command-card:hover{
+        /* inside stays clean / unchanged */
+        background:
+          linear-gradient(145deg,rgba(28,36,46,.56),rgba(12,17,24,.42)) !important;
+        border-color:transparent !important;
+        transform:none !important;
+        box-shadow:
+          inset 0 1px 0 rgba(255,255,255,.045),
+          0 14px 36px rgba(0,0,0,.12) !important;
+        animation:none !important;
+      }
+
+      .special-command-card:hover::after{
+        opacity:1;
+        animation:specialBorderRainbowFinal2 2.8s linear infinite;
+      }
+
+      .special-command-card:hover .special-command-bot{
+        color:transparent;
+        background:
+          linear-gradient(
+            90deg,
+            #ff3b6b 0%,
+            #ff9b31 14%,
+            #ffe65b 28%,
+            #5cff9b 42%,
+            #38d9ff 56%,
+            #6e7cff 70%,
+            #c45cff 84%,
+            #ff58d6 100%
+          );
+        background-size:320% 100%;
+        -webkit-background-clip:text;
+        background-clip:text;
+        animation:specialBotRainbowFinal 2.8s linear infinite;
+        filter:none !important;
+        text-shadow:none !important;
+      }
+    }
+
+    @media (max-width:1024px){
+      .special-command-card{
+        display:none !important;
+      }
+    }
+
+    /* =========================================================
+       BOT PNG — contour glow only
+       ========================================================= */
+
+    .special-overlay__bot-shine{
+      display:none !important;
+    }
+
+    .special-overlay__bot-img{
+      filter:
+        drop-shadow(0 0 7px rgba(255,244,190,.42))
+        drop-shadow(0 0 16px rgba(255,210,92,.28))
+        drop-shadow(0 8px 20px rgba(0,0,0,.46)) !important;
+    }
+
+    .special-overlay__bot-spark{
+      width:9px !important;
+      height:9px !important;
+    }
+
+    /* =========================================================
+       CROSSFADE ORDER FIX
+       click -> old video fades -> reverse scroll starts immediately
+       -> SPECIAL video fades in progressively while travelling upward
+       ========================================================= */
+
+    .bot-motion-bg video{
+      transition:opacity .65s ease !important;
+    }
+
+    body.special-reverse-running .bot-motion-bg video{
+      opacity:0 !important;
+    }
+
+    .special-overlay{
+      opacity:0 !important;
+      visibility:hidden !important;
+      pointer-events:none !important;
+      z-index:1 !important;
+      background:#000;
+    }
+
+    .special-overlay.is-prelude{
+      visibility:visible !important;
+      pointer-events:none !important;
+      z-index:1 !important;
+      /* JS increases opacity continuously as page travels upward */
+      opacity:var(--special-progress,0) !important;
+    }
+
+    .special-overlay.is-active{
+      visibility:visible !important;
+      pointer-events:auto !important;
+      z-index:1400 !important;
+      opacity:1 !important;
+    }
+
+    .special-overlay__video{
+      opacity:1 !important;
+      width:100%;
+      height:100%;
+      object-fit:cover !important;
+      object-position:center center !important;
+      transform:none !important;
+    }
+
+    .special-overlay__gold{
+      opacity:calc(var(--special-progress,0) * .74) !important;
+      transition:none !important;
+    }
+
+    #specialPageGoldWash{
+      opacity:calc(var(--special-progress,0) * .46) !important;
+      transition:none !important;
+    }
+
+    /* No fake movement; JS performs the actual reverse scroll. */
+    .special-sequence-active .lux-page,
+    .special-sequence-active .topbar,
+    .special-sequence-active .bot-pc-home,
+    .special-sequence-active .subpage-bottom-nav,
+    .special-reverse-running .lux-page,
+    .special-reverse-running .topbar,
+    .special-reverse-running .bot-pc-home,
+    .special-reverse-running .subpage-bottom-nav{
+      transform:none !important;
+      opacity:1 !important;
+      filter:none !important;
+      transition:none !important;
+    }
+
   </style>
 
   <script>
@@ -4754,7 +5013,11 @@
           style="--delay:350ms"
         >
           <div class="special-command-top">SPECIAL START →</div>
-          <h3>BOTを導入する</h3>
+
+          <div class="special-command-center">
+            <div class="special-command-bot">BOT</div>
+            <div class="special-command-sub">導入する</div>
+          </div>
         </a>
       </div>
     </section>
@@ -5170,7 +5433,6 @@
         alt=""
         class="special-overlay__bot-img"
       >
-      <span class="special-overlay__bot-shine"></span>
       <span class="special-overlay__bot-spark spark-1"></span>
       <span class="special-overlay__bot-spark spark-2"></span>
     </div>
@@ -5272,31 +5534,23 @@
         }
       };
 
-      /* Very gentle progression: no sudden rush in the middle. */
       const easeSlowRise = (t) => t * t * (3 - 2 * t);
 
       const playSpecialVideo = () => {
         try {
           overlayVideo.currentTime = 0;
-          const playPromise = overlayVideo.play();
-
-          if (playPromise && typeof playPromise.catch === "function") {
-            playPromise.catch(() => {});
-          }
+          const p = overlayVideo.play();
+          if (p && typeof p.catch === "function") p.catch(() => {});
         } catch (error) {}
       };
 
       const pauseNormalBackground = () => {
         if (!normalBackgroundVideo) return;
-
-        try {
-          normalBackgroundVideo.pause();
-        } catch (error) {}
+        try { normalBackgroundVideo.pause(); } catch (error) {}
       };
 
       const resumeNormalBackground = () => {
         if (!normalBackgroundVideo) return;
-
         try {
           const p = normalBackgroundVideo.play();
           if (p && typeof p.catch === "function") p.catch(() => {});
@@ -5322,7 +5576,7 @@
           "is-finish"
         );
 
-        overlay.removeAttribute("style");
+        overlay.style.removeProperty("--special-progress");
         overlay.setAttribute("aria-hidden","true");
 
         try {
@@ -5341,41 +5595,33 @@
         document.body.classList.remove("special-reverse-running");
         document.body.classList.add("special-sequence-active");
 
-        /* SPECIAL was already visible behind the page.
-           At TOP it simply becomes the foreground — no hard cut. */
+        overlay.style.setProperty("--special-progress","1");
         overlay.classList.remove("is-prelude");
         overlay.classList.add("is-active");
         overlay.setAttribute("aria-hidden","false");
 
-        /* Let the full SPECIAL frame breathe, then drop BOT. */
         timers.push(window.setTimeout(() => {
           overlay.classList.add("is-bot-drop");
-        }, 1350));
+        }, 1200));
 
-        /* Keep BOT centered and sparkling before the white-out. */
         timers.push(window.setTimeout(() => {
           overlay.classList.add("is-finish");
-        }, 4650));
+        }, 4550));
 
         timers.push(window.setTimeout(() => {
           goInvite();
-        }, 5650));
+        }, 5600));
       };
 
       const slowReverseToTop = () => {
         const scroller = pageScroller();
         const startTop = getScrollTop(scroller);
 
-        /*
-          Slow enough to visibly travel back through the site.
-          Long pages take longer, but capped so it does not become excessive.
-        */
+        /* Deliberately slow. The user should clearly feel the page travelling upward. */
         const duration = Math.min(
-          14000,
-          Math.max(10000,6200 + startTop * 1.02)
+          15000,
+          Math.max(11000,7000 + startTop * 1.05)
         );
-
-        overlay.style.setProperty("--special-rise-duration",`${duration}ms`);
 
         const startTime = performance.now();
 
@@ -5384,9 +5630,25 @@
           const t = Math.min(1,elapsed / duration);
           const eased = easeSlowRise(t);
 
+          /* Actual upward reverse-scroll */
           setScrollTop(
             scroller,
             Math.max(0,startTop * (1 - eased))
+          );
+
+          /*
+            SPECIAL video must NOT appear before movement begins.
+            Keep the first part almost invisible, then fade it in gradually
+            during the upward journey.
+          */
+          const visibleProgress = Math.max(
+            0,
+            Math.min(1,(t - .08) / .82)
+          );
+
+          overlay.style.setProperty(
+            "--special-progress",
+            visibleProgress.toFixed(3)
           );
 
           if (t < 1) {
@@ -5413,26 +5675,22 @@
         specialCard.classList.add("is-triggered");
 
         /*
-          Immediate response:
-          1. freeze/fade the normal background
-          2. start SPECIAL video underneath the real page
-          3. slowly reverse-scroll the actual page
+          Correct order:
+          1. click -> old background immediately starts disappearing
+          2. reverse-scroll starts immediately
+          3. SPECIAL video only begins to appear during that movement
         */
         pauseNormalBackground();
 
         document.body.classList.add("special-reverse-running");
 
-        overlay.classList.add(
-          "is-prelude",
-          "is-gold"
-        );
+        overlay.style.setProperty("--special-progress","0");
+        overlay.classList.add("is-prelude","is-gold");
         overlay.setAttribute("aria-hidden","false");
 
         playSpecialVideo();
 
-        timers.push(window.setTimeout(() => {
-          slowReverseToTop();
-        },180));
+        slowReverseToTop();
       };
 
       specialCard.addEventListener("click",(event) => {
