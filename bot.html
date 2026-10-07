@@ -65,8 +65,13 @@
       object-fit:cover;
       object-position:center center;
       opacity:1;
-      filter:saturate(.68) contrast(1.03) brightness(.92);
+      filter:
+        grayscale(var(--bot-bg-grayscale,0))
+        saturate(var(--bot-bg-saturate,1))
+        contrast(var(--bot-bg-contrast,1.03))
+        brightness(var(--bot-bg-brightness,.92));
       transform:scale(1.01);
+      will-change:filter;
     }
     .bot-motion-bg::after{
       display:none;
@@ -1503,9 +1508,7 @@
   </script>
 
   <div class="bot-motion-bg" aria-hidden="true">
-    <video id="botBackgroundVideo" autoplay muted loop playsinline preload="auto">
-      <source src="./assets/bot/hero.mp4" type="video/mp4">
-    </video>
+    <video id="botBackgroundVideo" autoplay muted loop playsinline preload="auto"></video>
   </div>
 
   <header class="topbar bot-topbar">
@@ -2124,14 +2127,92 @@
 
 
   <script>
-    // 背景動画をできるだけ途切れず連続再生する。
+    // 背景動画：ページ読込ごとに5本から1本をランダム選択。
+    // TOPはカラー、スクロール中は徐々に白黒＋暗め、最下部でカラーへ戻す。
     (() => {
       const video = document.getElementById("botBackgroundVideo");
-      if (!video) return;
+      const page = document.querySelector("main.lux-page");
+      const hero = document.querySelector(".hero");
+      if (!video || !page || !hero) return;
 
+      const videos = [
+        "./assets/bot/hero.mp4",
+        "./assets/bot/hero1.mp4",
+        "./assets/bot/hero2.mp4",
+        "./assets/bot/hero3.mp4",
+        "./assets/bot/hero4.mp4"
+      ];
+
+      const selectedVideo = videos[Math.floor(Math.random() * videos.length)];
+      video.src = selectedVideo;
       video.muted = true;
       video.loop = true;
       video.playsInline = true;
+
+      const clamp01 = (value) => Math.max(0, Math.min(1, value));
+      const mix = (from, to, amount) => from + (to - from) * amount;
+
+      function getScrollState() {
+        const pageIsScroller = page.scrollHeight > page.clientHeight + 2
+          && getComputedStyle(page).overflowY !== "visible";
+
+        if (pageIsScroller) {
+          return {
+            top:page.scrollTop,
+            viewport:page.clientHeight,
+            max:Math.max(0, page.scrollHeight - page.clientHeight)
+          };
+        }
+
+        const doc = document.documentElement;
+        const body = document.body;
+        const top = window.scrollY || doc.scrollTop || body.scrollTop || 0;
+        const fullHeight = Math.max(
+          doc.scrollHeight, body.scrollHeight,
+          doc.offsetHeight, body.offsetHeight,
+          doc.clientHeight
+        );
+
+        return {
+          top,
+          viewport:window.innerHeight || doc.clientHeight,
+          max:Math.max(0, fullHeight - (window.innerHeight || doc.clientHeight))
+        };
+      }
+
+      function updateBackgroundTone() {
+        const state = getScrollState();
+        const heroHeight = Math.max(1, hero.getBoundingClientRect().height || state.viewport);
+
+        // TOPを離れる約0.85画面で、カラーから白黒＋暗めへ移行。
+        const intoPage = clamp01(state.top / (heroHeight * .85));
+
+        // 最下部の約1.05画面手前から、白黒＋暗めからカラーへ復帰。
+        const distanceToBottom = Math.max(0, state.max - state.top);
+        const beforeBottom = clamp01(distanceToBottom / Math.max(1, state.viewport * 1.05));
+
+        const effect = Math.min(intoPage, beforeBottom);
+        const grayscale = effect;
+        const saturate = mix(1, .20, effect);
+        const brightness = mix(.92, .42, effect);
+        const contrast = mix(1.03, 1.10, effect);
+
+        video.style.setProperty("--bot-bg-grayscale", grayscale.toFixed(3));
+        video.style.setProperty("--bot-bg-saturate", saturate.toFixed(3));
+        video.style.setProperty("--bot-bg-brightness", brightness.toFixed(3));
+        video.style.setProperty("--bot-bg-contrast", contrast.toFixed(3));
+      }
+
+      let toneFrame = 0;
+      const requestToneUpdate = () => {
+        cancelAnimationFrame(toneFrame);
+        toneFrame = requestAnimationFrame(updateBackgroundTone);
+      };
+
+      page.addEventListener("scroll", requestToneUpdate, { passive:true });
+      window.addEventListener("scroll", requestToneUpdate, { passive:true });
+      window.addEventListener("resize", requestToneUpdate, { passive:true });
+      window.addEventListener("orientationchange", () => window.setTimeout(requestToneUpdate, 180), { passive:true });
 
       const keepPlaying = () => {
         if (document.hidden) return;
@@ -2156,8 +2237,13 @@
       document.addEventListener("visibilitychange", () => {
         if (!document.hidden) keepPlaying();
       });
-      window.addEventListener("pageshow", keepPlaying);
+      window.addEventListener("pageshow", () => {
+        keepPlaying();
+        requestToneUpdate();
+      });
 
+      video.load();
+      requestToneUpdate();
       keepPlaying();
     })();
   </script>
