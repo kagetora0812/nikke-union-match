@@ -2740,35 +2740,27 @@
     }
 
     /* =========================================================
-       SPECIAL SEQUENCE — FINAL REWRITE
-       click
-       -> old background fades
-       -> REAL page/text scrolls upward visibly
-       -> SPECIAL video fades in BEHIND page content
-       -> at TOP SPECIAL video comes to front
-       -> BOT PNG drops over SPECIAL video
-       -> navigate with BOTH still visible
+       SPECIAL SEQUENCE — SIMPLE / STABLE
        ========================================================= */
 
-    .bot-motion-bg video{
-      transition:opacity .28s linear !important;
+    body.special-running{
+      background:#000 !important;
     }
 
     body.special-running .bot-motion-bg video{
       opacity:0 !important;
+      transition:opacity .18s linear !important;
     }
 
-    /* During the rise, keep the actual page/text ABOVE the SPECIAL video. */
+    /* Keep page content visible during the real upward scroll. */
     body.special-running .lux-page,
     body.special-running .topbar,
     body.special-running .bot-pc-home,
     body.special-running .subpage-bottom-nav{
-      position:relative;
-      z-index:20 !important;
       opacity:1 !important;
       visibility:visible !important;
-      transform:none !important;
       filter:none !important;
+      transform:none !important;
     }
 
     .special-overlay{
@@ -2776,26 +2768,23 @@
       inset:0;
       width:100vw;
       height:100vh;
+      z-index:4;
       overflow:hidden;
       visibility:hidden;
       opacity:0;
       pointer-events:none;
-      z-index:5;
-      background:transparent;
+      background:#000;
     }
 
-    /* While scrolling upward, video stays behind page content. */
     .special-overlay.is-rising{
       visibility:visible;
       opacity:var(--special-opacity,0);
-      z-index:5;
     }
 
-    /* At TOP, bring the SAME video to the foreground. */
     .special-overlay.is-front{
+      z-index:1400;
       visibility:visible;
       opacity:1;
-      z-index:1400;
     }
 
     .special-overlay__video{
@@ -2809,7 +2798,7 @@
       visibility:visible !important;
       filter:none !important;
       transform:none !important;
-      background:transparent !important;
+      background:#000;
     }
 
     .special-overlay__bot-wrap{
@@ -2826,7 +2815,7 @@
 
     .special-overlay.is-bot-drop .special-overlay__bot-wrap{
       opacity:1;
-      animation:specialBotDropFinal .82s cubic-bezier(.18,.82,.25,1) forwards;
+      animation:specialBotDropSimple .78s cubic-bezier(.18,.82,.25,1) forwards;
     }
 
     .special-overlay__bot-img{
@@ -2834,21 +2823,13 @@
       width:min(58vw,760px);
       max-height:64vh;
       object-fit:contain;
-      opacity:1 !important;
       filter:none !important;
       box-shadow:none !important;
-      transform:none;
     }
 
-    @keyframes specialBotDropFinal{
-      from{
-        opacity:1;
-        transform:translateY(-130vh);
-      }
-      to{
-        opacity:1;
-        transform:translateY(0);
-      }
+    @keyframes specialBotDropSimple{
+      from{opacity:1;transform:translateY(-130vh)}
+      to{opacity:1;transform:translateY(0)}
     }
 
   </style>
@@ -3839,6 +3820,7 @@
       const video = document.getElementById("specialOverlayVideo");
       const botWrap = overlay?.querySelector(".special-overlay__bot-wrap");
       const normalVideo = document.getElementById("botBackgroundVideo");
+      const stayConnected = document.getElementById("stayConnected");
       const inviteUrl = "https://discord.com/oauth2/authorize?client_id=1548613088557793370&scope=bot%20applications.commands";
 
       if (!card || !overlay || !video || !botWrap) return;
@@ -3898,10 +3880,7 @@
         try {
           video.currentTime = 0;
           const p = video.play();
-
-          if (p && typeof p.catch === "function") {
-            p.catch(() => {});
-          }
+          if (p && typeof p.catch === "function") p.catch(() => {});
         } catch (_) {}
       };
 
@@ -3909,22 +3888,25 @@
         window.location.href = inviteUrl;
       };
 
-      const dropBotAndGo = () => {
-        const onDropEnd = (event) => {
-          if (event.animationName !== "specialBotDropFinal") return;
-          botWrap.removeEventListener("animationend",onDropEnd);
+      const getStayTop = () => {
+        if (!stayConnected) return 0;
+        const rect = stayConnected.getBoundingClientRect();
+        return window.scrollY + rect.top;
+      };
 
-          /* Keep SPECIAL video + BOT PNG exactly as-is and navigate now. */
+      const dropBotAndGo = () => {
+        const onEnd = (event) => {
+          if (event.animationName !== "specialBotDropSimple") return;
+          botWrap.removeEventListener("animationend",onEnd);
           goInvite();
         };
 
-        botWrap.addEventListener("animationend",onDropEnd);
+        botWrap.addEventListener("animationend",onEnd);
         overlay.classList.add("is-bot-drop");
 
-        /* Safety fallback only; normally animationend fires first. */
         window.setTimeout(() => {
           if (running) goInvite();
-        },1100);
+        },1000);
       };
 
       const startSequence = () => {
@@ -3939,17 +3921,17 @@
         card.classList.add("is-triggered");
 
         const scroller = getScroller();
-        const originalTop = getTop(scroller);
+        const startTopRaw = getTop(scroller);
 
         /*
-          BUTTON PRESS:
-          Make the REAL page move immediately.
-          Do this before video playback/decoding.
+          Immediate visible response on the click itself.
+          Move first, before doing any media work.
         */
-        const kick = Math.min(34,Math.max(18,originalTop * .006));
-        setTop(scroller,Math.max(0,originalTop - kick));
+        const instantKick = Math.min(42,Math.max(24,startTopRaw * .008));
+        setTop(scroller,Math.max(0,startTopRaw - instantKick));
 
         const startTop = getTop(scroller);
+        const stayTop = getStayTop();
 
         document.body.classList.add("special-running");
 
@@ -3957,19 +3939,13 @@
         overlay.classList.add("is-rising");
         overlay.setAttribute("aria-hidden","false");
 
-        if (normalVideo) {
-          requestAnimationFrame(() => {
-            try { normalVideo.pause(); } catch (_) {}
-          });
-        }
-
         /*
-          Keep the rise clearly visible, but not painfully slow.
-          6.2–7.4 seconds depending on distance.
+          Real upward motion.
+          5.8–7.0 sec depending on distance.
         */
         const duration = Math.min(
-          7400,
-          Math.max(6200,5000 + startTop * .32)
+          7000,
+          Math.max(5800,4600 + startTop * .30)
         );
 
         const startedAt = performance.now();
@@ -3978,30 +3954,25 @@
           const elapsed = now - startedAt;
           const t = Math.min(1,elapsed / duration);
 
-          /*
-            Linear REAL reverse scroll:
-            text/cards visibly travel upward the whole time.
-          */
-          setTop(scroller,startTop * (1 - t));
+          const currentTop = startTop * (1 - t);
+          setTop(scroller,currentTop);
 
           /*
-            Do not let video work block the initial click.
-            Start it only after the page is already moving.
+            Start fading only once we reach the STAY CONNECTED area.
+            Until then the background is simply black.
           */
-          if (!videoStarted && elapsed >= 120) {
-            startVideo();
+          const fadeStartTop = Math.max(0,stayTop);
+          let opacity = 0;
+
+          if (currentTop <= fadeStartTop) {
+            const denom = Math.max(1,fadeStartTop);
+            opacity = 1 - (currentTop / denom);
+            opacity = Math.max(0,Math.min(1,opacity));
+
+            if (!videoStarted) {
+              startVideo();
+            }
           }
-
-          /*
-            SPECIAL video fades in BEHIND the moving page.
-            Starts after movement is obvious, reaches 100% quickly.
-          */
-          const fadeStartMs = 180;
-          const fadeDurationMs = 900;
-          const opacity = Math.max(
-            0,
-            Math.min(1,(elapsed - fadeStartMs) / fadeDurationMs)
-          );
 
           overlay.style.setProperty(
             "--special-opacity",
@@ -4016,24 +3987,28 @@
           rafId = 0;
           setTop(scroller,0);
 
-          /*
-            TOP reached:
-            same SPECIAL video moves to foreground.
-            It NEVER disappears or turns black.
-          */
+          startVideo();
+
           overlay.style.setProperty("--special-opacity","1");
           overlay.classList.remove("is-rising");
           overlay.classList.add("is-front");
 
-          /*
-            Drop BOT PNG over the still-playing SPECIAL video.
-          */
           requestAnimationFrame(() => {
             dropBotAndGo();
           });
         };
 
         rafId = requestAnimationFrame(frame);
+
+        /*
+          Fade old background after movement has already been kicked.
+          No waiting for video decoding.
+        */
+        requestAnimationFrame(() => {
+          if (normalVideo) {
+            try { normalVideo.pause(); } catch (_) {}
+          }
+        });
       };
 
       card.addEventListener("click",(event) => {
