@@ -21,9 +21,9 @@
       --text:#f6f8fb;
       --muted:#a9b0ba;
       --muted2:#7b838d;
-      --cyan:#FF0030;
-      --cyan2:#FF4D68;
-      --purple:#FF7188;
+      --cyan:#28C0FC;
+      --cyan2:#8EDCFF;
+      --purple:#5B8CFF;
       --green:#72e0ad;
       --header-h:64px;
       --bottom-h:68px;
@@ -56,7 +56,7 @@
       overflow:hidden;
       pointer-events:none;
       background:
-        radial-gradient(circle at 70% 20%,rgba(255,0,48,.05),transparent 34%),
+        radial-gradient(circle at 70% 20%,rgba(40,192,252,.05),transparent 34%),
         #050609;
     }
     .bot-motion-bg video{
@@ -107,8 +107,8 @@
       content:"";
       width:5px;
       height:22px;
-      background:#ff4d5d;
-      box-shadow:0 0 16px rgba(255,77,93,.22);
+      background:#5B8CFF;
+      box-shadow:0 0 16px rgba(91,140,255,.22);
     }
     .site-menu-button{
       width:46px;
@@ -214,7 +214,7 @@
       height:44px;
       display:grid;
       place-items:center;
-      border:1px solid rgba(255,0,48,.52);
+      border:1px solid rgba(40,192,252,.52);
       background:rgba(4,9,13,.42);
       color:#e8f8ff;
       text-decoration:none;
@@ -224,8 +224,8 @@
       transition:.2s ease;
     }
     .bot-pc-home:hover{
-      border-color:#FF0030;
-      background:rgba(255,0,48,.12);
+      border-color:#28C0FC;
+      background:rgba(40,192,252,.12);
     }
 
 
@@ -269,13 +269,13 @@
 
     .hero-scroll-guide:hover,
     .hero-scroll-guide:focus-visible{
-      color:#FF4D68;
+      color:#8EDCFF;
       outline:none;
     }
 
     .hero-scroll-guide:hover b,
     .hero-scroll-guide:focus-visible b{
-      color:#FF4D68;
+      color:#8EDCFF;
     }
 
     @keyframes botHeroScrollCue{
@@ -380,13 +380,11 @@
       background:
         linear-gradient(
           90deg,
-          #ff003c 0%,
-          #ff7a00 16%,
-          #ffe600 32%,
-          #22d66f 48%,
-          #00c8ff 64%,
-          #5555ff 80%,
-          #ff00c8 100%
+          #1FB6F5 0%,
+          #28C0FC 38%,
+          #FFFFFF 50%,
+          #8EDCFF 62%,
+          #5B8CFF 100%
         );
       background-size:300% 100%;
 
@@ -458,7 +456,7 @@
       font-weight:700;
       line-height:.92;
       letter-spacing:.055em;
-      color:#FF0030;
+      color:#28C0FC;
       text-transform:uppercase;
     }
     .section-ja{
@@ -477,91 +475,67 @@
       justify-content:center;
     }
     .stay-copy{
-      width:min(760px,78%);
+      width:min(900px,86%);
     }
-    .stay-toggle{
-      margin:4px 0 26px;
-      display:flex;
-      align-items:center;
-      flex-wrap:wrap;
-      gap:22px;
+    .stay-lead{
+      margin:4px 0 20px;
       color:#fff;
-      font-size:clamp(34px,5vw,66px);
+      font-size:clamp(32px,4.8vw,62px);
       font-weight:900;
-      line-height:1.15;
+      line-height:1.14;
       letter-spacing:-.035em;
+      text-shadow:0 2px 14px rgba(0,0,0,.32);
     }
-    .stay-toggle .swap{
-      position:relative;
-      color:#E5485B;
-      font-family:"Teko",sans-serif;
-      font-size:.9em;
-      font-weight:600;
-      line-height:1;
-      display:inline-block;
-      vertical-align:middle;
-      text-shadow:none;
-    }
-    .stay-toggle .swap::before,
-    .stay-toggle .swap::after{
-      content:"⇄";
-      position:absolute;
-      inset:0;
-      color:#FF0000;
-      -webkit-text-fill-color:#FF0000;
-      pointer-events:none;
-      opacity:0;
-    }
-    .stay-toggle .swap::before{
-      clip-path:inset(0 0 50% 0);
-      animation:swapTopRhythm 1.2s steps(1,end) infinite;
-    }
-    .stay-toggle .swap::after{
-      clip-path:inset(50% 0 0 0);
-      animation:swapBottomRhythm 1.2s steps(1,end) infinite;
-    }
-    @keyframes swapTopRhythm{
-      0%,49.999%{
-        opacity:1;
-        text-shadow:0 0 5px #FF0000,0 0 14px rgba(255,0,0,.78);
-        filter:brightness(1.5);
-      }
-      50%,100%{
-        opacity:0;
-        text-shadow:none;
-        filter:none;
-      }
-    }
-    @keyframes swapBottomRhythm{
-      0%,49.999%{
-        opacity:0;
-        text-shadow:none;
-        filter:none;
-      }
-      50%,100%{
-        opacity:1;
-        text-shadow:0 0 5px #FF0000,0 0 14px rgba(255,0,0,.78);
-        filter:brightness(1.5);
-      }
-    }
-    .stay-copy p{
+    .stay-intro{
+      max-width:780px;
       margin:0;
       color:rgba(255,255,255,.92);
       font-size:15px;
-      line-height:2.02;
+      line-height:2;
       font-weight:800;
-      text-shadow:0 2px 10px rgba(0,0,0,.24);
+      text-shadow:0 2px 10px rgba(0,0,0,.28);
     }
-    .stay-copy strong{
-      color:#ffffff;
-      font-weight:900;
-      text-shadow:0 2px 12px rgba(0,0,0,.28);
+    .stay-use-grid{
+      display:grid;
+      grid-template-columns:repeat(2,minmax(0,1fr));
+      gap:14px;
+      margin-top:30px;
     }
-    .stay-bot-note{
-      margin-top:26px!important;
-      padding-top:20px;
-      border-top:1px solid rgba(255,255,255,.20);
-      color:#f5fcff!important;
+    .stay-use-card{
+      min-height:176px;
+      padding:22px 22px 20px;
+      border:1px solid rgba(40,192,252,.34);
+      border-top:2px solid #28C0FC;
+      background:linear-gradient(145deg,rgba(15,21,29,.80),rgba(6,10,15,.68));
+      box-shadow:inset 0 1px 0 rgba(255,255,255,.035),0 18px 50px rgba(0,0,0,.18);
+      backdrop-filter:blur(12px) saturate(112%);
+      -webkit-backdrop-filter:blur(12px) saturate(112%);
+    }
+    .stay-use-kicker{
+      color:#8EDCFF;
+      font:700 14px/1 "Teko",sans-serif;
+      letter-spacing:.16em;
+    }
+    .stay-use-card h3{
+      margin:10px 0 0;
+      color:#fff;
+      font-size:20px;
+      line-height:1.4;
+    }
+    .stay-use-card p{
+      margin:10px 0 0;
+      color:#b8c2cc;
+      font-size:12px;
+      line-height:1.85;
+      font-weight:700;
+    }
+    .stay-registration-note{
+      margin:24px 0 0;
+      padding-top:18px;
+      border-top:1px solid rgba(255,255,255,.18);
+      color:#f5fcff;
+      font-size:13px;
+      line-height:1.8;
       font-weight:900;
       text-shadow:0 2px 14px rgba(0,0,0,.30);
     }
@@ -594,7 +568,7 @@
       display:flex;
       flex-direction:column;
       border:1px solid transparent;
-      border-image:linear-gradient(135deg,#FF0030 0%,#FF3657 50%,#FF7188 100%) 1;
+      border-image:linear-gradient(135deg,#28C0FC 0%,#1FB6F5 50%,#8EDCFF 100%) 1;
       background:linear-gradient(145deg,rgba(17,22,29,.78),rgba(6,9,14,.63));
       box-shadow:inset 0 1px 0 rgba(255,255,255,.035),0 18px 50px rgba(0,0,0,.18);
       backdrop-filter:blur(12px) saturate(112%);
@@ -611,7 +585,7 @@
       left:0;
       right:0;
       height:1px;
-      background:linear-gradient(90deg,#FF0030 0%,#FF3657 52%,#FF7188 100%);
+      background:linear-gradient(90deg,#28C0FC 0%,#1FB6F5 52%,#8EDCFF 100%);
       pointer-events:none;
     }
     /* Moving highlight. */
@@ -627,13 +601,13 @@
       transform:translateX(-125%);
       background:linear-gradient(90deg,
         transparent 0%,
-        #FF0030 18%,
-        #FF0000 42%,
+        #28C0FC 18%,
+        #28C0FC 42%,
         #FFFFFF 52%,
-        #FF0000 62%,
-        #FF3657 80%,
+        #28C0FC 62%,
+        #1FB6F5 80%,
         transparent 100%);
-      box-shadow:0 0 10px rgba(255,0,0,.52);
+      box-shadow:0 0 10px rgba(40,192,252,.52);
       pointer-events:none;
       will-change:transform,opacity;
     }
@@ -641,7 +615,7 @@
       .feature-card:hover{
         transform:translateY(-5px);
         background:linear-gradient(145deg,rgba(19,27,35,.84),rgba(7,11,16,.68));
-        box-shadow:inset 0 1px 0 rgba(255,255,255,.035),0 22px 55px rgba(0,0,0,.24),0 0 18px rgba(255,0,48,.08);
+        box-shadow:inset 0 1px 0 rgba(255,255,255,.035),0 22px 55px rgba(0,0,0,.24),0 0 18px rgba(40,192,252,.08);
       }
       .feature-card:hover::after{
         opacity:1;
@@ -1061,8 +1035,8 @@
         font:800 21px/.9 "Teko",sans-serif;
       }
       .bot-bottom-nav>a:nth-child(2){
-        background:rgba(255,0,48,.10);
-        box-shadow:inset 0 2px 0 rgba(255,0,48,.78);
+        background:rgba(40,192,252,.10);
+        box-shadow:inset 0 2px 0 rgba(40,192,252,.78);
       }
     }
 
@@ -1142,11 +1116,13 @@
 
       .stay-section{min-height:70vh}
       .stay-copy{width:100%}
-      .stay-toggle{
-        gap:12px;
-        font-size:clamp(31px,11vw,46px);
-      }
-      .stay-copy p{font-size:13.5px;line-height:1.92;font-weight:800}
+      .stay-lead{font-size:clamp(30px,10vw,44px)}
+      .stay-intro{font-size:13.5px;line-height:1.9}
+      .stay-use-grid{grid-template-columns:1fr;gap:12px;margin-top:24px}
+      .stay-use-card{min-height:0;padding:18px 17px}
+      .stay-use-card h3{font-size:18px}
+      .stay-use-card p{font-size:12px;line-height:1.78}
+      .stay-registration-note{font-size:12.5px}
 
       .character-grid{
         display:flex;
@@ -1207,21 +1183,21 @@
        ========================================================= */
 
     /* Red accents that were originally hard-coded cyan. */
-    .cmd{color:#FF4D68}
-    .first-tag{background:#FF4D68;color:#120609}
-    .copy-command{border-color:rgba(255,0,48,.40)}
+    .cmd{color:#8EDCFF}
+    .first-tag{background:#8EDCFF;color:#120609}
+    .copy-command{border-color:rgba(40,192,252,.40)}
     .copy-command:hover{
-      border-color:#FF0030;
-      background:rgba(255,0,48,.12);
-      box-shadow:0 0 24px rgba(255,0,48,.08);
+      border-color:#28C0FC;
+      background:rgba(40,192,252,.12);
+      box-shadow:0 0 24px rgba(40,192,252,.08);
     }
     .feature-no,
-    .slider-status{color:#FF4D68}
-    .feature-shared{border-left-color:rgba(255,0,48,.76)}
-    .profile-demo-avatar{background:linear-gradient(135deg,#FF0030,#FF7188)}
+    .slider-status{color:#8EDCFF}
+    .feature-shared{border-left-color:rgba(40,192,252,.76)}
+    .profile-demo-avatar{background:linear-gradient(135deg,#28C0FC,#8EDCFF)}
     .profile-actions span{
-      border-color:rgba(255,0,48,.28);
-      background:rgba(255,0,48,.08);
+      border-color:rgba(40,192,252,.28);
+      background:rgba(40,192,252,.08);
       color:#fff4f6;
     }
 
@@ -1247,7 +1223,7 @@
       display:grid;
       place-items:center;
       padding:0 0 3px;
-      border:1px solid rgba(255,0,48,.44);
+      border:1px solid rgba(40,192,252,.44);
       border-radius:999px;
       background:rgba(5,12,18,.20);
       color:#f7fdff;
@@ -1260,8 +1236,8 @@
     .slider-arrow:hover,
     .slider-arrow:focus-visible{
       transform:translateY(-1px);
-      border-color:#FF0030;
-      background:rgba(255,0,48,.11);
+      border-color:#28C0FC;
+      background:rgba(40,192,252,.11);
       outline:none;
     }
     .slider-arrow:disabled{
@@ -1586,24 +1562,33 @@
     <section class="lux-section stay-section" id="stayConnected">
       <header class="section-heading reveal-up">
         <div class="section-en">STAY CONNECTED</div>
-        <div class="section-ja">UNION MATCHを継続して利用するために</div>
+        <div class="section-ja">Discord BOTの使い方は自由です。</div>
       </header>
 
       <div class="stay-copy reveal-up" style="--delay:90ms">
-        <div class="stay-toggle">
-          <span>募集中</span>
-          <span class="swap" aria-label="切り替え">⇄</span>
-          <span>登録のみ</span>
-        </div>
+        <h2 class="stay-lead">募集しなくても、BOTだけ利用できます。</h2>
 
-        <p>
-          メンバーを募集するときは<strong>「募集中」</strong>。<br>
-          募集していない期間は<strong>「登録のみ」</strong>。<br>
-          状況に合わせて切り替えながら、UNION MATCHを継続して利用できます。
+        <p class="stay-intro">
+          UNION MATCHでユニオンメンバーを募集していなくても、Discord BOTだけ利用できます。<br>
+          ユニオンレイド・ソロレイド・協同作戦など、NIKKEのイベント情報をDiscordへ自動でお知らせします。
         </p>
 
-        <p class="stay-bot-note">
-          Discord BOTを利用するには、UNION MATCHへのユニオン登録が必要です。
+        <div class="stay-use-grid" aria-label="Discord BOTの利用方法">
+          <article class="stay-use-card">
+            <div class="stay-use-kicker">EVENT NOTIFICATION</div>
+            <h3>イベント通知だけ使いたい</h3>
+            <p>ユニオンメンバーを募集していなくても利用できます。NIKKEのイベント情報を、いつものDiscordで確認できます。</p>
+          </article>
+
+          <article class="stay-use-card">
+            <div class="stay-use-kicker">UNION MATCH + BOT</div>
+            <h3>メンバー募集も利用したい</h3>
+            <p>UNION MATCHの募集と組み合わせると、募集通知・掲載期限通知・ユニオン管理などの機能も利用できます。</p>
+          </article>
+        </div>
+
+        <p class="stay-registration-note">
+          Discord BOTを利用するには、UNION MATCHへのユニオン登録が必要です。募集掲載は必要ありません。
         </p>
       </div>
     </section>
