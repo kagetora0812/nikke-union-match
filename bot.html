@@ -1587,6 +1587,97 @@
     }
 
 
+  
+    /* ---------- final hierarchy tuning ---------- */
+
+    /* Keep English section title + subcopy tighter. */
+    .intro-section .section-heading,
+    .stay-section .section-heading,
+    .union-bot-section .section-heading{
+      margin-bottom:10px;
+    }
+
+    /* UNION MATCH + BOT should read as the strongest chapter title. */
+    .union-bot-section .section-en{
+      font-size:clamp(54px,6.2vw,82px);
+      line-height:.9;
+    }
+
+    /* The subcopy sits close to the English heading. */
+    .union-bot-section .section-ja{
+      margin-top:5px;
+    }
+
+    /* Then create a clearer break before the Japanese main heading. */
+    .union-bot-lead{
+      margin-top:26px;
+      margin-bottom:15px;
+    }
+
+    /* Keep STAY CONNECTED Japanese heading compact. */
+    .stay-lead{
+      margin-top:20px;
+    }
+
+    /* Inline emphasis uses a lighter blue than the section headings. */
+    .inline-accent{
+      color:#8EDCFF;
+      font-weight:900;
+    }
+
+    .stay-api-note{
+      margin-top:22px!important;
+      padding-top:18px;
+      border-top:1px solid rgba(255,255,255,.16);
+    }
+
+    .stay-closing{
+      margin-top:18px!important;
+    }
+
+    @media (max-width:1024px){
+      .union-bot-section .section-en{
+        font-size:clamp(40px,7.1vw,58px);
+      }
+      .union-bot-lead{
+        margin-top:22px;
+      }
+      .stay-lead{
+        margin-top:17px;
+      }
+    }
+
+    @media (max-width:600px){
+      .intro-section .section-heading,
+      .stay-section .section-heading,
+      .union-bot-section .section-heading{
+        margin-bottom:7px;
+      }
+
+      .union-bot-section .section-en{
+        font-size:clamp(34px,10.2vw,42px);
+        white-space:nowrap;
+      }
+
+      .union-bot-section .section-ja{
+        margin-top:3px;
+      }
+
+      .union-bot-lead{
+        margin-top:19px;
+        margin-bottom:13px;
+      }
+
+      .stay-lead{
+        margin-top:16px;
+      }
+
+      .stay-api-note{
+        margin-top:18px!important;
+        padding-top:15px;
+      }
+    }
+
   </style>
 
   <script>
@@ -1821,7 +1912,7 @@
       </header>
 
       <div class="stay-copy">
-        <h2 class="stay-lead reveal-up" style="--delay:60ms">イベント情報を、探しに行かなくていい。<br></h2>
+        <h2 class="stay-lead reveal-up" style="--delay:60ms">イベント情報を、Discordへ。<br></h2>
 
         <p class="reveal-up" style="--delay:110ms">
           <strong>NIKKE公式JP Discordのログインイベント</strong>をお知らせ。<br>
@@ -1835,10 +1926,14 @@
         </p>
 
         <p class="stay-api-note reveal-up" style="--delay:260ms">
-          Xの情報を自動取得してDiscordへ通知する無料BOTは、探しても選択肢がかなり限られます。<br>UNION MATCH BOTでは、利用するユニオン側でX APIを用意する必要はありません。<br>
+          <strong class="inline-accent">無料で使える自動通知BOTは、まだ多くありません。</strong><br>
+          Xの情報を自動取得してDiscordへ届けるサービスは、有料のものも多く、無料で利用できる選択肢は限られています。<br>
+          <strong class="inline-accent">UNION MATCH BOTは、利用するユニオン側でX APIを用意する必要もなく、無料で利用できます。</strong>
         </p>
 
-        <p class="stay-closing reveal-up" style="--delay:310ms">必要なNIKKE情報を自動で取得して、いつものDiscordへ。<br></p>
+        <p class="stay-closing reveal-up" style="--delay:310ms">
+          <strong class="inline-accent">イベント情報も、募集情報も。必要な情報を、いつものDiscordへ。</strong>
+        </p>
       </div>
     </section>
 
@@ -1851,7 +1946,8 @@
       <div class="union-bot-copy">
         <h2 class="union-bot-lead reveal-up" style="--delay:60ms">募集情報も、ユニオンを探している指揮官もDiscordで。<br></h2>
         <p class="union-bot-summary reveal-up" style="--delay:110ms">
-          UNION MATCHでメンバー募集をしているユニオンは、<strong>UNION MATCHに登録された募集情報</strong>と、<strong>Xでユニオンを探している指揮官情報</strong>をDiscordで確認できます。<br>サイトやXを何度も見に行く必要はありません。<br>
+          <strong>UNION MATCHでメンバー募集をしているユニオンは、UNION MATCHに登録された募集情報と、Xでユニオンを探している指揮官情報をDiscordで確認できます。</strong><br>
+          <strong>サイトやXを何度も見に行く必要はありません。</strong>
         </p>
 
         <div class="union-bot-flow">
