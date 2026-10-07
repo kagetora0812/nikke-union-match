@@ -2292,6 +2292,228 @@
       }
     }
 
+  
+    /* =========================================================
+       COMMANDS POSITION FIX + /channelcheck + BOTTOM INVITE
+       ========================================================= */
+
+    /* COMMANDS: keep cards locked to the grid. */
+    .command-grid{
+      align-items:stretch;
+    }
+
+    .command-card{
+      width:100%;
+      min-width:0;
+      transform:none !important;
+    }
+
+    /* Command cards now use only a vertical reveal, so layout never shifts sideways. */
+    .js .command-card.reveal-up{
+      opacity:0;
+      transform:translateY(26px) !important;
+    }
+
+    .js .command-card.reveal-up.is-visible{
+      opacity:1;
+      transform:translateY(0) !important;
+      transition:
+        opacity .72s cubic-bezier(.18,.76,.2,1) var(--delay,0ms),
+        transform .82s cubic-bezier(.18,.76,.2,1) var(--delay,0ms) !important;
+    }
+
+    /* With five commands, let the final diagnostic command use the full row on desktop. */
+    .command-card-channelcheck{
+      grid-column:1 / -1;
+      min-height:0;
+    }
+
+    /* Bottom CTA: same button as the hero, without creating another giant panel. */
+    .bottom-invite-wrap{
+      width:min(var(--content),calc(100% - 48px));
+      margin:52px auto 24px;
+      display:flex;
+      justify-content:center;
+      align-items:center;
+    }
+
+    .bottom-invite-wrap .invite-btn{
+      margin:0;
+    }
+
+    @media (max-width:760px){
+      .command-grid{
+        grid-template-columns:1fr;
+      }
+
+      .command-card-channelcheck{
+        grid-column:auto;
+      }
+    }
+
+    @media (max-width:600px){
+      .js .command-card.reveal-up{
+        transform:translateY(20px) !important;
+      }
+
+      .bottom-invite-wrap{
+        width:calc(100% - 28px);
+        margin:40px auto 18px;
+      }
+    }
+
+    @media (prefers-reduced-motion:reduce){
+      .js .command-card.reveal-up,
+      .js .command-card.reveal-up.is-visible{
+        opacity:1 !important;
+        transform:none !important;
+      }
+    }
+
+  
+    /* =========================================================
+       MOTION REFINEMENT — slower, softer, more premium
+       ========================================================= */
+
+    /* Reduce travel distance, extend duration. */
+    .js .reveal-up.motion-left{
+      opacity:0;
+      transform:translateX(-28px);
+    }
+
+    .js .reveal-up.motion-right{
+      opacity:0;
+      transform:translateX(28px);
+    }
+
+    .js .reveal-up.motion-rise{
+      opacity:0;
+      transform:translateY(26px) scale(.994);
+    }
+
+    .js .reveal-up.motion-step{
+      opacity:0;
+      transform:translateY(24px) translateX(8px) scale(.994);
+    }
+
+    .js .reveal-up.motion-left.is-visible,
+    .js .reveal-up.motion-right.is-visible,
+    .js .reveal-up.motion-rise.is-visible,
+    .js .reveal-up.motion-step.is-visible{
+      opacity:1;
+      transform:translate(0,0) scale(1);
+      transition:
+        opacity .95s cubic-bezier(.22,.72,.22,1) var(--delay,0ms),
+        transform 1.12s cubic-bezier(.22,.72,.22,1) var(--delay,0ms);
+    }
+
+    /* Editorial rows: slightly more breathing room between reveals. */
+    .feature-editorial-list .editorial-item:nth-child(1){ --delay:80ms; }
+    .feature-editorial-list .editorial-item:nth-child(2){ --delay:180ms; }
+    .feature-editorial-list .editorial-item:nth-child(3){ --delay:280ms; }
+    .feature-editorial-list .editorial-item:nth-child(4){ --delay:380ms; }
+    .feature-editorial-list .editorial-item:nth-child(5){ --delay:480ms; }
+
+    .step-editorial-list .editorial-item:nth-child(1){ --delay:90ms; }
+    .step-editorial-list .editorial-item:nth-child(2){ --delay:240ms; }
+    .step-editorial-list .editorial-item:nth-child(3){ --delay:390ms; }
+
+    /* Characters: slower and gentler. */
+    .js .character-card.reveal-up{
+      opacity:0;
+      transform:translateY(30px) scale(.982);
+    }
+
+    .js .character-card.reveal-up.is-visible{
+      opacity:1;
+      transform:translateY(0) scale(1);
+      transition:
+        opacity 1.05s cubic-bezier(.22,.72,.22,1) var(--delay,0ms),
+        transform 1.28s cubic-bezier(.22,.72,.22,1) var(--delay,0ms);
+    }
+
+    /* Commands: vertical only, slower and stable. */
+    .js .command-card.reveal-up{
+      opacity:0;
+      transform:translateY(22px) !important;
+    }
+
+    .js .command-card.reveal-up.is-visible{
+      opacity:1;
+      transform:translateY(0) !important;
+      transition:
+        opacity .9s cubic-bezier(.22,.72,.22,1) var(--delay,0ms),
+        transform 1.08s cubic-bezier(.22,.72,.22,1) var(--delay,0ms) !important;
+    }
+
+    /* Important/footer CTA motion also softened. */
+    .js .important-item.reveal-up{
+      opacity:0;
+      transform:translateY(22px);
+    }
+
+    .js .important-item.reveal-up.is-visible{
+      opacity:1;
+      transform:translateY(0);
+      transition:
+        opacity .92s cubic-bezier(.22,.72,.22,1) var(--delay,0ms),
+        transform 1.08s cubic-bezier(.22,.72,.22,1) var(--delay,0ms);
+    }
+
+    .js .reveal-up.motion-backtop{
+      opacity:0;
+      transform:translateY(24px);
+    }
+
+    .js .reveal-up.motion-backtop.is-visible{
+      opacity:1;
+      transform:translateY(0);
+      transition:
+        opacity 1s cubic-bezier(.22,.72,.22,1),
+        transform 1.16s cubic-bezier(.22,.72,.22,1);
+    }
+
+    @media (max-width:600px){
+      .js .reveal-up.motion-left{
+        transform:translateX(-18px);
+      }
+
+      .js .reveal-up.motion-right{
+        transform:translateX(18px);
+      }
+
+      .js .reveal-up.motion-rise{
+        transform:translateY(20px) scale(.996);
+      }
+
+      .js .reveal-up.motion-step{
+        transform:translateY(18px) translateX(5px) scale(.996);
+      }
+
+      .js .character-card.reveal-up{
+        transform:translateY(22px) scale(.986);
+      }
+
+      .js .command-card.reveal-up{
+        transform:translateY(18px) !important;
+      }
+    }
+
+    @media (prefers-reduced-motion:reduce){
+      .js .reveal-up.motion-left,
+      .js .reveal-up.motion-right,
+      .js .reveal-up.motion-rise,
+      .js .reveal-up.motion-step,
+      .js .character-card.reveal-up,
+      .js .command-card.reveal-up,
+      .js .important-item.reveal-up,
+      .js .reveal-up.motion-backtop{
+        opacity:1 !important;
+        transform:none !important;
+        transition:none !important;
+      }
+    }
+
   </style>
 
   <script>
@@ -2819,6 +3041,18 @@
             操作方法が分からなくなったときに、いつでも呼び出せます。
           </p>
         </article>
+
+        <article class="glass-card command-card reveal-up command-card-channelcheck" style="--delay:280ms">
+          <div class="command-top">
+            <div class="cmd">/channelcheck</div>
+            <button class="copy-command" type="button" data-copy="/channelcheck">COPY COMMAND →</button>
+          </div>
+          <h3>通知チャンネルを診断</h3>
+          <p>
+            BOTがこのチャンネルで正常に通知できるか確認します。
+            権限が不足している場合は、不足している権限をその場で確認できます。
+          </p>
+        </article>
       </div>
     </section>
 
@@ -2864,11 +3098,14 @@
     </section>
 
 
-    <div class="back-to-top-wrap reveal-up motion-backtop">
-      <a class="back-to-top-btn" href="#botTop" aria-label="BOTページのTOPへ戻る">
-        <span>BACK TO TOP</span>
-        <small>BOTページのTOPへ戻る</small>
-      </a>
+    <div class="bottom-invite-wrap reveal-up motion-backtop">
+      <a
+        class="invite-btn"
+        href="https://discord.com/oauth2/authorize?client_id=1548613088557793370&scope=bot%20applications.commands"
+        target="_blank"
+        rel="noopener noreferrer"
+        aria-label="Discord BOTを導入する"
+      ><span>BOTを導入する</span></a>
     </div>
 
     <footer class="bottom-area">
