@@ -467,77 +467,126 @@
       letter-spacing:.035em;
     }
 
-    /* ---------- STAY CONNECTED ---------- */
-    .stay-section{
+    /* ---------- INTRO / STAY CONNECTED / UNION MATCH + BOT ---------- */
+    .intro-section,
+    .stay-section,
+    .union-bot-section{
       min-height:74vh;
       display:flex;
       flex-direction:column;
       justify-content:center;
     }
-    .stay-copy{
+    .intro-copy,
+    .stay-copy,
+    .union-bot-copy{
       width:min(900px,86%);
     }
-    .stay-lead{
-      margin:4px 0 20px;
+    .intro-title,
+    .stay-lead,
+    .union-bot-lead{
+      margin:2px 0 20px;
       color:#fff;
-      font-size:clamp(32px,4.8vw,62px);
+      font-size:clamp(28px,3.5vw,48px);
       font-weight:900;
-      line-height:1.14;
-      letter-spacing:-.035em;
+      line-height:1.22;
+      letter-spacing:-.025em;
       text-shadow:0 2px 14px rgba(0,0,0,.32);
     }
-    .stay-intro{
-      max-width:780px;
+    .intro-copy p,
+    .stay-copy p,
+    .union-bot-copy p{
       margin:0;
-      color:rgba(255,255,255,.92);
-      font-size:15px;
-      line-height:2;
-      font-weight:800;
-      text-shadow:0 2px 10px rgba(0,0,0,.28);
+      color:rgba(255,255,255,.90);
+      font-size:14px;
+      line-height:1.95;
+      font-weight:700;
+      text-shadow:0 2px 10px rgba(0,0,0,.25);
     }
-    .stay-use-grid{
+    .intro-copy strong,
+    .stay-copy strong,
+    .union-bot-copy strong{
+      color:#fff;
+      font-weight:900;
+    }
+    .intro-points{
+      margin-top:26px;
       display:grid;
-      grid-template-columns:repeat(2,minmax(0,1fr));
-      gap:14px;
-      margin-top:30px;
+      gap:0;
+      border-top:1px solid rgba(255,255,255,.14);
     }
-    .stay-use-card{
-      min-height:176px;
-      padding:22px 22px 20px;
-      border:1px solid rgba(40,192,252,.34);
-      border-top:2px solid #28C0FC;
-      background:linear-gradient(145deg,rgba(15,21,29,.80),rgba(6,10,15,.68));
-      box-shadow:inset 0 1px 0 rgba(255,255,255,.035),0 18px 50px rgba(0,0,0,.18);
-      backdrop-filter:blur(12px) saturate(112%);
-      -webkit-backdrop-filter:blur(12px) saturate(112%);
+    .intro-point{
+      display:grid;
+      grid-template-columns:150px 1fr;
+      gap:22px;
+      padding:18px 0;
+      border-bottom:1px solid rgba(255,255,255,.12);
     }
-    .stay-use-kicker{
+    .intro-point b{
+      color:#8EDCFF;
+      font:700 14px/1.2 "Teko",sans-serif;
+      letter-spacing:.14em;
+    }
+    .intro-point span{
+      color:#dce5eb;
+      font-size:13px;
+      line-height:1.75;
+      font-weight:700;
+    }
+    .stay-source-line{
+      margin-top:20px!important;
+      padding-top:20px;
+      border-top:1px solid rgba(255,255,255,.14);
+    }
+    .stay-bot-only{
+      margin-top:24px!important;
+      color:#28C0FC!important;
+      font-size:15px!important;
+      line-height:1.8!important;
+      font-weight:900!important;
+      text-shadow:0 2px 12px rgba(0,0,0,.32)!important;
+    }
+    .stay-api-note{
+      margin-top:18px!important;
+      color:#c2ccd4!important;
+      font-size:12.5px!important;
+      line-height:1.85!important;
+    }
+    .stay-closing{
+      margin-top:18px!important;
+      color:#fff!important;
+      font-weight:900!important;
+    }
+    .union-bot-summary{
+      max-width:820px;
+    }
+    .union-bot-flow{
+      margin-top:28px;
+      border-top:1px solid rgba(255,255,255,.14);
+    }
+    .union-bot-item{
+      padding:22px 0;
+      border-bottom:1px solid rgba(255,255,255,.12);
+    }
+    .union-bot-kicker{
       color:#8EDCFF;
       font:700 14px/1 "Teko",sans-serif;
       letter-spacing:.16em;
     }
-    .stay-use-card h3{
-      margin:10px 0 0;
+    .union-bot-item h3{
+      margin:8px 0 8px;
       color:#fff;
       font-size:20px;
       line-height:1.4;
     }
-    .stay-use-card p{
-      margin:10px 0 0;
-      color:#b8c2cc;
-      font-size:12px;
-      line-height:1.85;
-      font-weight:700;
-    }
-    .stay-registration-note{
-      margin:24px 0 0;
-      padding-top:18px;
-      border-top:1px solid rgba(255,255,255,.18);
-      color:#f5fcff;
+    .union-bot-item p{
+      max-width:820px;
+      color:#c1cbd3;
       font-size:13px;
-      line-height:1.8;
-      font-weight:900;
-      text-shadow:0 2px 14px rgba(0,0,0,.30);
+      line-height:1.85;
+    }
+    .union-bot-accent{
+      color:#28C0FC!important;
+      font-weight:900!important;
     }
 
     /* ---------- BOT FEATURES ---------- */
@@ -1079,6 +1128,16 @@
       .step-card{min-height:0}
     }
 
+    @media (min-width:601px) and (max-width:1180px){
+      .intro-copy,.stay-copy,.union-bot-copy{width:min(860px,94%)}
+      .intro-title,.stay-lead,.union-bot-lead{font-size:clamp(28px,4.2vw,38px)}
+      .intro-copy p,.stay-copy p,.union-bot-copy p{font-size:13px;line-height:1.85}
+      .section-en{font-size:clamp(38px,6vw,54px)}
+      .section-ja{font-size:12.5px}
+      .union-bot-item h3{font-size:18px}
+      .union-bot-item p{font-size:12.5px}
+    }
+
     @media (max-width:600px){
       :root{--header-h:58px}
       .topbar{padding:0 14px}
@@ -1114,15 +1173,21 @@
         font-size:12px;
       }
 
-      .stay-section{min-height:70vh}
-      .stay-copy{width:100%}
-      .stay-lead{font-size:clamp(30px,10vw,44px)}
-      .stay-intro{font-size:13.5px;line-height:1.9}
-      .stay-use-grid{grid-template-columns:1fr;gap:12px;margin-top:24px}
-      .stay-use-card{min-height:0;padding:18px 17px}
-      .stay-use-card h3{font-size:18px}
-      .stay-use-card p{font-size:12px;line-height:1.78}
-      .stay-registration-note{font-size:12.5px}
+      .intro-section,.stay-section,.union-bot-section{min-height:0}
+      .intro-copy,.stay-copy,.union-bot-copy{width:100%}
+      .intro-title,.stay-lead,.union-bot-lead{font-size:clamp(24px,7.2vw,34px);line-height:1.24;margin-bottom:16px}
+      .intro-copy p,.stay-copy p,.union-bot-copy p{font-size:12.5px;line-height:1.82}
+      .intro-points{margin-top:20px}
+      .intro-point{grid-template-columns:1fr;gap:6px;padding:14px 0}
+      .intro-point b{font-size:12.5px}
+      .intro-point span{font-size:12px;line-height:1.7}
+      .stay-bot-only{margin-top:18px!important;font-size:13.5px!important;line-height:1.72!important}
+      .stay-api-note{font-size:11.5px!important;line-height:1.75!important}
+      .union-bot-flow{margin-top:22px}
+      .union-bot-item{padding:18px 0}
+      .union-bot-kicker{font-size:12.5px}
+      .union-bot-item h3{font-size:17px;margin-top:7px}
+      .union-bot-item p{font-size:12px;line-height:1.75}
 
       .character-grid{
         display:flex;
@@ -1551,7 +1616,7 @@
 
       <a
         class="hero-scroll-guide"
-        href="#stayConnected"
+        href="#easyStart"
         aria-label="BOTの説明を見る"
       >
         <span>SCROLL</span>
@@ -1559,37 +1624,95 @@
       </a>
     </section>
 
+    <section class="lux-section intro-section" id="easyStart">
+      <header class="section-heading reveal-up">
+        <div class="section-en">EASY TO START</div>
+        <div class="section-ja">導入前の不安を、できるだけ少なく。</div>
+      </header>
+
+      <div class="intro-copy reveal-up" style="--delay:90ms">
+        <h2 class="intro-title">はじめてでも、設定はかんたん。</h2>
+        <p>Discord BOTの導入は難しそうに見えますが、初期設定は案内に沿って進めるだけです。</p>
+
+        <div class="intro-points" aria-label="導入時のポイント">
+          <div class="intro-point">
+            <b>EASY SETUP</b>
+            <span>初期設定は案内に沿って進めるだけ。必要な項目を順番に設定できます。</span>
+          </div>
+          <div class="intro-point">
+            <b>CHANNEL CHECK</b>
+            <span>利用できない場合も、通知先チャンネルの権限など、どこで止まっているかを確認できます。</span>
+          </div>
+          <div class="intro-point">
+            <b>QUIET NOTICES</b>
+            <span>通知は通常1日1回程度を目安に、イベントや新しいキャラクター情報など必要な情報があるときだけ。必要な通知だけ選んで利用できます。</span>
+          </div>
+        </div>
+      </div>
+    </section>
+
     <section class="lux-section stay-section" id="stayConnected">
       <header class="section-heading reveal-up">
         <div class="section-en">STAY CONNECTED</div>
-        <div class="section-ja">Discord BOTの使い方は自由です。</div>
+        <div class="section-ja">NIKKEの情報を、いつものDiscordへ。</div>
       </header>
 
       <div class="stay-copy reveal-up" style="--delay:90ms">
-        <h2 class="stay-lead">募集しなくても、BOTだけ利用できます。</h2>
+        <h2 class="stay-lead">イベント情報を、探しに行かなくていい。</h2>
 
-        <p class="stay-intro">
-          UNION MATCHでユニオンメンバーを募集していなくても、Discord BOTだけ利用できます。<br>
-          ユニオンレイド・ソロレイド・協同作戦など、NIKKEのイベント情報をDiscordへ自動でお知らせします。
+        <p>
+          <strong>NIKKE公式JP Discordのログインイベント</strong>をお知らせ。
+        </p>
+        <p class="stay-source-line">
+          <strong>ユニオンレイド・ソロレイド・協同作戦・新キャラクター情報</strong>などは、NIKKE公式Xから自動取得してDiscordへ配信します。
         </p>
 
-        <div class="stay-use-grid" aria-label="Discord BOTの利用方法">
-          <article class="stay-use-card">
-            <div class="stay-use-kicker">EVENT NOTIFICATION</div>
-            <h3>イベント通知だけ使いたい</h3>
-            <p>ユニオンメンバーを募集していなくても利用できます。NIKKEのイベント情報を、いつものDiscordで確認できます。</p>
-          </article>
+        <p class="stay-bot-only">
+          メンバー募集は利用せず、Discord BOTだけを利用したいユニオンもご利用いただけます。
+        </p>
 
-          <article class="stay-use-card">
-            <div class="stay-use-kicker">UNION MATCH + BOT</div>
-            <h3>メンバー募集も利用したい</h3>
-            <p>UNION MATCHの募集と組み合わせると、募集通知・掲載期限通知・ユニオン管理などの機能も利用できます。</p>
-          </article>
+        <p class="stay-api-note">
+          Xの情報を自動取得してDiscordへ通知する無料BOTは、探しても選択肢がかなり限られます。UNION MATCH BOTでは、利用するユニオン側でX APIを用意する必要はありません。
+        </p>
+
+        <p class="stay-closing">必要なNIKKE情報を自動で取得して、いつものDiscordへ。</p>
+      </div>
+    </section>
+
+    <section class="lux-section union-bot-section" id="unionMatchBot">
+      <header class="section-heading reveal-up">
+        <div class="section-en">UNION MATCH + BOT</div>
+        <div class="section-ja">メンバー募集を、Discordでもっとスムーズに。</div>
+      </header>
+
+      <div class="union-bot-copy reveal-up" style="--delay:90ms">
+        <h2 class="union-bot-lead">募集情報も、ユニオンを探している指揮官もDiscordで。</h2>
+        <p class="union-bot-summary">
+          UNION MATCHでメンバー募集をしているユニオンは、<strong>UNION MATCHに登録された募集情報</strong>と、<strong>Xでユニオンを探している指揮官情報</strong>をDiscordで確認できます。サイトやXを何度も見に行く必要はありません。
+        </p>
+
+        <div class="union-bot-flow">
+          <section class="union-bot-item">
+            <div class="union-bot-kicker">RECRUITMENT SUPPORT</div>
+            <h3>探す募集にも、待つ募集にも。</h3>
+            <p>
+              Xでユニオンを探している指揮官へ積極的に声をかけたい場合は、BOTに届く指揮官情報を見ながらアプローチできます。積極的に勧誘しないユニオンも、<strong>UNION MATCHに掲載しておくことで、指揮官側から見つけてもらうきっかけを作れます。</strong>
+            </p>
+            <p class="union-bot-accent">勧誘しに行かなくても、見つけてもらえる場所を。</p>
+          </section>
+
+          <section class="union-bot-item">
+            <div class="union-bot-kicker">DEADLINE NOTICE</div>
+            <h3>期限前にDiscordへ通知。</h3>
+            <p>募集期限の<strong>48時間前・1時間前</strong>にお知らせ。延長・再掲載もスムーズです。</p>
+          </section>
+
+          <section class="union-bot-item">
+            <div class="union-bot-kicker">UNION MANAGEMENT</div>
+            <h3>募集していない期間も、そのまま使える。</h3>
+            <p>メンバー募集をしていない期間も、<strong>イベント通知BOTとして継続利用できます。</strong></p>
+          </section>
         </div>
-
-        <p class="stay-registration-note">
-          Discord BOTを利用するには、UNION MATCHへのユニオン登録が必要です。募集掲載は必要ありません。
-        </p>
       </div>
     </section>
 
