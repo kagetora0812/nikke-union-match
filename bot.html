@@ -2764,9 +2764,19 @@
     body.special-running .topbar,
     body.special-running .bot-pc-home,
     body.special-running .subpage-bottom-nav{
-      opacity:1 !important;
       visibility:visible !important;
       filter:none !important;
+      transition:none !important;
+    }
+
+    body.special-running .lux-page{
+      opacity:var(--site-fade,1) !important;
+    }
+
+    body.special-running .topbar,
+    body.special-running .bot-pc-home,
+    body.special-running .subpage-bottom-nav{
+      opacity:var(--site-fade,1) !important;
     }
 
     /*
@@ -3895,6 +3905,37 @@
       let specialStarted = false;
       let rafId = 0;
 
+      /*
+        Force SPECIAL looping in JavaScript too.
+        The HTML loop attribute remains, but this guarantees replay
+        even if the browser fails to honor it during the transition.
+      */
+      specialVideo.loop = true;
+
+      const forceSpecialLoop = () => {
+        try {
+          specialVideo.loop = true;
+          specialVideo.currentTime = 0;
+          const p = specialVideo.play();
+          if (p && typeof p.catch === "function") {
+            p.catch(() => {});
+          }
+        } catch (_) {}
+      };
+
+      specialVideo.addEventListener("ended", forceSpecialLoop);
+
+      specialVideo.addEventListener("timeupdate", () => {
+        const duration = specialVideo.duration;
+        if (
+          Number.isFinite(duration) &&
+          duration > 0 &&
+          specialVideo.currentTime >= duration - 0.40
+        ) {
+          forceSpecialLoop();
+        }
+      });
+
       const isDesktop = () =>
         window.matchMedia("(min-width:1025px)").matches;
 
@@ -4002,6 +4043,7 @@
           Text/cards remain because SPECIAL is still behind the page.
         */
         document.body.classList.add("special-running");
+        document.body.style.setProperty("--site-fade","1");
 
         overlay.style.setProperty("--special-opacity","0");
         overlay.classList.remove("is-front","is-bot-drop");
@@ -4049,6 +4091,23 @@
             opacity.toFixed(3)
           );
 
+          /*
+            Fade the site UI during the last ~15% of the climb.
+            This removes the abrupt "text disappears at TOP" cut.
+          */
+          const fadeOutStart = startTop * 0.15;
+          let siteFade = 1;
+
+          if (currentTop <= fadeOutStart) {
+            siteFade = currentTop / Math.max(1,fadeOutStart);
+            siteFade = Math.max(0,Math.min(1,siteFade));
+          }
+
+          document.body.style.setProperty(
+            "--site-fade",
+            siteFade.toFixed(3)
+          );
+
           if (t < 1) {
             rafId = requestAnimationFrame(frame);
             return;
@@ -4063,6 +4122,7 @@
 
           startSpecialVideo();
 
+          document.body.style.setProperty("--site-fade","0");
           overlay.style.setProperty("--special-opacity","1");
           overlay.classList.remove("is-rising");
           overlay.classList.add("is-front");
