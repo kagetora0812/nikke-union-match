@@ -40,7 +40,7 @@
       min-height:100vh;
       color:var(--text);
       background:var(--bg);
-      font-family:"Zen Kaku Gothic New",system-ui,-apple-system,"Segoe UI",sans-serif;
+      font-family:"Gothic MB101","Zen Kaku Gothic New",system-ui,-apple-system,"Segoe UI",sans-serif;
       font-weight:700;
       -webkit-font-smoothing:antialiased;
       text-rendering:optimizeLegibility;
@@ -1424,23 +1424,30 @@
       .slider-arrow{width:40px;height:40px}
     }
 
-  
     /* ---------- readability / responsive heading refinement ---------- */
     .easy-start-en{
-      display:flex;
-      flex-direction:column;
-      align-items:flex-start;
-      gap:0;
-      line-height:.82;
+      display:block;
+      white-space:nowrap;
+      line-height:.9;
     }
-    .easy-start-en span{display:block}
+
+    /* The three new sections: keep the English heading visually dominant. */
+    .intro-section .section-heading,
+    .stay-section .section-heading,
+    .union-bot-section .section-heading{
+      margin-bottom:14px;
+    }
 
     .intro-title,
     .stay-lead,
     .union-bot-lead{
+      margin:0 0 14px;
+      font-size:clamp(25px,2.65vw,36px);
+      line-height:1.28;
+      letter-spacing:-.02em;
       text-shadow:
         0 2px 4px rgba(0,0,0,.92),
-        0 0 12px rgba(0,0,0,.72);
+        0 0 12px rgba(0,0,0,.70);
     }
 
     .intro-copy p,
@@ -1449,8 +1456,8 @@
     .intro-point span,
     .union-bot-item p{
       text-shadow:
-        0 1px 3px rgba(0,0,0,.92),
-        0 0 8px rgba(0,0,0,.55);
+        0 1px 3px rgba(0,0,0,.90),
+        0 0 8px rgba(0,0,0,.52);
     }
 
     .section-en,
@@ -1458,75 +1465,127 @@
     .intro-point b,
     .union-bot-kicker{
       text-shadow:
-        0 2px 5px rgba(0,0,0,.88),
-        0 0 10px rgba(0,0,0,.52);
+        0 2px 5px rgba(0,0,0,.86),
+        0 0 10px rgba(0,0,0,.50);
+    }
+
+    /* Headline blue and inline emphasis use different tones. */
+    .section-en{
+      color:#28C0FC;
+    }
+    .intro-point b,
+    .union-bot-kicker{
+      color:#5B8CFF;
+    }
+    .stay-bot-only,
+    .union-bot-accent{
+      color:#8EDCFF!important;
+    }
+
+    /* Japanese copy follows the creator page font stack. */
+    .intro-title,
+    .stay-lead,
+    .union-bot-lead,
+    .intro-copy p,
+    .stay-copy p,
+    .union-bot-copy p,
+    .intro-point span,
+    .union-bot-item h3,
+    .union-bot-item p{
+      font-family:"Gothic MB101","Zen Kaku Gothic New",sans-serif;
     }
 
     @media (max-width:1024px){
+      .intro-section .section-heading,
+      .stay-section .section-heading,
+      .union-bot-section .section-heading{
+        margin-bottom:11px;
+      }
+
       .section-en{
-        font-size:clamp(36px,6.2vw,52px);
+        font-size:clamp(34px,5.5vw,48px);
       }
+
       .easy-start-en{
-        font-size:clamp(34px,6vw,48px);
+        font-size:clamp(33px,5.3vw,46px);
       }
+
       .intro-title,
       .stay-lead,
       .union-bot-lead{
-        font-size:clamp(24px,4.4vw,34px);
-        line-height:1.28;
+        margin-bottom:12px;
+        font-size:clamp(21px,3.2vw,28px);
+        line-height:1.32;
       }
     }
 
     @media (max-width:600px){
+      .intro-section .section-heading,
+      .stay-section .section-heading,
+      .union-bot-section .section-heading{
+        margin-bottom:9px;
+      }
+
       .section-en{
-        font-size:clamp(31px,10.5vw,42px);
+        font-size:clamp(30px,9vw,37px);
         line-height:.9;
       }
+
       .easy-start-en{
-        font-size:clamp(30px,10vw,39px);
-        line-height:.82;
+        font-size:clamp(29px,8.7vw,36px);
+        white-space:nowrap;
       }
+
       .section-ja{
-        margin-top:9px;
-        font-size:11px;
-        line-height:1.6;
+        margin-top:6px;
+        font-size:10.5px;
+        line-height:1.55;
       }
+
       .intro-title,
       .stay-lead,
       .union-bot-lead{
-        font-size:clamp(21px,6.4vw,27px);
-        line-height:1.34;
-        letter-spacing:-.018em;
+        margin-bottom:11px;
+        font-size:clamp(18px,5.4vw,22px);
+        line-height:1.38;
+        letter-spacing:-.014em;
       }
+
       .intro-copy p,
       .stay-copy p,
       .union-bot-copy p{
         font-size:12.5px;
         line-height:1.82;
       }
+
       .stay-bot-only{
-        font-size:13.5px!important;
+        font-size:13px!important;
         line-height:1.72!important;
       }
+
       .union-bot-item h3{
-        font-size:17px;
+        font-size:16.5px;
         line-height:1.45;
       }
+
       .union-bot-kicker,
       .intro-point b{
         font-size:12px;
       }
+
       .intro-point{
         grid-template-columns:1fr;
-        gap:7px;
-        padding:15px 0;
+        gap:6px;
+        padding:14px 0;
       }
+
       .intro-point span,
       .union-bot-item p{
         font-size:12px;
         line-height:1.75;
       }
     }
+
 
   </style>
 
@@ -1730,26 +1789,26 @@
 
     <section class="lux-section intro-section" id="easyStart">
       <header class="section-heading reveal-up">
-        <div class="section-en easy-start-en"><span>EASY</span><span>TO START</span></div>
-        <div class="section-ja">導入前の不安を、できるだけ少なく。</div>
+        <div class="section-en easy-start-en">EASY TO START</div>
+        <div class="section-ja">導入前の不安を、できるだけ少なく。<br></div>
       </header>
 
       <div class="intro-copy">
-        <h2 class="intro-title reveal-up" style="--delay:60ms">はじめてでも、設定はかんたん。</h2>
-        <p class="reveal-up" style="--delay:110ms">Discord BOTの導入は難しそうに見えますが、初期設定は案内に沿って進めるだけです。</p>
+        <h2 class="intro-title reveal-up" style="--delay:60ms">はじめてでも、設定はかんたん。<br></h2>
+        <p class="reveal-up" style="--delay:110ms">Discord BOTの導入は難しそうに見えますが、初期設定は案内に沿って進めるだけです。<br></p>
 
         <div class="intro-points" aria-label="導入時のポイント">
           <div class="intro-point reveal-up" style="--delay:150ms">
             <b>EASY SETUP</b>
-            <span>初期設定は案内に沿って進めるだけ。必要な項目を順番に設定できます。</span>
+            <span>初期設定は案内に沿って進めるだけ。<br>必要な項目を順番に設定できます。<br></span>
           </div>
           <div class="intro-point reveal-up" style="--delay:210ms">
             <b>CHANNEL CHECK</b>
-            <span>利用できない場合も、通知先チャンネルの権限など、どこで止まっているかを確認できます。</span>
+            <span>利用できない場合も、通知先チャンネルの権限など、どこで止まっているかを確認できます。<br></span>
           </div>
           <div class="intro-point reveal-up" style="--delay:270ms">
             <b>QUIET NOTICES</b>
-            <span>通知は通常1日1回程度を目安に、イベントや新しいキャラクター情報など必要な情報があるときだけ。必要な通知だけ選んで利用できます。</span>
+            <span>通知は通常1日1回程度を目安に、イベントや新しいキャラクター情報など必要な情報があるときだけ。<br>必要な通知だけ選んで利用できます。<br></span>
           </div>
         </div>
       </div>
@@ -1758,51 +1817,51 @@
     <section class="lux-section stay-section" id="stayConnected">
       <header class="section-heading reveal-up">
         <div class="section-en">STAY CONNECTED</div>
-        <div class="section-ja">NIKKEの情報を、いつものDiscordへ。</div>
+        <div class="section-ja">NIKKEの情報を、いつものDiscordへ。<br></div>
       </header>
 
       <div class="stay-copy">
-        <h2 class="stay-lead reveal-up" style="--delay:60ms">イベント情報を、探しに行かなくていい。</h2>
+        <h2 class="stay-lead reveal-up" style="--delay:60ms">イベント情報を、探しに行かなくていい。<br></h2>
 
         <p class="reveal-up" style="--delay:110ms">
-          <strong>NIKKE公式JP Discordのログインイベント</strong>をお知らせ。
+          <strong>NIKKE公式JP Discordのログインイベント</strong>をお知らせ。<br>
         </p>
         <p class="stay-source-line reveal-up" style="--delay:160ms">
-          <strong>ユニオンレイド・ソロレイド・協同作戦・新キャラクター情報</strong>などは、NIKKE公式Xから自動取得してDiscordへ配信します。
+          <strong>ユニオンレイド・ソロレイド・協同作戦・新キャラクター情報</strong>などは、NIKKE公式Xから自動取得してDiscordへ配信します。<br>
         </p>
 
         <p class="stay-bot-only reveal-up" style="--delay:210ms">
-          メンバー募集は利用せず、Discord BOTだけを利用したいユニオンもご利用いただけます。
+          メンバー募集は利用せず、Discord BOTだけを利用したいユニオンもご利用いただけます。<br>
         </p>
 
         <p class="stay-api-note reveal-up" style="--delay:260ms">
-          Xの情報を自動取得してDiscordへ通知する無料BOTは、探しても選択肢がかなり限られます。UNION MATCH BOTでは、利用するユニオン側でX APIを用意する必要はありません。
+          Xの情報を自動取得してDiscordへ通知する無料BOTは、探しても選択肢がかなり限られます。<br>UNION MATCH BOTでは、利用するユニオン側でX APIを用意する必要はありません。<br>
         </p>
 
-        <p class="stay-closing reveal-up" style="--delay:310ms">必要なNIKKE情報を自動で取得して、いつものDiscordへ。</p>
+        <p class="stay-closing reveal-up" style="--delay:310ms">必要なNIKKE情報を自動で取得して、いつものDiscordへ。<br></p>
       </div>
     </section>
 
     <section class="lux-section union-bot-section" id="unionMatchBot">
       <header class="section-heading reveal-up">
         <div class="section-en">UNION MATCH + BOT</div>
-        <div class="section-ja">メンバー募集を、Discordでもっとスムーズに。</div>
+        <div class="section-ja">メンバー募集を、Discordでもっとスムーズに。<br></div>
       </header>
 
       <div class="union-bot-copy">
-        <h2 class="union-bot-lead reveal-up" style="--delay:60ms">募集情報も、ユニオンを探している指揮官もDiscordで。</h2>
+        <h2 class="union-bot-lead reveal-up" style="--delay:60ms">募集情報も、ユニオンを探している指揮官もDiscordで。<br></h2>
         <p class="union-bot-summary reveal-up" style="--delay:110ms">
-          UNION MATCHでメンバー募集をしているユニオンは、<strong>UNION MATCHに登録された募集情報</strong>と、<strong>Xでユニオンを探している指揮官情報</strong>をDiscordで確認できます。サイトやXを何度も見に行く必要はありません。
+          UNION MATCHでメンバー募集をしているユニオンは、<strong>UNION MATCHに登録された募集情報</strong>と、<strong>Xでユニオンを探している指揮官情報</strong>をDiscordで確認できます。<br>サイトやXを何度も見に行く必要はありません。<br>
         </p>
 
         <div class="union-bot-flow">
           <section class="union-bot-item reveal-up" style="--delay:160ms">
             <div class="union-bot-kicker">RECRUITMENT SUPPORT</div>
-            <h3>探す募集にも、待つ募集にも。</h3>
+            <h3>探す募集にも、待つ募集にも。<br></h3>
             <p>
-              Xでユニオンを探している指揮官へ積極的に声をかけたい場合は、BOTに届く指揮官情報を見ながらアプローチできます。積極的に勧誘しないユニオンも、<strong>UNION MATCHに掲載しておくことで、指揮官側から見つけてもらうきっかけを作れます。</strong>
+              Xでユニオンを探している指揮官へ積極的に声をかけたい場合は、BOTに届く指揮官情報を見ながらアプローチできます。<br>積極的に勧誘しないユニオンも、<strong>UNION MATCHに掲載しておくことで、指揮官側から見つけてもらうきっかけを作れます。<br></strong>
             </p>
-            <p class="union-bot-accent">勧誘しに行かなくても、見つけてもらえる場所を。</p>
+            <p class="union-bot-accent">勧誘しに行かなくても、見つけてもらえる場所を。<br></p>
           </section>
 
           <section class="union-bot-item reveal-up" style="--delay:220ms">
