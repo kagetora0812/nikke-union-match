@@ -3853,7 +3853,6 @@
       id="specialOverlayVideo"
       class="special-overlay__video"
       muted
-      loop
       playsinline
       preload="auto"
     >
@@ -3904,37 +3903,6 @@
       let running = false;
       let specialStarted = false;
       let rafId = 0;
-
-      /*
-        Force SPECIAL looping in JavaScript too.
-        The HTML loop attribute remains, but this guarantees replay
-        even if the browser fails to honor it during the transition.
-      */
-      specialVideo.loop = true;
-
-      const forceSpecialLoop = () => {
-        try {
-          specialVideo.loop = true;
-          specialVideo.currentTime = 0;
-          const p = specialVideo.play();
-          if (p && typeof p.catch === "function") {
-            p.catch(() => {});
-          }
-        } catch (_) {}
-      };
-
-      specialVideo.addEventListener("ended", forceSpecialLoop);
-
-      specialVideo.addEventListener("timeupdate", () => {
-        const duration = specialVideo.duration;
-        if (
-          Number.isFinite(duration) &&
-          duration > 0 &&
-          specialVideo.currentTime >= duration - 0.40
-        ) {
-          forceSpecialLoop();
-        }
-      });
 
       const isDesktop = () =>
         window.matchMedia("(min-width:1025px)").matches;
@@ -4092,10 +4060,10 @@
           );
 
           /*
-            Fade the site UI during the last ~15% of the climb.
+            Fade the site UI during the last ~35% of the climb.
             This removes the abrupt "text disappears at TOP" cut.
           */
-          const fadeOutStart = startTop * 0.15;
+          const fadeOutStart = startTop * 0.35;
           let siteFade = 1;
 
           if (currentTop <= fadeOutStart) {
