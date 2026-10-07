@@ -4462,6 +4462,63 @@
       transition:none !important;
     }
 
+  
+    /* =========================================================
+       SPECIAL PERFORMANCE FIX
+       Start scrolling first; keep reverse phase lightweight.
+       ========================================================= */
+
+    body.special-reverse-running .special-overlay__video{
+      filter:none !important;
+    }
+
+    body.special-reverse-running .special-overlay__gold{
+      mix-blend-mode:normal !important;
+      background:
+        linear-gradient(
+          180deg,
+          rgba(255,214,110,.08),
+          rgba(140,82,18,.10)
+        ) !important;
+    }
+
+    body.special-reverse-running #specialPageGoldWash{
+      mix-blend-mode:normal !important;
+    }
+
+    /* Immediate visual reaction on click without waiting for media playback. */
+    .special-command-card.is-triggered{
+      transform:scale(.985) !important;
+      opacity:.92 !important;
+      transition:
+        transform .08s ease,
+        opacity .08s ease !important;
+    }
+
+  
+    /* =========================================================
+       SPECIAL FINAL LIGHTWEIGHT FINISH
+       BOT PNG drops -> direct navigation
+       ========================================================= */
+
+    .special-overlay__bot-img{
+      filter:none !important;
+    }
+
+    .special-overlay__bot-spark,
+    .special-overlay__bot-shine,
+    .special-overlay__flash{
+      display:none !important;
+    }
+
+    .special-overlay.is-finish .special-overlay__bot-img,
+    .special-overlay.is-finish .special-overlay__bot-wrap,
+    .special-overlay.is-finish .special-overlay__flash{
+      animation:none !important;
+      filter:none !important;
+      box-shadow:none !important;
+    }
+
   </style>
 
   <script>
@@ -5482,6 +5539,7 @@
       let timers = [];
       let reverseRAF = 0;
       let running = false;
+      let specialStarted = false;
 
       const clearTimers = () => {
         timers.forEach((id) => window.clearTimeout(id));
@@ -5536,7 +5594,10 @@
 
       const easeSlowRise = (t) => t * t * (3 - 2 * t);
 
-      const playSpecialVideo = () => {
+      const startSpecialVideo = () => {
+        if (specialStarted) return;
+        specialStarted = true;
+
         try {
           overlayVideo.currentTime = 0;
           const p = overlayVideo.play();
@@ -5560,6 +5621,7 @@
       const cleanupSpecial = () => {
         clearTimers();
         running = false;
+        specialStarted = false;
 
         specialCard.classList.remove("is-triggered");
 
@@ -5595,55 +5657,54 @@
         document.body.classList.remove("special-reverse-running");
         document.body.classList.add("special-sequence-active");
 
+        startSpecialVideo();
+
         overlay.style.setProperty("--special-progress","1");
         overlay.classList.remove("is-prelude");
-        overlay.classList.add("is-active");
+        overlay.classList.add("is-active","is-gold");
         overlay.setAttribute("aria-hidden","false");
 
         timers.push(window.setTimeout(() => {
           overlay.classList.add("is-bot-drop");
-        }, 1200));
+        }, 850));
 
-        timers.push(window.setTimeout(() => {
-          overlay.classList.add("is-finish");
-        }, 4550));
-
+        /* BOT PNG lands, then move straight to the BOT invite page.
+           No glow sequence, no sparkle hold, no white flash. */
         timers.push(window.setTimeout(() => {
           goInvite();
-        }, 5600));
+        }, 2350));
       };
 
       const slowReverseToTop = () => {
         const scroller = pageScroller();
         const startTop = getScrollTop(scroller);
 
-        /* Deliberately slow. The user should clearly feel the page travelling upward. */
+        /* 6.5–8 seconds: visible, but no long waiting feeling. */
         const duration = Math.min(
-          15000,
-          Math.max(11000,7000 + startTop * 1.05)
+          8000,
+          Math.max(6500, 5000 + startTop * 0.42)
         );
 
         const startTime = performance.now();
 
         const step = (now) => {
           const elapsed = now - startTime;
-          const t = Math.min(1,elapsed / duration);
+          const t = Math.min(1, elapsed / duration);
           const eased = easeSlowRise(t);
 
-          /* Actual upward reverse-scroll */
+          /* This happens from the very first animation frame. */
           setScrollTop(
             scroller,
-            Math.max(0,startTop * (1 - eased))
+            Math.max(0, startTop * (1 - eased))
           );
 
           /*
-            SPECIAL video must NOT appear before movement begins.
-            Keep the first part almost invisible, then fade it in gradually
-            during the upward journey.
+            SPECIAL video stays completely hidden at first.
+            After the page has already begun moving, it fades in gradually.
           */
           const visibleProgress = Math.max(
             0,
-            Math.min(1,(t - .08) / .82)
+            Math.min(1, t / 0.12)
           );
 
           overlay.style.setProperty(
@@ -5672,24 +5733,27 @@
         }
 
         running = true;
+        specialStarted = false;
         specialCard.classList.add("is-triggered");
 
         /*
           Correct order:
-          1. click -> old background immediately starts disappearing
-          2. reverse-scroll starts immediately
-          3. SPECIAL video only begins to appear during that movement
+          1. old background starts disappearing now
+          2. reverse-scroll starts now
+          3. special video begins only after movement has already started
         */
         pauseNormalBackground();
 
         document.body.classList.add("special-reverse-running");
 
         overlay.style.setProperty("--special-progress","0");
-        overlay.classList.add("is-prelude","is-gold");
+        overlay.classList.add("is-prelude");
         overlay.setAttribute("aria-hidden","false");
 
-        playSpecialVideo();
+        /* Start SPECIAL video immediately. */
+        startSpecialVideo();
 
+        /* No timeout before movement. */
         slowReverseToTop();
       };
 
