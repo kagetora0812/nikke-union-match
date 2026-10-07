@@ -2514,6 +2514,349 @@
       }
     }
 
+  
+    /* =========================================================
+       PC SPECIAL EFFECT + compact 3x2 command grid
+       ========================================================= */
+
+    .command-grid-pc-six{
+      grid-template-columns:repeat(3,minmax(0,1fr)) !important;
+      gap:16px !important;
+      align-items:stretch;
+    }
+
+    .command-grid-pc-six .command-card{
+      min-height:242px;
+    }
+
+    .command-grid-pc-six .command-card-channelcheck{
+      grid-column:auto !important;
+    }
+
+    .special-command-card{
+      display:flex;
+      flex-direction:column;
+      justify-content:flex-start;
+      gap:0;
+      text-decoration:none;
+      color:inherit;
+      position:relative;
+      overflow:hidden;
+      isolation:isolate;
+      border-color:rgba(40,192,252,.28) !important;
+      background:
+        radial-gradient(circle at 18% 14%,rgba(40,192,252,.10),transparent 42%),
+        linear-gradient(145deg,rgba(28,36,46,.56),rgba(12,17,24,.42)) !important;
+    }
+
+    .special-command-card::before{
+      content:"";
+      position:absolute;
+      inset:-1px;
+      border:1px solid rgba(255,255,255,.12);
+      pointer-events:none;
+      z-index:-1;
+    }
+
+    .special-command-label{
+      color:#8EDCFF;
+      font:700 14px/1 "Teko",sans-serif;
+      letter-spacing:.15em;
+      text-shadow:none;
+    }
+
+    .special-command-chip{
+      display:inline-flex;
+      align-items:center;
+      justify-content:center;
+      min-height:30px;
+      padding:0 12px;
+      border:1px solid rgba(40,192,252,.62);
+      color:#fff;
+      font:700 10px/1 "Teko",sans-serif;
+      letter-spacing:.15em;
+      text-transform:uppercase;
+      text-shadow:none;
+      white-space:nowrap;
+      background:rgba(4,13,20,.24);
+    }
+
+    .special-command-cta{
+      margin-top:auto;
+      padding-top:16px;
+      color:#8EDCFF;
+      font:700 15px/1 "Teko",sans-serif;
+      letter-spacing:.12em;
+      text-shadow:none;
+    }
+
+    @media (hover:hover) and (pointer:fine){
+      .special-command-card:hover{
+        border-color:rgba(40,192,252,.52) !important;
+        transform:translateY(-4px);
+        box-shadow:
+          inset 0 1px 0 rgba(255,255,255,.06),
+          0 18px 42px rgba(0,0,0,.18),
+          0 0 18px rgba(40,192,252,.08) !important;
+      }
+    }
+
+    @media (max-width:1024px){
+      .command-grid-pc-six{
+        grid-template-columns:repeat(2,minmax(0,1fr)) !important;
+      }
+    }
+
+    @media (max-width:760px){
+      .command-grid-pc-six{
+        grid-template-columns:1fr !important;
+      }
+
+      .command-grid-pc-six .command-card{
+        min-height:0;
+      }
+    }
+
+    /* Special overlay */
+    .special-overlay{
+      position:fixed;
+      inset:0;
+      z-index:1400;
+      opacity:0;
+      visibility:hidden;
+      pointer-events:none;
+      overflow:hidden;
+      background:#000;
+      transition:
+        opacity .36s ease,
+        visibility 0s linear .36s;
+    }
+
+    .special-overlay.is-active{
+      opacity:1;
+      visibility:visible;
+      pointer-events:auto;
+      transition:
+        opacity .36s ease,
+        visibility 0s linear 0s;
+    }
+
+    .special-overlay__shade,
+    .special-overlay__video-wrap,
+    .special-overlay__bot,
+    .special-overlay__skip{
+      position:absolute;
+    }
+
+    .special-overlay__shade{
+      inset:0;
+      background:
+        radial-gradient(circle at center,rgba(255,255,255,.06),rgba(0,0,0,.42) 42%,rgba(0,0,0,.92) 100%);
+      opacity:0;
+      transition:opacity .45s ease;
+    }
+
+    .special-overlay.is-active .special-overlay__shade{
+      opacity:1;
+    }
+
+    .special-overlay__video-wrap{
+      inset:0;
+      overflow:hidden;
+      transform:scale(1.02);
+    }
+
+    .special-overlay__video{
+      position:absolute;
+      inset:-6%;
+      width:112%;
+      height:112%;
+      object-fit:cover;
+      opacity:0;
+      filter:grayscale(.28) brightness(.24) contrast(1.08) sepia(.52) saturate(1.32) hue-rotate(-10deg);
+      transform:translateY(26px) scale(1.02);
+      transition:
+        opacity .52s ease .18s,
+        transform 2.7s cubic-bezier(.2,.7,.2,1),
+        filter 2.2s ease;
+    }
+
+    .special-overlay.is-active .special-overlay__video{
+      opacity:1;
+      transform:translateY(-84px) scale(1.14);
+      filter:grayscale(.05) brightness(.58) contrast(1.12) sepia(.98) saturate(2.3) hue-rotate(-14deg);
+    }
+
+    .special-overlay__gold,
+    .special-overlay__vignette{
+      position:absolute;
+      inset:0;
+      pointer-events:none;
+    }
+
+    .special-overlay__gold{
+      background:
+        radial-gradient(circle at 50% 24%,rgba(255,232,148,.24),transparent 34%),
+        radial-gradient(circle at 50% 58%,rgba(255,204,85,.14),transparent 42%),
+        linear-gradient(180deg,rgba(255,205,76,.18),rgba(65,34,2,.18) 56%,rgba(0,0,0,.46));
+      mix-blend-mode:screen;
+      opacity:.72;
+      transition:opacity .6s ease .18s;
+    }
+
+    .special-overlay__vignette{
+      background:
+        radial-gradient(circle at center,transparent 30%,rgba(0,0,0,.20) 52%,rgba(0,0,0,.72) 100%);
+    }
+
+    .special-overlay__bot{
+      left:50%;
+      top:50%;
+      transform:translate(-50%,-155vh) scale(1.18);
+      opacity:0;
+      font:900 clamp(130px,16vw,280px)/.86 "Teko",sans-serif;
+      letter-spacing:.06em;
+      white-space:nowrap;
+      color:transparent;
+      background:
+        linear-gradient(180deg,#fff5c9 0%,#f0cf6b 18%,#fff6d4 32%,#c68c18 52%,#f0d47b 74%,#fff8dc 100%);
+      -webkit-background-clip:text;
+      background-clip:text;
+      text-shadow:
+        0 0 10px rgba(255,224,143,.18),
+        0 8px 24px rgba(0,0,0,.48),
+        0 0 28px rgba(255,195,72,.20);
+      will-change:transform,opacity;
+    }
+
+    .special-overlay.is-active .special-overlay__bot{
+      animation:specialBotDrop 1.85s cubic-bezier(.16,.83,.18,1) .62s forwards,
+                specialBotGlow 1.15s ease 1.84s 1;
+    }
+
+    @keyframes specialBotDrop{
+      0%{
+        transform:translate(-50%,-155vh) scale(1.18);
+        opacity:0;
+      }
+      18%{
+        opacity:1;
+      }
+      74%{
+        transform:translate(-50%,-48%) scale(1.06);
+        opacity:1;
+      }
+      85%{
+        transform:translate(-50%,-50%) scale(.985);
+      }
+      92%{
+        transform:translate(-50%,-50%) scale(1.015);
+      }
+      100%{
+        transform:translate(-50%,-50%) scale(1);
+        opacity:1;
+      }
+    }
+
+    @keyframes specialBotGlow{
+      0%,100%{
+        text-shadow:
+          0 0 10px rgba(255,224,143,.18),
+          0 8px 24px rgba(0,0,0,.48),
+          0 0 28px rgba(255,195,72,.20);
+      }
+      50%{
+        text-shadow:
+          0 0 18px rgba(255,235,173,.46),
+          0 0 40px rgba(255,202,79,.42),
+          0 12px 30px rgba(0,0,0,.56);
+      }
+    }
+
+    .special-overlay__skip{
+      right:28px;
+      top:26px;
+      z-index:2;
+      min-height:38px;
+      padding:0 16px;
+      border:1px solid rgba(255,255,255,.62);
+      background:rgba(0,0,0,.22);
+      color:#fff;
+      font:700 14px/1 "Teko",sans-serif;
+      letter-spacing:.16em;
+      text-transform:uppercase;
+      opacity:0;
+      transition:opacity .28s ease .24s,border-color .25s ease,color .25s ease;
+    }
+
+    .special-overlay.is-active .special-overlay__skip{
+      opacity:1;
+    }
+
+    @media (hover:hover) and (pointer:fine){
+      .special-overlay__skip:hover{
+        border-color:#8EDCFF;
+        color:#8EDCFF;
+      }
+    }
+
+    /* Page movement into the special effect */
+    .special-sequence-active .lux-page,
+    .special-sequence-active .topbar,
+    .special-sequence-active .bot-pc-home,
+    .special-sequence-active .subpage-bottom-nav{
+      transition:
+        transform .72s cubic-bezier(.18,.78,.18,1),
+        opacity .62s ease,
+        filter .72s ease;
+    }
+
+    .special-sequence-active .lux-page{
+      transform:translateY(-82px) scale(1.02);
+      opacity:.08;
+      filter:blur(10px) saturate(.55);
+    }
+
+    .special-sequence-active .topbar,
+    .special-sequence-active .bot-pc-home,
+    .special-sequence-active .subpage-bottom-nav{
+      transform:translateY(-36px);
+      opacity:.06;
+      filter:blur(8px);
+    }
+
+    @media (max-width:1024px){
+      .special-overlay__bot{
+        font-size:clamp(92px,18vw,180px);
+      }
+    }
+
+    @media (max-width:760px){
+      .special-overlay__skip{
+        right:16px;
+        top:16px;
+      }
+    }
+
+    @media (prefers-reduced-motion:reduce){
+      .special-overlay,
+      .special-overlay__video,
+      .special-overlay__shade,
+      .special-overlay__skip,
+      .special-sequence-active .lux-page,
+      .special-sequence-active .topbar,
+      .special-sequence-active .bot-pc-home,
+      .special-sequence-active .subpage-bottom-nav{
+        transition:none !important;
+      }
+
+      .special-overlay__bot{
+        animation:none !important;
+        transform:translate(-50%,-50%);
+        opacity:1;
+      }
+    }
+
   </style>
 
   <script>
@@ -2984,13 +3327,14 @@
       </div>
     </section>
 
+    
     <section class="lux-section">
       <header class="section-heading reveal-up">
         <div class="section-en">COMMANDS</div>
         <div class="section-ja">よく使うコマンド</div>
       </header>
 
-      <div class="command-grid">
+      <div class="command-grid command-grid-pc-six">
         <article class="glass-card command-card reveal-up">
           <div class="command-top">
             <div>
@@ -3042,7 +3386,7 @@
           </p>
         </article>
 
-        <article class="glass-card command-card reveal-up command-card-channelcheck" style="--delay:280ms">
+        <article class="glass-card command-card reveal-up" style="--delay:280ms">
           <div class="command-top">
             <div class="cmd">/channelcheck</div>
             <button class="copy-command" type="button" data-copy="/channelcheck">COPY COMMAND →</button>
@@ -3053,10 +3397,31 @@
             権限が不足している場合は、不足している権限をその場で確認できます。
           </p>
         </article>
+
+        <a
+          class="glass-card command-card special-command-card reveal-up"
+          id="specialCommandCard"
+          href="https://discord.com/oauth2/authorize?client_id=1548613088557793370&scope=bot%20applications.commands"
+          target="_blank"
+          rel="noopener noreferrer"
+          aria-label="SPECIAL演出でBOTを導入する"
+          style="--delay:350ms"
+        >
+          <div class="command-top">
+            <div class="special-command-label">SPECIAL</div>
+            <span class="special-command-chip">PC LIMITED</span>
+          </div>
+          <h3>BOTを導入する</h3>
+          <p>
+            PCでは、特別演出のあとにBOT導入画面へ進みます。<br>
+            スマホ・タブレットでは通常の導入画面を開きます。
+          </p>
+          <span class="special-command-cta">SPECIAL START →</span>
+        </a>
       </div>
     </section>
 
-    <section class="lux-section important-section">
+<section class="lux-section important-section">
       <header class="section-heading reveal-up">
         <div class="section-en">IMPORTANT</div>
         <div class="section-ja">最初に知っておくこと</div>
@@ -3219,12 +3584,14 @@
         (entries) => {
           entries.forEach((entry) => {
             if (entry.isIntersecting) {
-              entry.target.classList.add("is-visible");
+              window.setTimeout(() => {
+                entry.target.classList.add("is-visible");
+              }, 180);
               observer.unobserve(entry.target);
             }
           });
         },
-        { root:null, threshold:.12, rootMargin:"0px 0px -6% 0px" }
+        { root:null, threshold:.2, rootMargin:"0px 0px -18% 0px" }
       );
 
       document.querySelectorAll(".reveal-up").forEach((el) => observer.observe(el));
@@ -3438,6 +3805,34 @@
     })();
   </script>
 
+
+  <div id="specialOverlay" class="special-overlay" aria-hidden="true">
+    <div class="special-overlay__shade"></div>
+    <div class="special-overlay__video-wrap">
+      <video
+        id="specialOverlayVideo"
+        class="special-overlay__video"
+        muted
+        playsinline
+        preload="auto"
+        poster="assets/bot/special-goddessfall-poster.jpg"
+      >
+        <source src="assets/bot/special-goddessfall.mp4" type="video/mp4">
+      </video>
+      <div class="special-overlay__gold"></div>
+      <div class="special-overlay__vignette"></div>
+    </div>
+
+    <div class="special-overlay__bot" aria-hidden="true">BOT</div>
+
+    <button
+      id="specialOverlaySkip"
+      class="special-overlay__skip"
+      type="button"
+      aria-label="演出をスキップしてBOT導入画面へ進む"
+    >SKIP</button>
+  </div>
+
   <nav class="subpage-bottom-nav bot-bottom-nav" aria-label="フッターメニュー">
     <a href="./index.html#videoHero">
       <span class="bot-nav-icon" aria-hidden="true">⌂</span>
@@ -3454,6 +3849,86 @@
       <span class="bot-nav-label">CREATOR</span>
     </a>
   </nav>
+
+
+  <script>
+    (() => {
+      const specialCard = document.getElementById("specialCommandCard");
+      const overlay = document.getElementById("specialOverlay");
+      const overlayVideo = document.getElementById("specialOverlayVideo");
+      const skipButton = document.getElementById("specialOverlaySkip");
+      const inviteUrl = "https://discord.com/oauth2/authorize?client_id=1548613088557793370&scope=bot%20applications.commands";
+
+      if (!specialCard || !overlay || !overlayVideo) return;
+
+      const isDesktop = () => window.matchMedia("(min-width: 1025px)").matches;
+      const reducedMotion = () => window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+
+      let exitTimer = 0;
+
+      const goInvite = () => {
+        window.location.href = inviteUrl;
+      };
+
+      const cleanupSpecial = () => {
+        document.body.classList.remove("special-sequence-active");
+        overlay.classList.remove("is-active");
+        overlay.setAttribute("aria-hidden","true");
+        window.clearTimeout(exitTimer);
+        try {
+          overlayVideo.pause();
+          overlayVideo.currentTime = 0;
+        } catch (error) {}
+      };
+
+      const startSpecial = () => {
+        if (!isDesktop() || reducedMotion()) {
+          goInvite();
+          return;
+        }
+
+        document.body.classList.add("special-sequence-active");
+        overlay.classList.add("is-active");
+        overlay.setAttribute("aria-hidden","false");
+
+        try {
+          overlayVideo.currentTime = 0;
+          const playPromise = overlayVideo.play();
+          if (playPromise && typeof playPromise.catch === "function") {
+            playPromise.catch(() => {});
+          }
+        } catch (error) {}
+
+        exitTimer = window.setTimeout(() => {
+          cleanupSpecial();
+          goInvite();
+        }, 4050);
+      };
+
+      specialCard.addEventListener("click", (event) => {
+        if (!isDesktop() || reducedMotion()) return;
+        event.preventDefault();
+        startSpecial();
+      });
+
+      skipButton?.addEventListener("click", () => {
+        cleanupSpecial();
+        goInvite();
+      });
+
+      document.addEventListener("keydown", (event) => {
+        if (event.key === "Escape" && overlay.classList.contains("is-active")) {
+          cleanupSpecial();
+        }
+      });
+
+      overlay.addEventListener("click", (event) => {
+        if (event.target === overlay) {
+          cleanupSpecial();
+        }
+      });
+    })();
+  </script>
 
 </body>
 </html>
