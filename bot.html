@@ -1424,6 +1424,110 @@
       .slider-arrow{width:40px;height:40px}
     }
 
+  
+    /* ---------- readability / responsive heading refinement ---------- */
+    .easy-start-en{
+      display:flex;
+      flex-direction:column;
+      align-items:flex-start;
+      gap:0;
+      line-height:.82;
+    }
+    .easy-start-en span{display:block}
+
+    .intro-title,
+    .stay-lead,
+    .union-bot-lead{
+      text-shadow:
+        0 2px 4px rgba(0,0,0,.92),
+        0 0 12px rgba(0,0,0,.72);
+    }
+
+    .intro-copy p,
+    .stay-copy p,
+    .union-bot-copy p,
+    .intro-point span,
+    .union-bot-item p{
+      text-shadow:
+        0 1px 3px rgba(0,0,0,.92),
+        0 0 8px rgba(0,0,0,.55);
+    }
+
+    .section-en,
+    .section-ja,
+    .intro-point b,
+    .union-bot-kicker{
+      text-shadow:
+        0 2px 5px rgba(0,0,0,.88),
+        0 0 10px rgba(0,0,0,.52);
+    }
+
+    @media (max-width:1024px){
+      .section-en{
+        font-size:clamp(36px,6.2vw,52px);
+      }
+      .easy-start-en{
+        font-size:clamp(34px,6vw,48px);
+      }
+      .intro-title,
+      .stay-lead,
+      .union-bot-lead{
+        font-size:clamp(24px,4.4vw,34px);
+        line-height:1.28;
+      }
+    }
+
+    @media (max-width:600px){
+      .section-en{
+        font-size:clamp(31px,10.5vw,42px);
+        line-height:.9;
+      }
+      .easy-start-en{
+        font-size:clamp(30px,10vw,39px);
+        line-height:.82;
+      }
+      .section-ja{
+        margin-top:9px;
+        font-size:11px;
+        line-height:1.6;
+      }
+      .intro-title,
+      .stay-lead,
+      .union-bot-lead{
+        font-size:clamp(21px,6.4vw,27px);
+        line-height:1.34;
+        letter-spacing:-.018em;
+      }
+      .intro-copy p,
+      .stay-copy p,
+      .union-bot-copy p{
+        font-size:12.5px;
+        line-height:1.82;
+      }
+      .stay-bot-only{
+        font-size:13.5px!important;
+        line-height:1.72!important;
+      }
+      .union-bot-item h3{
+        font-size:17px;
+        line-height:1.45;
+      }
+      .union-bot-kicker,
+      .intro-point b{
+        font-size:12px;
+      }
+      .intro-point{
+        grid-template-columns:1fr;
+        gap:7px;
+        padding:15px 0;
+      }
+      .intro-point span,
+      .union-bot-item p{
+        font-size:12px;
+        line-height:1.75;
+      }
+    }
+
   </style>
 
   <script>
@@ -1626,24 +1730,24 @@
 
     <section class="lux-section intro-section" id="easyStart">
       <header class="section-heading reveal-up">
-        <div class="section-en">EASY TO START</div>
+        <div class="section-en easy-start-en"><span>EASY</span><span>TO START</span></div>
         <div class="section-ja">導入前の不安を、できるだけ少なく。</div>
       </header>
 
-      <div class="intro-copy reveal-up" style="--delay:90ms">
-        <h2 class="intro-title">はじめてでも、設定はかんたん。</h2>
-        <p>Discord BOTの導入は難しそうに見えますが、初期設定は案内に沿って進めるだけです。</p>
+      <div class="intro-copy">
+        <h2 class="intro-title reveal-up" style="--delay:60ms">はじめてでも、設定はかんたん。</h2>
+        <p class="reveal-up" style="--delay:110ms">Discord BOTの導入は難しそうに見えますが、初期設定は案内に沿って進めるだけです。</p>
 
         <div class="intro-points" aria-label="導入時のポイント">
-          <div class="intro-point">
+          <div class="intro-point reveal-up" style="--delay:150ms">
             <b>EASY SETUP</b>
             <span>初期設定は案内に沿って進めるだけ。必要な項目を順番に設定できます。</span>
           </div>
-          <div class="intro-point">
+          <div class="intro-point reveal-up" style="--delay:210ms">
             <b>CHANNEL CHECK</b>
             <span>利用できない場合も、通知先チャンネルの権限など、どこで止まっているかを確認できます。</span>
           </div>
-          <div class="intro-point">
+          <div class="intro-point reveal-up" style="--delay:270ms">
             <b>QUIET NOTICES</b>
             <span>通知は通常1日1回程度を目安に、イベントや新しいキャラクター情報など必要な情報があるときだけ。必要な通知だけ選んで利用できます。</span>
           </div>
@@ -1657,25 +1761,25 @@
         <div class="section-ja">NIKKEの情報を、いつものDiscordへ。</div>
       </header>
 
-      <div class="stay-copy reveal-up" style="--delay:90ms">
-        <h2 class="stay-lead">イベント情報を、探しに行かなくていい。</h2>
+      <div class="stay-copy">
+        <h2 class="stay-lead reveal-up" style="--delay:60ms">イベント情報を、探しに行かなくていい。</h2>
 
-        <p>
+        <p class="reveal-up" style="--delay:110ms">
           <strong>NIKKE公式JP Discordのログインイベント</strong>をお知らせ。
         </p>
-        <p class="stay-source-line">
+        <p class="stay-source-line reveal-up" style="--delay:160ms">
           <strong>ユニオンレイド・ソロレイド・協同作戦・新キャラクター情報</strong>などは、NIKKE公式Xから自動取得してDiscordへ配信します。
         </p>
 
-        <p class="stay-bot-only">
+        <p class="stay-bot-only reveal-up" style="--delay:210ms">
           メンバー募集は利用せず、Discord BOTだけを利用したいユニオンもご利用いただけます。
         </p>
 
-        <p class="stay-api-note">
+        <p class="stay-api-note reveal-up" style="--delay:260ms">
           Xの情報を自動取得してDiscordへ通知する無料BOTは、探しても選択肢がかなり限られます。UNION MATCH BOTでは、利用するユニオン側でX APIを用意する必要はありません。
         </p>
 
-        <p class="stay-closing">必要なNIKKE情報を自動で取得して、いつものDiscordへ。</p>
+        <p class="stay-closing reveal-up" style="--delay:310ms">必要なNIKKE情報を自動で取得して、いつものDiscordへ。</p>
       </div>
     </section>
 
@@ -1685,14 +1789,14 @@
         <div class="section-ja">メンバー募集を、Discordでもっとスムーズに。</div>
       </header>
 
-      <div class="union-bot-copy reveal-up" style="--delay:90ms">
-        <h2 class="union-bot-lead">募集情報も、ユニオンを探している指揮官もDiscordで。</h2>
-        <p class="union-bot-summary">
+      <div class="union-bot-copy">
+        <h2 class="union-bot-lead reveal-up" style="--delay:60ms">募集情報も、ユニオンを探している指揮官もDiscordで。</h2>
+        <p class="union-bot-summary reveal-up" style="--delay:110ms">
           UNION MATCHでメンバー募集をしているユニオンは、<strong>UNION MATCHに登録された募集情報</strong>と、<strong>Xでユニオンを探している指揮官情報</strong>をDiscordで確認できます。サイトやXを何度も見に行く必要はありません。
         </p>
 
         <div class="union-bot-flow">
-          <section class="union-bot-item">
+          <section class="union-bot-item reveal-up" style="--delay:160ms">
             <div class="union-bot-kicker">RECRUITMENT SUPPORT</div>
             <h3>探す募集にも、待つ募集にも。</h3>
             <p>
@@ -1701,13 +1805,13 @@
             <p class="union-bot-accent">勧誘しに行かなくても、見つけてもらえる場所を。</p>
           </section>
 
-          <section class="union-bot-item">
+          <section class="union-bot-item reveal-up" style="--delay:220ms">
             <div class="union-bot-kicker">DEADLINE NOTICE</div>
             <h3>期限前にDiscordへ通知。</h3>
             <p>募集期限の<strong>48時間前・1時間前</strong>にお知らせ。延長・再掲載もスムーズです。</p>
           </section>
 
-          <section class="union-bot-item">
+          <section class="union-bot-item reveal-up" style="--delay:280ms">
             <div class="union-bot-kicker">UNION MANAGEMENT</div>
             <h3>募集していない期間も、そのまま使える。</h3>
             <p>メンバー募集をしていない期間も、<strong>イベント通知BOTとして継続利用できます。</strong></p>
