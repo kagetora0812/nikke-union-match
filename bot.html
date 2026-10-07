@@ -3843,8 +3843,9 @@
       id="specialOverlayVideo"
       class="special-overlay__video"
       muted
+      loop
       playsinline
-      preload="metadata"
+      preload="auto"
     >
       <source src="assets/bot/special-goddessfall.mp4" type="video/mp4">
     </video>
@@ -4066,15 +4067,20 @@
           overlay.classList.remove("is-rising");
           overlay.classList.add("is-front");
 
-          requestAnimationFrame(() => {
+          /*
+            TOP reached:
+            hold the SPECIAL video at 100% for 2 seconds
+            before dropping the BOT PNG.
+          */
+          window.setTimeout(() => {
             overlay.classList.add("is-bot-drop");
 
             /*
               BOT drop lasts .78s.
-              Keep SPECIAL video + BOT PNG visible and navigate immediately.
+              Navigate immediately after the landing completes.
             */
             window.setTimeout(goInvite,820);
-          });
+          },2000);
         };
 
         /*
@@ -4098,7 +4104,7 @@
           if (running && getScrollTop() <= 4) {
             goInvite();
           }
-        },9000);
+        },12000);
       };
 
       card.addEventListener("click",(event) => {
