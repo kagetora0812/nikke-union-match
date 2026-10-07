@@ -2740,34 +2740,62 @@
     }
 
     /* =========================================================
-       SPECIAL SEQUENCE — clean rebuild
-       No legacy gold / shine / spark / flash / finish effects.
+       SPECIAL SEQUENCE — FINAL REWRITE
+       click
+       -> old background fades
+       -> REAL page/text scrolls upward visibly
+       -> SPECIAL video fades in BEHIND page content
+       -> at TOP SPECIAL video comes to front
+       -> BOT PNG drops over SPECIAL video
+       -> navigate with BOTH still visible
        ========================================================= */
 
     .bot-motion-bg video{
-      transition:opacity .22s linear !important;
+      transition:opacity .28s linear !important;
     }
 
     body.special-running .bot-motion-bg video{
       opacity:0 !important;
     }
 
+    /* During the rise, keep the actual page/text ABOVE the SPECIAL video. */
+    body.special-running .lux-page,
+    body.special-running .topbar,
+    body.special-running .bot-pc-home,
+    body.special-running .subpage-bottom-nav{
+      position:relative;
+      z-index:20 !important;
+      opacity:1 !important;
+      visibility:visible !important;
+      transform:none !important;
+      filter:none !important;
+    }
+
     .special-overlay{
       position:fixed;
       inset:0;
-      z-index:1200;
       width:100vw;
       height:100vh;
       overflow:hidden;
       visibility:hidden;
       opacity:0;
       pointer-events:none;
-      background:#000;
+      z-index:5;
+      background:transparent;
     }
 
-    .special-overlay.is-running{
+    /* While scrolling upward, video stays behind page content. */
+    .special-overlay.is-rising{
       visibility:visible;
       opacity:var(--special-opacity,0);
+      z-index:5;
+    }
+
+    /* At TOP, bring the SAME video to the foreground. */
+    .special-overlay.is-front{
+      visibility:visible;
+      opacity:1;
+      z-index:1400;
     }
 
     .special-overlay__video{
@@ -2777,9 +2805,11 @@
       height:100%;
       object-fit:cover;
       object-position:center center;
-      opacity:1;
-      filter:none;
-      transform:none;
+      opacity:1 !important;
+      visibility:visible !important;
+      filter:none !important;
+      transform:none !important;
+      background:transparent !important;
     }
 
     .special-overlay__bot-wrap{
@@ -2796,7 +2826,7 @@
 
     .special-overlay.is-bot-drop .special-overlay__bot-wrap{
       opacity:1;
-      animation:specialBotDropClean .86s cubic-bezier(.18,.82,.25,1) forwards;
+      animation:specialBotDropFinal .82s cubic-bezier(.18,.82,.25,1) forwards;
     }
 
     .special-overlay__bot-img{
@@ -2804,24 +2834,20 @@
       width:min(58vw,760px);
       max-height:64vh;
       object-fit:contain;
+      opacity:1 !important;
       filter:none !important;
       box-shadow:none !important;
+      transform:none;
     }
 
-    @keyframes specialBotDropClean{
-      0%{
+    @keyframes specialBotDropFinal{
+      from{
         opacity:1;
         transform:translateY(-130vh);
       }
-      100%{
+      to{
         opacity:1;
         transform:translateY(0);
-      }
-    }
-
-    @media (prefers-reduced-motion:reduce){
-      .special-overlay__bot-wrap{
-        animation:none !important;
       }
     }
 
@@ -3811,19 +3837,22 @@
       const card = document.getElementById("specialCommandCard");
       const overlay = document.getElementById("specialOverlay");
       const video = document.getElementById("specialOverlayVideo");
+      const botWrap = overlay?.querySelector(".special-overlay__bot-wrap");
       const normalVideo = document.getElementById("botBackgroundVideo");
       const inviteUrl = "https://discord.com/oauth2/authorize?client_id=1548613088557793370&scope=bot%20applications.commands";
 
-      if (!card || !overlay || !video) return;
+      if (!card || !overlay || !video || !botWrap) return;
 
       let running = false;
       let rafId = 0;
       let videoStarted = false;
 
-      const isDesktop = () => window.matchMedia("(min-width:1025px)").matches;
+      const isDesktop = () =>
+        window.matchMedia("(min-width:1025px)").matches;
 
       const getScroller = () => {
         const page = document.querySelector(".lux-page");
+
         if (
           page &&
           page.scrollHeight > page.clientHeight + 2 &&
@@ -3831,6 +3860,7 @@
         ) {
           return page;
         }
+
         return document.scrollingElement || document.documentElement;
       };
 
@@ -3845,6 +3875,7 @@
             document.body.scrollTop ||
             0;
         }
+
         return scroller.scrollTop;
       };
 
@@ -3863,11 +3894,13 @@
       const startVideo = () => {
         if (videoStarted) return;
         videoStarted = true;
+
         try {
           video.currentTime = 0;
-          const promise = video.play();
-          if (promise && typeof promise.catch === "function") {
-            promise.catch(() => {});
+          const p = video.play();
+
+          if (p && typeof p.catch === "function") {
+            p.catch(() => {});
           }
         } catch (_) {}
       };
@@ -3876,7 +3909,25 @@
         window.location.href = inviteUrl;
       };
 
-      const start = () => {
+      const dropBotAndGo = () => {
+        const onDropEnd = (event) => {
+          if (event.animationName !== "specialBotDropFinal") return;
+          botWrap.removeEventListener("animationend",onDropEnd);
+
+          /* Keep SPECIAL video + BOT PNG exactly as-is and navigate now. */
+          goInvite();
+        };
+
+        botWrap.addEventListener("animationend",onDropEnd);
+        overlay.classList.add("is-bot-drop");
+
+        /* Safety fallback only; normally animationend fires first. */
+        window.setTimeout(() => {
+          if (running) goInvite();
+        },1100);
+      };
+
+      const startSequence = () => {
         if (running) return;
 
         if (!isDesktop()) {
@@ -3885,38 +3936,77 @@
         }
 
         running = true;
-        videoStarted = false;
         card.classList.add("is-triggered");
-        document.body.classList.add("special-running");
-
-        if (normalVideo) {
-          try { normalVideo.pause(); } catch (_) {}
-        }
 
         const scroller = getScroller();
+        const originalTop = getTop(scroller);
+
+        /*
+          BUTTON PRESS:
+          Make the REAL page move immediately.
+          Do this before video playback/decoding.
+        */
+        const kick = Math.min(34,Math.max(18,originalTop * .006));
+        setTop(scroller,Math.max(0,originalTop - kick));
+
         const startTop = getTop(scroller);
-        const duration = Math.min(8000,Math.max(6500,5200 + startTop * .38));
-        const startedAt = performance.now();
+
+        document.body.classList.add("special-running");
 
         overlay.style.setProperty("--special-opacity","0");
-        overlay.classList.add("is-running");
+        overlay.classList.add("is-rising");
         overlay.setAttribute("aria-hidden","false");
+
+        if (normalVideo) {
+          requestAnimationFrame(() => {
+            try { normalVideo.pause(); } catch (_) {}
+          });
+        }
+
+        /*
+          Keep the rise clearly visible, but not painfully slow.
+          6.2–7.4 seconds depending on distance.
+        */
+        const duration = Math.min(
+          7400,
+          Math.max(6200,5000 + startTop * .32)
+        );
+
+        const startedAt = performance.now();
 
         const frame = (now) => {
           const elapsed = now - startedAt;
           const t = Math.min(1,elapsed / duration);
 
-          /* Linear travel = visible movement from the first frame. */
+          /*
+            Linear REAL reverse scroll:
+            text/cards visibly travel upward the whole time.
+          */
           setTop(scroller,startTop * (1 - t));
 
-          /* Start media only after the page has already begun moving. */
-          if (!videoStarted && t > 0) {
+          /*
+            Do not let video work block the initial click.
+            Start it only after the page is already moving.
+          */
+          if (!videoStarted && elapsed >= 120) {
             startVideo();
           }
 
-          /* SPECIAL becomes fully opaque quickly (~first 1 sec). */
-          const opacity = Math.min(1,t / .16);
-          overlay.style.setProperty("--special-opacity",opacity.toFixed(3));
+          /*
+            SPECIAL video fades in BEHIND the moving page.
+            Starts after movement is obvious, reaches 100% quickly.
+          */
+          const fadeStartMs = 180;
+          const fadeDurationMs = 900;
+          const opacity = Math.max(
+            0,
+            Math.min(1,(elapsed - fadeStartMs) / fadeDurationMs)
+          );
+
+          overlay.style.setProperty(
+            "--special-opacity",
+            opacity.toFixed(3)
+          );
 
           if (t < 1) {
             rafId = requestAnimationFrame(frame);
@@ -3925,20 +4015,30 @@
 
           rafId = 0;
           setTop(scroller,0);
-          overlay.style.setProperty("--special-opacity","1");
-          overlay.classList.add("is-bot-drop");
 
-          /* Drop is .86s; switch immediately after it lands. */
-          window.setTimeout(goInvite,900);
+          /*
+            TOP reached:
+            same SPECIAL video moves to foreground.
+            It NEVER disappears or turns black.
+          */
+          overlay.style.setProperty("--special-opacity","1");
+          overlay.classList.remove("is-rising");
+          overlay.classList.add("is-front");
+
+          /*
+            Drop BOT PNG over the still-playing SPECIAL video.
+          */
+          requestAnimationFrame(() => {
+            dropBotAndGo();
+          });
         };
 
-        /* The first requested frame performs the first scroll movement. */
         rafId = requestAnimationFrame(frame);
       };
 
       card.addEventListener("click",(event) => {
         event.preventDefault();
-        start();
+        startSequence();
       });
     })();
   </script>
