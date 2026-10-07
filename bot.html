@@ -380,13 +380,16 @@
       background:
         linear-gradient(
           90deg,
-          #1FB6F5 0%,
-          #28C0FC 38%,
-          #FFFFFF 50%,
-          #8EDCFF 62%,
-          #5B8CFF 100%
+          #ff004c 0%,
+          #ff8a00 14%,
+          #ffe600 28%,
+          #38ff7a 42%,
+          #22d3ff 56%,
+          #4f72ff 70%,
+          #b84dff 84%,
+          #ff3bd4 100%
         );
-      background-size:300% 100%;
+      background-size:400% 100%;
 
       -webkit-mask:
         linear-gradient(#000 0 0) content-box,
@@ -436,7 +439,7 @@
 
     @keyframes inviteRainbowBorder{
       from{background-position:0% 50%}
-      to{background-position:300% 50%}
+      to{background-position:400% 50%}
     }
 
     .lux-section{
@@ -2857,6 +2860,624 @@
       }
     }
 
+  
+    /* =========================================================
+       PC COMMAND GRID FIX
+       ========================================================= */
+
+    @media (min-width:1025px){
+      .command-grid-pc-six{
+        grid-template-columns:repeat(3,minmax(0,1fr)) !important;
+        gap:16px !important;
+      }
+
+      .command-grid-pc-six .command-card{
+        min-width:0;
+        min-height:242px;
+        padding:24px 22px 22px !important;
+        overflow:hidden;
+      }
+
+      /* Keep command name and copy button inside each card. */
+      .command-grid-pc-six .command-top{
+        display:grid !important;
+        grid-template-columns:minmax(0,1fr) auto;
+        gap:12px;
+        align-items:start;
+        width:100%;
+      }
+
+      .command-grid-pc-six .cmd{
+        min-width:0;
+        max-width:100%;
+        font-size:clamp(25px,2.05vw,35px) !important;
+        line-height:1 !important;
+        letter-spacing:-.025em;
+        overflow-wrap:anywhere;
+      }
+
+      .command-grid-pc-six .copy-command{
+        position:static !important;
+        flex:none;
+        width:auto !important;
+        min-width:116px;
+        max-width:130px;
+        height:43px;
+        padding:0 12px !important;
+        font-size:8px !important;
+        white-space:nowrap;
+      }
+
+      .command-grid-pc-six .command-card h3{
+        margin-top:16px;
+      }
+
+      .command-grid-pc-six .command-card p{
+        font-size:11.5px;
+        line-height:1.72;
+      }
+
+      /* SPECIAL occupies exactly the same cell size as the other five. */
+      .command-grid-pc-six .special-command-card{
+        min-height:242px;
+        height:auto;
+      }
+
+      .command-grid-pc-six .special-command-chip{
+        min-width:94px;
+        min-height:31px;
+        padding:0 10px;
+      }
+    }
+
+  
+    /* =========================================================
+       SPECIAL FINAL — hover rainbow + long upward motion
+       ========================================================= */
+
+    /* 3x2 PC command grid */
+    @media (min-width:1025px){
+      .command-grid-pc-six{
+        grid-template-columns:repeat(3,minmax(0,1fr)) !important;
+        gap:16px !important;
+        align-items:stretch;
+      }
+
+      .command-grid-pc-six .command-card{
+        min-width:0;
+        min-height:242px;
+        padding:24px 22px 22px !important;
+        overflow:hidden;
+      }
+
+      .command-grid-pc-six .command-top{
+        display:grid !important;
+        grid-template-columns:minmax(0,1fr) auto;
+        gap:12px;
+        align-items:start;
+        width:100%;
+      }
+
+      .command-grid-pc-six .cmd{
+        min-width:0;
+        max-width:100%;
+        font-size:clamp(25px,2.05vw,35px) !important;
+        line-height:1 !important;
+        letter-spacing:-.025em;
+        overflow-wrap:anywhere;
+      }
+
+      .command-grid-pc-six .copy-command{
+        position:static !important;
+        flex:none;
+        width:auto !important;
+        min-width:116px;
+        max-width:130px;
+        height:43px;
+        padding:0 12px !important;
+        font-size:8px !important;
+        white-space:nowrap;
+      }
+
+      .command-grid-pc-six .command-card h3{
+        margin-top:16px;
+      }
+
+      .command-grid-pc-six .command-card p{
+        font-size:11.5px;
+        line-height:1.72;
+      }
+
+      .command-grid-pc-six .special-command-card{
+        min-height:242px;
+      }
+    }
+
+    /* SPECIAL card */
+    .special-command-card{
+      position:relative;
+      overflow:hidden;
+      isolation:isolate;
+      display:flex;
+      flex-direction:column;
+      text-decoration:none;
+      color:inherit;
+      border-color:rgba(40,192,252,.28) !important;
+      background:
+        linear-gradient(145deg,rgba(28,36,46,.56),rgba(12,17,24,.42)) !important;
+      transition:
+        transform .28s ease,
+        border-color .28s ease,
+        box-shadow .28s ease,
+        background .28s ease;
+    }
+
+    .special-command-label{
+      color:#8EDCFF;
+      font:700 14px/1 "Teko",sans-serif;
+      letter-spacing:.15em;
+      text-shadow:none;
+    }
+
+    .special-command-card h3{
+      margin-top:18px !important;
+      color:#fff !important;
+      font-size:clamp(28px,2.2vw,40px) !important;
+      line-height:1.08 !important;
+      font-weight:900 !important;
+      letter-spacing:-.025em !important;
+      text-shadow:0 1px 2px rgba(0,0,0,.72);
+      transition:
+        transform .28s ease,
+        filter .28s ease;
+    }
+
+    .special-command-card p{
+      transition:
+        color .28s ease,
+        text-shadow .28s ease;
+    }
+
+    .special-command-cta{
+      margin-top:auto;
+      padding-top:16px;
+      color:#8EDCFF;
+      font:700 15px/1 "Teko",sans-serif;
+      letter-spacing:.12em;
+      text-shadow:none;
+      transition:
+        transform .28s ease,
+        color .28s ease,
+        text-shadow .28s ease;
+    }
+
+    @keyframes specialTitleRainbow{
+      from{background-position:0% 50%}
+      to{background-position:320% 50%}
+    }
+
+    @keyframes specialCardGlow{
+      0%,100%{
+        box-shadow:
+          inset 0 1px 0 rgba(255,255,255,.06),
+          0 18px 42px rgba(0,0,0,.18),
+          0 0 14px rgba(40,192,252,.06);
+      }
+      50%{
+        box-shadow:
+          inset 0 1px 0 rgba(255,255,255,.10),
+          0 24px 50px rgba(0,0,0,.24),
+          0 0 18px rgba(255,110,220,.28),
+          0 0 30px rgba(64,214,255,.32),
+          0 0 46px rgba(255,221,92,.24);
+      }
+    }
+
+    @media (hover:hover) and (pointer:fine){
+      .special-command-card:hover{
+        transform:translateY(-4px) scale(1.012);
+        border-color:rgba(255,255,255,.78) !important;
+        background:
+          radial-gradient(circle at 20% 14%,rgba(255,85,196,.22),transparent 34%),
+          radial-gradient(circle at 80% 76%,rgba(56,217,255,.20),transparent 34%),
+          radial-gradient(circle at 50% 50%,rgba(255,225,88,.15),transparent 48%),
+          linear-gradient(145deg,rgba(40,28,54,.78),rgba(16,21,30,.66)) !important;
+        animation:specialCardGlow 1.7s linear infinite;
+      }
+
+      .special-command-card:hover h3{
+        color:transparent !important;
+        background:
+          linear-gradient(
+            90deg,
+            #ff3b6b 0%,
+            #ff9b31 14%,
+            #ffe65b 28%,
+            #5cff9b 42%,
+            #38d9ff 56%,
+            #6e7cff 70%,
+            #c45cff 84%,
+            #ff58d6 100%
+          );
+        background-size:320% 100%;
+        -webkit-background-clip:text;
+        background-clip:text;
+        animation:specialTitleRainbow 2.7s linear infinite;
+        transform:scale(1.05);
+        filter:
+          drop-shadow(0 0 10px rgba(255,255,255,.18))
+          drop-shadow(0 0 18px rgba(56,217,255,.12));
+      }
+
+      .special-command-card:hover p{
+        color:#fff;
+        text-shadow:
+          0 0 8px rgba(255,255,255,.14),
+          0 1px 2px rgba(0,0,0,.88),
+          0 2px 8px rgba(0,0,0,.46);
+      }
+
+      .special-command-card:hover .special-command-cta{
+        color:#fff48c;
+        transform:translateX(7px) scale(1.02);
+        text-shadow:
+          0 0 10px rgba(255,240,130,.48),
+          0 0 24px rgba(56,217,255,.26);
+      }
+    }
+
+    /* =========================================================
+       SPECIAL overlay
+       ========================================================= */
+    .special-overlay{
+      position:fixed;
+      inset:0;
+      z-index:1400;
+      opacity:0;
+      visibility:hidden;
+      pointer-events:none;
+      overflow:hidden;
+      background:#000;
+      transition:
+        opacity .26s ease,
+        visibility 0s linear .26s;
+    }
+
+    .special-overlay.is-active{
+      opacity:1;
+      visibility:visible;
+      pointer-events:auto;
+      transition:
+        opacity .26s ease,
+        visibility 0s linear 0s;
+    }
+
+    .special-overlay__shade,
+    .special-overlay__video-wrap,
+    .special-overlay__bot-wrap,
+    .special-overlay__flash,
+    .special-overlay__skip{
+      position:absolute;
+    }
+
+    .special-overlay__shade{
+      inset:0;
+      z-index:1;
+      background:
+        radial-gradient(circle at center,rgba(255,255,255,.05),rgba(0,0,0,.50) 46%,rgba(0,0,0,.96) 100%);
+      opacity:0;
+      transition:opacity .18s ease;
+    }
+
+    .special-overlay.is-active .special-overlay__shade{
+      opacity:1;
+    }
+
+    .special-overlay__video-wrap{
+      inset:0;
+      z-index:0;
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      background:#000;
+      overflow:hidden;
+    }
+
+    .special-overlay__video{
+      width:100%;
+      height:100%;
+      object-fit:contain;
+      opacity:0;
+      filter:
+        brightness(.28)
+        saturate(.70)
+        contrast(1.03)
+        sepia(.06);
+      transform:translateY(0) scale(1);
+      transition:
+        opacity .72s ease .18s,
+        filter 6.8s ease .15s;
+    }
+
+    .special-overlay.is-active .special-overlay__video{
+      opacity:1;
+      filter:
+        brightness(.88)
+        saturate(1.28)
+        contrast(1.08)
+        sepia(.68)
+        hue-rotate(-8deg);
+    }
+
+    .special-overlay__gold,
+    .special-overlay__vignette{
+      position:absolute;
+      inset:0;
+      pointer-events:none;
+    }
+
+    .special-overlay__gold{
+      opacity:0;
+      background:
+        radial-gradient(circle at 50% 26%,rgba(255,236,160,.26),transparent 30%),
+        radial-gradient(circle at 50% 60%,rgba(255,210,98,.20),transparent 42%),
+        linear-gradient(180deg,rgba(255,210,92,.12),rgba(86,48,8,.20) 60%,rgba(0,0,0,.38));
+      mix-blend-mode:screen;
+      transition:opacity 6.6s ease .12s;
+    }
+
+    .special-overlay.is-active .special-overlay__gold{
+      opacity:.95;
+    }
+
+    .special-overlay__vignette{
+      background:
+        radial-gradient(circle at center,transparent 30%,rgba(0,0,0,.14) 52%,rgba(0,0,0,.72) 100%);
+    }
+
+    /* BOT image */
+    .special-overlay__bot-wrap{
+      left:50%;
+      top:50%;
+      z-index:3;
+      transform:translate(-50%,-190vh) scale(.92);
+      opacity:0;
+      width:min(48vw,620px);
+      max-width:88vw;
+      will-change:transform,opacity;
+      pointer-events:none;
+    }
+
+    .special-overlay__bot-img{
+      display:block;
+      width:100%;
+      height:auto;
+      filter:
+        drop-shadow(0 10px 24px rgba(0,0,0,.52))
+        drop-shadow(0 0 8px rgba(255,218,109,.10));
+      animation:botIdleGlow 2.1s ease-in-out infinite;
+    }
+
+    .special-overlay__bot-shine{
+      position:absolute;
+      inset:0;
+      background:
+        linear-gradient(
+          108deg,
+          rgba(255,255,255,0) 0%,
+          rgba(255,255,255,.08) 26%,
+          rgba(255,255,255,.72) 42%,
+          rgba(255,255,255,.12) 58%,
+          rgba(255,255,255,0) 74%
+        );
+      mix-blend-mode:screen;
+      transform:translateX(-150%) skewX(-22deg);
+      animation:botShineSweep 2.15s linear infinite;
+      pointer-events:none;
+    }
+
+    .special-overlay__bot-spark{
+      position:absolute;
+      width:11px;
+      height:11px;
+      border-radius:50%;
+      background:
+        radial-gradient(circle,#fff 0%,rgba(255,255,255,.86) 34%,rgba(255,235,168,.30) 58%,rgba(255,255,255,0) 100%);
+      box-shadow:
+        0 0 14px rgba(255,255,255,.95),
+        0 0 28px rgba(255,223,111,.70);
+      animation:botSparkTwinkle 1.3s ease-in-out infinite;
+    }
+
+    .spark-1{ top:11%; left:15%; animation-delay:.05s; }
+    .spark-2{ top:21%; right:16%; animation-delay:.46s; }
+    .spark-3{ bottom:17%; left:47%; animation-delay:.86s; }
+    .spark-4{ bottom:31%; right:8%; animation-delay:1.12s; }
+
+    @keyframes botIdleGlow{
+      0%,100%{
+        filter:
+          drop-shadow(0 10px 24px rgba(0,0,0,.52))
+          drop-shadow(0 0 8px rgba(255,218,109,.12));
+      }
+      50%{
+        filter:
+          drop-shadow(0 12px 28px rgba(0,0,0,.56))
+          drop-shadow(0 0 20px rgba(255,242,178,.34))
+          drop-shadow(0 0 36px rgba(255,208,74,.28));
+      }
+    }
+
+    @keyframes botShineSweep{
+      from{ transform:translateX(-150%) skewX(-22deg); }
+      to{ transform:translateX(155%) skewX(-22deg); }
+    }
+
+    @keyframes botSparkTwinkle{
+      0%,100%{ opacity:.18; transform:scale(.60); }
+      50%{ opacity:1; transform:scale(1.34); }
+    }
+
+    @keyframes specialBotDrop{
+      0%{
+        transform:translate(-50%,-190vh) scale(.92);
+        opacity:0;
+      }
+      14%{
+        opacity:1;
+      }
+      70%{
+        transform:translate(-50%,-55%) scale(1.035);
+        opacity:1;
+      }
+      82%{
+        transform:translate(-50%,-50%) scale(.982);
+      }
+      92%{
+        transform:translate(-50%,-50%) scale(1.018);
+      }
+      100%{
+        transform:translate(-50%,-50%) scale(1);
+        opacity:1;
+      }
+    }
+
+    .special-overlay.is-active .special-overlay__bot-wrap{
+      animation:specialBotDrop 1.82s cubic-bezier(.16,.83,.18,1) 6.0s forwards;
+    }
+
+    /* White flash */
+    .special-overlay__flash{
+      inset:0;
+      z-index:4;
+      background:
+        radial-gradient(
+          circle at center,
+          rgba(255,255,255,1) 0%,
+          rgba(255,255,255,.98) 26%,
+          rgba(255,255,255,.82) 42%,
+          rgba(255,255,255,.18) 64%,
+          rgba(255,255,255,0) 78%
+        );
+      opacity:0;
+      pointer-events:none;
+    }
+
+    .special-overlay.is-finish .special-overlay__flash{
+      animation:specialWhiteOut .95s ease forwards;
+    }
+
+    @keyframes specialWhiteOut{
+      0%{ opacity:0; }
+      28%{ opacity:.48; }
+      62%{ opacity:1; }
+      78%{ opacity:1; }
+      100%{ opacity:0; }
+    }
+
+    /* Skip */
+    .special-overlay__skip{
+      right:26px;
+      top:24px;
+      z-index:5;
+      min-height:38px;
+      padding:0 16px;
+      border:1px solid rgba(255,255,255,.62);
+      background:rgba(0,0,0,.24);
+      color:#fff;
+      font:700 14px/1 "Teko",sans-serif;
+      letter-spacing:.16em;
+      opacity:0;
+      transition:
+        opacity .25s ease .2s,
+        border-color .25s ease,
+        color .25s ease;
+    }
+
+    .special-overlay.is-active .special-overlay__skip{
+      opacity:1;
+    }
+
+    @media (hover:hover) and (pointer:fine){
+      .special-overlay__skip:hover{
+        border-color:#8EDCFF;
+        color:#8EDCFF;
+      }
+    }
+
+    /* Long upward movement feeling */
+    .special-sequence-active .lux-page,
+    .special-sequence-active .topbar,
+    .special-sequence-active .bot-pc-home,
+    .special-sequence-active .subpage-bottom-nav{
+      transition:
+        transform 7.4s cubic-bezier(.14,.72,.12,1),
+        opacity .68s ease,
+        filter 6.8s ease;
+    }
+
+    .special-sequence-active .lux-page{
+      transform:translateY(-132vh);
+      opacity:0;
+      filter:blur(10px) saturate(.56);
+    }
+
+    .special-sequence-active .topbar,
+    .special-sequence-active .bot-pc-home,
+    .special-sequence-active .subpage-bottom-nav{
+      transform:translateY(-78vh);
+      opacity:0;
+      filter:blur(8px);
+    }
+
+    @media (max-width:1024px){
+      .special-overlay__bot-wrap{
+        width:min(58vw,470px);
+      }
+    }
+
+    @media (prefers-reduced-motion:reduce){
+      .special-overlay__video,
+      .special-overlay__gold,
+      .special-overlay__bot-wrap,
+      .special-overlay__bot-img,
+      .special-overlay__bot-shine,
+      .special-overlay__bot-spark,
+      .special-sequence-active .lux-page,
+      .special-sequence-active .topbar,
+      .special-sequence-active .bot-pc-home,
+      .special-sequence-active .subpage-bottom-nav{
+        animation:none !important;
+        transition:none !important;
+      }
+    }
+
+    /* Bottom invite CTA must remain visible and keep existing rainbow behavior */
+    .bottom-invite-wrap{
+      opacity:1 !important;
+      transform:none !important;
+      visibility:visible !important;
+    }
+
+  
+    /* =========================================================
+       SPECIAL CARD — PC ONLY
+       ========================================================= */
+
+    /* Tablet / mobile: hide the SPECIAL card completely. */
+    @media (max-width:1024px){
+      .special-command-card{
+        display:none !important;
+      }
+    }
+
+    /* PC: SPECIAL remains the sixth tile in the 3 x 2 grid. */
+    @media (min-width:1025px){
+      .special-command-card{
+        display:flex !important;
+      }
+    }
+
   </style>
 
   <script>
@@ -3409,7 +4030,6 @@
         >
           <div class="command-top">
             <div class="special-command-label">SPECIAL</div>
-            <span class="special-command-chip">PC LIMITED</span>
           </div>
           <h3>BOTを導入する</h3>
           <p>
@@ -3808,6 +4428,7 @@
 
   <div id="specialOverlay" class="special-overlay" aria-hidden="true">
     <div class="special-overlay__shade"></div>
+
     <div class="special-overlay__video-wrap">
       <video
         id="specialOverlayVideo"
@@ -3815,15 +4436,28 @@
         muted
         playsinline
         preload="auto"
-        poster="assets/bot/special-goddessfall-poster.jpg"
       >
         <source src="assets/bot/special-goddessfall.mp4" type="video/mp4">
       </video>
+
       <div class="special-overlay__gold"></div>
       <div class="special-overlay__vignette"></div>
     </div>
 
-    <div class="special-overlay__bot" aria-hidden="true">BOT</div>
+    <div class="special-overlay__bot-wrap" aria-hidden="true">
+      <img
+        src="assets/bot/special-bot-logo-3d.png"
+        alt=""
+        class="special-overlay__bot-img"
+      >
+      <span class="special-overlay__bot-shine"></span>
+      <span class="special-overlay__bot-spark spark-1"></span>
+      <span class="special-overlay__bot-spark spark-2"></span>
+      <span class="special-overlay__bot-spark spark-3"></span>
+      <span class="special-overlay__bot-spark spark-4"></span>
+    </div>
+
+    <div class="special-overlay__flash"></div>
 
     <button
       id="specialOverlaySkip"
@@ -3864,17 +4498,41 @@
       const isDesktop = () => window.matchMedia("(min-width: 1025px)").matches;
       const reducedMotion = () => window.matchMedia("(prefers-reduced-motion: reduce)").matches;
 
-      let exitTimer = 0;
+      let inviteWindow = null;
+      let timers = [];
 
-      const goInvite = () => {
-        window.location.href = inviteUrl;
+      const clearTimers = () => {
+        timers.forEach((id) => window.clearTimeout(id));
+        timers = [];
+      };
+
+      const openInvitePlaceholder = () => {
+        try {
+          inviteWindow = window.open("about:blank", "_blank");
+        } catch (error) {
+          inviteWindow = null;
+        }
+      };
+
+      const goInviteBlank = () => {
+        if (inviteWindow && !inviteWindow.closed) {
+          try {
+            inviteWindow.opener = null;
+            inviteWindow.location.replace(inviteUrl);
+            inviteWindow.focus();
+            return;
+          } catch (error) {}
+        }
+
+        window.open(inviteUrl, "_blank", "noopener,noreferrer");
       };
 
       const cleanupSpecial = () => {
         document.body.classList.remove("special-sequence-active");
-        overlay.classList.remove("is-active");
-        overlay.setAttribute("aria-hidden","true");
-        window.clearTimeout(exitTimer);
+        overlay.classList.remove("is-active", "is-finish");
+        overlay.setAttribute("aria-hidden", "true");
+        clearTimers();
+
         try {
           overlayVideo.pause();
           overlayVideo.currentTime = 0;
@@ -3883,13 +4541,15 @@
 
       const startSpecial = () => {
         if (!isDesktop() || reducedMotion()) {
-          goInvite();
+          window.open(inviteUrl, "_blank", "noopener,noreferrer");
           return;
         }
 
+        openInvitePlaceholder();
+
         document.body.classList.add("special-sequence-active");
         overlay.classList.add("is-active");
-        overlay.setAttribute("aria-hidden","false");
+        overlay.setAttribute("aria-hidden", "false");
 
         try {
           overlayVideo.currentTime = 0;
@@ -3899,31 +4559,33 @@
           }
         } catch (error) {}
 
-        exitTimer = window.setTimeout(() => {
+        timers.push(window.setTimeout(() => {
+          overlay.classList.add("is-finish");
+        }, 7380));
+
+        timers.push(window.setTimeout(() => {
+          goInviteBlank();
+        }, 7700));
+
+        timers.push(window.setTimeout(() => {
           cleanupSpecial();
-          goInvite();
-        }, 4050);
+        }, 8320));
       };
 
       specialCard.addEventListener("click", (event) => {
         if (!isDesktop() || reducedMotion()) return;
+
         event.preventDefault();
         startSpecial();
       });
 
       skipButton?.addEventListener("click", () => {
+        goInviteBlank();
         cleanupSpecial();
-        goInvite();
       });
 
       document.addEventListener("keydown", (event) => {
         if (event.key === "Escape" && overlay.classList.contains("is-active")) {
-          cleanupSpecial();
-        }
-      });
-
-      overlay.addEventListener("click", (event) => {
-        if (event.target === overlay) {
           cleanupSpecial();
         }
       });
