@@ -3978,6 +3978,231 @@
       transition:none !important;
     }
 
+  
+    /* =========================================================
+       SPECIAL — immediate click response + slower reverse scroll
+       ========================================================= */
+
+    .special-command-card{
+      transition:
+        transform .18s ease,
+        box-shadow .18s ease,
+        border-color .18s ease,
+        background .18s ease !important;
+    }
+
+    .special-command-card.is-triggered{
+      transform:scale(.985) !important;
+      border-color:#8EDCFF !important;
+      box-shadow:
+        inset 0 0 0 1px rgba(142,220,255,.35),
+        0 0 18px rgba(40,192,252,.28),
+        0 0 34px rgba(142,220,255,.16) !important;
+    }
+
+    .special-command-card.is-triggered h3{
+      color:#fff !important;
+      text-shadow:
+        0 0 8px rgba(255,255,255,.30),
+        0 0 18px rgba(40,192,252,.22) !important;
+    }
+
+    #specialPageGoldWash{
+      transition:opacity 8.8s ease !important;
+    }
+
+    body.special-reverse-running #specialPageGoldWash{
+      opacity:.72 !important;
+    }
+
+  
+    /* =========================================================
+       SPECIAL CROSSFADE RISE
+       Current background fades out while SPECIAL video fades in
+       underneath the page during the slow reverse scroll.
+       ========================================================= */
+
+    .bot-motion-bg video{
+      transition:
+        opacity 1.15s ease,
+        filter .35s ease !important;
+    }
+
+    body.special-reverse-running .bot-motion-bg video{
+      opacity:0 !important;
+    }
+
+    /* During reverse-scroll, SPECIAL sits behind page content but above old background. */
+    .special-overlay{
+      --special-rise-duration:9000ms;
+      z-index:1 !important;
+      opacity:0 !important;
+      visibility:hidden !important;
+      pointer-events:none !important;
+      background:#000;
+      transition:
+        opacity var(--special-rise-duration) linear,
+        visibility 0s linear var(--special-rise-duration) !important;
+    }
+
+    .special-overlay.is-prelude{
+      z-index:1 !important;
+      visibility:visible !important;
+      opacity:.90 !important;
+      pointer-events:none !important;
+      transition:
+        opacity var(--special-rise-duration) linear,
+        visibility 0s linear 0s !important;
+    }
+
+    /* Once TOP is reached, SPECIAL becomes the full foreground screen. */
+    .special-overlay.is-active{
+      z-index:1400 !important;
+      visibility:visible !important;
+      opacity:1 !important;
+      pointer-events:auto !important;
+      transition:
+        opacity .55s ease,
+        visibility 0s linear 0s !important;
+    }
+
+    .special-overlay__video-wrap{
+      position:absolute;
+      inset:0;
+      width:100%;
+      height:100%;
+      overflow:hidden;
+      background:#000;
+    }
+
+    /* One SPECIAL video only. Fill screen; no duplicate video / blur layer. */
+    .special-overlay__video{
+      position:absolute;
+      inset:0;
+      width:100%;
+      height:100%;
+      object-fit:cover !important;
+      object-position:center center !important;
+      opacity:1 !important;
+      transform:none !important;
+      filter:
+        brightness(.60)
+        saturate(.86)
+        contrast(1.04)
+        sepia(.08);
+      transition:
+        filter var(--special-rise-duration) ease !important;
+    }
+
+    /* Gold develops gradually while the user is physically moving back toward TOP. */
+    .special-overlay.is-gold .special-overlay__video{
+      filter:
+        brightness(.86)
+        saturate(1.20)
+        contrast(1.08)
+        sepia(.68)
+        hue-rotate(-8deg);
+    }
+
+    .special-overlay__gold{
+      opacity:0 !important;
+      background:
+        radial-gradient(circle at 50% 28%,rgba(255,235,152,.24),transparent 32%),
+        radial-gradient(circle at 50% 64%,rgba(255,208,92,.16),transparent 44%),
+        linear-gradient(180deg,rgba(255,207,82,.10),rgba(108,61,12,.15) 60%,rgba(0,0,0,.26));
+      mix-blend-mode:screen;
+      transition:
+        opacity var(--special-rise-duration) ease !important;
+    }
+
+    .special-overlay.is-gold .special-overlay__gold{
+      opacity:.80 !important;
+    }
+
+    .special-overlay__shade{
+      z-index:2;
+      pointer-events:none;
+      opacity:.30 !important;
+    }
+
+    .special-overlay__vignette{
+      z-index:2;
+      background:
+        radial-gradient(circle at center,transparent 38%,rgba(0,0,0,.10) 60%,rgba(0,0,0,.48) 100%) !important;
+    }
+
+    /* Page content remains visible and really scrolls upward; no fake CSS translation. */
+    .special-sequence-active .lux-page,
+    .special-sequence-active .topbar,
+    .special-sequence-active .bot-pc-home,
+    .special-sequence-active .subpage-bottom-nav,
+    .special-reverse-running .lux-page,
+    .special-reverse-running .topbar,
+    .special-reverse-running .bot-pc-home,
+    .special-reverse-running .subpage-bottom-nav{
+      transform:none !important;
+      opacity:1 !important;
+      filter:none !important;
+      transition:none !important;
+    }
+
+    /* Light gold veil over the real page while it travels upward. */
+    #specialPageGoldWash{
+      position:fixed;
+      inset:0;
+      z-index:20;
+      pointer-events:none;
+      opacity:0;
+      background:
+        linear-gradient(
+          180deg,
+          rgba(255,217,112,.07),
+          rgba(176,104,24,.10)
+        );
+      transition:
+        opacity var(--special-rise-duration,9000ms) ease !important;
+    }
+
+    body.special-reverse-running #specialPageGoldWash{
+      opacity:.42 !important;
+    }
+
+    /* BOT PNG: only its contour glows; no rectangular white panel. */
+    .special-overlay__bot-wrap{
+      z-index:4;
+    }
+
+    .special-overlay__bot-img{
+      filter:
+        drop-shadow(0 0 8px rgba(255,239,170,.36))
+        drop-shadow(0 0 18px rgba(255,207,72,.24))
+        drop-shadow(0 10px 24px rgba(0,0,0,.48)) !important;
+    }
+
+    .special-overlay__bot-shine{
+      background:
+        linear-gradient(
+          108deg,
+          rgba(255,255,255,0) 0%,
+          rgba(255,255,255,0) 31%,
+          rgba(255,255,255,.58) 44%,
+          rgba(255,255,255,.06) 55%,
+          rgba(255,255,255,0) 68%
+        ) !important;
+    }
+
+    /* Fewer spark elements for lower GPU load. */
+    .spark-1{top:13%;left:17%}
+    .spark-2{bottom:20%;right:13%}
+
+    .special-overlay__flash{
+      z-index:6;
+    }
+
+    .special-overlay__skip{
+      z-index:7;
+    }
+
   </style>
 
   <script>
@@ -4926,17 +5151,6 @@
 
     <div class="special-overlay__video-wrap">
       <video
-        id="specialOverlayVideoBg"
-        class="special-overlay__video-bg"
-        muted
-        playsinline
-        preload="auto"
-        aria-hidden="true"
-      >
-        <source src="assets/bot/special-goddessfall.mp4" type="video/mp4">
-      </video>
-
-      <video
         id="specialOverlayVideo"
         class="special-overlay__video"
         muted
@@ -4959,8 +5173,6 @@
       <span class="special-overlay__bot-shine"></span>
       <span class="special-overlay__bot-spark spark-1"></span>
       <span class="special-overlay__bot-spark spark-2"></span>
-      <span class="special-overlay__bot-spark spark-3"></span>
-      <span class="special-overlay__bot-spark spark-4"></span>
     </div>
 
     <div class="special-overlay__flash"></div>
@@ -4996,9 +5208,8 @@
       const specialCard = document.getElementById("specialCommandCard");
       const overlay = document.getElementById("specialOverlay");
       const overlayVideo = document.getElementById("specialOverlayVideo");
-      const overlayVideoBg = document.getElementById("specialOverlayVideoBg");
       const skipButton = document.getElementById("specialOverlaySkip");
-      const goldWash = document.getElementById("specialPageGoldWash");
+      const normalBackgroundVideo = document.getElementById("botBackgroundVideo");
       const inviteUrl = "https://discord.com/oauth2/authorize?client_id=1548613088557793370&scope=bot%20applications.commands";
 
       if (!specialCard || !overlay || !overlayVideo) return;
@@ -5013,6 +5224,7 @@
       const clearTimers = () => {
         timers.forEach((id) => window.clearTimeout(id));
         timers = [];
+
         if (reverseRAF) {
           cancelAnimationFrame(reverseRAF);
           reverseRAF = 0;
@@ -5021,6 +5233,7 @@
 
       const pageScroller = () => {
         const page = document.querySelector(".lux-page");
+
         if (
           page &&
           page.scrollHeight > page.clientHeight + 2 &&
@@ -5028,65 +5241,65 @@
         ) {
           return page;
         }
+
         return document.scrollingElement || document.documentElement;
       };
 
       const getScrollTop = (scroller) => {
-        if (scroller === document.documentElement || scroller === document.body || scroller === document.scrollingElement) {
-          return window.scrollY || document.documentElement.scrollTop || document.body.scrollTop || 0;
+        if (
+          scroller === document.documentElement ||
+          scroller === document.body ||
+          scroller === document.scrollingElement
+        ) {
+          return window.scrollY ||
+            document.documentElement.scrollTop ||
+            document.body.scrollTop ||
+            0;
         }
+
         return scroller.scrollTop;
       };
 
-      const setScrollTop = (scroller, value) => {
-        if (scroller === document.documentElement || scroller === document.body || scroller === document.scrollingElement) {
-          window.scrollTo(0, value);
+      const setScrollTop = (scroller,value) => {
+        if (
+          scroller === document.documentElement ||
+          scroller === document.body ||
+          scroller === document.scrollingElement
+        ) {
+          window.scrollTo(0,value);
         } else {
           scroller.scrollTop = value;
         }
       };
 
-      const easeInOutSine = (t) => -(Math.cos(Math.PI * t) - 1) / 2;
-
-      const slowReverseToTop = (done) => {
-        const scroller = pageScroller();
-        const startTop = getScrollTop(scroller);
-
-        /* Long enough to visibly travel through the page instead of snapping back. */
-        const duration = Math.min(7600, Math.max(5200, 3200 + startTop * 0.62));
-        const startTime = performance.now();
-
-        document.body.classList.add("special-reverse-running");
-
-        const step = (now) => {
-          const elapsed = now - startTime;
-          const t = Math.min(1, elapsed / duration);
-          const eased = easeInOutSine(t);
-
-          setScrollTop(scroller, Math.max(0, startTop * (1 - eased)));
-
-          if (t < 1) {
-            reverseRAF = requestAnimationFrame(step);
-          } else {
-            reverseRAF = 0;
-            setScrollTop(scroller, 0);
-            done();
-          }
-        };
-
-        reverseRAF = requestAnimationFrame(step);
-      };
+      /* Very gentle progression: no sudden rush in the middle. */
+      const easeSlowRise = (t) => t * t * (3 - 2 * t);
 
       const playSpecialVideo = () => {
         try {
           overlayVideo.currentTime = 0;
-          overlayVideoBg.currentTime = 0;
+          const playPromise = overlayVideo.play();
 
-          const p1 = overlayVideo.play();
-          const p2 = overlayVideoBg.play();
+          if (playPromise && typeof playPromise.catch === "function") {
+            playPromise.catch(() => {});
+          }
+        } catch (error) {}
+      };
 
-          if (p1 && typeof p1.catch === "function") p1.catch(() => {});
-          if (p2 && typeof p2.catch === "function") p2.catch(() => {});
+      const pauseNormalBackground = () => {
+        if (!normalBackgroundVideo) return;
+
+        try {
+          normalBackgroundVideo.pause();
+        } catch (error) {}
+      };
+
+      const resumeNormalBackground = () => {
+        if (!normalBackgroundVideo) return;
+
+        try {
+          const p = normalBackgroundVideo.play();
+          if (p && typeof p.catch === "function") p.catch(() => {});
         } catch (error) {}
       };
 
@@ -5094,59 +5307,98 @@
         clearTimers();
         running = false;
 
+        specialCard.classList.remove("is-triggered");
+
         document.body.classList.remove(
           "special-sequence-active",
           "special-reverse-running"
         );
 
         overlay.classList.remove(
+          "is-prelude",
           "is-active",
           "is-gold",
           "is-bot-drop",
           "is-finish"
         );
 
+        overlay.removeAttribute("style");
         overlay.setAttribute("aria-hidden","true");
 
         try {
           overlayVideo.pause();
           overlayVideo.currentTime = 0;
-          overlayVideoBg.pause();
-          overlayVideoBg.currentTime = 0;
         } catch (error) {}
+
+        resumeNormalBackground();
       };
 
       const goInvite = () => {
         window.location.href = inviteUrl;
       };
 
-      const beginOverlaySequence = () => {
+      const finishAtTop = () => {
+        document.body.classList.remove("special-reverse-running");
         document.body.classList.add("special-sequence-active");
 
+        /* SPECIAL was already visible behind the page.
+           At TOP it simply becomes the foreground — no hard cut. */
+        overlay.classList.remove("is-prelude");
         overlay.classList.add("is-active");
         overlay.setAttribute("aria-hidden","false");
 
-        playSpecialVideo();
-
-        /* Video appears above the page TOP, then becomes gold gradually. */
-        timers.push(window.setTimeout(() => {
-          overlay.classList.add("is-gold");
-        }, 450));
-
-        /* Let the full-frame video breathe before BOT drops. */
+        /* Let the full SPECIAL frame breathe, then drop BOT. */
         timers.push(window.setTimeout(() => {
           overlay.classList.add("is-bot-drop");
-        }, 3000));
+        }, 1350));
 
-        /* BOT is now fully down; keep it visible and sparkling. */
+        /* Keep BOT centered and sparkling before the white-out. */
         timers.push(window.setTimeout(() => {
           overlay.classList.add("is-finish");
-        }, 6200));
+        }, 4650));
 
-        /* Navigate only after the white-out has clearly completed. */
         timers.push(window.setTimeout(() => {
           goInvite();
-        }, 7100));
+        }, 5650));
+      };
+
+      const slowReverseToTop = () => {
+        const scroller = pageScroller();
+        const startTop = getScrollTop(scroller);
+
+        /*
+          Slow enough to visibly travel back through the site.
+          Long pages take longer, but capped so it does not become excessive.
+        */
+        const duration = Math.min(
+          14000,
+          Math.max(10000,6200 + startTop * 1.02)
+        );
+
+        overlay.style.setProperty("--special-rise-duration",`${duration}ms`);
+
+        const startTime = performance.now();
+
+        const step = (now) => {
+          const elapsed = now - startTime;
+          const t = Math.min(1,elapsed / duration);
+          const eased = easeSlowRise(t);
+
+          setScrollTop(
+            scroller,
+            Math.max(0,startTop * (1 - eased))
+          );
+
+          if (t < 1) {
+            reverseRAF = requestAnimationFrame(step);
+          } else {
+            reverseRAF = 0;
+            setScrollTop(scroller,0);
+            finishAtTop();
+          }
+        };
+
+        reverseRAF = requestAnimationFrame(step);
       };
 
       const startSpecial = () => {
@@ -5158,24 +5410,42 @@
         }
 
         running = true;
+        specialCard.classList.add("is-triggered");
 
-        /* First travel back through the actual BOT page, slowly enough to follow. */
-        slowReverseToTop(() => {
-          beginOverlaySequence();
-        });
+        /*
+          Immediate response:
+          1. freeze/fade the normal background
+          2. start SPECIAL video underneath the real page
+          3. slowly reverse-scroll the actual page
+        */
+        pauseNormalBackground();
+
+        document.body.classList.add("special-reverse-running");
+
+        overlay.classList.add(
+          "is-prelude",
+          "is-gold"
+        );
+        overlay.setAttribute("aria-hidden","false");
+
+        playSpecialVideo();
+
+        timers.push(window.setTimeout(() => {
+          slowReverseToTop();
+        },180));
       };
 
-      specialCard.addEventListener("click", (event) => {
+      specialCard.addEventListener("click",(event) => {
         event.preventDefault();
         startSpecial();
       });
 
-      skipButton?.addEventListener("click", () => {
+      skipButton?.addEventListener("click",() => {
         cleanupSpecial();
         goInvite();
       });
 
-      document.addEventListener("keydown", (event) => {
+      document.addEventListener("keydown",(event) => {
         if (event.key === "Escape" && running) {
           cleanupSpecial();
         }
