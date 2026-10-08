@@ -2890,9 +2890,9 @@
     }
 
     /* =========================================================
-       SPECIAL FINAL — video fade -> black -> static PING -> black
-       Face-focused / black-blended / subtle red eyes
+       SPECIAL FINAL — video fade -> black -> face close-up -> Discord
        Uses assets/bot/special-bot-logo-3d.png
+       New image already contains the red-eye look.
        ========================================================= */
 
     .special-impact-black{
@@ -2931,95 +2931,51 @@
 
     .special-static-stage__visual{
       position:relative;
-      width:min(88vw,980px);
-      height:min(84vh,780px);
+      width:100%;
+      height:100%;
       display:grid;
       place-items:center;
       opacity:0;
-      transform:scale(.985);
-      transition:
-        opacity .20s ease,
-        transform .20s ease;
+      transition:opacity .18s ease;
     }
 
     .special-static-stage.is-show-ping .special-static-stage__visual{
       opacity:1;
-      transform:scale(1);
     }
 
+    /* Face close-up: intentionally larger than before.
+       Keep the head dominant, with the rest fading into black. */
     .special-static-stage__img{
       display:block;
-      max-width:88vw;
-      max-height:84vh;
-      width:auto;
+      width:min(92vw,1120px);
+      max-width:92vw;
+      max-height:88vh;
       height:auto;
       object-fit:contain;
-      object-position:center 35%;
+      object-position:center center;
+      opacity:.98;
       filter:
-        brightness(.58)
-        contrast(1.14)
-        saturate(.72);
-      opacity:.96;
+        brightness(.72)
+        contrast(1.12)
+        saturate(.88);
       -webkit-mask-image:
         radial-gradient(
-          ellipse 58% 48% at 50% 38%,
+          ellipse 66% 58% at 50% 47%,
           #000 0%,
-          #000 46%,
-          rgba(0,0,0,.94) 58%,
-          rgba(0,0,0,.58) 72%,
+          #000 52%,
+          rgba(0,0,0,.92) 67%,
+          rgba(0,0,0,.48) 82%,
           transparent 100%
         );
       mask-image:
         radial-gradient(
-          ellipse 58% 48% at 50% 38%,
+          ellipse 66% 58% at 50% 47%,
           #000 0%,
-          #000 46%,
-          rgba(0,0,0,.94) 58%,
-          rgba(0,0,0,.58) 72%,
+          #000 52%,
+          rgba(0,0,0,.92) 67%,
+          rgba(0,0,0,.48) 82%,
           transparent 100%
         );
-    }
-
-    /* subtle constant red eye glow */
-    .special-static-stage__eyes{
-      position:absolute;
-      left:50%;
-      top:34%;
-      width:23%;
-      height:9%;
-      transform:translate(-50%,-50%);
-      pointer-events:none;
-      opacity:.78;
-      filter:blur(1px);
-    }
-
-    .special-static-stage__eye{
-      position:absolute;
-      top:50%;
-      width:18%;
-      aspect-ratio:1.7 / 1;
-      border-radius:50%;
-      background:
-        radial-gradient(
-          ellipse at center,
-          rgba(255,245,245,.96) 0%,
-          rgba(255,65,65,.95) 22%,
-          rgba(255,0,0,.72) 48%,
-          rgba(255,0,0,.22) 68%,
-          rgba(255,0,0,0) 100%
-        );
-      box-shadow:
-        0 0 8px rgba(255,0,0,.48),
-        0 0 18px rgba(255,0,0,.28);
-      transform:translateY(-50%);
-    }
-
-    .special-static-stage__eye--left{
-      left:17%;
-    }
-
-    .special-static-stage__eye--right{
-      right:17%;
     }
 
     @keyframes specialImpactBlack{
@@ -4069,10 +4025,6 @@
           alt=""
           class="special-static-stage__img"
         >
-        <div class="special-static-stage__eyes" aria-hidden="true">
-          <span class="special-static-stage__eye special-static-stage__eye--left"></span>
-          <span class="special-static-stage__eye special-static-stage__eye--right"></span>
-        </div>
       </div>
     </div>
 
@@ -4401,12 +4353,8 @@
                     window.setTimeout(() => {
                       staticStage?.classList.add("is-show-ping");
 
-                      /* keep it visible only briefly */
-                      window.setTimeout(() => {
-                        impactBlack?.classList.add("is-black");
-                      },260);
-
-                      window.setTimeout(goInvite,520);
+                      /* keep the close-up visible briefly, then go directly to Discord */
+                      window.setTimeout(goInvite,320);
 
                     },120);
 
