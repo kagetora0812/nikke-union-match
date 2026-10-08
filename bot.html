@@ -2969,6 +2969,69 @@
       .special-audio-note{display:none !important;}
     }
 
+
+    /* FINAL: Japanese explanatory copy only */
+    .lux-page p,
+    .lux-page li,
+    .section-ja{
+      letter-spacing:.05em !important;
+      text-shadow:none !important;
+    }
+
+    /* FINAL: COMMANDS */
+    .commands-copy-note{
+      margin:-12px 0 24px;
+      color:rgba(242,242,242,.70);
+      font-size:12px;
+      line-height:1.65;
+      letter-spacing:.05em;
+      text-shadow:none !important;
+    }
+    .command-card[data-command]{
+      cursor:pointer;
+      user-select:none;
+    }
+    .command-card[data-command] .command-top{
+      display:block;
+    }
+    .command-card[data-command] .cmd{
+      font-family:"Teko",sans-serif !important;
+      font-weight:700 !important;
+      font-size:clamp(34px,3.25vw,48px) !important;
+      line-height:1 !important;
+      letter-spacing:.015em !important;
+      white-space:nowrap !important;
+      text-shadow:none !important;
+    }
+    .command-card[data-command] .copy-command{
+      display:none !important;
+    }
+    .command-card[data-command] h3{
+      margin-top:18px;
+    }
+    .command-card[data-command].is-copied::after{
+      content:"COPIED";
+      position:absolute;
+      top:16px;
+      right:18px;
+      color:#8EDCFF;
+      font:700 15px/1 "Teko",sans-serif;
+      letter-spacing:.08em;
+      opacity:0;
+      animation:commandCopiedNotice .85s ease forwards;
+      pointer-events:none;
+    }
+    @keyframes commandCopiedNotice{
+      0%{opacity:0;transform:translateY(4px)}
+      18%{opacity:1;transform:translateY(0)}
+      72%{opacity:1}
+      100%{opacity:0}
+    }
+    @media (max-width:1180px){
+      .command-card[data-command] .cmd{
+        font-size:clamp(30px,4.3vw,42px) !important;
+      }
+    }
 </style>
 
   <script>
@@ -3445,69 +3508,58 @@
         <div class="section-en">COMMANDS</div>
         <div class="section-ja">よく使うコマンド</div>
       </header>
+      <p class="commands-copy-note">コマンドをクリックするとコピーできます。</p>
 
       <div class="command-grid command-grid-pc-six">
-        <article class="glass-card command-card reveal-up">
+        <article class="glass-card command-card reveal-up" data-command="/setup" role="button" tabindex="0" aria-label="/setup をコピー">
           <div class="command-top">
             <div>
               <div class="cmd">/setup</div>
               <span class="first-tag">FIRST SETUP</span>
             </div>
-            <button class="copy-command" type="button" data-copy="/setup">COPY COMMAND →</button>
           </div>
-          <h3>初回設定・設定変更</h3>
-          <p>
-            UNION MATCHで発行されたPASSを入力して、Discordサーバーとユニオンを連携します。
-            募集通知の送信先、期限通知でメンションするロール、使用するキャラクターなどをまとめて設定できます。
-          </p>
+          <h3>初期設定</h3>
+          <p>初回設定や通知先などをまとめて設定します。</p>
         </article>
 
-        <article class="glass-card command-card reveal-up" style="--delay:70ms">
+        <article class="glass-card command-card reveal-up" style="--delay:70ms" data-command="/botprofiles" role="button" tabindex="0" aria-label="/botprofiles をコピー">
           <div class="command-top">
-            <div class="cmd">/botprofiles</div>
-            <button class="copy-command" type="button" data-copy="/botprofiles">COPY COMMAND →</button>
+            <div>
+              <div class="cmd">/botprofiles</div>
+            </div>
           </div>
           <h3>キャラクター設定</h3>
-          <p>
-            BOTで使用するキャラクターを選択できます。
-            すべてのキャラクターの名前・プロフィール画像の変更や、自由キャラクターの設定もここから行えます。
-          </p>
+          <p>使用するキャラクターやプロフィールを設定します。</p>
         </article>
 
-        <article class="glass-card command-card reveal-up" style="--delay:140ms">
+        <article class="glass-card command-card reveal-up" style="--delay:140ms" data-command="/unionmatch" role="button" tabindex="0" aria-label="/unionmatch をコピー">
           <div class="command-top">
-            <div class="cmd">/unionmatch</div>
-            <button class="copy-command" type="button" data-copy="/unionmatch">COPY COMMAND →</button>
+            <div>
+              <div class="cmd">/unionmatch</div>
+            </div>
           </div>
-          <h3>登録・募集状態を管理</h3>
-          <p>
-            UNION MATCHへの登録状態、現在の募集状態、利用期限をDiscordから確認できます。
-            「登録のみ」から「募集中」への変更や、利用期限の14日延長も行えます。
-          </p>
+          <h3>UNION MATCH管理</h3>
+          <p>登録・募集状態や利用期限を確認・管理します。</p>
         </article>
 
-        <article class="glass-card command-card reveal-up" style="--delay:210ms">
+        <article class="glass-card command-card reveal-up" style="--delay:210ms" data-command="/guide" role="button" tabindex="0" aria-label="/guide をコピー">
           <div class="command-top">
-            <div class="cmd">/guide</div>
-            <button class="copy-command" type="button" data-copy="/guide">COPY COMMAND →</button>
+            <div>
+              <div class="cmd">/guide</div>
+            </div>
           </div>
-          <h3>使い方をいつでも確認</h3>
-          <p>
-            BOTの基本的な使い方や、よく使うコマンドをDiscord内でもう一度確認できます。
-            操作方法が分からなくなったときに、いつでも呼び出せます。
-          </p>
+          <h3>BOTの使い方</h3>
+          <p>BOTの基本的な使い方やコマンドを確認します。</p>
         </article>
 
-        <article class="glass-card command-card reveal-up" style="--delay:280ms">
+        <article class="glass-card command-card reveal-up" style="--delay:280ms" data-command="/channelcheck" role="button" tabindex="0" aria-label="/channelcheck をコピー">
           <div class="command-top">
-            <div class="cmd">/channelcheck</div>
-            <button class="copy-command" type="button" data-copy="/channelcheck">COPY COMMAND →</button>
+            <div>
+              <div class="cmd">/channelcheck</div>
+            </div>
           </div>
-          <h3>通知チャンネルを診断</h3>
-          <p>
-            BOTがこのチャンネルで正常に通知できるか確認します。
-            権限が不足している場合は、不足している権限をその場で確認できます。
-          </p>
+          <h3>通知チャンネル診断</h3>
+          <p>通知に必要なチャンネル権限を確認します。</p>
         </article>
 
         <a
@@ -4130,8 +4182,8 @@
           The immediate click kick remains unchanged.
         */
         const duration = Math.min(
-          5600,
-          Math.max(4400,3500 + startTop * .22)
+          4200,
+          Math.max(3200,2550 + startTop * .16)
         );
 
         const startedAt = performance.now();
@@ -4145,7 +4197,7 @@
             starts gently, then gets progressively faster.
             Only the scroll motion is changed.
           */
-          const acceleratedT = Math.pow(t,1.65);
+          const acceleratedT = Math.pow(t,1.48);
 
           const currentTop = startTop * (1 - acceleratedT);
           setScrollTop(currentTop);
@@ -4278,5 +4330,44 @@
     })();
   </script>
 
+
+  <script>
+    (() => {
+      const cards = document.querySelectorAll('.command-card[data-command]');
+      const copyCommand = async (card) => {
+        const command = card.dataset.command;
+        if (!command) return;
+
+        try{
+          await navigator.clipboard.writeText(command);
+        }catch(_){
+          const area = document.createElement('textarea');
+          area.value = command;
+          area.setAttribute('readonly','');
+          area.style.position = 'fixed';
+          area.style.opacity = '0';
+          document.body.appendChild(area);
+          area.select();
+          try{ document.execCommand('copy'); }catch(_){}
+          area.remove();
+        }
+
+        card.classList.remove('is-copied');
+        void card.offsetWidth;
+        card.classList.add('is-copied');
+        window.setTimeout(() => card.classList.remove('is-copied'),900);
+      };
+
+      cards.forEach((card) => {
+        card.addEventListener('click', () => copyCommand(card));
+        card.addEventListener('keydown', (event) => {
+          if(event.key === 'Enter' || event.key === ' '){
+            event.preventDefault();
+            copyCommand(card);
+          }
+        });
+      });
+    })();
+  </script>
 </body>
 </html>
