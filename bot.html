@@ -2920,7 +2920,7 @@
       display:grid;
       place-items:center;
       background:#000;
-      opacity:1;
+      opacity:0;
       pointer-events:none;
       overflow:hidden;
     }
@@ -4315,13 +4315,13 @@
           */
           window.setTimeout(() => {
             if (!impactAudio) {
-              staticStage?.classList.add("is-visible");
               overlay.classList.add("is-video-fade");
 
               window.setTimeout(() => {
+                staticStage?.classList.add("is-visible");
                 staticStage?.classList.add("is-show-ping");
                 window.setTimeout(goInvite,220);
-              },100);
+              },90);
 
               return;
             }
@@ -4335,19 +4335,18 @@
 
                 /* tiny beat after the sound finishes */
                 window.setTimeout(() => {
-                  staticStage?.classList.add("is-visible");
-
                   /* video itself rapidly falls from 100% to 0% */
                   overlay.classList.add("is-video-fade");
 
-                  /* reveal PING as soon as the video is nearly gone */
+                  /* bring in the black stage just as the video is disappearing */
                   window.setTimeout(() => {
+                    staticStage?.classList.add("is-visible");
                     staticStage?.classList.add("is-show-ping");
 
                     /* brief face close-up, then direct Discord */
                     window.setTimeout(goInvite,220);
 
-                  },100);
+                  },90);
 
                 },80);
               };
@@ -4363,13 +4362,13 @@
               }
 
             } catch (_) {
-              staticStage?.classList.add("is-visible");
               overlay.classList.add("is-video-fade");
 
               window.setTimeout(() => {
+                staticStage?.classList.add("is-visible");
                 staticStage?.classList.add("is-show-ping");
                 window.setTimeout(goInvite,220);
-              },100);
+              },90);
             }
 
           },1000);
