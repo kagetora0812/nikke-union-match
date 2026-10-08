@@ -2906,7 +2906,7 @@
     }
 
     /* =========================================================
-       SPECIAL FINAL — bottom peek -> 1s hold -> rapid zoom -> black
+       SPECIAL FINAL — face peek -> camera rush -> black
        Uses assets/bot/special-bot-logo-3d.png
        ========================================================= */
 
@@ -2924,48 +2924,74 @@
     }
 
     .special-overlay__bot-wrap{
-      will-change:transform,opacity;
+      will-change:transform,opacity,filter;
+      overflow:visible;
     }
 
     .special-overlay__bot-img{
-      transform-origin:center center;
-      will-change:transform,opacity;
+      transform-origin:center 42%;
+      will-change:transform,filter,opacity;
     }
 
-    /* 1) face / upper body rises from below */
+    /* Face/shoulders appear from below. Keep most of the body outside viewport. */
     .special-overlay.is-creature-peek .special-overlay__bot-wrap{
       opacity:1 !important;
-      animation:specialCreaturePeek .58s cubic-bezier(.18,.78,.18,1) forwards !important;
+      animation:specialCreaturePeek .48s cubic-bezier(.16,.78,.18,1) forwards !important;
     }
 
-    /* 2) hold exact same position for 1 second */
+    /* Hold exact peek position */
     .special-overlay.is-creature-hold .special-overlay__bot-wrap{
       opacity:1 !important;
       animation:none !important;
-      transform:translateY(38vh) scale(.85) !important;
+      transform:translateY(52vh) scale(.78) !important;
     }
 
-    /* 3) rush straight toward viewer */
+    /* Camera-style rush: no jump arc, just aggressive push-in */
     .special-overlay.is-creature-zoom .special-overlay__bot-wrap{
       opacity:1 !important;
-      animation:specialCreatureZoom .38s cubic-bezier(.08,.80,.10,1) forwards !important;
+      animation:specialCameraRush .46s cubic-bezier(.08,.76,.10,1) forwards !important;
+    }
+
+    .special-overlay.is-creature-zoom .special-overlay__bot-img{
+      animation:specialMotionBlur .46s ease-out forwards !important;
     }
 
     @keyframes specialCreaturePeek{
       0%{
-        transform:translateY(88vh) scale(.82);
+        transform:translateY(92vh) scale(.76);
       }
       100%{
-        transform:translateY(38vh) scale(.85);
+        transform:translateY(52vh) scale(.78);
       }
     }
 
-    @keyframes specialCreatureZoom{
+    @keyframes specialCameraRush{
       0%{
-        transform:translateY(38vh) scale(.85);
+        transform:translateY(52vh) scale(.78);
+      }
+      38%{
+        transform:translateY(29vh) scale(1.28);
+      }
+      72%{
+        transform:translateY(5vh) scale(2.55);
       }
       100%{
-        transform:translateY(-6vh) scale(5.8);
+        transform:translateY(-7vh) scale(6.1);
+      }
+    }
+
+    @keyframes specialMotionBlur{
+      0%{
+        filter:blur(0px);
+      }
+      35%{
+        filter:blur(.7px);
+      }
+      72%{
+        filter:blur(1.6px);
+      }
+      100%{
+        filter:blur(.4px);
       }
     }
 
@@ -4290,9 +4316,9 @@
           /*
             TOP reached:
             +1 sec -> impact sound
-            +1 sec -> creature face appears from bottom
-            -> hold exactly 1 sec
-            -> rapid full-screen zoom
+            +1 sec -> face/shoulders appear from bottom
+            -> hold briefly
+            -> camera rushes straight toward the subject
             -> black -> Discord
           */
           window.setTimeout(() => {
@@ -4301,27 +4327,24 @@
             window.setTimeout(() => {
               overlay.classList.add("is-creature-peek");
 
-              /* face-out animation completes */
               window.setTimeout(() => {
                 overlay.classList.remove("is-creature-peek");
                 overlay.classList.add("is-creature-hold");
 
-                /* hold the face position for exactly 1 second */
+                /* short deliberate pause before the camera rush */
                 window.setTimeout(() => {
                   overlay.classList.remove("is-creature-hold");
                   overlay.classList.add("is-creature-zoom");
 
-                  /* black as the image fills the screen */
                   window.setTimeout(() => {
                     impactBlack?.classList.add("is-black");
-                  },300);
+                  },365);
 
-                  /* navigate after blackout */
-                  window.setTimeout(goInvite,560);
+                  window.setTimeout(goInvite,640);
 
-                },1000);
+                },700);
 
-              },580);
+              },480);
 
             },1000);
 
