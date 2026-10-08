@@ -2906,7 +2906,7 @@
     }
 
     /* =========================================================
-       SPECIAL FINAL — creature-like descent -> crouch -> leap -> black
+       SPECIAL FINAL — continuous creature descent -> rush -> black
        Uses assets/bot/special-bot-logo-3d.png
        ========================================================= */
 
@@ -2920,10 +2920,9 @@
     }
 
     .special-impact-black.is-black{
-      animation:specialImpactBlack .24s ease-in forwards;
+      animation:specialImpactBlack .22s ease-in forwards;
     }
 
-    /* Neutral base state for the creature image */
     .special-overlay__bot-wrap{
       will-change:transform,opacity;
     }
@@ -2933,72 +2932,76 @@
       will-change:transform,opacity;
     }
 
-    /* 1) creature descends from above with slight living sway */
-    .special-overlay.is-creature-drop .special-overlay__bot-wrap{
+    /* One continuous motion:
+       appears high -> descends -> accelerates toward viewer -> fills screen */
+    .special-overlay.is-creature-rush .special-overlay__bot-wrap{
       opacity:1 !important;
-      animation:specialCreatureDrop 1.05s cubic-bezier(.18,.78,.14,1) forwards !important;
+      animation:specialCreatureRush 1.48s cubic-bezier(.18,.72,.12,1) forwards !important;
     }
 
-    /* 2) tiny body compression / crouch */
-    .special-overlay.is-creature-crouch .special-overlay__bot-wrap{
-      opacity:1 !important;
-      animation:specialCreatureCrouch .18s ease-out forwards !important;
-    }
-
-    /* 3) leap toward viewer */
-    .special-overlay.is-creature-leap .special-overlay__bot-wrap{
-      opacity:1 !important;
-      animation:specialCreatureLeap .48s cubic-bezier(.12,.72,.10,1) forwards !important;
-    }
-
-    @keyframes specialCreatureDrop{
+    @keyframes specialCreatureRush{
       0%{
-        transform:translateY(-115vh) translateX(-1.5vw) rotate(-5deg) scale(.56);
+        transform:
+          translateY(-120vh)
+          translateX(0)
+          rotate(-2deg)
+          scale(.54);
       }
-      14%{
-        transform:translateY(-92vh) translateX(1.2vw) rotate(-2.5deg) scale(.58);
+
+      16%{
+        transform:
+          translateY(-94vh)
+          translateX(.4vw)
+          rotate(-1.2deg)
+          scale(.57);
       }
-      30%{
-        transform:translateY(-64vh) translateX(-.8vw) rotate(1.8deg) scale(.62);
+
+      34%{
+        transform:
+          translateY(-60vh)
+          translateX(-.3vw)
+          rotate(.8deg)
+          scale(.63);
       }
-      48%{
-        transform:translateY(-35vh) translateX(.7vw) rotate(-1.4deg) scale(.68);
+
+      52%{
+        transform:
+          translateY(-28vh)
+          translateX(.2vw)
+          rotate(-.4deg)
+          scale(.72);
       }
+
       66%{
-        transform:translateY(-12vh) translateX(-.4vw) rotate(1deg) scale(.75);
+        transform:
+          translateY(-6vh)
+          translateX(0)
+          rotate(0deg)
+          scale(.86);
       }
-      84%{
-        transform:translateY(3vh) translateX(.2vw) rotate(-.5deg) scale(.81);
-      }
-      100%{
-        transform:translateY(10vh) translateX(0) rotate(0deg) scale(.84);
-      }
-    }
 
-    @keyframes specialCreatureCrouch{
-      0%{
-        transform:translateY(10vh) scale(.84);
+      76%{
+        transform:
+          translateY(-2vh)
+          translateX(0)
+          rotate(0deg)
+          scale(1.08);
       }
-      100%{
-        transform:translateY(14vh) scaleX(.90) scaleY(.76);
-      }
-    }
 
-    @keyframes specialCreatureLeap{
-      0%{
-        transform:translateY(14vh) scaleX(.90) scaleY(.76);
+      88%{
+        transform:
+          translateY(-5vh)
+          translateX(0)
+          rotate(0deg)
+          scale(2.15);
       }
-      18%{
-        transform:translateY(5vh) scale(.94) rotate(-.8deg);
-      }
-      48%{
-        transform:translateY(-9vh) scale(1.55) rotate(.4deg);
-      }
-      72%{
-        transform:translateY(-7vh) scale(2.5) rotate(0deg);
-      }
+
       100%{
-        transform:translateY(-5vh) scale(5.25) rotate(0deg);
+        transform:
+          translateY(-6vh)
+          translateX(0)
+          rotate(0deg)
+          scale(5.35);
       }
     }
 
@@ -4322,37 +4325,23 @@
 
           /*
             TOP reached:
-            1 sec later -> impact sound
-            1 sec after that -> creature image appears
-            -> living descent -> crouch -> leap into screen -> black -> Discord
+            +1 sec -> impact sound
+            +1 sec -> creature appears and performs ONE continuous rush
+            -> fills the screen -> black -> Discord
           */
           window.setTimeout(() => {
             playSpecialAudio(impactAudio);
 
             window.setTimeout(() => {
-              overlay.classList.add("is-creature-drop");
+              overlay.classList.add("is-creature-rush");
 
-              /* descent complete */
+              /* black out right as the creature fills the viewport */
               window.setTimeout(() => {
-                overlay.classList.remove("is-creature-drop");
-                overlay.classList.add("is-creature-crouch");
+                impactBlack?.classList.add("is-black");
+              },1290);
 
-                /* tiny crouch / weight shift */
-                window.setTimeout(() => {
-                  overlay.classList.remove("is-creature-crouch");
-                  overlay.classList.add("is-creature-leap");
-
-                  /* black out just as it fills the screen */
-                  window.setTimeout(() => {
-                    impactBlack?.classList.add("is-black");
-                  },410);
-
-                  /* navigate after black covers the viewport */
-                  window.setTimeout(goInvite,690);
-
-                },180);
-
-              },1050);
+              /* navigate after the black cover is complete */
+              window.setTimeout(goInvite,1580);
 
             },1000);
 
