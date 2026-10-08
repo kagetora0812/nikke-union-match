@@ -493,7 +493,7 @@
       font-weight:900;
       line-height:1.22;
       letter-spacing:-.025em;
-      text-shadow:0 2px 14px rgba(0,0,0,.32);
+      text-shadow:none;
     }
     .intro-copy p,
     .stay-copy p,
@@ -503,7 +503,7 @@
       font-size:14px;
       line-height:1.95;
       font-weight:700;
-      text-shadow:0 2px 10px rgba(0,0,0,.25);
+      text-shadow:none;
     }
     .intro-copy strong,
     .stay-copy strong,
@@ -546,7 +546,7 @@
       font-size:15px!important;
       line-height:1.8!important;
       font-weight:900!important;
-      text-shadow:0 2px 12px rgba(0,0,0,.32)!important;
+      text-shadow:none;
     }
     .stay-api-note{
       margin-top:18px!important;
@@ -1448,9 +1448,7 @@
       font-size:clamp(25px,2.65vw,36px);
       line-height:1.28;
       letter-spacing:-.02em;
-      text-shadow:
-        0 2px 4px rgba(0,0,0,.92),
-        0 0 12px rgba(0,0,0,.70);
+      text-shadow:none;
     }
 
     .intro-copy p,
@@ -1458,18 +1456,14 @@
     .union-bot-copy p,
     .intro-point span,
     .union-bot-item p{
-      text-shadow:
-        0 1px 3px rgba(0,0,0,.90),
-        0 0 8px rgba(0,0,0,.52);
+      text-shadow:none;
     }
 
     .section-en,
     .section-ja,
     .intro-point b,
     .union-bot-kicker{
-      text-shadow:
-        0 2px 5px rgba(0,0,0,.86),
-        0 0 10px rgba(0,0,0,.50);
+      text-shadow:none;
     }
 
     /* Headline blue and inline emphasis use different tones. */
@@ -1793,7 +1787,7 @@
     .stay-bot-only,
     .feature-no,
     .slider-status{
-      text-shadow:none !important;
+      text-shadow:none;
     }
 
     /* Small white copy only: subtle dark shadow for readability over video. */
@@ -1804,18 +1798,14 @@
     .union-bot-item p,
     .section-ja{
       color:#f2f2f2;
-      text-shadow:
-        0 1px 2px rgba(0,0,0,.95),
-        0 2px 6px rgba(0,0,0,.55) !important;
+      text-shadow:none;
     }
 
     /* Keep Japanese headings clean and stronger without a glow. */
     .intro-title,
     .stay-lead,
     .union-bot-lead{
-      text-shadow:
-        0 1px 2px rgba(0,0,0,.88),
-        0 2px 5px rgba(0,0,0,.42) !important;
+      text-shadow:none;
     }
 
   
@@ -1879,7 +1869,7 @@
       font-size:clamp(64px,7vw,96px) !important;
       line-height:.82 !important;
       letter-spacing:.045em;
-      text-shadow:none !important;
+      text-shadow:none;
     }
 
     .feature-section .section-heading,
@@ -1924,7 +1914,7 @@
       font-weight:900;
       line-height:1.42;
       letter-spacing:-.02em;
-      text-shadow:0 1px 2px rgba(0,0,0,.82),0 2px 5px rgba(0,0,0,.38);
+      text-shadow:none;
     }
 
     .editorial-item p{
@@ -1934,7 +1924,7 @@
       font-size:12.5px;
       font-weight:700;
       line-height:1.82;
-      text-shadow:0 1px 2px rgba(0,0,0,.95),0 2px 6px rgba(0,0,0,.55);
+      text-shadow:none;
     }
 
     .editorial-item strong{
@@ -2585,9 +2575,7 @@
     /* IMPORTANT text readability stays unchanged. */
     .important-item p{
       color:#8EDCFF !important;
-      text-shadow:
-        0 1px 2px rgba(0,0,0,.92),
-        0 2px 6px rgba(0,0,0,.50) !important;
+      text-shadow:none;
     }
 
     /* =========================================================
@@ -2638,9 +2626,7 @@
       color:#fff;
       font:900 clamp(64px,5.2vw,88px)/.78 "Teko",sans-serif;
       letter-spacing:.045em;
-      text-shadow:
-        0 1px 2px rgba(0,0,0,.75),
-        0 5px 14px rgba(0,0,0,.32);
+      text-shadow:none;
     }
 
     .special-command-sub{
@@ -2650,9 +2636,7 @@
       font-size:12px;
       font-weight:800;
       letter-spacing:.08em;
-      text-shadow:
-        0 1px 2px rgba(0,0,0,.92),
-        0 2px 6px rgba(0,0,0,.50);
+      text-shadow:none;
     }
 
     .special-command-card::after{
@@ -2906,93 +2890,63 @@
     }
 
     /* =========================================================
-       SPECIAL FINAL — face peek -> camera rush -> black
+       SPECIAL FINAL — video fade -> black -> static PING -> black
        Uses assets/bot/special-bot-logo-3d.png
        ========================================================= */
 
     .special-impact-black{
       position:absolute;
       inset:-4%;
-      z-index:6;
+      z-index:8;
       pointer-events:none;
       background:#000;
       opacity:0;
     }
 
     .special-impact-black.is-black{
-      animation:specialImpactBlack .20s ease-in forwards;
+      animation:specialImpactBlack .22s ease-in forwards;
     }
 
-    .special-overlay__bot-wrap{
-      will-change:transform,opacity,filter;
-      overflow:visible;
+    /* Fade SPECIAL video itself out smoothly */
+    .special-overlay.is-video-fade .special-overlay__video{
+      opacity:0 !important;
+      transition:opacity .52s ease !important;
     }
 
-    .special-overlay__bot-img{
-      transform-origin:center 42%;
-      will-change:transform,filter,opacity;
+    /* Pure black stage behind PING */
+    .special-static-stage{
+      position:absolute;
+      inset:0;
+      z-index:5;
+      display:grid;
+      place-items:center;
+      background:#000;
+      opacity:0;
+      pointer-events:none;
     }
 
-    /* Face/shoulders appear from below. Keep most of the body outside viewport. */
-    .special-overlay.is-creature-peek .special-overlay__bot-wrap{
-      opacity:1 !important;
-      animation:specialCreaturePeek .48s cubic-bezier(.16,.78,.18,1) forwards !important;
+    .special-static-stage.is-visible{
+      opacity:1;
     }
 
-    /* Hold exact peek position */
-    .special-overlay.is-creature-hold .special-overlay__bot-wrap{
-      opacity:1 !important;
-      animation:none !important;
-      transform:translateY(52vh) scale(.78) !important;
+    .special-static-stage__img{
+      display:block;
+      max-width:78vw;
+      max-height:72vh;
+      width:auto;
+      height:auto;
+      object-fit:contain;
+      opacity:0;
+      transform:scale(.985);
+      transition:
+        opacity .34s ease,
+        transform .34s ease;
+      filter:none;
     }
 
-    /* Camera-style rush: no jump arc, just aggressive push-in */
-    .special-overlay.is-creature-zoom .special-overlay__bot-wrap{
-      opacity:1 !important;
-      animation:specialCameraRush .46s cubic-bezier(.08,.76,.10,1) forwards !important;
-    }
-
-    .special-overlay.is-creature-zoom .special-overlay__bot-img{
-      animation:specialMotionBlur .46s ease-out forwards !important;
-    }
-
-    @keyframes specialCreaturePeek{
-      0%{
-        transform:translateY(92vh) scale(.76);
-      }
-      100%{
-        transform:translateY(52vh) scale(.78);
-      }
-    }
-
-    @keyframes specialCameraRush{
-      0%{
-        transform:translateY(52vh) scale(.78);
-      }
-      38%{
-        transform:translateY(29vh) scale(1.28);
-      }
-      72%{
-        transform:translateY(5vh) scale(2.55);
-      }
-      100%{
-        transform:translateY(-7vh) scale(6.1);
-      }
-    }
-
-    @keyframes specialMotionBlur{
-      0%{
-        filter:blur(0px);
-      }
-      35%{
-        filter:blur(.7px);
-      }
-      72%{
-        filter:blur(1.6px);
-      }
-      100%{
-        filter:blur(.4px);
-      }
+    .special-static-stage.is-show-ping .special-static-stage__img{
+      opacity:1;
+      transform:scale(1);
     }
 
     @keyframes specialImpactBlack{
@@ -3014,7 +2968,7 @@
       line-height:1.35;
       letter-spacing:.035em;
       color:rgba(242,242,242,.72);
-      text-shadow:0 1px 2px rgba(0,0,0,.95);
+      text-shadow:none;
       pointer-events:none;
     }
     @media (max-width:1024px){
@@ -3027,7 +2981,7 @@
     .lux-page li,
     .section-ja{
       letter-spacing:.05em !important;
-      text-shadow:none !important;
+      text-shadow:none;
     }
 
     /* FINAL: COMMANDS */
@@ -3037,7 +2991,7 @@
       font-size:12px;
       line-height:1.65;
       letter-spacing:.05em;
-      text-shadow:none !important;
+      text-shadow:none;
     }
     .command-card[data-command]{
       cursor:pointer;
@@ -3053,7 +3007,7 @@
       line-height:1 !important;
       letter-spacing:.015em !important;
       white-space:nowrap !important;
-      text-shadow:none !important;
+      text-shadow:none;
     }
     .command-card[data-command] .copy-command{
       display:none !important;
@@ -4035,6 +3989,14 @@
         class="special-overlay__bot-img"
       >
     </div>
+    <div id="specialStaticStage" class="special-static-stage" aria-hidden="true">
+      <img
+        src="assets/bot/special-bot-logo-3d.png"
+        alt=""
+        class="special-static-stage__img"
+      >
+    </div>
+
     <audio id="specialButtonAudio" preload="auto" src="assets/bot/special-button.mp3"></audio>
     <audio id="specialImpactAudio" preload="auto" src="assets/bot/special-impact.mp3"></audio>
 
@@ -4066,6 +4028,7 @@
       const specialVideo = document.getElementById("specialOverlayVideo");
       const botWrap = overlay?.querySelector(".special-overlay__bot-wrap");
       const impactBlack = document.getElementById("specialImpactBlack");
+      const staticStage = document.getElementById("specialStaticStage");
       const buttonAudio = document.getElementById("specialButtonAudio");
       const impactAudio = document.getElementById("specialImpactAudio");
       const normalVideo = document.getElementById("botBackgroundVideo");
@@ -4316,37 +4279,36 @@
           /*
             TOP reached:
             +1 sec -> impact sound
-            +1 sec -> face/shoulders appear from bottom
-            -> hold briefly
-            -> camera rushes straight toward the subject
+            -> SPECIAL video fades out to black
+            -> brief full black
+            -> static PING fades in, fully contained in viewport
+            -> hold
             -> black -> Discord
           */
           window.setTimeout(() => {
             playSpecialAudio(impactAudio);
 
+            /* fade SPECIAL video away */
+            overlay.classList.add("is-video-fade");
+
             window.setTimeout(() => {
-              overlay.classList.add("is-creature-peek");
+              staticStage?.classList.add("is-visible");
 
+              /* short clean black beat before PING appears */
               window.setTimeout(() => {
-                overlay.classList.remove("is-creature-peek");
-                overlay.classList.add("is-creature-hold");
+                staticStage?.classList.add("is-show-ping");
 
-                /* short deliberate pause before the camera rush */
+                /* keep PING on black background */
                 window.setTimeout(() => {
-                  overlay.classList.remove("is-creature-hold");
-                  overlay.classList.add("is-creature-zoom");
+                  impactBlack?.classList.add("is-black");
+                },1200);
 
-                  window.setTimeout(() => {
-                    impactBlack?.classList.add("is-black");
-                  },365);
+                /* move after black fully covers */
+                window.setTimeout(goInvite,1510);
 
-                  window.setTimeout(goInvite,640);
+              },160);
 
-                },700);
-
-              },480);
-
-            },1000);
+            },520);
 
           },1000);
         };
