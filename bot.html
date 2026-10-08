@@ -2947,10 +2947,10 @@
        Keep the head dominant, with the rest fading into black. */
     .special-static-stage__img{
       display:block;
-      width:min(92vw,1120px);
+      width:auto;
+      height:auto;
       max-width:92vw;
       max-height:88vh;
-      height:auto;
       object-fit:contain;
       object-position:center center;
       opacity:.98;
@@ -2958,24 +2958,9 @@
         brightness(.72)
         contrast(1.12)
         saturate(.88);
-      -webkit-mask-image:
-        radial-gradient(
-          ellipse 66% 58% at 50% 47%,
-          #000 0%,
-          #000 52%,
-          rgba(0,0,0,.92) 67%,
-          rgba(0,0,0,.48) 82%,
-          transparent 100%
-        );
-      mask-image:
-        radial-gradient(
-          ellipse 66% 58% at 50% 47%,
-          #000 0%,
-          #000 52%,
-          rgba(0,0,0,.92) 67%,
-          rgba(0,0,0,.48) 82%,
-          transparent 100%
-        );
+      /* no mask here: avoid visible cutoff on the image */
+      -webkit-mask-image:none !important;
+      mask-image:none !important;
     }
 
     @keyframes specialImpactBlack{
@@ -3067,6 +3052,27 @@
         font-size:clamp(30px,4.3vw,42px) !important;
       }
     }
+
+    .special-static-stage::after{
+      content:"";
+      position:absolute;
+      inset:0;
+      z-index:2;
+      pointer-events:none;
+      background:
+        radial-gradient(
+          ellipse 72% 70% at 50% 50%,
+          rgba(0,0,0,0) 0%,
+          rgba(0,0,0,.05) 48%,
+          rgba(0,0,0,.32) 72%,
+          rgba(0,0,0,.78) 100%
+        );
+    }
+
+    .special-static-stage__visual{
+      z-index:1;
+    }
+
 </style>
 
   <script>
