@@ -2949,6 +2949,26 @@
       100%{opacity:1}
     }
 
+
+    /* SPECIAL audio warning — PC only */
+    .special-audio-note{
+      position:absolute;
+      left:14px;
+      right:14px;
+      bottom:11px;
+      z-index:3;
+      text-align:center;
+      font-size:11px;
+      line-height:1.35;
+      letter-spacing:.035em;
+      color:rgba(242,242,242,.72);
+      text-shadow:0 1px 2px rgba(0,0,0,.95);
+      pointer-events:none;
+    }
+    @media (max-width:1024px){
+      .special-audio-note{display:none !important;}
+    }
+
 </style>
 
   <script>
@@ -3505,6 +3525,7 @@
             <div class="special-command-bot">BOT</div>
             <div class="special-command-sub">導入する</div>
           </div>
+          <div class="special-audio-note">※ SPECIAL演出では音が再生されます。音量にご注意ください。</div>
         </a>
       </div>
     </section>
@@ -3910,7 +3931,10 @@
         class="special-overlay__bot-img"
       >
     </div>
-<div id="specialImpactBlack" class="special-impact-black" aria-hidden="true"></div>
+    <audio id="specialButtonAudio" preload="auto" src="assets/bot/special-button.mp3"></audio>
+    <audio id="specialImpactAudio" preload="auto" src="assets/bot/special-impact.mp3"></audio>
+
+    <div id="specialImpactBlack" class="special-impact-black" aria-hidden="true"></div>
   </div>
 
   <nav class="subpage-bottom-nav bot-bottom-nav" aria-label="フッターメニュー">
@@ -3938,6 +3962,8 @@
       const specialVideo = document.getElementById("specialOverlayVideo");
       const botWrap = overlay?.querySelector(".special-overlay__bot-wrap");
       const impactBlack = document.getElementById("specialImpactBlack");
+      const buttonAudio = document.getElementById("specialButtonAudio");
+      const impactAudio = document.getElementById("specialImpactAudio");
       const normalVideo = document.getElementById("botBackgroundVideo");
       const page = document.querySelector("main.lux-page");
       const stayConnected = document.getElementById("stayConnected");
@@ -3949,6 +3975,40 @@
       let running = false;
       let specialStarted = false;
       let rafId = 0;
+
+      const playSpecialAudio = (audio) => {
+        if (!audio) return;
+        try {
+          audio.muted = false;
+          audio.currentTime = 0;
+          const p = audio.play();
+          if (p && typeof p.catch === "function") p.catch(() => {});
+        } catch (_) {}
+      };
+
+      const unlockDelayedAudio = (audio) => {
+        if (!audio) return;
+        try {
+          audio.muted = true;
+          audio.currentTime = 0;
+          const p = audio.play();
+          if (p && typeof p.then === "function") {
+            p.then(() => {
+              audio.pause();
+              audio.currentTime = 0;
+              audio.muted = false;
+            }).catch(() => {
+              audio.muted = false;
+            });
+          } else {
+            audio.pause();
+            audio.currentTime = 0;
+            audio.muted = false;
+          }
+        } catch (_) {
+          audio.muted = false;
+        }
+      };
 
       const isDesktop = () =>
         window.matchMedia("(min-width:1025px)").matches;
@@ -4065,13 +4125,13 @@
         overlay.setAttribute("aria-hidden","false");
 
         /*
-          5.5–6.8 sec total upward movement.
-          Keep the same total duration, but progressively accelerate
-          toward the TOP. The immediate click kick remains unchanged.
+          Faster SPECIAL climb.
+          Still progressively accelerates toward the TOP.
+          The immediate click kick remains unchanged.
         */
         const duration = Math.min(
-          6800,
-          Math.max(5500,4400 + startTop * .27)
+          5600,
+          Math.max(4400,3500 + startTop * .22)
         );
 
         const startedAt = performance.now();
@@ -4154,6 +4214,7 @@
             keep SPECIAL at 100% for 2 seconds.
           */
           window.setTimeout(() => {
+            playSpecialAudio(impactAudio);
             overlay.classList.add("is-bot-drop");
 
             /*
@@ -4207,6 +4268,10 @@
 
       card.addEventListener("click",(event) => {
         event.preventDefault();
+
+        /* Click sound + unlock the delayed impact sound under the same user gesture. */
+        playSpecialAudio(buttonAudio);
+        unlockDelayedAudio(impactAudio);
         event.stopPropagation();
         startSequence();
       });
