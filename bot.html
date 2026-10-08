@@ -2891,6 +2891,7 @@
 
     /* =========================================================
        SPECIAL FINAL — video fade -> black -> static PING -> black
+       Face-focused / black-blended / subtle red eyes
        Uses assets/bot/special-bot-logo-3d.png
        ========================================================= */
 
@@ -2907,13 +2908,11 @@
       animation:specialImpactBlack .22s ease-in forwards;
     }
 
-    /* Fade SPECIAL video itself out smoothly */
     .special-overlay.is-video-fade .special-overlay__video{
       opacity:0 !important;
       transition:opacity .52s ease !important;
     }
 
-    /* Pure black stage behind PING */
     .special-static-stage{
       position:absolute;
       inset:0;
@@ -2923,30 +2922,104 @@
       background:#000;
       opacity:0;
       pointer-events:none;
+      overflow:hidden;
     }
 
     .special-static-stage.is-visible{
       opacity:1;
     }
 
-    .special-static-stage__img{
-      display:block;
-      max-width:78vw;
-      max-height:72vh;
-      width:auto;
-      height:auto;
-      object-fit:contain;
+    .special-static-stage__visual{
+      position:relative;
+      width:min(88vw,980px);
+      height:min(84vh,780px);
+      display:grid;
+      place-items:center;
       opacity:0;
       transform:scale(.985);
       transition:
-        opacity .34s ease,
-        transform .34s ease;
-      filter:none;
+        opacity .20s ease,
+        transform .20s ease;
     }
 
-    .special-static-stage.is-show-ping .special-static-stage__img{
+    .special-static-stage.is-show-ping .special-static-stage__visual{
       opacity:1;
       transform:scale(1);
+    }
+
+    .special-static-stage__img{
+      display:block;
+      max-width:88vw;
+      max-height:84vh;
+      width:auto;
+      height:auto;
+      object-fit:contain;
+      object-position:center 35%;
+      filter:
+        brightness(.58)
+        contrast(1.14)
+        saturate(.72);
+      opacity:.96;
+      -webkit-mask-image:
+        radial-gradient(
+          ellipse 58% 48% at 50% 38%,
+          #000 0%,
+          #000 46%,
+          rgba(0,0,0,.94) 58%,
+          rgba(0,0,0,.58) 72%,
+          transparent 100%
+        );
+      mask-image:
+        radial-gradient(
+          ellipse 58% 48% at 50% 38%,
+          #000 0%,
+          #000 46%,
+          rgba(0,0,0,.94) 58%,
+          rgba(0,0,0,.58) 72%,
+          transparent 100%
+        );
+    }
+
+    /* subtle constant red eye glow */
+    .special-static-stage__eyes{
+      position:absolute;
+      left:50%;
+      top:34%;
+      width:23%;
+      height:9%;
+      transform:translate(-50%,-50%);
+      pointer-events:none;
+      opacity:.78;
+      filter:blur(1px);
+    }
+
+    .special-static-stage__eye{
+      position:absolute;
+      top:50%;
+      width:18%;
+      aspect-ratio:1.7 / 1;
+      border-radius:50%;
+      background:
+        radial-gradient(
+          ellipse at center,
+          rgba(255,245,245,.96) 0%,
+          rgba(255,65,65,.95) 22%,
+          rgba(255,0,0,.72) 48%,
+          rgba(255,0,0,.22) 68%,
+          rgba(255,0,0,0) 100%
+        );
+      box-shadow:
+        0 0 8px rgba(255,0,0,.48),
+        0 0 18px rgba(255,0,0,.28);
+      transform:translateY(-50%);
+    }
+
+    .special-static-stage__eye--left{
+      left:17%;
+    }
+
+    .special-static-stage__eye--right{
+      right:17%;
     }
 
     @keyframes specialImpactBlack{
@@ -3990,11 +4063,17 @@
       >
     </div>
     <div id="specialStaticStage" class="special-static-stage" aria-hidden="true">
-      <img
-        src="assets/bot/special-bot-logo-3d.png"
-        alt=""
-        class="special-static-stage__img"
-      >
+      <div class="special-static-stage__visual">
+        <img
+          src="assets/bot/special-bot-logo-3d.png"
+          alt=""
+          class="special-static-stage__img"
+        >
+        <div class="special-static-stage__eyes" aria-hidden="true">
+          <span class="special-static-stage__eye special-static-stage__eye--left"></span>
+          <span class="special-static-stage__eye special-static-stage__eye--right"></span>
+        </div>
+      </div>
     </div>
 
     <audio id="specialButtonAudio" preload="auto" src="assets/bot/special-button.mp3"></audio>
@@ -4278,37 +4357,83 @@
 
           /*
             TOP reached:
-            +1 sec -> impact sound
-            -> SPECIAL video fades out to black
-            -> brief full black
-            -> static PING fades in, fully contained in viewport
-            -> hold
-            -> black -> Discord
+            SPECIAL video is already at 100%.
+            Play impact audio fully, wait a short beat,
+            then fade to black and briefly reveal PING before Discord.
           */
           window.setTimeout(() => {
-            playSpecialAudio(impactAudio);
+            if (!impactAudio) {
+              overlay.classList.add("is-video-fade");
 
-            /* fade SPECIAL video away */
-            overlay.classList.add("is-video-fade");
-
-            window.setTimeout(() => {
-              staticStage?.classList.add("is-visible");
-
-              /* short clean black beat before PING appears */
               window.setTimeout(() => {
-                staticStage?.classList.add("is-show-ping");
+                staticStage?.classList.add("is-visible");
 
-                /* keep PING on black background */
                 window.setTimeout(() => {
-                  impactBlack?.classList.add("is-black");
-                },1200);
+                  staticStage?.classList.add("is-show-ping");
 
-                /* move after black fully covers */
-                window.setTimeout(goInvite,1510);
+                  window.setTimeout(() => {
+                    impactBlack?.classList.add("is-black");
+                  },260);
 
-              },160);
+                  window.setTimeout(goInvite,520);
+                },120);
 
-            },520);
+              },520);
+
+              return;
+            }
+
+            try {
+              impactAudio.currentTime = 0;
+              impactAudio.muted = false;
+
+              const afterImpact = () => {
+                impactAudio.removeEventListener("ended", afterImpact);
+
+                /* small beat after the sound finishes */
+                window.setTimeout(() => {
+                  overlay.classList.add("is-video-fade");
+
+                  window.setTimeout(() => {
+                    staticStage?.classList.add("is-visible");
+
+                    /* PING is already there; blackout reveals it */
+                    window.setTimeout(() => {
+                      staticStage?.classList.add("is-show-ping");
+
+                      /* keep it visible only briefly */
+                      window.setTimeout(() => {
+                        impactBlack?.classList.add("is-black");
+                      },260);
+
+                      window.setTimeout(goInvite,520);
+
+                    },120);
+
+                  },520);
+
+                },260);
+              };
+
+              impactAudio.addEventListener("ended", afterImpact, { once:true });
+
+              const p = impactAudio.play();
+              if (p && typeof p.catch === "function") {
+                p.catch(() => {
+                  impactAudio.removeEventListener("ended", afterImpact);
+                  afterImpact();
+                });
+              }
+
+            } catch (_) {
+              overlay.classList.add("is-video-fade");
+
+              window.setTimeout(() => {
+                staticStage?.classList.add("is-visible");
+                staticStage?.classList.add("is-show-ping");
+                window.setTimeout(goInvite,520);
+              },520);
+            }
 
           },1000);
         };
