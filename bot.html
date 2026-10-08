@@ -2906,7 +2906,7 @@
     }
 
     /* =========================================================
-       SPECIAL FINAL — continuous creature descent -> rush -> black
+       SPECIAL FINAL — bottom peek -> rapid zoom -> black
        Uses assets/bot/special-bot-logo-3d.png
        ========================================================= */
 
@@ -2920,7 +2920,7 @@
     }
 
     .special-impact-black.is-black{
-      animation:specialImpactBlack .22s ease-in forwards;
+      animation:specialImpactBlack .20s ease-in forwards;
     }
 
     .special-overlay__bot-wrap{
@@ -2932,76 +2932,42 @@
       will-change:transform,opacity;
     }
 
-    /* One continuous motion:
-       appears high -> descends -> accelerates toward viewer -> fills screen */
-    .special-overlay.is-creature-rush .special-overlay__bot-wrap{
+    /* 1) Rise from below just enough to show the face / upper body */
+    .special-overlay.is-creature-peek .special-overlay__bot-wrap{
       opacity:1 !important;
-      animation:specialCreatureRush 1.48s cubic-bezier(.18,.72,.12,1) forwards !important;
+      animation:specialCreaturePeek .56s cubic-bezier(.18,.78,.18,1) forwards !important;
     }
 
-    @keyframes specialCreatureRush{
+    /* 2) Immediately rush straight toward the viewer */
+    .special-overlay.is-creature-zoom .special-overlay__bot-wrap{
+      opacity:1 !important;
+      animation:specialCreatureZoom .42s cubic-bezier(.10,.78,.12,1) forwards !important;
+    }
+
+    @keyframes specialCreaturePeek{
       0%{
-        transform:
-          translateY(-120vh)
-          translateX(0)
-          rotate(-2deg)
-          scale(.54);
+        transform:translateY(88vh) scale(.82);
       }
-
-      16%{
-        transform:
-          translateY(-94vh)
-          translateX(.4vw)
-          rotate(-1.2deg)
-          scale(.57);
+      72%{
+        transform:translateY(45vh) scale(.84);
       }
-
-      34%{
-        transform:
-          translateY(-60vh)
-          translateX(-.3vw)
-          rotate(.8deg)
-          scale(.63);
-      }
-
-      52%{
-        transform:
-          translateY(-28vh)
-          translateX(.2vw)
-          rotate(-.4deg)
-          scale(.72);
-      }
-
-      66%{
-        transform:
-          translateY(-6vh)
-          translateX(0)
-          rotate(0deg)
-          scale(.86);
-      }
-
-      76%{
-        transform:
-          translateY(-2vh)
-          translateX(0)
-          rotate(0deg)
-          scale(1.08);
-      }
-
-      88%{
-        transform:
-          translateY(-5vh)
-          translateX(0)
-          rotate(0deg)
-          scale(2.15);
-      }
-
       100%{
-        transform:
-          translateY(-6vh)
-          translateX(0)
-          rotate(0deg)
-          scale(5.35);
+        transform:translateY(38vh) scale(.85);
+      }
+    }
+
+    @keyframes specialCreatureZoom{
+      0%{
+        transform:translateY(38vh) scale(.85);
+      }
+      28%{
+        transform:translateY(24vh) scale(1.12);
+      }
+      62%{
+        transform:translateY(3vh) scale(2.05);
+      }
+      100%{
+        transform:translateY(-5vh) scale(5.6);
       }
     }
 
@@ -4244,8 +4210,8 @@
           The immediate click kick remains unchanged.
         */
         const duration = Math.min(
-          4200,
-          Math.max(3200,2550 + startTop * .16)
+          2550,
+          Math.max(1900,1550 + startTop * .095)
         );
 
         const startedAt = performance.now();
@@ -4259,7 +4225,7 @@
             starts gently, then gets progressively faster.
             Only the scroll motion is changed.
           */
-          const acceleratedT = Math.pow(t,1.48);
+          const acceleratedT = Math.pow(t,1.34);
 
           const currentTop = startTop * (1 - acceleratedT);
           setScrollTop(currentTop);
@@ -4326,22 +4292,29 @@
           /*
             TOP reached:
             +1 sec -> impact sound
-            +1 sec -> creature appears and performs ONE continuous rush
-            -> fills the screen -> black -> Discord
+            +1 sec -> creature peeks up from bottom
+            -> immediately rushes toward the screen
+            -> black -> Discord
           */
           window.setTimeout(() => {
             playSpecialAudio(impactAudio);
 
             window.setTimeout(() => {
-              overlay.classList.add("is-creature-rush");
+              overlay.classList.add("is-creature-peek");
 
-              /* black out right as the creature fills the viewport */
               window.setTimeout(() => {
-                impactBlack?.classList.add("is-black");
-              },1290);
+                overlay.classList.remove("is-creature-peek");
+                overlay.classList.add("is-creature-zoom");
 
-              /* navigate after the black cover is complete */
-              window.setTimeout(goInvite,1580);
+                /* black out as it becomes larger than the viewport */
+                window.setTimeout(() => {
+                  impactBlack?.classList.add("is-black");
+                },330);
+
+                /* navigate after black fully covers the screen */
+                window.setTimeout(goInvite,600);
+
+              },560);
 
             },1000);
 
