@@ -2910,7 +2910,7 @@
 
     .special-overlay.is-video-fade .special-overlay__video{
       opacity:0 !important;
-      transition:opacity .52s ease !important;
+      transition:opacity .10s cubic-bezier(.20,.70,.20,1) !important;
     }
 
     .special-static-stage{
@@ -2920,7 +2920,7 @@
       display:grid;
       place-items:center;
       background:#000;
-      opacity:0;
+      opacity:1;
       pointer-events:none;
       overflow:hidden;
     }
@@ -2936,7 +2936,7 @@
       display:grid;
       place-items:center;
       opacity:0;
-      transition:opacity .18s ease;
+      transition:opacity .10s linear;
     }
 
     .special-static-stage.is-show-ping .special-static-stage__visual{
@@ -4315,22 +4315,13 @@
           */
           window.setTimeout(() => {
             if (!impactAudio) {
+              staticStage?.classList.add("is-visible");
               overlay.classList.add("is-video-fade");
 
               window.setTimeout(() => {
-                staticStage?.classList.add("is-visible");
-
-                window.setTimeout(() => {
-                  staticStage?.classList.add("is-show-ping");
-
-                  window.setTimeout(() => {
-                    impactBlack?.classList.add("is-black");
-                  },260);
-
-                  window.setTimeout(goInvite,520);
-                },120);
-
-              },520);
+                staticStage?.classList.add("is-show-ping");
+                window.setTimeout(goInvite,220);
+              },100);
 
               return;
             }
@@ -4342,25 +4333,23 @@
               const afterImpact = () => {
                 impactAudio.removeEventListener("ended", afterImpact);
 
-                /* small beat after the sound finishes */
+                /* tiny beat after the sound finishes */
                 window.setTimeout(() => {
+                  staticStage?.classList.add("is-visible");
+
+                  /* video itself rapidly falls from 100% to 0% */
                   overlay.classList.add("is-video-fade");
 
+                  /* reveal PING as soon as the video is nearly gone */
                   window.setTimeout(() => {
-                    staticStage?.classList.add("is-visible");
+                    staticStage?.classList.add("is-show-ping");
 
-                    /* PING is already there; blackout reveals it */
-                    window.setTimeout(() => {
-                      staticStage?.classList.add("is-show-ping");
+                    /* brief face close-up, then direct Discord */
+                    window.setTimeout(goInvite,220);
 
-                      /* keep the close-up visible briefly, then go directly to Discord */
-                      window.setTimeout(goInvite,320);
+                  },100);
 
-                    },120);
-
-                  },520);
-
-                },260);
+                },80);
               };
 
               impactAudio.addEventListener("ended", afterImpact, { once:true });
@@ -4374,13 +4363,13 @@
               }
 
             } catch (_) {
+              staticStage?.classList.add("is-visible");
               overlay.classList.add("is-video-fade");
 
               window.setTimeout(() => {
-                staticStage?.classList.add("is-visible");
                 staticStage?.classList.add("is-show-ping");
-                window.setTimeout(goInvite,520);
-              },520);
+                window.setTimeout(goInvite,220);
+              },100);
             }
 
           },1000);
