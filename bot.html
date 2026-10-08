@@ -2906,8 +2906,8 @@
     }
 
     /* =========================================================
-       SPECIAL FINAL — drop -> immediate zoom -> black
-       Previous glass/crack/shake effects removed.
+       SPECIAL FINAL — creature-like descent -> crouch -> leap -> black
+       Uses assets/bot/special-bot-logo-3d.png
        ========================================================= */
 
     .special-impact-black{
@@ -2920,27 +2920,85 @@
     }
 
     .special-impact-black.is-black{
-      animation:specialImpactBlack .26s ease-in forwards;
+      animation:specialImpactBlack .24s ease-in forwards;
     }
 
-    .special-overlay.is-impact .special-overlay__bot-wrap{
-      animation:none !important;
-      opacity:1 !important;
-      transform:translateY(0) scale(1);
+    /* Neutral base state for the creature image */
+    .special-overlay__bot-wrap{
+      will-change:transform,opacity;
     }
 
-    .special-overlay.is-impact .special-overlay__bot-img{
+    .special-overlay__bot-img{
       transform-origin:center center;
-      animation:specialBotRush .44s cubic-bezier(.12,.82,.18,1) forwards;
-      will-change:transform;
+      will-change:transform,opacity;
     }
 
-    @keyframes specialBotRush{
+    /* 1) creature descends from above with slight living sway */
+    .special-overlay.is-creature-drop .special-overlay__bot-wrap{
+      opacity:1 !important;
+      animation:specialCreatureDrop 1.05s cubic-bezier(.18,.78,.14,1) forwards !important;
+    }
+
+    /* 2) tiny body compression / crouch */
+    .special-overlay.is-creature-crouch .special-overlay__bot-wrap{
+      opacity:1 !important;
+      animation:specialCreatureCrouch .18s ease-out forwards !important;
+    }
+
+    /* 3) leap toward viewer */
+    .special-overlay.is-creature-leap .special-overlay__bot-wrap{
+      opacity:1 !important;
+      animation:specialCreatureLeap .48s cubic-bezier(.12,.72,.10,1) forwards !important;
+    }
+
+    @keyframes specialCreatureDrop{
       0%{
-        transform:scale(1);
+        transform:translateY(-115vh) translateX(-1.5vw) rotate(-5deg) scale(.56);
+      }
+      14%{
+        transform:translateY(-92vh) translateX(1.2vw) rotate(-2.5deg) scale(.58);
+      }
+      30%{
+        transform:translateY(-64vh) translateX(-.8vw) rotate(1.8deg) scale(.62);
+      }
+      48%{
+        transform:translateY(-35vh) translateX(.7vw) rotate(-1.4deg) scale(.68);
+      }
+      66%{
+        transform:translateY(-12vh) translateX(-.4vw) rotate(1deg) scale(.75);
+      }
+      84%{
+        transform:translateY(3vh) translateX(.2vw) rotate(-.5deg) scale(.81);
       }
       100%{
-        transform:scale(3.55);
+        transform:translateY(10vh) translateX(0) rotate(0deg) scale(.84);
+      }
+    }
+
+    @keyframes specialCreatureCrouch{
+      0%{
+        transform:translateY(10vh) scale(.84);
+      }
+      100%{
+        transform:translateY(14vh) scaleX(.90) scaleY(.76);
+      }
+    }
+
+    @keyframes specialCreatureLeap{
+      0%{
+        transform:translateY(14vh) scaleX(.90) scaleY(.76);
+      }
+      18%{
+        transform:translateY(5vh) scale(.94) rotate(-.8deg);
+      }
+      48%{
+        transform:translateY(-9vh) scale(1.55) rotate(.4deg);
+      }
+      72%{
+        transform:translateY(-7vh) scale(2.5) rotate(0deg);
+      }
+      100%{
+        transform:translateY(-5vh) scale(5.25) rotate(0deg);
       }
     }
 
@@ -2950,6 +3008,7 @@
     }
 
 
+    
     /* SPECIAL audio warning — PC only */
     .special-audio-note{
       position:absolute;
@@ -4263,35 +4322,41 @@
 
           /*
             TOP reached:
-            keep SPECIAL at 100% for 2 seconds.
+            1 sec later -> impact sound
+            1 sec after that -> creature image appears
+            -> living descent -> crouch -> leap into screen -> black -> Discord
           */
           window.setTimeout(() => {
             playSpecialAudio(impactAudio);
-            overlay.classList.add("is-bot-drop");
 
-            /*
-              BOT drops for .78s.
-              The instant the drop finishes, it rushes toward the viewer.
-              No pause / glass / shake in between.
-            */
             window.setTimeout(() => {
-              overlay.classList.add("is-impact");
+              overlay.classList.add("is-creature-drop");
 
-              /*
-                As the BOT grows beyond the viewport, fade to black.
-              */
+              /* descent complete */
               window.setTimeout(() => {
-                impactBlack?.classList.add("is-black");
-              },310);
+                overlay.classList.remove("is-creature-drop");
+                overlay.classList.add("is-creature-crouch");
 
-              /*
-                Move to Discord only after black covers the screen.
-              */
-              window.setTimeout(goInvite,610);
+                /* tiny crouch / weight shift */
+                window.setTimeout(() => {
+                  overlay.classList.remove("is-creature-crouch");
+                  overlay.classList.add("is-creature-leap");
 
-            },780);
+                  /* black out just as it fills the screen */
+                  window.setTimeout(() => {
+                    impactBlack?.classList.add("is-black");
+                  },410);
 
-          },2000);
+                  /* navigate after black covers the viewport */
+                  window.setTimeout(goInvite,690);
+
+                },180);
+
+              },1050);
+
+            },1000);
+
+          },1000);
         };
 
         /*
@@ -4315,7 +4380,7 @@
           if (running && getScrollTop() <= 4) {
             goInvite();
           }
-        },14000);
+        },15000);
       };
 
       card.addEventListener("click",(event) => {
