@@ -5222,12 +5222,7 @@ body .video-topbar {
 @media screen and (min-width: 1025px) {
 
   html:not(.tablet-device) body:not(.register-mode):not(.manage-mode) {
-    --pc-video-height:
-      clamp(
-        560px,
-        56.25vw,
-        calc(100svh - var(--index-header-height))
-      );
+    --pc-video-height: calc(100dvh - var(--index-header-height));
   }
 
   /* Header: no sticky repaint / no card shadow showing through. */
