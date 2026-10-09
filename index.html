@@ -1376,7 +1376,6 @@
     /* PASS管理の操作ボタンだけ8角形。全サイトの.btnには触れない */
     #managePage #openManageActionBtn,
     #managePage #closeLoadedRecruitmentBtn,
-    #managePage #deleteUnionMembershipBtn,
     #managePage #manageEditPreviewBtn {
       border-radius: 0 !important;
       clip-path: polygon(
@@ -1401,21 +1400,29 @@
       box-shadow: none !important;
     }
 
-    /* 登録削除は通常操作から離し、危険操作として赤で明確に分離 */
-    #managePage #deleteUnionMembershipBtn.manage-delete-btn {
+    /* 登録削除：通常は白とルビーレッド、PCホバー時だけ赤背景。 */
+    html body #managePage #deleteUnionMembershipBtn.manage-delete-btn {
       margin-top: 72px !important;
       min-height: 52px !important;
-      border: 1px solid var(--red, #ff5364) !important;
-      color: #fff !important;
-      background: var(--red, #ff5364) !important;
+      border: 1px solid #C43246 !important;
+      color: #C43246 !important;
+      background: #fff !important;
+      background-image: none !important;
+      clip-path: none !important;
+      border-radius: 0 !important;
       box-shadow: none !important;
+      transform: none !important;
     }
 
-    #managePage #deleteUnionMembershipBtn.manage-delete-btn:hover,
-    #managePage #deleteUnionMembershipBtn.manage-delete-btn:active {
-      border-color: #d43f4f !important;
-      background: #d43f4f !important;
-      color: #fff !important;
+    @media (hover: hover) and (pointer: fine) {
+      html body #managePage #deleteUnionMembershipBtn.manage-delete-btn:hover {
+        border-color: #C43246 !important;
+        background: #C43246 !important;
+        background-image: none !important;
+        color: #fff !important;
+        box-shadow: none !important;
+        transform: none !important;
+      }
     }
 
     @media screen and (max-width: 600px) {
