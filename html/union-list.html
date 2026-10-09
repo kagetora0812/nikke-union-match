@@ -8,6 +8,7 @@
   <meta name="description" content="NIKKE UNION MATCHを現在利用中のユニオン一覧です。募集中のユニオンは募集記事から応募できます。">
 
   <link rel="stylesheet" href="../style.css?v=51.8">
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;500;600;700;800&display=swap" rel="stylesheet">
 
   <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;500;600;700;800&display=swap">
   <style>
@@ -172,97 +173,8 @@
       padding: 30px 18px 60px;
     }
 
-    .union-list-hero {
-      position: relative;
-      overflow: hidden;
-      padding: 32px;
-      border: 1px solid var(--line);
-      border-top: 3px solid var(--cyan);
-      background: #fff;
-      box-shadow: var(--shadow-soft);
-    }
-
-    .union-list-hero::after {
-      content: "";
-      position: absolute;
-      width: 240px;
-      height: 240px;
-      right: -100px;
-      top: -110px;
-      border: 26px solid rgba(26,176,241,.06);
-      box-shadow:
-        0 0 0 28px rgba(26,176,241,.025),
-        0 0 0 56px rgba(34,36,40,.018);
-      pointer-events: none;
-    }
-
-    .union-list-hero-inner {
-      position: relative;
-      z-index: 1;
-      display: block;
-      min-height: 132px;
-      padding-right: 230px;
-    }
-
-    .union-list-kicker {
-      margin-bottom: 8px;
-      color: var(--cyan-dark);
-      font: 900 11px "Teko", sans-serif;
-      letter-spacing: 2.4px;
-    }
-
-    .union-list-title {
-      margin: 0;
-      color: var(--ink);
-      font-size: clamp(32px, 5vw, 54px);
-      line-height: 1;
-      letter-spacing: -.055em;
-    }
-
-    .union-list-lead {
-      max-width: 760px;
-      margin: 14px 0 0;
-      color: var(--ink-soft);
-      font-size: 13px;
-      line-height: 1.9;
-    }
-
-    .union-list-countbox {
-      position: absolute;
-      top: 50%;
-      right: 0;
-      width: 190px;
-      min-width: 190px;
-      padding: 20px 22px;
-      border-left: 1px solid var(--line-strong);
-      background: transparent;
-      text-align: center;
-      transform: translateY(-50%);
-    }
-
-    .union-list-count-label {
-      color: var(--muted);
-      font: 900 10px "Teko", sans-serif;
-      letter-spacing: 2px;
-    }
-
-    .union-list-count {
-      margin-top: 8px;
-      color: var(--ink);
-      font-size: 18px;
-      font-weight: 900;
-      line-height: 1.2;
-      white-space: nowrap;
-    }
-
-    .union-list-count small {
-      margin-left: 4px;
-      color: var(--muted);
-      font-size: 11px;
-    }
-
     .union-list-toolbar {
-      margin-top: 16px;
+      margin-top: 0;
       padding: 15px 16px 16px;
       border: 1px solid var(--line);
       background: #fff;
@@ -347,52 +259,30 @@
       box-shadow: inset 0 -2px 0 var(--cyan);
     }
 
-    .union-list-grid {
-      margin-top: 14px;
-      display: grid;
-      grid-template-columns: repeat(3, minmax(0,1fr));
-      gap: 12px;
+    /* UNION LIST専用カード: 共通 .card の装飾に依存しない */
+    .union-list-grid { margin-top:14px; display:grid; grid-template-columns:repeat(4,minmax(0,1fr)); gap:14px; }
+    .union-list-grid article.card.union-card {
+      display:flex !important; flex-direction:column; min-width:0; min-height:230px;
+      padding:20px 20px 0 !important; overflow:hidden;
+      border:1px solid #e1e3e5 !important; border-radius:0 !important;
+      background:#fff !important; background-image:none !important;
+      box-shadow:none !important; clip-path:none !important; transform:none;
+      font-family:"Noto Sans JP",sans-serif;
     }
-
-    .union-list-grid .card {
-      min-width: 0;
-    }
-
-    .union-card-note {
-      margin-top: 10px;
-      color: var(--ink-soft);
-      font-size: 12px;
-      font-weight: 700;
-      line-height: 1.7;
-    }
-
-    .union-card-note.is-idle {
-      color: var(--muted);
-    }
-
-    .union-list-grid .union-card.status-open {
-      border-color: var(--cyan);
-    }
-
-    .union-list-grid .union-card.status-open::before {
-      background: var(--cyan);
-    }
-
-    .union-list-grid article.card.union-card.status-closed {
-      border-color: #E6C84A !important;
-      border-left-color: #E6C84A !important;
-    }
-
-    .union-list-grid article.card.union-card.status-closed::before {
-      background: #E6C84A !important;
-    }
-
-    .union-list-grid article.card.union-card.status-closed .state {
-      border-color: #E6C84A;
-      color: #6f6100;
-      background: rgba(255, 232, 96, .28);
-    }
-
+    .union-list-grid article.card.union-card::before,
+    .union-list-grid article.card.union-card::after { content:none !important; display:none !important; }
+    .union-list-grid article.card.union-card:hover { border-color:#b8bfc4 !important; box-shadow:none !important; }
+    .union-card-top { display:flex;justify-content:space-between;align-items:center;gap:8px;min-width:0; }
+    .union-card-top .countdown { margin:0 !important;padding:0 !important;border:0 !important;background:none !important;color:#757c81 !important;font-size:10px !important;font-weight:500 !important;line-height:1.6;white-space:nowrap; }
+    .union-card-state { font-size:11px; color:#099bd3; font-weight:700; white-space:nowrap; }
+    .union-card.status-closed .union-card-state { color:#848a8e; }
+    .union-list-grid .union-card .name { margin:24px 0 12px !important;color:#222428 !important;font-size:clamp(17px,1.45vw,23px) !important;line-height:1.4 !important;font-weight:700 !important;overflow-wrap:anywhere; }
+    .union-list-grid .union-card .union-rank { display:inline-block !important;align-self:flex-start;width:auto !important;min-width:0 !important;margin:0 !important;padding:5px 12px !important;font-size:11px !important;font-weight:700 !important;line-height:1.4;clip-path:none !important; }
+    .union-list-grid .union-card .x-post-area { margin-top:auto !important;padding:24px 0 0 !important;border:0 !important;background:none !important; }
+    .union-list-grid .union-card .x-btn { display:flex !important;align-items:center;justify-content:space-between;width:100%;min-height:50px;padding:12px 0 !important;border:0 !important;border-top:1px solid #e7e7e7 !important;background:#fff !important;color:#272a2d !important;font-family:"Noto Sans JP",sans-serif !important;font-size:12px !important;font-weight:600 !important;text-align:left;clip-path:none !important;box-shadow:none !important;text-decoration:none; }
+    .union-list-grid .union-card .x-btn:hover { color:#079ed8 !important; }
+    .union-card-no-link { margin-top:auto;padding:24px 0 16px;color:#92979b;font-size:11px; }
+    @media screen and (min-width:601px) and (max-width:1024px) { .union-list-grid { grid-template-columns:repeat(2,minmax(0,1fr)); } }
     .union-list-empty,
     .union-list-error,
     .union-list-loading {
@@ -431,17 +321,7 @@
     }
 
     @media screen and (max-width: 1024px) {
-      .union-list-hero-inner {
-        min-height: 124px;
-        padding-right: 205px;
-      }
 
-      .union-list-countbox {
-        right: 0;
-        width: 170px;
-        min-width: 170px;
-        padding: 18px 16px;
-      }
 
       .union-list-grid {
         grid-template-columns: repeat(2, minmax(0,1fr));
@@ -610,9 +490,6 @@
         padding: 0 12px !important;
       }
 
-      .union-list-countbox {
-        display: none !important;
-      }
 
 
       body > main.union-list-page {
@@ -634,14 +511,7 @@
         height: calc(100dvh - 58px);
       }
 
-      .union-list-hero {
-        padding: 22px 16px;
-      }
 
-      .union-list-hero-inner {
-        min-height: 0;
-        padding-right: 0;
-      }
 
       .union-list-grid {
         grid-template-columns: 1fr;
@@ -655,6 +525,13 @@
       .union-list-rank-select label { left: 8px; }
       .union-list-summary { font-size: 10px; }
       .union-list-summary strong { font-size: 13px; }
+    }
+
+    html.tablet-device .union-list-grid { grid-template-columns:repeat(2,minmax(0,1fr)); }
+    @media screen and (max-width:600px) {
+      .union-list-grid,html.tablet-device .union-list-grid {grid-template-columns:1fr;}
+      .union-list-grid article.card.union-card {min-height:210px;padding:18px 17px 0 !important;}
+      .union-card-top .countdown {font-size:9px !important;}
     }
   </style>
 </head>
@@ -709,25 +586,6 @@
   </aside>
 
   <main class="union-list-page">
-    <section class="union-list-hero">
-      <div class="union-list-hero-inner">
-        <div>
-          <div class="union-list-kicker">UNION MATCH MEMBERS</div>
-          <h1 class="union-list-title">ユニオンリスト</h1>
-          <p class="union-list-lead">
-            NIKKE UNION MATCHを現在利用しているユニオンです。<br>
-            「募集中」のユニオンは募集記事から応募できます。
-          </p>
-        </div>
-
-        <div class="union-list-countbox" aria-label="登録ユニオン総数">
-          <div class="union-list-count-label">TOTAL UNIONS</div>
-          <div class="union-list-count">
-            <span id="totalUnionCount">--</span><small>UNIONS</small>
-          </div>
-        </div>
-      </div>
-    </section>
 
     <section class="union-list-toolbar" aria-label="ユニオン一覧絞り込み">
       <div id="summary" class="union-list-summary" aria-live="polite">読み込み中...</div>
@@ -1058,13 +916,6 @@
         `募集中 <strong>${openCount}</strong><span class="sep">｜</span>` +
         `募集なし <strong>${closedCount}</strong>`;
 
-      const totalUnionCount =
-        document.getElementById("totalUnionCount");
-
-      if (totalUnionCount) {
-        totalUnionCount.textContent =
-          String(state.items.length);
-      }
 
       grid.innerHTML = "";
 
@@ -1104,40 +955,13 @@
 
           return `
             <article class="card union-card ${recruiting ? "status-open" : "status-closed"}">
-              <div class="card-head">
-                <div class="type-with-new">
-                  <span class="recruitment-type">● ユニオン</span>
-                </div>
-
-                <span class="state">
-                  ${recruiting ? "募集中" : "現在募集なし"}
-                </span>
+              <div class="union-card-top">
+                <span class="countdown" data-member-expires="${escapeHtml(item.expires_at || "")}">${escapeHtml(getMembershipCountdown(item.expires_at))}</span>
+                <span class="union-card-state">${recruiting ? "● 募集中" : "募集なし"}</span>
               </div>
-
-              <div class="name">
-                ${escapeHtml(item.union_name || "--")}
-              </div>
-
-              <div class="union-rank rank-${escapeHtml(rankClass)}">
-                ${escapeHtml(item.union_rank || "--")}
-              </div>
-
-              <div
-                class="countdown"
-                data-member-expires="${escapeHtml(item.expires_at || "")}"
-              >
-                ${escapeHtml(getMembershipCountdown(item.expires_at))}
-              </div>
-
-              <div class="union-card-note ${recruiting ? "" : "is-idle"}">
-                ${
-                  recruiting
-                    ? "現在メンバーを募集しています。"
-                    : "UNION MATCH利用中のユニオンです。現在は募集していません。"
-                }
-              </div>
-
-              ${button}
+              <div class="name">${escapeHtml(item.union_name || "--")}</div>
+              <div class="union-rank rank-${escapeHtml(rankClass)}">${escapeHtml(item.union_rank || "--")}</div>
+              ${button || '<div class="union-card-no-link">現在は募集していません</div>'}
             </article>
           `;
         }).join("");
