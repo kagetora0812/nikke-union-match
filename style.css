@@ -5874,12 +5874,6 @@ body.register-mode #registerPage .register-period-note,
 body.manage-mode #managePage .manage-pass-notice { border:0!important; border-left:3px solid #20b8f4!important; border-radius:0!important; clip-path:none!important; background:#f0f9fd!important; box-shadow:none!important; padding:14px 16px!important; color:#4e5962!important; }
 body.register-mode #registerPage .register-period-note strong,
 body.manage-mode #managePage .manage-pass-notice strong { color:#222428!important; }
-body.register-mode #registerPage #registerPreviewBtn,
-body.manage-mode #managePage #loadManageRecruitmentBtn { min-height:44px!important; clip-path:none!important; border:1px solid #cbd2d6!important; border-radius:0!important; background:#f7f8f9!important; box-shadow:none!important; color:#252a2d!important; font:700 13px "Noto Sans JP",sans-serif!important; transition:border-color .2s,background-color .2s,color .2s!important; }
-@media(hover:hover) and (pointer:fine) {
- body.register-mode #registerPage #registerPreviewBtn:hover,
- body.manage-mode #managePage #loadManageRecruitmentBtn:hover { background:#eaf8ff!important; border-color:#20b8f4!important; color:#078fc8!important; transform:none!important; box-shadow:none!important; }
-}
 @media(max-width:600px) {
  body.register-mode .register-inline-top,
  body.manage-mode .manage-inline-top { margin-bottom:16px!important; }
@@ -5943,7 +5937,9 @@ body.manage-mode #managePage #loadManageRecruitmentBtn { min-height:44px!importa
 #managePage .manage-renew-note,
 #managePage .manage-result-new-note,
 #managePage .manage-result-summary {background:#edf8fe!important;border:0!important;border-left:3px solid #20b8f4!important;border-radius:0!important;clip-path:none!important;box-shadow:none!important;color:#4e5962!important;padding:12px 14px!important;}
-/* Primary actions stay legible; cancel/edit stays white. */
+/* Register / PASS / BOT edit: unified clean primary and secondary buttons. */
+body.register-mode #registerPage #registerPreviewBtn,
+body.manage-mode #managePage #loadManageRecruitmentBtn,
 #managePage #openManageActionBtn,
 #managePage #closeLoadedRecruitmentBtn,
 #managePage #openManageEditBtn,
@@ -5954,16 +5950,29 @@ body.manage-mode #managePage #loadManageRecruitmentBtn { min-height:44px!importa
 #managePreviewModal .registration-preview-actions .btn,
 #resultModal .copy-btn,
 #manageResultModal .copy-btn,
-#manageResultModal #manageResultDone {clip-path:none!important;border-radius:0!important;border:1px solid #cbd2d6!important;background:#f7f8f9!important;color:#252a2d!important;box-shadow:none!important;font-family:"Noto Sans JP",sans-serif!important;font-weight:700!important;transition:border-color .2s,background-color .2s,color .2s!important;}
-#managePage #openManageActionBtn,
-#managePage #closeLoadedRecruitmentBtn,
-#managePage #openManageEditBtn,
-#managePage #backManageActionBtn,
-#managePage #manageEditPreviewBtn,
-#managePage #cancelManageEditBtn {min-height:44px!important;padding:10px 14px!important;}
+#manageResultModal #manageResultDone {
+  appearance:none!important;
+  clip-path:none!important;
+  border-radius:0!important;
+  border:1px solid #18a9e0!important;
+  background:#fff!important;
+  background-image:none!important;
+  color:#168dbc!important;
+  box-shadow:none!important;
+  text-shadow:none!important;
+  font-family:"Noto Sans JP",sans-serif!important;
+  font-weight:700!important;
+  min-height:44px!important;
+  transition:background-color .2s,color .2s,border-color .2s!important;
+}
 #managePage #cancelManageEditBtn,
-#managePreviewModal #managePreviewBack,
-#registrationPreviewModal #registrationPreviewBack {background:#fff!important;border-color:#cbd2d6!important;color:#252a2d!important;}
+#managePage #backManageActionBtn,
+#registrationPreviewModal #registrationPreviewBack,
+#managePreviewModal #managePreviewBack {
+  border-color:#a8afb5!important;
+  background:#fff!important;
+  color:#333!important;
+}
 /* Deletion remains RED. Do not alter delete confirmation workflows. */
 /* Destructive action only: refined ruby red, no filled gray or clipped corners. */
 #managePage #deleteUnionMembershipBtn,
@@ -5991,17 +6000,33 @@ body.manage-mode #managePage #loadManageRecruitmentBtn { min-height:44px!importa
   }
 }
 @media(hover:hover) and (pointer:fine){
+  body.register-mode #registerPage #registerPreviewBtn:hover,
+  body.manage-mode #managePage #loadManageRecruitmentBtn:hover,
   #managePage #openManageActionBtn:hover,
   #managePage #closeLoadedRecruitmentBtn:hover,
   #managePage #openManageEditBtn:hover,
-  #managePage #backManageActionBtn:hover,
   #managePage #manageEditPreviewBtn:hover,
-  #managePage #cancelManageEditBtn:hover,
-  #registrationPreviewModal .registration-preview-actions .btn:hover,
-  #managePreviewModal .registration-preview-actions .btn:hover,
+  #registrationPreviewModal #registrationPreviewConfirm:hover,
+  #managePreviewModal #managePreviewConfirm:hover,
   #resultModal .copy-btn:hover,
   #manageResultModal .copy-btn:hover,
-  #manageResultModal #manageResultDone:hover {border-color:#20b8f4!important;background:#eaf8ff!important;color:#078fc8!important;transform:none!important;box-shadow:none!important;}
+  #manageResultModal #manageResultDone:hover {
+    background:#18a9e0!important;
+    border-color:#18a9e0!important;
+    color:#fff!important;
+    transform:none!important;
+    box-shadow:none!important;
+  }
+  #managePage #cancelManageEditBtn:hover,
+  #managePage #backManageActionBtn:hover,
+  #registrationPreviewModal #registrationPreviewBack:hover,
+  #managePreviewModal #managePreviewBack:hover {
+    background:#fff!important;
+    border-color:#18a9e0!important;
+    color:#168dbc!important;
+    transform:none!important;
+    box-shadow:none!important;
+  }
 }
 @media(max-width:600px){
   body.manage-mode #managePage .manage-inline-top {gap:10px!important;margin-bottom:14px!important;}
