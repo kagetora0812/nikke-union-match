@@ -300,6 +300,12 @@
       line-height: 1.8;
     }
 
+    .creator-description-mobile { display: none; }
+    @media screen and (max-width: 600px) {
+      .creator-description-desktop { display: none; }
+      .creator-description-mobile { display: inline; }
+    }
+
     .creator-grid {
       display: grid;
       grid-template-columns: repeat(3, minmax(0, 1fr));
@@ -1130,7 +1136,7 @@
 <section class="list-section">
       <div class="section-title-row">
         <h1 class="creator-list-title">CREATOR LIST</h1>
-        <p class="creator-list-description">NIKKE UNION MATCHを応援していただいているクリエイターの皆様をご紹介します。</p>
+        <p class="creator-list-description"><span class="creator-description-desktop">NIKKE UNION MATCHを応援していただいているクリエイターの皆様をご紹介します。</span><span class="creator-description-mobile">応援していただいているクリエイターの皆様をご紹介します。</span></p>
       </div>
 
       <div id="creatorGrid" class="creator-grid"></div>
