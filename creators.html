@@ -143,13 +143,7 @@
       letter-spacing: 1.6px;
     }
 
-    .status::before {
-      content: "";
-      width: 5px;
-      height: 15px;
-      background: var(--orange);
-      box-shadow: 0 0 8px rgba(231,162,45,.22);
-    }
+    .status::before { display: none; }
 
     /* ================= LAYOUT ================= */
     .container {
@@ -193,100 +187,6 @@
       color: #b5bac1;
       font-size: 13px;
       line-height: 1.8;
-    }
-
-    /* ================= HERO ================= */
-    .creator-hero {
-      position: relative;
-      overflow: hidden;
-      min-height: 240px;
-      padding: 32px 34px;
-      display: grid;
-      grid-template-columns: minmax(0, 1fr) auto;
-      align-items: center;
-      gap: 30px;
-      border: 1px solid #292c32;
-      border-top: 3px solid #3a3d43;
-      background:
-        linear-gradient(110deg, #17191e 0%, #111318 56%, #0d0f13 100%);
-      box-shadow: 0 20px 45px rgba(0,0,0,.22);
-    }
-
-    .creator-hero::before,
-    .creator-hero::after {
-      content: "";
-      position: absolute;
-      border-radius: 50%;
-      pointer-events: none;
-    }
-
-    .creator-hero::before {
-      width: 300px;
-      height: 300px;
-      right: -68px;
-      top: -86px;
-      border: 34px solid rgba(255,255,255,.018);
-      box-shadow: 0 0 0 34px rgba(255,255,255,.014), 0 0 0 68px rgba(255,255,255,.010);
-    }
-
-    .creator-hero::after {
-      width: 8px;
-      height: 8px;
-      left: 16px;
-      top: 17px;
-      border-radius: 0;
-      background: var(--orange);
-      box-shadow: 14px 0 0 rgba(40,185,232,.38), 28px 0 0 rgba(255,255,255,.14);
-    }
-
-    .hero-copy,
-    .creator-count-panel {
-      position: relative;
-      z-index: 1;
-    }
-
-    .top-actions {
-      margin-top: 22px;
-    }
-
-    .back-btn {
-      display: inline-flex;
-      align-items: center;
-      justify-content: center;
-      min-height: 42px;
-      padding: 0 15px;
-      border: 1px solid #3a3d43;
-      background: #1a1d22;
-      color: #e2e4e7;
-      text-decoration: none;
-      font-size: 12px;
-      font-weight: 900;
-      transition: .18s ease;
-    }
-
-    .back-btn:hover {
-      border-color: #a9dff6;
-    }
-
-    .creator-count-panel {
-      min-width: 170px;
-      padding: 20px 22px;
-      border-left: 1px solid #33363d;
-      text-align: center;
-    }
-
-    .creator-count-label {
-      color: var(--muted2);
-      font: 800 10px "Teko", "Noto Sans JP", sans-serif;
-      letter-spacing: 2px;
-    }
-
-    .creator-count {
-      margin-top: 8px;
-      color: #fff;
-      font-size: 16px;
-      font-weight: 900;
-      white-space: nowrap;
     }
 
     /* ================= NIKKE WHITE / BLUE TAP ================= */
@@ -373,16 +273,31 @@
 
     /* ================= LIST ================= */
     .list-section {
-      margin-top: 30px;
+      margin-top: 0;
     }
 
     .section-title-row {
       display: flex;
-      align-items: end;
-      justify-content: space-between;
-      gap: 20px;
-      padding: 0 2px 13px;
+      align-items: baseline;
+      justify-content: flex-start;
+      flex-wrap: wrap;
+      gap: 10px 24px;
+      padding: 0 2px 16px;
       border-bottom: 1px solid var(--line);
+    }
+    .creator-list-title {
+      margin: 0;
+      color: var(--accent);
+      font: 700 clamp(27px, 3vw, 38px)/1 "Teko", sans-serif;
+      letter-spacing: .1em;
+      white-space: nowrap;
+    }
+    .creator-list-description {
+      margin: 0;
+      color: #c0c6cf;
+      font-size: 12px;
+      font-weight: 600;
+      line-height: 1.8;
     }
 
     .creator-grid {
@@ -710,44 +625,14 @@
         padding-top: 12px;
       }
 
-      .creator-hero {
-        min-height: 0;
-        padding: 24px 18px 20px;
-        grid-template-columns: 1fr;
-        gap: 20px;
-      }
 
-      .creator-hero::before {
-        width: 220px;
-        height: 220px;
-        right: -95px;
-        top: -78px;
-        opacity: .7;
-      }
-
-      h1 {
-        font-size: 34px;
-      }
-
-      .lead {
-        font-size: 12px;
-      }
-
-      .creator-count-panel {
-        min-width: 0;
-        padding: 15px 0 0;
-        border-left: 0;
-        border-top: 1px solid #30333a;
-        text-align: left;
-      }
-
-      .creator-count {
-        font-size: 14px;
-      }
 
       .section-title-row {
         align-items: flex-start;
+        flex-direction: column;
+        gap: 7px;
       }
+      .creator-list-description { font-size: 11px; }
 
       .creator-grid {
         grid-template-columns: 1fr;
@@ -828,11 +713,7 @@
       letter-spacing: .16em;
     }
 
-    .creator-brand::before {
-      width: 5px;
-      height: 22px;
-      flex: 0 0 5px;
-    }
+
 
     .site-menu-button {
       width: 46px;
@@ -938,50 +819,6 @@
     .site-menu-drawer > a:hover {
       color: var(--cyan);
       background: rgba(255,255,255,.06);
-    }
-
-    .creator-pc-home-row {
-      display: none;
-    }
-
-    @media screen and (min-width: 1025px) {
-      .creator-pc-home-row {
-        display: flex;
-        padding: 12px 0 0 20px;
-      }
-
-      .creator-pc-home {
-        position: fixed;
-        top: 76px;
-        left: 20px;
-        z-index: 105;
-        width: 44px;
-        height: 44px;
-        display: grid;
-        place-items: center;
-        overflow: hidden;
-        border: 1px solid rgba(26, 176, 241, .38);
-        background: rgba(26, 176, 241, .055);
-        color: #dcecf4;
-        text-decoration: none;
-        font: 800 23px/1 "Teko", "Noto Sans JP", sans-serif;
-        box-shadow: none;
-        transition: .18s ease;
-      }
-
-      .creator-pc-home::before,
-      .creator-pc-home::after {
-        display: none;
-      }
-
-      .creator-pc-home:hover,
-      .creator-pc-home:active {
-        border-color: #a9dff6;
-        background: #f7fbfd;
-        color: #079fd9;
-        transform: none;
-        box-shadow: none;
-      }
     }
 
     @media screen and (max-width: 1024px) {
@@ -1235,9 +1072,9 @@
 
   <header class="topbar creator-topbar">
 
-    <div class="status creator-brand">
+    <a class="status creator-brand" href="./index.html#videoHero" aria-label="UNION MATCH TOPへ戻る" style="text-decoration:none;">
       CREATOR
-    </div>
+    </a>
 
     <button
       id="siteMenuButton"
@@ -1288,44 +1125,12 @@
     </div>
   </aside>
 
-  <div class="creator-pc-home-row">
-    <a
-      class="creator-pc-home"
-      href="./index.html#videoHero"
-      aria-label="UNION MATCH TOPへ戻る"
-      title="HOME"
-    >
-      <span aria-hidden="true">⌂</span>
-    </a>
-  </div>
+<main class="container">
 
-
-
-  <main class="container">
-
-    <section class="creator-hero">
-      <div class="hero-copy">
-        <div class="eyebrow">SUPPORT CREATORS</div>
-        <h1>応援クリエイター</h1>
-        <p class="lead">
-          NIKKE UNION MATCHを応援していただいている<br>
-          NIKKEクリエイター・配信者の皆様をご紹介します。
-        </p>
-      </div>
-
-      <div class="creator-count-panel">
-        <div class="creator-count-label">PUBLIC CREATORS</div>
-        <div id="creatorCount" class="creator-count">
-          公開クリエイターを読み込み中...
-        </div>
-      </div>
-    </section>
-
-    <section class="list-section">
+<section class="list-section">
       <div class="section-title-row">
-        <div>
-          <div class="eyebrow">CREATOR LIST</div>
-        </div>
+        <h1 class="creator-list-title">CREATOR LIST</h1>
+        <p class="creator-list-description">NIKKE UNION MATCHを応援していただいているクリエイターの皆様をご紹介します。</p>
       </div>
 
       <div id="creatorGrid" class="creator-grid"></div>
@@ -1481,11 +1286,7 @@
       const errorState =
         $("#errorState");
 
-      const count =
-        $("#creatorCount");
-
-
-      grid.innerHTML =
+grid.innerHTML =
         "";
 
 
@@ -1538,11 +1339,7 @@
         );
 
 
-        count.textContent =
-          "公開クリエイター：--";
-
-
-        errorState.classList.remove(
+errorState.classList.remove(
           "hidden"
         );
 
@@ -1558,11 +1355,7 @@
           : [];
 
 
-      count.textContent =
-        `公開中 ${creators.length}名`;
-
-
-      if (
+if (
         creators.length ===
         0
       ) {
