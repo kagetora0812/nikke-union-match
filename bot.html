@@ -102,13 +102,8 @@
       color:#fff;
       font:700 22px/1 "Teko",sans-serif;
       letter-spacing:.16em;
-    }
-    .bot-brand::before{
-      content:"";
-      width:5px;
-      height:22px;
-      background:#5B8CFF;
-      box-shadow:0 0 16px rgba(91,140,255,.22);
+      text-decoration:none;
+      white-space:nowrap;
     }
     .site-menu-button{
       width:46px;
@@ -205,28 +200,6 @@
       line-height:1.7;
     }
 
-    .bot-pc-home{
-      position:fixed;
-      top:76px;
-      left:20px;
-      z-index:105;
-      width:44px;
-      height:44px;
-      display:grid;
-      place-items:center;
-      border:1px solid rgba(40,192,252,.52);
-      background:rgba(4,9,13,.42);
-      color:#e8f8ff;
-      text-decoration:none;
-      font:800 23px/1 "Teko",sans-serif;
-      backdrop-filter:blur(10px);
-      -webkit-backdrop-filter:blur(10px);
-      transition:.2s ease;
-    }
-    .bot-pc-home:hover{
-      border-color:#28C0FC;
-      background:rgba(40,192,252,.12);
-    }
 
 
     /* ---------- hero scroll guide ---------- */
@@ -1096,7 +1069,6 @@
 
     /* tablet + mobile: feature slider */
     @media (max-width:1024px){
-      .bot-pc-home{display:none}
       .lux-section{
         width:min(100% - 34px,var(--content));
         padding:82px 0;
@@ -1318,7 +1290,6 @@
 
     /* Tablet + mobile: one canonical slider definition only. */
     @media (max-width:1180px), (min-width:1181px) and (max-width:1366px) and (pointer:coarse){
-      .bot-pc-home{display:none}
       .slider-controls{display:flex}
       .feature-section{min-height:0}
       .feature-grid,
@@ -2748,7 +2719,6 @@
     /* Keep the real page/content visible while it moves upward. */
     body.special-running .lux-page,
     body.special-running .topbar,
-    body.special-running .bot-pc-home,
     body.special-running .subpage-bottom-nav{
       visibility:visible !important;
       filter:none !important;
@@ -2760,7 +2730,6 @@
     }
 
     body.special-running .topbar,
-    body.special-running .bot-pc-home,
     body.special-running .subpage-bottom-nav{
       opacity:var(--site-fade,1) !important;
     }
@@ -3353,7 +3322,7 @@
   </div>
 
   <header class="topbar bot-topbar">
-    <div class="bot-brand">DISCORD BOT</div>
+    <a class="bot-brand" href="./index.html#videoHero" aria-label="UNION MATCH TOPへ戻る">DISCORD BOT</a>
 
     <button
       id="siteMenuButton"
@@ -3389,13 +3358,6 @@
       ファンサイトです。
     </div>
   </aside>
-
-  <a
-    class="bot-pc-home"
-    href="./index.html#videoHero"
-    aria-label="UNION MATCH TOPへ戻る"
-    title="HOME"
-  >⌂</a>
 
   <main class="container bot-redesign lux-page">
 
