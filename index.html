@@ -1373,23 +1373,6 @@
       white-space: nowrap !important;
     }
 
-    /* PASS管理の操作ボタンだけ8角形。全サイトの.btnには触れない */
-    #managePage #openManageActionBtn,
-    #managePage #closeLoadedRecruitmentBtn,
-    #managePage #manageEditPreviewBtn {
-      border-radius: 0 !important;
-      clip-path: polygon(
-        8px 0,
-        calc(100% - 8px) 0,
-        100% 8px,
-        100% calc(100% - 8px),
-        calc(100% - 8px) 100%,
-        8px 100%,
-        0 calc(100% - 8px),
-        0 8px
-      ) !important;
-    }
-
     /* PASS編集：「編集をやめる」だけ境界線の四角ボタンへ統一 */
     #managePage #cancelManageEditBtn {
       border-radius: 0 !important;
