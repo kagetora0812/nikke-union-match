@@ -2121,17 +2121,8 @@ body.manage-mode #managePage {
   line-height: 19px;
 }
 
-.nav-btn:hover,
-.nav-btn.active {
-  color: #fff;
-
-  background:
-    linear-gradient(
-      180deg,
-      var(--cyan-2),
-      var(--cyan)
-    );
-}
+.nav-btn:hover { color: #20b8f4; }
+.nav-btn.active { color:#fff; background:transparent; box-shadow: inset 0 -2px 0 #20b8f4; }
 
 
 
@@ -3845,16 +3836,12 @@ body .bottom-nav .nav-btn {
   background: transparent !important;
 }
 
-/* 現在ページだけ青 */
+/* 現在ページは白文字＋細い水色ラインのみ */
 body .bottom-nav .nav-btn.active,
 body .bottom-nav .nav-btn.active:hover {
-  color: #fff !important;
-  background:
-    linear-gradient(
-      180deg,
-      var(--cyan-2),
-      var(--cyan)
-    ) !important;
+  color:#fff !important;
+  background:transparent !important;
+  box-shadow:inset 0 -2px 0 #20b8f4 !important;
 }
 
 /* PCのマウスオーバーは薄く反応するだけ */
