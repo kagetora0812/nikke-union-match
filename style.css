@@ -4091,6 +4091,12 @@ body .bottom-nav .nav-btn.active:hover {
 }
 
 
+/* Index header height is shared by the hero, scroll viewport and drawer. */
+:root { --index-header-height: 64px; }
+@media screen and (max-width: 600px) {
+  :root { --index-header-height: 58px; }
+}
+
 /* =========================================================
    v15 VIDEO TOP / HEADER / MOBILE+TABLET NAV
    2026-09-09
@@ -4101,7 +4107,7 @@ body .video-topbar {
   position: sticky !important;
   top: 0 !important;
   z-index: 120 !important;
-  height: 66px !important;
+  height: var(--index-header-height) !important;
   padding: 0 14px !important;
   border-bottom: 0 !important;
   background: rgba(9, 10, 13, .92) !important;
@@ -4181,7 +4187,7 @@ body.menu-open .site-menu-button span:nth-child(3) {
 
 body .site-menu-backdrop {
   position: fixed;
-  inset: 66px 0 0;
+  inset: var(--index-header-height) 0 0;
   z-index: 108;
   background: rgba(0, 0, 0, .48);
   backdrop-filter: blur(2px);
@@ -4190,11 +4196,11 @@ body .site-menu-backdrop {
 
 body .site-menu-drawer {
   position: fixed;
-  top: 66px;
+  top: var(--index-header-height);
   right: 0;
   z-index: 110;
   width: min(86vw, 340px);
-  height: calc(100dvh - 66px);
+  height: calc(100dvh - var(--index-header-height));
   padding: 12px;
   transform: translateX(105%);
   overflow-y: auto;
@@ -4259,7 +4265,7 @@ body .video-hero {
   width: 100%;
   overflow: hidden;
   background: #000;
-  scroll-margin-top: 66px;
+  scroll-margin-top: var(--index-header-height);
   isolation: isolate;
 }
 
@@ -4588,7 +4594,7 @@ body .bottom-nav .nav-link-btn {
 @media screen and (min-width: 1025px) {
   body .video-hero {
     aspect-ratio: 16 / 9;
-    max-height: calc(100svh - 66px);
+    max-height: calc(100svh - var(--index-header-height));
     min-height: 560px;
   }
 
@@ -4696,13 +4702,13 @@ body .bottom-nav .nav-link-btn {
     max-height: 40px !important;
   }
 
-  /* Hero occupies the viewport below the 66px sticky header.
+  /* Hero occupies the viewport below the var(--index-header-height) sticky header.
      The white recruitment sheet starts only after scrolling. */
   html body .video-hero {
     aspect-ratio: auto !important;
     width: 100% !important;
-    height: calc(100svh - 66px) !important;
-    min-height: calc(100svh - 66px) !important;
+    height: calc(100svh - var(--index-header-height)) !important;
+    min-height: calc(100svh - var(--index-header-height)) !important;
     max-height: none !important;
   }
 
@@ -4853,7 +4859,7 @@ body .bottom-nav .nav-link-btn {
 body:not(.register-mode):not(.manage-mode) .video-hero {
   position: -webkit-sticky !important;
   position: sticky !important;
-  top: 66px !important;
+  top: var(--index-header-height) !important;
   z-index: 1 !important;
 }
 
@@ -4891,15 +4897,15 @@ body .video-topbar {
      use a fixed video underlay instead of sticky on smartphones. */
   html body:not(.register-mode):not(.manage-mode) .video-hero {
     position: fixed !important;
-    top: 66px !important;
+    top: var(--index-header-height) !important;
     left: 0 !important;
     right: 0 !important;
     bottom: auto !important;
 
     width: 100% !important;
-    height: calc(100svh - 66px) !important;
-    min-height: calc(100svh - 66px) !important;
-    max-height: calc(100svh - 66px) !important;
+    height: calc(100svh - var(--index-header-height)) !important;
+    min-height: calc(100svh - var(--index-header-height)) !important;
+    max-height: calc(100svh - var(--index-header-height)) !important;
 
     z-index: 1 !important;
   }
@@ -4908,7 +4914,7 @@ body .video-topbar {
      so reserve exactly one smartphone hero-height before the list.
      This makes the document end at the real end of the cards. */
   html body:not(.register-mode):not(.manage-mode) main.container {
-    margin-top: calc(100svh - 66px) !important;
+    margin-top: calc(100svh - var(--index-header-height)) !important;
     min-height: 0 !important;
   }
 
@@ -4957,9 +4963,9 @@ body .video-topbar {
     position: relative !important;
 
     width: 100% !important;
-    height: calc(100dvh - 66px) !important;
+    height: calc(100dvh - var(--index-header-height)) !important;
     min-height: 0 !important;
-    max-height: calc(100dvh - 66px) !important;
+    max-height: calc(100dvh - var(--index-header-height)) !important;
 
     overflow-x: hidden !important;
     overflow-y: auto !important;
@@ -4982,9 +4988,9 @@ body .video-topbar {
     bottom: auto !important;
 
     width: 100% !important;
-    height: calc(100dvh - 66px) !important;
-    min-height: calc(100dvh - 66px) !important;
-    max-height: calc(100dvh - 66px) !important;
+    height: calc(100dvh - var(--index-header-height)) !important;
+    min-height: calc(100dvh - var(--index-header-height)) !important;
+    max-height: calc(100dvh - var(--index-header-height)) !important;
 
     z-index: 1 !important;
   }
@@ -5072,7 +5078,7 @@ body .video-topbar {
    v32 SMARTPHONE VIDEO HARD LOCK
    2026-09-10
    - smartphone INDEX only
-   - video is completely fixed under the 66px header
+   - video is completely fixed under the var(--index-header-height) header
    - dragging/overscroll cannot pull the video downward
    - the white recruitment sheet remains the only moving layer
    - white sheet starts 28px later than the video viewport
@@ -5088,7 +5094,7 @@ body .video-topbar {
   */
   html body .mobile-scroll-shell {
     position: fixed !important;
-    top: 66px !important;
+    top: var(--index-header-height) !important;
     right: 0 !important;
     bottom: 0 !important;
     left: 0 !important;
@@ -5112,15 +5118,15 @@ body .video-topbar {
   html body:not(.register-mode):not(.manage-mode) .video-hero {
     position: fixed !important;
 
-    top: 66px !important;
+    top: var(--index-header-height) !important;
     right: 0 !important;
     bottom: auto !important;
     left: 0 !important;
 
     width: 100% !important;
-    height: calc(100dvh - 66px) !important;
-    min-height: calc(100dvh - 66px) !important;
-    max-height: calc(100dvh - 66px) !important;
+    height: calc(100dvh - var(--index-header-height)) !important;
+    min-height: calc(100dvh - var(--index-header-height)) !important;
+    max-height: calc(100dvh - var(--index-header-height)) !important;
 
     margin: 0 !important;
     transform: none !important;
@@ -5136,7 +5142,7 @@ body .video-topbar {
     position: relative !important;
     z-index: 8 !important;
 
-    margin-top: calc(100dvh - 66px + 28px) !important;
+    margin-top: calc(100dvh - var(--index-header-height) + 28px) !important;
     min-height: 0 !important;
   }
 
@@ -5208,7 +5214,7 @@ body .video-topbar {
    2026-09-10
    - PC INDEX only
    - header is fixed and fully opaque
-   - video is fixed directly below the 66px header
+   - video is fixed directly below the var(--index-header-height) header
    - only the white recruitment content scrolls over the video
    - smartphone / tablet / register / manage untouched
    ========================================================= */
@@ -5220,7 +5226,7 @@ body .video-topbar {
       clamp(
         560px,
         56.25vw,
-        calc(100svh - 66px)
+        calc(100svh - var(--index-header-height))
       );
   }
 
@@ -5232,7 +5238,7 @@ body .video-topbar {
     right: 0 !important;
 
     width: 100% !important;
-    height: 66px !important;
+    height: var(--index-header-height) !important;
 
     z-index: 120 !important;
 
@@ -5245,7 +5251,7 @@ body .video-topbar {
   /* Video: hard lock below the header. */
   html:not(.tablet-device) body:not(.register-mode):not(.manage-mode) .video-hero {
     position: fixed !important;
-    top: 66px !important;
+    top: var(--index-header-height) !important;
     left: 0 !important;
     right: 0 !important;
     bottom: auto !important;
@@ -5273,7 +5279,7 @@ body .video-topbar {
 
     margin-top:
       calc(
-        66px
+        var(--index-header-height)
         + var(--pc-video-height)
       ) !important;
   }
@@ -5293,7 +5299,7 @@ body .video-topbar {
    - physical iPad / Android tablet only
    - portrait and landscape keep tablet behavior
    - TOP: white recruitment sheet and its shadow stay off-screen
-   - video is fixed below the existing 66px tablet top bar
+   - video is fixed below the existing var(--index-header-height) tablet top bar
    - footer uses the same internal scroll shell from every menu route
    - smartphone / PC / Supabase / card rendering untouched
    ========================================================= */
@@ -5316,7 +5322,7 @@ html.tablet-device body .video-topbar {
   position: sticky !important;
   top: 0 !important;
   z-index: 120 !important;
-  height: 66px !important;
+  height: var(--index-header-height) !important;
   background: rgba(9, 10, 13, .92) !important;
   backdrop-filter: blur(12px) !important;
   -webkit-backdrop-filter: blur(12px) !important;
@@ -5326,7 +5332,7 @@ html.tablet-device body .video-topbar {
 html.tablet-device body .mobile-scroll-shell {
   display: block !important;
   position: fixed !important;
-  top: 66px !important;
+  top: var(--index-header-height) !important;
   right: 0 !important;
   bottom: 0 !important;
   left: 0 !important;
@@ -5346,15 +5352,15 @@ html.tablet-device body .mobile-scroll-shell {
 /* Tablet TOP video: hard-locked to the viewport below the top bar. */
 html.tablet-device body:not(.register-mode):not(.manage-mode) .video-hero {
   position: fixed !important;
-  top: 66px !important;
+  top: var(--index-header-height) !important;
   right: 0 !important;
   bottom: auto !important;
   left: 0 !important;
 
   width: 100% !important;
-  height: calc(100dvh - 66px) !important;
-  min-height: calc(100dvh - 66px) !important;
-  max-height: calc(100dvh - 66px) !important;
+  height: calc(100dvh - var(--index-header-height)) !important;
+  min-height: calc(100dvh - var(--index-header-height)) !important;
+  max-height: calc(100dvh - var(--index-header-height)) !important;
   aspect-ratio: auto !important;
 
   margin: 0 !important;
@@ -5372,7 +5378,7 @@ html.tablet-device body .hero-background-video {
 html.tablet-device body:not(.register-mode):not(.manage-mode) main.container {
   position: relative !important;
   z-index: 8 !important;
-  margin-top: calc(100dvh - 66px + 28px) !important;
+  margin-top: calc(100dvh - var(--index-header-height) + 28px) !important;
   min-height: 0 !important;
 }
 
@@ -5443,7 +5449,7 @@ html.tablet-device body.manage-mode .video-topbar {
   right: 0 !important;
   left: 0 !important;
   width: 100% !important;
-  height: 66px !important;
+  height: var(--index-header-height) !important;
   z-index: 240 !important;
   transform: none !important;
   -webkit-backface-visibility: hidden !important;
@@ -5455,7 +5461,7 @@ html.tablet-device body.manage-mode .video-topbar {
 html.tablet-device body.register-mode .mobile-scroll-shell,
 html.tablet-device body.manage-mode .mobile-scroll-shell {
   position: fixed !important;
-  top: 66px !important;
+  top: var(--index-header-height) !important;
   right: 0 !important;
   bottom: calc(68px + env(safe-area-inset-bottom)) !important;
   left: 0 !important;
@@ -5501,7 +5507,7 @@ html.tablet-device body.manage-mode #bottomNav.bottom-nav {
     right: 0 !important;
     left: 0 !important;
     width: 100% !important;
-    height: 66px !important;
+    height: var(--index-header-height) !important;
     z-index: 240 !important;
     transform: none !important;
     will-change: auto !important;
@@ -5510,7 +5516,7 @@ html.tablet-device body.manage-mode #bottomNav.bottom-nav {
   html body.register-mode .mobile-scroll-shell,
   html body.manage-mode .mobile-scroll-shell {
     position: fixed !important;
-    top: 66px !important;
+    top: var(--index-header-height) !important;
     right: 0 !important;
     bottom: calc(68px + env(safe-area-inset-bottom)) !important;
     left: 0 !important;
