@@ -8492,3 +8492,17 @@ void initializeDiscordManageV1();
   window.addEventListener("resize", refresh, {passive:true});
   refresh();
 })();
+
+
+/* RECRUITMENTS: show the actual number of currently rendered cards. */
+(() => {
+  const list = document.getElementById("recruitmentList");
+  if (!list) return;
+  const updateCount = () => {
+    const count = list.querySelectorAll(":scope > article.card").length;
+    document.querySelectorAll("#listPage .recruitment-filter-count-value")
+      .forEach(node => { node.textContent = String(count); });
+  };
+  new MutationObserver(updateCount).observe(list, { childList: true });
+  updateCount();
+})();
