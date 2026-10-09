@@ -5821,9 +5821,12 @@ body.register-mode .hero {
 #listPage .search-tab { clip-path:none!important; min-height:44px; padding:9px 10px; border:1px solid #dedede!important; background:#f6f6f6!important; color:#444!important; font-size:12px; font-weight:600; box-shadow:none!important; transform:none!important; }
 #listPage .search-tab:hover { border-color:#8acfe9!important; }
 #listPage .search-tab.active,#listPage .commander-tab.active,#listPage .union-tab.active { border-color:#16aeeb!important; background:#eaf8ff!important; color:#078fc8!important; box-shadow:none!important; }
-#listPage #commanderFilterBox,#listPage #unionFilterBox { width:100%; margin:0 0 13px; padding:0; border:0!important; clip-path:none!important; background:transparent!important; box-shadow:none!important; }
-#listPage #commanderFilterBox label,#listPage #unionFilterBox label { display:flex; flex-direction:column; justify-content:center; width:min(220px,100%); min-height:52px; padding:5px 12px; margin:0; border:1px solid #cfd4d8; background:#fff; color:#93979b; font:500 10px/1.4 "Noto Sans JP",sans-serif; }
-#listPage #commanderFilterBox select,#listPage #unionFilterBox select { display:block; width:100%; min-height:26px; height:26px; margin:0; padding:0 20px 0 0; border:0!important; background-color:transparent!important; box-shadow:none!important; color:#222; font:600 13px "Noto Sans JP",sans-serif; outline-offset:2px; }
+#listPage #commanderFilterBox,#listPage #unionFilterBox { width:100%; display:flex; align-items:center; gap:15px; margin:0 0 13px; padding:0; border:0!important; clip-path:none!important; background:transparent!important; box-shadow:none!important; }
+#listPage #commanderFilterBox.hidden,#listPage #unionFilterBox.hidden { display:none!important; }
+#listPage #commanderFilterBox label,#listPage #unionFilterBox label { display:flex; flex-direction:row; align-items:center; gap:12px; flex:0 1 360px; width:360px; max-width:calc(100% - 80px); height:40px; min-height:40px; box-sizing:border-box; padding:0 12px; margin:0; border:1px solid #cfd4d8; background:#fff; color:#83888d; white-space:nowrap; font:600 11px/1.4 "Noto Sans JP",sans-serif; }
+#listPage #commanderFilterBox select,#listPage #unionFilterBox select { display:block; flex:1; min-width:0; width:100%; min-height:36px; height:36px; margin:0; padding:0 20px 0 0; border:0!important; background-color:transparent!important; box-shadow:none!important; color:#222; font:600 13px "Noto Sans JP",sans-serif; outline-offset:2px; }
+#listPage .recruitment-filter-count { flex:none; color:#777; white-space:nowrap; font:500 12px "Noto Sans JP",sans-serif; }
+#listPage .recruitment-filter-count-value { color:#079fd5; font-weight:700; }
 #listPage #recruitmentList.cards article.card.commander-card,#listPage #recruitmentList.cards article.card.union-card { border:1px solid #e2e2e2!important; transition:border-color .25s ease!important; }
 @media (hover:hover) and (pointer:fine) {
  #listPage #recruitmentList.cards article.card.commander-card:hover,#listPage #recruitmentList.cards article.card.union-card:hover { border-color:#20b8f4!important; }
@@ -5834,5 +5837,5 @@ body.register-mode .hero {
 @media(max-width:600px){
  #listPage .section-head h2{font-size:20px;}
  #listPage .search-tab{font-size:11px;min-height:42px;padding:8px 5px;}
- #listPage #commanderFilterBox label,#listPage #unionFilterBox label{width:min(180px,44vw);}
+ #listPage #commanderFilterBox label,#listPage #unionFilterBox label{flex:1 1 auto;width:auto;max-width:calc(100% - 80px);gap:8px;padding:0 10px;}
 }
