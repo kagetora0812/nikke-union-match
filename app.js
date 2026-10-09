@@ -2818,9 +2818,18 @@ const deadlineBadge =
                 class="card commander-card"
               >
 
-                <div class="card-head">
+                <div class="card-head card-head-minimal">
+<div
+                  class="countdown ${remaining.className}"
+                  data-expires="${escapeHtml(
+                    item.expires_at
+                  )}"
+                >
 
-                <div class="type-with-new">
+                  ${remaining.text}
+
+                </div>
+<div class="type-with-new">
 
   <span
     class="recruitment-type"
@@ -2832,17 +2841,7 @@ const deadlineBadge =
   ${deadlineBadge}
 
 </div>
-
-<span class="date">
-                    期限
-
-                    ${formatDate(
-                      item.expires_at
-                    )}
-
-                  </span>
-
-                </div>
+</div>
 
 
                 <div class="name">
@@ -2870,27 +2869,7 @@ const deadlineBadge =
                 </div>
 
 
-                <div class="date">
-
-                  登録
-
-                  ${formatDate(
-                    item.created_at
-                  )}
-
-                </div>
-
-
-                <div
-                  class="countdown ${remaining.className}"
-                  data-expires="${escapeHtml(
-                    item.expires_at
-                  )}"
-                >
-
-                  ${remaining.text}
-
-                </div>
+                
 
 
                 <div class="x-post-area">
@@ -3061,10 +3040,18 @@ const deadlineBadge =
                 class="card union-card"
               >
 
-                <div class="card-head">
+                <div class="card-head card-head-minimal">
+<div
+                  class="countdown ${remaining.className}"
+                  data-expires="${escapeHtml(
+                    item.expires_at
+                  )}"
+                >
 
+                  ${remaining.text}
 
-                <div class="type-with-new">
+                </div>
+<div class="type-with-new">
 
   <span
     class="recruitment-type"
@@ -3076,19 +3063,7 @@ const deadlineBadge =
   ${deadlineBadge}
 
 </div>
-
-<span class="date">
-
-                    期限
-
-                    ${formatDate(
-                      item.expires_at
-                    )}
-
-                  </span>
-
-
-                </div>
+</div>
 
 
                 <div class="name">
@@ -3111,27 +3086,7 @@ const deadlineBadge =
                 </div>
 
 
-                <div class="date">
-
-                  登録
-
-                  ${formatDate(
-                    item.created_at
-                  )}
-
-                </div>
-
-
-                <div
-                  class="countdown ${remaining.className}"
-                  data-expires="${escapeHtml(
-                    item.expires_at
-                  )}"
-                >
-
-                  ${remaining.text}
-
-                </div>
+                
 
 
                 <div class="x-post-area">
