@@ -972,24 +972,30 @@
       }
       const cards = [...document.querySelectorAll(".union-list-grid article.union-card")];
       if (!cards.length || !window.matchMedia("(hover:none), (pointer:coarse)").matches) return;
+      // Mobile/tablet scrolls inside main, while the window itself is fixed.
+      const scrollArea = document.querySelector("main.union-list-page");
       let queued = false;
       const update = () => {
         queued = false;
-        const centerY = window.innerHeight * .5;
+        const scrollRect = scrollArea && getComputedStyle(scrollArea).overflowY !== "visible"
+          ? scrollArea.getBoundingClientRect() : { top:0, bottom:window.innerHeight };
+        const centerY = (scrollRect.top + scrollRect.bottom) / 2;
         let closest = null;
         let distance = Infinity;
         for (const card of cards) {
           const rect = card.getBoundingClientRect();
-          if (rect.bottom < window.innerHeight * .15 || rect.top > window.innerHeight * .85) continue;
+          if (rect.bottom <= scrollRect.top || rect.top >= scrollRect.bottom) continue;
           const d = Math.abs((rect.top + rect.bottom) / 2 - centerY);
           if (d < distance) { distance = d; closest = card; }
         }
         cards.forEach(card => card.classList.toggle("is-in-view", card === closest));
       };
       const schedule = () => { if (!queued) { queued = true; requestAnimationFrame(update); } };
+      if (scrollArea) scrollArea.addEventListener("scroll", schedule, { passive:true });
       window.addEventListener("scroll", schedule, { passive:true });
       window.addEventListener("resize", schedule, { passive:true });
       unionCardScrollWatcher = { disconnect() {
+        if (scrollArea) scrollArea.removeEventListener("scroll", schedule);
         window.removeEventListener("scroll", schedule);
         window.removeEventListener("resize", schedule);
       }};
