@@ -904,23 +904,9 @@
         white-space: nowrap;
       }
 
-      /* Middle action is intentionally emphasized */
-      .creator-bottom-nav > a:nth-child(2) {
-        color: #fff !important;
-        background: rgba(40,185,232,.13) !important;
-        box-shadow:
-          inset 0 2px 0 rgba(40,185,232,.92),
-          inset 1px 0 0 rgba(255,255,255,.04),
-          inset -1px 0 0 rgba(255,255,255,.04) !important;
-      }
-
-      .creator-bottom-nav > a:nth-child(2) .creator-nav-icon {
-        color: var(--cyan) !important;
-      }
-
-      .creator-bottom-nav > a:active {
-        background: rgba(40,185,232,.22) !important;
-        color: #fff !important;
+      @media (hover:hover) and (pointer:fine) {
+        .creator-bottom-nav > a:hover,
+        .creator-bottom-nav > a:hover .creator-nav-icon { color:#20b8f4 !important; }
       }
     }
 
