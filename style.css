@@ -5839,3 +5839,13 @@ body.register-mode .hero {
  #listPage .search-tab{font-size:11px;min-height:42px;padding:8px 5px;}
  #listPage #commanderFilterBox label,#listPage #unionFilterBox label{flex:1 1 auto;width:auto;max-width:calc(100% - 80px);gap:8px;padding:0 10px;}
 }
+
+/* 2026-10-09: Shared header/nav dimensions and single-line listing count. */
+@media (min-width:601px) {
+  html body .topbar, html body .video-topbar {height:64px !important;}
+}
+@media (max-width:600px) {
+  html body .topbar, html body .video-topbar {height:58px !important;}
+}
+#listPage .recruitment-filter-count {white-space:nowrap !important;flex-shrink:0 !important;display:inline-flex;align-items:center;gap:3px;}
+#listPage .recruitment-filter-count-value {white-space:nowrap !important;}
