@@ -5891,113 +5891,104 @@ body.manage-mode #managePage #loadManageRecruitmentBtn { min-height:44px!importa
 }
 
 
-/* Result/preview and BOT no-PASS manage screens: visual styling only. */
+/* ================================================================
+   REGISTER / MANAGE / BOT EDIT — CONSOLIDATED VISUAL RULES
+   Scope: management content + 4 confirmation/result modals only.
+   Keep workflow, visibility, preview scrolling and destructive actions.
+   ================================================================ */
 #managePage #manageLoadedPanel,
 #managePage #manageEditPanel,
 #managePage #manageEditActionChoices {
+  color:#23272b; background:#fff!important; border:1px solid #e1e5e8!important;
+  border-radius:0!important; clip-path:none!important; box-shadow:none!important;
   font-family:"Noto Sans JP",sans-serif;
-  color:#24282c;
-  background:#fff!important;
-  border:1px solid #e1e5e8!important;
-  border-radius:0!important;
-  clip-path:none!important;
-  box-shadow:none!important;
 }
+#managePage #manageLoadedPanel,
 #managePage #manageEditPanel,
-#managePage #manageEditActionChoices {padding:clamp(16px,3vw,26px)!important;}
-#managePage #manageLoadedPanel .eyebrow,
-#managePage #manageEditPanel .eyebrow,
+#managePage #manageEditActionChoices {padding:clamp(16px,2.3vw,24px)!important;}
+#managePage .manage-loaded-head {margin-bottom:15px!important;}
+#managePage .manage-loaded-head h3,
+#managePage #manageEditTitle {font:700 clamp(20px,2.2vw,26px)/1.35 "Noto Sans JP",sans-serif!important;letter-spacing:-.025em!important;color:#23272b!important;}
+#managePage .manage-loaded-panel .eyebrow,
+#managePage .manage-edit-panel .eyebrow,
 #registrationPreviewModal .eyebrow,
 #managePreviewModal .eyebrow,
 #resultModal .eyebrow,
-#manageResultModal .eyebrow {
-  font-family:"Noto Sans JP",sans-serif!important;
-  font-size:10px!important;
-  font-weight:600!important;
-  letter-spacing:.12em!important;
-  color:#85898c!important;
-}
-#managePage #manageCurrentName,
-#managePage #manageEditTitle,
+#manageResultModal .eyebrow {font:600 10px/1.4 "Noto Sans JP",sans-serif!important;letter-spacing:.12em!important;color:#85898c!important;}
 #registrationPreviewModal h2,
 #managePreviewModal h2,
 #resultModal h2,
-#manageResultModal h2 {
-  font-family:"Noto Sans JP",sans-serif!important;
-  font-size:clamp(20px,2.2vw,26px)!important;
-  font-weight:700!important;
-  line-height:1.35!important;
-  color:#23272b!important;
-  letter-spacing:-.025em!important;
-}
-#managePage #manageEditPanel input:not([type="checkbox"]):not([type="file"]),
-#managePage #manageEditPanel select,
-#managePage #manageEditPanel textarea {
-  border:1px solid #cdd3d8!important;
-  border-radius:0!important;
-  background:#fff!important;
-  box-shadow:none!important;
-  color:#24282c!important;
-}
-#managePage #manageEditPanel input:focus-visible,
-#managePage #manageEditPanel select:focus-visible,
-#managePage #manageEditPanel textarea:focus-visible {outline:1px solid #20b8f4!important;border-color:#20b8f4!important;}
+#manageResultModal h2 {font:700 clamp(20px,2.2vw,26px)/1.35 "Noto Sans JP",sans-serif!important;letter-spacing:-.025em!important;color:#23272b!important;}
+/* Compact informational rows; no towering boxes on phones. */
+#managePage .manage-current-grid {gap:10px!important;}
 #managePage .manage-current-grid>div,
 #managePage .manage-current-url,
 #managePage .manage-fixed-name,
 #managePage .manage-edit-choice-panel,
-#managePage .manage-current-image-box {
-  border-color:#e1e5e8!important;
-  border-radius:0!important;
-  box-shadow:none!important;
-}
+#managePage .manage-current-image-box {border:1px solid #e2e6e9!important;border-radius:0!important;box-shadow:none!important;background:#fff!important;padding:13px 15px!important;}
+#managePage .manage-current-grid span,
+#managePage .manage-fixed-name span {color:#788089!important;font-size:11px!important;}
+#managePage #manageEditPanel input:not([type=checkbox]):not([type=file]),
+#managePage #manageEditPanel select,
+#managePage #manageEditPanel textarea {border:1px solid #cdd3d8!important;border-radius:0!important;background:#fff!important;box-shadow:none!important;color:#24282c!important;min-height:42px!important;font-family:"Noto Sans JP",sans-serif!important;}
+#managePage #manageEditPanel input:focus-visible,
+#managePage #manageEditPanel select:focus-visible,
+#managePage #manageEditPanel textarea:focus-visible {outline:1px solid #20b8f4!important;border-color:#20b8f4!important;}
 #registrationPreviewModal .registration-preview-modal-card,
 #managePreviewModal .registration-preview-modal-card,
 #resultModal .modal-card,
-#manageResultModal .modal-card {
-  background:#fff!important;
-  color:#24282c!important;
-  border:1px solid #e1e5e8!important;
-  border-radius:0!important;
-  clip-path:none!important;
-  box-shadow:none!important;
-  font-family:"Noto Sans JP",sans-serif;
-}
+#manageResultModal .modal-card {background:#fff!important;color:#24282c!important;border:1px solid #e1e5e8!important;border-radius:0!important;clip-path:none!important;box-shadow:none!important;font-family:"Noto Sans JP",sans-serif!important;}
 #resultModal .pass-box,
 #manageResultModal .pass-box,
 #managePage .manage-renew-note,
 #managePage .manage-result-new-note,
-#managePage .manage-result-summary {
-  background:#f0f9fd!important;
-  border:0!important;
-  border-left:3px solid #20b8f4!important;
-  border-radius:0!important;
-  clip-path:none!important;
-  box-shadow:none!important;
-  color:#4e5962!important;
-}
-/* Ordinary actions only. Red delete actions keep their warning styling. */
+#managePage .manage-result-summary {background:#edf8fe!important;border:0!important;border-left:3px solid #20b8f4!important;border-radius:0!important;clip-path:none!important;box-shadow:none!important;color:#4e5962!important;padding:12px 14px!important;}
+/* Primary actions stay legible; cancel/edit stays white. */
 #managePage #openManageActionBtn,
 #managePage #closeLoadedRecruitmentBtn,
 #managePage #openManageEditBtn,
 #managePage #backManageActionBtn,
 #managePage #manageEditPreviewBtn,
 #managePage #cancelManageEditBtn,
-#managePage #closeForm button[type="submit"],
 #registrationPreviewModal .registration-preview-actions .btn,
 #managePreviewModal .registration-preview-actions .btn,
 #resultModal .copy-btn,
 #manageResultModal .copy-btn,
-#manageResultModal #manageResultDone {
-  clip-path:none!important;
-  border-radius:0!important;
-  border:1px solid #cbd2d6!important;
-  background:#f7f8f9!important;
-  color:#252a2d!important;
-  box-shadow:none!important;
-  font-family:"Noto Sans JP",sans-serif!important;
-  font-weight:700!important;
-  transition:border-color .2s,background-color .2s,color .2s!important;
+#manageResultModal #manageResultDone {clip-path:none!important;border-radius:0!important;border:1px solid #cbd2d6!important;background:#f7f8f9!important;color:#252a2d!important;box-shadow:none!important;font-family:"Noto Sans JP",sans-serif!important;font-weight:700!important;transition:border-color .2s,background-color .2s,color .2s!important;}
+#managePage #openManageActionBtn,
+#managePage #closeLoadedRecruitmentBtn,
+#managePage #openManageEditBtn,
+#managePage #backManageActionBtn,
+#managePage #manageEditPreviewBtn,
+#managePage #cancelManageEditBtn {min-height:44px!important;padding:10px 14px!important;}
+#managePage #cancelManageEditBtn,
+#managePreviewModal #managePreviewBack,
+#registrationPreviewModal #registrationPreviewBack {background:#fff!important;border-color:#cbd2d6!important;color:#252a2d!important;}
+/* Deletion remains RED. Do not alter delete confirmation workflows. */
+/* Destructive action only: refined ruby red, no filled gray or clipped corners. */
+#managePage #deleteUnionMembershipBtn,
+#managePage #deleteUnionMembershipBtn.manage-delete-btn,
+#managePage #deleteUnionMembershipBtn:active,
+#managePage #deleteUnionMembershipBtn:focus {
+  background: #fff !important;
+  background-image: none !important;
+  color: #c43246 !important;
+  border: 1px solid #c43246 !important;
+  border-radius: 0 !important;
+  clip-path: none !important;
+  box-shadow: none !important;
+  text-shadow: none !important;
+  transition: background-color .2s ease, color .2s ease !important;
+}
+@media (hover: hover) and (pointer: fine) {
+  #managePage #deleteUnionMembershipBtn:hover,
+  #managePage #deleteUnionMembershipBtn.manage-delete-btn:hover {
+    background: #c43246 !important;
+    background-image: none !important;
+    border-color: #c43246 !important;
+    color: #fff !important;
+    box-shadow: none !important;
+  }
 }
 @media(hover:hover) and (pointer:fine){
   #managePage #openManageActionBtn:hover,
@@ -6010,21 +6001,24 @@ body.manage-mode #managePage #loadManageRecruitmentBtn { min-height:44px!importa
   #managePreviewModal .registration-preview-actions .btn:hover,
   #resultModal .copy-btn:hover,
   #manageResultModal .copy-btn:hover,
-  #manageResultModal #manageResultDone:hover {
-    background:#eaf8ff!important;
-    border-color:#20b8f4!important;
-    color:#078fc8!important;
-    transform:none!important;
-    box-shadow:none!important;
-  }
+  #manageResultModal #manageResultDone:hover {border-color:#20b8f4!important;background:#eaf8ff!important;color:#078fc8!important;transform:none!important;box-shadow:none!important;}
 }
 @media(max-width:600px){
+  body.manage-mode #managePage .manage-inline-top {gap:10px!important;margin-bottom:14px!important;}
+  body.manage-mode #managePage .manage-back-btn {width:42px!important;height:42px!important;min-width:42px!important;min-height:42px!important;}
+  body.manage-mode #managePage .manage-inline-title h2 {font-size:21px!important;}
+  #managePage #manageLoadedPanel,
   #managePage #manageEditPanel,
-  #managePage #manageEditActionChoices{padding:16px!important;}
+  #managePage #manageEditActionChoices {padding:16px 14px!important;}
+  #managePage .manage-current-grid>div,
+  #managePage .manage-current-url,
+  #managePage .manage-fixed-name {padding:11px 12px!important;}
+  #managePage .manage-action-stack {gap:10px!important;}
+  #managePage .manage-action-stack .btn {min-height:44px!important;}
   #registrationPreviewModal .registration-preview-modal-card,
   #managePreviewModal .registration-preview-modal-card,
   #resultModal .modal-card,
-  #manageResultModal .modal-card{max-width:100%;box-sizing:border-box;}
+  #manageResultModal .modal-card {max-width:100%;box-sizing:border-box;}
 }
 
 /* 2026-10-09: Shared header/nav dimensions and single-line listing count. */
