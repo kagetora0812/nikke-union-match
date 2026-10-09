@@ -1,4 +1,4 @@
-@import url("https://fonts.googleapis.com/css2?family=Teko:wght@500;600;700&family=Noto+Sans+JP:wght@400;500;600;700;800;900&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=Teko:wght@500;600;700&family=Zen+Kaku+Gothic+New:wght@500;700;900&display=swap");
 
 /* =========================================================
    NIKKE UNION MATCH
@@ -82,7 +82,8 @@ body {
     );
 
   font-family:
-    "Noto Sans JP",
+    "Gothic MB101",
+    "Zen Kaku Gothic New",
     sans-serif;
 
   font-weight: 700;
@@ -260,7 +261,8 @@ textarea {
     "Azonix",
     "Futura PT Condensed",
     "Teko",
-    "Noto Sans JP",
+    "Gothic MB101",
+    "Zen Kaku Gothic New",
     sans-serif;
 
   line-height: .82;
@@ -289,7 +291,7 @@ textarea {
 
   font:
     700 11px "Teko",
-    "Noto Sans JP", sans-serif;
+    sans-serif;
 
   letter-spacing: 1.4px;
 }
@@ -337,7 +339,8 @@ h3,
 .recruitment-type,
 .state {
   font-family:
-    "Noto Sans JP",
+    "Gothic MB101",
+    "Zen Kaku Gothic New",
     sans-serif;
 
   font-weight: 900;
@@ -360,7 +363,7 @@ h3 {
 
   font:
     800 11px "Teko",
-    "Noto Sans JP", sans-serif;
+    sans-serif;
 
   letter-spacing: 2.2px;
   text-transform: uppercase;
@@ -762,7 +765,8 @@ h3 {
     "Azonix",
     "Futura PT Condensed",
     "Teko",
-    "Noto Sans JP",
+    "Gothic MB101",
+    "Zen Kaku Gothic New",
     sans-serif;
 
   font-size:
@@ -829,7 +833,7 @@ h3 {
 
   font:
     700 10px "Teko",
-    "Noto Sans JP", sans-serif;
+    sans-serif;
 
   text-align: center;
 }
@@ -1041,7 +1045,8 @@ h3 {
     "Azonix",
     "Futura PT Condensed",
     "Teko",
-    "Noto Sans JP",
+    "Gothic MB101",
+    "Zen Kaku Gothic New",
     sans-serif;
 
   font-size: 24px;
@@ -1107,7 +1112,7 @@ h3 {
 
   font:
     800 46px/.84 "Teko",
-    "Noto Sans JP", sans-serif;
+    sans-serif;
 }
 
 .graduated-commander-number span {
@@ -1287,7 +1292,7 @@ h3 {
 
   font:
     800 34px "Teko",
-    "Noto Sans JP", sans-serif;
+    sans-serif;
 }
 
 .slv small {
@@ -1973,7 +1978,7 @@ body.manage-mode #managePage {
 
   font:
     700 10px "Teko",
-    "Noto Sans JP", sans-serif;
+    sans-serif;
 
   letter-spacing: 2px;
 }
@@ -1987,7 +1992,7 @@ body.manage-mode #managePage {
 
   font:
     800 40px "Teko",
-    "Noto Sans JP", sans-serif;
+    sans-serif;
 
   letter-spacing: 6px;
 }
@@ -2152,7 +2157,8 @@ body.manage-mode #managePage {
     "Azonix",
     "Futura PT Condensed",
     "Teko",
-    "Noto Sans JP",
+    "Gothic MB101",
+    "Zen Kaku Gothic New",
     sans-serif;
 }
 
@@ -2183,7 +2189,8 @@ body.manage-mode #managePage {
 .easy-register-title,
 .commander-close-reason-title {
   font-family:
-    "Noto Sans JP",
+    "Gothic MB101",
+    "Zen Kaku Gothic New",
     sans-serif;
 
   font-weight: 900;
@@ -2207,7 +2214,7 @@ body.manage-mode #managePage {
     "Industry",
     "Futura PT Condensed",
     "Teko",
-    "Noto Sans JP", sans-serif !important;
+    sans-serif !important;
 
   font-weight: 700;
   letter-spacing: .015em;
@@ -2224,7 +2231,7 @@ body.manage-mode #managePage {
     "Industry",
     "Azonix",
     "Teko",
-    "Noto Sans JP", sans-serif !important;
+    sans-serif !important;
 }
 
 /* Japanese headings: MB101 direction with free fallback */
@@ -2239,7 +2246,8 @@ body.manage-mode #managePage {
 .search-tab,
 .nav-btn {
   font-family:
-    "Noto Sans JP",
+    "Gothic MB101",
+    "Zen Kaku Gothic New",
     sans-serif !important;
 
   font-weight: 900;
@@ -2862,7 +2870,9 @@ body.manage-mode #managePage {
 .topbar .brand-small,
 .topbar .brand-main {
   font-family:
-    "Noto Sans JP",
+    "JTCウインZ10",
+    "Gothic MB101",
+    "Zen Kaku Gothic New",
     sans-serif !important;
 
   font-weight: 900 !important;
@@ -2900,7 +2910,7 @@ body.manage-mode #managePage {
     "Industry",
     "Azonix",
     "Teko",
-    "Noto Sans JP", sans-serif !important;
+    sans-serif !important;
 
   font-weight: 800 !important;
   line-height: .82 !important;
@@ -3089,7 +3099,9 @@ body.manage-mode #managePage {
 .topbar .brand-small,
 .topbar .brand-main {
   font-family:
-    "Noto Sans JP",
+    "JTCウインZ10",
+    "Gothic MB101",
+    "Zen Kaku Gothic New",
     sans-serif !important;
 
   font-weight: 900 !important;
@@ -3128,7 +3140,7 @@ body.manage-mode #managePage {
     "Industry",
     "Azonix",
     "Teko",
-    "Noto Sans JP", sans-serif !important;
+    sans-serif !important;
 
   font-weight: 800 !important;
   line-height: .82 !important;
@@ -3312,7 +3324,9 @@ body.manage-mode #managePage {
   color: #fff !important;
 
   font-family:
-    "Noto Sans JP",
+    "JTCウインZ10",
+    "Gothic MB101",
+    "Zen Kaku Gothic New",
     sans-serif !important;
 
   font-size: 14px !important;
@@ -3344,7 +3358,9 @@ body.manage-mode #managePage {
   padding: 0 !important;
 
   font-family:
-    "Noto Sans JP",
+    "JTCウインZ10",
+    "Gothic MB101",
+    "Zen Kaku Gothic New",
     sans-serif !important;
 
   font-size: 14px !important;
@@ -3378,7 +3394,7 @@ body.manage-mode #managePage {
     "Industry",
     "Azonix",
     "Teko",
-    "Noto Sans JP", sans-serif !important;
+    sans-serif !important;
 
   font-weight: 800 !important;
   line-height: .80 !important;
@@ -4211,7 +4227,7 @@ body .site-menu-head {
   min-height: 48px;
   padding: 0 6px 10px;
   color: rgba(255,255,255,.7);
-  font: 800 12px "Teko", "Noto Sans JP", sans-serif;
+  font: 800 12px "Teko", sans-serif;
   letter-spacing: .24em;
 }
 
@@ -4325,7 +4341,7 @@ body .video-x-listed-stat.hidden {
 body .video-x-listed-stat strong {
   display: block;
   color: #fff !important;
-  font-family: "Teko", "Arial Narrow", "Noto Sans JP", sans-serif;
+  font-family: "Teko", "Arial Narrow", sans-serif;
   font-size: clamp(34px, 4.2vw, 58px);
   font-weight: 700;
   line-height: .86;
@@ -4337,7 +4353,7 @@ body .video-x-listed-stat span {
   display: block;
   margin-top: 6px;
   color: #fff !important;
-  font-family: "Teko", "Arial Narrow", "Noto Sans JP", sans-serif;
+  font-family: "Teko", "Arial Narrow", sans-serif;
   font-size: clamp(9px, 1.15vw, 12px);
   font-weight: 700;
   line-height: 1;
@@ -4353,7 +4369,7 @@ body .video-current-stat {
 body .video-current-stat strong {
   display: block;
   color: #fff !important;
-  font-family: "Teko", "Arial Narrow", "Noto Sans JP", sans-serif;
+  font-family: "Teko", "Arial Narrow", sans-serif;
   font-size: clamp(50px, 7vw, 92px);
   font-weight: 700;
   line-height: .86;
@@ -4364,7 +4380,7 @@ body .video-current-stat span {
   display: block;
   margin-top: 9px;
   color: rgba(255,255,255,.96);
-  font-family: "Teko", "Arial Narrow", "Noto Sans JP", sans-serif;
+  font-family: "Teko", "Arial Narrow", sans-serif;
   font-size: clamp(13px, 1.6vw, 18px);
   font-weight: 700;
   line-height: 1;
@@ -4374,7 +4390,7 @@ body .video-current-stat span {
 body .video-history-row {
   margin-top: clamp(22px, 3vw, 36px);
   color: rgba(255,255,255,.68);
-  font-family: "Teko", "Arial Narrow", "Noto Sans JP", sans-serif;
+  font-family: "Teko", "Arial Narrow", sans-serif;
   font-size: clamp(11px, 1.25vw, 14px);
   font-weight: 600;
   letter-spacing: .13em;
@@ -4409,7 +4425,7 @@ body .video-scroll-button {
 
 body .video-scroll-button span {
   display: block;
-  font-family: "Teko", "Noto Sans JP", sans-serif;
+  font-family: "Teko", sans-serif;
   font-size: 9px;
   font-weight: 700;
   letter-spacing: .28em;
@@ -5782,3 +5798,28 @@ body.register-mode .hero {
   font-weight: 900;
 }
 
+
+
+/* Live recruitment listing cards: white editorial edition. */
+.cards article.card.commander-card,
+.cards article.card.union-card {
+  clip-path:none !important;
+  border:1px solid #e5e5e5 !important;
+  background:#fff !important;
+  box-shadow:none !important;
+  padding:24px !important;
+  font-family:"Noto Sans JP",sans-serif;
+}
+.cards article.card.commander-card::before,
+.cards article.card.union-card::before,
+.cards article.card.commander-card::after,
+.cards article.card.union-card::after {display:none !important;}
+.cards article.card .card-head-minimal {display:flex;justify-content:space-between;align-items:center;gap:10px;flex-wrap:wrap;}
+.cards article.card .card-head-minimal .countdown {margin:0 !important;padding:0 !important;background:none !important;border:0 !important;color:#777 !important;font-size:11px;font-weight:500;}
+.cards article.card .card-head-minimal .type-with-new {display:flex;justify-content:flex-end;align-items:center;gap:6px;}
+.cards article.card .card-head-minimal .recruitment-type {border:0 !important;background:none !important;padding:0 !important;color:#6e6e6e !important;font-size:11px;font-weight:600;}
+.cards article.card .name {margin:26px 0 13px !important;font-family:"Noto Sans JP",sans-serif !important;font-size:clamp(21px,2vw,28px) !important;font-weight:700 !important;letter-spacing:-.02em;}
+.cards article.card .union-rank {clip-path:none !important;padding:6px 16px !important;}
+.cards article.card .slv {font-family:"Noto Sans JP",sans-serif !important;}
+.cards article.card .x-post-area {margin-top:20px !important;}
+@media(max-width:600px){.cards article.card.commander-card,.cards article.card.union-card{padding:19px !important;}.cards article.card .card-head-minimal .countdown{font-size:10px;}.cards article.card .name{font-size:22px !important;}}
