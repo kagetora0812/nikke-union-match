@@ -8465,3 +8465,30 @@ void initializeDiscordManageV1();
   syncRegistrationPreviewLayout();
 })();
 
+
+
+/* Recruitment card scroll focus (mobile/tablet only). No click or data changes. */
+(() => {
+  const list = document.getElementById("recruitmentList");
+  if (!list || typeof IntersectionObserver === "undefined") return;
+  const touchScreen = window.matchMedia("(hover: none), (pointer: coarse)");
+  let observer = null;
+  const cardSelector = "article.card.commander-card, article.card.union-card";
+  function clear() {
+    list.querySelectorAll(".is-scroll-highlight").forEach(card => card.classList.remove("is-scroll-highlight"));
+  }
+  function refresh() {
+    if (observer) { observer.disconnect(); observer = null; }
+    clear();
+    if (!touchScreen.matches) return;
+    observer = new IntersectionObserver(entries => {
+      for (const entry of entries) entry.target.classList.toggle("is-scroll-highlight", entry.isIntersecting);
+    }, { root: null, rootMargin: "-32% 0px -32% 0px", threshold: 0 });
+    list.querySelectorAll(cardSelector).forEach(card => observer.observe(card));
+  }
+  const changes = new MutationObserver(() => refresh());
+  changes.observe(list, {childList:true});
+  if (touchScreen.addEventListener) touchScreen.addEventListener("change", refresh);
+  window.addEventListener("resize", refresh, {passive:true});
+  refresh();
+})();
