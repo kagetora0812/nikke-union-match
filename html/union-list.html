@@ -988,7 +988,13 @@
           const d = Math.abs((rect.top + rect.bottom) / 2 - centerY);
           if (d < distance) { distance = d; closest = card; }
         }
-        cards.forEach(card => card.classList.toggle("is-in-view", card === closest));
+        // Two-column tablet layout: highlight both cards in the same grid row.
+        // Single-column mobile layout still highlights only the closest card.
+        const rowTop = closest ? closest.offsetTop : null;
+        cards.forEach(card => card.classList.toggle(
+          "is-in-view",
+          rowTop !== null && Math.abs(card.offsetTop - rowTop) <= 2
+        ));
       };
       const schedule = () => { if (!queued) { queued = true; requestAnimationFrame(update); } };
       if (scrollArea) scrollArea.addEventListener("scroll", schedule, { passive:true });
