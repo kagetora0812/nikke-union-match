@@ -5895,6 +5895,143 @@ body.manage-mode #managePage #loadManageRecruitmentBtn { min-height:44px!importa
  body.manage-mode .manage-inline-title h2 { font-size:22px!important; }
 }
 
+
+/* Result/preview and BOT no-PASS manage screens: visual styling only. */
+#managePage #manageLoadedPanel,
+#managePage #manageEditPanel,
+#managePage #manageEditActionChoices {
+  font-family:"Noto Sans JP",sans-serif;
+  color:#24282c;
+  background:#fff!important;
+  border:1px solid #e1e5e8!important;
+  border-radius:0!important;
+  clip-path:none!important;
+  box-shadow:none!important;
+}
+#managePage #manageEditPanel,
+#managePage #manageEditActionChoices {padding:clamp(16px,3vw,26px)!important;}
+#managePage #manageLoadedPanel .eyebrow,
+#managePage #manageEditPanel .eyebrow,
+#registrationPreviewModal .eyebrow,
+#managePreviewModal .eyebrow,
+#resultModal .eyebrow,
+#manageResultModal .eyebrow {
+  font-family:"Noto Sans JP",sans-serif!important;
+  font-size:10px!important;
+  font-weight:600!important;
+  letter-spacing:.12em!important;
+  color:#85898c!important;
+}
+#managePage #manageCurrentName,
+#managePage #manageEditTitle,
+#registrationPreviewModal h2,
+#managePreviewModal h2,
+#resultModal h2,
+#manageResultModal h2 {
+  font-family:"Noto Sans JP",sans-serif!important;
+  font-size:clamp(20px,2.2vw,26px)!important;
+  font-weight:700!important;
+  line-height:1.35!important;
+  color:#23272b!important;
+  letter-spacing:-.025em!important;
+}
+#managePage #manageEditPanel input:not([type="checkbox"]):not([type="file"]),
+#managePage #manageEditPanel select,
+#managePage #manageEditPanel textarea {
+  border:1px solid #cdd3d8!important;
+  border-radius:0!important;
+  background:#fff!important;
+  box-shadow:none!important;
+  color:#24282c!important;
+}
+#managePage #manageEditPanel input:focus-visible,
+#managePage #manageEditPanel select:focus-visible,
+#managePage #manageEditPanel textarea:focus-visible {outline:1px solid #20b8f4!important;border-color:#20b8f4!important;}
+#managePage .manage-current-grid>div,
+#managePage .manage-current-url,
+#managePage .manage-fixed-name,
+#managePage .manage-edit-choice-panel,
+#managePage .manage-current-image-box {
+  border-color:#e1e5e8!important;
+  border-radius:0!important;
+  box-shadow:none!important;
+}
+#registrationPreviewModal .registration-preview-modal-card,
+#managePreviewModal .registration-preview-modal-card,
+#resultModal .modal-card,
+#manageResultModal .modal-card {
+  background:#fff!important;
+  color:#24282c!important;
+  border:1px solid #e1e5e8!important;
+  border-radius:0!important;
+  clip-path:none!important;
+  box-shadow:none!important;
+  font-family:"Noto Sans JP",sans-serif;
+}
+#resultModal .pass-box,
+#manageResultModal .pass-box,
+#managePage .manage-renew-note,
+#managePage .manage-result-new-note,
+#managePage .manage-result-summary {
+  background:#f0f9fd!important;
+  border:0!important;
+  border-left:3px solid #20b8f4!important;
+  border-radius:0!important;
+  clip-path:none!important;
+  box-shadow:none!important;
+  color:#4e5962!important;
+}
+/* Ordinary actions only. Red delete actions keep their warning styling. */
+#managePage #openManageActionBtn,
+#managePage #closeLoadedRecruitmentBtn,
+#managePage #openManageEditBtn,
+#managePage #backManageActionBtn,
+#managePage #manageEditPreviewBtn,
+#managePage #cancelManageEditBtn,
+#managePage #closeForm button[type="submit"],
+#registrationPreviewModal .registration-preview-actions .btn,
+#managePreviewModal .registration-preview-actions .btn,
+#resultModal .copy-btn,
+#manageResultModal .copy-btn,
+#manageResultModal #manageResultDone {
+  clip-path:none!important;
+  border-radius:0!important;
+  border:1px solid #cbd2d6!important;
+  background:#f7f8f9!important;
+  color:#252a2d!important;
+  box-shadow:none!important;
+  font-family:"Noto Sans JP",sans-serif!important;
+  font-weight:700!important;
+  transition:border-color .2s,background-color .2s,color .2s!important;
+}
+@media(hover:hover) and (pointer:fine){
+  #managePage #openManageActionBtn:hover,
+  #managePage #closeLoadedRecruitmentBtn:hover,
+  #managePage #openManageEditBtn:hover,
+  #managePage #backManageActionBtn:hover,
+  #managePage #manageEditPreviewBtn:hover,
+  #managePage #cancelManageEditBtn:hover,
+  #registrationPreviewModal .registration-preview-actions .btn:hover,
+  #managePreviewModal .registration-preview-actions .btn:hover,
+  #resultModal .copy-btn:hover,
+  #manageResultModal .copy-btn:hover,
+  #manageResultModal #manageResultDone:hover {
+    background:#eaf8ff!important;
+    border-color:#20b8f4!important;
+    color:#078fc8!important;
+    transform:none!important;
+    box-shadow:none!important;
+  }
+}
+@media(max-width:600px){
+  #managePage #manageEditPanel,
+  #managePage #manageEditActionChoices{padding:16px!important;}
+  #registrationPreviewModal .registration-preview-modal-card,
+  #managePreviewModal .registration-preview-modal-card,
+  #resultModal .modal-card,
+  #manageResultModal .modal-card{max-width:100%;box-sizing:border-box;}
+}
+
 /* 2026-10-09: Shared header/nav dimensions and single-line listing count. */
 @media (min-width:601px) {
   html body .topbar, html body .video-topbar {height:64px !important;}
