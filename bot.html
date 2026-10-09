@@ -3160,10 +3160,24 @@
     .lux-page .editorial-item p,
     .lux-page .command-card p,
     .lux-page .important-item p,
+    .lux-page .step-editorial-item p,
     .lux-page .commands-copy-note{
       font-size:var(--bot-type-small) !important;
+      font-weight:700 !important;
       line-height:1.85;
       color:var(--bot-type-body) !important;
+    }
+    /* Keep inline emphasis the same weight as its explanation, not bolder. */
+    .lux-page .intro-copy p strong,
+    .lux-page .intro-point span strong,
+    .lux-page .stay-copy p strong,
+    .lux-page .union-bot-copy p strong,
+    .lux-page .editorial-item p strong,
+    .lux-page .command-card p strong,
+    .lux-page .important-item p strong,
+    .lux-page .step-editorial-item p strong,
+    .lux-page .commands-copy-note strong{
+      font-weight:700 !important;
     }
     /* Japanese subheadings are clearly separated from body copy. */
     .lux-page .editorial-item h3,
