@@ -9,6 +9,7 @@
 
   <link rel="stylesheet" href="../style.css?v=51.8">
 
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;500;600;700;800&display=swap">
   <style>
     body {
       min-height: 100vh;
@@ -28,12 +29,15 @@
       letter-spacing: .12em;
     }
 
-    .union-list-brand-label::before {
-      content: "";
-      width: 5px;
-      height: 22px;
-      flex: 0 0 5px;
-      background: var(--cyan);
+    .union-list-brand-label {
+      text-decoration: none;
+      cursor: pointer;
+    }
+
+    .union-list-brand-label:hover,
+    .union-list-brand-label:focus-visible {
+      color: #fff;
+      opacity: .82;
     }
 
     .site-menu-button {
@@ -161,50 +165,6 @@
       line-height: 1.7;
     }
 
-    .union-list-pc-home-row {
-      display: none;
-    }
-
-    @media screen and (min-width: 1025px) {
-      .union-list-pc-home-row {
-        display: flex;
-        padding: 12px 0 0 20px;
-      }
-
-      .union-list-pc-home {
-        position: fixed;
-        top: 78px;
-        left: 20px;
-        z-index: 105;
-        width: 44px;
-        height: 44px;
-        display: grid;
-        place-items: center;
-        overflow: hidden;
-        border: 1px solid rgba(26, 176, 241, .55);
-        background: #0d1016;
-        color: #f3fbff;
-        text-decoration: none;
-        font: 800 23px/1 "Teko", sans-serif;
-        box-shadow: none;
-        transition: .18s ease;
-      }
-
-      .union-list-pc-home::before,
-      .union-list-pc-home::after {
-        display: none;
-      }
-
-      .union-list-pc-home:hover,
-      .union-list-pc-home:active {
-        border-color: #a9dff6;
-        background: #f7fbfd;
-        color: #079fd9;
-        transform: none;
-        box-shadow: none;
-      }
-    }
-
     .union-list-page {
       width: 100%;
       max-width: 1380px;
@@ -303,93 +263,88 @@
 
     .union-list-toolbar {
       margin-top: 16px;
-      padding: 16px;
-      display: grid;
-      grid-template-columns: repeat(4, minmax(0, 1fr));
-      gap: 12px;
-      align-items: end;
+      padding: 15px 16px 16px;
       border: 1px solid var(--line);
       background: #fff;
       box-shadow: var(--shadow-soft);
     }
-
-    .union-list-field {
-      grid-column: span 1;
-      min-width: 0;
-    }
-
-    .union-list-status-group {
-      grid-column: span 3;
-      min-width: 0;
-    }
-
-    .union-list-field label {
-      display: block;
-      margin-bottom: 7px;
-      color: var(--muted);
+    .union-list-summary {
+      margin: 0 0 12px;
+      min-height: 20px;
+      display: flex;
+      justify-content: flex-end;
+      align-items: baseline;
+      gap: 4px;
+      flex-wrap: wrap;
+      color: #777e85;
       font-size: 11px;
-      font-weight: 900;
+      font-weight: 500;
+      line-height: 1.5;
+      text-align: right;
     }
-
-    .union-list-field select {
-      width: 100%;
-      min-height: 46px;
-      margin: 0;
-      padding: 10px 12px;
-      border: 1px solid var(--line-strong);
-      background: #fff;
-      color: var(--ink);
-      font-size: 13px;
-      font-weight: 800;
+    .union-list-summary strong {
+      color: #079ed8;
+      font-size: 15px;
+      font-weight: 700;
+      font-variant-numeric: tabular-nums;
     }
-
-    .union-list-status-group label {
-      display: block;
-      margin-bottom: 7px;
-      color: var(--muted);
-      font-size: 11px;
-      font-weight: 900;
-    }
-
-    .union-list-status-tabs {
+    .union-list-summary .sep { color: #c4c8cc; padding: 0 4px; }
+    .union-list-controls {
       display: grid;
       grid-template-columns: repeat(3, minmax(0, 1fr));
       gap: 8px;
-      width: 100%;
+      align-items: stretch;
     }
-
-    .union-list-status-btn {
+    .union-list-rank-select {
+      position: relative;
+      min-width: 0;
+    }
+    .union-list-rank-select label {
+      position: absolute;
+      z-index: 1;
+      left: 12px;
+      top: 5px;
+      pointer-events: none;
+      color: #868b91;
+      font-size: 9px;
+      font-weight: 600;
+      line-height: 1.2;
+    }
+    .union-list-rank-select select {
       width: 100%;
-      min-height: 46px;
-      padding: 0 12px;
-      border: 1px solid var(--line-strong);
+      height: 47px;
+      margin: 0;
+      padding: 15px 25px 4px 12px;
+      border: 1px solid #b9bfc5;
       border-radius: 0 !important;
       background: #fff;
-      color: var(--ink-soft);
-      font-size: 11px;
-      font-weight: 900;
-      text-align: center;
+      color: #292e33;
+      font-family: 'Noto Sans JP', sans-serif;
+      font-size: 12px;
+      font-weight: 700;
+      cursor: pointer;
+    }
+    .union-list-status-btn {
+      width: 100%;
+      min-width: 0;
+      min-height: 47px;
+      padding: 0 5px;
+      border: 1px solid #b9bfc5;
+      border-radius: 0 !important;
+      background: #fff;
+      color: #3f444a;
+      font-family: 'Noto Sans JP', sans-serif;
+      font-size: 12px;
+      font-weight: 700;
       white-space: nowrap;
       cursor: pointer;
       clip-path: none !important;
     }
-
     .union-list-status-btn.active {
       border-color: var(--cyan);
-      background: #f4fbfe;
+      background: #f2fbff;
       color: var(--cyan-dark);
       box-shadow: inset 0 -2px 0 var(--cyan);
-    }
-
-    .union-list-summary {
-      margin-top: 16px;
-      padding: 12px 14px;
-      border-left: 3px solid var(--cyan);
-      background: rgba(26,176,241,.055);
-      color: var(--ink-soft);
-      font-size: 12px;
-      font-weight: 800;
-      line-height: 1.6;
     }
 
     .union-list-grid {
@@ -492,9 +447,6 @@
         grid-template-columns: repeat(2, minmax(0,1fr));
       }
 
-      .union-list-toolbar {
-        grid-template-columns: repeat(4, minmax(0, 1fr));
-      }
     }
 
     @media screen and (max-width: 1366px) {
@@ -625,8 +577,7 @@
        BOT / CREATOR とナビゲーション基本構成を統一
        - PC / Tablet header: 64px
        - Smartphone header: 58px
-       - PC HOME: 44x44 / left 20px / top 76px
-    ======================================== */
+     ======================================== */
 
     .union-list-topbar {
       height: 64px !important;
@@ -639,7 +590,7 @@
     }
 
     .union-list-brand-label {
-      gap: 9px;
+      gap: 0;
       font: 700 22px/1 "Teko", "Zen Kaku Gothic New", sans-serif;
       letter-spacing: .16em;
     }
@@ -653,19 +604,6 @@
       height: calc(100dvh - 64px);
     }
 
-    @media screen and (min-width: 1025px) {
-      .union-list-pc-home {
-        top: 76px;
-        left: 20px;
-        width: 44px;
-        height: 44px;
-        border: 1px solid rgba(26,176,241,.55);
-        background: #0d1016;
-        color: #f3fbff;
-        font: 800 23px/1 "Teko", sans-serif;
-      }
-    }
-
     @media screen and (max-width: 600px) {
       .union-list-topbar {
         height: 58px !important;
@@ -676,14 +614,6 @@
         display: none !important;
       }
 
-      .union-list-toolbar {
-        grid-template-columns: 1fr !important;
-      }
-
-      .union-list-field,
-      .union-list-status-group {
-        grid-column: 1 / -1;
-      }
 
       body > main.union-list-page {
         top: 58px !important;
@@ -718,23 +648,20 @@
         gap: 9px;
       }
 
-      .union-list-status-tabs {
-        grid-template-columns: repeat(3, minmax(0, 1fr));
-        gap: 6px;
-      }
-
-      .union-list-status-btn {
-        min-height: 42px;
-        padding: 0 6px;
-        font-size: 10px;
-      }
+      .union-list-toolbar { padding: 12px 8px; }
+      .union-list-controls { gap: 5px; }
+      .union-list-status-btn { font-size: 11px; padding: 0 3px; }
+      .union-list-rank-select select { font-size: 11px; padding-left: 8px; }
+      .union-list-rank-select label { left: 8px; }
+      .union-list-summary { font-size: 10px; }
+      .union-list-summary strong { font-size: 13px; }
     }
   </style>
 </head>
 
 <body>
   <header class="topbar union-list-topbar">
-    <div class="union-list-brand-label">UNION LIST</div>
+    <a class="union-list-brand-label" href="../index.html#videoHero" aria-label="UNION MATCH TOPへ戻る">UNION LIST</a>
 
     <button
       id="siteMenuButton"
@@ -781,17 +708,6 @@
     </div>
   </aside>
 
-  <div class="union-list-pc-home-row">
-    <a
-      class="union-list-pc-home"
-      href="../index.html#videoHero"
-      aria-label="UNION MATCH TOPへ戻る"
-      title="HOME"
-    >
-      <span aria-hidden="true">⌂</span>
-    </a>
-  </div>
-
   <main class="union-list-page">
     <section class="union-list-hero">
       <div class="union-list-hero-inner">
@@ -813,37 +729,23 @@
       </div>
     </section>
 
-    <div id="summary" class="union-list-summary">
-      ユニオンを読み込み中...
-    </div>
-
     <section class="union-list-toolbar" aria-label="ユニオン一覧絞り込み">
-      <div class="union-list-field">
-        <label for="rankFilter">ユニオンランク</label>
-        <select id="rankFilter">
-          <option value="">すべて</option>
-          <option value="チャレンジャー">チャレンジャー</option>
-          <option value="ダイヤ">ダイヤ</option>
-          <option value="プラチナ">プラチナ</option>
-          <option value="ゴールド">ゴールド</option>
-          <option value="シルバー">シルバー</option>
-          <option value="駆け出しユニオン">駆け出しユニオン</option>
-        </select>
-      </div>
-
-      <div class="union-list-status-group">
-        <label>表示切替</label>
-        <div class="union-list-status-tabs" aria-label="募集状態">
-          <button class="union-list-status-btn active" type="button" data-status="all">
-            全ユニオン
-          </button>
-          <button class="union-list-status-btn" type="button" data-status="open">
-            募集中
-          </button>
-          <button class="union-list-status-btn" type="button" data-status="closed">
-            現在募集なし
-          </button>
+      <div id="summary" class="union-list-summary" aria-live="polite">読み込み中...</div>
+      <div class="union-list-controls">
+        <div class="union-list-rank-select">
+          <label for="rankFilter">ユニオンランク</label>
+          <select id="rankFilter" aria-label="ユニオンランク">
+            <option value="">全ユニオン</option>
+            <option value="チャレンジャー">チャレンジャー</option>
+            <option value="ダイヤ">ダイヤ</option>
+            <option value="プラチナ">プラチナ</option>
+            <option value="ゴールド">ゴールド</option>
+            <option value="シルバー">シルバー</option>
+            <option value="駆け出しユニオン">駆け出しユニオン</option>
+          </select>
         </div>
+        <button class="union-list-status-btn" type="button" data-status="open" aria-pressed="false">募集中</button>
+        <button class="union-list-status-btn" type="button" data-status="closed" aria-pressed="false">募集なし</button>
       </div>
     </section>
 
@@ -1151,8 +1053,10 @@
       const closedCount =
         state.items.length - openCount;
 
-      summary.textContent =
-        `現在利用中 ${state.items.length}ユニオン ｜ 募集中 ${openCount} ｜ 現在募集なし ${closedCount}`;
+      summary.innerHTML =
+        `登録 <strong>${state.items.length}</strong><span class="sep">｜</span>` +
+        `募集中 <strong>${openCount}</strong><span class="sep">｜</span>` +
+        `募集なし <strong>${closedCount}</strong>`;
 
       const totalUnionCount =
         document.getElementById("totalUnionCount");
@@ -1374,8 +1278,8 @@
         button.addEventListener(
           "click",
           () => {
-            state.status =
-              button.dataset.status || "all";
+            const nextStatus = button.dataset.status || "all";
+            state.status = state.status === nextStatus ? "all" : nextStatus;
 
             document
               .querySelectorAll(
@@ -1384,9 +1288,12 @@
               .forEach(item =>
                 item.classList.toggle(
                   "active",
-                  item === button
+                  item.dataset.status === state.status
                 )
               );
+            document.querySelectorAll(".union-list-status-btn").forEach(item => {
+              item.setAttribute("aria-pressed", String(item.dataset.status === state.status));
+            });
 
             render();
           }
