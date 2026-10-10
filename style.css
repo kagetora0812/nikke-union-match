@@ -6055,3 +6055,36 @@ body.manage-mode #managePage #loadManageRecruitmentBtn,
 }
 #listPage .recruitment-filter-count {white-space:nowrap !important;flex-shrink:0 !important;display:inline-flex;align-items:center;gap:3px;}
 #listPage .recruitment-filter-count-value {white-space:nowrap !important;}
+
+/* INDEX recruitment cards: X source, compact status tags, responsive hover. */
+#listPage #recruitmentList.cards article.card { min-width:0; transition:border-color .22s ease, transform .22s ease !important; }
+#listPage #recruitmentList.cards article.card .card-head-minimal,
+#listPage #recruitmentList.cards article.card .x-collected-card-head { display:flex; align-items:center; justify-content:space-between; flex-wrap:nowrap; gap:8px; min-width:0; }
+#listPage #recruitmentList.cards article.card .card-head-status { display:flex; align-items:center; gap:5px; flex:1 1 auto; min-width:0; flex-wrap:wrap; }
+#listPage #recruitmentList.cards article.card .card-head-status .countdown { flex:0 0 auto; white-space:nowrap; }
+#listPage #recruitmentList.cards article.card .card-head-minimal .type-with-new { flex:0 0 auto; justify-content:flex-end; margin-left:auto; }
+#listPage #recruitmentList.cards article.card .new-badge,
+#listPage #recruitmentList.cards article.card .deadline-badge { display:inline-flex !important; align-items:center; justify-content:center; box-sizing:border-box; height:21px; min-height:21px; padding:0 6px !important; border:1px solid; background:#fff !important; font:600 10px/1 "Noto Sans JP",sans-serif !important; white-space:nowrap; letter-spacing:0; flex:0 0 auto; box-shadow:none !important; }
+#listPage #recruitmentList.cards article.card .new-badge { color:#C43246 !important; border-color:#C43246 !important; }
+#listPage #recruitmentList.cards article.card .deadline-badge { color:#AD7938 !important; border-color:#C58B43 !important; }
+#listPage #recruitmentList.cards article.card .new-badge::before,
+#listPage #recruitmentList.cards article.card .new-badge::after { content:none !important; display:none !important; }
+#listPage #recruitmentList.cards article.card.x-collected-card { border:1px solid #8B5CF6 !important; clip-path:none !important; background:#fff !important; box-shadow:none !important; }
+#listPage #recruitmentList.cards article.card.x-collected-card .x-collected-card-head .type-with-new { margin:0; justify-content:flex-start; }
+#listPage #recruitmentList.cards article.card.x-collected-card .x-listed-badge { margin-left:auto; padding:0 !important; border:0 !important; background:none !important; color:#7C3AED !important; font:600 11px/1.4 "Noto Sans JP",sans-serif !important; }
+@media (hover:hover) and (pointer:fine) {
+ #listPage #recruitmentList.cards article.card.commander-card:hover,
+ #listPage #recruitmentList.cards article.card.union-card:hover { border-color:#20b8f4 !important; transform:scale(1.01) !important; }
+ #listPage #recruitmentList.cards article.card.x-collected-card:hover { border-color:#7C3AED !important; transform:scale(1.01) !important; }
+}
+@media (hover:none), (pointer:coarse) {
+ #listPage #recruitmentList.cards article.card { transform:none !important; }
+ #listPage #recruitmentList.cards article.card.commander-card.is-scroll-highlight,
+ #listPage #recruitmentList.cards article.card.union-card.is-scroll-highlight { border-color:#20b8f4 !important; }
+ #listPage #recruitmentList.cards article.card.x-collected-card.is-scroll-highlight { border-color:#7C3AED !important; }
+}
+@media (max-width:600px) {
+ #listPage #recruitmentList.cards article.card .card-head-status { gap:4px; }
+ #listPage #recruitmentList.cards article.card .new-badge,
+ #listPage #recruitmentList.cards article.card .deadline-badge { height:20px; min-height:20px; padding:0 5px !important; font-size:9px !important; }
+}
