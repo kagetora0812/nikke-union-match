@@ -1929,7 +1929,7 @@ function updateCountdowns() {
         const badgeWrap =
           card
             ?.querySelector(
-              ".type-with-new"
+              ".card-head-status"
             );
 
         const currentBadge =
@@ -1950,7 +1950,7 @@ function updateCountdowns() {
             badgeWrap
               .insertAdjacentHTML(
                 "beforeend",
-                '<span class="deadline-badge">⚠ 締切間近</span>'
+                '<span class="deadline-badge">締切間近</span>'
               );
 
           }
@@ -2375,16 +2375,14 @@ function buildXCollectedCard(item) {
     isNewRecruitment(
       item.posted_at
     )
-      ? '<span class="new-badge">🔥 NEW</span>'
+      ? '<span class="new-badge">NEW</span>'
       : "";
 
   return `
     <article class="card x-collected-card">
       <div class="card-head x-collected-card-head">
-        <div class="type-with-new">
-          <span class="x-listed-badge">𝕏 LISTED</span>
-          ${newBadge}
-        </div>
+        <div class="type-with-new">${newBadge}</div>
+        <span class="x-listed-badge">● X LISTED</span>
       </div>
 
       <div class="x-post-area">
@@ -2805,12 +2803,12 @@ const newBadge =
   isNewRecruitment(
     item.created_at
   )
-    ? '<span class="new-badge">🔥 NEW</span>'
+    ? '<span class="new-badge">NEW</span>'
     : "";
 
 const deadlineBadge =
   remaining.deadlineNear
-    ? '<span class="deadline-badge">⚠ 締切間近</span>'
+    ? '<span class="deadline-badge">締切間近</span>'
     : "";
             return `
 
@@ -2819,7 +2817,7 @@ const deadlineBadge =
               >
 
                 <div class="card-head card-head-minimal">
-<div
+<div class="card-head-status"><div
                   class="countdown ${remaining.className}"
                   data-expires="${escapeHtml(
                     item.expires_at
@@ -2829,18 +2827,9 @@ const deadlineBadge =
                   ${remaining.text}
 
                 </div>
-<div class="type-with-new">
-
-  <span
-    class="recruitment-type"
-  >
-    ● 指揮官
-  </span>
-
-  ${newBadge}
-  ${deadlineBadge}
-
-</div>
+${newBadge}
+${deadlineBadge}</div>
+<div class="type-with-new"><span class="recruitment-type">● 指揮官</span></div>
 </div>
 
 
@@ -3026,12 +3015,12 @@ const newBadge =
   isNewRecruitment(
     item.created_at
   )
-    ? '<span class="new-badge">🔥 NEW</span>'
+    ? '<span class="new-badge">NEW</span>'
     : "";
 
 const deadlineBadge =
   remaining.deadlineNear
-    ? '<span class="deadline-badge">⚠ 締切間近</span>'
+    ? '<span class="deadline-badge">締切間近</span>'
     : "";
             
             return `
@@ -3041,7 +3030,7 @@ const deadlineBadge =
               >
 
                 <div class="card-head card-head-minimal">
-<div
+<div class="card-head-status"><div
                   class="countdown ${remaining.className}"
                   data-expires="${escapeHtml(
                     item.expires_at
@@ -3051,18 +3040,9 @@ const deadlineBadge =
                   ${remaining.text}
 
                 </div>
-<div class="type-with-new">
-
-  <span
-    class="recruitment-type"
-  >
-    ● ユニオン
-  </span>
-
-  ${newBadge}
-  ${deadlineBadge}
-
-</div>
+${newBadge}
+${deadlineBadge}</div>
+<div class="type-with-new"><span class="recruitment-type">● ユニオン</span></div>
 </div>
 
 
@@ -8473,7 +8453,7 @@ void initializeDiscordManageV1();
   if (!list || typeof IntersectionObserver === "undefined") return;
   const touchScreen = window.matchMedia("(hover: none), (pointer: coarse)");
   let observer = null;
-  const cardSelector = "article.card.commander-card, article.card.union-card";
+  const cardSelector = "article.card.commander-card, article.card.union-card, article.card.x-collected-card";
   function clear() {
     list.querySelectorAll(".is-scroll-highlight").forEach(card => card.classList.remove("is-scroll-highlight"));
   }
@@ -8481,15 +8461,51 @@ void initializeDiscordManageV1();
     if (observer) { observer.disconnect(); observer = null; }
     clear();
     if (!touchScreen.matches) return;
-    observer = new IntersectionObserver(entries => {
-      for (const entry of entries) entry.target.classList.toggle("is-scroll-highlight", entry.isIntersecting);
-    }, { root: null, rootMargin: "-32% 0px -32% 0px", threshold: 0 });
+    observer = new IntersectionObserver(() => {
+      const cards = [...list.querySelectorAll(cardSelector)];
+      if (!cards.length) return;
+      const center = window.innerHeight * .50;
+      const rows = new Map();
+      cards.forEach(card => {
+        const rect = card.getBoundingClientRect();
+        const key = Math.round(rect.top + window.scrollY);
+        const row = rows.get(key) || [];
+        row.push(card);
+        rows.set(key, row);
+      });
+      let nearest = null, distance = Infinity;
+      rows.forEach(row => {
+        const rect = row[0].getBoundingClientRect();
+        const d = Math.abs((rect.top + rect.bottom) / 2 - center);
+        if (d < distance) { distance = d; nearest = row; }
+      });
+      cards.forEach(card => card.classList.toggle("is-scroll-highlight", nearest?.includes(card) || false));
+    }, { root: null, rootMargin: "-20% 0px -20% 0px", threshold: 0 });
     list.querySelectorAll(cardSelector).forEach(card => observer.observe(card));
   }
   const changes = new MutationObserver(() => refresh());
   changes.observe(list, {childList:true});
   if (touchScreen.addEventListener) touchScreen.addEventListener("change", refresh);
   window.addEventListener("resize", refresh, {passive:true});
+  window.addEventListener("scroll", () => {
+    if (!touchScreen.matches) return;
+    const cards = [...list.querySelectorAll(cardSelector)];
+    const rows = new Map();
+    cards.forEach(card => {
+      const rect = card.getBoundingClientRect();
+      const key = Math.round(rect.top + window.scrollY);
+      if (!rows.has(key)) rows.set(key, []);
+      rows.get(key).push(card);
+    });
+    const center = innerHeight * .5;
+    let chosen = [], min = Infinity;
+    for (const row of rows.values()) {
+      const r = row[0].getBoundingClientRect();
+      const dist = Math.abs((r.top + r.bottom) * .5 - center);
+      if (dist < min) { min = dist; chosen = row; }
+    }
+    cards.forEach(card => card.classList.toggle("is-scroll-highlight", chosen.includes(card)));
+  }, {passive:true});
   refresh();
 })();
 
