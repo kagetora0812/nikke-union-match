@@ -271,7 +271,45 @@
     }
     .union-list-grid article.card.union-card::before,
     .union-list-grid article.card.union-card::after { content:none !important; display:none !important; }
-    .union-list-grid article.card.union-card { transition:border-color .25s ease !important; }
+    /* 登録済み募集画像だけ、カードの内側3pxにごく薄く常時表示する */
+    .union-list-grid article.card.union-card {
+      position: relative;
+      isolation: isolate;
+      transition: border-color .25s ease, transform .25s ease, box-shadow .25s ease !important;
+    }
+    .union-list-grid article.card.union-card > .union-card-watermark {
+      position: absolute;
+      inset: 3px;
+      z-index: 0;
+      overflow: hidden;
+      pointer-events: none;
+      background: #fff;
+    }
+    .union-list-grid article.card.union-card > .union-card-watermark img {
+      display: block;
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      object-position: center;
+      opacity: .06;
+      transition: opacity .25s ease;
+    }
+    .union-list-grid article.card.union-card > :not(.union-card-watermark) {
+      position: relative;
+      z-index: 1;
+    }
+    .union-list-grid .union-card .x-btn { background: transparent !important; }
+    @media (hover: hover) and (pointer: fine) {
+      .union-list-grid article.card.union-card:hover {
+        transform: scale(1.01) !important;
+        box-shadow: 0 5px 16px rgba(14, 43, 63, .08) !important;
+        z-index: 2;
+      }
+      .union-list-grid article.card.union-card:hover > .union-card-watermark img { opacity: .11; }
+    }
+    @media (hover: none), (pointer: coarse) {
+      .union-list-grid article.card.union-card { transform: none !important; }
+    }
     @media (hover:hover) and (pointer:fine) { .union-list-grid article.card.union-card:hover { border-color:#20b8f4 !important; } }
     .union-list-grid article.card.union-card.is-in-view { border-color:#20b8f4 !important; }
     .union-card-top { display:flex;justify-content:space-between;align-items:center;gap:8px;min-width:0; }
@@ -931,6 +969,12 @@
           const rankClass =
             getUnionRankClass(item.union_rank);
 
+          const imageUrl =
+            safeUrl(item._recruitment?.preview_image_url || "");
+          const watermark = imageUrl
+            ? `<div class="union-card-watermark" aria-hidden="true"><img src="${escapeHtml(imageUrl)}" alt="" loading="lazy" decoding="async"></div>`
+            : "";
+
           const button =
             recruiting && recruitmentUrl
               ? `
@@ -949,6 +993,7 @@
 
           return `
             <article class="card union-card ${recruiting ? "status-open" : "status-closed"}">
+              ${watermark}
               <div class="union-card-top">
                 <span class="countdown" data-member-expires="${escapeHtml(item.expires_at || "")}">${escapeHtml(getMembershipCountdown(item.expires_at))}</span>
                 <span class="union-card-state">${recruiting ? "● 募集中" : "募集なし"}</span>
@@ -1070,7 +1115,7 @@
             await sb
               .from("union_recruitments")
               .select(
-                "id, x_url, status, created_at, expires_at"
+                "id, x_url, preview_image_url, status, created_at, expires_at"
               )
               .in(
                 "id",
