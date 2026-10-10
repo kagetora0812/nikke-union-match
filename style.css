@@ -1364,22 +1364,17 @@ h3 {
    指揮官=orange、ユニオン=blue と分離する紫 #8B5CF6
    ========================================================= */
 
+/* X cards share the same plain white surface as regular cards. */
 body .card.x-collected-card {
-  border-color: #8B5CF6 !important;
-  background:
-    linear-gradient(
-      180deg,
-      #ffffff 0%,
-      #fbfaff 100%
-    ) !important;
+  border-color: #e2e2e2 !important;
+  background: #fff !important;
 }
 
-body .card.x-collected-card::before {
-  background: #8B5CF6 !important;
-}
-
+/* No colored left stripe or decorative corner motif. */
+body .card.x-collected-card::before,
 body .card.x-collected-card::after {
-  border-color: rgba(139, 92, 246, .20) !important;
+  content: none !important;
+  display: none !important;
 }
 
 body .x-collected-card-head {
@@ -6069,7 +6064,9 @@ body.manage-mode #managePage #loadManageRecruitmentBtn,
 #listPage #recruitmentList.cards article.card .deadline-badge { color:#AD7938 !important; border-color:#C58B43 !important; }
 #listPage #recruitmentList.cards article.card .new-badge::before,
 #listPage #recruitmentList.cards article.card .new-badge::after { content:none !important; display:none !important; }
-#listPage #recruitmentList.cards article.card.x-collected-card { border:1px solid #8B5CF6 !important; clip-path:none !important; background:#fff !important; box-shadow:none !important; }
+#listPage #recruitmentList.cards article.card.x-collected-card { border:1px solid #e2e2e2 !important; clip-path:none !important; background:#fff !important; background-image:none !important; box-shadow:none !important; }
+#listPage #recruitmentList.cards article.card.x-collected-card::before,
+#listPage #recruitmentList.cards article.card.x-collected-card::after { content:none !important; display:none !important; }
 #listPage #recruitmentList.cards article.card.x-collected-card .x-collected-card-head .type-with-new { margin:0; justify-content:flex-start; }
 #listPage #recruitmentList.cards article.card.x-collected-card .x-listed-badge { margin-left:auto; padding:0 !important; border:0 !important; background:none !important; color:#7C3AED !important; font:600 11px/1.4 "Noto Sans JP",sans-serif !important; }
 @media (hover:hover) and (pointer:fine) {
