@@ -1032,6 +1032,16 @@
           const d = Math.abs((rect.top + rect.bottom) / 2 - centerY);
           if (d < distance) { distance = d; closest = card; }
         }
+        // At scroll limits the viewport midpoint can still favor an inner row.
+        // Always highlight the first/last row at the respective scroll edge.
+        if (scrollArea && getComputedStyle(scrollArea).overflowY !== "visible") {
+          const maxScroll = Math.max(0, scrollArea.scrollHeight - scrollArea.clientHeight);
+          if (scrollArea.scrollTop <= 8) {
+            closest = cards[0];
+          } else if (maxScroll > 0 && maxScroll - scrollArea.scrollTop <= 8) {
+            closest = cards[cards.length - 1];
+          }
+        }
         // Two-column tablet layout: highlight both cards in the same grid row.
         // Single-column mobile layout still highlights only the closest card.
         const rowTop = closest ? closest.offsetTop : null;
