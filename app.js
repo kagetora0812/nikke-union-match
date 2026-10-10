@@ -141,7 +141,7 @@ let lastRegisteredRecruitment = null;
 // public_x_recruitment_list RPC 経由で安全に取得する。
 // DB側・画面側の両方で48時間以内だけを表示する。
 // ========================================
-const X_LISTED_PUBLIC_RPC = "public_x_recruitment_list";
+const X_LISTED_PUBLIC_RPC = "public_x_recruitment_list_v2";
 const X_LISTED_MAX_ITEMS = 100;
 const X_LISTED_HOURS = 48;
 
@@ -2371,9 +2371,10 @@ function buildXCollectedCard(item) {
     return "";
   }
 
+  // XのNEWだけは「初回発見日時」から24時間。投稿日時は掲載48時間の判定に残す。
   const newBadge =
     isNewRecruitment(
-      item.posted_at
+      item.discovered_at
     )
       ? '<span class="new-badge">NEW</span>'
       : "";
