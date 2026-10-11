@@ -5804,6 +5804,8 @@ body.register-mode .hero {
 .cards article.card .name {margin:26px 0 13px !important;font-family:"Noto Sans JP",sans-serif !important;font-size:clamp(21px,2vw,28px) !important;font-weight:700 !important;letter-spacing:-.02em;}
 .cards article.card .union-rank {clip-path:none !important;padding:6px 16px !important;}
 .cards article.card .slv {font-family:"Noto Sans JP",sans-serif !important;}
+/* Commander listing only: keep SLV label size, align number row with union rank. */
+#listPage .cards article.card.commander-card .slv {font-size:20px !important;line-height:20px !important;padding:6px 0 !important;}
 .cards article.card .x-post-area {margin-top:20px !important;}
 @media(max-width:600px){.cards article.card.commander-card,.cards article.card.union-card{padding:19px !important;}.cards article.card .card-head-minimal .countdown{font-size:10px;}.cards article.card .name{font-size:22px !important;}}
 
