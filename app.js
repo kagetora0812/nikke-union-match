@@ -8448,65 +8448,66 @@ void initializeDiscordManageV1();
 
 
 
-/* Recruitment card scroll focus (mobile/tablet only). Keep the final row highlighted at the bottom. */
+/* Recruitment card scroll focus (mobile/tablet only). No click or data changes. */
 (() => {
   const list = document.getElementById("recruitmentList");
-  if (!list) return;
+  if (!list || typeof IntersectionObserver === "undefined") return;
   const touchScreen = window.matchMedia("(hover: none), (pointer: coarse)");
+  let observer = null;
   const cardSelector = "article.card.commander-card, article.card.union-card, article.card.x-collected-card";
-  let frame = 0;
-
-  function updateHighlight() {
-    frame = 0;
+  function clear() {
+    list.querySelectorAll(".is-scroll-highlight").forEach(card => card.classList.remove("is-scroll-highlight"));
+  }
+  function refresh() {
+    if (observer) { observer.disconnect(); observer = null; }
+    clear();
+    if (!touchScreen.matches) return;
+    observer = new IntersectionObserver(() => {
+      const cards = [...list.querySelectorAll(cardSelector)];
+      if (!cards.length) return;
+      const center = window.innerHeight * .50;
+      const rows = new Map();
+      cards.forEach(card => {
+        const rect = card.getBoundingClientRect();
+        const key = Math.round(rect.top + window.scrollY);
+        const row = rows.get(key) || [];
+        row.push(card);
+        rows.set(key, row);
+      });
+      let nearest = null, distance = Infinity;
+      rows.forEach(row => {
+        const rect = row[0].getBoundingClientRect();
+        const d = Math.abs((rect.top + rect.bottom) / 2 - center);
+        if (d < distance) { distance = d; nearest = row; }
+      });
+      cards.forEach(card => card.classList.toggle("is-scroll-highlight", nearest?.includes(card) || false));
+    }, { root: null, rootMargin: "-20% 0px -20% 0px", threshold: 0 });
+    list.querySelectorAll(cardSelector).forEach(card => observer.observe(card));
+  }
+  const changes = new MutationObserver(() => refresh());
+  changes.observe(list, {childList:true});
+  if (touchScreen.addEventListener) touchScreen.addEventListener("change", refresh);
+  window.addEventListener("resize", refresh, {passive:true});
+  window.addEventListener("scroll", () => {
+    if (!touchScreen.matches) return;
     const cards = [...list.querySelectorAll(cardSelector)];
-    if (!touchScreen.matches || !cards.length) {
-      cards.forEach(card => card.classList.remove("is-scroll-highlight"));
-      return;
-    }
-
-    // Group cards by visual rows so both cards in a tablet row are highlighted.
-    const rows = [];
+    const rows = new Map();
     cards.forEach(card => {
       const rect = card.getBoundingClientRect();
-      const row = rows.find(item => Math.abs(item.top - rect.top) < 5);
-      if (row) row.cards.push(card);
-      else rows.push({ top: rect.top, cards: [card] });
+      const key = Math.round(rect.top + window.scrollY);
+      if (!rows.has(key)) rows.set(key, []);
+      rows.get(key).push(card);
     });
-    rows.sort((a, b) => a.top - b.top);
-
-    const viewHeight = window.visualViewport?.height || window.innerHeight;
-    const scrollElement = document.scrollingElement || document.documentElement;
-    const reachedPageBottom = scrollElement.scrollTop + scrollElement.clientHeight >= scrollElement.scrollHeight - 12;
-    const last = rows[rows.length - 1];
-    const lastRect = last.cards[0].getBoundingClientRect();
-    const lastRowVisible = lastRect.top < viewHeight && lastRect.bottom > 0;
-    let chosen = null;
-
-    if (reachedPageBottom && lastRowVisible) {
-      chosen = last.cards;
-    } else {
-      const center = viewHeight * .5;
-      let minDistance = Infinity;
-      for (const row of rows) {
-        const r = row.cards[0].getBoundingClientRect();
-        const distance = Math.abs((r.top + r.bottom) * .5 - center);
-        if (distance < minDistance) {
-          minDistance = distance;
-          chosen = row.cards;
-        }
-      }
+    const center = innerHeight * .5;
+    let chosen = [], min = Infinity;
+    for (const row of rows.values()) {
+      const r = row[0].getBoundingClientRect();
+      const dist = Math.abs((r.top + r.bottom) * .5 - center);
+      if (dist < min) { min = dist; chosen = row; }
     }
-    cards.forEach(card => card.classList.toggle("is-scroll-highlight", chosen?.includes(card) || false));
-  }
-
-  function scheduleHighlight() {
-    if (!frame) frame = requestAnimationFrame(updateHighlight);
-  }
-  new MutationObserver(scheduleHighlight).observe(list, { childList: true });
-  if (touchScreen.addEventListener) touchScreen.addEventListener("change", scheduleHighlight);
-  window.addEventListener("resize", scheduleHighlight, { passive: true });
-  window.addEventListener("scroll", scheduleHighlight, { passive: true });
-  scheduleHighlight();
+    cards.forEach(card => card.classList.toggle("is-scroll-highlight", chosen.includes(card)));
+  }, {passive:true});
+  refresh();
 })();
 
 
