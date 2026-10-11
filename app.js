@@ -8448,74 +8448,68 @@ void initializeDiscordManageV1();
 
 
 
-/* Recruitment cards: one scroll-focus controller for smartphone and tablet. */
+/* Recruitment cards: single scroll-focus controller for commander, union and X. */
 (() => {
   const list = document.getElementById("recruitmentList");
   if (!list) return;
 
-  const cardSelector = "article.card.commander-card, article.card.union-card, article.card.x-collected-card";
+  const selector = "article.card.commander-card, article.card.union-card, article.card.x-collected-card";
   const touchScreen = window.matchMedia("(hover: none), (pointer: coarse)");
   let frame = 0;
   let scrollTarget = null;
 
-  function clear() {
-    list.querySelectorAll(".is-scroll-highlight").forEach(card => {
-      card.classList.remove("is-scroll-highlight");
-    });
-  }
-
   function paint() {
     frame = 0;
-    if (!touchScreen.matches || !list.getClientRects().length) {
-      clear();
+    const cards = [...list.querySelectorAll(selector)];
+    if (!touchScreen.matches || !list.getClientRects().length || !cards.length) {
+      cards.forEach(card => card.classList.remove("is-scroll-highlight"));
       return;
     }
 
-    const cards = [...list.querySelectorAll(cardSelector)];
-    if (!cards.length) return;
-
     const shell = getMobileScrollShell();
-    const viewport = shell ? shell.getBoundingClientRect() : {
-      top: 0,
-      bottom: window.innerHeight
-    };
-    const center = (viewport.top + viewport.bottom) / 2;
-
-    // Group cards into the same visual grid row (tablet: two columns).
+    const viewport = shell ? shell.getBoundingClientRect() : { top: 0, bottom: window.innerHeight };
+    const centerY = (viewport.top + viewport.bottom) / 2;
     const rows = [];
+
+    // Group by actual on-screen row, including two-column tablet cards.
     for (const card of cards) {
       const rect = card.getBoundingClientRect();
-      const row = rows.find(group => Math.abs(group.top - rect.top) < 12);
+      const row = rows.find(item => Math.abs(item.top - rect.top) <= 2);
       if (row) row.cards.push(card);
       else rows.push({ top: rect.top, cards: [card] });
     }
     rows.sort((a, b) => a.top - b.top);
 
-    const visible = rows.map(row => {
+    const visibleRows = rows.map(row => {
       const rects = row.cards.map(card => card.getBoundingClientRect());
       const top = Math.min(...rects.map(rect => rect.top));
       const bottom = Math.max(...rects.map(rect => rect.bottom));
-      return { cards: row.cards, top, bottom,
-        overlap: Math.max(0, Math.min(bottom, viewport.bottom) - Math.max(top, viewport.top)) };
+      const overlap = Math.max(0, Math.min(bottom, viewport.bottom) - Math.max(top, viewport.top));
+      return { cards: row.cards, top, bottom, overlap };
     }).filter(row => row.overlap > 0);
 
-    if (!visible.length) { clear(); return; }
+    if (!visibleRows.length) {
+      cards.forEach(card => card.classList.remove("is-scroll-highlight"));
+      return;
+    }
 
     const scroller = shell || document.scrollingElement || document.documentElement;
-    const atTop = scroller.scrollTop <= 2;
-    const atBottom = scroller.scrollHeight - scroller.clientHeight - scroller.scrollTop <= 3;
-    const first = visible[0];
-    const last = visible[visible.length - 1];
-    let chosen;
+    const maxScroll = Math.max(0, scroller.scrollHeight - scroller.clientHeight);
+    const atTop = scroller.scrollTop <= 8;
+    const atBottom = maxScroll - scroller.scrollTop <= 8;
+    const first = visibleRows[0];
+    const last = visibleRows[visibleRows.length - 1];
+    let chosen = null;
 
-    if (atBottom || (last.cards.includes(cards[cards.length - 1]) && last.bottom <= viewport.bottom - 2)) {
-      // A short final row can never cross the viewport's center.
+    // Same edge rule as UNION LIST: the final row wins at the actual bottom,
+    // even when short commander/union cards never reach the viewport center.
+    if (atBottom && last.cards.includes(cards[cards.length - 1])) {
       chosen = last;
     } else if (atTop && first.cards.includes(cards[0])) {
       chosen = first;
     } else {
-      chosen = visible.reduce((best, row) => {
-        const distance = Math.abs((row.top + row.bottom) / 2 - center);
+      chosen = visibleRows.reduce((best, row) => {
+        const distance = Math.abs((row.top + row.bottom) / 2 - centerY);
         return !best || distance < best.distance ? { ...row, distance } : best;
       }, null);
     }
@@ -8528,7 +8522,7 @@ void initializeDiscordManageV1();
     if (!frame) frame = requestAnimationFrame(paint);
   }
 
-  function bindScroller() {
+  function bindScroll() {
     const next = getMobileScrollShell() || window;
     if (scrollTarget !== next) {
       scrollTarget?.removeEventListener("scroll", schedule);
@@ -8539,9 +8533,9 @@ void initializeDiscordManageV1();
   }
 
   new MutationObserver(schedule).observe(list, { childList: true });
-  if (touchScreen.addEventListener) touchScreen.addEventListener("change", bindScroller);
-  window.addEventListener("resize", bindScroller, { passive: true });
-  bindScroller();
+  touchScreen.addEventListener?.("change", bindScroll);
+  window.addEventListener("resize", bindScroll, { passive: true });
+  bindScroll();
 })();
 
 
