@@ -8448,61 +8448,100 @@ void initializeDiscordManageV1();
 
 
 
-/* Recruitment card scroll focus (mobile/tablet only). No click or data changes. */
+/* Recruitment cards: one scroll-focus controller for smartphone and tablet. */
 (() => {
   const list = document.getElementById("recruitmentList");
-  if (!list || typeof IntersectionObserver === "undefined") return;
-  const touchScreen = window.matchMedia("(hover: none), (pointer: coarse)");
-  const scrollShell = document.getElementById("mobileScrollShell");
+  if (!list) return;
+
   const cardSelector = "article.card.commander-card, article.card.union-card, article.card.x-collected-card";
-  let observer = null;
+  const touchScreen = window.matchMedia("(hover: none), (pointer: coarse)");
+  let frame = 0;
+  let scrollTarget = null;
+
   function clear() {
-    list.querySelectorAll(".is-scroll-highlight").forEach(card => card.classList.remove("is-scroll-highlight"));
+    list.querySelectorAll(".is-scroll-highlight").forEach(card => {
+      card.classList.remove("is-scroll-highlight");
+    });
   }
-  function updateHighlight() {
-    if (!touchScreen.matches) return;
+
+  function paint() {
+    frame = 0;
+    if (!touchScreen.matches || !list.getClientRects().length) {
+      clear();
+      return;
+    }
+
     const cards = [...list.querySelectorAll(cardSelector)];
     if (!cards.length) return;
-    const viewport = scrollShell && getComputedStyle(scrollShell).overflowY !== "visible"
-      ? scrollShell.getBoundingClientRect()
-      : { top: 0, bottom: window.innerHeight };
-    const listRect = list.getBoundingClientRect();
-    const visibleTop = Math.max(viewport.top, listRect.top);
-    const visibleBottom = Math.min(viewport.bottom, listRect.bottom);
-    if (visibleBottom <= visibleTop) { clear(); return; }
-    const rows = new Map();
-    cards.forEach(card => {
+
+    const shell = getMobileScrollShell();
+    const viewport = shell ? shell.getBoundingClientRect() : {
+      top: 0,
+      bottom: window.innerHeight
+    };
+    const center = (viewport.top + viewport.bottom) / 2;
+
+    // Group cards into the same visual grid row (tablet: two columns).
+    const rows = [];
+    for (const card of cards) {
       const rect = card.getBoundingClientRect();
-      const key = Math.round(rect.top - listRect.top);
-      if (!rows.has(key)) rows.set(key, []);
-      rows.get(key).push(card);
-    });
-    const center = (visibleTop + visibleBottom) / 2;
-    let chosen = [], min = Infinity;
-    for (const row of rows.values()) {
-      const rect = row[0].getBoundingClientRect();
-      // Prefer a row actually visible in the list, including short final rows.
-      const overlap = Math.min(rect.bottom, visibleBottom) - Math.max(rect.top, visibleTop);
-      if (overlap <= 0) continue;
-      const dist = Math.abs((Math.max(rect.top, visibleTop) + Math.min(rect.bottom, visibleBottom)) / 2 - center);
-      if (dist < min) { min = dist; chosen = row; }
+      const row = rows.find(group => Math.abs(group.top - rect.top) < 12);
+      if (row) row.cards.push(card);
+      else rows.push({ top: rect.top, cards: [card] });
     }
-    cards.forEach(card => card.classList.toggle("is-scroll-highlight", chosen.includes(card)));
+    rows.sort((a, b) => a.top - b.top);
+
+    const visible = rows.map(row => {
+      const rects = row.cards.map(card => card.getBoundingClientRect());
+      const top = Math.min(...rects.map(rect => rect.top));
+      const bottom = Math.max(...rects.map(rect => rect.bottom));
+      return { cards: row.cards, top, bottom,
+        overlap: Math.max(0, Math.min(bottom, viewport.bottom) - Math.max(top, viewport.top)) };
+    }).filter(row => row.overlap > 0);
+
+    if (!visible.length) { clear(); return; }
+
+    const scroller = shell || document.scrollingElement || document.documentElement;
+    const atTop = scroller.scrollTop <= 2;
+    const atBottom = scroller.scrollHeight - scroller.clientHeight - scroller.scrollTop <= 3;
+    const first = visible[0];
+    const last = visible[visible.length - 1];
+    let chosen;
+
+    if (atBottom || (last.cards.includes(cards[cards.length - 1]) && last.bottom <= viewport.bottom - 2)) {
+      // A short final row can never cross the viewport's center.
+      chosen = last;
+    } else if (atTop && first.cards.includes(cards[0])) {
+      chosen = first;
+    } else {
+      chosen = visible.reduce((best, row) => {
+        const distance = Math.abs((row.top + row.bottom) / 2 - center);
+        return !best || distance < best.distance ? { ...row, distance } : best;
+      }, null);
+    }
+
+    const selected = new Set(chosen.cards);
+    cards.forEach(card => card.classList.toggle("is-scroll-highlight", selected.has(card)));
   }
-  function refresh() {
-    if (observer) { observer.disconnect(); observer = null; }
-    clear();
-    if (!touchScreen.matches) return;
-    observer = new IntersectionObserver(updateHighlight, { threshold: 0 });
-    list.querySelectorAll(cardSelector).forEach(card => observer.observe(card));
-    requestAnimationFrame(updateHighlight);
+
+  function schedule() {
+    if (!frame) frame = requestAnimationFrame(paint);
   }
-  new MutationObserver(refresh).observe(list, { childList: true });
-  if (touchScreen.addEventListener) touchScreen.addEventListener("change", refresh);
-  window.addEventListener("resize", refresh, { passive: true });
-  window.addEventListener("scroll", updateHighlight, { passive: true });
-  scrollShell?.addEventListener("scroll", updateHighlight, { passive: true });
-  refresh();
+
+  function bindScroller() {
+    const next = getMobileScrollShell() || window;
+    if (scrollTarget !== next) {
+      scrollTarget?.removeEventListener("scroll", schedule);
+      scrollTarget = next;
+      scrollTarget.addEventListener("scroll", schedule, { passive: true });
+    }
+    schedule();
+  }
+
+  new MutationObserver(schedule).observe(list, { childList: true });
+  if (touchScreen.addEventListener) touchScreen.addEventListener("change", bindScroller);
+  window.addEventListener("resize", bindScroller, { passive: true });
+  bindScroller();
 })();
 
 
