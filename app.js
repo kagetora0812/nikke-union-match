@@ -1238,12 +1238,22 @@ function renderXCollectedEmbed(target, attempt = 0, recovery = false) {
   stage.setAttribute("aria-hidden", "true");
   target.appendChild(stage);
   let settled = false;
+  // 初回表示は1秒だけ待ち、その時点で未完成なら保存本文を表示。
+  // iframeの取得は中断しないため、後から完成すれば公式表示に切り替わる。
+  const textTimer = !recovery ? setTimeout(() => {
+    if (!current() || settled) return;
+    const loading = target.querySelector('.x-saved-text');
+    if (loading) loading.outerHTML = getXCollectedTextHtml(target);
+  }, 1000) : null;
   const fail = () => {
     if (settled || !current()) return;
     settled = true;
+    clearTimeout(textTimer);
     stage.remove();
+    // 失敗した時点で保存本文を表示。再試行中も情報を隠さない。
+    if (!recovery) target.innerHTML = getXCollectedTextHtml(target);
     if (attempt === 0) {
-      // 最初の失敗時は待機表示を維持したまま一度だけ再試行。
+      // 最初の失敗時は本文を維持したまま一度だけ再試行。
       setTimeout(() => { if (current()) renderXCollectedEmbed(target, 1, true); }, 3000);
     } else {
       showXEmbedFallback(target);
@@ -1271,6 +1281,7 @@ function renderXCollectedEmbed(target, attempt = 0, recovery = false) {
       const height = iframe?.getBoundingClientRect().height || 0;
       if (iframe && height >= 170) {
         settled = true;
+        clearTimeout(textTimer);
         target.replaceChildren(stage);
         stage.style.cssText = "position:static;opacity:1;pointer-events:auto;z-index:auto;width:100%;";
         stage.removeAttribute("aria-hidden");
@@ -1324,8 +1335,7 @@ function renderSingleXEmbed(target, attempt = 0, recovery = false) {
 
 // X LISTEDだけ: 画面付近を優先し、残りもスクロール不要で順次読み込む。
 // Xへの大量同時アクセスを避けるため、開始タイミングを650msずつずらす。
-let xCollectedLoadTimer = null;
-
+// X LISTEDは全件を同時に読み込み開始する。逐次開始の650ms待機は使わない。
 function renderXEmbeds(retry = 0) {
   if (!window.twttr?.widgets?.createTweet) {
     if (retry < 10) {
@@ -1335,37 +1345,7 @@ function renderXEmbeds(retry = 0) {
     }
     return;
   }
-
-  // 本人登録の通常カードは今までどおり。X LISTEDのみ順次処理する。
-  document.querySelectorAll('.x-embed:not(.x-collected-embed)').forEach(renderSingleXEmbed);
-
-  if (xCollectedLoadTimer !== null) {
-    clearInterval(xCollectedLoadTimer);
-    xCollectedLoadTimer = null;
-  }
-
-  const pending = Array.from(document.querySelectorAll('.x-collected-embed:not([data-loaded])'));
-  if (!pending.length) return;
-
-  const loadNext = () => {
-    // 各回で画面位置を見直し、スクロール先の投稿を優先する。
-    const available = pending.filter(target => target.isConnected && !target.dataset.loaded);
-    if (!available.length) {
-      clearInterval(xCollectedLoadTimer);
-      xCollectedLoadTimer = null;
-      return;
-    }
-    const distance = target => {
-      const rect = target.getBoundingClientRect();
-      if (rect.bottom >= -150 && rect.top <= window.innerHeight + 400) return 0;
-      return rect.top > window.innerHeight ? rect.top - window.innerHeight : -rect.bottom;
-    };
-    available.sort((a, b) => distance(a) - distance(b));
-    renderSingleXEmbed(available[0]);
-  };
-
-  loadNext(); // 最初の1件は即座に開始
-  xCollectedLoadTimer = setInterval(loadNext, 650);
+  document.querySelectorAll('.x-embed').forEach(renderSingleXEmbed);
 }
 
 
