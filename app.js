@@ -141,7 +141,7 @@ let lastRegisteredRecruitment = null;
 // public_x_recruitment_list RPC 経由で安全に取得する。
 // DB側・画面側の両方で48時間以内だけを表示する。
 // ========================================
-const X_LISTED_PUBLIC_RPC = "public_x_recruitment_list_v2";
+const X_LISTED_PUBLIC_RPC = "public_x_recruitment_list_v3";
 const X_LISTED_MAX_ITEMS = 100;
 const X_LISTED_HOURS = 48;
 
@@ -1151,223 +1151,107 @@ function getXPostId(value) {
 // 他の投稿の読み込みを止めない
 // ========================================
 
+// X公式の埋め込みを優先。失敗は1回だけ再試行して、保存済み本文へ切り替える。
+// iframeは別オリジンなので、その内部の「Not found」という文字は取得できない。
 function showXEmbedFallback(target) {
-
-  if (!target) {
-    return;
-  }
-
-  target.dataset.loaded =
-    "failed";
-
-  const previewImageUrl =
-    target.dataset.previewImageUrl || "";
-
-  const recruitmentUrl =
-    target.dataset.recruitmentUrl || "";
-
-  // 管理画面などから登録された画像がある場合は、
-  // X埋め込みが削除済み / Not found / 読み込み失敗でも画像を表示する。
+  if (!target || !target.isConnected) return;
+  target.dataset.loaded = "failed";
+  const url = target.dataset.recruitmentUrl || "";
+  const previewImageUrl = target.dataset.previewImageUrl || "";
+  const excerpt = target.dataset.textExcerpt || "";
+  const author = target.dataset.authorHandle || "";
+  const slv = target.dataset.slv || "";
   if (previewImageUrl) {
-
     target.innerHTML = `
-      <div class="registration-preview-platform">
-        掲載先：X
-      </div>
-      <a
-        class="recruitment-preview-link"
-        href="${escapeHtml(recruitmentUrl)}"
-        target="_blank"
-        rel="noopener noreferrer"
-      >
-        <img
-          class="recruitment-preview-image"
-          src="${escapeHtml(previewImageUrl)}"
-          alt="X募集記事の登録画像"
-          loading="lazy"
-        >
-      </a>
-    `;
-
+      <div class="registration-preview-platform">掲載先：X</div>
+      <a class="recruitment-preview-link" href="${escapeHtml(url)}" target="_blank" rel="noopener noreferrer">
+        <img class="recruitment-preview-image" src="${escapeHtml(previewImageUrl)}" alt="X募集記事の登録画像" loading="lazy">
+      </a>`;
     return;
   }
-
-  target.innerHTML =
-    '<div class="x-embed-error">' +
-      '<strong>X投稿を埋め込み表示できません</strong><br>' +
-      '<span>下の「Xで募集記事を開く」から確認してください。</span>' +
-    '</div>';
-
+  if (excerpt) {
+    target.innerHTML = `
+      <div class="x-saved-text" style="padding:18px 16px;background:#101013;border:1px solid #333;border-radius:12px;overflow-wrap:anywhere;">
+        <div style="font-size:12px;color:#aaa;margin-bottom:12px;">X投稿の保存済みテキスト</div>
+        ${author ? `<div style="font-size:13px;color:#ccc;margin-bottom:8px;">${escapeHtml(author.startsWith('@') ? author : '@' + author)}${slv ? ' ・ SLV ' + escapeHtml(slv) : ''}</div>` : (slv ? `<div style="font-size:13px;color:#ccc;margin-bottom:8px;">SLV ${escapeHtml(slv)}</div>` : '')}
+        <div style="white-space:pre-wrap;line-height:1.7;font-size:14px;color:#eee;">${escapeHtml(excerpt)}</div>
+        <a href="${escapeHtml(url)}" target="_blank" rel="noopener noreferrer" style="display:inline-block;margin-top:16px;color:#eee;text-decoration:underline;">Xで元の投稿を開く ↗</a>
+      </div>`;
+    return;
+  }
+  target.innerHTML = `
+    <div class="x-embed-error">
+      <strong>X投稿を埋め込み表示できません</strong><br>
+      <a href="${escapeHtml(url)}" target="_blank" rel="noopener noreferrer">Xで投稿を開く ↗</a>
+    </div>`;
 }
 
-
-// X側は削除済み投稿でも iframe 自体を返して
-// 「Not found」と表示する場合があるため、Promise成功だけでは判定できない。
-// 登録画像がある募集だけ、描画後のiframe高さを見て小さすぎる場合は画像へフォールバックする。
-function checkXEmbedUnavailable(target) {
-
-  if (!target) {
-    return;
-  }
-
-  const previewImageUrl =
-    target.dataset.previewImageUrl || "";
-
-  if (!previewImageUrl) {
-    return;
-  }
-
-  if (target.dataset.loaded !== "true") {
-    return;
-  }
-
-  const iframe =
-    target.querySelector("iframe");
-
-  if (!iframe) {
+function renderSingleXEmbed(target, attempt = 0) {
+  if (!target || !target.isConnected) return;
+  if (attempt === 0 && (target.dataset.loaded === "true" || target.dataset.loaded === "loading" || target.dataset.loaded === "failed")) return;
+  const postId = target.dataset.postId;
+  if (!postId || !window.twttr?.widgets?.createTweet) {
     showXEmbedFallback(target);
     return;
   }
-
-  const iframeRect =
-    iframe.getBoundingClientRect();
-
-  const iframeHeight =
-    Math.max(
-      iframeRect.height || 0,
-      iframe.offsetHeight || 0,
-      Number(iframe.getAttribute("height")) || 0
-    );
-
-  const targetHeight =
-    Math.max(
-      target.getBoundingClientRect().height || 0,
-      target.offsetHeight || 0
-    );
-
-  // Xは削除済み投稿でも「Not found」用iframeを返すことがある。
-  // そのiframeは通常の投稿よりかなり低い。
-  // 管理画面で画像が登録済みなら、小さい埋め込みを画像へ切り替える。
-  const renderedHeight =
-    Math.max(iframeHeight, targetHeight);
-
-  if (renderedHeight <= 260) {
-    showXEmbedFallback(target);
-  }
-
-}
-
-
-function renderSingleXEmbed(target) {
-
-  if (!target) {
-    return;
-  }
-
-
-  if (
-    target.dataset.loaded === "true"
-    ||
-    target.dataset.loaded === "loading"
-  ) {
-    return;
-  }
-
-
-  const postId =
-    target.dataset.postId;
-
-
-  if (!postId) {
-
-    showXEmbedFallback(
-      target
-    );
-
-    return;
-
-  }
-
-
-  target.dataset.loaded =
-    "loading";
-
-
+  target.dataset.loaded = "loading";
+  target.replaceChildren();
+  const token = (target._xEmbedToken || 0) + 1;
+  target._xEmbedToken = token;
+  const current = () => target.isConnected && target._xEmbedToken === token;
+  const fail = () => {
+    if (!current()) return;
+    if (attempt === 0) {
+      setTimeout(() => {
+        if (current()) renderSingleXEmbed(target, 1);
+      }, 3000);
+    } else {
+      showXEmbedFallback(target);
+    }
+  };
+  let finished = false;
+  const timeoutId = setTimeout(() => {
+    if (!finished) fail();
+  }, 12000);
+  let result;
   try {
-
-    const result =
-      window.twttr.widgets
-        .createTweet(
-
-          postId,
-
-          target,
-
-          {
-            theme: "dark",
-            align: "center",
-            conversation: "none"
-          }
-
-        );
-
-
-    Promise
-      .resolve(result)
-      .then(tweetElement => {
-
-        if (tweetElement) {
-
-          target.dataset.loaded =
-            "true";
-
-          // Xが「Not found」のiframeを返すケースを判定。
-          // iframeの描画完了を待ってから確認する。
-          // Xのiframeは段階的に高さが確定するため複数回確認する。
-          [1200, 3000, 6000].forEach(delay => {
-            setTimeout(
-              () => checkXEmbedUnavailable(target),
-              delay
-            );
-          });
-
-          return;
-
-        }
-
-        showXEmbedFallback(
-          target
-        );
-
-      })
-      .catch(error => {
-
-        console.error(
-          "X投稿表示エラー",
-          error
-        );
-
-        showXEmbedFallback(
-          target
-        );
-
-      });
-
+    result = window.twttr.widgets.createTweet(postId, target, {
+      theme: "dark", align: "center", conversation: "none"
+    });
   } catch (error) {
-
-    console.error(
-      "X投稿表示エラー",
-      error
-    );
-
-    showXEmbedFallback(
-      target
-    );
-
+    clearTimeout(timeoutId);
+    console.warn("X投稿埋め込み失敗", error);
+    fail();
+    return;
   }
-
+  Promise.resolve(result).then(tweetElement => {
+    finished = true;
+    clearTimeout(timeoutId);
+    if (!current()) return;
+    if (!tweetElement) {
+      fail();
+      return;
+    }
+    target.dataset.loaded = "true";
+    // Xはエラー画面だけの低いiframeを返す場合がある。
+    // 画像登録済みの通常カードは従来通り。収集カードだけ、
+    // 保存本文がある場合に限り、極端に小さいiframeを再試行する。
+    if (target.classList.contains("x-collected-embed") && target.dataset.textExcerpt) {
+      setTimeout(() => {
+        if (!current() || target.dataset.loaded !== "true") return;
+        const iframe = target.querySelector("iframe");
+        if (iframe && iframe.getBoundingClientRect().height > 0 && iframe.getBoundingClientRect().height < 170) {
+          fail();
+        }
+      }, 4000);
+    }
+  }).catch(error => {
+    finished = true;
+    clearTimeout(timeoutId);
+    console.warn("X投稿埋め込み失敗", error);
+    fail();
+  });
 }
-
 
 function renderXEmbeds(
   retry = 0
@@ -1392,6 +1276,8 @@ function renderXEmbeds(
         500
       );
 
+    } else {
+      document.querySelectorAll(".x-embed:not([data-loaded])").forEach(showXEmbedFallback);
     }
 
     return;
@@ -2387,12 +2273,12 @@ function buildXCollectedCard(item) {
       </div>
 
       <div class="x-post-area">
-        ${buildRecruitmentPreviewMedia(
-          url,
-          "",
-          true,
-          false
-        )}
+        <div class="x-embed x-collected-embed"
+          data-post-id="${escapeHtml(getXPostId(url) || "")}" 
+          data-recruitment-url="${escapeHtml(url)}"
+          data-text-excerpt="${escapeHtml(item.text_excerpt || "")}" 
+          data-author-handle="${escapeHtml(item.author_handle || "")}" 
+          data-slv="${escapeHtml(item.slv || "")}"></div>
       </div>
     </article>
   `;
