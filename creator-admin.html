@@ -1857,6 +1857,33 @@
     }
 
 
+
+    /* 募集表示管理: 一括保存エディタ。別画面には適用しない */
+    .recruitment-editor-panel .form-grid { gap: 15px; }
+    .recruitment-editor-step { color: #ffb15c; font-size: 12px; font-weight: 900; letter-spacing: .10em; padding: 9px 0 4px; border-bottom: 1px solid #314155; }
+    .recruitment-editor-pair { display:grid; grid-template-columns: 1fr 1fr; gap:14px; }
+    .recruitment-editor-pair label { min-width:0; }
+    .recruitment-editor-selected { color:#b8ccdf; background:#0b111b; border-left:3px solid #29b6ef; padding:12px; font-size:12px; }
+    .recruitment-editor-controls { background:#0b111b; border:1px solid #314155; padding:5px 14px 12px; }
+    .recruitment-editor-option { display:flex !important; flex-direction:row !important; align-items:center; justify-content:space-between; gap:14px; padding:13px 0; margin:0; border-bottom:1px solid #263449; cursor:pointer; }
+    .recruitment-editor-option span {display:grid;gap:6px;flex:1;min-width:0;}
+    .recruitment-editor-option strong{color:#e3eefa;font-size:14px;}
+    .recruitment-editor-option small{color:#91a3b9;font-size:11px;line-height:1.6;}
+    .recruitment-editor-option input[type="checkbox"] { width:20px; height:20px; margin:0; accent-color:#22b8f4; flex:0 0 auto; }
+    .recruitment-editor-option select { max-width:230px; width:42%; margin:0; }
+    .recruitment-editor-option.hidden { display:none !important; }
+    .recruitment-editor-image-card{ margin-top:0; }
+    .recruitment-editor-image-actions { display:flex; gap:10px; flex-wrap:wrap; align-items:center; margin-top:13px; }
+    .recruitment-editor-image-select { cursor:pointer; position:relative; overflow:hidden; }
+    .recruitment-editor-hidden-file { position:absolute !important; inset:0; opacity:0; cursor:pointer; width:100%; height:100%; }
+    .recruitment-editor-footer{ display:flex; flex-direction:column; align-items:flex-start; gap:10px; margin-top:8px; border-top:1px solid #35445a; padding-top:18px; }
+    .recruitment-editor-footer #recruitmentEditorSave { min-height:54px; min-width:min(340px,100%); font-weight:900; }
+    .recruitment-editor-dirty { font-size:12px; color:#879caf; }
+    .recruitment-editor-dirty.is-dirty { color:#ffb96b; font-weight:800; }
+    .recruitment-editor-danger-zone { margin-top:30px; }
+    .recruitment-editor-danger-zone > .recruitment-image-preview-box { margin-top:0; }
+    @media(max-width:700px) { .recruitment-editor-pair{grid-template-columns:1fr;} .recruitment-editor-option select{width:50%;} .recruitment-editor-image-actions > *{flex:1 1 145px;} }
+
     /* ========================================
        アクセス解析
     ======================================== */
@@ -2903,98 +2930,70 @@
 
       </div>
 
-      <p class="lead">
-        現在募集中の募集を選び、URL修正・X埋め込みON / OFF・募集画像登録をまとめて管理できます。<br>
-        <strong>「画像を強制表示」をONにすると、X埋め込みより登録画像を最優先で表示します。</strong>
+      <p class="lead">指揮官・ユニオンの募集URL、表示設定、画像をまとめて編集できます。<br>
+        <strong>公開サイトへの反映は最後の「変更を保存して反映」だけです。</strong>
       </p>
-
-      <div class="panel">
-
+      <div class="panel recruitment-editor-panel">
         <div class="form-grid">
+          <div class="recruitment-editor-step">01 / 編集する募集</div>
+          <div class="recruitment-editor-pair">
+            <label>募集タイプ
+              <select id="recruitmentImageType">
+                <option value="commander">指揮官</option><option value="union">ユニオン</option>
+              </select>
+            </label>
+            <label>対象の募集
+              <select id="recruitmentImageTarget"><option value="">読み込み中...</option></select>
+            </label>
+          </div>
+          <div class="recruitment-editor-selected" id="recruitmentEditorSelected">対象を選択してください。</div>
 
-          <label>
-            募集タイプ
-            <select id="recruitmentImageType">
-              <option value="commander">指揮官</option>
-              <option value="union">ユニオン</option>
-            </select>
+          <div class="recruitment-editor-step">02 / 募集記事URL</div>
+          <label>募集記事URL
+            <input id="recruitmentManageUrl" type="url" inputmode="url" autocomplete="off" spellcheck="false" placeholder="https://...">
           </label>
+          <div class="recruitment-image-status" id="recruitmentManagePlatform">掲載先：--</div>
 
-          <label>
-            対象の募集
-            <select id="recruitmentImageTarget">
-              <option value="">読み込み中...</option>
-            </select>
-          </label>
+          <div class="recruitment-editor-step">03 / 表示設定</div>
+          <div class="recruitment-editor-controls">
+            <label id="recruitmentEditorEmbedRow" class="recruitment-editor-option">
+              <span><strong>X記事を埋め込む</strong><small>OFFなら登録画像などを表示（XのURLの場合のみ）</small></span>
+              <input id="recruitmentEditorEmbed" type="checkbox">
+            </label>
+            <label class="recruitment-editor-option">
+              <span><strong>画像の表示方法</strong><small>「画像を優先」でX埋め込みより画像を優先</small></span>
+              <select id="recruitmentEditorImageMode">
+                <option value="auto">自動表示</option>
+                <option value="force">登録画像を優先</option>
+              </select>
+            </label>
+            <div class="recruitment-image-status" id="recruitmentEditorModeHint">表示方法を選んでください。</div>
+          </div>
 
-          <div class="recruitment-image-preview-box">
-            <div class="recruitment-image-preview-title">
-              現在の表示設定
+          <div class="recruitment-editor-step">04 / 募集画像</div>
+          <div class="recruitment-image-preview-box recruitment-editor-image-card">
+            <div class="recruitment-image-preview-title" id="recruitmentEditorImageTitle">現在の登録画像</div>
+            <img id="recruitmentImageCurrentPreview" class="recruitment-image-preview hidden" alt="募集画像プレビュー">
+            <div id="recruitmentImageCurrentEmpty" class="recruitment-image-empty">現在、画像は登録されていません。</div>
+            <div id="recruitmentImageCurrentLabel" class="recruitment-image-current-label hidden">登録画像</div>
+            <div class="recruitment-editor-image-actions">
+              <label class="btn recruitment-editor-image-select" for="recruitmentImageFile">画像を選択・変更
+                <input id="recruitmentImageFile" type="file" accept="image/jpeg,image/png,image/webp" class="recruitment-editor-hidden-file">
+              </label>
+              <button id="recruitmentEditorImageClear" type="button" class="btn danger">画像を外す</button>
             </div>
-            <div id="recruitmentManageTargetLabel" class="recruitment-image-status">対象：--</div>
-            <div id="recruitmentManagePlatform" class="recruitment-image-status">掲載先：--</div>
-            <div id="recruitmentManageEmbedState" class="recruitment-image-status">X埋め込み：--</div>
-            <div id="recruitmentManageForceImageState" class="recruitment-image-status">強制画像表示：--</div>
+            <div class="recruitment-image-status" id="recruitmentImageFileStatus">JPG / PNG / WebP・20MBまで。選択した画像は保存前にプレビューできます。</div>
           </div>
 
-          <label>
-            募集記事URL
-            <input
-              id="recruitmentManageUrl"
-              type="url"
-              inputmode="url"
-              autocomplete="off"
-              autocapitalize="off"
-              spellcheck="false"
-              placeholder="https://..."
-            >
-          </label>
-
-          <div class="button-row">
-            <button
-              id="recruitmentManageUrlSaveBtn"
-              class="btn primary"
-              type="button"
-            >
-              🛠️ URLを修正
-            </button>
-
-            <button
-              id="recruitmentManageXEmbedOffBtn"
-              class="btn danger"
-              type="button"
-            >
-              🙈 X埋め込みOFF
-            </button>
-
-            <button
-              id="recruitmentManageXEmbedOnBtn"
-              class="btn green"
-              type="button"
-            >
-              👁 X埋め込みON
-            </button>
-
-            <button
-              id="recruitmentManageForceImageOnBtn"
-              class="btn primary"
-              type="button"
-            >
-              🖼️ 画像を強制表示
-            </button>
-
-            <button
-              id="recruitmentManageForceImageOffBtn"
-              class="btn"
-              type="button"
-            >
-              🔄 自動表示に戻す
-            </button>
+          <div class="recruitment-editor-footer">
+            <div id="recruitmentEditorDirty" class="recruitment-editor-dirty">変更はありません。</div>
+            <button id="recruitmentEditorSave" class="btn blue" type="button" disabled>変更を保存して反映</button>
+            <div class="recruitment-image-status">保存前に対象を切り替えると、未保存の変更について確認します。</div>
           </div>
-
-          <div class="recruitment-image-status">
-            ※ X以外のURLではX埋め込みON / OFFは使用しません。強制画像表示は掲載先に関係なく使えます。
-          </div>
+        </div>
+        <div id="recruitmentImageMessage" class="message hidden"></div>
+      </div>
+      <div class="recruitment-editor-danger-zone">
           <div class="recruitment-image-preview-box" style="border:1px solid rgba(255,92,111,.58);background:rgba(255,47,74,.035)">
             <div class="recruitment-image-preview-title" style="color:#ff7788">いたずら登録の強制削除（ADMIN専用）</div>
             <div class="recruitment-image-status" style="line-height:1.85">
@@ -3011,90 +3010,8 @@
             <div class="recruitment-image-status" id="forceDeleteTargetHint" style="margin-top:10px">対象を選択してください。</div>
             <button id="forceDeleteTargetBtn" class="btn danger" type="button" style="margin-top:12px">選択した登録を強制削除</button>
           </div>
-
-          <div class="recruitment-image-preview-box">
-            <div class="recruitment-image-preview-title">
-              現在登録されている画像
-            </div>
-
-            <img
-              id="recruitmentImageCurrentPreview"
-              class="recruitment-image-preview hidden"
-              alt="現在の募集画像"
-            >
-
-            <div
-              id="recruitmentImageCurrentEmpty"
-              class="recruitment-image-empty"
-            >
-              現在、募集画像は登録されていません。
-            </div>
-
-            <div
-              id="recruitmentImageCurrentLabel"
-              class="recruitment-image-current-label hidden"
-            >
-              現在の登録画像
-            </div>
-          </div>
-
-          <label>
-            新しい募集画像（任意）
-            <input
-              id="recruitmentImageFile"
-              type="file"
-              accept="image/jpeg,image/png,image/webp"
-            >
-          </label>
-
-          <div class="recruitment-image-status" id="recruitmentImageFileStatus">
-            20MBまで。選択した画像は自動で最適化されます。X埋め込みOFFでも登録できます。
-          </div>
-
-          <div
-            id="recruitmentImageNewPreviewBox"
-            class="recruitment-image-preview-box hidden"
-          >
-            <div class="recruitment-image-preview-title">
-              登録前プレビュー
-            </div>
-
-            <img
-              id="recruitmentImageNewPreview"
-              class="recruitment-image-preview"
-              alt="登録前プレビュー"
-            >
-          </div>
-
-          <div class="button-row">
-            <button
-              id="recruitmentImageSaveBtn"
-              class="btn primary"
-              type="button"
-            >
-              🖼️ 画像を登録・変更
-            </button>
-
-            <button
-              id="recruitmentImageRemoveBtn"
-              class="btn danger"
-              type="button"
-            >
-              登録画像を削除
-            </button>
-          </div>
-
-        </div>
-
-        <div
-          id="recruitmentImageMessage"
-          class="message hidden"
-        ></div>
-
       </div>
-
     </section>
-
 
     <!-- ========================================
          X埋め込み ON / OFF
@@ -4287,23 +4204,11 @@
 
 
     function clearRecruitmentImagePreparedFile() {
-
       recruitmentImagePreparedFile = null;
-
       if (recruitmentImagePreparedObjectUrl) {
         URL.revokeObjectURL(recruitmentImagePreparedObjectUrl);
-        recruitmentImagePreparedObjectUrl = "";
+        recruitmentImagePreparedObjectUrl = '';
       }
-
-      const preview = $("#recruitmentImageNewPreview");
-      const box = $("#recruitmentImageNewPreviewBox");
-
-      if (preview) {
-        preview.removeAttribute("src");
-      }
-
-      box?.classList.add("hidden");
-
     }
 
 
@@ -4389,255 +4294,172 @@
     }
 
 
-    function showCurrentRecruitmentImage(value) {
+    // 編集状態はローカルのみ。保存時は専用RPCが一括更新する。
+    let recruitmentEditorSnapshot = null;
+    let recruitmentEditorImageAction = 'keep';
+    let recruitmentEditorSaving = false;
+    let recruitmentEditorOptimizing = false;
+    let recruitmentEditorLoadedType = 'commander';
+    let recruitmentEditorLoadedId = '';
+    let recruitmentEditorRequestId = 0;
+    let recruitmentEditorPreviewLastKey = null;
 
+    function getRecruitmentEditorDraft() {
+      const item = getSelectedRecruitmentImageItem();
+      if (!item) return null;
+      const url = $("#recruitmentManageUrl")?.value.trim() || '';
+      const force = $("#recruitmentEditorImageMode")?.value === 'force';
+      const isX = getAdminRecruitmentPlatform(url) === 'X';
+      const embed = isX && !force && $("#recruitmentEditorEmbed")?.checked === true;
+      return { url, force, embed, imageAction: recruitmentEditorImageAction };
+    }
+
+    function recruitmentEditorHasChanges() {
+      const d = getRecruitmentEditorDraft();
+      const base = recruitmentEditorSnapshot;
+      return Boolean(d && base && (
+        d.url !== base.url || d.force !== base.force || d.embed !== base.embed ||
+        d.imageAction !== 'keep'
+      ));
+    }
+
+    function confirmDiscardRecruitmentEditor() {
+      if (recruitmentEditorSaving || recruitmentEditorOptimizing) return false;
+      return !recruitmentEditorHasChanges() || window.confirm('未保存の変更があります。保存せずに破棄しますか？');
+    }
+
+    function renderRecruitmentEditorPreview() {
       const preview = $("#recruitmentImageCurrentPreview");
       const empty = $("#recruitmentImageCurrentEmpty");
+      const title = $("#recruitmentEditorImageTitle");
       const label = $("#recruitmentImageCurrentLabel");
-      const removeButton = $("#recruitmentImageRemoveBtn");
-      const displayUrl = getAdminPreviewDisplayUrl(value);
-
-      if (!displayUrl) {
-        if (preview) {
-          preview.onload = null;
-          preview.onerror = null;
-          preview.removeAttribute("src");
-          preview.classList.add("hidden");
-        }
-        empty?.classList.remove("hidden");
-        label?.classList.add("hidden");
-        if (removeButton) {
-          removeButton.disabled = true;
-        }
-        return;
+      const item = getSelectedRecruitmentImageItem();
+      if (!preview) return;
+      const hasNew = recruitmentEditorImageAction === 'replace' && !!recruitmentImagePreparedObjectUrl;
+      const deleted = recruitmentEditorImageAction === 'remove';
+      const rawUrl = deleted ? '' : hasNew ? recruitmentImagePreparedObjectUrl : (item?.preview_image_url || '');
+      const previewKey = [item?.id || '',recruitmentEditorImageAction,rawUrl].join('|');
+      const samePreview = recruitmentEditorPreviewLastKey === previewKey;
+      const url = hasNew ? rawUrl : getAdminPreviewDisplayUrl(rawUrl);
+      recruitmentEditorPreviewLastKey = previewKey;
+      if (!samePreview) {
+      preview.onload = null;
+      preview.onerror = null;
+      if (!url) {
+        preview.removeAttribute('src');
+        preview.classList.add('hidden');
+        empty?.classList.remove('hidden');
+        if (empty) empty.textContent = deleted ? '保存後に画像を外します。' : '現在、画像は登録されていません。';
+        label?.classList.add('hidden');
+      } else {
+        if (empty) empty.textContent = '画像を読み込み中...';
+        preview.classList.add('hidden');
+        empty?.classList.remove('hidden');
+        preview.onload = () => { preview.classList.remove('hidden'); empty?.classList.add('hidden'); label?.classList.remove('hidden'); };
+        preview.onerror = () => { preview.classList.add('hidden'); empty?.classList.remove('hidden'); if (empty) empty.textContent='画像を表示できません。'; label?.classList.add('hidden'); };
+        preview.src = url;
       }
-
-      if (!preview) {
-        return;
       }
-
-      // srcを入れただけで hidden を外すのではなく、実際に読み込み成功してから表示。
-      preview.classList.add("hidden");
-      empty?.classList.remove("hidden");
-
-      preview.onload = () => {
-        preview.classList.remove("hidden");
-        empty?.classList.add("hidden");
-        label?.classList.remove("hidden");
-      };
-
-      preview.onerror = () => {
-        preview.classList.add("hidden");
-        empty?.classList.remove("hidden");
-        label?.classList.add("hidden");
-        empty && (empty.textContent =
-          "登録画像の読み込みに失敗しました。再読込するか、画像を登録し直してください。");
-      };
-
-      preview.src = displayUrl;
-
-      if (removeButton) {
-        removeButton.disabled = false;
-      }
-
+      if (title) title.textContent = hasNew ? '変更後の画像（未保存）' : deleted ? '画像を外す（未保存）' : '現在の登録画像';
+      if (label) label.textContent = hasNew ? '未保存の画像' : '登録画像';
+      const clearButton = $("#recruitmentEditorImageClear");
+      if (clearButton) clearButton.disabled = !item || deleted || (!item.preview_image_url && !hasNew);
     }
 
+    function renderRecruitmentEditorControls() {
+      const draft = getRecruitmentEditorDraft();
+      const item = getSelectedRecruitmentImageItem();
+      const platform = draft ? getAdminRecruitmentPlatform(draft.url) : '--';
+      const isX = platform === 'X';
+      const isForce = draft?.force === true;
+      const embed = $("#recruitmentEditorEmbed");
+      const embedRow = $("#recruitmentEditorEmbedRow");
+      const status = $("#recruitmentManagePlatform");
+      const hint = $("#recruitmentEditorModeHint");
+      if (status) status.textContent = '掲載先：' + platform;
+      embedRow?.classList.toggle('hidden', !isX);
+      if (embed) {
+        embed.disabled = !item || !isX || isForce || recruitmentEditorSaving;
+        if (isForce || !isX) embed.checked = false;
+      }
+      if (hint) hint.textContent = isForce
+        ? '登録画像を最優先に表示します。X埋め込みはOFFになります。'
+        : '自動表示です。X埋め込みは上のチェックで切り替えできます。';
+      const available = recruitmentEditorImageAction === 'replace' && !!recruitmentImagePreparedFile ||
+        (recruitmentEditorImageAction !== 'remove' && !!item?.preview_image_url);
+      const mode = $("#recruitmentEditorImageMode");
+      if (mode) mode.disabled = !item || recruitmentEditorSaving;
+      if (mode && !available) {
+        const opt = mode.querySelector('option[value="force"]');
+        if (opt) opt.disabled = true;
+      } else if (mode) {
+        const opt = mode.querySelector('option[value="force"]');
+        if (opt) opt.disabled = false;
+      }
+      const hasChanges = recruitmentEditorHasChanges();
+      const dirty = $("#recruitmentEditorDirty");
+      if (dirty) {
+        dirty.textContent = hasChanges ? '未保存の変更があります。公開ページにはまだ反映されていません。' : '変更はありません。';
+        dirty.classList.toggle('is-dirty',hasChanges);
+      }
+      const save = $("#recruitmentEditorSave");
+      if (save) save.disabled = !item || !hasChanges || recruitmentEditorSaving || recruitmentEditorOptimizing;
+      renderRecruitmentEditorPreview();
+    }
 
     function renderCurrentRecruitmentImage() {
-
       const item = getSelectedRecruitmentImageItem();
-      const type = $("#recruitmentImageType")?.value || "commander";
-      const identity = getRecruitmentManageTargetIdentity(item, type);
-      const urlInput = $("#recruitmentManageUrl");
-      const targetLabel = $("#recruitmentManageTargetLabel");
-      const platformLabel = $("#recruitmentManagePlatform");
-      const embedState = $("#recruitmentManageEmbedState");
-      const forceImageState = $("#recruitmentManageForceImageState");
-      const embedOffButton = $("#recruitmentManageXEmbedOffBtn");
-      const embedOnButton = $("#recruitmentManageXEmbedOnBtn");
-      const forceImageOnButton = $("#recruitmentManageForceImageOnBtn");
-      const forceImageOffButton = $("#recruitmentManageForceImageOffBtn");
-      const urlSaveButton = $("#recruitmentManageUrlSaveBtn");
-      const imageUrl = item?.preview_image_url || "";
-      const forceImageEnabled = item?.force_preview_image === true;
-      const recruitmentUrl = item?.x_url || "";
-      const platform = getAdminRecruitmentPlatform(recruitmentUrl);
-      const isX = platform === "X";
-
-      if (urlInput) {
-        urlInput.value = recruitmentUrl;
-        urlInput.disabled = !item;
-      }
-
-      if (targetLabel) {
-        targetLabel.textContent = `対象：${identity.label}`;
-      }
-
-      if (platformLabel) {
-        platformLabel.textContent = `掲載先：${platform}`;
-      }
-
-      if (embedState) {
-        embedState.textContent = isX
-          ? `X埋め込み：${item?.x_embed_enabled === false ? "OFF 🙈" : "ON 👁"}`
-          : "X埋め込み：対象外";
-      }
-
-      if (forceImageState) {
-        forceImageState.textContent = item
-          ? `強制画像表示：${forceImageEnabled ? "ON 🖼️" : "OFF / 自動"}`
-          : "強制画像表示：--";
-      }
-
-      if (embedOffButton) {
-        embedOffButton.disabled = !item || !isX || item?.x_embed_enabled === false;
-      }
-
-      if (embedOnButton) {
-        embedOnButton.disabled = !item || !isX || item?.x_embed_enabled !== false;
-      }
-
-      if (forceImageOnButton) {
-        forceImageOnButton.disabled =
-          !item || !imageUrl || forceImageEnabled;
-      }
-
-      if (forceImageOffButton) {
-        forceImageOffButton.disabled =
-          !item || !forceImageEnabled;
-      }
-
-      if (urlSaveButton) {
-        urlSaveButton.disabled = !item;
-      }
-
-      const empty = $("#recruitmentImageCurrentEmpty");
-      if (empty && !imageUrl) {
-        empty.textContent = "現在、募集画像は登録されていません。";
-      }
-
-      // BlablaLink自動キャプチャの有無に関係なく、
-      // 管理画面で登録した preview_image_url をそのまま最優先で表示する。
-      showCurrentRecruitmentImage(imageUrl);
-
+      const type = $("#recruitmentImageType")?.value || 'commander';
+      const identity = getRecruitmentManageTargetIdentity(item,type);
+      clearRecruitmentImagePreparedFile();
+      recruitmentEditorImageAction = 'keep';
+      const url = item?.x_url || '';
+      if ($("#recruitmentManageUrl")) $("#recruitmentManageUrl").value = url;
+      if ($("#recruitmentManageUrl")) $("#recruitmentManageUrl").disabled = !item;
+      if ($("#recruitmentEditorSelected")) $("#recruitmentEditorSelected").textContent = item ? '編集中：' + identity.label : '対象を選択してください。';
+      const force = item?.force_preview_image === true;
+      const embed = getAdminRecruitmentPlatform(url) === 'X' && !force && item?.x_embed_enabled !== false;
+      if ($("#recruitmentEditorEmbed")) $("#recruitmentEditorEmbed").checked = embed;
+      if ($("#recruitmentEditorImageMode")) $("#recruitmentEditorImageMode").value = force ? 'force' : 'auto';
+      if ($("#recruitmentImageFile")) $("#recruitmentImageFile").value = '';
+      if ($("#recruitmentImageFileStatus")) $("#recruitmentImageFileStatus").textContent = 'JPG / PNG / WebP・20MBまで。変更は保存するまで反映されません。';
+      recruitmentEditorSnapshot = item ? {
+        url, force, embed,
+        expected: {x_url:url,x_embed_enabled:item.x_embed_enabled !== false,
+          force_preview_image:force,preview_image_url:item.preview_image_url || null}
+      } : null;
+      recruitmentEditorLoadedId = item?.id || '';
+      recruitmentEditorLoadedType = type;
+      renderRecruitmentEditorControls();
     }
-
 
     async function loadRecruitmentImageTargets() {
-
-      clearMessage($("#recruitmentImageMessage"));
-      clearRecruitmentImagePreparedFile();
-
-      const fileInput = $("#recruitmentImageFile");
-      if (fileInput) {
-        fileInput.value = "";
-      }
-
-      const status = $("#recruitmentImageFileStatus");
-      if (status) {
-        status.textContent =
-          "20MBまで。選択した画像は自動で最適化されます。X埋め込みOFFでも登録できます。";
-        status.className = "recruitment-image-status";
-      }
-
-      const type =
-        $("#recruitmentImageType")?.value || "commander";
-
+      const type = $("#recruitmentImageType")?.value || 'commander';
       const targetSelect = $("#recruitmentImageTarget");
-
-      if (targetSelect) {
-        targetSelect.innerHTML =
-          '<option value="">読み込み中...</option>';
-        targetSelect.disabled = true;
-      }
-
+      if (!targetSelect) return;
+      const requestId = ++recruitmentEditorRequestId;
+      targetSelect.disabled = true;
+      targetSelect.innerHTML = '<option value="">読み込み中...</option>';
       const nowIso = new Date().toISOString();
-
-      let query;
-
-      if (type === "union") {
-        query = sb
-          .from("union_recruitments")
-          .select("id, union_name, union_rank, x_url, x_embed_enabled, preview_image_url, force_preview_image, created_at, expires_at")
-          .eq("status", "open")
-          .gt("expires_at", nowIso)
-          .order("created_at", { ascending: false });
-      } else {
-        query = sb
-          .from("recruitments")
-          .select("id, commander_name, slv, x_url, x_embed_enabled, preview_image_url, force_preview_image, created_at, expires_at")
-          .eq("status", "open")
-          .gt("expires_at", nowIso)
-          .order("created_at", { ascending: false });
-      }
-
-      const { data, error } = await query;
-
+      const table = type === 'union' ? 'union_recruitments' : 'recruitments';
+      const columns = type === 'union' ? 'id,union_name,union_rank,x_url,x_embed_enabled,preview_image_url,force_preview_image,created_at,expires_at' : 'id,commander_name,slv,x_url,x_embed_enabled,preview_image_url,force_preview_image,created_at,expires_at';
+      const {data,error} = await sb.from(table).select(columns).eq('status','open').gt('expires_at',nowIso).order('created_at',{ascending:false});
+      if (requestId !== recruitmentEditorRequestId) return;
       if (error) {
-
-        console.error("募集画像対象読み込みエラー", error);
-
         recruitmentImageItems = [];
-
-        if (targetSelect) {
-          targetSelect.innerHTML =
-            '<option value="">読み込めませんでした</option>';
-          targetSelect.disabled = false;
-        }
-
-        showMessage(
-          $("#recruitmentImageMessage"),
-          String(error.message || "").includes("preview_image_url")
-            ? "募集画像用SQLが未適用です。先にSupabaseで画像対応SQLをRunしてください。"
-            : "募集中の募集を読み込めませんでした。",
-          "error"
-        );
-
-        renderCurrentRecruitmentImage();
-        return;
-
+        targetSelect.innerHTML = '<option value="">取得できませんでした</option>';
+        showMessage($("#recruitmentImageMessage"),'募集対象を読み込めませんでした。','error');
+      } else {
+        recruitmentImageItems = Array.isArray(data) ? data : [];
+        targetSelect.innerHTML = recruitmentImageItems.length ? recruitmentImageItems.map(item => {
+          const name = type === 'union' ? `${item.union_name} / ${item.union_rank}` : `${item.commander_name} / SLV ${item.slv}`;
+          return `<option value="${escapeHtml(item.id)}">${escapeHtml(name)}</option>`;
+        }).join('') : '<option value="">現在募集中の募集はありません</option>';
       }
-
-      recruitmentImageItems = Array.isArray(data) ? data : [];
-
-      if (targetSelect) {
-
-        if (!recruitmentImageItems.length) {
-          targetSelect.innerHTML =
-            '<option value="">現在募集中の募集はありません</option>';
-        } else {
-
-          targetSelect.innerHTML =
-            recruitmentImageItems
-              .map(item => {
-
-                const label =
-                  type === "union"
-                    ? `${item.union_name} / ${item.union_rank}`
-                    : `${item.commander_name} / SLV ${item.slv}`;
-
-                const imageMark =
-                  item.preview_image_url ? " 🖼️" : "";
-
-                return `
-                  <option value="${escapeHtml(item.id)}">
-                    ${escapeHtml(label + imageMark)}
-                  </option>
-                `;
-
-              })
-              .join("");
-
-        }
-
-        targetSelect.disabled = false;
-
-      }
-
+      targetSelect.disabled = false;
+      clearMessage($("#recruitmentImageMessage"));
       renderCurrentRecruitmentImage();
-
     }
-
 
     async function uploadAdminRecruitmentImage(type, recruitmentId, file) {
 
@@ -4680,96 +4502,93 @@
         throw new Error("RECRUITMENT_IMAGE_PUBLIC_URL_FAILED");
       }
 
-      return publicUrl;
+      return {publicUrl, path:objectPath};
 
     }
 
 
-    async function setAdminRecruitmentImageUrl(previewImageUrl) {
 
-      const token = getToken();
-
-      if (!token) {
-        showLogin();
-        return false;
-      }
-
-      const type =
-        $("#recruitmentImageType")?.value || "commander";
-
+    // URL・埋め込み・強制表示・画像URLは1トランザクションで更新する。
+    async function saveRecruitmentEditor() {
+      if (recruitmentEditorSaving || recruitmentEditorOptimizing) return;
       const item = getSelectedRecruitmentImageItem();
-
-      if (!item?.id) {
-        showMessage(
-          $("#recruitmentImageMessage"),
-          "対象の募集を選択してください。",
-          "error"
-        );
-        return false;
+      const draft = getRecruitmentEditorDraft();
+      if (!item || !draft || !recruitmentEditorSnapshot) return;
+      if (!validRecruitmentUrl(draft.url)) {
+        showMessage($("#recruitmentImageMessage"),'募集記事URLの形式が正しくありません。','error');return;
       }
-
-      const { error } =
-        await sb.rpc(
-          "admin_set_recruitment_preview_image",
-          {
-            p_token: token,
-            p_type: type,
-            p_id: item.id,
-            p_preview_image_url: previewImageUrl || null
-          }
-        );
-
-      if (error) {
-
-        const errorText = String(
-          error.message || error.details || ""
-        );
-
-        if (errorText.includes("ADMIN_SESSION_INVALID")) {
-          clearToken();
-          showLogin();
-          return false;
+      const canShowImage = draft.imageAction === 'replace' ? !!recruitmentImagePreparedFile
+        : draft.imageAction === 'remove' ? false : !!item.preview_image_url;
+      if (draft.force && !canShowImage) {
+        showMessage($("#recruitmentImageMessage"),'画像を優先表示するには、募集画像を選択してください。','error');return;
+      }
+      if (!recruitmentEditorHasChanges()) return;
+      const token = getToken();
+      if (!token) {showLogin();return;}
+      const type = $("#recruitmentImageType")?.value || 'commander';
+      const label = getRecruitmentManageTargetIdentity(item,type).label;
+      if (!window.confirm(`「${label}」の変更をまとめて保存しますか？\n\nURL・埋め込み・画像設定が公開側に反映されます。`)) return;
+      const btn = $("#recruitmentEditorSave");
+      const originalText = btn?.textContent || '変更を保存して反映';
+      recruitmentEditorSaving = true;
+      if (btn) {btn.disabled=true;btn.textContent='保存中...';}
+      let uploadedPath='';
+      try {
+        let imageUrl = item.preview_image_url || null;
+        if (draft.imageAction === 'remove') imageUrl = null;
+        if (draft.imageAction === 'replace') {
+          if (!recruitmentImagePreparedFile) throw new Error('IMAGE_NOT_READY');
+          const result = await uploadAdminRecruitmentImage(type,item.id,recruitmentImagePreparedFile);
+          imageUrl = result.publicUrl;
+          uploadedPath = result.path;
         }
-
-        if (
-          errorText.includes("RECRUITMENT_NOT_FOUND") ||
-          errorText.includes("PGRST202") ||
-          errorText.includes("admin_set_recruitment_preview_image")
-        ) {
-          showMessage(
-            $("#recruitmentImageMessage"),
-            errorText.includes("RECRUITMENT_NOT_FOUND")
-              ? "対象の募集が見つかりません。再読込してください。"
-              : "管理画面用の募集画像SQLが未適用です。Supabaseで最新SQLをRunしてください。",
-            "error"
-          );
-          return false;
+        const { data, error } = await sb.rpc('creator_admin_save_recruitment_display',{
+          p_token:token,
+          p_type:type,
+          p_id:item.id,
+          p_x_url:draft.url,
+          p_x_embed_enabled:draft.embed,
+          p_force_preview_image:draft.force,
+          p_preview_image_url:imageUrl,
+          p_expected:recruitmentEditorSnapshot.expected
+        });
+        if (error || !data?.ok) throw error || new Error('SAVE_FAILED');
+        item.x_url = draft.url;
+        item.x_embed_enabled = draft.embed;
+        item.force_preview_image = draft.force;
+        item.preview_image_url = imageUrl;
+        renderCurrentRecruitmentImage();
+        showMessage($("#recruitmentImageMessage"),'変更をまとめて保存しました。公開表示に反映されています。','ok');
+      } catch (error) {
+        // DB保存が失敗した場合、新規アップロードだけ削除する（既存画像は削除しない）。
+        if (uploadedPath) {
+          try {await sb.storage.from('recruitment-previews').remove([uploadedPath]);} catch(_) {}
         }
-
-        console.error("募集画像更新エラー", error);
-
-        showMessage(
-          $("#recruitmentImageMessage"),
-          "募集画像を更新できませんでした。",
-          "error"
-        );
-
-        return false;
-
+        const code = String(error?.message || error || '');
+        console.error('募集表示管理の一括保存エラー',error);
+        if (code.includes('ADMIN_SESSION_INVALID')) {clearToken();showLogin();}
+        else showMessage($("#recruitmentImageMessage"),
+          code.includes('RECRUITMENT_CHANGED') ? '別の画面で募集内容が変更されました。再読込してからやり直してください。' :
+          code.includes('RECRUITMENT_NOT_FOUND') ? '募集が終了または期限切れになりました。再読込してください。' :
+          code.includes('PGRST202') ? '一括保存用SQLをSupabaseに適用してください。' :
+          '保存できませんでした。公開側の変更は反映されていません。','error');
+      } finally {
+        recruitmentEditorSaving = false;
+        if (btn) btn.textContent = originalText;
+        renderRecruitmentEditorControls();
       }
-
-      item.preview_image_url = previewImageUrl || null;
-
-      if (!previewImageUrl) {
-        item.force_preview_image = false;
-      }
-
-      renderCurrentRecruitmentImage();
-      return true;
-
     }
 
-
+    function stageRecruitmentImageRemoval() {
+      const item = getSelectedRecruitmentImageItem();
+      if (!item) return;
+      clearRecruitmentImagePreparedFile();
+      recruitmentEditorImageAction = item.preview_image_url ? 'remove' : 'keep';
+      if ($("#recruitmentImageFile")) $("#recruitmentImageFile").value = '';
+      if ($("#recruitmentEditorImageMode")) $("#recruitmentEditorImageMode").value='auto';
+      if ($("#recruitmentImageFileStatus")) $("#recruitmentImageFileStatus").textContent='画像は保存時に解除します。';
+      renderRecruitmentEditorControls();
+    }
 
     // ADMIN専用。編集画面と独立した対象リストを使用して誤削除を防ぐ。
     let forceDeleteTargets = [];
@@ -4861,248 +4680,6 @@
         renderForceDeleteTargetHint();
       }
     }
-
-    async function updateSelectedRecruitmentUrl() {
-
-      clearMessage($("#recruitmentImageMessage"));
-
-      const token = getToken();
-      if (!token) {
-        showLogin();
-        return;
-      }
-
-      const type = $("#recruitmentImageType")?.value || "commander";
-      const item = getSelectedRecruitmentImageItem();
-      const identity = getRecruitmentManageTargetIdentity(item, type);
-      const newUrl = $("#recruitmentManageUrl")?.value.trim() || "";
-
-      if (!item?.id) {
-        showMessage($("#recruitmentImageMessage"), "対象の募集を選択してください。", "error");
-        return;
-      }
-
-      if (!validRecruitmentUrl(newUrl)) {
-        showMessage($("#recruitmentImageMessage"), "募集記事URLが正しくありません。", "error");
-        return;
-      }
-
-      const button = $("#recruitmentManageUrlSaveBtn");
-      if (button) button.disabled = true;
-
-      const { error } = await sb.rpc(
-        "admin_update_recruitment_url",
-        {
-          p_token: token,
-          p_type: type,
-          p_name: identity.name,
-          p_value: identity.value,
-          p_x_url: newUrl
-        }
-      );
-
-      if (button) button.disabled = false;
-
-      if (error) {
-        const errorText = String(error.message || error.details || "");
-
-        if (errorText.includes("ADMIN_SESSION_INVALID")) {
-          clearToken();
-          showLogin();
-          return;
-        }
-
-        showMessage(
-          $("#recruitmentImageMessage"),
-          errorText.includes("RECRUITMENT_NOT_FOUND")
-            ? "対象の募集が見つかりません。再読込してください。"
-            : "募集記事URLを修正できませんでした。",
-          "error"
-        );
-        return;
-      }
-
-      item.x_url = newUrl;
-      renderCurrentRecruitmentImage();
-
-      showMessage(
-        $("#recruitmentImageMessage"),
-        "🛠️ 募集記事URLを修正しました。",
-        "ok"
-      );
-
-    }
-
-
-    async function setSelectedRecruitmentXEmbed(enabled) {
-
-      clearMessage($("#recruitmentImageMessage"));
-
-      const token = getToken();
-      if (!token) {
-        showLogin();
-        return;
-      }
-
-      const type = $("#recruitmentImageType")?.value || "commander";
-      const item = getSelectedRecruitmentImageItem();
-      const identity = getRecruitmentManageTargetIdentity(item, type);
-
-      if (!item?.id) {
-        showMessage($("#recruitmentImageMessage"), "対象の募集を選択してください。", "error");
-        return;
-      }
-
-      if (getAdminRecruitmentPlatform(item.x_url) !== "X") {
-        showMessage($("#recruitmentImageMessage"), "Xの募集記事だけ埋め込みON / OFFを変更できます。", "error");
-        return;
-      }
-
-      const { error } = await sb.rpc(
-        "admin_set_recruitment_x_embed",
-        {
-          p_token: token,
-          p_type: type,
-          p_name: identity.name,
-          p_value: identity.value,
-          p_enabled: enabled
-        }
-      );
-
-      if (error) {
-        const errorText = String(error.message || error.details || "");
-
-        if (errorText.includes("ADMIN_SESSION_INVALID")) {
-          clearToken();
-          showLogin();
-          return;
-        }
-
-        showMessage(
-          $("#recruitmentImageMessage"),
-          errorText.includes("RECRUITMENT_NOT_FOUND")
-            ? "対象の募集が見つかりません。再読込してください。"
-            : "X埋め込み設定を変更できませんでした。",
-          "error"
-        );
-        return;
-      }
-
-      item.x_embed_enabled = enabled;
-      renderCurrentRecruitmentImage();
-
-      showMessage(
-        $("#recruitmentImageMessage"),
-        enabled
-          ? "👁 X埋め込みをONにしました。募集画像はそのまま保持されます。"
-          : "🙈 X埋め込みをOFFにしました。募集画像があれば画像表示へ切り替わります。",
-        "ok"
-      );
-
-    }
-
-
-    async function setSelectedRecruitmentForceImage(enabled) {
-
-      clearMessage($("#recruitmentImageMessage"));
-
-      const token = getToken();
-      if (!token) {
-        showLogin();
-        return;
-      }
-
-      const type = $("#recruitmentImageType")?.value || "commander";
-      const item = getSelectedRecruitmentImageItem();
-
-      if (!item?.id) {
-        showMessage(
-          $("#recruitmentImageMessage"),
-          "対象の募集を選択してください。",
-          "error"
-        );
-        return;
-      }
-
-      if (enabled === true && !item.preview_image_url) {
-        showMessage(
-          $("#recruitmentImageMessage"),
-          "先に募集画像を登録してください。",
-          "error"
-        );
-        return;
-      }
-
-      const { error } = await sb.rpc(
-        "admin_set_recruitment_force_image",
-        {
-          p_token: token,
-          p_type: type,
-          p_id: item.id,
-          p_enabled: enabled === true
-        }
-      );
-
-      if (error) {
-        const errorText = String(error.message || error.details || "");
-
-        if (errorText.includes("ADMIN_SESSION_INVALID")) {
-          clearToken();
-          showLogin();
-          return;
-        }
-
-        if (errorText.includes("PREVIEW_IMAGE_REQUIRED")) {
-          showMessage(
-            $("#recruitmentImageMessage"),
-            "先に募集画像を登録してください。",
-            "error"
-          );
-          return;
-        }
-
-        if (
-          errorText.includes("PGRST202") ||
-          errorText.includes("admin_set_recruitment_force_image")
-        ) {
-          showMessage(
-            $("#recruitmentImageMessage"),
-            "強制画像表示用SQLが未適用です。ZIP内のSQLをSupabaseでRunしてください。",
-            "error"
-          );
-          return;
-        }
-
-        showMessage(
-          $("#recruitmentImageMessage"),
-          errorText.includes("RECRUITMENT_NOT_FOUND")
-            ? "対象の募集が見つかりません。再読込してください。"
-            : "強制画像表示を変更できませんでした。",
-          "error"
-        );
-        return;
-      }
-
-      item.force_preview_image = enabled === true;
-
-      // 強制画像表示はDB側でもX埋め込みをOFFにする。
-      // 自動表示へ戻す場合はX URLならX埋め込みをONへ戻す。
-      if (getAdminRecruitmentPlatform(item.x_url) === "X") {
-        item.x_embed_enabled = enabled === true ? false : true;
-      }
-
-      renderCurrentRecruitmentImage();
-
-      showMessage(
-        $("#recruitmentImageMessage"),
-        enabled
-          ? "🖼️ 登録画像を強制表示にしました。X埋め込みも自動でOFFにしました。"
-          : "🔄 自動表示に戻しました。X URLは埋め込みONへ戻しました。",
-        "ok"
-      );
-
-    }
-
 
     function escapeHtml(value) {
 
@@ -6827,19 +6404,17 @@
 
 
     $("#backToMenuFromRecruitmentImageBtn")
-      ?.addEventListener(
-        "click",
-        showMenu
-      );
+      ?.addEventListener('click', () => {
+        if (!confirmDiscardRecruitmentEditor()) return;
+        showMenu();
+      });
 
 
     $("#reloadRecruitmentImageTargetsBtn")
-      ?.addEventListener(
-        "click",
-        async () => {
-          await Promise.all([loadRecruitmentImageTargets(), loadForceDeleteTargets()]);
-        }
-      );
+      ?.addEventListener('click', async () => {
+        if (!confirmDiscardRecruitmentEditor()) return;
+        await Promise.all([loadRecruitmentImageTargets(),loadForceDeleteTargets()]);
+      });
 
 
     $("#backToMenuFromXEmbedControlBtn")
@@ -9145,334 +8720,63 @@
 
 
     // ========================================
-    // 募集画像登録 / 変更
+    // 募集表示管理：1画面で仮編集→まとめて保存
     // ========================================
 
-    $("#recruitmentManageUrlSaveBtn")
-      ?.addEventListener(
-        "click",
-        updateSelectedRecruitmentUrl
-      );
-
-
-    $("#recruitmentManageXEmbedOffBtn")
-      ?.addEventListener(
-        "click",
-        () => setSelectedRecruitmentXEmbed(false)
-      );
-
-
-    $("#recruitmentManageXEmbedOnBtn")
-      ?.addEventListener(
-        "click",
-        () => setSelectedRecruitmentXEmbed(true)
-      );
-
-
-    $("#recruitmentManageForceImageOnBtn")
-      ?.addEventListener(
-        "click",
-        () => setSelectedRecruitmentForceImage(true)
-      );
-
-
-    $("#forceDeleteTargetBtn")?.addEventListener("click", forceDeleteRegistration);
-    $("#forceDeleteTargetSelect")?.addEventListener("change", renderForceDeleteTargetHint);
-
-    $("#recruitmentManageForceImageOffBtn")
-      ?.addEventListener(
-        "click",
-        () => setSelectedRecruitmentForceImage(false)
-      );
-
-
-    $("#recruitmentImageType")
-      ?.addEventListener(
-        "change",
-        async () => {
-          await Promise.all([loadRecruitmentImageTargets(), loadForceDeleteTargets()]);
-        }
-      );
-
-
-    $("#recruitmentImageTarget")
-      ?.addEventListener(
-        "change",
-        () => {
-          clearMessage($("#recruitmentImageMessage"));
-          renderCurrentRecruitmentImage();
-        }
-      );
-
-
-    $("#recruitmentImageFile")
-      ?.addEventListener(
-        "change",
-        async event => {
-
-          clearMessage($("#recruitmentImageMessage"));
-          clearRecruitmentImagePreparedFile();
-
-          const file = event.target.files?.[0] || null;
-          const status = $("#recruitmentImageFileStatus");
-          const saveButton = $("#recruitmentImageSaveBtn");
-
-          if (!file) {
-            if (status) {
-              status.textContent =
-                "20MBまで。選択した画像は自動で最適化されます。X埋め込みOFFでも登録できます。";
-              status.className = "recruitment-image-status";
-            }
-            return;
-          }
-
-          if (!validateRecruitmentImageFile(file)) {
-            event.target.value = "";
-            return;
-          }
-
-          if (saveButton) {
-            saveButton.disabled = true;
-          }
-
-          if (status) {
-            status.textContent =
-              `自動最適化中... 元画像 ${formatRecruitmentImageFileSize(file.size)}`;
-            status.className = "recruitment-image-status";
-          }
-
-          try {
-
-            const optimized =
-              await optimizeRecruitmentImageFile(file);
-
-            recruitmentImagePreparedFile = optimized;
-            recruitmentImagePreparedObjectUrl =
-              URL.createObjectURL(optimized);
-
-            const preview = $("#recruitmentImageNewPreview");
-            const previewBox = $("#recruitmentImageNewPreviewBox");
-
-            if (preview) {
-              preview.onload = () => {
-                previewBox?.classList.remove("hidden");
-              };
-
-              preview.onerror = () => {
-                previewBox?.classList.add("hidden");
-                showMessage(
-                  $("#recruitmentImageMessage"),
-                  "選択した画像のプレビューを表示できませんでした。別の画像を選択してください。",
-                  "error"
-                );
-              };
-
-              preview.src = recruitmentImagePreparedObjectUrl;
-            }
-
-            // onload待ちの間も枠自体は先に表示しておく。
-            previewBox?.classList.remove("hidden");
-
-            if (status) {
-              status.textContent =
-                optimized === file
-                  ? `選択画像：${formatRecruitmentImageFileSize(file.size)}（そのまま使用）`
-                  : `自動最適化：${formatRecruitmentImageFileSize(file.size)} → ${formatRecruitmentImageFileSize(optimized.size)}`;
-              status.className = "recruitment-image-status ok";
-            }
-
-          } catch (error) {
-
-            console.error("募集画像最適化エラー", error);
-            event.target.value = "";
-
-            showMessage(
-              $("#recruitmentImageMessage"),
-              "画像を処理できませんでした。別の画像を選択してください。",
-              "error"
-            );
-
-            if (status) {
-              status.textContent = "画像の最適化に失敗しました。";
-              status.className = "recruitment-image-status error";
-            }
-
-          } finally {
-
-            if (saveButton) {
-              saveButton.disabled = false;
-            }
-
-          }
-
-        }
-      );
-
-
-    $("#recruitmentImageSaveBtn")
-      ?.addEventListener(
-        "click",
-        async () => {
-
-          clearMessage($("#recruitmentImageMessage"));
-
-          const item = getSelectedRecruitmentImageItem();
-
-          if (!item?.id) {
-            showMessage(
-              $("#recruitmentImageMessage"),
-              "対象の募集を選択してください。",
-              "error"
-            );
-            return;
-          }
-
-          if (!recruitmentImagePreparedFile) {
-            showMessage(
-              $("#recruitmentImageMessage"),
-              "登録する画像を選択してください。",
-              "error"
-            );
-            return;
-          }
-
-          const button = $("#recruitmentImageSaveBtn");
-          const originalText = button?.textContent || "画像を登録・変更";
-
-          if (button) {
-            button.disabled = true;
-            button.textContent = "画像を登録中...";
-          }
-
-          try {
-
-            const type =
-              $("#recruitmentImageType")?.value || "commander";
-
-            const publicUrl =
-              await uploadAdminRecruitmentImage(
-                type,
-                item.id,
-                recruitmentImagePreparedFile
-              );
-
-            const updated =
-              await setAdminRecruitmentImageUrl(publicUrl);
-
-            if (!updated) {
-              return;
-            }
-
-            clearRecruitmentImagePreparedFile();
-
-            const fileInput = $("#recruitmentImageFile");
-            if (fileInput) {
-              fileInput.value = "";
-            }
-
-            const status = $("#recruitmentImageFileStatus");
-            if (status) {
-              status.textContent =
-                "20MBまで。選択した画像は自動で最適化されます。X埋め込みOFFでも登録できます。";
-              status.className = "recruitment-image-status";
-            }
-
-            // 保存成功直後に管理画面へ即反映。
-            item.preview_image_url = publicUrl;
-            renderCurrentRecruitmentImage();
-
-            showMessage(
-              $("#recruitmentImageMessage"),
-              "🖼️ 募集画像を登録しました。管理画面にも即反映しました。",
-              "ok"
-            );
-
-            await loadRecruitmentImageTargets();
-
-          } catch (error) {
-
-            console.error("募集画像登録エラー", error);
-
-            showMessage(
-              $("#recruitmentImageMessage"),
-              String(error?.message || "").includes("Bucket not found")
-                ? "画像保存用Storageがありません。Supabaseで最新の画像対応SQLをRunしてください。"
-                : "募集画像を登録できませんでした。",
-              "error"
-            );
-
-          } finally {
-
-            if (button) {
-              button.disabled = false;
-              button.textContent = originalText;
-            }
-
-          }
-
-        }
-      );
-
-
-    $("#recruitmentImageRemoveBtn")
-      ?.addEventListener(
-        "click",
-        async () => {
-
-          clearMessage($("#recruitmentImageMessage"));
-
-          const item = getSelectedRecruitmentImageItem();
-
-          if (!item?.id || !item.preview_image_url) {
-            showMessage(
-              $("#recruitmentImageMessage"),
-              "削除する登録画像がありません。",
-              "error"
-            );
-            return;
-          }
-
-          if (!confirm("この募集の登録画像を削除しますか？\n募集データ自体は削除されません。")) {
-            return;
-          }
-
-          const button = $("#recruitmentImageRemoveBtn");
-          const originalText = button?.textContent || "登録画像を削除";
-
-          if (button) {
-            button.disabled = true;
-            button.textContent = "削除中...";
-          }
-
-          try {
-
-            const updated =
-              await setAdminRecruitmentImageUrl(null);
-
-            if (!updated) {
-              return;
-            }
-
-            showMessage(
-              $("#recruitmentImageMessage"),
-              "募集画像の表示を削除しました。募集データはそのままです。",
-              "ok"
-            );
-
-            await loadRecruitmentImageTargets();
-
-          } finally {
-
-            if (button) {
-              button.disabled = false;
-              button.textContent = originalText;
-            }
-
-          }
-
-        }
-      );
-
+    $("#forceDeleteTargetBtn")?.addEventListener('click',forceDeleteRegistration);
+    $("#forceDeleteTargetSelect")?.addEventListener('change',renderForceDeleteTargetHint);
+
+    $("#recruitmentManageUrl")?.addEventListener('input',renderRecruitmentEditorControls);
+    $("#recruitmentEditorEmbed")?.addEventListener('change',renderRecruitmentEditorControls);
+    $("#recruitmentEditorImageMode")?.addEventListener('change',() => {
+      const force = $("#recruitmentEditorImageMode")?.value === 'force';
+      const check = $("#recruitmentEditorEmbed");
+      if (check) check.checked = !force && getAdminRecruitmentPlatform($("#recruitmentManageUrl")?.value) === 'X';
+      renderRecruitmentEditorControls();
+    });
+    $("#recruitmentEditorImageClear")?.addEventListener('click',stageRecruitmentImageRemoval);
+    $("#recruitmentEditorSave")?.addEventListener('click',saveRecruitmentEditor);
+
+    $("#recruitmentImageType")?.addEventListener('change',async (event) => {
+      if (!confirmDiscardRecruitmentEditor()) {event.target.value=recruitmentEditorLoadedType;return;}
+      recruitmentEditorSnapshot = null;
+      await Promise.all([loadRecruitmentImageTargets(),loadForceDeleteTargets()]);
+    });
+    $("#recruitmentImageTarget")?.addEventListener('change',(event) => {
+      if (!confirmDiscardRecruitmentEditor()) {event.target.value=recruitmentEditorLoadedId;return;}
+      clearMessage($("#recruitmentImageMessage"));
+      renderCurrentRecruitmentImage();
+    });
+    $("#recruitmentImageFile")?.addEventListener('change',async (event) => {
+      const file = event.target.files?.[0];
+      if (!file) return;
+      if (!validateRecruitmentImageFile(file)) {event.target.value='';return;}
+      if (recruitmentEditorSaving) return;
+      const selectionId = recruitmentEditorLoadedId;
+      recruitmentEditorOptimizing = true;
+      renderRecruitmentEditorControls();
+      if ($("#recruitmentImageFileStatus")) $("#recruitmentImageFileStatus").textContent='画像を最適化中...';
+      try {
+        const optimized = await optimizeRecruitmentImageFile(file);
+        if (selectionId !== recruitmentEditorLoadedId) return;
+        clearRecruitmentImagePreparedFile();
+        recruitmentImagePreparedFile=optimized;
+        recruitmentImagePreparedObjectUrl=URL.createObjectURL(optimized);
+        recruitmentEditorImageAction='replace';
+        if ($("#recruitmentImageFileStatus")) $("#recruitmentImageFileStatus").textContent=`選択画像 ${formatRecruitmentImageFileSize(optimized.size)}（未保存）`;
+      } catch (error) {
+        console.error('画像最適化エラー',error);
+        event.target.value='';
+        showMessage($("#recruitmentImageMessage"),'画像を処理できませんでした。','error');
+      } finally {
+        recruitmentEditorOptimizing=false;
+        renderRecruitmentEditorControls();
+      }
+    });
+    window.addEventListener('beforeunload',(event) => {
+      const visible = !$("#recruitmentImageSection")?.classList.contains('hidden');
+      if (visible && recruitmentEditorHasChanges()) {event.preventDefault(); event.returnValue='';}
+    });
 
     // ========================================
     // 募集記事URL修正
