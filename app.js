@@ -1255,18 +1255,25 @@ function renderXCollectedEmbed(target, attempt = 0, recovery = false) {
     clearTimeout(timeoutId);
     if (!current() || settled) return;
     if (!tweetElement) { fail(); return; }
-    // iframeの高さが確定する時間を待ち、極端に低いエラー画面を除外する。
-    setTimeout(() => {
+    // 正常なiframeは高さが確定し次第すぐ表示する。
+    // まだ小さい場合のみ最大2.5秒待ち、Not found疑いなら本文を維持する。
+    const verifyEmbed = (elapsed = 0) => {
       if (!current() || settled) return;
       const iframe = stage.querySelector("iframe");
       const height = iframe?.getBoundingClientRect().height || 0;
-      if (!iframe || height < 170) { fail(); return; }
-      settled = true;
-      target.replaceChildren(stage);
-      stage.style.cssText = "position:static;opacity:1;pointer-events:auto;z-index:auto;width:100%;";
-      stage.removeAttribute("aria-hidden");
-      target.dataset.loaded = "true";
-    }, 2500);
+      if (iframe && height >= 170) {
+        settled = true;
+        target.replaceChildren(stage);
+        stage.style.cssText = "position:static;opacity:1;pointer-events:auto;z-index:auto;width:100%;";
+        stage.removeAttribute("aria-hidden");
+        target.dataset.loaded = "true";
+        return;
+      }
+      if (elapsed >= 2500) { fail(); return; }
+      const wait = Math.min(250, 2500 - elapsed);
+      setTimeout(() => verifyEmbed(elapsed + wait), wait);
+    };
+    verifyEmbed();
   }).catch(error => {
     clearTimeout(timeoutId);
     console.warn("X投稿埋め込み失敗", error);
