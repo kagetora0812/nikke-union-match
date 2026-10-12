@@ -6122,7 +6122,7 @@ body.manage-mode #managePage #loadManageRecruitmentBtn,
   transform: translateY(0);
 }
 #resultModal .registration-bot-guide h3 {
-  color: #23272b;
+  color: #1ab0f1;
   font: 700 15px/1.5 "Noto Sans JP", sans-serif;
   letter-spacing: -.025em;
   margin: 0 0 9px;
@@ -6138,8 +6138,31 @@ body.manage-mode #managePage #loadManageRecruitmentBtn,
   justify-content: center;
   min-height: 46px;
   margin-top: 12px;
+  padding: 10px 12px;
   text-decoration: none;
+  text-align: center;
   font-size: 12px;
+  font-weight: 900;
+  border: 1px solid #1ab0f1 !important;
+  color: #1ab0f1 !important;
+  background: #fff !important;
+  border-radius: 0 !important;
+  clip-path: none !important;
+  box-shadow: none !important;
+  transform: none !important;
+}
+@media (hover: hover) {
+  #resultModal .registration-bot-guide-link:hover {
+    border-color: #079bdc !important;
+    color: #fff !important;
+    background: #079bdc !important;
+  }
+}
+#resultModal .registration-bot-guide-link:focus-visible,
+#resultModal .registration-bot-guide-link:active {
+  border-color: #079bdc !important;
+  color: #fff !important;
+  background: #079bdc !important;
 }
 /* Restrict modal scrolling to the moment the new guide opens. */
 #resultModal.bot-guide-expanded .modal-card {
