@@ -1173,13 +1173,9 @@ document.addEventListener("visibilitychange", () => {
   if (!document.hidden) retryFailedXCollectedEmbeds();
 });
 
-// X LISTEDは保存済みの本文を最初から表示する。埋め込みは非表示の領域で検査し、
+// X LISTEDはカード作成時点で保存済み本文を表示。埋め込みは非表示の領域で検査し、
 // 成功した場合だけ切り替える。通常募集のX埋め込みは従来どおり。
-function getXCollectedTextHtml(target) {
-  const url = target.dataset.recruitmentUrl || "";
-  const excerpt = target.dataset.textExcerpt || "";
-  const author = target.dataset.authorHandle || "";
-  const slv = target.dataset.slv || "";
+function buildXCollectedTextHtml(url, excerpt, author, slv) {
   if (!excerpt.trim()) {
     return `<div class="x-embed-error"><strong>Not found</strong><div style="margin-top:8px;color:#aaa;font-size:13px;">X投稿を表示できませんでした。</div><a href="${escapeHtml(url)}" target="_blank" rel="noopener noreferrer" style="display:inline-block;margin-top:12px;">Xで元の投稿を開く ↗</a></div>`;
   }
@@ -1192,8 +1188,13 @@ function getXCollectedTextHtml(target) {
     </div>`;
 }
 
-function getXCollectedLoadingHtml() {
-  return `<div class="x-saved-text" role="status" style="padding:24px 16px;background:#101013;border:1px solid #333;border-radius:12px;color:#bbb;text-align:center;font-size:14px;">X投稿を読み込み中…</div>`;
+function getXCollectedTextHtml(target) {
+  return buildXCollectedTextHtml(
+    target.dataset.recruitmentUrl || "",
+    target.dataset.textExcerpt || "",
+    target.dataset.authorHandle || "",
+    target.dataset.slv || ""
+  );
 }
 
 function showXEmbedFallback(target) {
@@ -1229,26 +1230,19 @@ function renderXCollectedEmbed(target, attempt = 0, recovery = false) {
   const token = (target._xEmbedToken || 0) + 1;
   target._xEmbedToken = token;
   const current = () => target.isConnected && target._xEmbedToken === token;
-  // 公開カードの表示を消さず、同じ位置の透明なステージで公式iframeを準備する。
-  // 復旧試行中は保存済み本文を維持。それ以外は読み込み中を表示。
-  if (!recovery) target.innerHTML = getXCollectedLoadingHtml();
+  // X LISTEDはカード生成時から保存済み本文を表示。公式iframeが完成するまで消さない。
+  if (!target.querySelector(".x-saved-text, .x-embed-error")) {
+    target.innerHTML = getXCollectedTextHtml(target);
+  }
   target.style.position = "relative";
   const stage = document.createElement("div");
   stage.style.cssText = "position:absolute;top:0;left:0;width:100%;opacity:0;pointer-events:none;z-index:-1;";
   stage.setAttribute("aria-hidden", "true");
   target.appendChild(stage);
   let settled = false;
-  // 初回表示は1秒だけ待ち、その時点で未完成なら保存本文を表示。
-  // iframeの取得は中断しないため、後から完成すれば公式表示に切り替わる。
-  const textTimer = !recovery ? setTimeout(() => {
-    if (!current() || settled) return;
-    const loading = target.querySelector('.x-saved-text');
-    if (loading) loading.outerHTML = getXCollectedTextHtml(target);
-  }, 1000) : null;
   const fail = () => {
     if (settled || !current()) return;
     settled = true;
-    clearTimeout(textTimer);
     stage.remove();
     // 失敗した時点で保存本文を表示。再試行中も情報を隠さない。
     if (!recovery) target.innerHTML = getXCollectedTextHtml(target);
@@ -1281,8 +1275,7 @@ function renderXCollectedEmbed(target, attempt = 0, recovery = false) {
       const height = iframe?.getBoundingClientRect().height || 0;
       if (iframe && height >= 170) {
         settled = true;
-        clearTimeout(textTimer);
-        target.replaceChildren(stage);
+            target.replaceChildren(stage);
         stage.style.cssText = "position:static;opacity:1;pointer-events:auto;z-index:auto;width:100%;";
         stage.removeAttribute("aria-hidden");
         target.dataset.loaded = "true";
@@ -2329,7 +2322,7 @@ function buildXCollectedCard(item) {
           data-text-excerpt="${escapeHtml(item.text_excerpt || "")}" 
           data-author-handle="${escapeHtml(item.author_handle || "")}" 
           data-slv="${escapeHtml(item.slv || "")}">
-          ${getXCollectedLoadingHtml()}
+          ${buildXCollectedTextHtml(url, item.text_excerpt || "", item.author_handle || "", item.slv || "")}
         </div>
       </div>
     </article>
@@ -2337,11 +2330,16 @@ function buildXCollectedCard(item) {
 }
 
 
+// データが同じならDOMとX公式iframeを保持する。
+let recruitmentListSignature = null;
+let recruitmentListRequestId = 0;
+
 // ========================================
 // 募集一覧
 // ========================================
 
 async function loadRecruitments() {
+  const requestId = ++recruitmentListRequestId;
 
   const list =
     $("#recruitmentList");
@@ -2375,10 +2373,8 @@ async function loadRecruitments() {
   }
 
 
-  list.innerHTML =
-    "";
-
-
+  // 前回のX iframeを残したまま最新の募集情報を確認する。
+  // 一覧をここで空にすると毎回埋め込みを読み直してしまう。
   empty.classList.add(
     "hidden"
   );
@@ -2517,6 +2513,22 @@ async function loadRecruitments() {
     unionResult.data ||
     [];
 
+  // ページ移動中に発生した古い通信結果は反映しない。
+  if (requestId !== recruitmentListRequestId) return;
+
+  const nextListSignature = JSON.stringify({
+    type: currentSearchType,
+    slvFilter: $("#slvFilter")?.value || "",
+    unionRankFilter: $("#unionRankFilter")?.value || "",
+    commanders: currentSearchType === "commander" ? commanders : [],
+    unions: currentSearchType === "union" ? unions : [],
+    xCollected: currentSearchType === "commander" ? xCollectedCandidates : []
+  });
+  const keepExistingEmbeds =
+    recruitmentListSignature === nextListSignature &&
+    list.children.length > 0;
+
+
 
   // X収集候補はBOT側の48時間ライフサイクルに加え、
   // 公開RPCと画面側でも48時間以内だけに限定する。
@@ -2611,6 +2623,16 @@ async function loadRecruitments() {
 
   }
 
+
+  // データ・絞り込みが変わらなければ、表示済みX iframeをそのまま使う。
+  // カウンターは上で更新済み。新着/削除/48時間切れは署名が変わり再描画される。
+  if (keepExistingEmbeds) {
+    updateCountdowns();
+    return;
+  }
+
+  list.replaceChildren();
+  recruitmentListSignature = nextListSignature;
 
   // ======================================
   // 指揮官一覧
