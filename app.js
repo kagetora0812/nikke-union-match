@@ -1151,11 +1151,36 @@ function getXPostId(value) {
 // 他の投稿の読み込みを止めない
 // ========================================
 
+// 公開X収集カードだけ、テキスト表示後30分ごとに埋め込み復帰を試す。
+// 開いているブラウザ内だけで動き、X API / Gemini は呼ばない。
+const X_EMBED_RECOVERY_INTERVAL_MS = 30 * 60 * 1000;
+
+function retryFailedXCollectedEmbeds() {
+  if (document.hidden || !document.getElementById("listPage")?.classList.contains("active")) return;
+  if (!window.twttr?.widgets?.createTweet) return;
+  const now = Date.now();
+  document.querySelectorAll('.x-collected-embed[data-loaded="failed"]').forEach(target => {
+    if (!target.isConnected || now < Number(target.dataset.nextRetryAt || 0)) return;
+    // 通常の失敗→テキスト化からのみ復帰を試す。再試行開始時に期限を先送りする。
+    target.dataset.nextRetryAt = String(now + X_EMBED_RECOVERY_INTERVAL_MS);
+    renderSingleXEmbed(target, 0, true);
+  });
+}
+
+// DOMの簡単な状態確認だけを1分ごとに実施。埋め込み通信は失敗カードのみ30分に1回。
+setInterval(retryFailedXCollectedEmbeds, 60 * 1000);
+document.addEventListener("visibilitychange", () => {
+  if (!document.hidden) retryFailedXCollectedEmbeds();
+});
+
 // X公式の埋め込みを優先。失敗は1回だけ再試行して、保存済み本文へ切り替える。
 // iframeは別オリジンなので、その内部の「Not found」という文字は取得できない。
 function showXEmbedFallback(target) {
   if (!target || !target.isConnected) return;
   target.dataset.loaded = "failed";
+  if (target.classList.contains("x-collected-embed")) {
+    target.dataset.nextRetryAt = String(Date.now() + X_EMBED_RECOVERY_INTERVAL_MS);
+  }
   const url = target.dataset.recruitmentUrl || "";
   const previewImageUrl = target.dataset.previewImageUrl || "";
   const excerpt = target.dataset.textExcerpt || "";
@@ -1186,9 +1211,9 @@ function showXEmbedFallback(target) {
     </div>`;
 }
 
-function renderSingleXEmbed(target, attempt = 0) {
+function renderSingleXEmbed(target, attempt = 0, recovery = false) {
   if (!target || !target.isConnected) return;
-  if (attempt === 0 && (target.dataset.loaded === "true" || target.dataset.loaded === "loading" || target.dataset.loaded === "failed")) return;
+  if (attempt === 0 && (target.dataset.loaded === "true" || target.dataset.loaded === "loading" || (target.dataset.loaded === "failed" && !recovery))) return;
   const postId = target.dataset.postId;
   if (!postId || !window.twttr?.widgets?.createTweet) {
     showXEmbedFallback(target);
