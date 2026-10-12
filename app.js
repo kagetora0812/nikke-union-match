@@ -1151,7 +1151,7 @@ function getXPostId(value) {
 // 他の投稿の読み込みを止めない
 // ========================================
 
-// 公開X収集カードだけ、テキスト表示後30分ごとに埋め込み復帰を試す。
+// 公開X収集カードだけ、埋め込み失敗後30分ごとに復帰を試す。
 // 開いているブラウザ内だけで動き、X API / Gemini は呼ばない。
 const X_EMBED_RECOVERY_INTERVAL_MS = 30 * 60 * 1000;
 
@@ -1180,6 +1180,9 @@ function getXCollectedTextHtml(target) {
   const excerpt = target.dataset.textExcerpt || "";
   const author = target.dataset.authorHandle || "";
   const slv = target.dataset.slv || "";
+  if (!excerpt.trim()) {
+    return `<div class="x-embed-error"><strong>Not found</strong><div style="margin-top:8px;color:#aaa;font-size:13px;">X投稿を表示できませんでした。</div><a href="${escapeHtml(url)}" target="_blank" rel="noopener noreferrer" style="display:inline-block;margin-top:12px;">Xで元の投稿を開く ↗</a></div>`;
+  }
   return `
     <div class="x-saved-text" style="padding:18px 16px;background:#101013;border:1px solid #333;border-radius:12px;overflow-wrap:anywhere;">
       <div style="font-size:12px;color:#aaa;margin-bottom:12px;">X投稿の保存済みテキスト</div>
@@ -1187,6 +1190,10 @@ function getXCollectedTextHtml(target) {
       <div style="white-space:pre-wrap;line-height:1.7;font-size:14px;color:#eee;">${escapeHtml(excerpt || '投稿本文を取得できませんでした。Xで元の投稿を確認してください。')}</div>
       <a href="${escapeHtml(url)}" target="_blank" rel="noopener noreferrer" style="display:inline-block;margin-top:16px;color:#eee;text-decoration:underline;">Xで元の投稿を開く ↗</a>
     </div>`;
+}
+
+function getXCollectedLoadingHtml() {
+  return `<div class="x-saved-text" role="status" style="padding:24px 16px;background:#101013;border:1px solid #333;border-radius:12px;color:#bbb;text-align:center;font-size:14px;">X投稿を読み込み中…</div>`;
 }
 
 function showXEmbedFallback(target) {
@@ -1223,7 +1230,8 @@ function renderXCollectedEmbed(target, attempt = 0, recovery = false) {
   target._xEmbedToken = token;
   const current = () => target.isConnected && target._xEmbedToken === token;
   // 公開カードの表示を消さず、同じ位置の透明なステージで公式iframeを準備する。
-  target.innerHTML = getXCollectedTextHtml(target);
+  // 復旧試行中は保存済み本文を維持。それ以外は読み込み中を表示。
+  if (!recovery) target.innerHTML = getXCollectedLoadingHtml();
   target.style.position = "relative";
   const stage = document.createElement("div");
   stage.style.cssText = "position:absolute;top:0;left:0;width:100%;opacity:0;pointer-events:none;z-index:-1;";
@@ -1235,7 +1243,7 @@ function renderXCollectedEmbed(target, attempt = 0, recovery = false) {
     settled = true;
     stage.remove();
     if (attempt === 0) {
-      // 本文を表示したまま、短時間後に1回だけやり直す。
+      // 最初の失敗時は待機表示を維持したまま一度だけ再試行。
       setTimeout(() => { if (current()) renderXCollectedEmbed(target, 1, true); }, 3000);
     } else {
       showXEmbedFallback(target);
@@ -1314,49 +1322,50 @@ function renderSingleXEmbed(target, attempt = 0, recovery = false) {
   } catch (error) { clearTimeout(timeoutId); console.warn("X投稿埋め込み失敗", error); fail(); }
 }
 
-function renderXEmbeds(
-  retry = 0
-) {
+// X LISTEDだけ: 画面付近を優先し、残りもスクロール不要で順次読み込む。
+// Xへの大量同時アクセスを避けるため、開始タイミングを650msずつずらす。
+let xCollectedLoadTimer = null;
 
-  if (
-    !window.twttr
-    ||
-    !window.twttr.widgets
-  ) {
-
+function renderXEmbeds(retry = 0) {
+  if (!window.twttr?.widgets?.createTweet) {
     if (retry < 10) {
-
-      setTimeout(
-        () => {
-
-          renderXEmbeds(
-            retry + 1
-          );
-
-        },
-        500
-      );
-
+      setTimeout(() => renderXEmbeds(retry + 1), 500);
     } else {
-      document.querySelectorAll(".x-embed:not([data-loaded])").forEach(showXEmbedFallback);
+      document.querySelectorAll('.x-embed:not([data-loaded])').forEach(showXEmbedFallback);
     }
-
     return;
   }
 
+  // 本人登録の通常カードは今までどおり。X LISTEDのみ順次処理する。
+  document.querySelectorAll('.x-embed:not(.x-collected-embed)').forEach(renderSingleXEmbed);
 
-  const targets =
-    document.querySelectorAll(
-      ".x-embed"
-    );
+  if (xCollectedLoadTimer !== null) {
+    clearInterval(xCollectedLoadTimer);
+    xCollectedLoadTimer = null;
+  }
 
+  const pending = Array.from(document.querySelectorAll('.x-collected-embed:not([data-loaded])'));
+  if (!pending.length) return;
 
-  // ★ await で1件ずつ待たない。
-  // 全投稿をそれぞれ独立して読み込む。
-  targets.forEach(target => {
-    renderSingleXEmbed(target);
-  });
+  const loadNext = () => {
+    // 各回で画面位置を見直し、スクロール先の投稿を優先する。
+    const available = pending.filter(target => target.isConnected && !target.dataset.loaded);
+    if (!available.length) {
+      clearInterval(xCollectedLoadTimer);
+      xCollectedLoadTimer = null;
+      return;
+    }
+    const distance = target => {
+      const rect = target.getBoundingClientRect();
+      if (rect.bottom >= -150 && rect.top <= window.innerHeight + 400) return 0;
+      return rect.top > window.innerHeight ? rect.top - window.innerHeight : -rect.bottom;
+    };
+    available.sort((a, b) => distance(a) - distance(b));
+    renderSingleXEmbed(available[0]);
+  };
 
+  loadNext(); // 最初の1件は即座に開始
+  xCollectedLoadTimer = setInterval(loadNext, 650);
 }
 
 
@@ -2340,12 +2349,7 @@ function buildXCollectedCard(item) {
           data-text-excerpt="${escapeHtml(item.text_excerpt || "")}" 
           data-author-handle="${escapeHtml(item.author_handle || "")}" 
           data-slv="${escapeHtml(item.slv || "")}">
-          <div class="x-saved-text" style="padding:18px 16px;background:#101013;border:1px solid #333;border-radius:12px;overflow-wrap:anywhere;">
-            <div style="font-size:12px;color:#aaa;margin-bottom:12px;">X投稿の保存済みテキスト</div>
-            ${item.author_handle ? `<div style="font-size:13px;color:#ccc;margin-bottom:8px;">${escapeHtml(String(item.author_handle).startsWith('@') ? item.author_handle : '@' + item.author_handle)}${item.slv ? ' ・ SLV ' + escapeHtml(item.slv) : ''}</div>` : (item.slv ? `<div style="font-size:13px;color:#ccc;margin-bottom:8px;">SLV ${escapeHtml(item.slv)}</div>` : '')}
-            <div style="white-space:pre-wrap;line-height:1.7;font-size:14px;color:#eee;">${escapeHtml(item.text_excerpt || '投稿本文を取得できませんでした。Xで元の投稿を確認してください。')}</div>
-            <a href="${escapeHtml(url)}" target="_blank" rel="noopener noreferrer" style="display:inline-block;margin-top:16px;color:#eee;text-decoration:underline;">Xで元の投稿を開く ↗</a>
-          </div>
+          ${getXCollectedLoadingHtml()}
         </div>
       </div>
     </article>
