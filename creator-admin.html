@@ -2390,21 +2390,6 @@
         </button>
 
         <button
-          id="openXPromoBtn"
-          class="menu-card"
-          type="button"
-        >
-          <div class="menu-card-icon">📣</div>
-          <div class="menu-card-title">
-            X宣伝
-          </div>
-          <div class="menu-card-copy">
-            登録してくれた指揮官・ユニオンを選び、
-            固定文＋募集情報＋自分のXリンクでそのまま宣伝できます。
-          </div>
-        </button>
-
-        <button
           id="openRecruitmentImageBtn"
           class="menu-card"
           type="button"
@@ -2877,182 +2862,6 @@
     </section>
 
     <!-- ========================================
-         X宣伝
-         登録済み募集を選択してX投稿文を生成
-    ========================================= -->
-
-    <section
-      id="xPromoSection"
-      class="hidden"
-    >
-
-      <div class="admin-head">
-
-        <div>
-          <div class="eyebrow">
-            X PROMOTION
-          </div>
-
-          <h2>
-            📣 X宣伝 <span style="font-size:12px;opacity:.55;">v13.22</span>
-          </h2>
-        </div>
-
-        <div class="admin-head-actions">
-          <button
-            id="reloadXPromoTargetsBtn"
-            class="btn"
-            type="button"
-          >
-            ↻ 再読込
-          </button>
-
-          <button
-            id="backToMenuFromXPromoBtn"
-            class="btn"
-            type="button"
-          >
-            ← 管理メニュー
-          </button>
-        </div>
-
-      </div>
-
-      <p class="lead">
-        現在募集中の登録から宣伝対象を選ぶだけで、X投稿文を自動生成します。<br>
-        Discordの管理通知にある「📣 この募集を宣伝」から開くと、対象を自動選択してここへ直行します。
-      </p>
-
-      <div class="panel">
-
-        <div class="form-grid">
-
-          <label>
-            宣伝する募集
-            <select id="xPromoTarget">
-              <option value="">読み込み中...</option>
-            </select>
-          </label>
-
-          <div class="recruitment-image-preview-box">
-            <div class="recruitment-image-preview-title">
-              選択中の募集
-            </div>
-            <div id="xPromoTargetInfo" class="recruitment-image-status">対象：--</div>
-            <div id="xPromoTargetUrl" class="recruitment-image-status">募集記事：--</div>
-          </div>
-
-          <label>
-            追加文（任意）
-            <textarea
-              id="xPromoFixedText"
-              rows="4"
-              placeholder="例：ぜひチェックしてみてください🐾"
-            ></textarea>
-          </label>
-
-          <label>
-            自分のXリンク（任意）
-            <input
-              id="xPromoOwnXUrl"
-              type="url"
-              inputmode="url"
-              autocomplete="off"
-              autocapitalize="off"
-              spellcheck="false"
-              placeholder="https://x.com/あなたのID"
-            >
-          </label>
-
-          <div class="button-row">
-            <button
-              id="saveXPromoSettingsBtn"
-              class="btn"
-              type="button"
-            >
-              💾 追加文・Xリンクを保存
-            </button>
-          </div>
-
-          <label>
-            X投稿プレビュー
-            <textarea
-              id="xPromoPreview"
-              rows="12"
-              readonly
-            ></textarea>
-          </label>
-
-          <div id="xPromoCharCount" class="recruitment-image-status">
-            文字数：--
-          </div>
-
-          <div class="recruitment-image-preview-box">
-            <div class="recruitment-image-preview-title">
-              登録されている募集画像（確認用）
-            </div>
-
-            <img
-              id="xPromoImagePreview"
-              class="recruitment-image-preview hidden"
-              alt="募集画像"
-            >
-
-            <div
-              id="xPromoImageEmpty"
-              class="recruitment-image-empty"
-            >
-              この募集には登録画像がありません。
-            </div>
-
-            <div id="xPromoImageStatus" class="recruitment-image-status">
-              画像：--
-            </div>
-          </div>
-
-          <div class="button-row">
-            <button
-              id="copyXPromoBtn"
-              class="btn"
-              type="button"
-            >
-              📋 宣伝文をコピー
-            </button>
-
-            <button
-              id="openXPromoPostBtn"
-              class="btn primary"
-              type="button"
-            >
-              𝕏 Xで宣伝
-            </button>
-
-            <button
-              id="oneTouchXPromoBtn"
-              class="btn blue"
-              type="button"
-            >
-              ⚡ Xへワンタッチ
-            </button>
-          </div>
-
-          <div class="recruitment-image-status">
-            ※ XのWeb投稿画面では画像の自動添付はできません。
-          </div>
-
-          <div
-            id="xPromoMessage"
-            class="message hidden"
-          ></div>
-
-        </div>
-
-      </div>
-
-    </section>
-
-
-    <!-- ========================================
          募集表示管理
          URL / X埋め込み / 画像を1画面で管理
     ========================================= -->
@@ -3186,10 +2995,21 @@
           <div class="recruitment-image-status">
             ※ X以外のURLではX埋め込みON / OFFは使用しません。強制画像表示は掲載先に関係なく使えます。
           </div>
-          <div class="recruitment-image-preview-box" style="border-color:rgba(255,104,120,.5)">
-            <div class="recruitment-image-preview-title" style="color:#ff9ca7">いたずら登録の緊急対応</div>
-            <div class="recruitment-image-status">選択した募集を即時終了し、公開一覧から非表示にします。ユニオン会員登録・PASS・BOT設定は削除しません。BOT連携中のユニオンは操作できません。</div>
-            <button id="recruitmentEmergencyCloseBtn" class="btn danger" type="button" style="margin-top:12px">選択した募集を緊急非表示</button>
+          <div class="recruitment-image-preview-box" style="border:1px solid rgba(255,92,111,.58);background:rgba(255,47,74,.035)">
+            <div class="recruitment-image-preview-title" style="color:#ff7788">いたずら登録の強制削除（ADMIN専用）</div>
+            <div class="recruitment-image-status" style="line-height:1.85">
+              指揮官：登録済み募集とPASSを削除します。<br>
+              ユニオン：募集・ユニオンリストの登録・PASSを削除し、該当するDiscord BOTの連携と利用設定を無効化します。<br>
+              ユニオンの「登録のみ」も選択できます。<strong style="color:#ff93a0">取り消しはできません。</strong>
+            </div>
+            <label style="display:block;margin-top:14px">
+              強制削除する対象（上部の募集編集とは別）
+              <select id="forceDeleteTargetSelect" style="margin-top:6px">
+                <option value="">削除対象を読み込み中...</option>
+              </select>
+            </label>
+            <div class="recruitment-image-status" id="forceDeleteTargetHint" style="margin-top:10px">対象を選択してください。</div>
+            <button id="forceDeleteTargetBtn" class="btn danger" type="button" style="margin-top:12px">選択した登録を強制削除</button>
           </div>
 
           <div class="recruitment-image-preview-box">
@@ -4213,510 +4033,6 @@
 
 
     // ========================================
-    // X宣伝
-    // 登録済み募集 + 固定文 + 自分のXリンク
-    // ========================================
-
-    const X_PROMO_FIXED_TEXT_KEY =
-      "nikke_union_admin_x_promo_extra_v2";
-
-    const X_PROMO_OWN_X_URL_KEY =
-      "nikke_union_admin_x_promo_own_x_url_v1";
-
-    const X_PROMO_DEFAULT_FIXED_TEXT =
-      "";
-
-    const X_PROMO_APP_URL =
-      "https://x.gd/4tEJo";
-
-    console.info("NIKKE UNION MATCH creator-admin X promo v13.22");
-
-    let xPromoItems = [];
-
-    // Discord管理通知からの「この募集を宣伝」直通
-    const X_PROMO_DEEP_LINK = (() => {
-      const params = new URLSearchParams(window.location.search);
-      const promo = params.get("promo") === "1";
-      const type = String(params.get("promo_type") || "").trim();
-      const id = String(params.get("promo_id") || "").trim();
-
-      if (
-        !promo
-        || !["commander", "union"].includes(type)
-        || !id
-      ) {
-        return null;
-      }
-
-      return {
-        type,
-        id,
-        key: `${type}:${id}`
-      };
-    })();
-
-    let xPromoDeepLinkHandled = false;
-
-    function hasXPromoDeepLink() {
-      return Boolean(
-        X_PROMO_DEEP_LINK
-        && !xPromoDeepLinkHandled
-      );
-    }
-
-    function clearXPromoDeepLinkFromUrl() {
-      try {
-        const url = new URL(window.location.href);
-        url.searchParams.delete("promo");
-        url.searchParams.delete("promo_type");
-        url.searchParams.delete("promo_id");
-
-        window.history.replaceState(
-          {},
-          "",
-          `${url.pathname}${url.search}${url.hash}`
-        );
-      } catch (error) {
-        console.warn(
-          "X宣伝直通URLの整理をスキップ",
-          error
-        );
-      }
-    }
-
-
-    function getXPromoFixedText() {
-      return localStorage.getItem(X_PROMO_FIXED_TEXT_KEY)
-        || X_PROMO_DEFAULT_FIXED_TEXT;
-    }
-
-
-    function getXPromoOwnXUrl() {
-      return localStorage.getItem(X_PROMO_OWN_X_URL_KEY)
-        || "";
-    }
-
-
-    function getSelectedXPromoItem() {
-      const key = $("#xPromoTarget")?.value || "";
-      return xPromoItems.find(item => item._promoKey === key) || null;
-    }
-
-
-    function getXPromoItemLabel(item) {
-      if (!item) return "--";
-
-      if (item._promoType === "union") {
-        return `🏢 ${item.union_name || ""} / ${item.union_rank || ""}`;
-      }
-
-      return `👤 ${item.commander_name || ""} / SLV ${item.slv || ""}`;
-    }
-
-
-    function buildXPromoHeadline(item) {
-      if (!item) return "";
-
-      if (item._promoType === "union") {
-        const name = String(item.union_name || "").trim();
-        const rank = String(item.union_rank || "").trim();
-
-        const detail = rank
-          ? (rank.includes("ユニオン")
-              ? `🏆 ${rank}です！`
-              : `🏆 ${rank}帯のユニオン様です！`)
-          : "🏆 新しい仲間を探しているユニオン様です！";
-
-        return [
-          "🩵 NEW UNION",
-          `🏢 ${name}さんが指揮官を募集中✨`,
-          detail
-        ].join("\n");
-      }
-
-      const name = String(item.commander_name || "").trim();
-      const slv = String(item.slv || "").trim();
-
-      return [
-        "🩵 NEW COMMANDER",
-        `👤 ${name}さんが移籍先ユニオンを探しています✨`,
-        slv
-          ? `📈 SLV${slv}の指揮官様です！`
-          : "📈 移籍先を探している指揮官様です！"
-      ].join("\n");
-    }
-
-
-    function buildXPromoText() {
-      const item = getSelectedXPromoItem();
-      if (!item) return "";
-
-      const extraText =
-        $("#xPromoFixedText")?.value.trim() || "";
-
-      const ownXUrl =
-        $("#xPromoOwnXUrl")?.value.trim() || "";
-
-      const parts = [
-        buildXPromoHeadline(item)
-      ];
-
-      if (extraText) {
-        parts.push(extraText);
-      }
-
-      if (ownXUrl) {
-        parts.push(
-          `𝕏 ${ownXUrl}`
-        );
-      }
-
-      parts.push(
-        "👇 NIKKE UNION MATCH\nhttps://x.gd/4tEJo"
-      );
-
-      // 募集記事URLは見出しを付けず、宣伝文のいちばん最後へURLだけ追加。
-      if (item.x_url) {
-        parts.push(String(item.x_url).trim());
-      }
-
-      return parts.filter(Boolean).join("\n\n");
-    }
-
-
-    function renderXPromoImage(item) {
-      const image = $("#xPromoImagePreview");
-      const empty = $("#xPromoImageEmpty");
-      const status = $("#xPromoImageStatus");
-      const imageUrl = String(item?.preview_image_url || "").trim();
-
-      if (imageUrl) {
-        if (image) {
-          image.src = imageUrl;
-          image.classList.remove("hidden");
-        }
-        empty?.classList.add("hidden");
-        if (status) {
-          status.textContent = "画像：登録画像あり（サイト掲載用・確認用）";
-        }
-      } else {
-        if (image) {
-          image.removeAttribute("src");
-          image.classList.add("hidden");
-        }
-        empty?.classList.remove("hidden");
-        if (status) {
-          status.textContent = item
-            ? "画像：なし"
-            : "画像：--";
-        }
-      }
-    }
-
-
-    function openXPromoIntent(text) {
-      const intent =
-        "https://x.com/intent/tweet?text="
-        + encodeURIComponent(text);
-
-      window.open(
-        intent,
-        "_blank",
-        "noopener,noreferrer"
-      );
-    }
-
-
-    function getXPromoImageExtension(mimeType = "") {
-      const type = String(mimeType).toLowerCase();
-      if (type.includes("png")) return "png";
-      if (type.includes("webp")) return "webp";
-      if (type.includes("gif")) return "gif";
-      return "jpg";
-    }
-
-
-    async function getXPromoShareImageFile(item) {
-      const imageUrl = String(item?.preview_image_url || "").trim();
-      if (!imageUrl) return null;
-
-      const response = await fetch(imageUrl, {
-        mode: "cors",
-        cache: "no-store"
-      });
-
-      if (!response.ok) {
-        throw new Error("X_PROMO_IMAGE_FETCH_FAILED");
-      }
-
-      const blob = await response.blob();
-      if (!String(blob.type || "").startsWith("image/")) {
-        throw new Error("X_PROMO_IMAGE_INVALID");
-      }
-
-      const extension = getXPromoImageExtension(blob.type);
-      const safeName = item?._promoType === "union"
-        ? String(item.union_name || "union")
-        : String(item.commander_name || "commander");
-
-      const fileName =
-        `${safeName.replace(/[\\/:*?"<>|]+/g, "_") || "nikke-union-match"}.${extension}`;
-
-      return new File(
-        [blob],
-        fileName,
-        { type: blob.type || "image/jpeg" }
-      );
-    }
-
-
-    function oneTouchXPromo() {
-      const item = getSelectedXPromoItem();
-      const text = buildXPromoText();
-      if (!item || !text) return;
-
-      clearMessage($("#xPromoMessage"));
-
-      // Windowsの共有シートは使わず、必ずXのWeb Intentを直接開く。
-      // これにより「共有」画面ではなくXの投稿作成画面へ遷移する。
-      openXPromoIntent(text);
-
-      showMessage(
-        $("#xPromoMessage"),
-        item.preview_image_url
-          ? "Xの投稿画面を開きました。登録画像の自動添付はX Web Intentの仕様上できません。"
-          : "Xの投稿画面を開きました。",
-        "ok"
-      );
-    }
-
-    function renderXPromoPreview() {
-      const item = getSelectedXPromoItem();
-      const info = $("#xPromoTargetInfo");
-      const urlInfo = $("#xPromoTargetUrl");
-      const preview = $("#xPromoPreview");
-      const count = $("#xPromoCharCount");
-      const copyButton = $("#copyXPromoBtn");
-      const postButton = $("#openXPromoPostBtn");
-      const oneTouchButton = $("#oneTouchXPromoBtn");
-
-      if (info) {
-        info.textContent = `対象：${getXPromoItemLabel(item)}`;
-      }
-
-      if (urlInfo) {
-        urlInfo.textContent = `募集記事：${item?.x_url || "--"}`;
-      }
-
-      renderXPromoImage(item);
-
-      const text = buildXPromoText();
-
-      if (preview) {
-        preview.value = text;
-      }
-
-      if (count) {
-        count.textContent = text
-          ? `文字数（目安）：${text.length}`
-          : "文字数：--";
-      }
-
-      if (copyButton) {
-        copyButton.disabled = !text;
-      }
-
-      if (postButton) {
-        postButton.disabled = !text;
-      }
-
-      if (oneTouchButton) {
-        oneTouchButton.disabled = !text;
-      }
-    }
-
-
-    async function loadXPromoTargets() {
-      clearMessage($("#xPromoMessage"));
-
-      const target = $("#xPromoTarget");
-      if (target) {
-        target.innerHTML = '<option value="">読み込み中...</option>';
-        target.disabled = true;
-      }
-
-      const nowIso = new Date().toISOString();
-
-      const [commanderResult, unionResult] = await Promise.all([
-        sb
-          .from("recruitments")
-          .select("id, commander_name, slv, x_url, preview_image_url, created_at, expires_at")
-          .eq("status", "open")
-          .gt("expires_at", nowIso)
-          .order("created_at", { ascending: false }),
-
-        sb
-          .from("union_recruitments")
-          .select("id, union_name, union_rank, x_url, preview_image_url, created_at, expires_at")
-          .eq("status", "open")
-          .gt("expires_at", nowIso)
-          .order("created_at", { ascending: false })
-      ]);
-
-      if (commanderResult.error || unionResult.error) {
-        console.error(
-          "X宣伝対象読み込みエラー",
-          commanderResult.error || unionResult.error
-        );
-
-        xPromoItems = [];
-
-        if (target) {
-          target.innerHTML = '<option value="">読み込めませんでした</option>';
-          target.disabled = false;
-        }
-
-        showMessage(
-          $("#xPromoMessage"),
-          "募集中の募集を読み込めませんでした。",
-          "error"
-        );
-
-        renderXPromoPreview();
-        return;
-      }
-
-      const commanders = (commanderResult.data || []).map(item => ({
-        ...item,
-        _promoType: "commander",
-        _promoKey: `commander:${item.id}`
-      }));
-
-      const unions = (unionResult.data || []).map(item => ({
-        ...item,
-        _promoType: "union",
-        _promoKey: `union:${item.id}`
-      }));
-
-      xPromoItems = [...commanders, ...unions]
-        .sort((a, b) => new Date(b.created_at) - new Date(a.created_at));
-
-      if (target) {
-        if (!xPromoItems.length) {
-          target.innerHTML = '<option value="">現在募集中の募集はありません</option>';
-        } else {
-          target.innerHTML = xPromoItems.map(item => {
-            const date = item.created_at
-              ? new Intl.DateTimeFormat("ja-JP", {
-                  month: "2-digit",
-                  day: "2-digit",
-                  hour: "2-digit",
-                  minute: "2-digit"
-                }).format(new Date(item.created_at))
-              : "--";
-
-            return `
-              <option value="${escapeHtml(item._promoKey)}">
-                ${escapeHtml(getXPromoItemLabel(item))} / ${escapeHtml(date)}
-              </option>
-            `;
-          }).join("");
-        }
-
-        target.disabled = false;
-      }
-
-      // Discord管理通知から開いた場合は、その募集を自動選択。
-      if (
-        target
-        && hasXPromoDeepLink()
-      ) {
-        const matched =
-          xPromoItems.find(
-            item =>
-              item._promoKey ===
-              X_PROMO_DEEP_LINK.key
-          );
-
-        if (matched) {
-          target.value =
-            X_PROMO_DEEP_LINK.key;
-
-          xPromoDeepLinkHandled =
-            true;
-
-          clearXPromoDeepLinkFromUrl();
-
-          showMessage(
-            $("#xPromoMessage"),
-            "📣 Discord通知から開いた募集を選択しました。このまま宣伝できます。",
-            "ok"
-          );
-        } else {
-          xPromoDeepLinkHandled =
-            true;
-
-          clearXPromoDeepLinkFromUrl();
-
-          showMessage(
-            $("#xPromoMessage"),
-            "指定された募集が見つかりませんでした。掲載終了・再掲載済みの可能性があります。",
-            "error"
-          );
-        }
-      }
-
-      renderXPromoPreview();
-    }
-
-
-    function loadXPromoSettingsIntoForm() {
-      const fixed = $("#xPromoFixedText");
-      const own = $("#xPromoOwnXUrl");
-
-      if (fixed) fixed.value = getXPromoFixedText();
-      if (own) own.value = getXPromoOwnXUrl();
-    }
-
-
-    function saveXPromoSettings() {
-      const fixedText = $("#xPromoFixedText")?.value.trim() || "";
-      const ownXUrl = $("#xPromoOwnXUrl")?.value.trim() || "";
-
-      if (ownXUrl) {
-        try {
-          const parsed = new URL(ownXUrl);
-          const host = parsed.hostname.toLowerCase().replace(/^www\./, "");
-          if (
-            parsed.protocol !== "https:"
-            || (host !== "x.com" && host !== "twitter.com")
-          ) {
-            throw new Error("INVALID_X_URL");
-          }
-        } catch {
-          showMessage(
-            $("#xPromoMessage"),
-            "自分のXリンクは https://x.com/... の形式で入力してください。",
-            "error"
-          );
-          return;
-        }
-      }
-
-      localStorage.setItem(X_PROMO_FIXED_TEXT_KEY, fixedText);
-      localStorage.setItem(X_PROMO_OWN_X_URL_KEY, ownXUrl);
-
-      showMessage(
-        $("#xPromoMessage"),
-        "追加文と自分のXリンクを保存しました。",
-        "ok"
-      );
-
-      renderXPromoPreview();
-    }
-
-
-    // ========================================
     // 募集画像管理
     // 20MBまで受付 → 自動最適化 → Storageへ保存
     // ========================================
@@ -5455,22 +4771,95 @@
 
 
 
-    async function emergencyCloseRecruitment() {
-      const type=$("#recruitmentImageType")?.value || "commander";
-      const item=getSelectedRecruitmentImageItem();
-      if (!item?.id) { showMessage($("#recruitmentImageMessage"),"対象を選択してください。","error"); return; }
-      const identity=getRecruitmentManageTargetIdentity(item,type);
-      if (!window.confirm(`「${identity.label}」の募集を即時非表示にしますか？\n\n会員登録・PASS・BOT設定は変更しません。`)) return;
-      if (!window.confirm("最終確認：本当に公開募集を終了しますか？")) return;
-      const token=getToken(); if (!token) {showLogin();return;}
-      const btn=$("#recruitmentEmergencyCloseBtn"); if (btn) btn.disabled=true;
-      const {data,error}=await sb.rpc("creator_admin_emergency_close_recruitment",{p_token:token,p_type:type,p_recruitment_id:String(item.id)});
-      if (btn) btn.disabled=false;
-      if (error || !data?.ok) {
-        showMessage($("#recruitmentImageMessage"),String(error?.message||data?.reason||"緊急非表示に失敗しました。"),"error");return;
+    // ADMIN専用。編集画面と独立した対象リストを使用して誤削除を防ぐ。
+    let forceDeleteTargets = [];
+    let forceDeleteBusy = false;
+
+    async function loadForceDeleteTargets() {
+      const select = $("#forceDeleteTargetSelect");
+      if (!select) return;
+      const type = $("#recruitmentImageType")?.value || "commander";
+      forceDeleteTargets = [];
+      select.disabled = true;
+      select.innerHTML = '<option value="">削除対象を読み込み中...</option>';
+      const token = getToken();
+      if (!token) { showLogin(); return; }
+      const { data, error } = await sb.rpc("creator_admin_force_delete_target_list", {
+        p_token: token, p_type: type
+      });
+      if (error) {
+        const message = String(error.message || "");
+        if (message.includes("INVALID_ADMIN_TOKEN") || message.includes("ADMIN_SESSION_INVALID")) {
+          clearToken(); showLogin(); return;
+        }
+        select.innerHTML = '<option value="">削除対象を読み込めません</option>';
+        showMessage($("#recruitmentImageMessage"), "強制削除対象を読み込めません。専用SQLの適用状況を確認してください。", "error");
+        return;
       }
-      await loadRecruitmentImageTargets();
-      showMessage($("#recruitmentImageMessage"),"公開募集を即時終了しました。会員情報・PASS・BOT設定は維持されています。","ok");
+      forceDeleteTargets = Array.isArray(data) ? data : [];
+      select.innerHTML = '<option value="">削除対象を選んでください</option>' +
+        forceDeleteTargets.map(item =>
+          `<option value="${escapeHtml(String(item.id))}">${escapeHtml(String(item.label || item.id))}</option>`
+        ).join("");
+      select.disabled = false;
+      renderForceDeleteTargetHint();
+    }
+
+    function renderForceDeleteTargetHint() {
+      const targetId = $("#forceDeleteTargetSelect")?.value || "";
+      const hint = $("#forceDeleteTargetHint");
+      const button = $("#forceDeleteTargetBtn");
+      const item = forceDeleteTargets.find(row => String(row.id) === String(targetId));
+      if (hint) hint.textContent = item
+        ? `削除対象：${item.label} ／ ${item.type === "union" ? "ユニオン登録・PASS・対象BOTの利用停止" : "指揮官募集・PASSの削除"}`
+        : "上の削除対象を選択してください。募集編集で選択中の対象とは別です。";
+      if (button) button.disabled = forceDeleteBusy || !item;
+    }
+
+    async function forceDeleteRegistration() {
+      if (forceDeleteBusy) return;
+      const type = $("#recruitmentImageType")?.value || "commander";
+      const id = $("#forceDeleteTargetSelect")?.value || "";
+      const target = forceDeleteTargets.find(row => String(row.id) === id && row.type === type);
+      if (!target) {
+        showMessage($("#recruitmentImageMessage"), "削除する登録を選択してください。", "error");
+        return;
+      }
+      const label = String(target.label || id);
+      if (!window.confirm(`【1回目の確認】\n「${label}」を強制削除しますか？\n\n${type === "union" ? "ユニオン登録・募集・PASSを削除し、関連BOTの利用権も無効化します。" : "指揮官募集とPASSを削除します。"}\nこの操作は取り消せません。`)) return;
+      const phrase = window.prompt(`【2回目の最終確認】\n削除対象：${label}\n\n続行するには「強制削除」と入力してください。`, "");
+      if (phrase !== "強制削除") {
+        if (phrase !== null) showMessage($("#recruitmentImageMessage"), "確認文字が一致しないため、削除を中止しました。", "error");
+        return;
+      }
+      const token = getToken();
+      if (!token) { showLogin(); return; }
+      forceDeleteBusy = true;
+      renderForceDeleteTargetHint();
+      try {
+        const { data, error } = await sb.rpc("creator_admin_force_delete_target", {
+          p_token: token, p_type: type, p_target_id: id
+        });
+        if (error || !data?.ok) {
+          const message = String(error?.message || data?.reason || "強制削除に失敗しました。");
+          if (message.includes("INVALID_ADMIN_TOKEN") || message.includes("ADMIN_SESSION_INVALID")) {
+            clearToken(); showLogin(); return;
+          }
+          showMessage($("#recruitmentImageMessage"), `強制削除に失敗しました：${message}`, "error");
+          return;
+        }
+        await loadRecruitmentImageTargets();
+        await loadForceDeleteTargets();
+        showMessage($("#recruitmentImageMessage"),
+          type === "union" ? `「${label}」の登録を削除しました。関連BOT設定 ${Number(data.disabled_guilds || 0)}件を無効化しました。` : `「${label}」の指揮官募集を削除しました。`,
+          "ok");
+      } catch (e) {
+        console.error("ADMIN強制削除エラー", e);
+        showMessage($("#recruitmentImageMessage"), "強制削除中にエラーが発生しました。", "error");
+      } finally {
+        forceDeleteBusy = false;
+        renderForceDeleteTargetHint();
+      }
     }
 
     async function updateSelectedRecruitmentUrl() {
@@ -7271,15 +6660,6 @@
       );
 
 
-    $("#openXPromoBtn")
-      ?.addEventListener(
-        "click",
-        async () => {
-          showXPromoAdmin();
-        }
-      );
-
-
     $("#openRecruitmentImageBtn")
       ?.addEventListener(
         "click",
@@ -7446,85 +6826,6 @@
       );
 
 
-    $("#reloadXPromoTargetsBtn")
-      ?.addEventListener(
-        "click",
-        loadXPromoTargets
-      );
-
-
-    $("#xPromoTarget")
-      ?.addEventListener(
-        "change",
-        renderXPromoPreview
-      );
-
-
-    $("#xPromoFixedText")
-      ?.addEventListener(
-        "input",
-        renderXPromoPreview
-      );
-
-
-    $("#xPromoOwnXUrl")
-      ?.addEventListener(
-        "input",
-        renderXPromoPreview
-      );
-
-
-    $("#saveXPromoSettingsBtn")
-      ?.addEventListener(
-        "click",
-        saveXPromoSettings
-      );
-
-
-    $("#copyXPromoBtn")
-      ?.addEventListener(
-        "click",
-        async () => {
-          const text = buildXPromoText();
-          if (!text) return;
-
-          try {
-            await copyTextToClipboard(text);
-            showMessage(
-              $("#xPromoMessage"),
-              "宣伝文をコピーしました。",
-              "ok"
-            );
-          } catch (error) {
-            console.error(error);
-            showMessage(
-              $("#xPromoMessage"),
-              "宣伝文をコピーできませんでした。",
-              "error"
-            );
-          }
-        }
-      );
-
-
-    $("#openXPromoPostBtn")
-      ?.addEventListener(
-        "click",
-        () => {
-          const text = buildXPromoText();
-          if (!text) return;
-          openXPromoIntent(text);
-        }
-      );
-
-
-    $("#oneTouchXPromoBtn")
-      ?.addEventListener(
-        "click",
-        oneTouchXPromo
-      );
-
-
     $("#backToMenuFromRecruitmentImageBtn")
       ?.addEventListener(
         "click",
@@ -7535,7 +6836,9 @@
     $("#reloadRecruitmentImageTargetsBtn")
       ?.addEventListener(
         "click",
-        loadRecruitmentImageTargets
+        async () => {
+          await Promise.all([loadRecruitmentImageTargets(), loadForceDeleteTargets()]);
+        }
       );
 
 
@@ -8531,10 +7834,6 @@
         ?.classList
         .add("hidden");
 
-      $("#xPromoSection")
-        ?.classList
-        .add("hidden");
-
       $("#accessStatsSection")
         ?.classList
         .add("hidden");
@@ -9369,24 +8668,6 @@
     }
 
 
-    async function showXPromoAdmin() {
-
-      hideAllAdminSections();
-
-      $("#xPromoSection")
-        ?.classList
-        .remove("hidden");
-
-      clearMessage(
-        $("#xPromoMessage")
-      );
-
-      loadXPromoSettingsIntoForm();
-      await loadXPromoTargets();
-
-    }
-
-
     async function showRecruitmentImageAdmin() {
 
       hideAllAdminSections();
@@ -9399,7 +8680,7 @@
         $("#recruitmentImageMessage")
       );
 
-      await loadRecruitmentImageTargets();
+      await Promise.all([loadRecruitmentImageTargets(), loadForceDeleteTargets()]);
 
     }
 
@@ -9561,11 +8842,7 @@
             "";
 
 
-          if (hasXPromoDeepLink()) {
-            await showXPromoAdmin();
-          } else {
-            showMenu();
-          }
+          showMenu();
 
         }
       );
@@ -9899,7 +9176,8 @@
       );
 
 
-    $("#recruitmentEmergencyCloseBtn")?.addEventListener("click",emergencyCloseRecruitment);
+    $("#forceDeleteTargetBtn")?.addEventListener("click", forceDeleteRegistration);
+    $("#forceDeleteTargetSelect")?.addEventListener("change", renderForceDeleteTargetHint);
 
     $("#recruitmentManageForceImageOffBtn")
       ?.addEventListener(
@@ -9911,7 +9189,9 @@
     $("#recruitmentImageType")
       ?.addEventListener(
         "change",
-        loadRecruitmentImageTargets
+        async () => {
+          await Promise.all([loadRecruitmentImageTargets(), loadForceDeleteTargets()]);
+        }
       );
 
 
@@ -12114,11 +11394,7 @@
 
         if (valid) {
 
-          if (hasXPromoDeepLink()) {
-            await showXPromoAdmin();
-          } else {
-            showMenu();
-          }
+          showMenu();
 
         }
 
