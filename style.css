@@ -6087,3 +6087,73 @@ body.manage-mode #managePage #loadManageRecruitmentBtn,
  #listPage #recruitmentList.cards article.card .new-badge,
  #listPage #recruitmentList.cards article.card .deadline-badge { height:20px; min-height:20px; padding:0 5px !important; font-size:9px !important; }
 }
+
+
+/* ================================================================
+   NEW UNION REGISTRATION — BOT GUIDE AFTER SUCCESSFUL PASS COPY
+   Only #resultModal; never affects manage/preview/Discord republish.
+   ================================================================ */
+#resultModal .registration-bot-guide {
+  visibility: hidden;
+  pointer-events: none;
+  overflow: hidden;
+  max-height: 0;
+  opacity: 0;
+  margin: 0;
+  padding: 0 13px;
+  border: 0 solid #dce5e9;
+  background: #f8fafb;
+  transform: translateY(-8px);
+  transition:
+    max-height .32s ease,
+    opacity .25s ease,
+    transform .32s ease,
+    padding .32s ease,
+    margin .32s ease;
+}
+#resultModal .registration-bot-guide.is-open {
+  visibility: visible;
+  pointer-events: auto;
+  max-height: 440px;
+  opacity: 1;
+  margin: 12px 0;
+  padding: 13px;
+  border-width: 1px;
+  transform: translateY(0);
+}
+#resultModal .registration-bot-guide h3 {
+  color: #23272b;
+  font: 700 15px/1.5 "Noto Sans JP", sans-serif;
+  letter-spacing: -.025em;
+  margin: 0 0 9px;
+}
+#resultModal .registration-bot-guide p {
+  color: #4e5962;
+  font: 500 12px/1.75 "Noto Sans JP", sans-serif;
+  margin: 0 0 10px;
+}
+#resultModal .registration-bot-guide-link {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 46px;
+  margin-top: 12px;
+  text-decoration: none;
+  font-size: 12px;
+}
+/* Restrict modal scrolling to the moment the new guide opens. */
+#resultModal.bot-guide-expanded .modal-card {
+  max-height: calc(100vh - 32px);
+  max-height: calc(100dvh - 32px);
+  overflow-y: auto;
+  overscroll-behavior: contain;
+  -webkit-overflow-scrolling: touch;
+}
+@media (max-width: 600px) {
+  #resultModal .registration-bot-guide.is-open { padding: 12px; }
+  #resultModal .registration-bot-guide h3 { font-size: 14px; }
+  #resultModal .registration-bot-guide p { font-size: 12.5px; }
+}
+@media (prefers-reduced-motion: reduce) {
+  #resultModal .registration-bot-guide { transition: none; }
+}
