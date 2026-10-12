@@ -1173,19 +1173,32 @@ document.addEventListener("visibilitychange", () => {
   if (!document.hidden) retryFailedXCollectedEmbeds();
 });
 
-// X公式の埋め込みを優先。失敗は1回だけ再試行して、保存済み本文へ切り替える。
-// iframeは別オリジンなので、その内部の「Not found」という文字は取得できない。
+// X LISTEDは保存済みの本文を最初から表示する。埋め込みは非表示の領域で検査し、
+// 成功した場合だけ切り替える。通常募集のX埋め込みは従来どおり。
+function getXCollectedTextHtml(target) {
+  const url = target.dataset.recruitmentUrl || "";
+  const excerpt = target.dataset.textExcerpt || "";
+  const author = target.dataset.authorHandle || "";
+  const slv = target.dataset.slv || "";
+  return `
+    <div class="x-saved-text" style="padding:18px 16px;background:#101013;border:1px solid #333;border-radius:12px;overflow-wrap:anywhere;">
+      <div style="font-size:12px;color:#aaa;margin-bottom:12px;">X投稿の保存済みテキスト</div>
+      ${author ? `<div style="font-size:13px;color:#ccc;margin-bottom:8px;">${escapeHtml(author.startsWith('@') ? author : '@' + author)}${slv ? ' ・ SLV ' + escapeHtml(slv) : ''}</div>` : (slv ? `<div style="font-size:13px;color:#ccc;margin-bottom:8px;">SLV ${escapeHtml(slv)}</div>` : '')}
+      <div style="white-space:pre-wrap;line-height:1.7;font-size:14px;color:#eee;">${escapeHtml(excerpt || '投稿本文を取得できませんでした。Xで元の投稿を確認してください。')}</div>
+      <a href="${escapeHtml(url)}" target="_blank" rel="noopener noreferrer" style="display:inline-block;margin-top:16px;color:#eee;text-decoration:underline;">Xで元の投稿を開く ↗</a>
+    </div>`;
+}
+
 function showXEmbedFallback(target) {
   if (!target || !target.isConnected) return;
   target.dataset.loaded = "failed";
   if (target.classList.contains("x-collected-embed")) {
     target.dataset.nextRetryAt = String(Date.now() + X_EMBED_RECOVERY_INTERVAL_MS);
+    target.innerHTML = getXCollectedTextHtml(target);
+    return;
   }
   const url = target.dataset.recruitmentUrl || "";
   const previewImageUrl = target.dataset.previewImageUrl || "";
-  const excerpt = target.dataset.textExcerpt || "";
-  const author = target.dataset.authorHandle || "";
-  const slv = target.dataset.slv || "";
   if (previewImageUrl) {
     target.innerHTML = `
       <div class="registration-preview-platform">掲載先：X</div>
@@ -1194,24 +1207,10 @@ function showXEmbedFallback(target) {
       </a>`;
     return;
   }
-  if (excerpt) {
-    target.innerHTML = `
-      <div class="x-saved-text" style="padding:18px 16px;background:#101013;border:1px solid #333;border-radius:12px;overflow-wrap:anywhere;">
-        <div style="font-size:12px;color:#aaa;margin-bottom:12px;">X投稿の保存済みテキスト</div>
-        ${author ? `<div style="font-size:13px;color:#ccc;margin-bottom:8px;">${escapeHtml(author.startsWith('@') ? author : '@' + author)}${slv ? ' ・ SLV ' + escapeHtml(slv) : ''}</div>` : (slv ? `<div style="font-size:13px;color:#ccc;margin-bottom:8px;">SLV ${escapeHtml(slv)}</div>` : '')}
-        <div style="white-space:pre-wrap;line-height:1.7;font-size:14px;color:#eee;">${escapeHtml(excerpt)}</div>
-        <a href="${escapeHtml(url)}" target="_blank" rel="noopener noreferrer" style="display:inline-block;margin-top:16px;color:#eee;text-decoration:underline;">Xで元の投稿を開く ↗</a>
-      </div>`;
-    return;
-  }
-  target.innerHTML = `
-    <div class="x-embed-error">
-      <strong>X投稿を埋め込み表示できません</strong><br>
-      <a href="${escapeHtml(url)}" target="_blank" rel="noopener noreferrer">Xで投稿を開く ↗</a>
-    </div>`;
+  target.innerHTML = `<div class="x-embed-error"><strong>X投稿を埋め込み表示できません</strong><br><a href="${escapeHtml(url)}" target="_blank" rel="noopener noreferrer">Xで投稿を開く ↗</a></div>`;
 }
 
-function renderSingleXEmbed(target, attempt = 0, recovery = false) {
+function renderXCollectedEmbed(target, attempt = 0, recovery = false) {
   if (!target || !target.isConnected) return;
   if (attempt === 0 && (target.dataset.loaded === "true" || target.dataset.loaded === "loading" || (target.dataset.loaded === "failed" && !recovery))) return;
   const postId = target.dataset.postId;
@@ -1220,29 +1219,32 @@ function renderSingleXEmbed(target, attempt = 0, recovery = false) {
     return;
   }
   target.dataset.loaded = "loading";
-  target.replaceChildren();
   const token = (target._xEmbedToken || 0) + 1;
   target._xEmbedToken = token;
   const current = () => target.isConnected && target._xEmbedToken === token;
+  // 公開カードの表示を消さず、同じ位置の透明なステージで公式iframeを準備する。
+  target.innerHTML = getXCollectedTextHtml(target);
+  target.style.position = "relative";
+  const stage = document.createElement("div");
+  stage.style.cssText = "position:absolute;top:0;left:0;width:100%;opacity:0;pointer-events:none;z-index:-1;";
+  stage.setAttribute("aria-hidden", "true");
+  target.appendChild(stage);
+  let settled = false;
   const fail = () => {
-    if (!current()) return;
+    if (settled || !current()) return;
+    settled = true;
+    stage.remove();
     if (attempt === 0) {
-      setTimeout(() => {
-        if (current()) renderSingleXEmbed(target, 1);
-      }, 3000);
+      // 本文を表示したまま、短時間後に1回だけやり直す。
+      setTimeout(() => { if (current()) renderXCollectedEmbed(target, 1, true); }, 3000);
     } else {
       showXEmbedFallback(target);
     }
   };
-  let finished = false;
-  const timeoutId = setTimeout(() => {
-    if (!finished) fail();
-  }, 12000);
+  const timeoutId = setTimeout(fail, 12000);
   let result;
   try {
-    result = window.twttr.widgets.createTweet(postId, target, {
-      theme: "dark", align: "center", conversation: "none"
-    });
+    result = window.twttr.widgets.createTweet(postId, stage, { theme:"dark", align:"center", conversation:"none" });
   } catch (error) {
     clearTimeout(timeoutId);
     console.warn("X投稿埋め込み失敗", error);
@@ -1250,32 +1252,59 @@ function renderSingleXEmbed(target, attempt = 0, recovery = false) {
     return;
   }
   Promise.resolve(result).then(tweetElement => {
-    finished = true;
     clearTimeout(timeoutId);
-    if (!current()) return;
-    if (!tweetElement) {
-      fail();
-      return;
-    }
-    target.dataset.loaded = "true";
-    // Xはエラー画面だけの低いiframeを返す場合がある。
-    // 画像登録済みの通常カードは従来通り。収集カードだけ、
-    // 保存本文がある場合に限り、極端に小さいiframeを再試行する。
-    if (target.classList.contains("x-collected-embed") && target.dataset.textExcerpt) {
-      setTimeout(() => {
-        if (!current() || target.dataset.loaded !== "true") return;
-        const iframe = target.querySelector("iframe");
-        if (iframe && iframe.getBoundingClientRect().height > 0 && iframe.getBoundingClientRect().height < 170) {
-          fail();
-        }
-      }, 4000);
-    }
+    if (!current() || settled) return;
+    if (!tweetElement) { fail(); return; }
+    // iframeの高さが確定する時間を待ち、極端に低いエラー画面を除外する。
+    setTimeout(() => {
+      if (!current() || settled) return;
+      const iframe = stage.querySelector("iframe");
+      const height = iframe?.getBoundingClientRect().height || 0;
+      if (!iframe || height < 170) { fail(); return; }
+      settled = true;
+      target.replaceChildren(stage);
+      stage.style.cssText = "position:static;opacity:1;pointer-events:auto;z-index:auto;width:100%;";
+      stage.removeAttribute("aria-hidden");
+      target.dataset.loaded = "true";
+    }, 2500);
   }).catch(error => {
-    finished = true;
     clearTimeout(timeoutId);
     console.warn("X投稿埋め込み失敗", error);
     fail();
   });
+}
+
+function renderSingleXEmbed(target, attempt = 0, recovery = false) {
+  if (!target || !target.isConnected) return;
+  if (target.classList.contains("x-collected-embed")) {
+    renderXCollectedEmbed(target, attempt, recovery);
+    return;
+  }
+  // 登録者自身が掲載した通常カードの挙動は変更しない。
+  if (attempt === 0 && (target.dataset.loaded === "true" || target.dataset.loaded === "loading" || target.dataset.loaded === "failed")) return;
+  const postId = target.dataset.postId;
+  if (!postId || !window.twttr?.widgets?.createTweet) { showXEmbedFallback(target); return; }
+  target.dataset.loaded = "loading";
+  target.replaceChildren();
+  const token = (target._xEmbedToken || 0) + 1;
+  target._xEmbedToken = token;
+  const current = () => target.isConnected && target._xEmbedToken === token;
+  const fail = () => {
+    if (!current()) return;
+    if (attempt === 0) setTimeout(() => { if (current()) renderSingleXEmbed(target, 1); }, 3000);
+    else showXEmbedFallback(target);
+  };
+  let finished = false;
+  const timeoutId = setTimeout(() => { if (!finished) fail(); }, 12000);
+  try {
+    Promise.resolve(window.twttr.widgets.createTweet(postId, target, {theme:"dark",align:"center",conversation:"none"})).then(tweetElement => {
+      finished = true;
+      clearTimeout(timeoutId);
+      if (!current()) return;
+      if (!tweetElement) { fail(); return; }
+      target.dataset.loaded = "true";
+    }).catch(error => { finished = true; clearTimeout(timeoutId); console.warn("X投稿埋め込み失敗", error); fail(); });
+  } catch (error) { clearTimeout(timeoutId); console.warn("X投稿埋め込み失敗", error); fail(); }
 }
 
 function renderXEmbeds(
@@ -2303,7 +2332,14 @@ function buildXCollectedCard(item) {
           data-recruitment-url="${escapeHtml(url)}"
           data-text-excerpt="${escapeHtml(item.text_excerpt || "")}" 
           data-author-handle="${escapeHtml(item.author_handle || "")}" 
-          data-slv="${escapeHtml(item.slv || "")}"></div>
+          data-slv="${escapeHtml(item.slv || "")}">
+          <div class="x-saved-text" style="padding:18px 16px;background:#101013;border:1px solid #333;border-radius:12px;overflow-wrap:anywhere;">
+            <div style="font-size:12px;color:#aaa;margin-bottom:12px;">X投稿の保存済みテキスト</div>
+            ${item.author_handle ? `<div style="font-size:13px;color:#ccc;margin-bottom:8px;">${escapeHtml(String(item.author_handle).startsWith('@') ? item.author_handle : '@' + item.author_handle)}${item.slv ? ' ・ SLV ' + escapeHtml(item.slv) : ''}</div>` : (item.slv ? `<div style="font-size:13px;color:#ccc;margin-bottom:8px;">SLV ${escapeHtml(item.slv)}</div>` : '')}
+            <div style="white-space:pre-wrap;line-height:1.7;font-size:14px;color:#eee;">${escapeHtml(item.text_excerpt || '投稿本文を取得できませんでした。Xで元の投稿を確認してください。')}</div>
+            <a href="${escapeHtml(url)}" target="_blank" rel="noopener noreferrer" style="display:inline-block;margin-top:16px;color:#eee;text-decoration:underline;">Xで元の投稿を開く ↗</a>
+          </div>
+        </div>
       </div>
     </article>
   `;
