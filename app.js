@@ -3965,6 +3965,21 @@ $("#previewImageClearBtn")
 
 
 // ========================================
+// 新規ユニオン登録のBOT案内（PASSコピー後のみ表示）
+// ========================================
+
+function resetRegistrationBotGuide(isUnion = false) {
+  const modal = $("#resultModal");
+  const guide = $("#registrationBotGuide");
+
+  modal?.classList.toggle("bot-guide-available", isUnion);
+  modal?.classList.remove("bot-guide-expanded");
+  guide?.classList.remove("is-open");
+  guide?.setAttribute("aria-hidden", "true");
+}
+
+
+// ========================================
 // 登録結果表示
 // ========================================
 
@@ -3974,6 +3989,8 @@ function showRegistrationResult(
   registerOnly = false,
   isUnion = false
 ) {
+
+  resetRegistrationBotGuide(isUnion);
 
   const registrationResultTitle =
     $("#registrationResultTitle");
@@ -4104,6 +4121,9 @@ function showRegistrationResult(
 
 
 function showDiscordRepublishV2Result(result, registerOnly = false) {
+
+  // BOT経由の再掲載には新規登録案内を出さない。
+  resetRegistrationBotGuide(false);
 
   const registrationResultTitle =
     $("#registrationResultTitle");
@@ -4909,6 +4929,35 @@ $("#copyPass")
           .writeText(
             pass
           );
+
+        // 既存のPASSコピーが成功した場合だけ、ユニオン向けBOT案内を展開。
+        const modal = $("#resultModal");
+        const guide = $("#registrationBotGuide");
+        if (
+          modal?.classList.contains("bot-guide-available") &&
+          !modal.classList.contains("hidden") &&
+          guide
+        ) {
+          guide.setAttribute("aria-hidden", "false");
+          guide.classList.add("is-open");
+          modal.classList.add("bot-guide-expanded");
+
+          // 展開後の位置に合わせ、狭い画面でも案内全体を見られるようにする。
+          window.setTimeout(() => {
+            if (
+              guide.classList.contains("is-open") &&
+              !modal.classList.contains("hidden")
+            ) {
+              const reduceMotion = window.matchMedia?.(
+                "(prefers-reduced-motion: reduce)"
+              ).matches;
+              guide.scrollIntoView({
+                behavior: reduceMotion ? "auto" : "smooth",
+                block: "nearest"
+              });
+            }
+          }, 350);
+        }
 
 
         const button =
