@@ -139,7 +139,7 @@ let lastRegisteredRecruitment = null;
 // X収集カード 公開表示
 // BOTが x_recruitment_candidates に保存した候補を
 // public_x_recruitment_list RPC 経由で安全に取得する。
-// DB側・画面側の両方で48時間以内だけを表示する。
+// DB側・画面側の両方で「UNION MATCH初回取得時刻から48時間以内」だけを表示する。
 // ========================================
 const X_LISTED_PUBLIC_RPC = "public_x_recruitment_list_v3";
 const X_LISTED_MAX_ITEMS = 100;
@@ -2230,15 +2230,16 @@ function isPublicXListedCandidate(item) {
     return false;
   }
 
-  const postedTime =
-    new Date(item?.posted_at).getTime();
+  // X投稿日時ではなく、UNION MATCHが初回取得した時刻から48時間掲載する。
+  const discoveredTime =
+    new Date(item?.discovered_at).getTime();
 
-  if (!Number.isFinite(postedTime)) {
+  if (!Number.isFinite(discoveredTime)) {
     return false;
   }
 
   const age =
-    Date.now() - postedTime;
+    Date.now() - discoveredTime;
 
   return (
     age >= 0
@@ -2300,13 +2301,9 @@ function buildXCollectedCard(item) {
     return "";
   }
 
-  // XのNEWだけは「初回発見日時」から24時間。投稿日時は掲載48時間の判定に残す。
+  // X LISTEDは取得から48時間だけ掲載するため、その掲載中はNEWとして扱う。
   const newBadge =
-    isNewRecruitment(
-      item.discovered_at
-    )
-      ? '<span class="new-badge">NEW</span>'
-      : "";
+    '<span class="new-badge">NEW</span>';
 
   return `
     <article class="card x-collected-card">
