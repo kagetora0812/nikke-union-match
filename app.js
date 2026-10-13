@@ -141,7 +141,7 @@ let lastRegisteredRecruitment = null;
 // public_x_recruitment_list RPC 経由で安全に取得する。
 // DB側・画面側の両方で48時間以内だけを表示する。
 // ========================================
-const X_LISTED_PUBLIC_RPC = "public_x_recruitment_list_v3";
+const X_LISTED_PUBLIC_RPC = "public_x_recruitment_list_v4";
 const X_LISTED_MAX_ITEMS = 100;
 const X_LISTED_HOURS = 48;
 
@@ -2230,16 +2230,15 @@ function isPublicXListedCandidate(item) {
     return false;
   }
 
-  // UNION MATCHが初回取得した時刻から48時間掲載
-  const discoveredTime =
-    new Date(item?.discovered_at).getTime();
+  const listedTime =
+    new Date(item?.listed_at).getTime();
 
-  if (!Number.isFinite(discoveredTime)) {
+  if (!Number.isFinite(listedTime)) {
     return false;
   }
 
   const age =
-    Date.now() - discoveredTime;
+    Date.now() - listedTime;
 
   return (
     age >= 0
@@ -2285,9 +2284,9 @@ async function loadPublicXListedCandidates() {
     )
     .sort(
       (a, b) =>
-        new Date(b.discovered_at)
+        new Date(b.listed_at)
         -
-        new Date(a.discovered_at)
+        new Date(a.listed_at)
     );
 }
 
@@ -2301,10 +2300,10 @@ function buildXCollectedCard(item) {
     return "";
   }
 
-  // XのNEWは「初回取得日時」から24時間。掲載自体は初回取得から48時間。
+  // XのNEWは「掲載開始日時」から24時間。掲載自体は48時間。
   const newBadge =
     isNewRecruitment(
-      item.discovered_at
+      item.listed_at
     )
       ? '<span class="new-badge">NEW</span>'
       : "";
