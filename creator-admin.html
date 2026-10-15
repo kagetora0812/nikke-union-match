@@ -7362,10 +7362,11 @@
         return;
       }
       const rows = Array.isArray(data) ? data : [];
-      const last = rows[0];
-      $("#xFlashState").textContent = !last ? "記録待ち" : last.code === "X_FLASH_RETRY_SCHEDULED" ? `保留 ${last.pending_count}件` : "判定完了";
-      $("#xFlashRetry").textContent = last?.code === "X_FLASH_RETRY_SCHEDULED" && last.retry_after ? `${formatXScheduleDate(last.retry_after)} JST` : "--";
-      body.innerHTML = rows.map(r => {
+      const latestState = rows.find(r => r.code === "X_FLASH_QUEUE_STATE");
+      const last = latestState || rows[0];
+      $("#xFlashState").textContent = !last ? "記録待ち" : Number(last.pending_count) > 0 ? `保留 ${last.pending_count}件` : "判定完了";
+      $("#xFlashRetry").textContent = last?.retry_after && Number(last.pending_count) > 0 ? `${formatXScheduleDate(last.retry_after)} JST` : "--";
+      body.innerHTML = rows.filter(r => r.code !== "X_FLASH_QUEUE_STATE").map(r => {
         const status = r.code === "X_FLASH_RETRY_SCHEDULED" ? "再スケジュール" : "判定完了";
         const result = r.code === "X_FLASH_RETRY_SCHEDULED" ? `延期（HTTP ${r.http_status || "--"}）` : status;
         return `<tr><td>${escapeHtml(formatXScheduleDate(r.occurred_at))} JST</td><td>${escapeHtml(result)}</td><td>${escapeHtml(r.retry_after ? formatXScheduleDate(r.retry_after) + " JST" : "--")}</td><td>${formatAccessNumber(r.pending_count)}</td><td>${formatAccessNumber(r.stored_count)}</td><td>${formatAccessNumber(r.discord_delivery_count)}</td></tr>`;
