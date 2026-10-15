@@ -2608,6 +2608,13 @@
         </div>
       </div>
 
+      <div class="panel-title" style="margin-top:25px">Flash最終判定・再スケジュール</div>
+      <div class="x-schedule-stats" style="grid-template-columns:repeat(2,minmax(0,1fr))">
+        <div class="x-schedule-stat"><div class="x-schedule-stat-label">最新のFlash状態</div><div id="xFlashState" class="x-schedule-stat-value info">--</div></div>
+        <div class="x-schedule-stat"><div class="x-schedule-stat-label">次回Flash再試行</div><div id="xFlashRetry" class="x-schedule-stat-value">--</div></div>
+      </div>
+      <div class="x-schedule-table-wrap"><table class="x-schedule-table"><thead><tr><th>記録日時</th><th>Flash処理</th><th>次回再試行</th><th>保留</th><th>保存</th><th>Discord配信</th></tr></thead><tbody id="xFlashHistoryBody"><tr><td colspan="6">読み込み中...</td></tr></tbody></table></div>
+      <div class="x-schedule-note">※ X検索時刻とは別のFlash最終判定履歴です。新しい記録処理の導入後に発生した延期・完了から記録します。</div>
       <div class="panel-title" style="margin-top:25px">過去72時間の実行履歴</div>
       <div class="x-schedule-table-wrap"><table class="x-schedule-table"><thead><tr><th>実行日時</th><th>状態</th><th>フェーズ</th><th>候補</th><th>保存</th><th>Discord配信</th></tr></thead><tbody id="xScheduleHistoryBody"><tr><td colspan="6">読み込み中...</td></tr></tbody></table></div>
       <div class="panel-title" style="margin-top:25px">今日から7日間の予定</div>
@@ -7344,6 +7351,27 @@
 
 
 
+    async function loadXFlashHistory() {
+      const body = $("#xFlashHistoryBody");
+      if (!body) return;
+      const token = getToken();
+      if (!token) return;
+      const { data, error } = await sb.rpc("creator_admin_x_flash_history", { p_token: token });
+      if (error) {
+        body.innerHTML = '<tr><td colspan="6">Flash履歴の取得に失敗しました。</td></tr>';
+        return;
+      }
+      const rows = Array.isArray(data) ? data : [];
+      const last = rows[0];
+      $("#xFlashState").textContent = !last ? "記録待ち" : last.code === "X_FLASH_RETRY_SCHEDULED" ? `保留 ${last.pending_count}件` : "判定完了";
+      $("#xFlashRetry").textContent = last?.code === "X_FLASH_RETRY_SCHEDULED" && last.retry_after ? `${formatXScheduleDate(last.retry_after)} JST` : "--";
+      body.innerHTML = rows.map(r => {
+        const status = r.code === "X_FLASH_RETRY_SCHEDULED" ? "再スケジュール" : "判定完了";
+        const result = r.code === "X_FLASH_RETRY_SCHEDULED" ? `延期（HTTP ${r.http_status || "--"}）` : status;
+        return `<tr><td>${escapeHtml(formatXScheduleDate(r.occurred_at))} JST</td><td>${escapeHtml(result)}</td><td>${escapeHtml(r.retry_after ? formatXScheduleDate(r.retry_after) + " JST" : "--")}</td><td>${formatAccessNumber(r.pending_count)}</td><td>${formatAccessNumber(r.stored_count)}</td><td>${formatAccessNumber(r.discord_delivery_count)}</td></tr>`;
+      }).join("") || '<tr><td colspan="6">まだFlashの再スケジュール履歴がありません。</td></tr>';
+    }
+
     async function loadXScheduleHistory() {
       const body=$("#xScheduleHistoryBody"); if(!body)return;
       const token=getToken();if(!token)return;
@@ -7355,6 +7383,7 @@
     async function loadXSchedule() {
       clearMessage($("#xScheduleMessage"));
       void loadXScheduleHistory();
+      void loadXFlashHistory();
 
       const body = $("#xScheduleTableBody");
       if (body) {
