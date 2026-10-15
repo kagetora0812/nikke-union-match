@@ -2752,6 +2752,19 @@
         ></div>
       </div>
 
+      <div class="panel" id="geminiErrorPanel">
+        <div class="panel-title">GEMINI API ERRORS</div>
+        <p class="lead" style="margin:0 0 12px">Googleの応答を記録したエラーのみ表示します。過去の未記録エラーは復元できません。</p>
+        <div id="geminiErrorSummary" class="system-check-detail" aria-live="polite">未取得</div>
+        <div id="geminiErrorRows" class="system-check-list" style="margin-top:12px"></div>
+      </div>
+      <dialog id="geminiErrorDialog" style="width:min(700px,94vw);max-height:82vh;background:#101621;color:#edf2f7;border:1px solid #2b3545;padding:22px">
+        <div class="button-row" style="justify-content:space-between;align-items:center">
+          <strong>Gemini エラー詳細</strong><button type="button" class="btn" id="closeGeminiErrorDialog">閉じる</button>
+        </div>
+        <pre id="geminiErrorText" style="margin-top:16px;white-space:pre-wrap;overflow-wrap:anywhere;line-height:1.7;font-size:12px"></pre>
+      </dialog>
+
       <div
         id="systemCheckMessage"
         class="message"
@@ -7895,6 +7908,65 @@
     }
 
 
+    // Gemini API errors: read-only, authenticated and scoped to existing runtime events.
+    let geminiErrors = [];
+    function renderGeminiErrors(items) {
+      geminiErrors = Array.isArray(items) ? items : [];
+      const summary = $("#geminiErrorSummary");
+      const rows = $("#geminiErrorRows");
+      if (!summary || !rows) return;
+      rows.replaceChildren();
+      summary.textContent = geminiErrors.length ? `直近の記録 ${geminiErrors.length}件` : "記録されたGemini APIエラーはありません";
+      for (const [index, item] of geminiErrors.entries()) {
+        const row = document.createElement("div");
+        row.className = "system-check-row " + (Number(item?.status) === 503 || Number(item?.status) === 429 ? "warn" : "info");
+        const mark = document.createElement("div");
+        mark.className = "system-check-mark";
+        mark.textContent = "!";
+        const body = document.createElement("div");
+        const label = document.createElement("div");
+        label.className = "system-check-label";
+        const date = new Date(item?.occurred_at);
+        const dateText = Number.isNaN(date.getTime()) ? "--" : date.toLocaleString("ja-JP", { timeZone:"Asia/Tokyo", month:"2-digit", day:"2-digit", hour:"2-digit", minute:"2-digit" });
+        label.textContent = `${dateText} / ${item?.model || "モデル不明"} / HTTP ${item?.status || "不明"}`;
+        const detail = document.createElement("div");
+        detail.className = "system-check-detail";
+        detail.textContent = `${item?.scope || "Gemini"} / ${item?.code || "APIエラー"}`;
+        body.append(label, detail);
+        const button = document.createElement("button");
+        button.className = "btn blue";
+        button.type = "button";
+        button.textContent = "詳細";
+        button.addEventListener("click", () => {
+          const target = geminiErrors[index];
+          $("#geminiErrorText").textContent = [
+            `発生: ${dateText} JST`, `モデル: ${target?.model || "--"}`,
+            `HTTP: ${target?.status || "--"}`, `エラーコード: ${target?.code || "--"}`,
+            `処理: ${target?.scope || "--"}`,
+            `Google応答: ${target?.message || "詳細情報なし"}`,
+            `再試行指示: ${target?.retry_delay_ms == null ? "指定なし" : String(target.retry_delay_ms) + "ms"}`
+          ].join("\n");
+          $("#geminiErrorDialog")?.showModal();
+        });
+        row.append(mark,body,button);
+        rows.append(row);
+      }
+    }
+    $("#closeGeminiErrorDialog")?.addEventListener("click", () => $("#geminiErrorDialog")?.close());
+    async function loadGeminiErrors() {
+      const summary = $("#geminiErrorSummary");
+      if (summary) summary.textContent = "読み込み中...";
+      const token = getToken();
+      if (!token) return;
+      const { data, error } = await sb.rpc("creator_admin_gemini_errors", { p_token: token });
+      if (error) {
+        if (summary) summary.textContent = "エラー履歴を取得できませんでした（SQL未適用・認証エラーなど）";
+        console.warn("GEMINI ERROR HISTORY", error?.code || error?.message);
+        return;
+      }
+      renderGeminiErrors(data);
+    }
+
     async function loadSystemCheck() {
 
       clearMessage(
@@ -7902,6 +7974,7 @@
       );
 
       setSystemCheckLoading();
+      loadGeminiErrors().catch(error => console.warn("GEMINI ERROR HISTORY", error?.message));
 
       const token = getToken();
 
