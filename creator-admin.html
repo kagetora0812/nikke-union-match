@@ -1584,6 +1584,8 @@
     .api-budget-fields{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:auto}
     .api-budget-fields label{min-width:0;font-size:11px}
     .api-budget-fields input{width:100%}
+    .api-budget-readonly{min-width:0;display:flex;flex-direction:column;justify-content:center;gap:5px;font-size:11px;color:var(--muted)}
+    .api-budget-readonly strong{font-size:15px;color:#d5e5f4;font-weight:800}
     @media(max-width:700px){.api-budget-grid{grid-template-columns:1fr}}
 /* Compact API budget cards; keep existing input/button hooks. */
 .api-budget-grid{gap:10px;margin-top:10px}
@@ -2663,7 +2665,7 @@
           <div class="api-budget-meter" role="progressbar" aria-label="OpenAI API 残高率" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0"><div id="apiBudgetOpenaiFill"></div></div>
           <div id="apiBudgetOpenaiMeterText" class="api-budget-meter-text">使用状況 未計測</div>
           <div id="apiBudgetOpenaiSummary" class="api-budget-summary hidden"></div>
-          <div class="api-budget-fields"><label>月間目安予算 $<input id="apiBudgetOpenaiLimit" type="number" min="0.01" step="0.01" value="5"></label><label>公式残高（手動） $<input id="apiBudgetOpenaiBalance" type="number" min="0" step="0.01" value="5"></label></div>
+          <div class="api-budget-fields"><div class="api-budget-readonly"><span>今月の消費額</span><strong id="apiBudgetOpenaiMonthlySpend">未計測</strong></div><label>公式残高（手動） $<input id="apiBudgetOpenaiBalance" type="number" min="0" step="0.01" value="5"></label></div>
           <button id="saveApiBudgetOpenai" class="btn blue wide" type="button">OpenAIの残高を記録</button>
         </div>
       </div>
@@ -7410,6 +7412,8 @@
       retry.textContent = latest.retry_after ? "再試行予定 " + formatXScheduleDate(latest.retry_after) + " JST" : "";
     }
 
+    // OpenAI の月間予算は入力しない。既存DB値を読み込み、残高更新時に変更せず渡す。
+    let openaiStoredBudgetUsd = null;
     // API残高はADMIN認証済みRPCを通して保存。ブラウザのローカルストレージを財務の正本にしない。
     async function loadApiBudgetAdmin() {
       const token = getToken(); if (!token) return;
@@ -7419,7 +7423,14 @@
         const row=(Array.isArray(data)?data:[]).find(x=>x.provider===key);
         if(!row)continue;
         const upper=key==="x"?"X":"Openai";
-        $("#apiBudget"+upper+"Limit").value=Number(row.budget_usd);
+        if(key==="x") {
+          $("#apiBudgetXLimit").value=Number(row.budget_usd);
+        } else {
+          const storedBudget=Number(row.budget_usd);
+          openaiStoredBudgetUsd=Number.isFinite(storedBudget) && storedBudget>0 ? storedBudget : null;
+          // 月単位のOpenAI利用額が計測されるまで推測値を表示しない。
+          $("#apiBudgetOpenaiMonthlySpend").textContent="未計測";
+        }
         // 入力欄は手動基準値のまま保ち、次回保存で自動減算を二重に含めない。
         $("#apiBudget"+upper+"Balance").value=Number(row.balance_usd);
         const manualBalance=Number(row.balance_usd);
@@ -7452,10 +7463,10 @@
     }
     async function saveApiBudgetAdmin(key){
       const upper=key==="x"?"X":"Openai";
-      const limit=Number($("#apiBudget"+upper+"Limit")?.value);
+      const limit=key==="x" ? Number($("#apiBudgetXLimit")?.value) : openaiStoredBudgetUsd;
       const balance=Number($("#apiBudget"+upper+"Balance")?.value);
       if(!Number.isFinite(limit)||limit<=0||!Number.isFinite(balance)||balance<0){
-        showMessage($("#apiBudgetMessage"),"予算は0より大きく、残高は0以上で入力してください。","error");return;
+        showMessage($("#apiBudgetMessage"),key==="openai" ? "OpenAIの既存設定を取得できません。再読込してください。" : "予算は0より大きく、残高は0以上で入力してください。","error");return;
       }
       const token=getToken();if(!token){showLogin();return;}
       const {error}=await sb.rpc("creator_admin_api_budget_write",{p_token:token,p_provider:key,p_budget_usd:limit,p_balance_usd:balance});
