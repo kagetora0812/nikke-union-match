@@ -2651,7 +2651,7 @@
           <div class="api-budget-top"><strong>X API</strong><span>従量課金</span></div>
           <div class="api-budget-caption">推定残高</div>
           <div id="apiBudgetXAmount" class="api-budget-amount">--</div>
-          <div class="api-budget-meter" role="progressbar" aria-label="X API 推定予算使用率" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0"><div id="apiBudgetXFill"></div></div>
+          <div class="api-budget-meter" role="progressbar" aria-label="X API 残高率" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0"><div id="apiBudgetXFill"></div></div>
           <div id="apiBudgetXMeterText" class="api-budget-meter-text">使用状況 未計測</div>
           <div id="apiBudgetXSummary" class="api-budget-summary">読み込み中...</div>
           <div class="api-budget-fields"><label>月間目安予算 $<input id="apiBudgetXLimit" type="number" min="0.01" step="0.01" value="7"></label><label>公式残高（手動） $<input id="apiBudgetXBalance" type="number" min="0" step="0.01" value="14.07"></label></div>
@@ -2661,7 +2661,7 @@
           <div class="api-budget-top"><strong>OpenAI API</strong><span>購入クレジット</span></div>
           <div class="api-budget-caption">推定残高</div>
           <div id="apiBudgetOpenaiAmount" class="api-budget-amount">--</div>
-          <div class="api-budget-meter" role="progressbar" aria-label="OpenAI API 推定予算使用率" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0"><div id="apiBudgetOpenaiFill"></div></div>
+          <div class="api-budget-meter" role="progressbar" aria-label="OpenAI API 残高率" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0"><div id="apiBudgetOpenaiFill"></div></div>
           <div id="apiBudgetOpenaiMeterText" class="api-budget-meter-text">使用状況 未計測</div>
           <div id="apiBudgetOpenaiSummary" class="api-budget-summary">読み込み中...</div>
           <div class="api-budget-fields"><label>月間目安予算 $<input id="apiBudgetOpenaiLimit" type="number" min="0.01" step="0.01" value="5"></label><label>公式残高（手動） $<input id="apiBudgetOpenaiBalance" type="number" min="0" step="0.01" value="5"></label></div>
@@ -2669,14 +2669,14 @@
         </div>
       </div>
       <div id="apiBudgetMessage" class="message hidden"></div>
-      <div class="x-schedule-note">※ 料金の記録がない場合は「未計測」。推定値でBOTを停止しません。手動の公式残高を基準にします。</div>
+      <div class="x-schedule-note">※ 計測開始までは残量メーターを未計測として表示します。計測開始後は青いバーが残高とともに減ります。推定値でBOTを停止しません。</div>
       <div class="panel-title" style="margin-top:25px">フェーズ別・直近3か月の学習実績</div>
       <div class="x-schedule-table-wrap"><table class="x-schedule-table"><thead><tr><th>フェーズ</th><th>TOTAL</th><th id="xLearnMonth2">--</th><th id="xLearnMonth1">--</th><th id="xLearnMonth0">--</th></tr></thead><tbody id="xLearningPhaseBody"><tr><td colspan="6">読み込み中...</td></tr></tbody></table></div>
       <div class="x-schedule-note">※ AI判定が完了した検索のみを集計。旧方式の履歴・未計測は「—」、確定した0件は「0」と表示します。</div>
       <div class="panel-title" style="margin-top:25px">直近48時間の実績</div>
       <div class="x-schedule-table-wrap"><table class="x-schedule-table"><thead><tr><th>日付（JST）</th><th>検索候補</th><th>通知募集</th><th>Discord通知先</th></tr></thead><tbody id="xDeliveryRecentBody"><tr><td colspan="4">読み込み中...</td></tr></tbody></table></div>
       <div class="panel-title" style="margin-top:25px">今後の検索予定</div>
-      <div class="x-schedule-table-wrap"><table class="x-schedule-table"><thead><tr><th>日時（JST）</th><th>X検索フェーズ</th><th>状態</th></tr></thead><tbody id="xScheduleTableBody"><tr><td colspan="2">読み込み中...</td></tr></tbody></table></div>
+      <div class="x-schedule-table-wrap"><table class="x-schedule-table"><thead><tr><th>日時（JST）</th><th>X検索フェーズ</th><th>状態</th></tr></thead><tbody id="xScheduleTableBody"><tr><td colspan="3">読み込み中...</td></tr></tbody></table></div>
       <div
         id="xScheduleMessage"
         class="message hidden"
@@ -7424,15 +7424,26 @@
         $("#apiBudget"+upper+"Limit").value=Number(row.budget_usd);
         // 入力欄は手動基準値のまま保ち、次回保存で自動減算を二重に含めない。
         $("#apiBudget"+upper+"Balance").value=Number(row.balance_usd);
-        const effective=Number(row.estimated_balance_usd ?? row.balance_usd);
-        const deducted=Number(row.estimated_spend_usd ?? 0);
-        const usedPercent=Number(row.budget_usd)>0 ? Math.max(0,deducted/Number(row.budget_usd)*100) : 0;
-        const measured = Boolean(row.usage_recorded); // 現行RPCにないため、追跡実装完了までは未計測とする
-        $("#apiBudget"+upper+"Amount").textContent = measured ? `$${effective.toFixed(2)}` : "未計測";
-        $("#apiBudget"+upper+"Summary").textContent = `手動残高 $${Number(row.balance_usd).toFixed(2)}｜推定使用額 ${measured ? `$${deducted.toFixed(4)}` : "未計測"}`;
-        $("#apiBudget"+upper+"MeterText").textContent = measured ? `目安予算の ${usedPercent.toFixed(1)}% 使用` : "使用状況 未計測";
-        $("#apiBudget"+upper+"Fill").style.width = measured ? `${Math.min(100,usedPercent)}%` : "0%";
-        $("#apiBudget"+upper+"Fill").parentElement.setAttribute("aria-valuenow",measured ? String(Math.min(100,usedPercent)) : "0");
+        const baseBalance=Number(row.balance_usd);
+        const estimatedBalance=Number(row.estimated_balance_usd);
+        const estimatedSpend=Number(row.estimated_spend_usd);
+        // 計測が有効になった場合のみ、手動記録した残高を満タンの基準にする。
+        // 月間目安予算は残高とは別物なので、メーターの分母には使わない。
+        const measured = row.usage_recorded === true
+          && Number.isFinite(baseBalance) && baseBalance > 0
+          && Number.isFinite(estimatedBalance) && Number.isFinite(estimatedSpend);
+        const remainingPercent = measured
+          ? Math.max(0, Math.min(100, estimatedBalance / baseBalance * 100)) : null;
+        const fill = $("#apiBudget"+upper+"Fill");
+        const meter = fill.parentElement;
+        $("#apiBudget"+upper+"Amount").textContent = measured ? `$${Math.max(0,estimatedBalance).toFixed(2)}` : "未計測";
+        $("#apiBudget"+upper+"Summary").textContent = `手動残高 $${baseBalance.toFixed(2)}｜推定使用額 ${measured ? `$${estimatedSpend.toFixed(4)}` : "未計測"}`;
+        $("#apiBudget"+upper+"MeterText").textContent = measured ? `残量 ${remainingPercent.toFixed(1)}%` : "残量 未計測";
+        fill.style.width = measured ? `${remainingPercent}%` : "0%";
+        fill.style.background = measured && remainingPercent <= 15 ? "#ff6878"
+          : measured && remainingPercent <= 30 ? "#e5a33f" : "var(--blue)";
+        meter.setAttribute("aria-valuenow", measured ? String(Math.round(remainingPercent)) : "0");
+        meter.setAttribute("aria-valuetext", measured ? `残量 ${remainingPercent.toFixed(1)}%` : "未計測");
       }
     }
     async function saveApiBudgetAdmin(key){
