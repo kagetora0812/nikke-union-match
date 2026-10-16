@@ -2645,7 +2645,6 @@
         <div class="x-schedule-stat"><div class="x-schedule-stat-label">今月X API使用量</div><div id="xScheduleBudget" class="x-schedule-stat-value ok">--</div></div>
       </div>
       <div class="panel-title" style="margin-top:25px">API予算管理</div>
-      <p class="lead">公式残高を手動記録。記録後のAPI推定使用額は、計測が有効になってから表示します。</p>
       <div class="api-budget-grid">
         <div class="api-budget-card">
           <div class="api-budget-top"><strong>X API</strong><span>従量課金</span></div>
@@ -2653,7 +2652,7 @@
           <div id="apiBudgetXAmount" class="api-budget-amount">--</div>
           <div class="api-budget-meter" role="progressbar" aria-label="X API 残高率" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0"><div id="apiBudgetXFill"></div></div>
           <div id="apiBudgetXMeterText" class="api-budget-meter-text">使用状況 未計測</div>
-          <div id="apiBudgetXSummary" class="api-budget-summary">読み込み中...</div>
+          <div id="apiBudgetXSummary" class="api-budget-summary hidden"></div>
           <div class="api-budget-fields"><label>月間目安予算 $<input id="apiBudgetXLimit" type="number" min="0.01" step="0.01" value="7"></label><label>公式残高（手動） $<input id="apiBudgetXBalance" type="number" min="0" step="0.01" value="14.07"></label></div>
           <button id="saveApiBudgetX" class="btn blue wide" type="button">Xの残高を記録</button>
         </div>
@@ -2663,13 +2662,12 @@
           <div id="apiBudgetOpenaiAmount" class="api-budget-amount">--</div>
           <div class="api-budget-meter" role="progressbar" aria-label="OpenAI API 残高率" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0"><div id="apiBudgetOpenaiFill"></div></div>
           <div id="apiBudgetOpenaiMeterText" class="api-budget-meter-text">使用状況 未計測</div>
-          <div id="apiBudgetOpenaiSummary" class="api-budget-summary">読み込み中...</div>
+          <div id="apiBudgetOpenaiSummary" class="api-budget-summary hidden"></div>
           <div class="api-budget-fields"><label>月間目安予算 $<input id="apiBudgetOpenaiLimit" type="number" min="0.01" step="0.01" value="5"></label><label>公式残高（手動） $<input id="apiBudgetOpenaiBalance" type="number" min="0" step="0.01" value="5"></label></div>
           <button id="saveApiBudgetOpenai" class="btn blue wide" type="button">OpenAIの残高を記録</button>
         </div>
       </div>
       <div id="apiBudgetMessage" class="message hidden"></div>
-      <div class="x-schedule-note">※ メーターはこのブラウザで初めて確認した公式残高を満タン基準にします。手動残高の更新またはAPI利用額の計測に応じて減少します。推定値でBOTを停止しません。</div>
       <div class="panel-title" style="margin-top:25px">フェーズ別・直近3か月の学習実績</div>
       <div class="x-schedule-table-wrap"><table class="x-schedule-table"><thead><tr><th>フェーズ</th><th>TOTAL</th><th id="xLearnMonth2">--</th><th id="xLearnMonth1">--</th><th id="xLearnMonth0">--</th></tr></thead><tbody id="xLearningPhaseBody"><tr><td colspan="6">読み込み中...</td></tr></tbody></table></div>
       <div class="x-schedule-note">※ AI判定が完了した検索のみを集計。旧方式の履歴・未計測は「—」、確定した0件は「0」と表示します。</div>
@@ -7444,7 +7442,7 @@
         $("#apiBudget"+upper+"Summary").textContent=valid
           ? `公式残高（手動） $${manualBalance.toFixed(2)}｜推定使用額 ${measured && row.estimated_spend_usd!=null ? `$${Number(row.estimated_spend_usd).toFixed(4)}` : "未計測"}`
           : "公式残高 未計測";
-        $("#apiBudget"+upper+"MeterText").textContent=percent===null ? "残量 未計測" : `残量 ${percent.toFixed(1)}%（初回記録時を100%）`;
+        $("#apiBudget"+upper+"MeterText").textContent=percent===null ? "残量 未計測" : `残量 ${percent.toFixed(1)}%`;
         fill.style.width=percent===null ? "0%" : `${percent}%`;
         fill.style.background=percent!==null && percent<=15 ? "#ff6878"
           : percent!==null && percent<=30 ? "#e5a33f" : "var(--blue)";
@@ -7462,7 +7460,11 @@
       const token=getToken();if(!token){showLogin();return;}
       const {error}=await sb.rpc("creator_admin_api_budget_write",{p_token:token,p_provider:key,p_budget_usd:limit,p_balance_usd:balance});
       if(error){showMessage($("#apiBudgetMessage"),"保存失敗。設定は変更されていません。","error");return;}
-      showMessage($("#apiBudgetMessage"),"残高基準を保存しました。公式残高との照合が必要です。","success");
+      // 手動記録した金額を、必ず新しいメーターの100%基準にする。
+      // API残高の正本は従来どおりSupabase。ここでは表示基準のみ保存。
+      try { localStorage.setItem("nikke_admin_api_meter_baseline_"+key,String(Math.max(balance,0.01))); } catch (_) {}
+      const message=$("#apiBudgetMessage");
+      if(message) message.classList.add("hidden");
       await loadApiBudgetAdmin();
     }
     $("#saveApiBudgetX")?.addEventListener("click",()=>void saveApiBudgetAdmin("x"));
