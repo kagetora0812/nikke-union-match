@@ -2678,7 +2678,7 @@
           <div class="api-budget-meter" role="progressbar" aria-label="OpenAI API 残高率" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0"><div id="apiBudgetOpenaiFill"></div></div>
           <div id="apiBudgetOpenaiMeterText" class="api-budget-meter-text">使用状況 未計測</div>
           <div id="apiBudgetOpenaiSummary" class="api-budget-summary hidden"></div>
-          <div class="api-budget-fields"><div class="api-budget-readonly"><span>今月の消費額</span><strong id="apiBudgetOpenaiMonthlySpend">未計測</strong></div><label>公式残高（手動） $<input id="apiBudgetOpenaiBalance" type="number" min="0" step="0.01" value="5"></label></div>
+          <div class="api-budget-fields"><div class="api-budget-readonly"><span>今月の推定消費額</span><strong id="apiBudgetOpenaiMonthlySpend">未計測</strong></div><label>公式残高（手動） $<input id="apiBudgetOpenaiBalance" type="number" min="0" step="0.01" value="5"></label></div>
           <button id="saveApiBudgetOpenai" class="btn blue wide" type="button">OpenAIの残高を記録</button>
         </div>
       </div>
@@ -7442,7 +7442,8 @@
           const storedBudget=Number(row.budget_usd);
           openaiStoredBudgetUsd=Number.isFinite(storedBudget) && storedBudget>0 ? storedBudget : null;
           // 月単位のOpenAI利用額が計測されるまで推測値を表示しない。
-          $("#apiBudgetOpenaiMonthlySpend").textContent="未計測";
+          const monthly = row.monthly_usage_recorded === true && Number.isFinite(Number(row.monthly_spend_usd));
+          $("#apiBudgetOpenaiMonthlySpend").textContent = monthly ? `$${Number(row.monthly_spend_usd).toFixed(4)}` : "未計測";
         }
         // 入力欄は手動基準値のまま保ち、次回保存で自動減算を二重に含めない。
         $("#apiBudget"+upper+"Balance").value=Number(row.balance_usd);
