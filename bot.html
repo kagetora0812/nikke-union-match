@@ -722,6 +722,33 @@
       text-align:center;
     }
 
+
+    /* ---------- PERMISSIONS: shared editorial layout, responsive ---------- */
+    .permission-section .section-heading{margin-bottom:18px}
+    .permission-section .section-en{font-size:clamp(52px,6.4vw,88px);line-height:.86}
+    .permission-section .section-ja{margin-top:6px}
+    .permission-intro{max-width:860px;margin:0 0 22px;color:#eef3f6;font-size:14px;line-height:1.85;font-weight:700}
+    .permission-list{width:min(860px,78%);border-top:1px solid rgba(255,255,255,.18)}
+    .permission-row{display:grid;grid-template-columns:minmax(180px,34%) minmax(0,1fr);gap:22px;align-items:center;padding:23px 0;border-bottom:1px solid rgba(255,255,255,.14)}
+    .permission-name{color:#8EDCFF;font-size:16px;line-height:1.5;font-weight:900}
+    .permission-description{margin:0;color:#f2f2f2;font-size:13px;line-height:1.8;font-weight:700}
+    .permission-note{max-width:860px;margin:19px 0 0;color:#bfcbd4;font-size:12px;line-height:1.85;font-weight:700}
+    .permission-note strong{color:#fff;font-weight:900}
+    @media (max-width:1024px){
+      .permission-section .section-en{font-size:clamp(45px,8vw,66px)}
+      .permission-list{width:min(900px,94%)}
+    }
+    @media (max-width:600px){
+      .permission-section .section-en{font-size:clamp(38px,10.1vw,47px);letter-spacing:.025em}
+      .permission-section .section-heading{margin-bottom:13px}
+      .permission-intro{margin-bottom:15px;font-size:12.5px;line-height:1.8}
+      .permission-list{width:100%}
+      .permission-row{grid-template-columns:1fr;gap:5px;padding:16px 0}
+      .permission-name{font-size:14px}
+      .permission-description{font-size:12.5px;line-height:1.75}
+      .permission-note{margin-top:14px;font-size:11.5px}
+    }
+
     /* ---------- GET STARTED ---------- */
     .step-grid{
       display:grid;
@@ -3536,6 +3563,30 @@
           </p>
         </section>
       </div>
+    </section>
+
+    <section class="lux-section permission-section" id="permissions" aria-labelledby="permissionsTitle">
+      <header class="section-heading reveal-up motion-left">
+        <div class="section-en" id="permissionsTitle">PERMISSIONS</div>
+        <div class="section-ja">必要な権限と、その使用目的。</div>
+      </header>
+
+      <p class="permission-intro reveal-up" style="--delay:40ms">通知に使用する権限を、わかりやすくご案内します。</p>
+      <div class="permission-list" aria-label="Discord BOTの通知権限">
+        <div class="permission-row reveal-up motion-rise" style="--delay:70ms">
+          <div class="permission-name">チャンネルを見る</div>
+          <p class="permission-description">設定された通知チャンネルにBOTがアクセスするため。</p>
+        </div>
+        <div class="permission-row reveal-up motion-rise" style="--delay:120ms">
+          <div class="permission-name">メッセージを送信</div>
+          <p class="permission-description">イベント情報・募集情報・利用期限のお知らせを送るため。</p>
+        </div>
+        <div class="permission-row reveal-up motion-rise" style="--delay:170ms">
+          <div class="permission-name">埋め込みリンク</div>
+          <p class="permission-description">X投稿や公式情報のリンクを、見やすい形式で表示するため。</p>
+        </div>
+      </div>
+      <p class="permission-note reveal-up" style="--delay:220ms"><strong>通知に不要な強い権限を前提としない設計です。</strong><br>管理者権限やメンバーのキック・BAN、メッセージの管理は、通常の通知には必要ありません。</p>
     </section>
 
     <section class="lux-section install-section" id="install">
