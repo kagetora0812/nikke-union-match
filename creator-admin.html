@@ -7522,9 +7522,14 @@
         series.forEach((item,i)=>{
           const cx=left+step*(i+.5),r=item.row,bar=13,gap=3;
           if(valid(r)){
-            [[Number(r.candidate_count),"#449be8",cx-gap/2-bar,"検索候補"],[Number(r.new_listing_count),"#f3a247",cx+gap/2,"新規掲載"]].forEach(([v,c,x,label])=>{
-              const h=v/topValue*plot;
-              out+='<rect x="'+x+'" y="'+(base-h)+'" width="'+bar+'" height="'+h+'" rx="2" fill="'+c+'"><title>'+esc(item.mon+' '+label+' '+fmt(v)+'件')+'</title></rect>';
+            const values=[[Number(r.candidate_count),"#449be8",cx-gap/2-bar,"検索候補"],[Number(r.new_listing_count),"#f3a247",cx+gap/2,"新規掲載"]];
+            values.forEach(([v,c,x,label],j)=>{
+              // 上端に数字だけを表示。2本の高さが近い場合は数字をずらして重なりを防ぐ。
+              const h=v/topValue*(plot-16);
+              const near=Math.abs(values[0][0]-values[1][0])/topValue*(plot-16)<13;
+              const labelY=Math.max(12,base-h-5-(near&&j===0?12:0));
+              out+='<rect x="'+x+'" y="'+(base-h)+'" width="'+bar+'" height="'+h+'" rx="2" fill="'+c+'"><title>'+esc(item.mon+' '+label+' '+fmt(v)+'件')+'</title></rect>'+
+                '<text x="'+(x+bar/2)+'" y="'+labelY+'" text-anchor="middle" fill="'+c+'" font-size="10" font-weight="700">'+fmt(v)+'</text>';
             });
           }else{out+='<text x="'+cx+'" y="'+(base-8)+'" text-anchor="middle" fill="#8596aa" font-size="13">—</text>';}
           out+='<text x="'+cx+'" y="182" text-anchor="middle" fill="#a9b8ca" font-size="11">'+esc(item.mon.slice(5))+'月</text>';
