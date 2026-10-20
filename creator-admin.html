@@ -2240,6 +2240,19 @@
 .x-current-phase-inline #xSchedulePhase{color:#e2ecf8;font-weight:600}
 #xLearningPhaseBody th{font-size:12px;text-align:left;white-space:nowrap;font-weight:600}
 #xLearningPhaseBody td{min-width:105px;padding:9px 12px;vertical-align:middle}
+
+.x-phase-chart-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}
+.x-phase-chart-card{min-width:0;background:#101621;border:1px solid #2b3545;border-radius:10px;padding:14px 12px}
+.x-phase-chart-head{display:flex;justify-content:space-between;align-items:baseline;gap:8px;margin-bottom:8px;flex-wrap:wrap}
+.x-phase-chart-head strong{font-size:14px;color:#edf2f7}
+.x-phase-chart-head span,.x-phase-chart-meta{font-size:11px;color:#a6bad1}
+.x-phase-chart-legend{display:flex;gap:14px;margin-bottom:10px;font-size:11px;color:#a6bad1}
+.x-phase-chart-legend i{display:inline-block;width:9px;height:9px;border-radius:2px;margin-right:4px}
+.x-phase-chart-viewport{overflow-x:auto}
+.x-phase-chart-svg{display:block;width:100%;min-width:295px;height:auto}
+.x-phase-chart-meta{margin-top:8px}
+@media(max-width:720px){.x-phase-chart-grid{grid-template-columns:1fr}.x-phase-chart-card{padding:13px 10px}}
+
 .x-learn-primary{display:flex;align-items:baseline;gap:5px;line-height:1.25}
 .x-learn-primary strong{font-size:18px;color:#ecf3fb;font-variant-numeric:tabular-nums}
 .x-learn-primary span,.x-learn-secondary{color:#8fa6c2;font-size:10px}
@@ -2670,9 +2683,9 @@
         </div>
       </div>
       <div id="apiBudgetMessage" class="message hidden"></div>
-      <div class="panel-title" style="margin-top:25px">フェーズ別・直近3か月の学習実績</div>
-      <div class="x-schedule-table-wrap"><table class="x-schedule-table"><thead><tr><th>フェーズ</th><th>TOTAL</th><th id="xLearnMonth2">--</th><th id="xLearnMonth1">--</th><th id="xLearnMonth0">--</th></tr></thead><tbody id="xLearningPhaseBody"><tr><td colspan="6">読み込み中...</td></tr></tbody></table></div>
-      <div class="x-schedule-note">※ AI判定が完了した検索のみを集計。旧方式の履歴・未計測は「—」、確定した0件は「0」と表示します。</div>
+      <div class="panel-title" style="margin-top:25px">フェーズ別・月別のX検索実績</div>
+      <div id="xLearningPhaseCharts" class="x-phase-chart-grid"><div class="x-phase-chart-card">読み込み中...</div></div>
+      <div class="x-schedule-note">※ 青＝検索候補、オレンジ＝新規掲載。旧方式の未計測は「—」、確定した0件は「0」と表示します。</div>
       <div class="panel-title" style="margin-top:25px">直近48時間の実績</div>
       <div class="x-schedule-table-wrap"><table class="x-schedule-table"><thead><tr><th>日付（JST）</th><th>検索候補</th><th>通知募集</th><th>Discord通知先</th></tr></thead><tbody id="xDeliveryRecentBody"><tr><td colspan="4">読み込み中...</td></tr></tbody></table></div>
       <div class="panel-title" style="margin-top:25px">今後の検索予定</div>
@@ -7482,40 +7495,48 @@
     $("#saveApiBudgetOpenai")?.addEventListener("click",()=>void saveApiBudgetAdmin("openai"));
 
     async function loadXLearningPhaseMetrics() {
-      const body = $("#xLearningPhaseBody");
+      const host = $("#xLearningPhaseCharts");
       const token = getToken();
-      if (!body || !token) return;
-      const nowParts = new Intl.DateTimeFormat("en-US", { timeZone: "Asia/Tokyo", year: "numeric", month: "2-digit" }).formatToParts(new Date());
-      const year = Number(nowParts.find(p => p.type === "year")?.value);
-      const month = Number(nowParts.find(p => p.type === "month")?.value);
-      const months = [-2,-1,0].map(d => {
-        const dt = new Date(Date.UTC(year, month - 1 + d, 1));
-        return dt.getUTCFullYear() + "-" + String(dt.getUTCMonth()+1).padStart(2,"0");
-      });
-      [2,1,0].forEach((suffix,i) => { const el = $("#xLearnMonth"+suffix); if(el) el.textContent = months[i]; });
-      body.innerHTML = '<tr><td colspan="5">読み込み中...</td></tr>';
-      const {data,error} = await sb.rpc("creator_admin_x_phase_monthly", {p_token:token});
-      if(error) {
-        console.warn("Xフェーズ別学習取得エラー",error);
-        body.innerHTML = '<tr><td colspan="5">未計測（集計用SQLの適用・ADMIN認証を確認してください）</td></tr>';
-        return;
-      }
-      const rows = Array.isArray(data) ? data : Array.isArray(data?.rows) ? data.rows : [];
-      const phases = ["raid_prep","raid_hard_end","reward_movement","post_raid"];
-      const keyOf = r => String(r.month_key || r.month || "").slice(0,7);
-      const metrics = ["TOTAL", ...months];
-      const metricCell = (phase, mon) => {
-        const row = rows.find(r => r.phase === phase &&
-          (mon === "TOTAL" ? String(r.month_key || r.month).toUpperCase() === "TOTAL" : keyOf(r) === mon));
-        if (!row || ["search_count", "candidate_count", "new_listing_count"].some(k => row[k] == null || !Number.isFinite(Number(row[k])))) {
-          return '<span class="x-learn-no-data">—</span>';
-        }
-        const number = key => Number(row[key]).toLocaleString("ja-JP");
-        return '<div class="x-learn-primary"><strong>' + number("new_listing_count") + '</strong><span>掲載</span></div>' +
-          '<div class="x-learn-secondary">検索 ' + number("search_count") + '回 / 候補 ' + number("candidate_count") + '件</div>';
+      if (!host || !token) return;
+      const parts = new Intl.DateTimeFormat("en-US",{timeZone:"Asia/Tokyo",year:"numeric",month:"2-digit"}).formatToParts(new Date());
+      const year=Number(parts.find(p=>p.type==="year")?.value);
+      const month=Number(parts.find(p=>p.type==="month")?.value);
+      const months=[-5,-4,-3,-2,-1,0].map(d=>{const dt=new Date(Date.UTC(year,month-1+d,1));return dt.getUTCFullYear()+"-"+String(dt.getUTCMonth()+1).padStart(2,"0");});
+      host.innerHTML='<div class="x-phase-chart-card">読み込み中...</div>';
+      const {data,error}=await sb.rpc("creator_admin_x_phase_monthly",{p_token:token});
+      if(error){console.warn("Xフェーズ別学習取得エラー",error);host.innerHTML='<div class="x-phase-chart-card">未計測（集計用SQL・ADMIN認証を確認してください）</div>';return;}
+      const rows=Array.isArray(data)?data:Array.isArray(data?.rows)?data.rows:[];
+      const phases=["raid_prep","raid_hard_end","reward_movement","post_raid"];
+      const keyOf=r=>String(r.month_key||r.month||"").slice(0,7);
+      const findRow=(phase,key)=>rows.find(r=>r.phase===phase&&(key==="TOTAL"?String(r.month_key||r.month).toUpperCase()==="TOTAL":keyOf(r)===key));
+      const valid=r=>r&&["search_count","candidate_count","new_listing_count"].every(k=>r[k]!=null&&Number.isFinite(Number(r[k])));
+      const fmt=n=>Number(n).toLocaleString("ja-JP");
+      const esc=v=>escapeHtml(String(v));
+      const renderSvg=phase=>{
+        const series=months.map(mon=>({mon,row:findRow(phase,mon)}));
+        const max=Math.max(1,...series.flatMap(x=>valid(x.row)?[Number(x.row.candidate_count),Number(x.row.new_listing_count)]:[]));
+        const topValue=Math.ceil(max/4)*4,W=420,H=194,left=38,right=8,top=12,base=164,plot=base-top;
+        let out='<svg class="x-phase-chart-svg" viewBox="0 0 '+W+' '+H+'" role="img" aria-label="'+esc(formatXPhase(phase))+' 月別検索候補と新規掲載の縦棒グラフ">';
+        for(let i=0;i<=4;i++){const y=top+i*plot/4,v=Math.round(topValue*(4-i)/4);out+='<line x1="'+left+'" y1="'+y+'" x2="'+(W-right)+'" y2="'+y+'" stroke="#354358" stroke-opacity=".7"/><text x="'+(left-5)+'" y="'+(y+3)+'" text-anchor="end" fill="#98aabd" font-size="10">'+fmt(v)+'</text>';}
+        const step=(W-left-right)/months.length;
+        series.forEach((item,i)=>{
+          const cx=left+step*(i+.5),r=item.row,bar=13,gap=3;
+          if(valid(r)){
+            [[Number(r.candidate_count),"#449be8",cx-gap/2-bar,"検索候補"],[Number(r.new_listing_count),"#f3a247",cx+gap/2,"新規掲載"]].forEach(([v,c,x,label])=>{
+              const h=v/topValue*plot;
+              out+='<rect x="'+x+'" y="'+(base-h)+'" width="'+bar+'" height="'+h+'" rx="2" fill="'+c+'"><title>'+esc(item.mon+' '+label+' '+fmt(v)+'件')+'</title></rect>';
+            });
+          }else{out+='<text x="'+cx+'" y="'+(base-8)+'" text-anchor="middle" fill="#8596aa" font-size="13">—</text>';}
+          out+='<text x="'+cx+'" y="182" text-anchor="middle" fill="#a9b8ca" font-size="11">'+esc(item.mon.slice(5))+'月</text>';
+        });
+        return out+'</svg>';
       };
-      body.innerHTML = phases.map(phase => '<tr><th scope="row">' + escapeHtml(formatXPhase(phase)) + '</th>' +
-        metrics.map(mon => '<td>' + metricCell(phase, mon) + '</td>').join('') + '</tr>').join('');
+      host.innerHTML=phases.map(phase=>{
+        const total=findRow(phase,"TOTAL");
+        const summary=valid(total)?'TOTAL：候補 '+fmt(total.candidate_count)+'件 / 新規掲載 '+fmt(total.new_listing_count)+'件':'TOTAL：未計測';
+        const searches=valid(total)?'検索 '+fmt(total.search_count)+'回':'検索回数 —';
+        return '<div class="x-phase-chart-card"><div class="x-phase-chart-head"><strong>'+esc(formatXPhase(phase))+'</strong><span>'+esc(searches)+'</span></div><div class="x-phase-chart-legend"><span><i style="background:#449be8"></i>検索候補</span><span><i style="background:#f3a247"></i>新規掲載</span></div><div class="x-phase-chart-viewport">'+renderSvg(phase)+'</div><div class="x-phase-chart-meta">'+esc(summary)+'</div></div>';
+      }).join('');
     }
 
     async function loadXSchedule() {
