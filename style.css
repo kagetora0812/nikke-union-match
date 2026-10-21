@@ -6222,15 +6222,15 @@ body, button, input, select, textarea {font-family:"Noto Sans JP",sans-serif;}
 /* Keep display typography for the brand, large hero title, numbers and English labels. */
 #resultModal .registration-pass-grid {
   display:grid!important;
-  grid-template-columns:repeat(2,minmax(0,1fr));
-  gap:8px 15px;
+  grid-template-columns:minmax(0,1fr);
+  gap:8px;
   margin-top:8px;
 }
 #resultModal .registration-pass-grid .registration-pass-item {
   display:block;
   min-width:0;
   border-left:0!important;
-  padding:4px 0!important;
+  padding:0!important;
   color:var(--cyan)!important;
   font-family:"Noto Sans JP",sans-serif!important;
   font-size:12px!important;
@@ -6263,7 +6263,7 @@ body, button, input, select, textarea {font-family:"Noto Sans JP",sans-serif;}
 @media(max-width:600px){
   #resultModal .share-choice-title{font-size:15px!important;}
   #resultModal .share-choice-help{font-size:13px!important;}
-  #resultModal .registration-pass-grid{gap:6px 9px;}
+  #resultModal .registration-pass-grid{gap:8px;}
   #resultModal .registration-pass-grid .registration-pass-item{font-size:11px!important;}
 }
 /* Let the registration result scroll without clipping its title at short viewport heights. */
