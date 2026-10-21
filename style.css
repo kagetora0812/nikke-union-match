@@ -1,4 +1,4 @@
-@import url("https://fonts.googleapis.com/css2?family=Teko:wght@500;600;700&family=Zen+Kaku+Gothic+New:wght@500;700;900&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=Teko:wght@500;600;700&family=Noto+Sans+JP:wght@400;500;600;700;800;900&display=swap");
 
 /* =========================================================
    NIKKE UNION MATCH
@@ -82,8 +82,7 @@ body {
     );
 
   font-family:
-    "Gothic MB101",
-    "Zen Kaku Gothic New",
+    "Noto Sans JP",
     sans-serif;
 
   font-weight: 700;
@@ -261,8 +260,7 @@ textarea {
     "Azonix",
     "Futura PT Condensed",
     "Teko",
-    "Gothic MB101",
-    "Zen Kaku Gothic New",
+    "Noto Sans JP",
     sans-serif;
 
   line-height: .82;
@@ -339,8 +337,7 @@ h3,
 .recruitment-type,
 .state {
   font-family:
-    "Gothic MB101",
-    "Zen Kaku Gothic New",
+    "Noto Sans JP",
     sans-serif;
 
   font-weight: 900;
@@ -765,8 +762,7 @@ h3 {
     "Azonix",
     "Futura PT Condensed",
     "Teko",
-    "Gothic MB101",
-    "Zen Kaku Gothic New",
+    "Noto Sans JP",
     sans-serif;
 
   font-size:
@@ -1045,8 +1041,7 @@ h3 {
     "Azonix",
     "Futura PT Condensed",
     "Teko",
-    "Gothic MB101",
-    "Zen Kaku Gothic New",
+    "Noto Sans JP",
     sans-serif;
 
   font-size: 24px;
@@ -2143,8 +2138,7 @@ body.manage-mode #managePage {
     "Azonix",
     "Futura PT Condensed",
     "Teko",
-    "Gothic MB101",
-    "Zen Kaku Gothic New",
+    "Noto Sans JP",
     sans-serif;
 }
 
@@ -2175,8 +2169,7 @@ body.manage-mode #managePage {
 .easy-register-title,
 .commander-close-reason-title {
   font-family:
-    "Gothic MB101",
-    "Zen Kaku Gothic New",
+    "Noto Sans JP",
     sans-serif;
 
   font-weight: 900;
@@ -2232,8 +2225,7 @@ body.manage-mode #managePage {
 .search-tab,
 .nav-btn {
   font-family:
-    "Gothic MB101",
-    "Zen Kaku Gothic New",
+    "Noto Sans JP",
     sans-serif !important;
 
   font-weight: 900;
@@ -2857,8 +2849,7 @@ body.manage-mode #managePage {
 .topbar .brand-main {
   font-family:
     "JTCウインZ10",
-    "Gothic MB101",
-    "Zen Kaku Gothic New",
+    "Noto Sans JP",
     sans-serif !important;
 
   font-weight: 900 !important;
@@ -3086,8 +3077,7 @@ body.manage-mode #managePage {
 .topbar .brand-main {
   font-family:
     "JTCウインZ10",
-    "Gothic MB101",
-    "Zen Kaku Gothic New",
+    "Noto Sans JP",
     sans-serif !important;
 
   font-weight: 900 !important;
@@ -3311,8 +3301,7 @@ body.manage-mode #managePage {
 
   font-family:
     "JTCウインZ10",
-    "Gothic MB101",
-    "Zen Kaku Gothic New",
+    "Noto Sans JP",
     sans-serif !important;
 
   font-size: 14px !important;
@@ -3345,8 +3334,7 @@ body.manage-mode #managePage {
 
   font-family:
     "JTCウインZ10",
-    "Gothic MB101",
-    "Zen Kaku Gothic New",
+    "Noto Sans JP",
     sans-serif !important;
 
   font-size: 14px !important;
@@ -6227,3 +6215,57 @@ body.manage-mode #managePage #loadManageRecruitmentBtn,
 .manage-action-dialog-actions .hidden {display:none!important;}
 .manage-action-dialog.is-danger #manageActionDialogAccept {border-color:#c43246;background:#c43246;color:#fff;}
 @media(max-width:600px){.manage-action-dialog-panel{padding:22px 18px;}.manage-action-dialog-panel h2{font-size:20px;}.manage-action-dialog-actions .btn{flex:1;min-width:0;}}
+
+
+/* 2026-10-21 — Consistent square controls and Japanese typography */
+body, button, input, select, textarea {font-family:"Noto Sans JP",sans-serif;}
+/* Keep display typography for the brand, large hero title, numbers and English labels. */
+#resultModal .registration-pass-grid {
+  display:grid!important;
+  grid-template-columns:repeat(2,minmax(0,1fr));
+  gap:8px 15px;
+  margin-top:8px;
+}
+#resultModal .registration-pass-grid .registration-pass-item {
+  display:block;
+  min-width:0;
+  border-left:0!important;
+  padding:4px 0!important;
+  color:var(--cyan)!important;
+  font-family:"Noto Sans JP",sans-serif!important;
+  font-size:12px!important;
+  font-weight:700!important;
+  line-height:1.65;
+}
+#resultModal .registration-pass-grid .registration-pass-item-full {grid-column:1/-1;}
+#resultModal .registration-pass-grid small {color:var(--ink-soft);font-size:10px;font-weight:600;white-space:nowrap;}
+#resultModal .share-choice-title {font-size:17px!important;line-height:1.45;}
+#resultModal .share-choice-help {font-size:14px!important;}
+#resultModal .copy-btn,
+#resultModal .registration-bot-guide-link,
+#resultModal #shareXBtn,
+#resultModal #resultDone {
+  border-radius:0!important;clip-path:none!important;
+  font-family:"Noto Sans JP",sans-serif!important;
+}
+/* Dialog buttons: existing primary cyan/gray and danger red; no beveled corners. */
+.manage-action-dialog-panel {font-family:"Noto Sans JP",sans-serif!important;border-color:var(--line)!important;}
+.manage-action-dialog-kicker {color:var(--cyan)!important;font-family:"Teko","Noto Sans JP",sans-serif;letter-spacing:.16em;}
+.manage-action-dialog.is-danger .manage-action-dialog-kicker {color:var(--red)!important;}
+.manage-action-dialog-actions {display:grid!important;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px;}
+.manage-action-dialog-actions .btn {width:100%;min-width:0;min-height:48px;border-radius:0!important;clip-path:none!important;box-shadow:none!important;font:700 14px/1.4 "Noto Sans JP",sans-serif!important;}
+.manage-action-dialog-actions #manageActionDialogCancel {background:#fff!important;border:1px solid var(--line-strong)!important;color:var(--ink)!important;}
+.manage-action-dialog-actions #manageActionDialogAccept {background:var(--charcoal)!important;border:1px solid var(--charcoal)!important;color:#fff!important;}
+.manage-action-dialog.is-danger #manageActionDialogAccept {background:var(--red)!important;border-color:var(--red)!important;color:#fff!important;}
+.manage-action-dialog-actions .btn:hover {transform:none!important;filter:brightness(.96);}
+.manage-action-dialog-actions #manageActionDialogCancel.hidden {display:none!important;}
+.manage-action-dialog-actions:has(#manageActionDialogCancel.hidden) {grid-template-columns:1fr;}
+@media(max-width:600px){
+  #resultModal .share-choice-title{font-size:15px!important;}
+  #resultModal .share-choice-help{font-size:13px!important;}
+  #resultModal .registration-pass-grid{gap:6px 9px;}
+  #resultModal .registration-pass-grid .registration-pass-item{font-size:11px!important;}
+}
+/* Let the registration result scroll without clipping its title at short viewport heights. */
+#resultModal {overflow-y:auto;overscroll-behavior:contain;align-items:safe center;padding-block:12px;}
+#resultModal .modal-card{max-height:calc(100dvh - 24px);overflow-y:auto;overscroll-behavior:contain;}
