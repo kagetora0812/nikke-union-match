@@ -4107,11 +4107,14 @@ function showRegistrationResult(
     .toggle("hidden", registerOnly);
 
 
-  $("#resultModal")
-    ?.classList
-    .remove(
-      "hidden"
-    );
+  const resultModal = $("#resultModal");
+  resultModal?.classList.remove("hidden");
+  // Reset a previously scrolled result when a new completion panel opens.
+  if (resultModal) {
+    resultModal.scrollTop = 0;
+    const resultPanel = resultModal.querySelector(".modal-card");
+    if (resultPanel) resultPanel.scrollTop = 0;
+  }
 
 }
 
@@ -4177,9 +4180,14 @@ function showDiscordRepublishV2Result(result, registerOnly = false) {
     ?.classList
     .toggle("hidden", registerOnly);
 
-  $("#resultModal")
-    ?.classList
-    .remove("hidden");
+  const resultModal = $("#resultModal");
+  resultModal?.classList.remove("hidden");
+  // Reset a previously scrolled result when a new completion panel opens.
+  if (resultModal) {
+    resultModal.scrollTop = 0;
+    const resultPanel = resultModal.querySelector(".modal-card");
+    if (resultPanel) resultPanel.scrollTop = 0;
+  }
 }
 
 // ========================================
