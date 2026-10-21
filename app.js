@@ -3764,20 +3764,15 @@ async function showRegistrationPreview() {
 
     host.innerHTML = `
       <article class="card union-card">
-        <div class="card-head">
-          <div class="type-with-new">
-            <span class="recruitment-type">● ユニオン</span>
-          </div>
-          <span class="date">管理期限 14日後</span>
+        <div class="card-head card-head-minimal">
+          <div class="card-head-status"><div class="countdown">管理期限 14日後</div></div>
+          <div class="type-with-new"><span class="recruitment-type">● ユニオン</span></div>
         </div>
-
         <div class="name">${escapeHtml(name)}</div>
         <div class="union-rank rank-${escapeHtml(getUnionRankClass(detail))}">${escapeHtml(detail)}</div>
-        <div class="countdown">残り14日</div>
-
-        <div class="notice" style="margin-top:14px;">
-          <strong>登録のみ</strong><br>
-          求人広告は掲載されません。
+        <div class="registration-only-preview-notice">
+          <strong>登録のみ</strong>
+          <span>求人広告は掲載されません。</span>
         </div>
       </article>
     `;
@@ -3811,18 +3806,14 @@ async function showRegistrationPreview() {
 
   host.innerHTML = `
     <article class="card ${cardClass}">
-      <div class="card-head">
-        <div class="type-with-new">
-          <span class="recruitment-type">${typeLabel}</span>
-          <span class="new-badge">🔥 NEW</span>
-        </div>
-        <span class="date">期限 14日後</span>
+      <div class="card-head card-head-minimal">
+        <div class="card-head-status"><div class="countdown">残り14日</div><span class="new-badge">NEW</span></div>
+        <div class="type-with-new"><span class="recruitment-type">${typeLabel}</span></div>
       </div>
 
       <div class="name">${escapeHtml(name)}</div>
       ${detailHtml}
       ${platform === "X" ? '<div class="date">掲載先：X</div>' : ""}
-      <div class="countdown">残り14日</div>
 
       <div class="x-post-area">
         ${mediaHtml}
