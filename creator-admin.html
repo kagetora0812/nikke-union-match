@@ -2659,27 +2659,27 @@
         <div id="xFlashAlertCard" class="x-schedule-stat hidden" role="status" aria-live="polite"><div id="xFlashAlertTitle" class="x-schedule-stat-label">X投稿のAI判定</div><div id="xFlashState" class="x-schedule-stat-value">--</div><div id="xFlashRetry" class="x-schedule-note"></div></div>
         <div class="x-schedule-stat"><div class="x-schedule-stat-label">今月X API使用量</div><div id="xScheduleBudget" class="x-schedule-stat-value ok">--</div></div>
       </div>
-      <div class="panel-title" style="margin-top:25px">API予算管理</div>
+      <div class="panel-title" style="margin-top:25px">API利用状況・予算設定</div>
       <div class="api-budget-grid">
         <div class="api-budget-card">
-          <div class="api-budget-top"><strong>X API</strong><span>従量課金</span></div>
-          <div class="api-budget-caption">現在の残高（手動記録）</div>
-          <div id="apiBudgetXAmount" class="api-budget-amount">--</div>
-          <div class="api-budget-meter" role="progressbar" aria-label="X API 残高率" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0"><div id="apiBudgetXFill"></div></div>
-          <div id="apiBudgetXMeterText" class="api-budget-meter-text">使用状況 未計測</div>
-          <div id="apiBudgetXSummary" class="api-budget-summary hidden"></div>
-          <div class="api-budget-fields"><label>月間目安予算 $<input id="apiBudgetXLimit" type="number" min="0.01" step="0.01" value="7"></label><label>公式残高（手動） $<input id="apiBudgetXBalance" type="number" min="0" step="0.01" value="14.07"></label></div>
-          <button id="saveApiBudgetX" class="btn blue wide" type="button">Xの残高を記録</button>
+          <div class="api-budget-top"><strong>X API</strong><span>月間予算の設定</span></div>
+          <div class="api-budget-caption">月間目安予算（手動設定）</div>
+          <div class="api-budget-fields" style="margin-top:16px"><label>月間予算 $<input id="apiBudgetXLimit" type="number" min="0.01" step="0.01" value="7"></label></div>
+          <div class="api-budget-meter-text">検索の利用料金はここでは計算しません。予算額だけ記録できます。</div>
+          <input id="apiBudgetXBalance" type="hidden" value="0">
+          <div style="display:none" aria-hidden="true"><div id="apiBudgetXAmount"></div><div class="api-budget-meter"><div id="apiBudgetXFill"></div></div><div id="apiBudgetXMeterText"></div><div id="apiBudgetXSummary"></div></div>
+          <button id="saveApiBudgetX" class="btn blue wide" type="button">月間予算を保存</button>
         </div>
         <div class="api-budget-card">
-          <div class="api-budget-top"><strong>OpenAI API</strong><span>購入クレジット</span></div>
-          <div class="api-budget-caption">推定残高</div>
+          <div class="api-budget-top"><strong>OpenAI API</strong><span>使用料金の推定値</span></div>
+          <div class="api-budget-caption">推定残高（自動計算）</div>
           <div id="apiBudgetOpenaiAmount" class="api-budget-amount">--</div>
-          <div class="api-budget-meter" role="progressbar" aria-label="OpenAI API 残高率" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0"><div id="apiBudgetOpenaiFill"></div></div>
-          <div id="apiBudgetOpenaiMeterText" class="api-budget-meter-text">使用状況 未計測</div>
+          <div class="api-budget-meter" role="progressbar" aria-label="OpenAI API 推定残高率" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0"><div id="apiBudgetOpenaiFill"></div></div>
+          <div id="apiBudgetOpenaiMeterText" class="api-budget-meter-text">残量 未計測</div>
           <div id="apiBudgetOpenaiSummary" class="api-budget-summary hidden"></div>
-          <div class="api-budget-fields"><div class="api-budget-readonly"><span>今月の推定消費額</span><strong id="apiBudgetOpenaiMonthlySpend">未計測</strong></div><label>公式残高（手動） $<input id="apiBudgetOpenaiBalance" type="number" min="0" step="0.01" value="5"></label></div>
-          <button id="saveApiBudgetOpenai" class="btn blue wide" type="button">OpenAIの残高を記録</button>
+          <div class="api-budget-fields"><div class="api-budget-readonly"><span>今月の推定使用料金（自動計測）</span><strong id="apiBudgetOpenaiMonthlySpend">未計測</strong></div><label>基準残高（手動入力） $<input id="apiBudgetOpenaiBalance" type="number" min="0" step="0.01" value="5"></label></div>
+          <div class="api-budget-meter-text">基準残高から記録された推定料金を引いて表示します。公式残高と一致するとは限りません。</div>
+          <button id="saveApiBudgetOpenai" class="btn blue wide" type="button">基準残高を更新</button>
         </div>
       </div>
       <div id="apiBudgetMessage" class="message hidden"></div>
@@ -7448,6 +7448,18 @@
         // 入力欄は手動基準値のまま保ち、次回保存で自動減算を二重に含めない。
         $("#apiBudget"+upper+"Balance").value=Number(row.balance_usd);
         const manualBalance=Number(row.balance_usd);
+        // X: 課金対象リソースの使用額が未記録なら、手動残高から残量率を捏造しない。
+        if(key==="x" && row.usage_recorded !== true) {
+          const validManual=Number.isFinite(manualBalance) && manualBalance>=0;
+          $("#apiBudgetXAmount").textContent=validManual ? `$${manualBalance.toFixed(2)}` : "未計測";
+          $("#apiBudgetXSummary").textContent="利用料金の自動計測なし（表示額は手動記録）";
+          $("#apiBudgetXMeterText").textContent="利用料金 未計測・残量率 未計測";
+          $("#apiBudgetXFill").style.width="0%";
+          const xMeter=$("#apiBudgetXFill").parentElement;
+          xMeter.removeAttribute("aria-valuenow");
+          xMeter.setAttribute("aria-valuetext","未計測");
+          continue;
+        }
         const measured=row.usage_recorded === true &&
           row.estimated_balance_usd != null && Number.isFinite(Number(row.estimated_balance_usd));
         const balance=measured ? Math.max(0,Number(row.estimated_balance_usd)) : manualBalance;
@@ -7463,9 +7475,9 @@
         const percent=valid && baseline>0 ? Math.max(0,Math.min(100,balance/baseline*100)) : null;
         const fill=$("#apiBudget"+upper+"Fill");
         const meter=fill.parentElement;
-        $("#apiBudget"+upper+"Amount").textContent=valid ? `$${balance.toFixed(2)}` : "未計測";
+        $("#apiBudget"+upper+"Amount").textContent=valid ? `$${balance.toFixed(key==="openai" ? 6 : 2)}` : "未計測";
         $("#apiBudget"+upper+"Summary").textContent=valid
-          ? `公式残高（手動） $${manualBalance.toFixed(2)}｜推定使用額 ${measured && row.estimated_spend_usd!=null ? `$${Number(row.estimated_spend_usd).toFixed(4)}` : "未計測"}`
+          ? `基準残高 $${manualBalance.toFixed(2)}｜基準設定以降の推定使用額 ${measured && row.estimated_spend_usd!=null ? `$${Number(row.estimated_spend_usd).toFixed(6)}` : "未計測"}`
           : "公式残高 未計測";
         $("#apiBudget"+upper+"MeterText").textContent=percent===null ? "残量 未計測" : `残量 ${percent.toFixed(1)}%`;
         fill.style.width=percent===null ? "0%" : `${percent}%`;
@@ -7480,14 +7492,14 @@
       const limit=key==="x" ? Number($("#apiBudgetXLimit")?.value) : openaiStoredBudgetUsd;
       const balance=Number($("#apiBudget"+upper+"Balance")?.value);
       if(!Number.isFinite(limit)||limit<=0||!Number.isFinite(balance)||balance<0){
-        showMessage($("#apiBudgetMessage"),key==="openai" ? "OpenAIの既存設定を取得できません。再読込してください。" : "予算は0より大きく、残高は0以上で入力してください。","error");return;
+        showMessage($("#apiBudgetMessage"),key==="openai" ? "OpenAIの既存設定を取得できません。再読込してください。" : "月間予算は0より大きい数字を入力してください。","error");return;
       }
       const token=getToken();if(!token){showLogin();return;}
       const {error}=await sb.rpc("creator_admin_api_budget_write",{p_token:token,p_provider:key,p_budget_usd:limit,p_balance_usd:balance});
       if(error){showMessage($("#apiBudgetMessage"),"保存失敗。設定は変更されていません。","error");return;}
       // 手動記録した金額を、必ず新しいメーターの100%基準にする。
       // API残高の正本は従来どおりSupabase。ここでは表示基準のみ保存。
-      try { localStorage.setItem("nikke_admin_api_meter_baseline_"+key,String(Math.max(balance,0.01))); } catch (_) {}
+      if(key==="openai") { try { localStorage.setItem("nikke_admin_api_meter_baseline_"+key,String(Math.max(balance,0.01))); } catch (_) {} }
       const message=$("#apiBudgetMessage");
       if(message) message.classList.add("hidden");
       await loadApiBudgetAdmin();
