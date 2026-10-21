@@ -4077,14 +4077,20 @@ function showRegistrationResult(
 
   if (registrationPassWarningTitle) {
     registrationPassWarningTitle.textContent =
-      "PASSを必ず保存してください。";
+      "発行された8文字のPASSは必ず保存してください。";
   }
 
   if (registrationPassWarningText) {
-    registrationPassWarningText.textContent =
-      isUnion
-        ? "利用確認・募集の編集／締切・BOT連携・UNION MATCHの会員登録解除に必要です。"
-        : "次回の編集・再延長・締切に必要です。";
+    registrationPassWarningText.innerHTML = isUnion
+      ? `<span style="display:block;font-weight:700;">PASSは以下の操作に必要です。</span>
+         <span style="display:block;margin-top:9px;color:#159ac8;font-weight:700;">ユニオンの方</span>
+         <span style="display:block;font-weight:700;">✓ 登録情報の変更・削除</span>
+         <span style="display:block;font-weight:700;">✓ 募集状況の切り替え</span>
+         <span style="display:block;font-weight:700;">✓ 掲載期限（14日）の延長</span>
+         <span style="display:block;font-weight:700;">✓ Discord BOTとの連携</span>`
+      : `<span style="display:block;font-weight:700;">PASSは以下の操作に必要です。</span>
+         <span style="display:block;margin-top:9px;color:#159ac8;font-weight:700;">指揮官の方</span>
+         <span style="display:block;font-weight:700;">募集の終了（掲載削除）のみ行えます。</span>`;
   }
 
   if (resultModeNote) {
