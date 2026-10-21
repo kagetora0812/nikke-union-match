@@ -602,6 +602,38 @@
   </style>
 
 
+  <style id="pass-notice-visual-correction">
+    /* PASS管理の説明表示のみ。既存機能・他ページは変更しない。 */
+    #managePage .manage-pass-notice > strong,
+    #managePage .manage-pass-notice > span {
+      display: block;
+      line-height: 1.8;
+    }
+    #managePage .manage-pass-notice > strong:first-child {
+      margin-bottom: 8px;
+    }
+    #managePage .manage-pass-notice > strong:nth-of-type(2),
+    #managePage .manage-pass-notice > strong:nth-of-type(3) {
+      margin-top: 13px;
+      margin-bottom: 3px;
+      color: #159ac8 !important;
+      -webkit-text-fill-color: #159ac8 !important;
+    }
+    #managePage .manage-pass-notice strong[style*="#159ac8"] {
+      color: #159ac8 !important;
+      -webkit-text-fill-color: #159ac8 !important;
+    }
+    #managePage .manage-pass-notice strong[style*="#c43246"] {
+      color: #c43246 !important;
+      -webkit-text-fill-color: #c43246 !important;
+    }
+    /* PASS管理画面の下部ナビ境界線のみ撤去。 */
+    body.manage-mode #bottomNav {
+      border-top: 0 !important;
+      box-shadow: none !important;
+    }
+  </style>
+
   <style id="manage-match-register-v512">
     /* =========================================================
        v51.2 MANAGE DESIGN MATCH
