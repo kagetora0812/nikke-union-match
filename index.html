@@ -38,7 +38,7 @@
 
   <link
     rel="stylesheet"
-    href="./style.css?v=51.18"
+    href="./style.css?v=51.19"
   >
 
 
@@ -3187,11 +3187,13 @@
         aria-label="Discord BOTのご案内"
         aria-hidden="true"
       >
-        <h3>新しい指揮官との出会いを、Discordから。</h3>
+        <div class="registration-bot-eyebrow">DISCORD BOT</div>
+        <h3>募集情報もイベント情報も、Discordへ。</h3>
         <p>
-          ユニオンを探している指揮官の情報やNIKKEのイベント情報をDiscordへ自動通知。掲載期限の延長もDiscordから簡単に行えます。
+          ユニオンを探している指揮官の情報や、NIKKEのイベント情報をDiscordへ自動通知。
         </p>
-        <p>設定が難しい場合は、運営者が導入をサポートします。</p>
+        <p>登録情報の<strong>変更・削除</strong>、<strong>募集状況の切り替え</strong>、<strong>掲載期限（14日）の延長</strong>など、Discordから<span class="registration-bot-accent">PASS不要</span>で操作できます。</p>
+        <p class="registration-bot-support">導入が難しい場合は、運営者がサポートします。</p>
         <a
           class="btn ghost wide registration-bot-guide-link"
           href="./bot.html?um_source=registration"
@@ -3209,13 +3211,12 @@
 
 
         <div class="share-choice-title">
-          📣 Xで募集をシェアしますか？
+          Xで募集をシェアしますか？
         </div>
 
 
         <div class="share-choice-help">
-          ✨ シェアするとユニオン・指揮官に<br>
-          見つけてもらいやすくなります！
+          シェアするとユニオン・指揮官に見つけてもらいやすくなります！
         </div>
 
 
@@ -3485,7 +3486,21 @@
 
   <!-- アプリ本体 -->
 
-  <script src="./app.js?v=51.24"></script>
+
+  <!-- 募集終了・登録削除専用：画面中央の確認／結果ダイアログ -->
+  <div id="manageActionDialog" class="manage-action-dialog hidden" role="presentation">
+    <div class="manage-action-dialog-panel" role="dialog" aria-modal="true" aria-labelledby="manageActionDialogTitle" aria-describedby="manageActionDialogMessage" tabindex="-1">
+      <div id="manageActionDialogKicker" class="manage-action-dialog-kicker">UNION MATCH</div>
+      <h2 id="manageActionDialogTitle"></h2>
+      <p id="manageActionDialogMessage"></p>
+      <div class="manage-action-dialog-actions">
+        <button type="button" class="btn ghost" id="manageActionDialogCancel">キャンセル</button>
+        <button type="button" class="btn primary" id="manageActionDialogAccept">OK</button>
+      </div>
+    </div>
+  </div>
+
+  <script src="./app.js?v=51.25"></script>
 
   <script id="preview-image-check-adapter-v5114">
     (() => {
