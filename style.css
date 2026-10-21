@@ -5693,10 +5693,10 @@ body.register-mode .register-inline-title h2 {
   line-height: 1.6;
 }
 
-/* Register page: remove only the HERO separator line.
-   Bottom navigation border is intentionally preserved. */
-body.register-mode .hero {
-  border-bottom-color: transparent !important;
+/* 登録・PASS管理画面のHERO下部の不要な横線のみ撤去。 */
+body.register-mode .hero,
+body.manage-mode .hero {
+  border-bottom: 0 !important;
 }
 
 @media screen and (max-width: 600px) {
@@ -5871,6 +5871,22 @@ body.register-mode #registerPage .register-period-note,
 body.manage-mode #managePage .manage-pass-notice { border:0!important; border-left:3px solid #20b8f4!important; border-radius:0!important; clip-path:none!important; background:#f0f9fd!important; box-shadow:none!important; padding:14px 16px!important; color:#4e5962!important; }
 body.register-mode #registerPage .register-period-note strong,
 body.manage-mode #managePage .manage-pass-notice strong { color:#222428!important; }
+/* 募集登録：掲載終了と指揮官への注意は赤、BOTのPASS不要はシアン。 */
+body.register-mode #registerPage .register-period-note .register-period-ending,
+body.register-mode #registerPage .register-period-note .register-period-commander-note {
+  color:#c43246!important;
+  -webkit-text-fill-color:#c43246!important;
+  font-weight:900!important;
+}
+body.register-mode #registerPage .register-period-note .register-period-bot {
+  color:#078fc8!important;
+  -webkit-text-fill-color:#078fc8!important;
+  font-weight:900!important;
+}
+body.register-mode #registerPage .register-period-note .register-period-commander-note {
+  display:block;
+  font-size:11px;
+}
 @media(max-width:600px) {
  body.register-mode .register-inline-top,
  body.manage-mode .manage-inline-top { margin-bottom:16px!important; }
