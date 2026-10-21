@@ -6267,5 +6267,34 @@ body, button, input, select, textarea {font-family:"Noto Sans JP",sans-serif;}
   #resultModal .registration-pass-grid .registration-pass-item{font-size:11px!important;}
 }
 /* Let the registration result scroll without clipping its title at short viewport heights. */
-#resultModal {overflow-y:auto;overscroll-behavior:contain;align-items:safe center;padding-block:12px;}
-#resultModal .modal-card{max-height:calc(100dvh - 24px);overflow-y:auto;overscroll-behavior:contain;}
+/* Keep one scroll area in the completion dialog, not two nested scrollbars. */
+#resultModal {overflow:hidden;overscroll-behavior:contain;align-items:center;justify-items:center;padding:12px;}
+#resultModal .modal-card {max-height:calc(100vh - 24px);max-height:calc(100dvh - 24px);overflow-x:hidden;overflow-y:auto;overscroll-behavior:contain;scrollbar-gutter:stable;}
+#resultModal .registration-pass-grid {gap:5px!important;margin-top:6px!important;}
+#resultModal .registration-pass-grid .registration-pass-item {line-height:1.45!important;}
+/* Registration preview uses the same simple editorial card geometry as the live lists. */
+#registrationPreviewCard article.card.commander-card,
+#registrationPreviewCard article.card.union-card {
+  clip-path:none!important;border:1px solid #e5e5e5!important;background:#fff!important;
+  box-shadow:none!important;padding:24px!important;font-family:"Noto Sans JP",sans-serif!important;
+}
+#registrationPreviewCard article.card.commander-card::before,
+#registrationPreviewCard article.card.union-card::before,
+#registrationPreviewCard article.card.commander-card::after,
+#registrationPreviewCard article.card.union-card::after {display:none!important;}
+#registrationPreviewCard .card-head-minimal {display:flex;justify-content:space-between;align-items:center;gap:10px;flex-wrap:wrap;}
+#registrationPreviewCard .card-head-minimal .card-head-status {display:flex;align-items:center;gap:7px;}
+#registrationPreviewCard .card-head-minimal .countdown {margin:0!important;padding:0!important;border:0!important;background:none!important;color:#777!important;font-size:11px!important;font-weight:500!important;}
+#registrationPreviewCard .card-head-minimal .type-with-new {display:flex;align-items:center;gap:6px;}
+#registrationPreviewCard .card-head-minimal .recruitment-type {border:0!important;background:none!important;padding:0!important;color:#6e6e6e!important;font-size:11px!important;font-weight:600!important;}
+#registrationPreviewCard article.card .name {margin:26px 0 13px!important;font:700 clamp(21px,2vw,28px)/1.35 "Noto Sans JP",sans-serif!important;letter-spacing:-.02em;}
+#registrationPreviewCard article.card .union-rank {clip-path:none!important;padding:6px 16px!important;}
+#registrationPreviewCard article.card .x-post-area {margin-top:20px!important;}
+#registrationPreviewCard .registration-only-preview-notice {margin-top:18px;padding:12px 14px;border-left:3px solid var(--cyan);background:#edf8fe;color:var(--ink);font-size:12px;line-height:1.65;}
+#registrationPreviewCard .registration-only-preview-notice strong {display:block;margin-bottom:5px;font-weight:800;}
+#registrationPreviewCard .registration-only-preview-notice span {color:var(--ink-soft);}
+@media(max-width:600px){
+  #registrationPreviewCard article.card.commander-card,#registrationPreviewCard article.card.union-card{padding:19px!important;}
+  #registrationPreviewCard article.card .name{font-size:22px!important;}
+  #resultModal .registration-pass-grid{gap:5px!important;}
+}
