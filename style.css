@@ -5772,8 +5772,8 @@ body.manage-mode .hero {
 
 
 /* Live recruitment listing cards: white editorial edition. */
-.cards article.card.commander-card,
-.cards article.card.union-card {
+:is(.cards, #registrationPreviewCard) article.card.commander-card,
+:is(.cards, #registrationPreviewCard) article.card.union-card {
   clip-path:none !important;
   border:1px solid #e5e5e5 !important;
   background:#fff !important;
@@ -5781,21 +5781,21 @@ body.manage-mode .hero {
   padding:24px !important;
   font-family:"Noto Sans JP",sans-serif;
 }
-.cards article.card.commander-card::before,
-.cards article.card.union-card::before,
-.cards article.card.commander-card::after,
-.cards article.card.union-card::after {display:none !important;}
-.cards article.card .card-head-minimal {display:flex;justify-content:space-between;align-items:center;gap:10px;flex-wrap:wrap;}
-.cards article.card .card-head-minimal .countdown {margin:0 !important;padding:0 !important;background:none !important;border:0 !important;color:#777 !important;font-size:11px;font-weight:500;}
-.cards article.card .card-head-minimal .type-with-new {display:flex;justify-content:flex-end;align-items:center;gap:6px;}
-.cards article.card .card-head-minimal .recruitment-type {border:0 !important;background:none !important;padding:0 !important;color:#6e6e6e !important;font-size:11px;font-weight:600;}
-.cards article.card .name {margin:26px 0 13px !important;font-family:"Noto Sans JP",sans-serif !important;font-size:clamp(21px,2vw,28px) !important;font-weight:700 !important;letter-spacing:-.02em;}
-.cards article.card .union-rank {clip-path:none !important;padding:6px 16px !important;}
-.cards article.card .slv {font-family:"Noto Sans JP",sans-serif !important;}
+:is(.cards, #registrationPreviewCard) article.card.commander-card::before,
+:is(.cards, #registrationPreviewCard) article.card.union-card::before,
+:is(.cards, #registrationPreviewCard) article.card.commander-card::after,
+:is(.cards, #registrationPreviewCard) article.card.union-card::after {display:none !important;}
+:is(.cards, #registrationPreviewCard) article.card .card-head-minimal {display:flex;justify-content:space-between;align-items:center;gap:10px;flex-wrap:wrap;}
+:is(.cards, #registrationPreviewCard) article.card .card-head-minimal .countdown {margin:0 !important;padding:0 !important;background:none !important;border:0 !important;color:#777 !important;font-size:11px;font-weight:500;}
+:is(.cards, #registrationPreviewCard) article.card .card-head-minimal .type-with-new {display:flex;justify-content:flex-end;align-items:center;gap:6px;}
+:is(.cards, #registrationPreviewCard) article.card .card-head-minimal .recruitment-type {border:0 !important;background:none !important;padding:0 !important;color:#6e6e6e !important;font-size:11px;font-weight:600;}
+:is(.cards, #registrationPreviewCard) article.card .name {margin:26px 0 13px !important;font-family:"Noto Sans JP",sans-serif !important;font-size:clamp(21px,2vw,28px) !important;font-weight:700 !important;letter-spacing:-.02em;}
+:is(.cards, #registrationPreviewCard) article.card .union-rank {clip-path:none !important;padding:6px 16px !important;}
+:is(.cards, #registrationPreviewCard) article.card .slv {font-family:"Noto Sans JP",sans-serif !important;}
 /* Commander listing only: keep SLV label size, align number row with union rank. */
-#listPage .cards article.card.commander-card .slv {font-size:20px !important;line-height:20px !important;padding:6px 0 !important;}
-.cards article.card .x-post-area {margin-top:20px !important;}
-@media(max-width:600px){.cards article.card.commander-card,.cards article.card.union-card{padding:19px !important;}.cards article.card .card-head-minimal .countdown{font-size:10px;}.cards article.card .name{font-size:22px !important;}}
+#listPage :is(.cards, #registrationPreviewCard) article.card.commander-card .slv {font-size:20px !important;line-height:20px !important;padding:6px 0 !important;}
+:is(.cards, #registrationPreviewCard) article.card .x-post-area {margin-top:20px !important;}
+@media(max-width:600px){:is(.cards, #registrationPreviewCard) article.card.commander-card,:is(.cards, #registrationPreviewCard) article.card.union-card{padding:19px !important;}:is(.cards, #registrationPreviewCard) article.card .card-head-minimal .countdown{font-size:10px;}:is(.cards, #registrationPreviewCard) article.card .name{font-size:22px !important;}}
 
 
 /* RECRUITMENTS list-area refinement: scoped to #listPage only. */
@@ -6058,18 +6058,18 @@ body.manage-mode #managePage #loadManageRecruitmentBtn,
 #listPage .recruitment-filter-count-value {white-space:nowrap !important;}
 
 /* INDEX recruitment cards: X source, compact status tags, responsive hover. */
-#listPage #recruitmentList.cards article.card { min-width:0; transition:border-color .22s ease, transform .22s ease !important; }
-#listPage #recruitmentList.cards article.card .card-head-minimal,
+:is(#listPage #recruitmentList.cards, #registrationPreviewCard) article.card { min-width:0; transition:border-color .22s ease, transform .22s ease !important; }
+:is(#listPage #recruitmentList.cards, #registrationPreviewCard) article.card .card-head-minimal,
 #listPage #recruitmentList.cards article.card .x-collected-card-head { display:flex; align-items:center; justify-content:space-between; flex-wrap:nowrap; gap:8px; min-width:0; }
-#listPage #recruitmentList.cards article.card .card-head-status { display:flex; align-items:center; gap:5px; flex:1 1 auto; min-width:0; flex-wrap:wrap; }
-#listPage #recruitmentList.cards article.card .card-head-status .countdown { flex:0 0 auto; white-space:nowrap; }
-#listPage #recruitmentList.cards article.card .card-head-minimal .type-with-new { flex:0 0 auto; justify-content:flex-end; margin-left:auto; }
-#listPage #recruitmentList.cards article.card .new-badge,
-#listPage #recruitmentList.cards article.card .deadline-badge { display:inline-flex !important; align-items:center; justify-content:center; box-sizing:border-box; height:21px; min-height:21px; padding:0 6px !important; border:1px solid; background:#fff !important; font:600 10px/1 "Noto Sans JP",sans-serif !important; white-space:nowrap; letter-spacing:0; flex:0 0 auto; box-shadow:none !important; }
-#listPage #recruitmentList.cards article.card .new-badge { color:#C43246 !important; border-color:#C43246 !important; }
-#listPage #recruitmentList.cards article.card .deadline-badge { color:#AD7938 !important; border-color:#C58B43 !important; }
-#listPage #recruitmentList.cards article.card .new-badge::before,
-#listPage #recruitmentList.cards article.card .new-badge::after { content:none !important; display:none !important; }
+:is(#listPage #recruitmentList.cards, #registrationPreviewCard) article.card .card-head-status { display:flex; align-items:center; gap:5px; flex:1 1 auto; min-width:0; flex-wrap:wrap; }
+:is(#listPage #recruitmentList.cards, #registrationPreviewCard) article.card .card-head-status .countdown { flex:0 0 auto; white-space:nowrap; }
+:is(#listPage #recruitmentList.cards, #registrationPreviewCard) article.card .card-head-minimal .type-with-new { flex:0 0 auto; justify-content:flex-end; margin-left:auto; }
+:is(#listPage #recruitmentList.cards, #registrationPreviewCard) article.card .new-badge,
+:is(#listPage #recruitmentList.cards, #registrationPreviewCard) article.card .deadline-badge { display:inline-flex !important; align-items:center; justify-content:center; box-sizing:border-box; height:21px; min-height:21px; padding:0 6px !important; border:1px solid; background:#fff !important; font:600 10px/1 "Noto Sans JP",sans-serif !important; white-space:nowrap; letter-spacing:0; flex:0 0 auto; box-shadow:none !important; }
+:is(#listPage #recruitmentList.cards, #registrationPreviewCard) article.card .new-badge { color:#C43246 !important; border-color:#C43246 !important; }
+:is(#listPage #recruitmentList.cards, #registrationPreviewCard) article.card .deadline-badge { color:#AD7938 !important; border-color:#C58B43 !important; }
+:is(#listPage #recruitmentList.cards, #registrationPreviewCard) article.card .new-badge::before,
+:is(#listPage #recruitmentList.cards, #registrationPreviewCard) article.card .new-badge::after { content:none !important; display:none !important; }
 #listPage #recruitmentList.cards article.card.x-collected-card { border:1px solid #e2e2e2 !important; clip-path:none !important; background:#fff !important; background-image:none !important; box-shadow:none !important; }
 #listPage #recruitmentList.cards article.card.x-collected-card::before,
 #listPage #recruitmentList.cards article.card.x-collected-card::after { content:none !important; display:none !important; }
@@ -6088,8 +6088,8 @@ body.manage-mode #managePage #loadManageRecruitmentBtn,
 }
 @media (max-width:600px) {
  #listPage #recruitmentList.cards article.card .card-head-status { gap:4px; }
- #listPage #recruitmentList.cards article.card .new-badge,
- #listPage #recruitmentList.cards article.card .deadline-badge { height:20px; min-height:20px; padding:0 5px !important; font-size:9px !important; }
+ :is(#listPage #recruitmentList.cards, #registrationPreviewCard) article.card .new-badge,
+ :is(#listPage #recruitmentList.cards, #registrationPreviewCard) article.card .deadline-badge { height:20px; min-height:20px; padding:0 5px !important; font-size:9px !important; }
 }
 
 
@@ -6272,29 +6272,8 @@ body, button, input, select, textarea {font-family:"Noto Sans JP",sans-serif;}
 #resultModal .modal-card {max-height:calc(100vh - 24px);max-height:calc(100dvh - 24px);overflow-x:hidden;overflow-y:auto;overscroll-behavior:contain;scrollbar-gutter:stable;}
 #resultModal .registration-pass-grid {gap:5px!important;margin-top:6px!important;}
 #resultModal .registration-pass-grid .registration-pass-item {line-height:1.45!important;}
-/* Registration preview uses the same simple editorial card geometry as the live lists. */
-#registrationPreviewCard article.card.commander-card,
-#registrationPreviewCard article.card.union-card {
-  clip-path:none!important;border:1px solid #e5e5e5!important;background:#fff!important;
-  box-shadow:none!important;padding:24px!important;font-family:"Noto Sans JP",sans-serif!important;
-}
-#registrationPreviewCard article.card.commander-card::before,
-#registrationPreviewCard article.card.union-card::before,
-#registrationPreviewCard article.card.commander-card::after,
-#registrationPreviewCard article.card.union-card::after {display:none!important;}
-#registrationPreviewCard .card-head-minimal {display:flex;justify-content:space-between;align-items:center;gap:10px;flex-wrap:wrap;}
-#registrationPreviewCard .card-head-minimal .card-head-status {display:flex;align-items:center;gap:7px;}
-#registrationPreviewCard .card-head-minimal .countdown {margin:0!important;padding:0!important;border:0!important;background:none!important;color:#777!important;font-size:11px!important;font-weight:500!important;}
-#registrationPreviewCard .card-head-minimal .type-with-new {display:flex;align-items:center;gap:6px;}
-#registrationPreviewCard .card-head-minimal .recruitment-type {border:0!important;background:none!important;padding:0!important;color:#6e6e6e!important;font-size:11px!important;font-weight:600!important;}
-#registrationPreviewCard article.card .name {margin:26px 0 13px!important;font:700 clamp(21px,2vw,28px)/1.35 "Noto Sans JP",sans-serif!important;letter-spacing:-.02em;}
-#registrationPreviewCard article.card .union-rank {clip-path:none!important;padding:6px 16px!important;}
-#registrationPreviewCard article.card .x-post-area {margin-top:20px!important;}
+/* Preview inherits the same card styles as #recruitmentList; only register-only notice is unique. */
 #registrationPreviewCard .registration-only-preview-notice {margin-top:18px;padding:12px 14px;border-left:3px solid var(--cyan);background:#edf8fe;color:var(--ink);font-size:12px;line-height:1.65;}
 #registrationPreviewCard .registration-only-preview-notice strong {display:block;margin-bottom:5px;font-weight:800;}
 #registrationPreviewCard .registration-only-preview-notice span {color:var(--ink-soft);}
-@media(max-width:600px){
-  #registrationPreviewCard article.card.commander-card,#registrationPreviewCard article.card.union-card{padding:19px!important;}
-  #registrationPreviewCard article.card .name{font-size:22px!important;}
-  #resultModal .registration-pass-grid{gap:5px!important;}
-}
+@media(max-width:600px){#resultModal .registration-pass-grid{gap:5px!important;}}
