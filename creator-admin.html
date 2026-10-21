@@ -2688,6 +2688,8 @@
       <div class="x-schedule-note">※ 青＝検索候補、オレンジ＝新規掲載。旧方式の未計測は「—」、確定した0件は「0」と表示します。</div>
       <div class="panel-title" style="margin-top:25px">直近48時間の実績</div>
       <div class="x-schedule-table-wrap"><table class="x-schedule-table"><thead><tr><th>日付（JST）</th><th>検索候補</th><th>通知募集</th><th>Discord通知先</th></tr></thead><tbody id="xDeliveryRecentBody"><tr><td colspan="4">読み込み中...</td></tr></tbody></table></div>
+      <div class="panel-title" style="margin-top:25px">X取得履歴（過去72時間）</div>
+      <div class="x-schedule-table-wrap"><table class="x-schedule-table"><thead><tr><th>日時（JST）</th><th>実行方法</th><th>状態</th><th>取得候補</th><th>保存</th><th>Discord通知</th></tr></thead><tbody id="xSearchHistoryBody"><tr><td colspan="6">読み込み中...</td></tr></tbody></table></div>
       <div class="panel-title" style="margin-top:25px">今後の検索予定</div>
       <div class="x-schedule-table-wrap"><table class="x-schedule-table"><thead><tr><th>日時（JST）</th><th>X検索フェーズ</th><th>状態</th></tr></thead><tbody id="xScheduleTableBody"><tr><td colspan="3">読み込み中...</td></tr></tbody></table></div>
       <div
@@ -7557,12 +7559,37 @@
       }).join('');
     }
 
+    async function loadXSearchHistory() {
+      const body = $("#xSearchHistoryBody");
+      if (!body) return;
+      body.innerHTML = '<tr><td colspan="6">読み込み中...</td></tr>';
+      const token = getToken();
+      if (!token) return;
+      const { data, error } = await sb.rpc("creator_admin_x_schedule_history", { p_token: token });
+      if (error) {
+        console.warn("X取得履歴の取得エラー", error);
+        body.innerHTML = '<tr><td colspan="6">取得履歴を読み込めませんでした。</td></tr>';
+        return;
+      }
+      if (!Array.isArray(data) || data.length === 0) {
+        body.innerHTML = '<tr><td colspan="6">過去72時間の取得履歴はありません。</td></tr>';
+        return;
+      }
+      body.innerHTML = data.map(r => {
+        const source = r.status === "manual" ? "Discord手動取得" : "自動取得";
+        const status = r.status === "failed" ? "失敗" : "実行済み";
+        const count = v => Number.isFinite(Number(v)) ? String(Number(v)) : "—";
+        return `<tr><td>${escapeHtml(formatXScheduleDate(r.executed_at) + " JST")}</td><td>${escapeHtml(source)}</td><td>${escapeHtml(status)}</td><td>${escapeHtml(count(r.candidate_count))}</td><td>${escapeHtml(count(r.stored_count))}</td><td>${escapeHtml(count(r.discord_delivery_count))}</td></tr>`;
+      }).join("");
+    }
+
     async function loadXSchedule() {
       clearMessage($("#xScheduleMessage"));
       void loadXDeliveryRecent();
       void loadXFlashState();
       void loadApiBudgetAdmin();
       void loadXLearningPhaseMetrics();
+      void loadXSearchHistory();
 
       const body = $("#xScheduleTableBody");
       if (body) {
