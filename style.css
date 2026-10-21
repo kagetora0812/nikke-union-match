@@ -6168,14 +6168,7 @@ body.manage-mode #managePage #loadManageRecruitmentBtn,
   color: #fff !important;
   background: #079bdc !important;
 }
-/* Restrict modal scrolling to the moment the new guide opens. */
-#resultModal.bot-guide-expanded .modal-card {
-  max-height: calc(100vh - 32px);
-  max-height: calc(100dvh - 32px);
-  overflow-y: auto;
-  overscroll-behavior: contain;
-  -webkit-overflow-scrolling: touch;
-}
+/* The result modal owns scrolling in both collapsed and expanded states. */
 @media (max-width: 600px) {
   #resultModal .registration-bot-guide.is-open { padding: 12px; }
   #resultModal .registration-bot-guide h3 { font-size: 14px; }
@@ -6266,48 +6259,52 @@ body, button, input, select, textarea {font-family:"Noto Sans JP",sans-serif;}
   #resultModal .registration-pass-grid{gap:8px;}
   #resultModal .registration-pass-grid .registration-pass-item{font-size:11px!important;}
 }
-/* Registration result: one scroll area; short windows must not hide the close button. */
+/* Registration result: a viewport-anchored panel with one internal scroll area. */
 #resultModal {
-  display:flex;
-  align-items:stretch;
-  justify-content:center;
-  overflow:hidden;
-  padding:12px;
-  overscroll-behavior:contain;
+  display: flex;
+  position: fixed;
+  inset: 0;
+  align-items: safe center;
+  justify-content: center;
+  overflow: hidden;
+  padding: 12px;
+  overscroll-behavior: contain;
 }
-#resultModal.hidden {display:none!important;}
-#resultModal .modal-card {
-  width:min(480px,100%);
-  min-height:0;
-  max-height:calc(100vh - 24px);
-  max-height:calc(100dvh - 24px);
-  margin:auto 0;
-  overflow-x:hidden;
-  overflow-y:auto;
-  overscroll-behavior:contain;
-  -webkit-overflow-scrolling:touch;
-  scrollbar-gutter:stable;
+#resultModal.hidden { display: none !important; }
+#resultModal > .modal-card {
+  flex: 0 1 480px;
+  width: min(480px, 100%);
+  min-width: 0;
+  min-height: 0;
+  max-height: calc(100vh - 24px);
+  max-height: calc(100dvh - 24px);
+  margin: 0;
+  overflow-x: hidden;
+  overflow-y: auto;
+  overscroll-behavior: contain;
+  -webkit-overflow-scrolling: touch;
 }
-/* Sticky inside the modal's only scroll container, so it remains clickable. */
+/* The close control stays reachable even if content is scrolled. */
 #resultModal #modalClose {
-  position:sticky;
-  top:0;
-  right:auto;
-  display:block;
-  float:right;
-  z-index:5;
-  width:34px;
-  height:34px;
-  margin:-10px -10px 0 0;
-  border:0;
-  border-radius:0!important;
-  background:#fff;
-  color:var(--ink-soft);
-  font:400 26px/34px "Noto Sans JP",sans-serif;
-  text-align:center;
-  cursor:pointer;
+  position: sticky;
+  top: 0;
+  right: auto;
+  z-index: 5;
+  float: right;
+  display: block;
+  width: 36px;
+  height: 36px;
+  margin: -10px -10px 0 0;
+  padding: 0;
+  border: 0;
+  border-radius: 0 !important;
+  background: #fff;
+  color: var(--ink-soft);
+  font: 400 26px/36px "Noto Sans JP", sans-serif;
+  text-align: center;
+  cursor: pointer;
 }
-#resultModal #modalClose:focus-visible {outline:2px solid var(--cyan);outline-offset:-2px;}
+#resultModal #modalClose:focus-visible { outline: 2px solid var(--cyan); outline-offset: -2px; }
 #resultModal .registration-pass-grid {gap:5px!important;margin-top:6px!important;}
 #resultModal .registration-pass-grid .registration-pass-item {line-height:1.45!important;}
 /* Preview inherits the same card styles as #recruitmentList; only register-only notice is unique. */
