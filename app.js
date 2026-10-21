@@ -3970,6 +3970,31 @@ function resetRegistrationBotGuide(isUnion = false) {
 }
 
 
+// 登録完了画面だけのスクロール位置制御。
+// 表示直後、PASSコピー後の案内展開、ウィンドウ縮小時にも先頭を維持する。
+function resetRegistrationResultScroll() {
+  const modal = $("#resultModal");
+  if (!modal || modal.classList.contains("hidden")) return;
+  const reset = () => {
+    if (modal.classList.contains("hidden")) return;
+    const card = modal.querySelector(".modal-card");
+    if (card) card.scrollTop = 0;
+  };
+  reset();
+  requestAnimationFrame(() => {
+    reset();
+    requestAnimationFrame(reset);
+  });
+}
+
+// 高さ変更で先頭が切れないよう、登録完了モーダルの表示中だけ補正する。
+window.addEventListener("resize", () => {
+  const modal = $("#resultModal");
+  if (modal && !modal.classList.contains("hidden")) {
+    resetRegistrationResultScroll();
+  }
+});
+
 // ========================================
 // 登録結果表示
 // ========================================
@@ -4109,12 +4134,7 @@ function showRegistrationResult(
 
   const resultModal = $("#resultModal");
   resultModal?.classList.remove("hidden");
-  // Reset a previously scrolled result when a new completion panel opens.
-  if (resultModal) {
-    resultModal.scrollTop = 0;
-    const resultPanel = resultModal.querySelector(".modal-card");
-    if (resultPanel) resultPanel.scrollTop = 0;
-  }
+  resetRegistrationResultScroll();
 
 }
 
@@ -4182,12 +4202,7 @@ function showDiscordRepublishV2Result(result, registerOnly = false) {
 
   const resultModal = $("#resultModal");
   resultModal?.classList.remove("hidden");
-  // Reset a previously scrolled result when a new completion panel opens.
-  if (resultModal) {
-    resultModal.scrollTop = 0;
-    const resultPanel = resultModal.querySelector(".modal-card");
-    if (resultPanel) resultPanel.scrollTop = 0;
-  }
+  resetRegistrationResultScroll();
 }
 
 // ========================================
@@ -4946,21 +4961,8 @@ $("#copyPass")
           guide.classList.add("is-open");
           modal.classList.add("bot-guide-expanded");
 
-          // 展開後の位置に合わせ、狭い画面でも案内全体を見られるようにする。
-          window.setTimeout(() => {
-            if (
-              guide.classList.contains("is-open") &&
-              !modal.classList.contains("hidden")
-            ) {
-              const reduceMotion = window.matchMedia?.(
-                "(prefers-reduced-motion: reduce)"
-              ).matches;
-              guide.scrollIntoView({
-                behavior: reduceMotion ? "auto" : "smooth",
-                block: "nearest"
-              });
-            }
-          }, 350);
+          // PASSコピー前と同じく、案内展開後も先頭を表示する。
+          resetRegistrationResultScroll();
         }
 
 
