@@ -4082,15 +4082,15 @@ function showRegistrationResult(
 
   if (registrationPassWarningText) {
     registrationPassWarningText.innerHTML = isUnion
-      ? `<span style="display:block;font-weight:700;">PASSは以下の操作に必要です。</span>
-         <span style="display:block;margin-top:9px;color:#159ac8;font-weight:700;">ユニオンの方</span>
-         <span style="display:block;font-weight:700;">✓ 登録情報の変更・削除</span>
-         <span style="display:block;font-weight:700;">✓ 募集状況の切り替え</span>
-         <span style="display:block;font-weight:700;">✓ 掲載期限（14日）の延長</span>
-         <span style="display:block;font-weight:700;">✓ Discord BOTとの連携</span>`
-      : `<span style="display:block;font-weight:700;">PASSは以下の操作に必要です。</span>
-         <span style="display:block;margin-top:9px;color:#159ac8;font-weight:700;">指揮官の方</span>
-         <span style="display:block;font-weight:700;">募集の終了（掲載削除）のみ行えます。</span>`;
+      ? `<span class="registration-pass-intro">PASSは以下の操作に必要です。</span>
+         <span class="registration-pass-role">ユニオンの方</span>
+         <span class="registration-pass-item">登録情報の変更・削除</span>
+         <span class="registration-pass-item">募集状況の切り替え</span>
+         <span class="registration-pass-item">掲載期限（14日）の延長</span>
+         <span class="registration-pass-item">Discord BOTとの連携</span>`
+      : `<span class="registration-pass-intro">PASSは以下の操作に必要です。</span>
+         <span class="registration-pass-role">指揮官の方</span>
+         <span class="registration-pass-item">募集の終了（掲載削除）</span>`;
   }
 
   if (resultModeNote) {
@@ -6905,6 +6905,51 @@ $("#managePreviewConfirm")
   );
 
 
+// 募集終了・登録削除専用ダイアログ。既存RPCの内容や呼出順序は変更しない。
+function showManageActionDialog({ title, message, confirm = false, danger = false }) {
+  return new Promise(resolve => {
+    const overlay = document.getElementById("manageActionDialog");
+    const panel = overlay?.querySelector(".manage-action-dialog-panel");
+    const cancel = document.getElementById("manageActionDialogCancel");
+    const accept = document.getElementById("manageActionDialogAccept");
+    if (!overlay || !panel || !cancel || !accept) {
+      resolve(confirm ? window.confirm(message) : (window.alert(message), true));
+      return;
+    }
+    const previousFocus = document.activeElement;
+    document.getElementById("manageActionDialogTitle").textContent = title;
+    document.getElementById("manageActionDialogMessage").textContent = message;
+    document.getElementById("manageActionDialogKicker").textContent = confirm ? "CONFIRM" : "INFORMATION";
+    overlay.classList.toggle("is-danger", danger);
+    cancel.classList.toggle("hidden", !confirm);
+    accept.textContent = confirm ? (danger ? "削除する" : "確定する") : "閉じる";
+    overlay.classList.remove("hidden");
+    const finish = value => {
+      overlay.classList.add("hidden");
+      accept.removeEventListener("click", onAccept);
+      cancel.removeEventListener("click", onCancel);
+      document.removeEventListener("keydown", onKey);
+      previousFocus?.focus?.();
+      resolve(value);
+    };
+    const onAccept = () => finish(true);
+    const onCancel = () => finish(false);
+    const onKey = event => {
+      if (event.key === "Escape") { event.preventDefault(); finish(false); }
+      if (event.key === "Tab") {
+        const targets = confirm ? [cancel, accept] : [accept];
+        const active = document.activeElement;
+        if (event.shiftKey && active === targets[0]) { event.preventDefault(); targets.at(-1).focus(); }
+        else if (!event.shiftKey && active === targets.at(-1)) { event.preventDefault(); targets[0].focus(); }
+      }
+    };
+    accept.addEventListener("click", onAccept);
+    cancel.addEventListener("click", onCancel);
+    document.addEventListener("keydown", onKey);
+    (confirm ? cancel : accept).focus();
+  });
+}
+
 // ========================================
 // PASSで募集締切（従来機能を維持）
 // ========================================
@@ -6939,9 +6984,7 @@ async function closeLoadedRecruitment() {
   ) {
 
     const ok =
-      window.confirm(
-        "求人広告を締め切って「登録のみ」に戻しますか？\n\n会員登録は残るため、TOTAL UNIONSからは外れません。"
-      );
+      await showManageActionDialog({ title: "メンバー募集の終了", message: "メンバー募集を終了し、「登録のみ」に切り替えますか？\n\nユニオンの登録情報は削除されず、そのまま残ります。", confirm: true });
 
     if (!ok) {
       return;
@@ -6982,15 +7025,11 @@ async function closeLoadedRecruitment() {
         "ユニオン募集停止エラー",
         error || data
       );
-      alert(
-        "募集を終了できませんでした。もう一度お試しください。"
-      );
+      await showManageActionDialog({ title: "切り替え失敗", message: "募集状況を変更できませんでした。\nもう一度お試しください。" });
       return;
     }
 
-    alert(
-      "求人広告を締め切りました。\nユニオン会員登録は「登録のみ」として継続します。"
-    );
+    await showManageActionDialog({ title: "切り替え完了", message: "メンバー募集を終了し、「登録のみ」に切り替えました。\n\n登録状況は、メニューの「ユニオンリスト」からご確認ください。" });
 
     clearLoadedManageRecruitment();
     $("#closeForm")?.reset();
@@ -7008,9 +7047,7 @@ async function closeLoadedRecruitment() {
   // 従来の締切処理を維持
   // --------------------------------------
   const ok =
-    window.confirm(
-      "この募集を締め切りますか？\n\n※ 再延長・再登録ではありません。募集一覧から非表示になります。"
-    );
+    await showManageActionDialog({ title: "募集終了の確認", message: "募集を終了しますか？\n\n募集を終了すると、掲載情報は削除されます。", confirm: true, danger: true });
 
   if (!ok) {
     return;
@@ -7030,7 +7067,7 @@ async function closeLoadedRecruitment() {
 
   if (error) {
     console.error("募集締切エラー", error);
-    alert("募集締切処理に失敗しました。");
+    await showManageActionDialog({ title: "終了失敗", message: "募集を終了できませんでした。\nもう一度お試しください。" });
     return;
   }
 
@@ -7055,22 +7092,16 @@ async function closeLoadedRecruitment() {
         "指揮官募集締切エラー",
         commanderError
       );
-      alert(
-        "指揮官募集の締切処理に失敗しました。"
-      );
+      await showManageActionDialog({ title: "終了失敗", message: "募集を終了できませんでした。\nもう一度お試しください。" });
       return;
     }
 
     if (commanderClosed !== true) {
-      alert(
-        "PASSが正しくないか、すでに募集終了しています。"
-      );
+      await showManageActionDialog({ title: "登録情報を確認できませんでした", message: "PASSが正しくないか、すでに募集が終了している可能性があります。" });
       return;
     }
 
-    alert(
-      "🎓 ユニオン決定として募集を締め切りました。"
-    );
+    await showManageActionDialog({ title: "募集終了", message: "募集を終了し、掲載情報を削除しました。" });
 
     await loadGraduatedCommanderCount();
 
@@ -7116,9 +7147,7 @@ $("#deleteUnionMembershipBtn")
       }
 
       const ok =
-        window.confirm(
-          "UNION MATCHから登録を削除しますか？\n\n・TOTAL UNIONSから外れます\n・募集中なら求人広告も終了します\n・BOTとのユニオン連携も解除されます\n・再利用する場合は新規登録が必要です"
-        );
+        await showManageActionDialog({ title: "登録情報の削除", message: "登録情報を削除しますか？\n\n削除すると掲載情報も削除され、元に戻すことはできません。", confirm: true, danger: true });
 
       if (!ok) {
         return;
@@ -7145,15 +7174,11 @@ $("#deleteUnionMembershipBtn")
           "ユニオン会員解除エラー",
           error || data
         );
-        alert(
-          "登録を削除できませんでした。"
-        );
+        await showManageActionDialog({ title: "削除失敗", message: "登録情報を削除できませんでした。\nもう一度お試しください。" });
         return;
       }
 
-      alert(
-        "UNION MATCHから登録を削除しました。\n再び利用する場合は新規登録してください。"
-      );
+      await showManageActionDialog({ title: "削除完了", message: "登録情報を削除しました。" });
 
       clearLoadedManageRecruitment();
       $("#closeForm")?.reset();
