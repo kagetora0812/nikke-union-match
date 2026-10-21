@@ -3970,30 +3970,13 @@ function resetRegistrationBotGuide(isUnion = false) {
 }
 
 
-// 登録完了画面だけのスクロール位置制御。
-// 表示直後、PASSコピー後の案内展開、ウィンドウ縮小時にも先頭を維持する。
+// 登録結果を開いたとき、カードのスクロール位置だけを初期化する。
 function resetRegistrationResultScroll() {
   const modal = $("#resultModal");
   if (!modal || modal.classList.contains("hidden")) return;
-  const reset = () => {
-    if (modal.classList.contains("hidden")) return;
-    const card = modal.querySelector(".modal-card");
-    if (card) card.scrollTop = 0;
-  };
-  reset();
-  requestAnimationFrame(() => {
-    reset();
-    requestAnimationFrame(reset);
-  });
+  const card = modal.querySelector(".modal-card");
+  if (card) card.scrollTop = 0;
 }
-
-// 高さ変更で先頭が切れないよう、登録完了モーダルの表示中だけ補正する。
-window.addEventListener("resize", () => {
-  const modal = $("#resultModal");
-  if (modal && !modal.classList.contains("hidden")) {
-    resetRegistrationResultScroll();
-  }
-});
 
 // ========================================
 // 登録結果表示
