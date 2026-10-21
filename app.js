@@ -4084,11 +4084,11 @@ function showRegistrationResult(
     registrationPassWarningText.innerHTML = `
       <span class="registration-pass-intro">PASSは以下の操作に必要です。</span>
       <span class="registration-pass-grid">
-        <span class="registration-pass-item registration-pass-item-full">登録情報の削除 <small>※指揮官のみ</small></span>
-        <span class="registration-pass-item">登録の変更・削除</span>
-        <span class="registration-pass-item">募集状況の切り替え</span>
-        <span class="registration-pass-item">掲載期限（14日）の延長</span>
-        <span class="registration-pass-item">Discord BOTとの連携</span>
+        <span class="registration-pass-item">・登録情報の削除 <small>※指揮官のみ</small></span>
+        <span class="registration-pass-item">・登録の変更・削除</span>
+        <span class="registration-pass-item">・募集状況の切り替え</span>
+        <span class="registration-pass-item">・掲載期限（14日）の延長</span>
+        <span class="registration-pass-item">・Discord BOTとの連携</span>
       </span>`;
   }
 
