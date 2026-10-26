@@ -7525,7 +7525,32 @@
         const no=Number(r.raid_no), month=Number(r.raid_month_number);
         return [no,{no,name:`第${no}回｜${month}月度`,start:r.raid_start_at,end:r.raid_end_at}];
       })).values()].sort((a,b)=>a.no-b.no);
-      const fmt=(iso)=>{const d=new Date(iso);return iso && Number.isFinite(d.getTime())?new Intl.DateTimeFormat('ja-JP',{timeZone:'Asia/Tokyo',month:'numeric',day:'numeric',hour:'2-digit',minute:'2-digit',hourCycle:'h23'}).format(d):'次回発表まで';};
+      // グラフのフェーズ期間はJSTの日付のみ表示し、隣接フェーズ間で同日を重ねない。
+      const jstDay=(iso)=>{
+        if(!iso) return null;
+        const d=new Date(iso);
+        if(!Number.isFinite(d.getTime())) return null;
+        const parts=Object.fromEntries(new Intl.DateTimeFormat('en-US',{
+          timeZone:'Asia/Tokyo',year:'numeric',month:'2-digit',day:'2-digit',
+          hour:'2-digit',minute:'2-digit',second:'2-digit',hourCycle:'h23'
+        }).formatToParts(d).map(p=>[p.type,p.value]));
+        return {day:Date.UTC(+parts.year,+parts.month-1,+parts.day),
+          time:(+parts.hour)*3600+(+parts.minute)*60+(+parts.second)};
+      };
+      const shortDay=(day)=>{const d=new Date(day);return `${d.getUTCMonth()+1}/${d.getUTCDate()}`;};
+      const phaseDateRange=(r)=>{
+        const start=jstDay(r.phase_start_at),end=jstDay(r.phase_end_at);
+        if(!start) return '日程未取得';
+        if(end && new Date(r.phase_start_at).getTime() >= new Date(r.phase_end_at).getTime())
+          return '対象期間なし';
+        // 00:00終了は前日まで。それ以外も前後のフェーズで同日を重複表示しない。
+        const last=end ? end.day-(end.time===0?86400000:0) : null;
+        let first=start.day+(start.time!==0?86400000:0);
+        if(last!==null && first>last) first=start.day;
+        if(last!==null && first>last) return '対象期間なし';
+        if(last===null) return `${shortDay(first)}〜次回発表まで`;
+        return first===last ? shortDay(first) : `${shortDay(first)}〜${shortDay(last)}`;
+      };
       const labels={raid_prep:"レイド準備期間",raid_hard_end:"レイドハード終了",reward_movement:"報酬配布・移籍可能",post_raid:"レイド後"};
       const colors={raid_prep:"#3cbab5",raid_hard_end:"#bb86cf",reward_movement:"#e6be72",post_raid:"#8d9aa8"};
       const phases=["raid_prep","raid_hard_end","reward_movement","post_raid"];
@@ -7545,7 +7570,7 @@
         const raid=raids.find(r=>String(r.no)===selector.value);
         const rows=data.filter(r=>Number(r.raid_no)===raid.no && phases.includes(r.phase));
         const items=phases.map(p=>({key:p,...(rows.find(r=>r.phase===p)||{})}));
-        $("#xRaidPreviewRange").textContent=raid.start?`開催期間：${fmt(raid.start)}〜${fmt(raid.end)}（JST）`:'開催期間：未確定';
+        $("#xRaidPreviewRange").textContent=raid.start?`開催期間：${shortDay(jstDay(raid.start).day)}〜${shortDay(jstDay(raid.end).day)}（JST）`:'開催期間：未確定';
         if (!items.length) { $("#xRaidPreviewGraph").textContent="記録された検索実績はありません。"; $("#xRaidPreviewTotals").textContent=""; return; }
         const candidates=r=>Math.max(0,Number(r.candidate_count)||0),listed=r=>Math.max(0,Number(r.new_listing_count)||0);
         const max=Math.max(1,...items.map(candidates),...items.map(listed));
@@ -7558,7 +7583,7 @@
             const height=v/top*plot,x=cx+offset,y=base-height;
             svg+=`<rect x="${x}" y="${y}" width="15" height="${height}" rx="2" fill="${c}"><title>${labels[r.key]} ${v}件</title></rect><text x="${x+7}" y="${Math.max(14,y-6)}" text-anchor="middle" font-size="11" font-weight="700" fill="${c}">${v}</text>`;
           });
-          const period=r.phase_start_at?`${fmt(r.phase_start_at)}〜${r.phase_end_at?fmt(r.phase_end_at):"次回発表まで"}`:"日程未取得";
+          const period=phaseDateRange(r);
           svg+=`<text x="${cx}" y="199" text-anchor="middle" font-size="11" fill="${colors[r.key]}">${labels[r.key]}</text><text x="${cx}" y="219" text-anchor="middle" font-size="10" fill="#8197af">${period}</text>`;
         });
         $("#xRaidPreviewGraph").innerHTML=svg+"</svg>";
