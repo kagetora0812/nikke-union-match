@@ -2686,7 +2686,7 @@
       <div id="apiBudgetMessage" class="message hidden"></div>
       <div class="panel-title" style="margin-top:25px">開催回・対象フェーズ別のX検索実績</div>
       <div id="xLearningPhaseCharts" class="x-phase-chart-grid"><div class="x-phase-chart-card">読み込み中...</div></div>
-      <div class="x-schedule-note">※ 青＝X収集候補、オレンジ＝指揮官募集の掲載数（参考）。開催回別の区分はプレビュー用の仮設定です。</div>
+      <div class="x-schedule-note">※ 青＝X収集候補、オレンジ＝指揮官募集の掲載数（参考）。</div>
       <div class="panel-title" style="margin-top:25px">直近48時間の実績</div>
       <div class="x-schedule-table-wrap"><table class="x-schedule-table"><thead><tr><th>日付（JST）</th><th>検索候補</th><th>通知募集</th><th>Discord通知先</th></tr></thead><tbody id="xDeliveryRecentBody"><tr><td colspan="4">読み込み中...</td></tr></tbody></table></div>
       <div class="panel-title" style="margin-top:25px">X取得履歴（過去72時間）</div>
@@ -7510,65 +7510,62 @@
     $("#saveApiBudgetX")?.addEventListener("click",()=>void saveApiBudgetAdmin("x"));
     $("#saveApiBudgetOpenai")?.addEventListener("click",()=>void saveApiBudgetAdmin("openai"));
 
-    // X分析デザイン確認用：取得履歴の期間分割は暫定。DBの月間集計を開催回に流用しない。
-    function loadXLearningPhaseMetrics() {
+    // X分析：開催回・フェーズ別。集計値は認証済みRPCから取得し、固定サンプルは使用しない。
+    async function loadXLearningPhaseMetrics() {
       const host = $("#xLearningPhaseCharts");
       if (!host) return;
-      const records = [
-        ["10/01","normal",0,0],["10/04","pre_raid",6,6],["10/06","pre_raid",0,0],
-        ["10/10","raid_early",8,8],["10/14","post_prep",258,0],["10/15","post_prep",62,0],
-        ["10/16","post_prep",39,0],["10/17","raid_hard_end",44,2],["10/18","raid_hard_end",70,3],
-        ["10/19","reward_movement",72,3],["10/20","reward_movement",94,9],
-        ["10/20","reward_movement",43,1],["10/21","reward_movement",28,2],
-        ["10/21","reward_movement",14,1],["10/22","reward_movement",43,5],
-        ["10/23","reward_movement",62,7],["10/24","raid_prep",72,7],["10/25","raid_prep",159,21]
-      ];
+      const token = getToken();
+      if (!token) return;
+      const {data, error} = await sb.rpc("creator_admin_x_raid_phases", {p_token:token});
+      if (error || !Array.isArray(data)) {
+        host.innerHTML = '<div class="x-phase-chart-card">開催回別の集計を読み込めません。Supabaseの集計関数 creator_admin_x_raid_phases を設定してください。</div>';
+        return;
+      }
+      const raids = [...new Map(data.map(r=>{
+        const no=Number(r.raid_no), month=Number(r.raid_month_number);
+        return [no,{no,name:`第${no}回｜${month}月度`,start:r.raid_start_at,end:r.raid_end_at}];
+      })).values()].sort((a,b)=>a.no-b.no);
+      const fmt=(iso)=>{const d=new Date(iso);return iso && Number.isFinite(d.getTime())?new Intl.DateTimeFormat('ja-JP',{timeZone:'Asia/Tokyo',month:'numeric',day:'numeric',hour:'2-digit',minute:'2-digit',hourCycle:'h23'}).format(d):'次回発表まで';};
+      const labels={raid_prep:"レイド準備期間",raid_hard_end:"レイドハード終了",reward_movement:"報酬配布・移籍可能",post_raid:"レイド後"};
+      const colors={raid_prep:"#3cbab5",raid_hard_end:"#bb86cf",reward_movement:"#e6be72",post_raid:"#8d9aa8"};
+      const phases=["raid_prep","raid_hard_end","reward_movement","post_raid"];
       host.innerHTML = `<div class="x-phase-chart-card x-raid-preview">
-        <div class="x-phase-chart-head"><strong>指揮官募集の取得分析</strong><span>2026年10月の取得履歴</span></div>
-        <div class="x-raid-preview-controls"><label>対象レイド<select id="xRaidPreviewSelector">
-          <option value="45">第45回｜10月度</option><option value="46">第46回｜11月度（準備期間）</option>
-        </select></label></div>
+        <div class="x-phase-chart-head"><strong>指揮官募集の取得分析</strong><span>開催回・対象フェーズ別</span></div>
+        <div class="x-raid-preview-controls"><label>対象レイド<select id="xRaidPreviewSelector">${raids.map(r=>`<option value="${r.no}">${r.name}</option>`).join("")}</select></label></div>
         <div id="xRaidPreviewRange" class="x-phase-chart-meta"></div>
         <div class="x-phase-chart-legend"><span><i style="background:#449be8"></i>X収集候補</span><span><i style="background:#f3a247"></i>指揮官募集の掲載数（参考）</span></div>
         <div id="xRaidPreviewGraph" class="x-phase-chart-viewport"></div>
         <div id="xRaidPreviewTotals" class="x-phase-chart-meta"></div>
-        <div class="x-phase-chart-meta">※ 開催回への紐付けは仮区分です。第45回は10/1〜10/23（終了後の移籍期間を含む）、第46回は10/24以降の準備期間のみ表示しています。開催回への割り当ては確認用で、正式な開催回別集計ではありません。</div>
+        <div class="x-phase-chart-meta">※ 掲載数は過去の保存数を含む参考値です。フェーズ期間はBOTの検索スケジュール規則による予定です。</div>
       </div>`;
-      const render = () => {
-        const selected = $("#xRaidPreviewSelector").value;
-        const subset = records.filter(r => selected === "45" ? r[0] <= "10/23" : r[0] >= "10/24");
-        const grouped = new Map();
-        for (const [date,phase,candidates,listed] of subset) {
-          // Previous raid retains its post-raid movement. Next raid displays preparation only.
-          const key = selected === "46" ? "レイド準備" :
-            (phase === "pre_raid" || phase === "normal") ? "レイド準備" :
-            (phase === "raid_early" || (phase === "post_prep" && date === "10/14")) ? "レイド開催中" :
-            phase === "post_prep" ? "レイド後" :
-            phase === "raid_hard_end" ? "ハード終了" :
-            phase === "reward_movement" ? "報酬・移籍" : "その他";
-          const prior = grouped.get(key) || {candidates:0,listed:0,dates:[]};
-          prior.candidates += candidates; prior.listed += listed; prior.dates.push(date);
-          grouped.set(key,prior);
-        }
-        const items = [...grouped.entries()];
-        const max = Math.max(1,...items.flatMap(([,r])=>[r.candidates,r.listed]));
-        const top=Math.ceil(max/4)*4,W=680,H=220,left=46,right=12,base=171,plot=142;
-        let svg = `<svg class="x-phase-chart-svg" style="min-width:480px" viewBox="0 0 ${W} ${H}" role="img" aria-label="対象フェーズ別X収集候補と掲載数">`;
-        for(let i=0;i<5;i++){const y=base-i*plot/4;svg+=`<line x1="${left}" y1="${y}" x2="${W-right}" y2="${y}" stroke="#354358"/><text x="${left-7}" y="${y+4}" text-anchor="end" fill="#98aabd" font-size="11">${Math.round(top*i/4)}</text>`;}
-        items.forEach(([name,r],i)=>{
+      const selector=$("#xRaidPreviewSelector");
+      if (!raids.length) { $("#xRaidPreviewGraph").textContent="公式レイド情報がありません。"; return; }
+      selector.value=String(raids[raids.length-1].no);
+      const render=()=>{
+        const raid=raids.find(r=>String(r.no)===selector.value);
+        const rows=data.filter(r=>Number(r.raid_no)===raid.no && phases.includes(r.phase));
+        const items=phases.map(p=>({key:p,...(rows.find(r=>r.phase===p)||{})}));
+        $("#xRaidPreviewRange").textContent=raid.start?`開催期間：${fmt(raid.start)}〜${fmt(raid.end)}（JST）`:'開催期間：未確定';
+        if (!items.length) { $("#xRaidPreviewGraph").textContent="記録された検索実績はありません。"; $("#xRaidPreviewTotals").textContent=""; return; }
+        const candidates=r=>Math.max(0,Number(r.candidate_count)||0),listed=r=>Math.max(0,Number(r.new_listing_count)||0);
+        const max=Math.max(1,...items.map(candidates),...items.map(listed));
+        const top=Math.ceil(max/4)*4,W=Math.max(600,items.length*130),H=248,left=49,right=15,base=175,plot=147;
+        let svg=`<svg class="x-phase-chart-svg" style="min-width:${W}px" viewBox="0 0 ${W} ${H}" role="img" aria-label="対象フェーズ別X収集候補と掲載数">`;
+        for(let i=0;i<5;i++){const y=base-i*plot/4;svg+=`<line x1="${left}" y1="${y}" x2="${W-right}" y2="${y}" stroke="#354358"/><text x="${left-6}" y="${y+4}" text-anchor="end" fill="#98aabd" font-size="11">${Math.round(top*i/4)}</text>`;}
+        items.forEach((r,i)=>{
           const cx=left+(W-left-right)*(i+.5)/items.length;
-          [[r.candidates,"#449be8",-17],[r.listed,"#f3a247",3]].forEach(([v,c,offset])=>{
-            const h=v/top*plot,x=cx+offset,y=base-h;
-            svg+=`<rect x="${x}" y="${y}" width="14" height="${h}" rx="2" fill="${c}"><title>${name} ${v}件</title></rect><text x="${x+7}" y="${Math.max(15,y-6)}" text-anchor="middle" font-size="11" font-weight="700" fill="${c}">${v}</text>`;
+          [[candidates(r),"#449be8",-18],[listed(r),"#f3a247",3]].forEach(([v,c,offset])=>{
+            const height=v/top*plot,x=cx+offset,y=base-height;
+            svg+=`<rect x="${x}" y="${y}" width="15" height="${height}" rx="2" fill="${c}"><title>${labels[r.key]} ${v}件</title></rect><text x="${x+7}" y="${Math.max(14,y-6)}" text-anchor="middle" font-size="11" font-weight="700" fill="${c}">${v}</text>`;
           });
-          svg+=`<text x="${cx}" y="194" text-anchor="middle" font-size="11" fill="#a9b8ca">${name}</text><text x="${cx}" y="210" text-anchor="middle" font-size="10" fill="#8197af">${r.dates.reduce((a,b)=>a<b?a:b)}〜${r.dates.reduce((a,b)=>a>b?a:b)}</text>`;
+          const period=r.phase_start_at?`${fmt(r.phase_start_at)}〜${r.phase_end_at?fmt(r.phase_end_at):"次回発表まで"}`:"日程未取得";
+          svg+=`<text x="${cx}" y="199" text-anchor="middle" font-size="11" fill="${colors[r.key]}">${labels[r.key]}</text><text x="${cx}" y="219" text-anchor="middle" font-size="10" fill="#8197af">${period}</text>`;
         });
-        $("#xRaidPreviewGraph").innerHTML = svg + "</svg>";
-        const dates=subset.map(r=>r[0]);
-        $("#xRaidPreviewRange").textContent = (selected === "45" ? "開催期間：10/09〜10/15 ｜ " : "開催期間：確認待ち ｜ 現在フェーズ：レイド準備 ｜ ") + `取得期間：${dates[0]}〜${dates[dates.length-1]}（JST）`;
-        $("#xRaidPreviewTotals").textContent = `取得${subset.length}回 ／ X収集候補${subset.reduce((n,r)=>n+r[2],0)}件 ／ 掲載数（参考）${subset.reduce((n,r)=>n+r[3],0)}件`;
+        $("#xRaidPreviewGraph").innerHTML=svg+"</svg>";
+        const sum=k=>items.reduce((n,r)=>n+(Number(r[k])||0),0);
+        $("#xRaidPreviewTotals").textContent=`取得${sum("search_count")}回 ／ X収集候補${sum("candidate_count")}件 ／ 掲載数（参考）${sum("new_listing_count")}件`;
       };
-      $("#xRaidPreviewSelector").addEventListener("change",render);
+      selector.addEventListener("change",render);
       render();
     }
 
