@@ -7541,8 +7541,15 @@
       const phaseDateRange=(r)=>{
         const start=jstDay(r.phase_start_at),end=jstDay(r.phase_end_at);
         if(!start) return '日程未取得';
-        if(end && new Date(r.phase_start_at).getTime() >= new Date(r.phase_end_at).getTime())
+        if(end && new Date(r.phase_start_at).getTime() >= new Date(r.phase_end_at).getTime()) {
+          // 過去フェーズの予定区間が次回発表で逆転した場合、実際の取得日を表示する。
+          const firstRun=jstDay(r.first_run),lastRun=jstDay(r.last_run);
+          if(firstRun && lastRun && firstRun.day<=lastRun.day)
+            return firstRun.day===lastRun.day
+              ? `取得：${shortDay(firstRun.day)}`
+              : `取得：${shortDay(firstRun.day)}〜${shortDay(lastRun.day)}`;
           return '対象期間なし';
+        }
         // 00:00終了は前日まで。それ以外も前後のフェーズで同日を重複表示しない。
         const last=end ? end.day-(end.time===0?86400000:0) : null;
         let first=start.day+(start.time!==0?86400000:0);
