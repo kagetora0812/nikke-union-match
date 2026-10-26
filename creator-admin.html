@@ -7526,24 +7526,26 @@
       host.innerHTML = `<div class="x-phase-chart-card x-raid-preview">
         <div class="x-phase-chart-head"><strong>指揮官募集の取得分析</strong><span>2026年10月の取得履歴</span></div>
         <div class="x-raid-preview-controls"><label>対象レイド<select id="xRaidPreviewSelector">
-          <option value="45">第45回｜10月度</option><option value="46">次回レイド｜11月度（暫定）</option>
+          <option value="45">第45回｜10月度</option><option value="46">第46回｜11月度（準備期間）</option>
         </select></label></div>
         <div id="xRaidPreviewRange" class="x-phase-chart-meta"></div>
         <div class="x-phase-chart-legend"><span><i style="background:#449be8"></i>X収集候補</span><span><i style="background:#f3a247"></i>指揮官募集の掲載数（参考）</span></div>
         <div id="xRaidPreviewGraph" class="x-phase-chart-viewport"></div>
         <div id="xRaidPreviewTotals" class="x-phase-chart-meta"></div>
-        <div class="x-phase-chart-meta">※ 開催回への紐付けは仮区分です。第45回は10/1〜10/15、次回は10/16〜10/25の取得を表示しています。正式な開催回別集計ではありません。</div>
+        <div class="x-phase-chart-meta">※ 開催回への紐付けは仮区分です。第45回は10/1〜10/23（終了後の移籍期間を含む）、第46回は10/24以降の準備期間のみ表示しています。開催回への割り当ては確認用で、正式な開催回別集計ではありません。</div>
       </div>`;
       const render = () => {
         const selected = $("#xRaidPreviewSelector").value;
-        const subset = records.filter(r => selected === "45" ? r[0] <= "10/15" : r[0] >= "10/16");
+        const subset = records.filter(r => selected === "45" ? r[0] <= "10/23" : r[0] >= "10/24");
         const grouped = new Map();
         for (const [date,phase,candidates,listed] of subset) {
-          const key = phase === "pre_raid" || phase === "normal" ? "レイド準備" :
-            phase === "raid_early" ? "レイド開催中" :
+          // Previous raid retains its post-raid movement. Next raid displays preparation only.
+          const key = selected === "46" ? "レイド準備" :
+            (phase === "pre_raid" || phase === "normal") ? "レイド準備" :
+            (phase === "raid_early" || (phase === "post_prep" && date === "10/14")) ? "レイド開催中" :
             phase === "post_prep" ? "レイド後" :
             phase === "raid_hard_end" ? "ハード終了" :
-            phase === "reward_movement" ? "報酬・移籍" : "次回準備";
+            phase === "reward_movement" ? "報酬・移籍" : "その他";
           const prior = grouped.get(key) || {candidates:0,listed:0,dates:[]};
           prior.candidates += candidates; prior.listed += listed; prior.dates.push(date);
           grouped.set(key,prior);
@@ -7563,7 +7565,7 @@
         });
         $("#xRaidPreviewGraph").innerHTML = svg + "</svg>";
         const dates=subset.map(r=>r[0]);
-        $("#xRaidPreviewRange").textContent = (selected === "45" ? "開催期間：10/09〜10/15 ｜ " : "開催期間：未確定 ｜ ") + `取得期間：${dates[0]}〜${dates[dates.length-1]}（JST）`;
+        $("#xRaidPreviewRange").textContent = (selected === "45" ? "開催期間：10/09〜10/15 ｜ " : "開催期間：確認待ち ｜ 現在フェーズ：レイド準備 ｜ ") + `取得期間：${dates[0]}〜${dates[dates.length-1]}（JST）`;
         $("#xRaidPreviewTotals").textContent = `取得${subset.length}回 ／ X収集候補${subset.reduce((n,r)=>n+r[2],0)}件 ／ 掲載数（参考）${subset.reduce((n,r)=>n+r[3],0)}件`;
       };
       $("#xRaidPreviewSelector").addEventListener("change",render);
