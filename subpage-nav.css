@@ -28,7 +28,7 @@
     z-index: 220 !important;
     height: calc(68px + env(safe-area-inset-bottom));
     display: grid !important;
-    grid-template-columns: repeat(3, minmax(0, 1fr));
+    grid-template-columns: repeat(4, minmax(0, 1fr));
     padding-bottom: env(safe-area-inset-bottom);
     border-top: 1px solid rgba(255,255,255,.12);
     background: rgba(16,18,22,.96);
