@@ -48,7 +48,7 @@
     });
     let data = {};
     try { data = await response.json(); } catch (_) {}
-    if (!response.ok || !data.saved) throw new Error(data.error || ('HTTP_' + response.status));
+    if (!response.ok || (action !== 'get' && !data.saved)) throw new Error(data.error || ('HTTP_' + response.status));
     return data;
   }
   function init() {
