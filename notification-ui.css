@@ -97,7 +97,7 @@ html body .site-menu-drawer .site-menu-disclaimer {
 .um-notification-dialog{position:fixed;inset:0;z-index:4000;display:none;align-items:center;justify-content:center;padding:16px;background:rgba(0,0,0,.55)}
 .um-notification-dialog[data-open="true"]{display:flex}
 .um-notification-panel{box-sizing:border-box;width:min(440px,100%);max-height:88dvh;overflow:auto;padding:23px 22px;background:#f8fafb;color:#222428;border:1px solid #c8cdd0;border-radius:0;font-family:"Noto Sans JP",sans-serif;box-shadow:0 12px 32px rgba(0,0,0,.20)}
-.um-notification-panel h2{margin:0;color:#1ab0f1;font:700 29px/1 "Teko",sans-serif;letter-spacing:.0.10em}
+.um-notification-panel h2{margin:0;color:#1ab0f1;font:700 clamp(27px, 3vw, 38px)/1 "Teko",sans-serif;letter-spacing:.1em}
 .um-notification-panel .um-subtitle{font:500 12px/1.5 "Noto Sans JP",sans-serif;color:#62666a;margin:7px 0 15px}
 .um-notification-panel .um-close{float:right;width:35px;height:35px;border:0;background:transparent;color:#222428;font:400 28px/1 sans-serif;cursor:pointer}
 .um-notification-panel .um-row{display:flex;align-items:center;justify-content:space-between;gap:12px;min-height:60px;padding:11px 0;border-bottom:1px solid #d6dadd;color:#222428;font:500 13px/1.6 "Noto Sans JP",sans-serif}
