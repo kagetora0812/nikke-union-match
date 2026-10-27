@@ -1,18 +1,37 @@
-/* UNION MATCH: new UI only. Never change body, scrolling shell, modal, or page modes. */
-.um-notification-bell{position:relative;display:flex;align-items:center;justify-content:flex-end;flex:0 0 auto;box-sizing:border-box;width:var(--um-bell-box-height,40px);height:var(--um-bell-box-height,40px);margin-left:auto;margin-right:8px;padding:0;background:transparent;border:0;color:#fff;cursor:pointer}.um-notification-bell svg{display:block;height:100%;width:auto;aspect-ratio:1;overflow:visible}.um-bell-light{position:absolute;right:-3px;top:-3px;width:8px;height:8px;border-radius:50%;background:#858585;border:1px solid #14161a}.um-notification-bell[data-status="on"] .um-bell-light{background:#42b8ff}
-/* Respect each page's current header layout; the bell's right edge occupies the old BOT button right edge. */
-/* TOP keeps the exact former BOT-button right/top/bottom alignment. */
-.video-topbar .um-notification-bell{position:absolute;top:50%;right:72px;transform:translateY(-50%);margin:0;--um-bell-box-height:40px}
-@media (min-width:601px) and (max-width:1024px){.video-topbar .um-notification-bell{right:66px;--um-bell-box-height:32px}}
-@media(max-width:600px){.video-topbar .um-notification-bell{right:58px;--um-bell-box-height:24px}}
-@media(max-width:360px){.video-topbar .um-notification-bell{right:54px;--um-bell-box-height:22px}}
-.site-menu-drawer>a,.site-menu-drawer>button:not(.site-menu-head button){font-family:"Noto Sans JP",sans-serif;font-size:14px;font-weight:500}.site-menu-drawer>.um-notification-menu-entry{display:flex;align-items:center;min-height:52px;width:100%;padding:0 14px;background:transparent;color:#fff;border:0;border-bottom:1px solid rgba(255,255,255,.10);text-align:left;cursor:pointer}
-/* Reuse existing footer visibility + breakpoint rules; style only the four replacement entries. */
-.bottom-nav>.um-footer-item,.subpage-bottom-nav>.um-footer-item,.union-list-bottom-nav>.um-footer-item{box-sizing:border-box;min-width:0;display:flex;align-items:center;justify-content:center;flex-direction:column;gap:3px;text-align:center;text-decoration:none;background:transparent;color:#fff;border:0;cursor:pointer;font:500 10px/1.15 "Noto Sans JP",sans-serif}
-.bottom-nav>.um-footer-item svg,.subpage-bottom-nav>.um-footer-item svg,.union-list-bottom-nav>.um-footer-item svg{width:21px;height:21px;flex:none}.bottom-nav>.um-footer-item>span,.subpage-bottom-nav>.um-footer-item>span,.union-list-bottom-nav>.um-footer-item>span{display:block;font:500 10px/1.15 "Noto Sans JP",sans-serif}
-/* Retain the original 1366px threshold and all special page-mode display conditions. */
-@media(max-width:1366px){.subpage-bottom-nav,.union-list-bottom-nav{grid-template-columns:repeat(4,minmax(0,1fr))!important}}
-@media(max-width:1366px){.bottom-nav>.um-footer-item{flex:1;max-width:none}}
+/* UNION MATCH notification UI — appearance only. No body / scroll / form changes. */
+.um-notification-bell{position:relative;display:flex;align-items:center;justify-content:center;flex:0 0 36px;width:36px;height:44px;margin-left:auto;margin-right:8px;padding:0;color:#fff;border:0;background:transparent;cursor:pointer;box-sizing:border-box}
+.um-notification-bell svg{display:block;width:20px;height:20px;flex:none;overflow:visible}
+.um-bell-light{position:absolute;width:6px;height:6px;top:10px;right:5px;background:#898c91;border:1px solid #121418;border-radius:50%}
+.um-notification-bell[data-status="on"] .um-bell-light{background:#42b8ff}
+/* Only TOP uses absolute positioning: keep existing menu/logo positioning intact. */
+.video-topbar .um-notification-bell{position:absolute;top:50%;right:72px;transform:translateY(-50%);margin:0}
+@media(min-width:601px) and (max-width:1024px){.video-topbar .um-notification-bell{right:66px}}
+@media(max-width:600px){.video-topbar .um-notification-bell{right:58px}}
+@media(max-width:360px){.video-topbar .um-notification-bell{right:54px}}
+/* Unified footer presentation; original breakpoints, positioning and visibility remain untouched. */
+.bottom-nav>.um-footer-item,.subpage-bottom-nav>.um-footer-item,.union-list-bottom-nav>.um-footer-item{box-sizing:border-box;min-width:0;min-height:0;display:flex;align-items:center;justify-content:center;flex-direction:column;gap:3px;padding:5px 2px;color:rgba(255,255,255,.9);text-align:center;text-decoration:none;background:transparent;border:0;cursor:pointer;font:500 10px/1.2 "Noto Sans JP",sans-serif}
+.bottom-nav>.um-footer-item svg,.subpage-bottom-nav>.um-footer-item svg,.union-list-bottom-nav>.um-footer-item svg{display:block;width:21px;height:21px;flex:none}
+.bottom-nav>.um-footer-item>span,.subpage-bottom-nav>.um-footer-item>span,.union-list-bottom-nav>.um-footer-item>span{display:block;font:500 10px/1.2 "Noto Sans JP",sans-serif}
 #manageBackBtn .um-back-label{font:500 12px/1.2 "Noto Sans JP",sans-serif;margin-left:5px}
-#manageMembershipConfirmedNotice .um-confirm-date,#manageMembershipConfirmedNotice .um-confirm-note{display:block;white-space:normal}#manageMembershipConfirmedNotice .um-confirm-note{margin-top:4px;color:#53616c;font-size:11px}
-.um-notification-dialog{position:fixed;inset:0;z-index:4000;display:none;align-items:center;justify-content:center;padding:16px;background:rgba(0,0,0,.55)}.um-notification-dialog[data-open="true"]{display:flex}.um-notification-panel{box-sizing:border-box;width:min(440px,100%);max-height:88dvh;overflow:auto;background:#fff;color:#222;padding:24px;border:1px solid #ddd;border-radius:12px;font-family:"Noto Sans JP",sans-serif}.um-notification-panel h2{font-size:23px;margin:0}.um-notification-panel .um-subtitle{font-size:12px;color:#777;margin:4px 0 16px}.um-notification-panel .um-row{display:flex;justify-content:space-between;align-items:center;gap:14px;min-height:60px;padding:12px 0;border-bottom:1px solid #e6e8eb;font-size:13px;font-weight:500}.um-notification-panel input[type=checkbox]{width:20px;height:20px;accent-color:#138dc9}.um-notification-panel .um-pass-wrap{padding:12px 0}.um-notification-panel .um-pass-wrap[hidden]{display:none}.um-notification-panel input[type=password]{width:100%;padding:12px;border:1px solid #ccc}.um-notification-panel .um-save{width:100%;margin-top:14px;padding:12px;background:#202328;color:#fff;border:0;cursor:pointer}.um-notification-panel .um-close{float:right;border:0;background:transparent;color:#222;font-size:24px;cursor:pointer}.um-notification-panel .um-status,.um-notification-panel .um-hint{font-size:11px;line-height:1.8;margin-top:12px;color:#656970}
+#manageMembershipConfirmedNotice .um-confirm-date,#manageMembershipConfirmedNotice .um-confirm-note{display:block;white-space:normal}
+#manageMembershipConfirmedNotice .um-confirm-note{margin-top:4px;color:#53616c;font-size:11px}
+/* All site drawers: compact readable entries, no extra separators. */
+.site-menu-drawer>a,.site-menu-drawer>.um-notification-menu-entry{min-height:42px;font:500 14px/1.35 "Noto Sans JP",sans-serif;padding:7px 14px;border-bottom:1px solid rgba(255,255,255,.10)}
+.site-menu-drawer>.um-notification-menu-entry{display:flex;align-items:center;width:100%;background:transparent;color:#fff;border-top:0;border-left:0;border-right:0;text-align:left;cursor:pointer}
+.site-menu-drawer .site-menu-head{min-height:38px;padding-bottom:4px}
+.site-menu-drawer .site-menu-disclaimer{margin-top:9px;padding-top:9px;border-top:1px solid rgba(255,255,255,.12)}
+/* Notification dialog: white square-edged NIKKE style with restrained cyan accents. */
+.um-notification-dialog{position:fixed;inset:0;z-index:4000;display:none;align-items:center;justify-content:center;padding:16px;background:rgba(0,0,0,.55)}
+.um-notification-dialog[data-open="true"]{display:flex}
+.um-notification-panel{box-sizing:border-box;width:min(440px,100%);max-height:88dvh;overflow:auto;padding:23px 22px;background:#f8fafb;color:#222428;border:1px solid #c8cdd0;border-radius:0;font-family:"Noto Sans JP",sans-serif;box-shadow:0 12px 32px rgba(0,0,0,.20)}
+.um-notification-panel h2{margin:0;color:#222428;font:600 29px/1 "Teko",sans-serif;letter-spacing:.12em}
+.um-notification-panel .um-subtitle{font:500 12px/1.5 "Noto Sans JP",sans-serif;color:#62666a;margin:7px 0 15px}
+.um-notification-panel .um-close{float:right;width:35px;height:35px;border:0;background:transparent;color:#222428;font:400 28px/1 sans-serif;cursor:pointer}
+.um-notification-panel .um-row{display:flex;align-items:center;justify-content:space-between;gap:12px;min-height:60px;padding:11px 0;border-bottom:1px solid #d6dadd;color:#222428;font:500 13px/1.6 "Noto Sans JP",sans-serif}
+.um-notification-panel .um-row small{font:400 11px/1.5 "Noto Sans JP",sans-serif;color:#7b8085}
+.um-notification-panel input[type=checkbox]{width:19px;height:19px;flex:none;accent-color:#1ab0f1}
+.um-notification-panel .um-pass-wrap{padding:12px 0;font:500 12px "Noto Sans JP",sans-serif}
+.um-notification-panel .um-pass-wrap[hidden]{display:none}
+.um-notification-panel input[type=password]{width:100%;padding:12px;border:1px solid #c8cdd0;border-radius:0;background:#fff}
+.um-notification-panel .um-save{width:100%;margin-top:18px;padding:12px;background:#303135;color:#fff;border:0;border-radius:0;border-left:4px solid #1ab0f1;font:600 13px "Noto Sans JP",sans-serif;cursor:pointer}
+.um-notification-panel .um-status,.um-notification-panel .um-hint{margin-top:10px;font:400 11px/1.6 "Noto Sans JP",sans-serif;color:#62666a}
