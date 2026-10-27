@@ -1068,7 +1068,7 @@
         min-height:var(--bottom-h);
         padding-bottom:env(safe-area-inset-bottom);
         display:grid!important;
-        grid-template-columns:repeat(3,minmax(0,1fr));
+        grid-template-columns:repeat(4,minmax(0,1fr));
         border-top:1px solid rgba(255,255,255,.09);
         background:rgba(10,12,16,.96);
       }
@@ -3225,6 +3225,7 @@
   <script>
     document.documentElement.classList.add("js");
   </script>
+<link rel="stylesheet" href="./notification-ui.css?v=2">
 </head>
 
 <body>
@@ -3351,6 +3352,8 @@
   <header class="topbar bot-topbar">
     <a class="bot-brand" href="./index.html#videoHero" aria-label="UNION MATCH TOPへ戻る">DISCORD BOT</a>
 
+    <button class="um-notification-bell" type="button" aria-label="プッシュ通知設定を開く" title="プッシュ通知設定"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.65" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M18 8a6 6 0 0 0-12 0c0 7-3 7-3 9h18c0-2-3-2-3-9M10 21h4"/></svg><span class="um-bell-light" aria-hidden="true"></span></button>
+
     <button
       id="siteMenuButton"
       class="site-menu-button"
@@ -3371,11 +3374,12 @@
       <button id="siteMenuClose" type="button" aria-label="メニューを閉じる">×</button>
     </div>
 
-    <a href="./index.html#videoHero">TOP</a>
+    <a href="./index.html#videoHero">ホーム</a>
     <a href="./index.html?view=commander#listPage">指揮官を見る</a>
     <a href="./index.html?view=union#listPage">ユニオンを見る</a>
     <a href="./index.html#registerPage">募集登録</a>
     <a href="./index.html#managePage">PASS管理</a>
+    <button type="button" class="um-notification-menu-entry" data-um-notification-open>プッシュ通知設定</button>
     <a href="./html/union-list.html">ユニオンリスト</a>
     <a href="./bot.html">Discord BOT</a>
     <a href="./creators.html">応援クリエイター</a>
@@ -4219,21 +4223,11 @@
   </div>
 
   <nav class="subpage-bottom-nav bot-bottom-nav" aria-label="フッターメニュー">
-    <a href="./index.html#videoHero">
-      <span class="bot-nav-icon" aria-hidden="true">⌂</span>
-      <span class="bot-nav-label">TOP</span>
-    </a>
-
-    <a href="./index.html#registerPage">
-      <span class="bot-nav-icon" aria-hidden="true">＋</span>
-      <span class="bot-nav-label">募集登録</span>
-    </a>
-
-    <a href="./creators.html">
-      <span class="bot-nav-icon" aria-hidden="true">✦</span>
-      <span class="bot-nav-label">CREATOR</span>
-    </a>
-  </nav>
+  <a class="um-footer-item" href="./index.html#videoHero"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m3 10 9-7 9 7v10H3z"/><path d="M9 20v-7h6v7"/></svg><span>ホーム</span></a>
+  <a class="um-footer-item" href="./index.html#registerPage"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" aria-hidden="true"><path d="M12 5v14M5 12h14"/></svg><span>登録</span></a>
+  <a class="um-footer-item" href="./index.html#managePage"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="7.5" cy="12" r="4"/><path d="M11.5 12H21m-4 0v3m3-3v3"/></svg><span>PASS</span></a>
+  <button type="button" class="um-footer-item" data-um-menu-open><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" aria-hidden="true"><path d="M4 6h16M4 12h16M4 18h16"/></svg><span>メニュー</span></button>
+</nav>
 
 
   <script>
@@ -4633,6 +4627,7 @@
       });
     })();
   </script>
+<script src="./notification-ui.js?v=2" defer></script>
 </body>
 </html>
 
