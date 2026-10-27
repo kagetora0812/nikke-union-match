@@ -1384,11 +1384,11 @@
       display: flex !important;
       align-items: center !important;
       flex-wrap: nowrap !important;
-      gap: 5px !important;
-      white-space: nowrap !important;
-      font-size: clamp(9px, 2.55vw, 11px) !important;
-      line-height: 1.35 !important;
-      overflow: hidden;
+      gap: 9px !important;
+      white-space: normal !important;
+      font-size: 12px !important;
+      line-height: 1.7 !important;
+      overflow: visible;
     }
     #manageMembershipConfirmedNotice .manage-confirm-check {
       display: inline-block;
@@ -1401,7 +1401,7 @@
     #manageMembershipConfirmedNotice > span:last-child {
       display: inline-block;
       min-width: 0;
-      white-space: nowrap !important;
+      white-space: normal !important;
     }
 
     /* PASS編集：「編集をやめる」だけ境界線の四角ボタンへ統一 */
@@ -1652,260 +1652,18 @@
   </style>
 
 
-  <style id="topbar-bot-button-v1">
-    /* =========================================================
-       TOPBAR DISCORD BOT BUTTON
-       PC      : 現行サイズを維持
-       Tablet  : 横長2段のまま縦だけ縮小
-       Mobile  : 三本線メニューに合わせた正方形 / BOT + 導入
-       hover   : レインボー枠
-       ========================================================= */
-
-    .topbar-bot-link {
-      position: absolute;
-      top: 50%;
-      right: 72px;
-      z-index: 3;
-
-      min-width: 104px;
-      height: 40px;
-
-      display: inline-flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-      gap: 2px;
-
-      padding: 4px 13px 5px;
-
-      border: 1px solid rgba(255,255,255,.92);
-      border-radius: 2px;
-
-      background: transparent;
-      color: #fff;
-
-      text-decoration: none;
-      white-space: nowrap;
-      box-sizing: border-box;
-
-      transform: translateY(-50%);
-
-      transition:
-        border-color .18s ease,
-        color .18s ease,
-        box-shadow .18s ease;
-
-      -webkit-tap-highlight-color: transparent;
-    }
-
-    .topbar-bot-main {
-      display: block;
-      color: #fff;
-      font-size: 10px;
-      font-weight: 900;
-      line-height: 1;
-      letter-spacing: .11em;
-    }
-
-    .topbar-bot-sub {
-      display: block;
-      color: rgba(255,255,255,.58);
-      font-size: 7px;
-      font-weight: 800;
-      line-height: 1;
-      letter-spacing: .08em;
-    }
-
-    .topbar-bot-main-mobile,
-    .topbar-bot-sub-mobile {
-      display: none;
-    }
-
-    .topbar-bot-link::before {
-      content: "";
-      position: absolute;
-      inset: -1px;
-      border-radius: 2px;
-      padding: 1px;
-      pointer-events: none;
-
-      background:
-        linear-gradient(
-          90deg,
-          #ff003c 0%,
-          #ff7a00 16%,
-          #ffe600 32%,
-          #22d66f 48%,
-          #00c8ff 64%,
-          #5555ff 80%,
-          #ff00c8 100%
-        );
-
-      background-size: 300% 100%;
-
-      -webkit-mask:
-        linear-gradient(#000 0 0) content-box,
-        linear-gradient(#000 0 0);
-
-      -webkit-mask-composite: xor;
-      mask-composite: exclude;
-
-      opacity: 0;
-    }
-
-    @media (hover: hover) and (pointer: fine) {
-      .topbar-bot-link:hover {
-        border-color: transparent;
-        color: #fff;
-
-        box-shadow:
-          0 0 10px rgba(0,200,255,.16),
-          0 0 14px rgba(255,0,180,.10);
-      }
-
-      .topbar-bot-link:hover::before {
-        opacity: 1;
-        animation: topbarBotRainbow 1.15s linear infinite;
-      }
-
-      .topbar-bot-link:hover .topbar-bot-sub {
-        color: rgba(255,255,255,.80);
-      }
-    }
-
-    .topbar-bot-link:focus-visible {
-      outline: 2px solid #fff;
-      outline-offset: 3px;
-    }
-
-    @keyframes topbarBotRainbow {
-      from { background-position: 0% 50%; }
-      to   { background-position: 300% 50%; }
-    }
-
-    /* ---------- Tablet ---------- */
-    @media screen and (min-width: 601px) and (max-width: 1024px) {
-      .topbar-bot-link {
-        right: 66px;
-        min-width: 94px;
-        height: 32px;
-        gap: 1px;
-        padding: 2px 10px 3px;
-      }
-
-      .topbar-bot-main {
-        font-size: 9px;
-        letter-spacing: .09em;
-      }
-
-      .topbar-bot-sub {
-        font-size: 6px;
-        letter-spacing: .06em;
-      }
-    }
-
-    /* ---------- Smartphone ---------- */
+  <style id="topbar-mobile-header-alignment">
     @media screen and (max-width: 600px) {
-      /* 左ロゴを少し大きくして、右側との視覚バランスを取る */
-      .video-logo-switch img {
-        transform: scale(1.12);
-        transform-origin: left center;
-      }
-
-      /* 右側のBOT + 三本線をひとまとまりに見せる */
-      .topbar {
-        padding-right: 14px !important;
-      }
-
-      .site-menu-button {
-        width: 34px !important;
-        height: 34px !important;
-        margin: 0 !important;
-        padding: 0 !important;
-      }
-
-      .site-menu-button span {
-        width: 24px !important;
-      }
-
-      /* BOTは幅を変えず、高さだけ縮めて横長にする */
-      .topbar-bot-link {
-        right: 58px;
-
-        width: 30px;
-        min-width: 30px;
-        height: 24px;
-
-        gap: 0;
-        padding: 0;
-
-        border-color: rgba(255,255,255,.58);
-        border-radius: 0;
-      }
-
-      .topbar-bot-main-wide,
-      .topbar-bot-sub-wide {
-        display: none;
-      }
-
-      .topbar-bot-main-mobile,
-      .topbar-bot-sub-mobile {
-        display: block;
-      }
-
-      .topbar-bot-main-mobile {
-        font-size: 7.5px;
-        line-height: .95;
-        letter-spacing: .05em;
-      }
-
-      .topbar-bot-sub-mobile {
-        margin-top: 1px;
-        font-size: 4.6px;
-        line-height: .95;
-        letter-spacing: .03em;
-      }
+      .video-logo-switch img { transform:scale(1.12);transform-origin:left center; }
+      .topbar { padding-right:14px !important; }
+      .site-menu-button { width:34px !important;height:34px !important;margin:0 !important;padding:0 !important; }
+      .site-menu-button span { width:24px !important; }
     }
-
-    @media screen and (max-width: 360px) {
-      .topbar {
-        padding-right: 12px !important;
-      }
-
-      .video-logo-switch img {
-        transform: scale(1.09);
-      }
-
-      .site-menu-button {
-        width: 32px !important;
-        height: 32px !important;
-      }
-
-      .site-menu-button span {
-        width: 22px !important;
-      }
-
-      .topbar-bot-link {
-        right: 54px;
-        width: 28px;
-        min-width: 28px;
-        height: 22px;
-      }
-
-      .topbar-bot-main-mobile {
-        font-size: 7px;
-      }
-
-      .topbar-bot-sub-mobile {
-        font-size: 4.3px;
-      }
-    }
-
-    @media (prefers-reduced-motion: reduce) {
-      .topbar-bot-link:hover::before {
-        animation: none;
-        background-position: 50% 50%;
-      }
+    @media screen and (max-width:360px) {
+      .topbar { padding-right:12px !important; }
+      .video-logo-switch img { transform:scale(1.09); }
+      .site-menu-button { width:32px !important;height:32px !important; }
+      .site-menu-button span { width:22px !important; }
     }
   </style>
 
@@ -1923,6 +1681,7 @@
     }
   </style>
 
+<link rel="stylesheet" href="./notification-ui.css?v=2">
 </head>
 
 
@@ -1948,17 +1707,7 @@
       >
     </button>
 
-    <a
-      class="topbar-bot-link"
-      href="./bot.html?um_source=index"
-      aria-label="Discord BOT導入ページへ"
-    >
-      <span class="topbar-bot-main topbar-bot-main-wide">DISCORD BOT</span>
-      <span class="topbar-bot-sub topbar-bot-sub-wide">導入する</span>
-
-      <span class="topbar-bot-main topbar-bot-main-mobile">BOT</span>
-      <span class="topbar-bot-sub topbar-bot-sub-mobile">導入</span>
-    </a>
+    <button class="um-notification-bell" type="button" aria-label="プッシュ通知設定を開く" title="プッシュ通知設定"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.65" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M18 8a6 6 0 0 0-12 0c0 7-3 7-3 9h18c0-2-3-2-3-9M10 21h4"/></svg><span class="um-bell-light" aria-hidden="true"></span></button>
 
     <button
       id="siteMenuButton"
@@ -1995,11 +1744,12 @@
       >×</button>
     </div>
 
-    <button type="button" data-menu-action="top">TOP</button>
+    <button type="button" data-menu-action="top">ホーム</button>
     <button type="button" data-menu-action="commander">指揮官を見る</button>
     <button type="button" data-menu-action="union">ユニオンを見る</button>
     <button type="button" data-menu-action="register">募集登録</button>
     <button type="button" data-menu-action="manage">PASS管理</button>
+    <button type="button" class="um-notification-menu-entry" data-um-notification-open>プッシュ通知設定</button>
     <a href="./html/union-list.html">ユニオンリスト</a>
     <a href="./bot.html?um_source=index">Discord BOT</a>
     <a href="./creators.html">応援クリエイター</a>
@@ -2437,7 +2187,7 @@
               aria-label="戻る"
               title="戻る"
             >
-              <span aria-hidden="true">↩</span>
+              <span aria-hidden="true">↩</span><span class="um-back-label">戻る</span>
             </button>
 
             <div class="manage-inline-title">
@@ -2988,49 +2738,12 @@
        動画TOPでは非表示、募集エリアで表示
   ========================================= -->
 
-  <nav
-    class="bottom-nav"
-    id="bottomNav"
-    aria-label="メインメニュー"
-  >
-
-    <button
-      data-page="list"
-      class="nav-btn active"
-      type="button"
-    >
-      <span>⌂</span>
-      募集を見る
-    </button>
-
-    <button
-      data-page="register"
-      class="nav-btn"
-      type="button"
-    >
-      <span>＋</span>
-      登録
-    </button>
-
-    <button
-      data-page="manage"
-      class="nav-btn"
-      type="button"
-    >
-      <svg
-        class="nav-key-icon"
-        viewBox="0 0 24 24"
-        aria-hidden="true"
-      >
-        <circle cx="7.5" cy="12" r="4"></circle>
-        <path d="M11.5 12H21"></path>
-        <path d="M17 12V15"></path>
-        <path d="M20 12V15"></path>
-      </svg>
-      PASS管理
-    </button>
-
-  </nav>
+  <nav class="bottom-nav" id="bottomNav" aria-label="メインメニュー">
+  <button class="nav-btn um-footer-item" type="button" data-um-home><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m3 10 9-7 9 7v10H3z"/><path d="M9 20v-7h6v7"/></svg><span>ホーム</span></button>
+  <button class="nav-btn um-footer-item" type="button" data-page="register"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" aria-hidden="true"><path d="M12 5v14M5 12h14"/></svg><span>登録</span></button>
+  <button class="nav-btn um-footer-item" type="button" data-page="manage"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="7.5" cy="12" r="4"/><path d="M11.5 12H21m-4 0v3m3-3v3"/></svg><span>PASS</span></button>
+  <button class="nav-btn um-footer-item" type="button" data-um-menu-open><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" aria-hidden="true"><path d="M4 6h16M4 12h16M4 18h16"/></svg><span>メニュー</span></button>
+</nav>
 
 
 
@@ -3534,6 +3247,7 @@
   </script>
 
 
+<script src="./notification-ui.js?v=2" defer></script>
 </body>
 
 </html>
