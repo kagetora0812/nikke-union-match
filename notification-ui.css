@@ -16,7 +16,7 @@
 .um-back-label{font:500 12px/1.2 "Noto Sans JP",sans-serif;margin-left:7px;white-space:nowrap}
 #manageMembershipConfirmedNotice .um-confirm-date,#manageMembershipConfirmedNotice .um-confirm-note{display:block;white-space:normal}
 #manageMembershipConfirmedNotice .um-confirm-note{margin-top:4px;color:#53616c;font-size:11px}
-/* Drawer entry geometry: links and TOP-page action buttons share one grid. */
+/* Shared drawer rows: same line lengths, hover and selected state. */
 html body .site-menu-drawer > a,
 html body .site-menu-drawer > button[data-menu-action],
 html body .site-menu-drawer > button.um-notification-menu-entry {
@@ -24,51 +24,74 @@ html body .site-menu-drawer > button.um-notification-menu-entry {
   display: flex;
   flex: 0 0 auto;
   align-items: center;
-  width: 100%;
+  width: calc(100% - 28px);
   height: 52px;
   min-height: 52px;
-  margin: 0;
-  padding: 0 14px;
+  margin: 0 14px;
+  padding: 0;
   font: 500 14px/1.35 "Noto Sans JP", sans-serif;
   text-align: left;
-  border: 0;
-  border-bottom: 1px solid rgba(255,255,255,.10);
   color: #fff;
   background: transparent;
+  border: 0;
+  border-bottom: 1px solid rgba(255,255,255,.10);
+  border-radius: 0;
   text-decoration: none;
   cursor: pointer;
+  transition: background-color .18s ease, color .18s ease;
+  -webkit-tap-highlight-color: transparent;
 }
-/* The final separator is the disclaimer's top rule, never two lines. */
+/* Matching hover for links and buttons; do not change the active page styling. */
+@media (hover: hover) and (pointer: fine) {
+  html body .site-menu-drawer > a:hover,
+  html body .site-menu-drawer > button[data-menu-action]:hover,
+  html body .site-menu-drawer > button.um-notification-menu-entry:hover {
+    color: #fff;
+    background-color: rgba(255,255,255,.065);
+  }
+}
+@media (hover: none) {
+  html body .site-menu-drawer > a:hover,
+  html body .site-menu-drawer > button[data-menu-action]:hover,
+  html body .site-menu-drawer > button.um-notification-menu-entry:hover {
+    color: #fff;
+    background-color: transparent;
+  }
+}
+html body .site-menu-drawer > a:focus-visible,
+html body .site-menu-drawer > button[data-menu-action]:focus-visible,
+html body .site-menu-drawer > button.um-notification-menu-entry:focus-visible {
+  outline: 2px solid #1ab0f1;
+  outline-offset: -2px;
+}
+/* Single final divider is owned by the disclaimer, not the last entry. */
 html body .site-menu-drawer > a:last-of-type {
   border-bottom: 0 !important;
 }
-@media (max-width: 600px) {
-  html body .site-menu-drawer > a,
-  html body .site-menu-drawer > button[data-menu-action],
-  html body .site-menu-drawer > button.um-notification-menu-entry {
-    height: 42px !important;
-    min-height: 42px !important;
-    padding: 0 14px !important;
-    font: 500 14px/1.35 "Noto Sans JP", sans-serif !important;
-    border-bottom: 1px solid rgba(255,255,255,.10) !important;
-  }
-  html body .site-menu-drawer > a:last-of-type {
-    border-bottom: 0 !important;
-  }
-}
-.site-menu-drawer .site-menu-head {
+html body .site-menu-drawer .site-menu-head {
   min-height: 38px;
   padding-bottom: 4px;
   color: #1ab0f1;
   font-family: "Teko", sans-serif;
   letter-spacing: .16em;
 }
-/* Last rule matches the menu rows' 14px horizontal insets. */
 html body .site-menu-drawer .site-menu-disclaimer {
   box-sizing: border-box;
   margin: 0 14px 8px;
   padding: 12px 0 0;
   border-top: 1px solid rgba(255,255,255,.10);
+}
+@media (max-width: 600px) {
+  /* Expand the drawer and give the 9 rows more breathing room. */
+  html body .site-menu-drawer { width: min(94vw, 440px); max-width: none; }
+  html body .site-menu-drawer > a,
+  html body .site-menu-drawer > button[data-menu-action],
+  html body .site-menu-drawer > button.um-notification-menu-entry {
+    height: 48px !important;
+    min-height: 48px !important;
+    font: 500 14px/1.35 "Noto Sans JP", sans-serif !important;
+  }
+  html body .site-menu-drawer > a:last-of-type { border-bottom: 0 !important; }
 }
 /* Notification dialog: white square-edged NIKKE style with restrained cyan accents. */
 .um-notification-dialog{position:fixed;inset:0;z-index:4000;display:none;align-items:center;justify-content:center;padding:16px;background:rgba(0,0,0,.55)}
