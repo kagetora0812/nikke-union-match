@@ -5833,11 +5833,11 @@ body.manage-mode #managePage { font-family:"Noto Sans JP",sans-serif; color:#232
 body.register-mode .register-inline-top,
 body.manage-mode .manage-inline-top { display:flex!important; align-items:center!important; gap:14px!important; margin-bottom:22px!important; }
 body.register-mode .register-inline-title .eyebrow,
-body.manage-mode .manage-inline-title .eyebrow { color:#888d91!important; font-size:10px!important; letter-spacing:.12em!important; font-weight:600!important; }
+body.manage-mode .manage-inline-title .eyebrow { color:#1ab0f1!important; font:600 12px/1 "Teko",sans-serif!important; letter-spacing:.16em!important; }
 body.register-mode .register-inline-title h2,
 body.manage-mode .manage-inline-title h2 { margin:2px 0 0!important; color:#222428!important; font:700 clamp(22px,2.2vw,28px)/1.3 "Noto Sans JP",sans-serif!important; letter-spacing:-.03em!important; }
 body.register-mode #registerPage .register-back-btn,
-body.manage-mode #managePage .manage-back-btn { width:44px!important; height:44px!important; min-width:44px!important; min-height:44px!important; clip-path:none!important; border:1px solid #d5d9dc!important; border-radius:0!important; background:#fff!important; box-shadow:none!important; color:#24282c!important; font-size:23px!important; transition:border-color .2s,color .2s!important; }
+body.manage-mode #managePage .manage-back-btn { width:auto!important; height:44px!important; min-width:0!important; min-height:44px!important; padding:0 12px!important; display:inline-flex!important; align-items:center!important; justify-content:center!important; white-space:nowrap!important; clip-path:none!important; border:1px solid #d5d9dc!important; border-radius:0!important; background:#fff!important; box-shadow:none!important; color:#24282c!important; font-size:23px!important; transition:border-color .2s,color .2s!important; }
 @media(hover:hover) and (pointer:fine) {
  body.register-mode #registerPage .register-back-btn:hover,
  body.manage-mode #managePage .manage-back-btn:hover {border-color:#20b8f4!important;color:#079fd5!important;background:#fff!important;}
@@ -6031,7 +6031,7 @@ body.manage-mode #managePage #loadManageRecruitmentBtn,
 }
 @media(max-width:600px){
   body.manage-mode #managePage .manage-inline-top {gap:10px!important;margin-bottom:14px!important;}
-  body.manage-mode #managePage .manage-back-btn {width:42px!important;height:42px!important;min-width:42px!important;min-height:42px!important;}
+  body.manage-mode #managePage .manage-back-btn {width:auto!important;height:42px!important;min-width:0!important;min-height:42px!important;}
   body.manage-mode #managePage .manage-inline-title h2 {font-size:21px!important;}
   #managePage #manageLoadedPanel,
   #managePage #manageEditPanel,
