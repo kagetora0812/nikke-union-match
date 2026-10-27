@@ -16,20 +16,59 @@
 .um-back-label{font:500 12px/1.2 "Noto Sans JP",sans-serif;margin-left:7px;white-space:nowrap}
 #manageMembershipConfirmedNotice .um-confirm-date,#manageMembershipConfirmedNotice .um-confirm-note{display:block;white-space:normal}
 #manageMembershipConfirmedNotice .um-confirm-note{margin-top:4px;color:#53616c;font-size:11px}
-/* All site drawers: compact readable entries, no extra separators. */
-.site-menu-drawer>a,.site-menu-drawer>button[data-menu-action],.site-menu-drawer>.um-notification-menu-entry{box-sizing:border-box;min-height:52px;font:500 14px/1.35 "Noto Sans JP",sans-serif;padding:7px 14px;border-bottom:1px solid rgba(255,255,255,.10)}
-@media(max-width:600px){.site-menu-drawer>a,.site-menu-drawer>button[data-menu-action],.site-menu-drawer>.um-notification-menu-entry{min-height:42px;padding-top:6px;padding-bottom:6px}}
-.site-menu-drawer>a:nth-last-child(2),.site-menu-drawer>button[data-menu-action]:nth-last-child(2){border-bottom:0}
-.site-menu-drawer>.um-notification-menu-entry{min-height:52px}
-@media(max-width:600px){.site-menu-drawer>.um-notification-menu-entry{min-height:42px}}
-.site-menu-drawer>.um-notification-menu-entry{display:flex;align-items:center;width:100%;background:transparent;color:#fff;border-top:0;border-left:0;border-right:0;text-align:left;cursor:pointer}
-.site-menu-drawer .site-menu-head{min-height:38px;padding-bottom:4px;color:#1ab0f1;font-family:"Teko",sans-serif;letter-spacing:.16em}
-.site-menu-drawer .site-menu-disclaimer{margin-top:0;padding-top:12px;border-top:1px solid rgba(255,255,255,.12)}
+/* Drawer entries: same height and separator spacing on all pages.
+   Keep the existing drawer positioning, scroll and animation unchanged. */
+html body .site-menu-drawer>a,
+html body .site-menu-drawer>button.um-notification-menu-entry{
+  box-sizing:border-box;
+  display:flex;
+  align-items:center;
+  width:100%;
+  height:52px;
+  min-height:52px;
+  padding:0 14px;
+  margin:0;
+  font:500 14px/1.35 "Noto Sans JP",sans-serif;
+  border-bottom:1px solid rgba(255,255,255,.10);
+}
+html body .site-menu-drawer>button.um-notification-menu-entry{
+  background:transparent;
+  color:#fff;
+  border-top:0;
+  border-left:0;
+  border-right:0;
+  text-align:left;
+  cursor:pointer;
+}
+/* Other pages contain mobile-specific !important border rules. */
+html body .site-menu-drawer>a:last-of-type{
+  border-bottom:0!important;
+}
+@media(max-width:600px){
+  html body .site-menu-drawer>a,
+  html body .site-menu-drawer>button.um-notification-menu-entry{
+    height:42px!important;
+    min-height:42px!important;
+    padding:0 14px!important;
+  }
+}
+.site-menu-drawer .site-menu-head{
+  min-height:38px;
+  padding-bottom:4px;
+  color:#1ab0f1;
+  font-family:"Teko",sans-serif;
+  letter-spacing:.16em;
+}
+.site-menu-drawer .site-menu-disclaimer{
+  margin-top:0;
+  padding-top:12px;
+  border-top:1px solid rgba(255,255,255,.12);
+}
 /* Notification dialog: white square-edged NIKKE style with restrained cyan accents. */
 .um-notification-dialog{position:fixed;inset:0;z-index:4000;display:none;align-items:center;justify-content:center;padding:16px;background:rgba(0,0,0,.55)}
 .um-notification-dialog[data-open="true"]{display:flex}
 .um-notification-panel{box-sizing:border-box;width:min(440px,100%);max-height:88dvh;overflow:auto;padding:23px 22px;background:#f8fafb;color:#222428;border:1px solid #c8cdd0;border-radius:0;font-family:"Noto Sans JP",sans-serif;box-shadow:0 12px 32px rgba(0,0,0,.20)}
-.um-notification-panel h2{margin:0;color:#1ab0f1;font:700 29px/1 "Teko",sans-serif;letter-spacing:.1em}
+.um-notification-panel h2{margin:0;color:#1ab0f1;font:700 29px/1 "Teko",sans-serif;letter-spacing:.10em}
 .um-notification-panel .um-subtitle{font:500 12px/1.5 "Noto Sans JP",sans-serif;color:#62666a;margin:7px 0 15px}
 .um-notification-panel .um-close{float:right;width:35px;height:35px;border:0;background:transparent;color:#222428;font:400 28px/1 sans-serif;cursor:pointer}
 .um-notification-panel .um-row{display:flex;align-items:center;justify-content:space-between;gap:12px;min-height:60px;padding:11px 0;border-bottom:1px solid #d6dadd;color:#222428;font:500 13px/1.6 "Noto Sans JP",sans-serif}
