@@ -79,18 +79,35 @@
     const siteToggle = dialog.querySelector('#umSite');
     const expiryToggle = dialog.querySelector('#umExpiry');
     const expiryWrap = dialog.querySelector('.um-pass-wrap');
+    const bells = document.querySelectorAll('.um-notification-bell');
+    function setBell(on) { bells.forEach(bell => { bell.dataset.status = on ? 'on' : 'off'; }); }
     expiryToggle.disabled = true;
     expiryToggle.title = 'PASS本人確認機能の準備中です';
     expiryWrap.hidden = true;
     async function refreshLocalState() {
-      if (!('serviceWorker' in navigator)) return;
+      if (!('serviceWorker' in navigator)) { setBell(false); return; }
       try {
         const reg = await navigator.serviceWorker.getRegistration(base.href);
         const subscription = await reg?.pushManager?.getSubscription();
-        // Avoid showing unsaved preferences as saved. Local state is only a hint, never proof.
-        if (!subscription) status.textContent = 'この端末は未登録です。';
-      } catch (_) {}
+        if (!subscription) {
+          xToggle.checked = false;
+          siteToggle.checked = false;
+          setBell(false);
+          status.textContent = 'この端末は未登録です。';
+          return;
+        }
+        const saved = await postSettings(subscription, 'get', false, false);
+        const on = saved.enabled === true && (saved.notify_x === true || saved.notify_site === true || saved.notify_expiry === true);
+        xToggle.checked = on && saved.notify_x === true;
+        siteToggle.checked = on && saved.notify_site === true;
+        setBell(on);
+        status.textContent = on ? 'この端末の通知設定を読み込みました。' : 'この端末の通知はOFFです。';
+      } catch (error) {
+        console.warn('[UM push] restore failed:', error);
+        status.textContent = '設定の読み込みに失敗しました。';
+      }
     }
+    refreshLocalState();
     const close = () => { dialog.dataset.open = 'false'; };
     const open = () => {
       if (document.body.classList.contains('menu-open')) document.getElementById('siteMenuClose')?.click();
@@ -133,6 +150,7 @@
           await postSettings(current, 'disable', false, false);
           // After the server confirms disable, remove browser registration.
           try { await current.unsubscribe(); } catch (_) {}
+          setBell(false);
           status.textContent = 'この端末の通知をすべてOFFにしました。';
           return;
         }
@@ -143,6 +161,7 @@
         }
         const subscription = current || await reg.pushManager.subscribe({userVisibleOnly:true, applicationServerKey:decodeVapid(PUBLIC_VAPID_KEY)});
         await postSettings(subscription, 'save', notifyX, notifySite);
+        setBell(true);
         status.textContent = '保存しました。この端末の通知設定を更新しました。';
       } catch (error) {
         console.warn('[UM push] settings failed:', error);
