@@ -5464,7 +5464,7 @@ function renderLoadedManageRecruitment() {
 
       membershipNotice.innerHTML =
         `<span class="manage-confirm-check" aria-hidden="true">✅</span>`
-        + `<span>利用確認が完了しました。次回確認期限：${nextDate}</span>`;
+        + `<span><strong>利用確認が完了しました。</strong><span class="um-confirm-date">次回確認期限：${escapeHtml(nextDate)}</span><span class="um-confirm-note">登録内容に変更がない場合は、左上の「戻る」からお戻りください。</span></span>`;
       membershipNotice.classList.remove("hidden");
     } else {
       membershipNotice.classList.add("hidden");
