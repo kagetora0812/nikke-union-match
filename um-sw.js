@@ -11,10 +11,23 @@ self.addEventListener('push', (event) => {
   const requested = typeof payload.url === 'string' ? new URL(payload.url, SCOPE) : fallback;
   const target = requested.origin === SCOPE.origin && requested.pathname.startsWith(SCOPE.pathname) ? requested.href : fallback.href;
   const tag = typeof payload.tag === 'string' ? payload.tag.slice(0, 100) : ('um-' + type);
-  event.waitUntil(self.registration.showNotification(title, { body, tag, data:{url:target, type} }));
+  event.waitUntil((async () => {
+    await self.registration.showNotification(title, { body, tag, data:{url:target, type} });
+    // UM_PUSH_BADGE_V1
+    try {
+      if (typeof self.navigator?.setAppBadge === 'function')
+        await self.navigator.setAppBadge(1);
+    } catch (_) {}
+  })());
 });
 self.addEventListener('notificationclick', (event) => {
   event.notification.close();
+  event.waitUntil((async () => {
+    try {
+      if (typeof self.navigator?.clearAppBadge === 'function')
+        await self.navigator.clearAppBadge();
+    } catch (_) {}
+  })());
   const url = event.notification.data?.url || new URL('index.html', SCOPE).href;
   event.waitUntil((async () => {
     const windows = await clients.matchAll({ type:'window', includeUncontrolled:true });

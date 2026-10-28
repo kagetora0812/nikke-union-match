@@ -1408,6 +1408,19 @@ function renderXEmbeds(retry = 0) {
 // 登録・締切モードを確実に解除
 // ========================================
 
+// UM_PUSH_EXPIRY_MANAGE_V1
+function openExpiryPushLandingOnce() {
+  const url = new URL(location.href);
+  if (url.searchParams.get('um_push') !== 'expiry_48h') return;
+  url.searchParams.delete('um_push');
+  history.replaceState(history.state, '', url.toString());
+  showPage('manage');
+}
+if (document.readyState === 'loading') {
+  document.addEventListener('DOMContentLoaded', openExpiryPushLandingOnce, {once:true});
+} else {
+  queueMicrotask(openExpiryPushLandingOnce);
+}
 function showPage(name) {
   if (name === "manage") queueMicrotask(() => { openWebPushManageIfAuthorized(); });
 
