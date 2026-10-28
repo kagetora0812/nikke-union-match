@@ -154,8 +154,47 @@ let registrationPreviewPreparedFile = null;
 let loadedManagedRecruitment = null;
 let loadedManagePass = "";
 let loadedManagePassHash = "";
+let webPushManageMode = false;
 let manageEditPreparedFile = null;
 let manageEditObjectUrl = null;
+
+// Web Push端末認証（PASS自体を保存・復元しない）
+const WEB_PUSH_MANAGE_TOKEN_KEY = "um_webpush_union_token_v1";
+const WEB_PUSH_MANAGE_API = "https://igoekrvpgnjberppiawf.supabase.co/functions/v1/web-push-union-control";
+async function callWebPushManage(action, extra = {}) {
+  const token = localStorage.getItem(WEB_PUSH_MANAGE_TOKEN_KEY);
+  if (!token) throw new Error("端末認証がありません。PASSで管理してください。");
+  const reg = await navigator.serviceWorker?.getRegistration(new URL(".", document.querySelector('script[src*="notification-ui.js"]')?.src || document.baseURI).href);
+  const sub = await reg?.pushManager?.getSubscription();
+  if (!sub) throw new Error("通知登録がありません。PASSで管理してください。");
+  const response = await fetch(WEB_PUSH_MANAGE_API, {
+    method: "POST", mode: "cors", cache: "no-store",
+    headers: {"Content-Type": "application/json"},
+    body: JSON.stringify({action, session_token: token, subscription: sub.toJSON(), ...extra})
+  });
+  const result = await response.json();
+  if (!response.ok) throw new Error(result.error || "端末認証エラー");
+  return result;
+}
+async function openWebPushManageIfAuthorized() {
+  if (discordManageV1Mode || !localStorage.getItem(WEB_PUSH_MANAGE_TOKEN_KEY)) return;
+  try {
+    const result = await callWebPushManage("manage_get");
+    if (!document.getElementById("managePage")?.classList.contains("active")) return;
+    if (!result?.authorized || result?.managed?.type !== "union") return;
+    clearLoadedManageRecruitment();
+    loadedManagedRecruitment = result.managed;
+    webPushManageMode = true;
+    loadedManagePass = "";
+    loadedManagePassHash = "";
+    resetManageImageState();
+    resetManageActionMenu();
+    renderLoadedManageRecruitment();
+    await loadTotalRegisteredUnionCount();
+  } catch (error) {
+    console.info("Web Push端末認証が利用できません。通常のPASS管理を使用してください。", error?.message || error);
+  }
+}
 
 // Discord BOT経由 再掲載 V2
 const DISCORD_REPUBLISH_V2_PARAM = "discord_republish_v2";
@@ -1351,6 +1390,7 @@ function renderXEmbeds(retry = 0) {
 // ========================================
 
 function showPage(name) {
+  if (name === "manage") queueMicrotask(() => { openWebPushManageIfAuthorized(); });
 
   // 登録・締切モード
   document.body.classList.toggle(
@@ -5221,6 +5261,7 @@ function showManageEditActionChoices() {
 
 
 function clearLoadedManageRecruitment() {
+  webPushManageMode = false;
 
   loadedManagedRecruitment = null;
   loadedManagePass = "";
@@ -5728,6 +5769,7 @@ function normalizeManagePass() {
 
 
 async function loadRecruitmentForManage() {
+  webPushManageMode = false;
 
   if (!sb) {
     alert("Supabaseの設定がまだです。");
@@ -6575,7 +6617,7 @@ $("#renewUnchangedBtn")
       if (
         !loadedManagedRecruitment
         ||
-        !loadedManagePassHash
+        (!loadedManagePassHash && !webPushManageMode)
       ) {
         alert("先にPASSから募集内容を呼び出してください。");
         return;
@@ -6606,19 +6648,14 @@ $("#renewUnchangedBtn")
         const isUnion =
           loadedManagedRecruitment.type === "union";
 
-        const {
-          data,
-          error
-        } =
-          await sb.rpc(
-            isUnion
-              ? "renew_union_recruitment_by_membership_pass"
-              : "renew_recruitment_by_pass",
-            {
-              p_pass_hash:
-                loadedManagePassHash
-            }
-          );
+        const renewResponse = webPushManageMode
+          ? await callWebPushManage("manage_renew")
+          : await sb.rpc(
+              isUnion ? "renew_union_recruitment_by_membership_pass" : "renew_recruitment_by_pass",
+              {p_pass_hash: loadedManagePassHash}
+            );
+        const data = webPushManageMode ? [renewResponse.result] : renewResponse.data;
+        const error = webPushManageMode ? null : renewResponse.error;
 
         if (error) {
           console.error("再延長エラー", error);
@@ -6663,7 +6700,7 @@ $("#managePreviewConfirm")
       if (
         !loadedManagedRecruitment
         ||
-        (!loadedManagePassHash && !discordManageV1SessionHash)
+        (!loadedManagePassHash && !discordManageV1SessionHash && !webPushManageMode)
       ) {
         alert("編集認証を取得できませんでした。もう一度呼び出してください。");
         return;
@@ -6701,6 +6738,11 @@ $("#managePreviewConfirm")
         &&
         $("#manageRemoveImage")
           ?.checked === true;
+
+      if (webPushManageMode && (manageEditPreparedFile || removeImage)) {
+        alert("画像の変更には通常のPASS認証が必要です。PASS管理から操作してください。");
+        return;
+      }
 
       const button =
         $("#managePreviewConfirm");
@@ -6758,14 +6800,16 @@ $("#managePreviewConfirm")
                   p_remove_preview_image: removeImage
                 };
 
-        const {
-          data,
-          error
-        } =
-          await sb.rpc(
-            rpcName,
-            rpcParams
-          );
+        const webPushResult = webPushManageMode
+          ? await callWebPushManage("manage_start", {
+              union_rank: values.unionRank,
+              x_url: values.url,
+              remove_preview_image: removeImage
+            })
+          : null;
+        const rpcResult = webPushManageMode ? null : await sb.rpc(rpcName, rpcParams);
+        const data = webPushManageMode ? [webPushResult.result] : rpcResult.data;
+        const error = webPushManageMode ? null : rpcResult.error;
 
         if (error) {
 
@@ -6951,6 +6995,8 @@ async function closeLoadedRecruitment() {
       !loadedManagePassHash
       &&
       !discordManageV1SessionHash
+      &&
+      !webPushManageMode
     )
   ) {
     alert("編集認証を取得できませんでした。もう一度呼び出してください。");
@@ -6980,24 +7026,14 @@ async function closeLoadedRecruitment() {
         discordManageV1SessionHash
       );
 
-    const {
-      data,
-      error
-    } =
-      await sb.rpc(
-        useDiscordManage
-          ? "stop_union_recruiting_by_discord_manage_v1"
-          : "stop_union_recruiting_by_membership_pass",
-        useDiscordManage
-          ? {
-              p_session_hash:
-                discordManageV1SessionHash
-            }
-          : {
-              p_pass_hash:
-                loadedManagePassHash
-            }
-      );
+    const stopResult = webPushManageMode
+      ? await callWebPushManage("manage_stop")
+      : await sb.rpc(
+          useDiscordManage ? "stop_union_recruiting_by_discord_manage_v1" : "stop_union_recruiting_by_membership_pass",
+          useDiscordManage ? {p_session_hash: discordManageV1SessionHash} : {p_pass_hash: loadedManagePassHash}
+        );
+    const data = webPushManageMode ? stopResult.closed : stopResult.data;
+    const error = webPushManageMode ? null : stopResult.error;
 
     if (
       error
