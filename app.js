@@ -1408,16 +1408,100 @@ function renderXEmbeds(retry = 0) {
 // 登録・締切モードを確実に解除
 // ========================================
 
-// UM_PUSH_EXPIRY_MANAGE_V1
-function openExpiryPushLandingOnce() {
+// UM_PUSH_EXPIRY_MANAGE_V2 — 48時間前PUSHからのみ開く専用画面。
+// 通常のPASS管理・Discord管理画面は変更しない。
+async function openExpiryPushLandingOnce() {
   const url = new URL(location.href);
-  if (url.searchParams.get('um_push') !== 'expiry_48h') return;
-  url.searchParams.delete('um_push');
-  history.replaceState(history.state, '', url.toString());
-  showPage('manage');
+  if (url.searchParams.get("um_push") !== "expiry_48h") return;
+  url.searchParams.delete("um_push");
+  history.replaceState(history.state, "", url.toString());
+
+  const overlay = document.createElement("section");
+  overlay.id = "umExpiryPushScreen";
+  overlay.setAttribute("role", "dialog");
+  overlay.setAttribute("aria-modal", "true");
+  overlay.setAttribute("aria-labelledby", "umExpiryPushTitle");
+  overlay.style.cssText = "position:fixed;inset:0;z-index:2147483647;background:#f6f8fb;overflow-y:auto;overscroll-behavior:contain;padding:clamp(18px,5vw,48px) 18px;box-sizing:border-box;display:grid;place-items:center;font-family:'Noto Sans JP',sans-serif;color:#202934;";
+  overlay.innerHTML = `
+    <div style="width:min(100%,460px);background:#fff;border:1px solid #e4e8ee;border-radius:18px;padding:clamp(22px,5vw,38px);box-sizing:border-box;box-shadow:0 16px 48px rgba(25,53,84,.09)">
+      <div style="color:#159ac8;font-size:12px;font-weight:800;letter-spacing:.12em">UNION MATCH / PUSH NOTICE</div>
+      <h1 id="umExpiryPushTitle" style="font-size:clamp(21px,5vw,27px);line-height:1.5;margin:14px 0 12px">掲載期限の14日延長</h1>
+      <p id="umExpiryPushMessage" role="status" aria-live="polite" style="font-size:14px;line-height:1.8;color:#606c78;margin:0 0 20px;overflow-wrap:anywhere">登録情報を確認しています…</p>
+      <div id="umExpiryPushDetails" hidden style="border-top:1px solid #e7ebef;border-bottom:1px solid #e7ebef;padding:16px 0;margin:0 0 20px;font-size:14px;line-height:2">
+        <div>ユニオン名：<strong id="umExpiryPushName"></strong></div>
+        <div>現在の期限：<strong id="umExpiryPushDate"></strong></div>
+      </div>
+      <button id="umExpiryPushRenew" type="button" hidden disabled style="width:100%;min-height:52px;border:0;border-radius:10px;background:#159ac8;color:#fff;font-size:15px;font-weight:800;cursor:pointer">14日延長する</button>
+      <button id="umExpiryPushManage" type="button" style="width:100%;min-height:46px;margin-top:12px;border:1px solid #d8dee6;border-radius:10px;background:#fff;color:#475665;font-size:14px;cursor:pointer">通常のPASS管理へ</button>
+      <button id="umExpiryPushClose" type="button" style="width:100%;min-height:40px;margin-top:8px;border:0;background:transparent;color:#667583;font-size:13px;cursor:pointer">サイトへ戻る</button>
+    </div>`;
+  document.body.appendChild(overlay);
+  const get = id => overlay.querySelector("#" + id);
+  const message = get("umExpiryPushMessage");
+  const renewButton = get("umExpiryPushRenew");
+  const close = () => overlay.remove();
+  get("umExpiryPushClose").addEventListener("click", close);
+  get("umExpiryPushManage").addEventListener("click", () => {
+    close();
+    showPage("manage");
+  });
+
+  try {
+    const response = await callWebPushManage("manage_get");
+    if (!overlay.isConnected) return;
+    const managed = response?.managed;
+    if (!response?.authorized || managed?.type !== "union" || !managed?.membership_id) {
+      throw new Error("端末認証を確認できませんでした。");
+    }
+    const expiry = new Date(managed.member_expires_at || managed.expires_at);
+    if (!Number.isFinite(expiry.getTime())) throw new Error("掲載期限を確認できませんでした。");
+    get("umExpiryPushName").textContent = managed.name || "ユニオン";
+    get("umExpiryPushDate").textContent = expiry.toLocaleString("ja-JP", {year:"numeric",month:"2-digit",day:"2-digit",hour:"2-digit",minute:"2-digit"});
+    get("umExpiryPushDetails").hidden = false;
+    const remaining = expiry.getTime() - Date.now();
+    if (remaining <= 0) {
+      message.textContent = "掲載期限を過ぎています。通常のPASS管理をご確認ください。";
+      return;
+    }
+    // 延長済み通知の再タップでは再延長しない。期限間近に限り実行可能。
+    if (remaining > 72 * 60 * 60 * 1000) {
+      message.textContent = "現在の掲載期限にはまだ余裕があります。延長済みの場合、追加の操作は必要ありません。";
+      return;
+    }
+    message.textContent = "募集内容や募集状態は変更せず、掲載期限だけを本日から14日後に更新します。";
+    renewButton.hidden = false;
+    renewButton.disabled = false;
+    let submitted = false;
+    renewButton.addEventListener("click", async () => {
+      if (submitted) return;
+      if (!window.confirm("掲載期限を本日から14日後に延長します。よろしいですか？")) return;
+      submitted = true;
+      renewButton.disabled = true;
+      renewButton.textContent = "延長しています…";
+      try {
+        // 再掲載用 manage_renew ではなく、利用期限の確認・延長専用 renew を使う。
+        const result = await callWebPushManage("renew");
+        if (!result?.renewed || !result?.expires_at) throw new Error("延長結果を確認できませんでした。");
+        if (!overlay.isConnected) return;
+        const next = new Date(result.expires_at);
+        get("umExpiryPushDate").textContent = Number.isFinite(next.getTime())
+          ? next.toLocaleString("ja-JP", {year:"numeric",month:"2-digit",day:"2-digit",hour:"2-digit",minute:"2-digit"})
+          : "更新済み";
+        message.textContent = "掲載期限を14日延長しました。募集内容と募集状態はそのままです。";
+        renewButton.hidden = true;
+      } catch (error) {
+        if (!overlay.isConnected) return;
+        message.textContent = "延長結果を確認できませんでした（" + String(error?.message || "通信エラー") + "）。通常のPASS管理で期限をご確認ください。";
+        renewButton.hidden = true; // 不明な通信結果で二重更新しない
+      }
+    });
+  } catch (error) {
+    if (!overlay.isConnected) return;
+    message.textContent = "通知端末の認証を確認できませんでした（" + String(error?.message || "通信エラー") + "）。通常のPASS管理をご利用ください。";
+  }
 }
-if (document.readyState === 'loading') {
-  document.addEventListener('DOMContentLoaded', openExpiryPushLandingOnce, {once:true});
+if (document.readyState === "loading") {
+  document.addEventListener("DOMContentLoaded", openExpiryPushLandingOnce, {once:true});
 } else {
   queueMicrotask(openExpiryPushLandingOnce);
 }
