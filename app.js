@@ -6553,6 +6553,24 @@ function showManageResult(mode, result) {
           : "編集内容を反映し、掲載期限を本日から14日間に更新しました。";
   }
 
+  // Web Push認証でPASSを省略した場合のみ、PASS表示とコピーを隠す。
+  // 通常のPASS管理とDiscord管理の表示は従来どおり。
+  const passBox = $("#manageResultPass")?.closest(".pass-box");
+  const passWarning = $("#manageResultModal .manage-same-pass-warning");
+  if (passBox) {
+    passBox.classList.toggle("hidden", webPushManageMode);
+  }
+  if (passWarning) {
+    if (webPushManageMode) {
+      passWarning.textContent =
+        "PASSは前回と同じです。\n登録時に発行されたPASSは変更されていません。\n今後の管理にも必要となるため、紛失しないよう大切に保管してください。";
+      passWarning.style.whiteSpace = "pre-line";
+    } else {
+      passWarning.innerHTML =
+        "※ PASSは前回と同じです。<br>次回の編集・再延長・締切にも、このPASSをそのまま使用してください。";
+      passWarning.style.whiteSpace = "";
+    }
+  }
   if ($("#manageResultPass")) {
     $("#manageResultPass").textContent =
       loadedManagePass || (discordManageV1Mode ? "既存PASSは変更されません" : "--------");
