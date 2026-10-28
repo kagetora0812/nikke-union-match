@@ -7,6 +7,13 @@
   const TOKEN_KEY = 'um_webpush_union_token_v1';
   const script = document.currentScript;
   const base = new URL('.', script?.src || document.baseURI);
+  // 端末別の月次集計は全公開ページ共通。ADMIN画面は対象外。
+  if (!/(?:^|\/)creator-admin\.html$/i.test(location.pathname)) {
+    const deviceAnalytics = document.createElement('script');
+    deviceAnalytics.src = new URL('site-device-analytics.js?v=20261028-1', base).href;
+    deviceAnalytics.async = true;
+    document.head.appendChild(deviceAnalytics);
+  }
   function ensureLink(rel, href, attrs = {}) {
     if (document.head.querySelector(`link[rel="${rel}"]`)) return;
     const link = document.createElement('link');
