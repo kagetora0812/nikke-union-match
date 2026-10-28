@@ -164,7 +164,14 @@ const WEB_PUSH_MANAGE_API = "https://igoekrvpgnjberppiawf.supabase.co/functions/
 async function callWebPushManage(action, extra = {}) {
   const token = localStorage.getItem(WEB_PUSH_MANAGE_TOKEN_KEY);
   if (!token) throw new Error("端末認証がありません。PASSで管理してください。");
-  const reg = await navigator.serviceWorker?.getRegistration(new URL(".", document.querySelector('script[src*="notification-ui.js"]')?.src || document.baseURI).href);
+  const scopeUrl = new URL(".", document.querySelector('script[src*="notification-ui.js"]')?.src || document.baseURI).href;
+  let reg = await navigator.serviceWorker?.getRegistration(scopeUrl);
+  if (!reg && navigator.serviceWorker) {
+    reg = await Promise.race([
+      navigator.serviceWorker.ready,
+      new Promise((_, reject) => setTimeout(() => reject(new Error("通知の初期化が完了していません")), 5000))
+    ]);
+  }
   const sub = await reg?.pushManager?.getSubscription();
   if (!sub) throw new Error("通知登録がありません。PASSで管理してください。");
   const response = await fetch(WEB_PUSH_MANAGE_API, {
@@ -190,9 +197,21 @@ async function openWebPushManageIfAuthorized() {
     resetManageImageState();
     resetManageActionMenu();
     renderLoadedManageRecruitment();
+    document.getElementById("umWebPushManageNotice")?.remove();
     await loadTotalRegisteredUnionCount();
   } catch (error) {
     console.info("Web Push端末認証が利用できません。通常のPASS管理を使用してください。", error?.message || error);
+    const form = document.getElementById("closeForm");
+    if (form && document.getElementById("managePage")?.classList.contains("active")) {
+      let notice = document.getElementById("umWebPushManageNotice");
+      if (!notice) {
+        notice = document.createElement("p");
+        notice.id = "umWebPushManageNotice";
+        notice.style.cssText = "font-size:13px;color:#676b72;margin:12px 0 0;line-height:1.6;overflow-wrap:anywhere;";
+        form.appendChild(notice);
+      }
+      notice.textContent = "端末認証で自動表示できませんでした（" + String(error?.message || "通信エラー") + "）。通常のPASS入力は引き続き利用できます。";
+    }
   }
 }
 
