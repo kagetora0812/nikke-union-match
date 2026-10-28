@@ -61,7 +61,7 @@
       <label class="um-row"><span>14日間の掲載期限通知<small style="display:block;color:#777">期限48時間前に通知</small></span><input id="umExpiry" type="checkbox"></label>
       <div class="um-pass-wrap" hidden><label for="umPass">登録時のPASS（初回連携のみ）</label><input id="umPass" type="password" autocomplete="off" maxlength="8" placeholder="8文字のPASSを入力"><small style="display:block;color:#777">初回のみPASS認証で、この端末を登録します。認証後は、この端末からPASS入力なしで登録情報を管理できます。期限通知をOFFにすると、PASS不要の管理機能も解除されます。</small></div>
       <button type="button" class="um-save">通知設定を保存</button>
-      <div class="um-status" role="status"></div><div class="um-hint"></div><div class="um-pass-status" style="color:#168bd2;font-weight:700;display:none" aria-live="polite"></div>
+      <div class="um-status" role="status"></div><div class="um-hint"></div><div class="um-pass-status" style="color:#168bd2;font-size:11px;line-height:1.5;font-weight:700;display:none" aria-live="polite"></div>
     </div>`;
     document.body.appendChild(dialog);
     const hint=dialog.querySelector('.um-hint'),status=dialog.querySelector('.um-status'),save=dialog.querySelector('.um-save');
