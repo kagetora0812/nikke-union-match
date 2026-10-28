@@ -61,10 +61,13 @@
       <label class="um-row"><span>14日間の掲載期限通知<small style="display:block;color:#777">期限48時間前に通知</small></span><input id="umExpiry" type="checkbox"></label>
       <div class="um-pass-wrap" hidden><label for="umPass">登録時のPASS（初回連携のみ）</label><input id="umPass" type="password" autocomplete="off" maxlength="8" placeholder="8文字のPASSを入力"><small style="display:block;color:#777">初回のみPASS認証で、この端末を登録します。認証後は、この端末からPASS入力なしで登録情報を管理できます。期限通知をOFFにすると、PASS不要の管理機能も解除されます。</small></div>
       <button type="button" class="um-save">通知設定を保存</button>
-      <div class="um-status" role="status"></div><div class="um-hint"></div>
+      <div class="um-status" role="status"></div><div class="um-hint"></div><div class="um-pass-status" style="color:#168bd2;font-weight:700;display:none" aria-live="polite"></div>
     </div>`;
     document.body.appendChild(dialog);
     const hint=dialog.querySelector('.um-hint'),status=dialog.querySelector('.um-status'),save=dialog.querySelector('.um-save');
+    const passStatus=dialog.querySelector('.um-pass-status');
+    const setPassStatus=authorized=>{passStatus.textContent=authorized?'✓ PASS連携済み（PASS入力不要）':'';passStatus.style.display=authorized?'block':'none';};
+    let restoreSequence=0;
     const xToggle=dialog.querySelector('#umX'),siteToggle=dialog.querySelector('#umSite'),expiryToggle=dialog.querySelector('#umExpiry');
     const expiryWrap=dialog.querySelector('.um-pass-wrap'),passInput=dialog.querySelector('#umPass');
     const bells=document.querySelectorAll('.um-notification-bell');
@@ -83,6 +86,8 @@
     }
     expiryToggle.addEventListener('change',syncPass);
     async function refreshLocalState(){
+      const sequence=++restoreSequence;
+      setPassStatus(false);
       if(!('serviceWorker' in navigator)){setBell(false);showNotificationState(false);return;}
       try{
         const reg=await navigator.serviceWorker.getRegistration(base.href);
@@ -94,11 +99,21 @@
         expiryToggle.checked=on&&saved.notify_expiry===true;wasExpiryOn=expiryToggle.checked;
         syncPass();setBell(on);
         showNotificationState(on);status.textContent='';
+        // 表示だけを追加。PASS連携済みの判断は必ずサーバーのcheckで行う。
+        if(on && saved.notify_expiry===true && Notification.permission==='granted'){
+          const token=localStorage.getItem(TOKEN_KEY);
+          if(token){
+            try{
+              const verification=await postUnion(subscription,'check',{session_token:token});
+              if(sequence===restoreSequence)setPassStatus(verification.authorized===true);
+            }catch(_){if(sequence===restoreSequence)setPassStatus(false);}
+          }
+        }
       }catch(error){console.warn('[UM push] restore failed:',error);status.textContent='設定の読み込みに失敗しました。';}
     }
     refreshLocalState();
     const close=()=>{dialog.dataset.open='false';};
-    const open=()=>{if(document.body.classList.contains('menu-open'))document.getElementById('siteMenuClose')?.click();showNotificationState(false);dialog.dataset.open='true';refreshLocalState();};
+    const open=()=>{if(document.body.classList.contains('menu-open'))document.getElementById('siteMenuClose')?.click();setPassStatus(false);showNotificationState(false);dialog.dataset.open='true';refreshLocalState();};
     document.querySelectorAll('.um-notification-bell,[data-um-notification-open]').forEach(button=>button.addEventListener('click',open));
     dialog.querySelector('.um-close').addEventListener('click',close);
     dialog.addEventListener('click',event=>{if(event.target===dialog)close();});
@@ -118,7 +133,7 @@
           if(wasExpiryOn)await postUnion(current,'revoke');
           await postSettings(current,'disable',false,false);
           try{await current.unsubscribe();}catch(_){}
-          localStorage.removeItem(TOKEN_KEY);wasExpiryOn=false;setBell(false);showNotificationState(false);status.textContent='';return;
+          localStorage.removeItem(TOKEN_KEY);wasExpiryOn=false;setBell(false);showNotificationState(false);setPassStatus(false);status.textContent='';return;
         }
         if(Notification.permission==='denied')throw new Error('通知がブロックされています。ブラウザの設定から通知を許可してください。');
         if(Notification.permission!=='granted'){const permission=await Notification.requestPermission();if(permission!=='granted')throw new Error('通知が許可されませんでした。設定は保存していません。');}
@@ -133,7 +148,7 @@
           else await postUnion(subscription,'check',{session_token:token});
           wasExpiryOn=true;passInput.value='';
         }
-        syncPass();setBell(true);showNotificationState(true);status.textContent='';
+        syncPass();setBell(true);showNotificationState(true);setPassStatus(notifyExpiry && wasExpiryOn);status.textContent='';
       }catch(error){console.warn('[UM push] settings failed:',error);status.textContent='保存できませんでした：'+(error?.message||'通信エラー');await refreshLocalState();}
       finally{save.disabled=false;}
     });
