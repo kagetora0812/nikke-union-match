@@ -1953,6 +1953,27 @@
       font-weight: 800;
     }
 
+    /* ACCESS ANALYTICS: replace old separate BOT cards with compact paired rows */
+    .access-stat-pair{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px;margin-top:11px}
+    .access-stat-half{min-width:0}
+    .access-stat-source{font-size:10px;color:#a1b1c5;font-weight:700;line-height:1.5}
+    .access-stat-pair .access-stat-value{font-size:clamp(18px,2.7vw,27px);margin-top:6px;white-space:nowrap}
+    .access-stat-pair .access-stat-sub{font-size:10px;margin-top:8px;white-space:nowrap}
+    .access-register-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:7px;margin-top:10px}
+    .access-register-value{font-size:clamp(19px,2.4vw,25px);line-height:1.2;color:#fff;font-weight:900}
+    .access-device-panel{padding:18px;margin-top:18px;background:#0b111b;border:1px solid var(--line)}
+    .access-device-head{display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap}
+    .access-device-month-label{display:flex;align-items:center;gap:8px;font-size:11px}
+    .access-device-month-label select{width:auto;min-width:128px;margin:0;padding:8px;color:#fff;font-size:12px}
+    .access-device-bar{width:100%;height:18px;display:flex;margin-top:18px;border-radius:3px;overflow:hidden;background:#273449}
+    .access-device-mobile{background:#168bd2}.access-device-pc{background:#8b92e8}.access-device-tablet{background:#54bdb0}
+    .access-device-legend{display:flex;justify-content:space-around;flex-wrap:wrap;gap:12px;margin-top:13px;font-size:12px}
+    .access-device-legend>div{display:flex;align-items:center;gap:6px}
+    .access-device-legend strong{margin-left:5px;font-size:15px;color:#fff}
+    .access-device-key{width:9px;height:9px;display:inline-block;border-radius:2px;flex:none}
+    .access-device-note{margin-top:10px;color:var(--muted);font-size:11px}
+    @media(max-width:600px){.access-stat-card{padding:12px}.access-stat-pair{gap:5px}.access-stat-source{font-size:9px}.access-stat-pair .access-stat-value{font-size:18px}.access-register-value{font-size:21px}}
+
     .access-daily-table {
       width: 100%;
       margin-top: 16px;
@@ -2886,39 +2907,87 @@
       <div class="panel">
 
         <div class="access-stats-grid">
-
           <div class="access-stat-card">
             <div class="access-stat-label">今日のPV</div>
-            <div id="accessTodayPv" class="access-stat-value">--</div>
-            <div id="accessTodayUnique" class="access-stat-sub">ユニーク --</div>
+            <div class="access-stat-pair">
+              <div class="access-stat-half"><div class="access-stat-source">UNION MATCH 本体</div>
+                <div id="accessTodayPv" class="access-stat-value">--</div>
+                <div id="accessTodayUnique" class="access-stat-sub">ユニーク --</div></div>
+              <div class="access-stat-half"><div class="access-stat-source">DISCORD BOT</div>
+                <div id="botTodayPv" class="access-stat-value">--</div>
+                <div id="botTodayUnique" class="access-stat-sub">ユニーク --</div></div>
+            </div>
           </div>
-
           <div class="access-stat-card">
             <div class="access-stat-label">昨日のPV</div>
-            <div id="accessYesterdayPv" class="access-stat-value">--</div>
-            <div id="accessYesterdayUnique" class="access-stat-sub">ユニーク --</div>
+            <div class="access-stat-pair">
+              <div class="access-stat-half"><div class="access-stat-source">UNION MATCH 本体</div>
+                <div id="accessYesterdayPv" class="access-stat-value">--</div>
+                <div id="accessYesterdayUnique" class="access-stat-sub">ユニーク --</div></div>
+              <div class="access-stat-half"><div class="access-stat-source">DISCORD BOT</div>
+                <div id="botYesterdayPv" class="access-stat-value">--</div>
+                <div id="botYesterdayUnique" class="access-stat-sub">ユニーク --</div></div>
+            </div>
           </div>
-
           <div class="access-stat-card">
             <div class="access-stat-label">直近7日PV</div>
-            <div id="access7dPv" class="access-stat-value">--</div>
-            <div id="access7dUnique" class="access-stat-sub">ユニーク --</div>
+            <div class="access-stat-pair">
+              <div class="access-stat-half"><div class="access-stat-source">UNION MATCH 本体</div>
+                <div id="access7dPv" class="access-stat-value">--</div>
+                <div id="access7dUnique" class="access-stat-sub">ユニーク --</div></div>
+              <div class="access-stat-half"><div class="access-stat-source">DISCORD BOT</div>
+                <div id="bot7dPv" class="access-stat-value">--</div>
+                <div id="bot7dUnique" class="access-stat-sub">ユニーク --</div></div>
+            </div>
           </div>
-
           <div class="access-stat-card">
             <div class="access-stat-label">直近30日PV</div>
-            <div id="access30dPv" class="access-stat-value">--</div>
-            <div id="access30dUnique" class="access-stat-sub">ユニーク --</div>
+            <div class="access-stat-pair">
+              <div class="access-stat-half"><div class="access-stat-source">UNION MATCH 本体</div>
+                <div id="access30dPv" class="access-stat-value">--</div>
+                <div id="access30dUnique" class="access-stat-sub">ユニーク --</div></div>
+              <div class="access-stat-half"><div class="access-stat-source">DISCORD BOT</div>
+                <div id="bot30dPv" class="access-stat-value">--</div>
+                <div id="bot30dUnique" class="access-stat-sub">ユニーク --</div></div>
+            </div>
           </div>
-
           <div class="access-stat-card">
             <div class="access-stat-label">累計PV</div>
-            <div id="accessTotalPv" class="access-stat-value">--</div>
-            <div id="accessTotalUnique" class="access-stat-sub">ユニーク --</div>
+            <div class="access-stat-pair">
+              <div class="access-stat-half"><div class="access-stat-source">UNION MATCH 本体</div>
+                <div id="accessTotalPv" class="access-stat-value">--</div>
+                <div id="accessTotalUnique" class="access-stat-sub">ユニーク --</div></div>
+              <div class="access-stat-half"><div class="access-stat-source">DISCORD BOT</div>
+                <div id="botTotalPv" class="access-stat-value">--</div>
+                <div id="botTotalUnique" class="access-stat-sub">ユニーク --</div></div>
+            </div>
           </div>
-
+          <div class="access-stat-card">
+            <div class="access-stat-label">BOT・PUSH 登録状況</div>
+            <div class="access-register-grid">
+              <div><div class="access-stat-source">BOT導入</div><div id="accessBotRegistered" class="access-register-value">--</div></div>
+              <div><div class="access-stat-source">BOT PASS連携</div><div id="accessBotLinked" class="access-register-value">--</div></div>
+              <div><div class="access-stat-source">PUSH登録端末</div><div id="accessPushRegistered" class="access-register-value">--</div></div>
+              <div><div class="access-stat-source">PUSH PASS連携</div><div id="accessPushLinked" class="access-register-value">--</div></div>
+            </div>
+          </div>
         </div>
 
+        <div class="access-device-panel">
+          <div class="access-device-head"><div class="panel-title" style="margin:0">端末別アクセス割合</div>
+          <label class="access-device-month-label">月別
+            <select id="accessDeviceMonth" aria-label="端末割合の対象月"></select>
+          </label></div>
+          <div id="accessDeviceBar" class="access-device-bar" aria-label="端末別アクセス割合">
+            <div id="accessDeviceMobileBar" class="access-device-mobile" style="width:0%"></div><div id="accessDevicePcBar" class="access-device-pc" style="width:0%"></div><div id="accessDeviceTabletBar" class="access-device-tablet" style="width:0%"></div>
+          </div>
+          <div class="access-device-legend">
+            <div><i class="access-device-key access-device-mobile"></i>スマホ <strong id="accessDeviceMobile">—%</strong></div>
+            <div><i class="access-device-key access-device-pc"></i>PC <strong id="accessDevicePc">—%</strong></div>
+            <div><i class="access-device-key access-device-tablet"></i>タブレット <strong id="accessDeviceTablet">—%</strong></div>
+          </div>
+          <div id="accessDeviceNote" class="access-device-note">計測開始前の月はデータなし</div>
+        </div>
         <div class="panel-title" style="margin-top:24px;">
           直近7日の日別アクセス
         </div>
@@ -2945,18 +3014,6 @@
           class="message hidden"
         ></div>
 
-      </div>
-
-
-      <div class="panel" id="botAnalyticsPanel" style="margin-top:24px;">
-        <div class="panel-title">DISCORD BOT ページアクセス</div>
-        <p class="lead">BOTページのアクセス数と、INDEX・登録完了画面・Xなどからの流入を集計します。Xアプリ等で参照元が渡らない場合は「直接・不明」に含まれます。</p>
-        <div class="access-stats-grid" id="botAccessCards"></div>
-        <div class="panel-title" style="margin-top:25px;">流入経路（累計）</div>
-        <div style="overflow-x:auto;"><table class="access-daily-table"><thead><tr><th>流入元</th><th>PV</th><th>ユニーク</th></tr></thead><tbody id="botAccessSources"><tr><td colspan="3">読み込み中...</td></tr></tbody></table></div>
-        <div class="panel-title" style="margin-top:25px;">直近7日の日別アクセス</div>
-        <div style="overflow-x:auto;"><table class="access-daily-table"><thead><tr><th>日付</th><th>PV</th><th>ユニーク</th></tr></thead><tbody id="botAccessDaily"><tr><td colspan="3">読み込み中...</td></tr></tbody></table></div>
-        <div id="botAccessMessage" class="message hidden"></div>
       </div>
     </section>
 
@@ -6468,10 +6525,12 @@
       );
 
 
+    $("#accessDeviceMonth")?.addEventListener('change',loadAccessExtension);
+
     $("#reloadAccessStatsBtn")
       ?.addEventListener(
         "click",
-        async () => { await Promise.all([loadAccessStats(),loadBotAccessStats()]); }
+        async () => { await Promise.all([loadAccessStats(),loadBotAccessStats(),loadAccessExtension()]); }
       );
 
 
@@ -8555,29 +8614,51 @@
 
 
     async function loadBotAccessStats() {
-      const area = $("#botAccessCards"), sources = $("#botAccessSources"), daily = $("#botAccessDaily");
-      if (!area || !sources || !daily) return;
-      area.textContent = "読み込み中...";
-      const token = getToken();
-      if (!token) return;
-      const {data,error}=await sb.rpc("creator_admin_bot_page_stats", {p_token:token});
-      if (error) {
-        area.textContent="取得できませんでした";
-        showMessage($("#botAccessMessage"),"BOTページ解析を読み込めません。SQLの適用を確認してください。","error");
-        return;
+      const token=getToken();if(!token)return;
+      const specs=[['Today','today'],['Yesterday','yesterday'],['7d','last_7_days'],['30d','last_30_days'],['Total','total']];
+      for(const [name] of specs){const pv=$("#bot"+name+"Pv"),unique=$("#bot"+name+"Unique");if(pv)pv.textContent="--";if(unique)unique.textContent="ユニーク --";}
+      const {data,error}=await sb.rpc('creator_admin_bot_page_stats',{p_token:token});
+      if(error){console.warn('BOTページPV取得失敗',error);return;}
+      const summary=data?.summary||{};
+      for(const [name,prefix] of specs){
+        const pv=$("#bot"+name+"Pv"),unique=$("#bot"+name+"Unique");
+        if(pv)pv.textContent=formatAccessNumber(summary[prefix+'_pv']);
+        if(unique)unique.textContent='ユニーク '+formatAccessNumber(summary[prefix+'_unique']);
       }
-      clearMessage($("#botAccessMessage"));
-      const s=data?.summary || {};
-      const specs=[
-        ["今日",s.today_pv,s.today_unique], ["昨日",s.yesterday_pv,s.yesterday_unique],
-        ["直近7日",s.last_7_days_pv,s.last_7_days_unique],
-        ["直近30日",s.last_30_days_pv,s.last_30_days_unique],
-        ["累計",s.total_pv,s.total_unique]
-      ];
-      area.innerHTML=specs.map(x=>`<div class="access-stat-card"><div class="access-stat-label">${x[0]} PV</div><div class="access-stat-value">${formatAccessNumber(x[1])}</div><div class="access-stat-sub">ユニーク ${formatAccessNumber(x[2])}</div></div>`).join("");
-      const names={index:"INDEX",registration:"登録完了画面",x:"X",external:"外部サイト",direct_unknown:"直接・不明"};
-      sources.innerHTML=(data?.sources||[]).map(x=>`<tr><td>${escapeHtml(names[x.source]||x.source)}</td><td>${formatAccessNumber(x.pv)}</td><td>${formatAccessNumber(x.unique)}</td></tr>`).join("") || '<tr><td colspan="3">データなし</td></tr>';
-      daily.innerHTML=(data?.daily||[]).map(x=>`<tr><td>${escapeHtml(x.date)}</td><td>${formatAccessNumber(x.pv)}</td><td>${formatAccessNumber(x.unique)}</td></tr>`).join("") || '<tr><td colspan="3">データなし</td></tr>';
+    }
+
+    function initAccessDeviceMonths(){
+      const select=$('#accessDeviceMonth');if(!select)return;
+      const now=new Date();const japan=new Intl.DateTimeFormat('en-CA',{timeZone:'Asia/Tokyo',year:'numeric',month:'2-digit'}).format(now);
+      const [year,month]=japan.split('-').map(Number);
+      const options=[];
+      for(let i=0;i<24;i++){
+        const date=new Date(Date.UTC(year,month-1-i,1));
+        const key=date.toISOString().slice(0,7);
+        options.push('<option value="'+key+'">'+date.getUTCFullYear()+'年'+(date.getUTCMonth()+1)+'月</option>');
+      }
+      select.innerHTML=options.join('');
+    }
+    async function loadAccessExtension(){
+      const token=getToken();if(!token)return;
+      const month=$('#accessDeviceMonth')?.value;
+      if(!month)return;
+      const {data,error}=await sb.rpc('admin_get_access_extension',{p_token:token,p_month:month});
+      if(error){
+        for(const id of ['accessBotRegistered','accessBotLinked','accessPushRegistered','accessPushLinked']){const el=$('#'+id);if(el)el.textContent='--';}
+        $('#accessDeviceNote').textContent='集計機能のSQLが未適用、または取得に失敗しました。';
+        console.warn('端末・登録統計取得失敗',error);return;
+      }
+      const fields=[['accessBotRegistered','bot_registered'],['accessBotLinked','bot_linked'],['accessPushRegistered','push_registered'],['accessPushLinked','push_linked']];
+      for(const [id,key] of fields){const el=$('#'+id);if(el)el.textContent=formatAccessNumber(data?.[key]);}
+      const mobile=Number(data?.mobile||0),pc=Number(data?.pc||0),tablet=Number(data?.tablet||0),total=mobile+pc+tablet;
+      const parts=total?[mobile/total*100,pc/total*100,tablet/total*100]:[0,0,0];
+      for(const [i,name] of ['Mobile','Pc','Tablet'].entries()){
+        const label=$('#accessDevice'+name),bar=$('#accessDevice'+name+'Bar');
+        if(label)label.textContent=total?parts[i].toFixed(1)+'%':'—%';
+        if(bar)bar.style.width=parts[i]+'%';
+      }
+      $('#accessDeviceNote').textContent=total?'対象月のユニーク訪問端末 '+formatAccessNumber(total)+'件':'この月の端末別データはありません。';
     }
 
     async function showAccessStatsAdmin() {
@@ -8588,7 +8669,8 @@
         ?.classList
         .remove("hidden");
 
-      await Promise.all([loadAccessStats(),loadBotAccessStats()]);
+      initAccessDeviceMonths();
+      await Promise.all([loadAccessStats(),loadBotAccessStats(),loadAccessExtension()]);
 
     }
 
