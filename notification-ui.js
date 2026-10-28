@@ -21,10 +21,10 @@
     const ua = navigator.userAgent || '';
     const isIOS = /iPad|iPhone|iPod/i.test(ua) || (navigator.platform === 'MacIntel' && navigator.maxTouchPoints > 1);
     const standalone = window.matchMedia?.('(display-mode: standalone)').matches || navigator.standalone === true;
-    if (!('serviceWorker' in navigator) || !('PushManager' in window) || !('Notification' in window)) return 'このブラウザはプッシュ通知に対応していません。対応ブラウザで開いてください。';
-    if (isIOS && !standalone) return 'iPhone・iPadでは、共有メニューから「ホーム画面に追加」し、追加したUNION MATCHのアイコンから開いてください。その後、通知ベルから許可できます。';
-    if (Notification.permission === 'denied') return 'ブラウザで通知がブロックされています。端末の設定からUNION MATCHの通知を許可してください。';
-    return '通知の登録にはブラウザの許可が必要です。保存すると、この端末の通知設定が登録されます。';
+    if (!('serviceWorker' in navigator) || !('PushManager' in window) || !('Notification' in window)) return 'ご利用のブラウザはプッシュ通知に対応していません。Chrome・Edge・Safariなどの対応ブラウザをご利用ください。';
+    if (isIOS && !standalone) return '通知を利用するには、UNION MATCHをホーム画面に追加してください。共有メニューから「ホーム画面に追加」を選び、追加したアイコンから通知を設定してください。';
+    if (Notification.permission === 'denied') return '通知がブロックされています。ブラウザの設定から通知を許可してください。';
+    return '通知を受け取るには、ブラウザの通知許可が必要です。「通知設定を保存」を押して、通知を許可してください。';
   }
   if (isSecureContext && 'serviceWorker' in navigator) {
     navigator.serviceWorker.register(new URL('um-sw.js', base).href, {scope:base.pathname})
@@ -59,7 +59,7 @@
       <label class="um-row"><span>Xの新着指揮官通知</span><input id="umX" type="checkbox"></label>
       <label class="um-row"><span>サイト登録の新着指揮官通知<small style="display:block;color:#777">毎日21:00に通知</small></span><input id="umSite" type="checkbox"></label>
       <label class="um-row"><span>14日間の掲載期限通知<small style="display:block;color:#777">期限48時間前に通知</small></span><input id="umExpiry" type="checkbox"></label>
-      <div class="um-pass-wrap" hidden><label for="umPass">登録時のPASS（初回連携のみ）</label><input id="umPass" type="password" autocomplete="off" maxlength="8" placeholder="8文字のPASSを入力"><small style="display:block;color:#777">初回PASS認証で端末を連携します。期限通知をOFFにすると、この端末の認証も解除されます。</small></div>
+      <div class="um-pass-wrap" hidden><label for="umPass">登録時のPASS（初回連携のみ）</label><input id="umPass" type="password" autocomplete="off" maxlength="8" placeholder="8文字のPASSを入力"><small style="display:block;color:#777">初回のみPASS認証で、この端末を登録します。認証後は、この端末からPASS入力なしで登録情報を管理できます。期限通知をOFFにすると、PASS不要の管理機能も解除されます。</small></div>
       <button type="button" class="um-save">通知設定を保存</button>
       <div class="um-status" role="status"></div><div class="um-hint"></div>
     </div>`;
@@ -95,9 +95,9 @@
     save.addEventListener('click',async()=>{
       if(save.disabled)return;
       const notifyX=xToggle.checked,notifySite=siteToggle.checked,notifyExpiry=expiryToggle.checked;
-      if(!isSecureContext||!('serviceWorker' in navigator)||!('PushManager' in window)||!('Notification' in window)){status.textContent='この環境ではプッシュ通知を登録できません。';return;}
+      if(!isSecureContext||!('serviceWorker' in navigator)||!('PushManager' in window)||!('Notification' in window)){status.textContent='お使いの環境では通知を設定できません。ブラウザの通知対応状況をご確認ください。';return;}
       const ios=/iPad|iPhone|iPod/i.test(navigator.userAgent)||(navigator.platform==='MacIntel'&&navigator.maxTouchPoints>1);
-      if(ios&&!(window.matchMedia?.('(display-mode: standalone)').matches||navigator.standalone===true)){status.textContent='iPhone・iPadではホーム画面に追加したアイコンから開いてください。';return;}
+      if(ios&&!(window.matchMedia?.('(display-mode: standalone)').matches||navigator.standalone===true)){status.textContent='通知を利用するには、UNION MATCHをホーム画面に追加してください。共有メニューから「ホーム画面に追加」を選び、追加したアイコンから通知を設定してください。';return;}
       if(notifyExpiry&&!wasExpiryOn&&!/^[A-HJ-NP-Z2-9]{8}$/i.test(passInput.value.trim())){status.textContent='期限通知には初回のみ8文字のPASSが必要です。';return;}
       save.disabled=true;status.textContent='端末の通知設定を確認中…';
       try{
@@ -110,7 +110,7 @@
           try{await current.unsubscribe();}catch(_){}
           localStorage.removeItem(TOKEN_KEY);wasExpiryOn=false;setBell(false);status.textContent='この端末の通知をすべてOFFにしました。';return;
         }
-        if(Notification.permission==='denied')throw new Error('通知がブロックされています。端末の設定から通知を許可してください。');
+        if(Notification.permission==='denied')throw new Error('通知がブロックされています。ブラウザの設定から通知を許可してください。');
         if(Notification.permission!=='granted'){const permission=await Notification.requestPermission();if(permission!=='granted')throw new Error('通知が許可されませんでした。設定は保存していません。');}
         const subscription=current||await reg.pushManager.subscribe({userVisibleOnly:true,applicationServerKey:decodeVapid(PUBLIC_VAPID_KEY)});
         if(wasExpiryOn&&!notifyExpiry){await postUnion(subscription,'revoke');localStorage.removeItem(TOKEN_KEY);wasExpiryOn=false;}
