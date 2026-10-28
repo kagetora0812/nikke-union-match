@@ -71,24 +71,34 @@
     let wasExpiryOn=false;
     const setBell=on=>bells.forEach(b=>{b.dataset.status=on?'on':'off';});
     const syncPass=()=>{expiryWrap.hidden=!expiryToggle.checked || wasExpiryOn;};
+    // 通知の「許可」とサイトの「配信ON」の両方を満たす場合だけ正常表示。
+    function showNotificationState(on) {
+      const permitted = 'Notification' in window && Notification.permission === 'granted';
+      const active = permitted && on;
+      hint.textContent = active ? '✓ 通知は正常に設定されています。'
+        : permitted && !on ? '通知はOFFです。'
+        : guidance();
+      hint.style.color = active ? '#168bd2' : '';
+      hint.style.fontWeight = active ? '700' : '';
+    }
     expiryToggle.addEventListener('change',syncPass);
     async function refreshLocalState(){
-      if(!('serviceWorker' in navigator)){setBell(false);return;}
+      if(!('serviceWorker' in navigator)){setBell(false);showNotificationState(false);return;}
       try{
         const reg=await navigator.serviceWorker.getRegistration(base.href);
         const subscription=await reg?.pushManager?.getSubscription();
-        if(!subscription){xToggle.checked=false;siteToggle.checked=false;expiryToggle.checked=false;wasExpiryOn=false;syncPass();setBell(false);status.textContent='この端末は未登録です。';return;}
+        if(!subscription){xToggle.checked=false;siteToggle.checked=false;expiryToggle.checked=false;wasExpiryOn=false;syncPass();setBell(false);showNotificationState(false);status.textContent='';return;}
         const saved=await postSettings(subscription,'get',false,false);
         const on=saved.enabled===true&&(saved.notify_x===true||saved.notify_site===true||saved.notify_expiry===true);
         xToggle.checked=on&&saved.notify_x===true;siteToggle.checked=on&&saved.notify_site===true;
         expiryToggle.checked=on&&saved.notify_expiry===true;wasExpiryOn=expiryToggle.checked;
         syncPass();setBell(on);
-        status.textContent=on?'この端末の通知設定を読み込みました。':'この端末の通知はOFFです。';
+        showNotificationState(on);status.textContent='';
       }catch(error){console.warn('[UM push] restore failed:',error);status.textContent='設定の読み込みに失敗しました。';}
     }
     refreshLocalState();
     const close=()=>{dialog.dataset.open='false';};
-    const open=()=>{if(document.body.classList.contains('menu-open'))document.getElementById('siteMenuClose')?.click();hint.textContent=guidance();dialog.dataset.open='true';refreshLocalState();};
+    const open=()=>{if(document.body.classList.contains('menu-open'))document.getElementById('siteMenuClose')?.click();showNotificationState(false);dialog.dataset.open='true';refreshLocalState();};
     document.querySelectorAll('.um-notification-bell,[data-um-notification-open]').forEach(button=>button.addEventListener('click',open));
     dialog.querySelector('.um-close').addEventListener('click',close);
     dialog.addEventListener('click',event=>{if(event.target===dialog)close();});
@@ -108,7 +118,7 @@
           if(wasExpiryOn)await postUnion(current,'revoke');
           await postSettings(current,'disable',false,false);
           try{await current.unsubscribe();}catch(_){}
-          localStorage.removeItem(TOKEN_KEY);wasExpiryOn=false;setBell(false);status.textContent='この端末の通知をすべてOFFにしました。';return;
+          localStorage.removeItem(TOKEN_KEY);wasExpiryOn=false;setBell(false);showNotificationState(false);status.textContent='';return;
         }
         if(Notification.permission==='denied')throw new Error('通知がブロックされています。ブラウザの設定から通知を許可してください。');
         if(Notification.permission!=='granted'){const permission=await Notification.requestPermission();if(permission!=='granted')throw new Error('通知が許可されませんでした。設定は保存していません。');}
@@ -123,7 +133,7 @@
           else await postUnion(subscription,'check',{session_token:token});
           wasExpiryOn=true;passInput.value='';
         }
-        syncPass();setBell(true);status.textContent='保存しました。この端末の通知設定を更新しました。';
+        syncPass();setBell(true);showNotificationState(true);status.textContent='';
       }catch(error){console.warn('[UM push] settings failed:',error);status.textContent='保存できませんでした：'+(error?.message||'通信エラー');await refreshLocalState();}
       finally{save.disabled=false;}
     });
