@@ -6,7 +6,7 @@
   const UNION_API = 'https://igoekrvpgnjberppiawf.supabase.co/functions/v1/web-push-union-control';
   const TOKEN_KEY = 'um_webpush_union_token_v1';
   const script = document.currentScript;
-  const base = new URL('.', script?.src || document.baseURI);
+  const base = new URL('../', script?.src || document.baseURI);
   // 端末別の月次集計は全公開ページ共通。ADMIN画面は対象外。
   if (!/(?:^|\/)creator-admin\.html$/i.test(location.pathname)) {
     const deviceAnalytics = document.createElement('script');
@@ -23,7 +23,7 @@
     document.head.appendChild(link);
   }
   ensureLink('manifest', 'manifest.webmanifest');
-  ensureLink('apple-touch-icon', 'apple-touch-icon.png');
+  ensureLink('apple-touch-icon', 'push-notifications/icons/apple-touch-icon.png');
   function guidance() {
     const ua = navigator.userAgent || '';
     const isIOS = /iPad|iPhone|iPod/i.test(ua) || (navigator.platform === 'MacIntel' && navigator.maxTouchPoints > 1);
