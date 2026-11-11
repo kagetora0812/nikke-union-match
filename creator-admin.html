@@ -7994,7 +7994,7 @@
         if (!Number.isFinite(since) || since > now) return [];
         const remaining = Math.max(0, AUTO_LEAVE_WEEK_MS - (now-since));
         const lastChecked = Date.parse(entry.lastChecked || "");
-        return [{id, name:String(names[id] || "サーバー名未取得"), reason:AUTO_LEAVE_REASONS[entry.reason], remaining, since, stale:!Number.isFinite(lastChecked) || now-lastChecked>36*3600000}];
+        return [{id, name:String(entry.name || names[id] || "サーバー名未取得"), reason:AUTO_LEAVE_REASONS[entry.reason], remaining, since, stale:!Number.isFinite(lastChecked) || now-lastChecked>36*3600000}];
       }).sort((a,b) => a.remaining-b.remaining);
       const when = new Date(updatedMs).toLocaleString("ja-JP", {timeZone:"Asia/Tokyo"});
       summary.textContent = `カウント中 ${rows.length}件 ｜ 永久除外 1件（UNION MATCH通知用） ｜ 最終同期 ${when} JST`;
