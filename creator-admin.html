@@ -7996,16 +7996,20 @@
         const lastChecked = Date.parse(entry.lastChecked || "");
         return [{id, name:String(entry.name || names[id] || "サーバー名未取得"), reason:AUTO_LEAVE_REASONS[entry.reason], remaining, since, stale:!Number.isFinite(lastChecked) || now-lastChecked>36*3600000}];
       }).sort((a,b) => a.remaining-b.remaining);
+      const recentDepartures = (Array.isArray(state._departures) ? state._departures : []).filter(item => {
+        const leftAt = Date.parse(item?.leftAt || "");
+        return /^\d{15,22}$/.test(String(item?.id || "")) && String(item.id) !== "1546382067745431592" && Number.isFinite(leftAt) && leftAt <= now && now - leftAt < AUTO_LEAVE_WEEK_MS;
+      }).sort((a,b) => Date.parse(b.leftAt) - Date.parse(a.leftAt));
       const when = new Date(updatedMs).toLocaleString("ja-JP", {timeZone:"Asia/Tokyo"});
-      summary.textContent = `カウント中 ${rows.length}件 ｜ 永久除外 1件（UNION MATCH通知用） ｜ 最終同期 ${when} JST`;
+      summary.textContent = `カウント中 ${rows.length}件 ｜ 退出済み（7日以内）${recentDepartures.length}件 ｜ 永久除外 1件（UNION MATCH通知用） ｜ 最終同期 ${when} JST`;
       if (now-updatedMs>36*3600000) {
         message.textContent = "最終同期から36時間以上経過しています。残り日数は参考値です。";
         message.classList.remove("hidden");
       }
-      if (!rows.length) {
+      if (!rows.length && !recentDepartures.length) {
         const empty = document.createElement("div");
         empty.className = "empty";
-        empty.textContent = "現在、カウント中の記録はありません。";
+        empty.textContent = "現在、カウント中・退出済みの記録はありません。";
         list.append(empty);
         return;
       }
@@ -8025,6 +8029,21 @@
         since.className = "ending-union-rank";
         since.textContent = `カウント開始：${new Date(row.since).toLocaleString("ja-JP",{timeZone:"Asia/Tokyo"})} JST`;
         card.append(title, details, count, since);
+        list.append(card);
+      }
+      for (const departed of recentDepartures) {
+        const card = document.createElement("article");
+        card.className = "ending-union-card contacted";
+        const title = document.createElement("div");
+        title.className = "ending-union-name";
+        title.textContent = String(departed.name || names[departed.id] || "サーバー名未取得");
+        const details = document.createElement("div");
+        details.className = "ending-union-rank";
+        details.textContent = `退出済み ｜ サーバーID：${departed.id}`;
+        const result = document.createElement("div");
+        result.className = "ending-union-remaining";
+        result.textContent = `退出済み：${new Date(departed.leftAt).toLocaleString("ja-JP", {timeZone:"Asia/Tokyo"})} JST`;
+        card.append(title, details, result);
         list.append(card);
       }
     }
@@ -8091,7 +8110,7 @@
       const rows = Array.isArray(items) ? items : [];
       const issueRows = Array.isArray(issues) ? issues : [];
 
-      if (!rows.length) {
+      if (!rows.length && !recentDepartures.length) {
         list.innerHTML = `
           <div class="system-check-row unmonitored">
             <div class="system-check-mark">○</div>
