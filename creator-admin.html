@@ -2548,6 +2548,12 @@
         </button>
 
 
+        <button id="openAutoLeaveBtn" class="menu-card" type="button">
+          <div class="menu-card-icon">⏳</div>
+          <div class="menu-card-title">BOT自動退出カウント</div>
+          <div class="menu-card-copy">7日間の退出候補と残り日数を確認します（読み取り専用）。</div>
+        </button>
+
         <button
           id="openSystemCheckBtn"
           class="menu-card"
@@ -2723,6 +2729,27 @@
 
     </section>
 
+
+    <!-- ========================================
+         BOT AUTO LEAVE（読み取り専用）
+    ========================================= -->
+    <section id="autoLeaveSection" class="hidden">
+      <div class="admin-head">
+        <div>
+          <div class="eyebrow">BOT AUTO LEAVE</div>
+          <h2>⏳ 自動退出カウント</h2>
+        </div>
+        <div class="admin-head-actions">
+          <button id="reloadAutoLeaveBtn" class="btn blue" type="button">↻ 更新</button>
+          <button id="backToMenuFromAutoLeaveBtn" class="btn" type="button">← 管理メニュー</button>
+        </div>
+      </div>
+      <p class="lead">共有BOTの退出候補と残り日数を確認します。<br>ここから退出操作はできません。</p>
+      <div id="autoLeaveSummary" class="union-registry-summary">読み込み前</div>
+      <div id="autoLeaveList" class="ending-union-list"></div>
+      <div id="autoLeaveMessage" class="message error hidden"></div>
+      <p class="lead" style="font-size:12px">※ 表示は最終同期時点の監視結果です。監視・同期が停止している場合は最新の判定ではありません。</p>
+    </section>
 
     <!-- ========================================
          SYSTEM CHECK（読み取り専用）
@@ -6391,6 +6418,13 @@
       );
 
 
+    $("#openAutoLeaveBtn")?.addEventListener("click", async () => {
+      showAutoLeaveAdmin();
+      await loadAutoLeaveAdmin();
+    });
+    $("#reloadAutoLeaveBtn")?.addEventListener("click", loadAutoLeaveAdmin);
+    $("#backToMenuFromAutoLeaveBtn")?.addEventListener("click", showMenu);
+
     $("#openSystemCheckBtn")
       ?.addEventListener(
         "click",
@@ -7771,6 +7805,8 @@
         ?.classList
         .add("hidden");
 
+      $("#autoLeaveSection")?.classList.add("hidden");
+
       $("#xCandidateAdminSection")
         ?.classList
         .add("hidden");
@@ -7910,6 +7946,88 @@
 
     }
 
+
+    function showAutoLeaveAdmin() {
+      hideAllAdminSections();
+      $("#autoLeaveSection")?.classList.remove("hidden");
+    }
+
+    const AUTO_LEAVE_WEEK_MS = 7 * 86400000;
+    const AUTO_LEAVE_REASONS = {
+      no_guild_settings: "BOT設定なし",
+      pass_not_linked: "PASS未連携",
+      registration_missing: "サイト登録なし",
+      registration_expired: "サイト登録期限切れ"
+    };
+
+    async function loadAutoLeaveAdmin() {
+      const summary = $("#autoLeaveSummary");
+      const list = $("#autoLeaveList");
+      const message = $("#autoLeaveMessage");
+      if (!summary || !list || !message) return;
+      message.classList.add("hidden");
+      list.replaceChildren();
+      summary.textContent = "読み込み中...";
+      const token = getToken();
+      if (!token) { showLogin(); return; }
+      const { data, error } = await sb.rpc("creator_admin_auto_leave_countdown", {p_token:token});
+      if (error) {
+        const detail = String(error.message || "");
+        if (detail.includes("INVALID_ADMIN_TOKEN")) { clearToken(); showLogin(); return; }
+        summary.textContent = "取得できませんでした";
+        message.textContent = "監視情報の取得に失敗しました。管理用RPCと同期状態を確認してください。";
+        message.classList.remove("hidden");
+        console.warn("AUTO_LEAVE_STATUS_ERROR", error);
+        return;
+      }
+      const state = data?.snapshot || {};
+      const names = data?.guild_names || {};
+      const updatedMs = data?.updated_at ? Date.parse(data.updated_at) : NaN;
+      if (!Number.isFinite(updatedMs)) {
+        summary.textContent = "未同期：共有BOTのDRY_RUN実行後に同期が必要です。";
+        return;
+      }
+      const now = Date.now();
+      const rows = Object.entries(state).flatMap(([id, entry]) => {
+        if (id === "1546382067745431592" || !/^\d{15,22}$/.test(id) || !entry || !AUTO_LEAVE_REASONS[entry.reason]) return [];
+        const since = Date.parse(entry.since || "");
+        if (!Number.isFinite(since) || since > now) return [];
+        const remaining = Math.max(0, AUTO_LEAVE_WEEK_MS - (now-since));
+        const lastChecked = Date.parse(entry.lastChecked || "");
+        return [{id, name:String(names[id] || "サーバー名未取得"), reason:AUTO_LEAVE_REASONS[entry.reason], remaining, since, stale:!Number.isFinite(lastChecked) || now-lastChecked>36*3600000}];
+      }).sort((a,b) => a.remaining-b.remaining);
+      const when = new Date(updatedMs).toLocaleString("ja-JP", {timeZone:"Asia/Tokyo"});
+      summary.textContent = `カウント中 ${rows.length}件 ｜ 永久除外 1件（UNION MATCH通知用） ｜ 最終同期 ${when} JST`;
+      if (now-updatedMs>36*3600000) {
+        message.textContent = "最終同期から36時間以上経過しています。残り日数は参考値です。";
+        message.classList.remove("hidden");
+      }
+      if (!rows.length) {
+        const empty = document.createElement("div");
+        empty.className = "empty";
+        empty.textContent = "現在、カウント中の記録はありません。";
+        list.append(empty);
+        return;
+      }
+      for (const row of rows) {
+        const card = document.createElement("article");
+        card.className = "ending-union-card";
+        const title = document.createElement("div");
+        title.className = "ending-union-name";
+        title.textContent = row.name;
+        const details = document.createElement("div");
+        details.className = "ending-union-rank";
+        details.textContent = `判定：${row.reason} ｜ サーバーID：${row.id}`;
+        const count = document.createElement("div");
+        count.className = "ending-union-remaining";
+        count.textContent = `残り ${Math.ceil(row.remaining/86400000)} 日${row.stale ? "（要再確認）" : ""}`;
+        const since = document.createElement("div");
+        since.className = "ending-union-rank";
+        since.textContent = `カウント開始：${new Date(row.since).toLocaleString("ja-JP",{timeZone:"Asia/Tokyo"})} JST`;
+        card.append(title, details, count, since);
+        list.append(card);
+      }
+    }
 
     function showSystemCheckAdmin() {
 
