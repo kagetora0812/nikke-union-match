@@ -38,7 +38,7 @@ async function db(table,query,opts={}){
   const member=memberships[0];
   const delta=Date.parse(member.expires_at)-now;
   // Delivery window: within 48h of expiry, allowing 1h of scheduling recovery.
-  if(!(delta>47*3600000&&delta<=48*3600000))continue;
+  if(!(delta>24*3600000&&delta<=48*3600000))continue;
   ready.push({sub,member});
  }
  result.due_memberships=ready.length;
@@ -62,7 +62,7 @@ async function db(table,query,opts={}){
   let status='failed',code=null;
   result.attempts++;
   try{
-   const payload={title:'UNION MATCH・懈軸霈画悄髯舌∪縺ｧ48譎る俣',body:(member.union_name||'繝ｦ繝九が繝ｳ')+'縺ｮ謗ｲ霈画悄髯舌′霑代▼縺・※縺・∪縺吶ゅし繧､繝医〒譛滄剞繧堤｢ｺ隱阪・蟒ｶ髟ｷ縺励※縺上□縺輔＞縲・,type:'expiry_48h',tag:'um-expiry-'+member.id,url:'https://kagetora0812.github.io/nikke-union-match/index.html?um_push=expiry_48h'};
+   const payload={title:'UNION MATCH｜掲載期限まで48時間',body:(member.union_name||'ユニオン')+'の掲載期限が近づいています。サイトで期限を確認・延長してください。',type:'expiry_48h',tag:'um-expiry-'+member.id,url:'https://kagetora0812.github.io/nikke-union-match/index.html?um_push=expiry_48h'};
    const response=await webpush.sendNotification({endpoint:sub.endpoint,keys:{p256dh:sub.p256dh,auth:sub.auth_secret}},JSON.stringify(payload),{TTL:1800,urgency:'normal'});
    if(response.statusCode<200||response.statusCode>=300)throw Error('HTTP_'+response.statusCode);
    status='sent';result.accepted++;result.notifications_sent++;
