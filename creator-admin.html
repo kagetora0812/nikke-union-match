@@ -26,18 +26,19 @@
 
   <style>
 
-    :root {
-      --bg: #0A101B;
-      --panel: #15253A;
-      --panel2: #192C44;
-      --line: #36516E;
-      --text: #eff6ff;
-      --muted: #a0b2ca;
-      --accent: #319BFF;
-      --accent2: #78C3FF;
-      --green: #64E6AE;
-      --blue: #319BFF;
-      --red: #FF526B;
+     :root {
+      --bg: #050607;
+      --panel: #14171b;
+      --panel2: #171b20;
+      --line: #32383f;
+      --text: #F2F4F7;
+      --muted: #A5ABB5;
+      --accent: #41C8F4;
+      --accent2: #78DCFF;
+      --green: #36D4A0;
+      --blue: #41C8F4;
+      --red: #FF454D;
+      --cyan: #41C8F4;
     }
 
 
@@ -55,7 +56,7 @@
         radial-gradient(
           circle at 50% -10%,
           #18314F 0,
-          #0A101B 49%
+          #050607 49%
         );
 
       color: var(--text);
@@ -85,7 +86,7 @@
     ======================================== */
 
     .topbar {
-      height:62px; padding:0 28px; display:flex; align-items:center; justify-content:space-between; border-bottom:1px solid #36526e; background:#0A101B; position:sticky; top:0; z-index:10;
+      height:62px; padding:0 28px; display:flex; align-items:center; justify-content:space-between; border-bottom:1px solid #36526e; background:#050607; position:sticky; top:0; z-index:10;
     }
 
 
@@ -291,7 +292,7 @@
         );
 
       background:
-        #15253A;
+        #14171b;
 
       object-fit: cover;
     }
@@ -323,7 +324,7 @@
       justify-content: center;
 
       background:
-        #15253A;
+        #14171b;
 
       color:
         var(--green);
@@ -450,7 +451,7 @@
       padding: 12px 14px;
       border: 1px solid rgba(54, 150, 255, .30);
       background: rgba(54, 150, 255, .06);
-      color: #b9dcff;
+      color: #C0EDFC;
       font-size: 13px;
       font-weight: 800;
       line-height: 1.6;
@@ -487,7 +488,7 @@
 
     .union-registry-rank {
       margin-top: 6px;
-      color: #8cc9ff;
+      color: #85DAFA;
       font-size: 12px;
       font-weight: 800;
     }
@@ -567,7 +568,7 @@
 
     .union-registry-url {
       margin-top: 8px;
-      color: #b9dcff;
+      color: #C0EDFC;
       font-size: 11px;
       word-break: break-all;
     }
@@ -755,7 +756,7 @@
         );
 
       background:
-        #15253A;
+        #14171b;
     }
 
 
@@ -785,7 +786,7 @@
         );
 
       background:
-        #15253A;
+        #14171b;
 
       color:
         var(--green);
@@ -971,7 +972,7 @@
       min-height: 285px;
       margin-top: 12px;
       white-space: pre-wrap;
-      color: #edf2f7;
+      color: #F2F4F7;
       background: #101B2A;
     }
 
@@ -1019,7 +1020,7 @@
 
     .ending-union-rank {
       margin-top: 6px;
-      color: #8cc9ff;
+      color: #85DAFA;
       font-size: 12px;
       font-weight: 800;
     }
@@ -1119,7 +1120,7 @@
 
     .ending-union-bot-badge.active {
       border-color: rgba(54, 150, 255, .52);
-      color: #9ed2ff;
+      color: #90DFFF;
       background: rgba(54, 150, 255, .10);
     }
 
@@ -1140,7 +1141,7 @@
       padding: 9px 11px;
       border-left: 3px solid var(--blue);
       background: rgba(54, 150, 255, .06);
-      color: #b9dcff;
+      color: #C0EDFC;
       font-size: 11px;
       font-weight: 800;
       line-height: 1.6;
@@ -1151,7 +1152,7 @@
       padding: 12px 14px;
       border: 1px solid rgba(54, 150, 255, .30);
       background: rgba(54, 150, 255, .06);
-      color: #b9dcff;
+      color: #C0EDFC;
       font-size: 13px;
       font-weight: 800;
     }
@@ -1184,7 +1185,7 @@
 
     .x-candidate-meta {
       margin-top: 6px;
-      color: #8cc9ff;
+      color: #85DAFA;
       font-size: 11px;
       font-weight: 800;
       line-height: 1.6;
@@ -1264,7 +1265,7 @@
     }
 
     .x-schedule-stat-value.info {
-      color: #86c5ff;
+      color: #85DAFA;
     }
 
     .x-schedule-table-wrap {
@@ -1309,7 +1310,7 @@
     }
 
     .x-schedule-time {
-      color: #9ed2ff;
+      color: #90DFFF;
       font-weight: 900;
       white-space: nowrap;
     }
@@ -1326,7 +1327,7 @@
       gap: 5px;
       padding: 4px 7px;
       border: 1px solid rgba(54, 150, 255, .30);
-      color: #9ed2ff;
+      color: #90DFFF;
       background: rgba(54, 150, 255, .06);
       font-size: 10px;
       font-weight: 900;
@@ -1379,7 +1380,7 @@
     .api-budget-top strong{font-size:17px;color:#fff}
     .api-budget-top span,.api-budget-caption,.api-budget-meter-text{font-size:11px;color:var(--muted)}
     .api-budget-amount{font-size:clamp(25px,4vw,35px);line-height:1.2;font-weight:900;color:#fff;font-variant-numeric:tabular-nums}
-    .api-budget-meter{width:100%;height:11px;background:#36516E;border-radius:999px;overflow:hidden}
+    .api-budget-meter{width:100%;height:11px;background:#32383f;border-radius:999px;overflow:hidden}
     .api-budget-meter>div{height:100%;width:0;background:var(--blue);border-radius:999px;transition:width .25s ease}
     .api-budget-summary{min-height:40px;font-size:12px;color:#c7d4e2;line-height:1.6}
     .api-budget-fields{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:auto}
@@ -1500,7 +1501,7 @@
     .icon-file-box {
       margin-top: 8px;
       padding: 14px;
-      border: 1px dashed #3b4658;
+      border: 1px dashed #373d44;
       background: rgba(11, 17, 27, .72);
     }
 
@@ -1650,13 +1651,13 @@
       width: 100%;
       max-height: 520px;
       object-fit: contain;
-      background: #0A101B;
+      background: #050607;
       border: 1px solid #3B5875;
     }
 
     .recruitment-image-empty {
       padding: 34px 14px;
-      border: 1px dashed #3b4658;
+      border: 1px dashed #373d44;
       color: var(--muted);
       text-align: center;
       font-size: 12px;
@@ -1690,23 +1691,23 @@
 
     /* 募集表示管理: 一括保存エディタ。別画面には適用しない */
     .recruitment-editor-panel .form-grid { gap: 15px; }
-    .recruitment-editor-step { color: #ffb15c; font-size: 12px; font-weight: 900; letter-spacing: .10em; padding: 9px 0 4px; border-bottom: 1px solid #36516E; }
+    .recruitment-editor-step { color: #80D9F5; font-size: 12px; font-weight: 900; letter-spacing: .10em; padding: 9px 0 4px; border-bottom: 1px solid #32383f; }
     .recruitment-editor-pair { display:grid; grid-template-columns: 1fr 1fr; gap:14px; }
     .recruitment-editor-pair label { min-width:0; }
-    .recruitment-editor-selected { color:#b8ccdf; background:#101B2A; border-left:3px solid #29b6ef; padding:12px; font-size:12px; }
-    .recruitment-editor-controls { background:#101B2A; border:1px solid #36516E; padding:5px 14px 12px; }
-    .recruitment-editor-option { display:flex !important; flex-direction:row !important; align-items:center; justify-content:space-between; gap:14px; padding:13px 0; margin:0; border-bottom:1px solid #36516E; cursor:pointer; }
+    .recruitment-editor-selected { color:#b8ccdf; background:#101B2A; border-left:3px solid #41C8F4; padding:12px; font-size:12px; }
+    .recruitment-editor-controls { background:#101B2A; border:1px solid #32383f; padding:5px 14px 12px; }
+    .recruitment-editor-option { display:flex !important; flex-direction:row !important; align-items:center; justify-content:space-between; gap:14px; padding:13px 0; margin:0; border-bottom:1px solid #32383f; cursor:pointer; }
     .recruitment-editor-option span {display:grid;gap:6px;flex:1;min-width:0;}
     .recruitment-editor-option strong{color:#e3eefa;font-size:14px;}
     .recruitment-editor-option small{color:#91a3b9;font-size:11px;line-height:1.6;}
-    .recruitment-editor-option input[type="checkbox"] { width:20px; height:20px; margin:0; accent-color:#22b8f4; flex:0 0 auto; }
+    .recruitment-editor-option input[type="checkbox"] { width:20px; height:20px; margin:0; accent-color:#41C8F4; flex:0 0 auto; }
     .recruitment-editor-option select { max-width:230px; width:42%; margin:0; }
     .recruitment-editor-option.hidden { display:none !important; }
     .recruitment-editor-image-card{ margin-top:0; }
     .recruitment-editor-image-actions { display:flex; gap:10px; flex-wrap:wrap; align-items:center; margin-top:13px; }
     .recruitment-editor-image-select { cursor:pointer; position:relative; overflow:hidden; }
     .recruitment-editor-hidden-file { position:absolute !important; inset:0; opacity:0; cursor:pointer; width:100%; height:100%; }
-    .recruitment-editor-footer{ display:flex; flex-direction:column; align-items:flex-start; gap:10px; margin-top:8px; border-top:1px solid #35445a; padding-top:18px; }
+    .recruitment-editor-footer{ display:flex; flex-direction:column; align-items:flex-start; gap:10px; margin-top:8px; border-top:1px solid #34383f; padding-top:18px; }
     .recruitment-editor-footer #recruitmentEditorSave { min-height:54px; min-width:min(340px,100%); font-weight:900; }
     .recruitment-editor-dirty { font-size:12px; color:#879caf; }
     .recruitment-editor-dirty.is-dirty { color:#ffb96b; font-weight:800; }
@@ -1748,7 +1749,7 @@
 
     .access-stat-sub {
       margin-top: 8px;
-      color: #86c5ff;
+      color: #85DAFA;
       font-size: 11px;
       font-weight: 800;
     }
@@ -1830,7 +1831,7 @@
     }
 
     .system-check-overall.error {
-      color: #FF526B;
+      color: #FF454D;
     }
 
     .system-check-time {
@@ -1847,7 +1848,7 @@
     }
 
     .system-check-group {
-      min-width:0; padding:12px; border:1px solid var(--line); border-radius:12px; background:#132236;
+      min-width:0; padding:12px; border:1px solid var(--line); border-radius:12px; background:#14171b;
     }
 
     .system-check-group-title {
@@ -1867,9 +1868,9 @@
       padding:9px 11px; display:grid; grid-template-columns:19px minmax(0,1fr) auto; align-items:start; gap:9px; border:1px solid rgba(255,255,255,.07); border-left:3px solid #657489; border-radius:6px; background:#182A41;
     }
 
-    .system-check-row.ok { border-left-color: #79e5b1; }
+    .system-check-row.ok { border-left-color: #36D4A0; }
     .system-check-row.warn,
-    .system-check-row.error { border-left-color: #FF526B; }
+    .system-check-row.error { border-left-color: #FF454D; }
     .system-check-row.info { border-left-color: #43c2f8; }
     .system-check-row.unmonitored { border-left-color: #657489; }
 
@@ -1885,7 +1886,7 @@
     }
 
     .system-check-row.warn .system-check-mark,
-    .system-check-row.error .system-check-mark { color: #FF526B; }
+    .system-check-row.error .system-check-mark { color: #FF454D; }
 
     .system-check-row.unmonitored .system-check-mark { color: #8491a1; }
     .system-check-row.info .system-check-mark { color: #43c2f8; }
@@ -1906,10 +1907,10 @@
     }
 
     .system-check-metric { font-size: 1.12em; font-weight: 900; white-space: nowrap; }
-    .system-check-metric.good { color: #79e5b1; }
+    .system-check-metric.good { color: #36D4A0; }
     .system-check-metric.info { color: #43c2f8; }
     .system-check-metric.attention { color: #ffbe78; }
-    .system-check-metric.problem { color: #FF526B; }
+    .system-check-metric.problem { color: #FF454D; }
     .system-check-metric.muted { color: #8491a1; }
 
 
@@ -1927,7 +1928,7 @@
     .system-check-count {
       min-width: 40px;
       padding: 4px 7px;
-      color: #FF526B;
+      color: #FF454D;
       border: 1px solid rgba(255, 113, 129, .4);
       background: rgba(255, 113, 129, .075);
       font-size: 10px;
@@ -2037,30 +2038,30 @@
 
 
     /* ADMIN UI | shared visual system for all views */
-    .topbar{box-shadow:none;border-bottom:1px solid #36516E;background:#0A101B}
+    .topbar{box-shadow:none;border-bottom:1px solid #32383f;background:#050607}
     .container{max-width:1100px;padding-top:22px;padding-bottom:44px}
     .admin-head{margin-bottom:12px}
     .admin-head h2{font-size:clamp(22px,3vw,29px);line-height:1.2}
     .eyebrow{margin-bottom:4px;font-size:10px;color:#7FC6FF}
     .lead{margin:7px 0 10px;font-size:12px;line-height:1.55;color:#ADC1D7}
-    .panel,.system-check-group,.access-stat-card,.x-schedule-stat,.api-budget-card,.x-candidate-card,.union-registry-card,.creator-card,.ending-union-card,.ending-union-card.bot-managed,.recruitment-image-preview-box,.icon-crop-editor,.access-device-panel,.template-box,.recruitment-editor-controls,.pass-reissue-result{background:#132236;border:1px solid #36516E;box-shadow:none;border-radius:9px}
+    .panel,.system-check-group,.access-stat-card,.x-schedule-stat,.api-budget-card,.x-candidate-card,.union-registry-card,.creator-card,.ending-union-card,.ending-union-card.bot-managed,.recruitment-image-preview-box,.icon-crop-editor,.access-device-panel,.template-box,.recruitment-editor-controls,.pass-reissue-result{background:#14171b;border:1px solid #32383f;box-shadow:none;border-radius:9px}
     .panel{padding:15px;margin-top:12px}
     .panel-title{font-size:16px;margin-bottom:10px}
     .menu-grid{gap:10px;margin-top:12px}
-    .menu-card{min-height:106px;padding:15px 18px;border-radius:9px;background:#15253A;border:1px solid #36516E;box-shadow:none;display:grid;grid-template-columns:34px minmax(0,1fr);column-gap:12px;align-items:center}
+    .menu-card{min-height:106px;padding:15px 18px;border-radius:9px;background:#14171b;border:1px solid #32383f;box-shadow:none;display:grid;grid-template-columns:34px minmax(0,1fr);column-gap:12px;align-items:center}
     .menu-card-icon{font-size:23px;grid-row:span 2;margin:0;filter:saturate(1.22)}
     .menu-card-title{font-size:17px;font-weight:800;line-height:1.35}
     .menu-card-copy{margin-top:3px;color:#AEC2D9;font-size:11px;line-height:1.45}
     .menu-card:hover{background:#1D3550;border-color:#51AFFF;transform:translateY(-1px)}
-    .menu-card.union-menu,.menu-card.creator-menu{border-color:#36516E}
+    .menu-card.union-menu,.menu-card.creator-menu{border-color:#32383f}
     .btn{min-height:39px;padding:9px 13px;border:1px solid #42617E;border-radius:7px;background:#1A2D44;color:#F3F8FF;font-size:12px;font-weight:800;box-shadow:none}
     .btn.blue,.btn.primary{background:#1975C6;border-color:#329DFF;color:#FFFFFF}
     .btn.blue:hover,.btn.primary:hover{background:#258AE3;border-color:#83C7FF;color:#FFF}
-    .btn.danger,.x-candidate-actions .btn.danger{background:#642333;border-color:#FF526B;color:#FFF}
+    .btn.danger,.x-candidate-actions .btn.danger{background:#642333;border-color:#FF454D;color:#FFF}
     .btn.danger:hover,.x-candidate-actions .btn.danger:hover{background:#86283E;border-color:#FF899A;color:#FFF}
     .btn.green{background:#173B36;border-color:#40C998;color:#A7F6D4}
     .btn:disabled{opacity:.48;cursor:not-allowed}
-    .btn:focus-visible,.menu-card:focus-visible,.manage-tab:focus-visible,select:focus-visible,input:focus-visible,button:focus-visible{outline:2px solid #78C3FF;outline-offset:2px}
+    .btn:focus-visible,.menu-card:focus-visible,.manage-tab:focus-visible,select:focus-visible,input:focus-visible,button:focus-visible{outline:2px solid #78DCFF;outline-offset:2px}
     input,textarea,select{background:#101B2A;border:1px solid #3B5875;border-radius:7px;color:#F0F6FF;padding:10px 12px}
     input:focus,textarea:focus,select:focus{border-color:#4CADFF}
     label{color:#B7CAE0;font-size:11px}
@@ -2076,18 +2077,18 @@
     .recruitment-editor-danger-zone>summary span{font-size:11px;color:#E3BBC4;margin-left:10px}
     .recruitment-editor-danger-zone>.recruitment-image-preview-box{border:0!important;margin:0}
     .recruitment-editor-panel{margin-top:9px}
-    .system-check-summary{background:#192C44;border-color:#36516E;margin-top:12px;padding:12px 14px}
+    .system-check-summary{background:#171b20;border-color:#32383f;margin-top:12px;padding:12px 14px}
     .system-check-breakdown{margin-top:9px}
-    .system-check-breakdown>summary{cursor:pointer;background:#192C44;border:1px solid #36516E;border-radius:8px;padding:10px 13px;color:#D9EDFF;font-size:12px}
+    .system-check-breakdown>summary{cursor:pointer;background:#171b20;border:1px solid #32383f;border-radius:8px;padding:10px 13px;color:#D9EDFF;font-size:12px}
     .system-check-breakdown[open]>summary{border-radius:8px 8px 0 0}
     .system-check-breakdown .system-check-columns{margin-top:8px}
     .system-check-columns{gap:10px;margin-top:12px}
     .system-check-group{padding:12px}
-    .system-check-row{background:#182A41;border-color:#36516E;border-left:3px solid #758DA7;border-radius:6px;padding:9px 10px}
-    .system-check-row.ok{border-left-color:#64E6AE}.system-check-row.error,.system-check-row.warn{border-left-color:#FF526B}
+    .system-check-row{background:#182A41;border-color:#32383f;border-left:3px solid #758DA7;border-radius:6px;padding:9px 10px}
+    .system-check-row.ok{border-left-color:#36D4A0}.system-check-row.error,.system-check-row.warn{border-left-color:#FF454D}
     .system-check-detail{margin-top:3px;line-height:1.5}
     .system-check-issues{background:#1C293A;border-color:#B58D43;border-radius:8px;padding:12px}
-    .system-check-issue-card{background:#132236;border-radius:6px}
+    .system-check-issue-card{background:#14171b;border-radius:6px}
     .access-stats-grid,.x-schedule-stats{gap:10px;margin-top:10px}
     .union-registry-list,.ending-union-list,.creator-list,.x-candidate-list{gap:10px;margin-top:10px}
     .union-registry-card,.ending-union-card,.creator-card,.x-candidate-card{padding:13px;min-height:0}
@@ -2097,19 +2098,19 @@
     .bot-guild-top{display:flex;align-items:center;justify-content:space-between;gap:9px;margin-bottom:9px}
     .bot-guild-top strong{font-size:14px}.bot-guild-top span{font-size:11px;color:#8FC9FF}
     .bot-guild-rows{display:grid;gap:6px}
-    .bot-guild-row{display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:9px;background:#101B2A;border:1px solid #36516E;border-radius:6px;padding:10px 12px}
+    .bot-guild-row{display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:9px;background:#101B2A;border:1px solid #32383f;border-radius:6px;padding:10px 12px}
     .bot-guild-info{display:flex;flex-direction:column;gap:3px}.bot-guild-info strong{font-size:12px}.bot-guild-info small{font-size:10px;color:#9AB2C9}
     .bot-guild-flags{display:flex;flex-wrap:wrap;gap:6px}
-    .bot-guild-flag{padding:4px 6px;border:1px solid #36516E;border-radius:5px;font-size:10px;font-weight:750}
-    .bot-guild-flag.on{border-color:#258B6C;color:#64E6AE}.bot-guild-flag.off{color:#A4B4C5}.bot-guild-flag.unknown{color:#FFD18B}
+    .bot-guild-flag{padding:4px 6px;border:1px solid #32383f;border-radius:5px;font-size:10px;font-weight:750}
+    .bot-guild-flag.on{border-color:#258B6C;color:#36D4A0}.bot-guild-flag.off{color:#A4B4C5}.bot-guild-flag.unknown{color:#FFD18B}
     .bot-guild-note{font-size:10px;color:#9BAEC4;margin:9px 0 0;line-height:1.5}
-    .bot-exit-details{border:1px solid #36516E;border-radius:8px;background:#132236;padding:0 12px 12px}
+    .bot-exit-details{border:1px solid #32383f;border-radius:8px;background:#14171b;padding:0 12px 12px}
     .bot-exit-details>summary{padding:12px 0;cursor:pointer;font-size:13px;font-weight:800;color:#CBE8FF}
-    .ai-monitor-panel{background:#132236}
-    .ai-day{background:#132236;border-color:#36516E}
+    .ai-monitor-panel{background:#14171b}
+    .ai-day{background:#14171b;border-color:#32383f}
     .ai-day-header{background:#203C5A}
-    .ai-model-row{border-top-color:#36516E}
-    .ai-fail.has-errors{color:#FF6078}.ai-success{color:#64E6AE}
+    .ai-model-row{border-top-color:#32383f}
+    .ai-fail.has-errors{color:#FF6078}.ai-success{color:#36D4A0}
     .ai-causes{color:#FFCE91}
     @media(max-width:600px){
       .container{width:calc(100% - 20px);padding-top:16px}
@@ -2125,15 +2126,15 @@
       .ai-model-outcome{justify-content:flex-start;text-align:left}
       .recruitment-editor-danger-zone>summary span{display:block;margin:4px 0 0}
     }
-    .manage-tabs{display:flex;gap:6px;flex-wrap:wrap;margin:14px 0 9px;padding:5px;background:#101B2A;border:1px solid #37526e;border-radius:10px}
-    .manage-tab{border:0;border-radius:7px;background:transparent;color:#b2c5d8;padding:10px 18px;min-height:40px;cursor:pointer;font:inherit;font-size:13px;font-weight:800}
-    .manage-tab.is-active{background:#206cb3;color:#fff;box-shadow:inset 0 0 0 1px #61b7ff}
-    .manage-tab:not(.is-active):hover{background:#223b56;color:#fff}
+    .manage-tabs{display:flex;gap:6px;flex-wrap:wrap;margin:12px 0 8px;padding:4px;background:#111416;border:1px solid #34383f;border-radius:7px}
+    .manage-tab{border:1px solid transparent;border-radius:5px;background:transparent;color:#b3bbc3;padding:8px 14px;min-height:37px;cursor:pointer;font:inherit;font-size:12px;font-weight:800;transition:background-color .18s ease,border-color .18s ease,color .18s ease}
+    .manage-tab.is-active{background:#083b4e;color:#b0eeff;border-color:#41C8F4;box-shadow:none}
+    .manage-tab:not(.is-active):hover,.manage-tab:not(.is-active):focus-visible{background:#1b323a;color:#fff;border-color:#41C8F4}
     .manage-lead{margin-bottom:7px}
     .recruitment-editor-panel{margin-top:11px}
     .recruitment-editor-panel .form-grid{gap:11px}
-    .recruitment-editor-step{color:#88caff;font-size:12px;letter-spacing:.03em;padding:6px 0 5px;border-bottom:1px solid #36516E}
-    .recruitment-editor-controls{border-radius:8px;background:#132236;border-color:#36516E}
+    .recruitment-editor-step{color:#88caff;font-size:12px;letter-spacing:.03em;padding:6px 0 5px;border-bottom:1px solid #32383f}
+    .recruitment-editor-controls{border-radius:8px;background:#14171b;border-color:#32383f}
     .recruitment-editor-option{padding:10px 0}
     .recruitment-editor-option strong{color:#f0f7ff;font-size:13px}
     .recruitment-editor-option small{color:#9db3cd;font-size:11px;line-height:1.5}
@@ -2143,16 +2144,16 @@
     .recruitment-editor-danger-zone>summary span{font-size:11px;color:#dcb3bd;font-weight:500;margin-left:12px}
     .recruitment-editor-danger-zone>.recruitment-image-preview-box{border:0!important;margin:0}
     .system-check-breakdown{margin-top:12px}
-    .system-check-breakdown>summary{cursor:pointer;background:#182b42;border:1px solid #36516e;border-radius:9px;padding:11px 15px;color:#cae4ff;font-size:13px;font-weight:750}
+    .system-check-breakdown>summary{cursor:pointer;background:#171b20;border:1px solid #32383f;border-radius:9px;padding:11px 15px;color:#cae4ff;font-size:13px;font-weight:750}
     .system-check-breakdown[open]>summary{border-radius:9px 9px 0 0}
     .system-check-breakdown .system-check-columns{margin-top:8px}
-    .ai-monitor-panel{margin-top:13px;background:#132236}
+    .ai-monitor-panel{margin-top:13px;background:#14171b}
     .ai-monitor-heading{display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap}
     .ai-monitor-heading .panel-title{margin:0;font-size:18px}
     .ai-data-label{font-size:11px;color:#91b6d9}
     .ai-monitor-caption{margin:9px 0;color:#b5c9dd;font-size:12px}
     .ai-monitor-days{display:grid;gap:10px}
-    .ai-day{border:1px solid #36516E;border-radius:8px;background:#132236;overflow:hidden}
+    .ai-day{border:1px solid #32383f;border-radius:8px;background:#14171b;overflow:hidden}
     .ai-day-header{display:flex;justify-content:space-between;align-items:center;gap:8px;background:#203C5A;padding:10px 13px}
     .ai-day-header strong{color:#eff7ff;font-size:13px}
     .ai-day-header span{color:#a2bdd8;font-size:11px}
@@ -2164,11 +2165,126 @@
     .ai-fail.has-errors{color:#ff748d;font-weight:800}
     .ai-causes{flex-basis:100%;color:#ffc19a;font-size:11px;line-height:1.4}
     .ai-monitor-footnote{color:#91a9c1;font-size:11px;line-height:1.5;margin:9px 0 0}
-    .ai-error-details{margin-top:3px;border:1px solid #36516E;border-radius:8px;overflow:hidden}
+    .ai-error-details{margin-top:3px;border:1px solid #32383f;border-radius:8px;overflow:hidden}
     .ai-error-details>summary{cursor:pointer;padding:11px 13px;color:#b6d5f5;font-size:12px}
     .ai-error-detail-list{display:grid;gap:6px;padding:0 11px 11px}
     .ai-error-button{text-align:left;font-size:11px;min-height:33px}
   .x-raid-preview-controls{margin:12px 0}.x-raid-preview-controls select{max-width:360px;display:block;margin-top:6px}.x-raid-preview .x-phase-chart-svg{width:100%}
+
+/* ADMIN MINIMAL BLACK THEME — consolidated visual layer; application logic unchanged */
+:root { color-scheme: dark; }
+html { background:#050607; }
+body { background:#050607 !important; color:#F2F4F7; font-family:"Noto Sans JP",sans-serif; }
+.topbar { height:58px; padding:0 20px; background:#08090b !important; border-bottom:1px solid #272d34; }
+.brand-main { font-family:"Teko","Noto Sans JP",sans-serif; font-size:27px; font-weight:600; line-height:.87; letter-spacing:1.25px; }
+.brand-small { font-family:"Teko",sans-serif; font-size:12px; font-weight:600; letter-spacing:2.8px; color:#41C8F4; }
+.admin-home-button { appearance:none; width:auto; height:auto; padding:5px 9px; margin-left:-9px; border:1px solid transparent; border-radius:5px; background:transparent; color:inherit; cursor:pointer; display:flex; flex-direction:row; align-items:baseline; flex-wrap:nowrap; white-space:nowrap; text-align:left; gap:9px; transition:background-color .18s ease,border-color .18s ease; }
+.brand-nikke,.brand-union {font-family:"Teko","Noto Sans JP",sans-serif;font-weight:600;font-size:clamp(20px,3vw,28px);line-height:1;letter-spacing:1px;}
+.brand-nikke {color:#41C8F4;}
+.brand-union {color:#F5F7FA;}
+.brand-admin {color:#A8BAC2;font-size:11px;font-weight:800;letter-spacing:1.2px;margin-left:8px;}
+.admin-home-button:hover .brand-admin,.admin-home-button:focus-visible .brand-admin {color:#41C8F4;}
+@media(max-width:420px){.admin-home-button{gap:5px}.brand-admin{margin-left:3px;font-size:9px}.brand-nikke,.brand-union{font-size:22px}}
+.admin-home-button:hover,.admin-home-button:focus-visible { border-color:#41C8F4; background:#101b21; outline:none; }
+.admin-badge { color:#41C8F4; font-family:"Teko",sans-serif; font-size:15px; letter-spacing:1.2px; }
+.container { width:min(1080px,calc(100% - 36px)); padding:22px 0 45px; }
+.eyebrow { margin:0 0 3px; color:#41C8F4; font-size:10px; letter-spacing:1.6px; }
+h1 {font-size:clamp(27px,4vw,37px)} h2 {font-size:clamp(21px,3vw,28px)} h3 {font-size:17px}
+.admin-head { gap:12px; margin-bottom:12px; }
+.admin-head-actions { gap:7px; }
+.lead {margin:7px 0 0;line-height:1.5;font-size:12px;color:#A5ABB5}
+.section {margin-top:16px}
+.panel,.system-check-group,.bot-guild-overview,.x-phase-chart-card,.api-budget-card,.access-stat-card,.access-device-panel,.x-schedule-stat,.recruitment-image-preview-box,.recruitment-editor-controls,.icon-crop-editor,.template-box,.union-registry-card,.ending-union-card,.creator-card,.x-candidate-card,.bot-exit-details,.bot-guild-row {
+  background:#14171b !important; border-color:#33383e !important; box-shadow:none !important;
+}
+.panel { margin-top:10px; padding:15px; }
+.panel-title {font-size:16px; margin-bottom:9px;}
+.menu-grid { gap:8px; margin-top:10px; }
+.menu-card { display:flex; align-items:center; gap:13px; min-height:68px; padding:12px 15px; background:#14171b !important; border:1px solid #34383f !important; border-radius:5px; transition:background .14s,border-color .14s; }
+.menu-card:hover,.menu-card:focus-visible {background:#192126 !important; border-color:#41C8F4 !important; outline:none; }
+.menu-card.union-menu,.menu-card.creator-menu { border-color:#34383f !important; }
+.menu-card-icon { flex:0 0 28px; width:28px; font-size:23px; margin:0; color:#41C8F4; text-align:center; }
+.menu-card-title {font-size:15px; font-weight:800; line-height:1.3;}
+.menu-card-copy { margin-top:3px; font-size:10px; color:#A5ABB5; line-height:1.35; }
+.menu-card .menu-card-title,.menu-card .menu-card-copy { overflow-wrap:anywhere; }
+.btn { min-height:37px; padding:8px 12px; background:#171b20; border:1px solid #383e45; border-radius:4px; color:#edf2f5; font-size:12px; font-weight:700; box-shadow:none; transition:background-color .18s ease,border-color .18s ease,color .18s ease; }
+.btn:hover,.btn:focus-visible {border-color:#41C8F4; background:#1d2a30; color:#D8F5FF; outline:none;}
+.btn.blue,.btn.primary {background:#073648 !important; border-color:#41C8F4 !important; color:#9DE7FF !important;}
+.btn.blue:hover,.btn.primary:hover {background:#07506B !important; color:#fff !important;}
+.btn.danger {background:#2c0e12 !important; border-color:#FF454D !important; color:#FF8990 !important;}
+.btn.danger:hover {background:#4b151c !important;color:#fff !important;}
+.btn.green {background:#0a2520 !important;border-color:#36D4A0 !important;color:#5AE5B8 !important;}
+.btn.green:not(:disabled):hover {background:#14533f !important;color:#fff !important;}
+.btn.danger:not(:disabled):hover,.btn.blue:not(:disabled):hover,.btn.primary:not(:disabled):hover {filter:brightness(1.12);}
+.btn:disabled,.manage-tab:disabled {cursor:not-allowed;opacity:.46;}
+.btn:disabled:hover,.manage-tab:disabled:hover {filter:none;transform:none;}
+input,textarea,select {background:#0c0e11 !important;border:1px solid #393f46 !important;color:#F2F4F7 !important;border-radius:4px;padding:10px 11px;margin-top:5px;}
+input:focus,textarea:focus,select:focus {border-color:#41C8F4 !important;outline:1px solid #41C8F455;}
+label {font-size:11px;color:#B2B8C0}
+.form-grid {gap:10px}
+.recruitment-editor-step {color:#41C8F4 !important;padding:4px 0 !important; font-size:11px}
+.recruitment-editor-selected {background:#0f1418 !important;border-left-color:#41C8F4 !important;padding:8px}
+.recruitment-editor-controls {padding:2px 12px 8px}
+.recruitment-editor-option {padding:9px 0;gap:9px}
+.recruitment-editor-option small {font-size:10px}
+.recruitment-editor-footer {padding-top:10px;margin-top:4px;gap:7px}
+.recruitment-editor-footer #recruitmentEditorSave {min-height:42px}
+.recruitment-editor-danger-zone {margin-top:15px}
+.recruitment-image-empty {padding:14px}
+.recruitment-image-preview-box {padding:11px; margin-top:8px}
+.x-candidate-card,.creator-card,.union-registry-card {padding:12px}
+.x-candidate-list,.creator-list,.union-registry-list {gap:8px;margin-top:9px}
+.x-candidate-text {margin-top:8px;padding:9px 10px;background:#0a0d11 !important;border-left-color:#41C8F4 !important;line-height:1.55}
+.x-candidate-actions,.creator-actions {margin-top:8px;gap:7px}
+.ending-union-list {gap:0;margin-top:8px;border:1px solid #34383f;border-radius:5px;overflow:hidden}
+.bot-exit-details .ending-union-card { display:grid; grid-template-columns:minmax(0,1fr) auto; column-gap:12px; row-gap:3px; align-items:center; min-height:0; margin:0; padding:10px 13px; border:0 !important; border-bottom:1px solid #2d3238 !important; border-radius:0 !important; background:#121518 !important; }
+.bot-exit-details .ending-union-card:last-child {border-bottom:0 !important;}
+.bot-exit-details .ending-union-name {font-size:14px;grid-column:1;grid-row:1;}
+.bot-exit-details .ending-union-rank {font-size:10px;color:#A5ABB5 !important;margin:0;grid-column:1;}
+.bot-exit-details .ending-union-remaining {font-size:12px;grid-column:2;grid-row:1 / span 3;margin:0;padding:0;border:0 !important;background:transparent !important;color:#FF686F !important;text-align:right;white-space:nowrap;}
+.bot-exit-details .union-registry-summary {padding:8px 11px;margin-top:8px;font-size:11px;background:#11191d !important;border-color:#2e3e46 !important;color:#C1D7E0 !important;}
+.bot-exit-details,.system-check-breakdown {border:1px solid #33383e; border-radius:5px; background:#14171b !important;padding:10px 12px; margin-top:12px;}
+.bot-exit-details>summary,.system-check-breakdown>summary {font-size:13px;font-weight:800;color:#F2F4F7;cursor:pointer}
+.bot-guild-overview {margin-top:8px !important}
+.bot-guild-row {padding:9px 11px !important}
+.bot-guild-note {font-size:10px !important;line-height:1.4}
+.system-check-summary {padding:11px 13px;margin-top:8px;background:#11191d !important;border:1px solid #2e3e46 !important;}
+.system-check-overall {font-size:15px}
+.system-check-columns {gap:9px;margin-top:9px}
+.system-check-group {padding:10px}
+.system-check-list {gap:5px}
+.system-check-row {padding:8px 9px;gap:7px;background:#111316 !important;border-color:#2b3036 !important}
+.system-check-group-title {margin-bottom:7px;font-size:11px}
+.x-phase-chart-grid {gap:10px}
+.x-phase-chart-card {padding:12px !important;border-radius:5px !important}
+.x-phase-chart-viewport {max-height:340px;overflow:auto}
+.x-phase-chart-svg {max-height:335px}
+.x-phase-chart-legend {margin-bottom:5px}
+.x-phase-chart-meta {margin-top:4px}
+.x-schedule-stats,.access-stats-grid {gap:8px;margin-top:8px}
+.x-schedule-stat,.access-stat-card {padding:11px}
+.x-schedule-table-wrap,.x-phase-chart-card {background:#14171b !important}
+.x-schedule-table th {background:#171b20 !important}
+.x-schedule-table td {border-bottom-color:#30343a}
+.message {padding:9px 10px;margin-top:8px;background:#14171b}
+.empty {padding:14px}
+/* ensure all admin content sections share the same backdrop, irrespective of older section rules */
+main.container>section, main.container>section:not(.hidden), #menuSection, #autoLeaveSection, #xScheduleSection,#systemCheckSection,#recruitmentImageSection,#passReissueSection,#adminSection,#unionRegistrySection,#xCandidateAdminSection,#accessStatsSection {background:transparent !important;}
+@media(max-width:650px){
+ .container{width:calc(100% - 20px);padding-top:14px}
+ .topbar{padding:0 12px;height:54px}
+ .menu-grid{grid-template-columns:1fr;gap:6px}
+ .menu-card{min-height:57px;padding:9px 12px}
+ .menu-card-icon{font-size:20px;flex-basis:25px}
+ .menu-card-title{font-size:14px}
+ .panel{padding:11px}
+ .admin-head{margin-bottom:9px}
+ .admin-head-actions .btn{min-height:34px}
+ .bot-exit-details .ending-union-card{padding:9px;grid-template-columns:minmax(0,1fr) auto}
+ .bot-exit-details .ending-union-remaining{font-size:11px}
+ .x-phase-chart-viewport{max-height:290px}
+}
+
 </style>
 
 
@@ -2179,9 +2295,9 @@
 #xLearningPhaseBody td{min-width:105px;padding:9px 12px;vertical-align:middle}
 
 .x-phase-chart-grid{display:grid;grid-template-columns:1fr;gap:12px}
-.x-phase-chart-card{min-width:0;background:#132236;border:1px solid #36516E;border-radius:10px;padding:14px 12px}
+.x-phase-chart-card{min-width:0;background:#14171b;border:1px solid #32383f;border-radius:10px;padding:14px 12px}
 .x-phase-chart-head{display:flex;justify-content:space-between;align-items:baseline;gap:8px;margin-bottom:8px;flex-wrap:wrap}
-.x-phase-chart-head strong{font-size:14px;color:#edf2f7}
+.x-phase-chart-head strong{font-size:14px;color:#F2F4F7}
 .x-phase-chart-head span,.x-phase-chart-meta{font-size:11px;color:#a6bad1}
 .x-phase-chart-legend{display:flex;gap:14px;margin-bottom:10px;font-size:11px;color:#a6bad1}
 .x-phase-chart-legend i{display:inline-block;width:9px;height:9px;border-radius:2px;margin-right:4px}
@@ -2217,22 +2333,11 @@
 
   <header class="topbar">
 
-    <div class="brand">
-
-      <span class="brand-small">
-        NIKKE
-      </span>
-
-      <span class="brand-main">
-        UNION MATCH
-      </span>
-
-    </div>
-
-
-    <div class="admin-badge">
-      ADMIN
-    </div>
+    <button class="brand admin-home-button" id="adminHomeButton" type="button" aria-label="管理メニューに戻る" title="管理メニューに戻る">
+      <span class="brand-nikke">NIKKE</span>
+      <span class="brand-union">UNION MATCH</span>
+      <span class="brand-admin">ADMIN</span>
+    </button>
 
   </header>
 
@@ -2354,9 +2459,7 @@
 
       </div>
 
-      <p class="lead">
-        操作するメニューを選択
-      </p>
+      
 
       <div class="menu-grid">
 
@@ -2409,7 +2512,7 @@
         >
           <div class="menu-card-icon">🛠️</div>
           <div class="menu-card-title">募集管理</div>
-          <div class="menu-card-copy">表示設定・画像・PASS再発行</div>
+          <div class="menu-card-copy">PASS再発行・表示設定・画像</div>
         </button>
 
 
@@ -2639,7 +2742,7 @@
           <button id="backToMenuFromAutoLeaveBtn" class="btn" type="button">← 管理メニュー</button>
         </div>
       </div>
-      <p class="lead">導入先の連携状態・自動退出を確認</p>
+      
       <div class="bot-guild-overview panel" id="botGuildOverview">
         <div class="bot-guild-top"><strong>導入先のBOT連携</strong><span id="botGuildOverviewSummary">未取得</span></div>
         <div id="botGuildOverviewRows" class="bot-guild-rows"><div class="empty">読み込み前</div></div>
@@ -2649,7 +2752,7 @@
       <div id="autoLeaveSummary" class="union-registry-summary">読み込み前</div>
       <div id="autoLeaveList" class="ending-union-list"></div>
       <div id="autoLeaveMessage" class="message error hidden"></div>
-      <p class="lead" style="font-size:12px">自動退出は最終同期時点の情報です。</p>
+      
       </details>
     </section>
 
@@ -2691,9 +2794,7 @@
         </div>
       </div>
 
-      <p class="lead">
-        稼働状況と直近のエラー
-      </p>
+      
 
       <div class="system-check-summary">
         <div
@@ -2992,8 +3093,8 @@
       </div>
 
       <nav class="manage-tabs" aria-label="募集管理メニュー">
-        <button class="manage-tab is-active" type="button" aria-current="page">表示設定・画像</button>
         <button class="manage-tab" type="button" id="switchToPassReissue">PASS再発行</button>
+        <button class="manage-tab is-active" type="button" aria-current="page">表示設定・画像</button>
       </nav>
       <p class="lead manage-lead">編集内容は保存時に反映されます。</p>
       <div class="panel recruitment-editor-panel">
@@ -3498,8 +3599,8 @@
       </div>
 
       <nav class="manage-tabs" aria-label="募集管理メニュー">
-        <button class="manage-tab" type="button" id="switchToRecruitmentDisplay">表示設定・画像</button>
         <button class="manage-tab is-active" type="button" aria-current="page">PASS再発行</button>
+        <button class="manage-tab" type="button" id="switchToRecruitmentDisplay">表示設定・画像</button>
       </nav>
       <p class="lead manage-lead">対象を選択してPASSを再発行。</p>
 
@@ -6302,7 +6403,10 @@
     $("#openRecruitmentImageBtn")
       ?.addEventListener(
         "click",
-        showRecruitmentImageAdmin
+        async () => {
+          showPassReissueAdmin();
+          await loadPassReissueTargets();
+        }
       );
 
 
@@ -6330,9 +6434,16 @@
       );
 
 
-    $("#openAutoLeaveBtn")?.addEventListener("click", async () => {
+    $("#openAutoLeaveBtn")?.addEventListener("click", () => {
       showAutoLeaveAdmin();
-      await loadAutoLeaveAdmin();
+      loadAutoLeaveAdmin().catch(error => console.error("AUTO_LEAVE_LOAD", error));
+      loadBotGuildOverview().catch(error => {
+        console.error("BOT_OVERVIEW_LOAD", error);
+        const summary = $("#botGuildOverviewSummary");
+        const rows = $("#botGuildOverviewRows");
+        if (summary) summary.textContent = "取得失敗";
+        if (rows) rows.textContent = "BOT連携情報の読み込みに失敗しました。";
+      });
     });
     $("#reloadAutoLeaveBtn")?.addEventListener("click", () => {loadAutoLeaveAdmin();loadBotGuildOverview().catch(console.error);});
     $("#backToMenuFromAutoLeaveBtn")?.addEventListener("click", showMenu);
@@ -7570,7 +7681,7 @@
         <div class="x-phase-chart-head"><strong>指揮官募集の取得分析</strong><span>開催回・対象フェーズ別</span></div>
         <div class="x-raid-preview-controls"><label>対象レイド<select id="xRaidPreviewSelector">${raids.map(r=>`<option value="${r.no}">${r.name}</option>`).join("")}</select></label></div>
         <div id="xRaidPreviewRange" class="x-phase-chart-meta"></div>
-        <div class="x-phase-chart-legend"><span><i style="background:#449be8"></i>X収集候補</span><span><i style="background:#f3a247"></i>指揮官募集の掲載数（参考）</span></div>
+        <div class="x-phase-chart-legend"><span><i style="background:#41C8F4"></i>X収集候補</span><span><i style="background:#AEB4BD"></i>指揮官募集の掲載数（参考）</span></div>
         <div id="xRaidPreviewGraph" class="x-phase-chart-viewport"></div>
         <div id="xRaidPreviewTotals" class="x-phase-chart-meta"></div>
         <div class="x-phase-chart-meta">※ 掲載数は過去の保存数を含む参考値です。フェーズ期間はBOTの検索スケジュール規則による予定です。</div>
@@ -7588,15 +7699,15 @@
         const max=Math.max(1,...items.map(candidates),...items.map(listed));
         const top=Math.ceil(max/4)*4,W=Math.max(600,items.length*130),H=248,left=49,right=15,base=175,plot=147;
         let svg=`<svg class="x-phase-chart-svg" style="min-width:${W}px" viewBox="0 0 ${W} ${H}" role="img" aria-label="対象フェーズ別X収集候補と掲載数">`;
-        for(let i=0;i<5;i++){const y=base-i*plot/4;svg+=`<line x1="${left}" y1="${y}" x2="${W-right}" y2="${y}" stroke="#354358"/><text x="${left-6}" y="${y+4}" text-anchor="end" fill="#98aabd" font-size="11">${Math.round(top*i/4)}</text>`;}
+        for(let i=0;i<5;i++){const y=base-i*plot/4;svg+=`<line x1="${left}" y1="${y}" x2="${W-right}" y2="${y}" stroke="#373B43"/><text x="${left-6}" y="${y+4}" text-anchor="end" fill="#A6ABB3" font-size="11">${Math.round(top*i/4)}</text>`;}
         items.forEach((r,i)=>{
           const cx=left+(W-left-right)*(i+.5)/items.length;
-          [[candidates(r),"#449be8",-18],[listed(r),"#f3a247",3]].forEach(([v,c,offset])=>{
+          [[candidates(r),"#41C8F4",-18],[listed(r),"#AEB4BD",3]].forEach(([v,c,offset])=>{
             const height=v/top*plot,x=cx+offset,y=base-height;
             svg+=`<rect x="${x}" y="${y}" width="15" height="${height}" rx="2" fill="${c}"><title>${labels[r.key]} ${v}件</title></rect><text x="${x+7}" y="${Math.max(14,y-6)}" text-anchor="middle" font-size="11" font-weight="700" fill="${c}">${v}</text>`;
           });
           const period=phaseDateRange(r);
-          svg+=`<text x="${cx}" y="199" text-anchor="middle" font-size="11" fill="${colors[r.key]}">${labels[r.key]}</text><text x="${cx}" y="219" text-anchor="middle" font-size="10" fill="#8197af">${period}</text>`;
+          svg+=`<text x="${cx}" y="199" text-anchor="middle" font-size="11" fill="${colors[r.key]}">${labels[r.key]}</text><text x="${cx}" y="219" text-anchor="middle" font-size="10" fill="#A0A5AE">${period}</text>`;
         });
         $("#xRaidPreviewGraph").innerHTML=svg+"</svg>";
         const sum=k=>items.reduce((n,r)=>n+(Number(r[k])||0),0);
@@ -7775,6 +7886,13 @@
 
     }
 
+
+    // Header returns to the authenticated admin menu, without reloading the page.
+    $("#adminHomeButton")?.addEventListener("click", () => {
+      if (getToken()) showMenu();
+      else showLogin();
+      window.scrollTo({top:0, behavior:"instant"});
+    });
 
     function showAdmin() {
 
