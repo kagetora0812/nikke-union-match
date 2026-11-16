@@ -12,28 +12,31 @@
 
   <meta
     name="theme-color"
-    content="#080b12"
+    content="#080f1b"
   >
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;500;600;700;800;900&family=Teko:wght@400;500;600;700&display=swap" rel="stylesheet">
 
   <!-- v13.7 admin display manager -->
   <title>
-    NIKKE UNION MATCH - CREATOR ADMIN
+    NIKKE UNION MATCH | ADMIN CONSOLE
   </title>
 
 
   <style>
 
     :root {
-      --bg: #080b12;
-      --panel: #101621;
-      --panel2: #141c29;
-      --line: #2b3545;
-      --text: #edf2f7;
-      --muted: #8e9aaa;
-      --accent: #ff7a18;
-      --accent2: #ffb15c;
+      --bg: #080f1b;
+      --panel: #131f30;
+      --panel2: #18283d;
+      --line: #304258;
+      --text: #eff6ff;
+      --muted: #a0b2ca;
+      --accent: #56adff;
+      --accent2: #7cc9ff;
       --green: #8ff0bd;
-      --blue: #3696ff;
+      --blue: #4ca8ff;
       --red: #ff6878;
     }
 
@@ -51,17 +54,15 @@
       background:
         radial-gradient(
           circle at 50% -10%,
-          #1a2434 0,
-          #080b12 45%
+          #1b3455 0,
+          #080f1b 49%
         );
 
       color: var(--text);
 
       font-family:
-        -apple-system,
-        BlinkMacSystemFont,
-        "Segoe UI",
         "Noto Sans JP",
+        "Segoe UI",
         sans-serif;
     }
 
@@ -84,72 +85,27 @@
     ======================================== */
 
     .topbar {
-      height: 66px;
-
-      padding:
-        0 18px;
-
-      display: flex;
-
-      align-items: center;
-
-      justify-content: space-between;
-
-      border-bottom:
-        1px solid
-        var(--line);
-
-      background:
-        rgba(
-          8,
-          11,
-          18,
-          .92
-        );
-
-      position: sticky;
-
-      top: 0;
-
-      z-index: 10;
+      height:62px; padding:0 28px; display:flex; align-items:center; justify-content:space-between; border-bottom:1px solid #36526e; background:#080f1b; position:sticky; top:0; z-index:10;
     }
 
 
     .brand {
-      display: flex;
-
-      flex-direction: column;
-
-      line-height: .9;
+      display:flex; flex-direction:column; justify-content:center; line-height:.85; gap:2px;
     }
 
 
     .brand-small {
-      color: var(--accent2);
-
-      font-size: 10px;
-
-      letter-spacing: 3px;
+      font-family:"Teko",Impact,sans-serif; color:#71c2ff; font-size:15px; font-weight:600; letter-spacing:3.5px;
     }
 
 
     .brand-main {
-      font-size: 20px;
-
-      font-weight: 800;
-
-      letter-spacing: 1.5px;
+      font-family:"Teko",Impact,"Arial Narrow",sans-serif; color:#f4f9ff; font-size:30px; line-height:.84; font-weight:600; letter-spacing:1.6px;
     }
 
 
     .admin-badge {
-      color: var(--green);
-
-      font-size: 11px;
-
-      font-weight: 800;
-
-      letter-spacing: 1px;
+      color:#80e8b7; border:1px solid #337b6c; border-radius:7px; padding:6px 11px; background:#102b2b; font-family:"Teko",Impact,sans-serif; font-size:17px; line-height:1; font-weight:600; letter-spacing:1px;
     }
 
 
@@ -158,30 +114,12 @@
     ======================================== */
 
     .container {
-      width:
-        min(
-          960px,
-          calc(100% - 24px)
-        );
-
-      margin:
-        0 auto;
-
-      padding:
-        36px 0 70px;
+      width:min(1100px,calc(100% - 32px)); margin:0 auto; padding:30px 0 76px;
     }
 
 
     .eyebrow {
-      color: var(--accent2);
-
-      font-size: 11px;
-
-      font-weight: 800;
-
-      letter-spacing: 2px;
-
-      margin-bottom: 8px;
+      color:#88c8ff; font-size:10px; font-weight:800; letter-spacing:2px; margin-bottom:7px;
     }
 
 
@@ -215,12 +153,7 @@
 
 
     .lead {
-      margin:
-        12px 0 0;
-
-      color: var(--muted);
-
-      line-height: 1.8;
+      margin:9px 0 0; color:var(--muted); line-height:1.65; font-size:13px;
     }
 
 
@@ -234,48 +167,12 @@
     ======================================== */
 
     .panel {
-      margin-top: 18px;
-
-      padding: 20px;
-
-      border:
-        1px solid
-        var(--line);
-
-      background:
-        linear-gradient(
-          145deg,
-          rgba(
-            20,
-            28,
-            41,
-            .96
-          ),
-          rgba(
-            11,
-            16,
-            24,
-            .96
-          )
-        );
-
-      box-shadow:
-        0 16px 40px
-        rgba(
-          0,
-          0,
-          0,
-          .18
-        );
+      margin-top:14px; padding:20px; border:1px solid var(--line); border-radius:14px; background:var(--panel); box-shadow:0 12px 35px rgba(0,0,0,.12);
     }
 
 
     .panel-title {
-      font-size: 18px;
-
-      font-weight: 800;
-
-      margin-bottom: 16px;
+      font-size:17px; font-weight:800; margin-bottom:12px;
     }
 
 
@@ -284,20 +181,12 @@
     ======================================== */
 
     .form-grid {
-      display: grid;
-
-      gap: 16px;
+      display:grid; gap:12px;
     }
 
 
     label {
-      display: block;
-
-      color: var(--muted);
-
-      font-size: 12px;
-
-      font-weight: 800;
+      display:block; color:#b7c9dd; font-size:12px; font-weight:700;
     }
 
 
@@ -458,41 +347,17 @@
     ======================================== */
 
     .btn {
-      min-height: 48px;
-
-      padding:
-        12px 18px;
-
-      border:
-        1px solid
-        var(--line);
-
-      background:
-        var(--panel2);
-
-      color: var(--text);
-
-      font-weight: 800;
-
-      cursor: pointer;
+      min-height:42px; padding:10px 16px; border:1px solid var(--line); border-radius:9px; background:var(--panel2); color:var(--text); font-weight:750; cursor:pointer; transition:background .15s,border-color .15s;
     }
 
 
     .btn:hover {
-      border-color: var(--accent);
+      border-color:#8bcaff; background:#26496d;
     }
 
 
     .btn.primary {
-      background:
-        linear-gradient(
-          135deg,
-          #ff6a00,
-          #d94100
-        );
-
-      border-color:
-        #ff8c3a;
+      background:linear-gradient(135deg,#278ee9,#175ab8); border-color:#65b8ff;
     }
 
 
@@ -518,45 +383,12 @@
 
 
     .btn.blue {
-      background:
-        rgba(
-          54,
-          150,
-          255,
-          .10
-        );
-
-      border-color:
-        rgba(
-          54,
-          150,
-          255,
-          .45
-        );
-
-      color:
-        #86c5ff;
+      background:#1763b1; border-color:#318ce6; color:#ffffff;
     }
 
 
     .btn.danger {
-      background:
-        rgba(
-          255,
-          104,
-          120,
-          .08
-        );
-
-      border-color:
-        rgba(
-          255,
-          104,
-          120,
-          .40
-        );
-
-      color: #ff9ca7;
+      background:#4a1825; border-color:#e65270; color:#ffc8d1;
     }
 
 
@@ -794,24 +626,12 @@
     ======================================== */
 
     .admin-head {
-      display: flex;
-
-      justify-content: space-between;
-
-      align-items: center;
-
-      gap: 14px;
-
-      margin-bottom: 20px;
+      display:flex; justify-content:space-between; align-items:center; gap:14px; margin-bottom:14px;
     }
 
 
     .admin-head-actions {
-      display: flex;
-
-      gap: 8px;
-
-      flex-wrap: wrap;
+      display:flex; gap:8px; flex-wrap:wrap;
     }
 
 
@@ -1109,29 +929,15 @@
     ======================================== */
 
     .menu-grid {
-      display: grid;
-      grid-template-columns: repeat(2, minmax(0, 1fr));
-      gap: 14px;
-      margin-top: 18px;
+      display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); gap:12px; margin-top:16px;
     }
 
     .menu-card {
-      min-height: 150px;
-      padding: 22px;
-      border: 1px solid var(--line);
-      background:
-        linear-gradient(
-          145deg,
-          rgba(20, 28, 41, .96),
-          rgba(11, 16, 24, .96)
-        );
-      color: var(--text);
-      text-align: left;
-      cursor: pointer;
+      min-height:112px; padding:19px 22px; display:grid; grid-template-columns:44px minmax(0,1fr); align-content:center; column-gap:15px; border:1px solid var(--line); border-radius:14px; background:linear-gradient(135deg,#18293e,#111c2b); color:var(--text); text-align:left; cursor:pointer; transition:border-color .15s,transform .15s,background .15s;
     }
 
     .menu-card:hover {
-      border-color: var(--accent);
+      border-color:#66b8ff; background:linear-gradient(135deg,#1d3552,#14243a); transform:translateY(-1px);
     }
 
     .menu-card.union-menu {
@@ -1143,20 +949,15 @@
     }
 
     .menu-card-icon {
-      font-size: 28px;
-      margin-bottom: 12px;
+      grid-row:span 2; font-size:25px; margin:0; align-self:center; justify-self:center;
     }
 
     .menu-card-title {
-      font-size: 19px;
-      font-weight: 900;
+      font-size:16px; line-height:1.35; font-weight:800;
     }
 
     .menu-card-copy {
-      margin-top: 8px;
-      color: var(--muted);
-      font-size: 12px;
-      line-height: 1.7;
+      margin-top:5px; color:var(--muted); font-size:11px; line-height:1.5;
     }
 
     .template-box {
@@ -1587,7 +1388,7 @@
     .api-budget-readonly{min-width:0;display:flex;flex-direction:column;justify-content:center;gap:5px;font-size:11px;color:var(--muted)}
     .api-budget-readonly strong{font-size:15px;color:#d5e5f4;font-weight:800}
     @media(max-width:700px){.api-budget-grid{grid-template-columns:1fr}}
-/* Compact API budget cards; keep existing input/button hooks. */
+/* Compact API budget layout */
 .api-budget-grid{gap:10px;margin-top:10px}
 .api-budget-card{padding:12px;gap:7px}
 .api-budget-top strong{font-size:14px}
@@ -1595,8 +1396,7 @@
 .api-budget-meter{height:7px}
 .api-budget-summary{min-height:0;font-size:11px;line-height:1.45}
 .api-budget-fields{gap:7px}
-.api-budget-card .btn{padding-top:8px;padding-bottom:8px}
-@media(min-width:580px){.api-budget-grid{grid-template-columns:repeat(2,minmax(0,1fr))}}
+.api-budget-card .btn{padding:8px 12px}
 @media(max-width:579px){.api-budget-grid{grid-template-columns:1fr}}
 
 
@@ -2012,15 +1812,7 @@
     ======================================== */
 
     .system-check-summary {
-      margin-top: 18px;
-      padding: 16px;
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      gap: 14px;
-      flex-wrap: wrap;
-      border: 1px solid rgba(54, 150, 255, .32);
-      background: rgba(54, 150, 255, .06);
+      margin-top:14px; padding:14px 17px; display:flex; align-items:center; justify-content:space-between; gap:12px; flex-wrap:wrap; border:1px solid var(--line); border-radius:12px; background:#16263b;
     }
 
     .system-check-overall {
@@ -2055,10 +1847,7 @@
     }
 
     .system-check-group {
-      min-width: 0;
-      padding: 16px;
-      border: 1px solid var(--line);
-      background: rgba(8, 13, 21, .38);
+      min-width:0; padding:12px; border:1px solid var(--line); border-radius:12px; background:#111e2e;
     }
 
     .system-check-group-title {
@@ -2075,14 +1864,7 @@
     }
 
     .system-check-row {
-      padding: 13px 14px;
-      display: grid;
-      grid-template-columns: 24px minmax(0, 1fr) auto;
-      align-items: start;
-      gap: 10px;
-      border: 1px solid rgba(255, 255, 255, .09);
-      border-left: 3px solid #657489;
-      background: rgba(16, 22, 33, .72);
+      padding:9px 11px; display:grid; grid-template-columns:19px minmax(0,1fr) auto; align-items:start; gap:9px; border:1px solid rgba(255,255,255,.07); border-left:3px solid #657489; border-radius:6px; background:#152235;
     }
 
     .system-check-row.ok { border-left-color: #79e5b1; }
@@ -2253,6 +2035,75 @@
 
 
 
+
+    /* ADMIN UI | unified dark navy, crisp accents, concise interaction */
+    .topbar{box-shadow:0 3px 22px rgba(0,0,0,.18)}
+    .menu-card:focus-visible,.manage-tab:focus-visible,.btn:focus-visible,
+    button:focus-visible,select:focus-visible,input:focus-visible{outline:2px solid #78bdff;outline-offset:2px}
+    .menu-card.union-menu,.menu-card.creator-menu{border-color:var(--line)}
+    .menu-card:active{transform:translateY(0)}
+    .btn.blue:hover{background:#237fd9;border-color:#8fcaff}
+    .btn.danger:hover{background:#752135;border-color:#ff7890;color:#fff}
+    .btn.primary:hover{background:#287acb;border-color:#90caff}
+    .btn:disabled{opacity:.48;cursor:not-allowed}
+    .x-candidate-actions .btn.danger{background:#53202b;border-color:#ff6179;color:#fff1f2}
+    .menu-card-copy{font-size:12px;line-height:1.45}
+    .menu-card-icon{filter:saturate(1.15)}
+    .admin-head h2{font-size:clamp(23px,3vw,30px);line-height:1.2}
+    .panel{box-shadow:none}
+    .panel .lead{font-size:12px}
+    .manage-tabs{display:flex;gap:6px;flex-wrap:wrap;margin:14px 0 9px;padding:5px;background:#0d1b2d;border:1px solid #37526e;border-radius:10px}
+    .manage-tab{border:0;border-radius:7px;background:transparent;color:#b2c5d8;padding:10px 18px;min-height:40px;cursor:pointer;font:inherit;font-size:13px;font-weight:800}
+    .manage-tab.is-active{background:#206cb3;color:#fff;box-shadow:inset 0 0 0 1px #61b7ff}
+    .manage-tab:not(.is-active):hover{background:#223b56;color:#fff}
+    .manage-lead{margin-bottom:7px}
+    .recruitment-editor-panel{margin-top:11px}
+    .recruitment-editor-panel .form-grid{gap:11px}
+    .recruitment-editor-step{color:#88caff;font-size:12px;letter-spacing:.03em;padding:6px 0 5px;border-bottom:1px solid #334b65}
+    .recruitment-editor-controls{border-radius:8px;background:#0d1a2b;border-color:#35536f}
+    .recruitment-editor-option{padding:10px 0}
+    .recruitment-editor-option strong{color:#f0f7ff;font-size:13px}
+    .recruitment-editor-option small{color:#9db3cd;font-size:11px;line-height:1.5}
+    .recruitment-editor-image-card{border-radius:8px}
+    .recruitment-editor-danger-zone{display:block;margin-top:18px;border:1px solid #a43950;border-radius:9px;overflow:hidden}
+    .recruitment-editor-danger-zone>summary{padding:13px 16px;cursor:pointer;color:#ff9baa;font-size:13px;font-weight:800;list-style-position:inside;background:#2a1823}
+    .recruitment-editor-danger-zone>summary span{font-size:11px;color:#dcb3bd;font-weight:500;margin-left:12px}
+    .recruitment-editor-danger-zone>.recruitment-image-preview-box{border:0!important;margin:0}
+    .system-check-breakdown{margin-top:12px}
+    .system-check-breakdown>summary{cursor:pointer;background:#182b42;border:1px solid #36516e;border-radius:9px;padding:11px 15px;color:#cae4ff;font-size:13px;font-weight:750}
+    .system-check-breakdown[open]>summary{border-radius:9px 9px 0 0}
+    .system-check-breakdown .system-check-columns{margin-top:8px}
+    .ai-monitor-panel{margin-top:13px;background:#111e30}
+    .ai-monitor-heading{display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap}
+    .ai-monitor-heading .panel-title{margin:0;font-size:18px}
+    .ai-data-label{font-size:11px;color:#91b6d9}
+    .ai-monitor-caption{margin:9px 0;color:#b5c9dd;font-size:12px}
+    .ai-monitor-days{display:grid;gap:10px}
+    .ai-day{border:1px solid #334d68;border-radius:8px;background:#102034;overflow:hidden}
+    .ai-day-header{display:flex;justify-content:space-between;align-items:center;gap:8px;background:#1a3553;padding:10px 13px}
+    .ai-day-header strong{color:#eff7ff;font-size:13px}
+    .ai-day-header span{color:#a2bdd8;font-size:11px}
+    .ai-model-row{display:grid;grid-template-columns:minmax(0,1.2fr) minmax(0,1fr);gap:12px;align-items:center;border-top:1px solid #2b425c;padding:9px 13px}
+    .ai-model-name{font-size:12px;font-weight:750;color:#eaf5ff;overflow-wrap:anywhere}
+    .ai-model-outcome{display:flex;gap:5px 12px;align-items:center;flex-wrap:wrap;justify-content:flex-end;text-align:right}
+    .ai-success{color:#83e4b4;font-size:12px}
+    .ai-fail{color:#a6b6cc;font-size:12px}
+    .ai-fail.has-errors{color:#ff748d;font-weight:800}
+    .ai-causes{flex-basis:100%;color:#ffc19a;font-size:11px;line-height:1.4}
+    .ai-monitor-footnote{color:#91a9c1;font-size:11px;line-height:1.5;margin:9px 0 0}
+    .ai-error-details{margin-top:3px;border:1px solid #334d68;border-radius:8px;overflow:hidden}
+    .ai-error-details>summary{cursor:pointer;padding:11px 13px;color:#b6d5f5;font-size:12px}
+    .ai-error-detail-list{display:grid;gap:6px;padding:0 11px 11px}
+    .ai-error-button{text-align:left;font-size:11px;min-height:33px}
+    @media(max-width:600px){
+      .topbar{padding:0 15px;height:60px}.brand-main{font-size:27px}
+      .container{width:calc(100% - 22px)}.menu-grid{grid-template-columns:1fr;gap:9px}
+      .menu-card{min-height:84px;padding:13px 15px;grid-template-columns:34px minmax(0,1fr);column-gap:11px}
+      .menu-card-icon{font-size:22px}.menu-card-title{font-size:15px}
+      .ai-model-row{grid-template-columns:1fr;gap:6px}.ai-model-outcome{justify-content:flex-start;text-align:left}
+      .ai-day-header{padding:10px 12px}.manage-tabs{display:grid;grid-template-columns:1fr 1fr}
+      .manage-tab{padding:9px 5px}.recruitment-editor-danger-zone>summary span{display:block;margin:4px 0 0 18px}
+    }
   .x-raid-preview-controls{margin:12px 0}.x-raid-preview-controls select{max-width:360px;display:block;margin-top:6px}.x-raid-preview .x-phase-chart-svg{width:100%}
 </style>
 
@@ -2455,7 +2306,7 @@
             X取得記事管理
           </div>
           <div class="menu-card-copy">
-            BOTがXから自動取得した指揮官募集を確認し、誤取得・通常削除を使い分けて配信対象から外します。
+            取得記事の確認・削除
           </div>
         </button>
 
@@ -2469,7 +2320,7 @@
             応援クリエイター管理
           </div>
           <div class="menu-card-copy">
-            クリエイターの登録・編集・公開設定・削除を行います。
+            登録・編集・公開設定
           </div>
         </button>
 
@@ -2483,38 +2334,18 @@
             ユニオン登録情報
           </div>
           <div class="menu-card-copy">
-            現在有効なユニオン登録を、募集中と掲載のみで分けて確認します。
+            登録・掲載状況を確認
           </div>
         </button>
 
-        <button
-          id="openPassReissueBtn"
-          class="menu-card"
-          type="button"
-        >
-          <div class="menu-card-icon">🔑</div>
-          <div class="menu-card-title">
-            募集PASS再発行
-          </div>
-          <div class="menu-card-copy">
-            募集中の指揮官、または現在利用中のユニオンをプルダウンから選び、
-            PASSを再発行します。
-          </div>
-        </button>
-
-        <button
+<button
           id="openRecruitmentImageBtn"
           class="menu-card"
           type="button"
         >
           <div class="menu-card-icon">🛠️</div>
-          <div class="menu-card-title">
-            募集表示管理
-          </div>
-          <div class="menu-card-copy">
-            募集記事URL・募集画像・X埋め込みON / OFFを、
-            同じ画面からまとめて管理します。
-          </div>
+          <div class="menu-card-title">募集管理</div>
+          <div class="menu-card-copy">表示設定・画像・PASS再発行</div>
         </button>
 
 
@@ -2528,7 +2359,7 @@
             アクセス解析
           </div>
           <div class="menu-card-copy">
-            UNION MATCHのPV・ユニーク訪問数を確認します。
+            アクセス・端末別分析
           </div>
         </button>
 
@@ -2543,15 +2374,15 @@
             X配信スケジュール
           </div>
           <div class="menu-card-copy">
-            X検索の予定と48時間の配信実績を確認します。
+            検索予定・配信実績
           </div>
         </button>
 
 
         <button id="openAutoLeaveBtn" class="menu-card" type="button">
           <div class="menu-card-icon">⏳</div>
-          <div class="menu-card-title">BOT自動退出カウント</div>
-          <div class="menu-card-copy">7日間の退出候補と残り日数を確認します（読み取り専用）。</div>
+          <div class="menu-card-title">BOT管理</div>
+          <div class="menu-card-copy">退出候補・退出履歴</div>
         </button>
 
         <button
@@ -2564,7 +2395,7 @@
             SYSTEM CHECK
           </div>
           <div class="menu-card-copy">
-            UNION MATCH本体とBOT連携データを読み取り専用で点検します。
+            SITE・BOT・AIの異常確認
           </div>
         </button>
 
@@ -2612,7 +2443,7 @@
       </div>
 
       <p class="lead">
-        BOTがXから自動取得した指揮官募集です。誤取得と通常削除を選べます。どちらも候補から非表示にし、未送信の配信予約を取り消します。
+        取得した指揮官募集を確認・整理します。
       </p>
 
       <div
@@ -2737,14 +2568,14 @@
       <div class="admin-head">
         <div>
           <div class="eyebrow">BOT AUTO LEAVE</div>
-          <h2>⏳ 自動退出カウント</h2>
+          <h2>BOT管理</h2>
         </div>
         <div class="admin-head-actions">
           <button id="reloadAutoLeaveBtn" class="btn blue" type="button">↻ 更新</button>
           <button id="backToMenuFromAutoLeaveBtn" class="btn" type="button">← 管理メニュー</button>
         </div>
       </div>
-      <p class="lead">共有BOTの退出候補と残り日数を確認します。<br>ここから退出操作はできません。</p>
+      <p class="lead">共有BOTの自動退出カウントを確認します。通知先の監視は別途連携予定です。</p>
       <div id="autoLeaveSummary" class="union-registry-summary">読み込み前</div>
       <div id="autoLeaveList" class="ending-union-list"></div>
       <div id="autoLeaveMessage" class="message error hidden"></div>
@@ -2766,7 +2597,7 @@
             SYSTEM CHECK
           </div>
           <h2>
-            🩺 SITE + BOT 点検
+            システム監視
           </h2>
         </div>
 
@@ -2790,8 +2621,7 @@
       </div>
 
       <p class="lead">
-        現在のSupabaseデータを読み取り専用で点検します。<br>
-        この画面から登録・募集・BOT設定を変更することはありません。
+        サイト・BOT・AIの現在の状態と直近の記録。
       </p>
 
       <div class="system-check-summary">
@@ -2809,6 +2639,7 @@
         </div>
       </div>
 
+      <details class="system-check-breakdown"><summary>サイト・BOTの点検内訳を見る</summary>
       <div class="system-check-columns">
         <div class="system-check-group">
           <div class="system-check-group-title">
@@ -2830,6 +2661,8 @@
           ></div>
         </div>
       </div>
+
+      </details>
 
       <div
         id="systemCheckIssuePanel"
@@ -2859,11 +2692,14 @@
         ></div>
       </div>
 
-      <div class="panel" id="geminiErrorPanel">
-        <div class="panel-title">GEMINI API ERRORS</div>
-        <p class="lead" style="margin:0 0 12px">Googleの応答を記録したエラーのみ表示します。過去の未記録エラーは復元できません。</p>
-        <div id="geminiErrorSummary" class="system-check-detail" aria-live="polite">未取得</div>
-        <div id="geminiErrorRows" class="system-check-list" style="margin-top:12px"></div>
+      <div class="panel ai-monitor-panel" id="geminiErrorPanel">
+        <div class="ai-monitor-heading">
+          <div><div class="eyebrow">AI PERFORMANCE / LAST 3 DAYS</div><div class="panel-title">Gemini 稼働履歴</div></div>
+          <span class="ai-data-label">日本時間・日別</span>
+        </div>
+        <p id="geminiErrorSummary" class="ai-monitor-caption" aria-live="polite">読み込み前</p>
+        <div id="geminiErrorRows" class="ai-monitor-days"></div>
+        <p class="ai-monitor-footnote">成功履歴は未取得。失敗は取得済みログから表示。</p>
       </div>
       <dialog id="geminiErrorDialog" style="width:min(700px,94vw);max-height:82vh;background:#101621;color:#edf2f7;border:1px solid #2b3545;padding:22px">
         <div class="button-row" style="justify-content:space-between;align-items:center">
@@ -3058,12 +2894,10 @@
 
         <div>
           <div class="eyebrow">
-            RECRUITMENT DISPLAY MANAGER
+            RECRUITMENT MANAGER
           </div>
 
-          <h2>
-            🛠️ 募集表示管理
-          </h2>
+          <h2>募集管理</h2>
         </div>
 
         <div class="admin-head-actions">
@@ -3086,12 +2920,14 @@
 
       </div>
 
-      <p class="lead">指揮官・ユニオンの募集URL、表示設定、画像をまとめて編集できます。<br>
-        <strong>公開サイトへの反映は最後の「変更を保存して反映」だけです。</strong>
-      </p>
+      <nav class="manage-tabs" aria-label="募集管理メニュー">
+        <button class="manage-tab is-active" type="button" aria-current="page">表示設定・画像</button>
+        <button class="manage-tab" type="button" id="switchToPassReissue">PASS再発行</button>
+      </nav>
+      <p class="lead manage-lead">編集内容は保存時に反映されます。</p>
       <div class="panel recruitment-editor-panel">
         <div class="form-grid">
-          <div class="recruitment-editor-step">01 / 編集する募集</div>
+          <div class="recruitment-editor-step">編集対象</div>
           <div class="recruitment-editor-pair">
             <label>募集タイプ
               <select id="recruitmentImageType">
@@ -3104,13 +2940,13 @@
           </div>
           <div class="recruitment-editor-selected" id="recruitmentEditorSelected">対象を選択してください。</div>
 
-          <div class="recruitment-editor-step">02 / 募集記事URL</div>
+          <div class="recruitment-editor-step">記事URL</div>
           <label>募集記事URL
             <input id="recruitmentManageUrl" type="url" inputmode="url" autocomplete="off" spellcheck="false" placeholder="https://...">
           </label>
           <div class="recruitment-image-status" id="recruitmentManagePlatform">掲載先：--</div>
 
-          <div class="recruitment-editor-step">03 / 表示設定</div>
+          <div class="recruitment-editor-step">表示設定</div>
           <div class="recruitment-editor-controls">
             <label id="recruitmentEditorEmbedRow" class="recruitment-editor-option">
               <span><strong>X記事を埋め込む</strong><small>OFFなら登録画像などを表示（XのURLの場合のみ）</small></span>
@@ -3126,7 +2962,7 @@
             <div class="recruitment-image-status" id="recruitmentEditorModeHint">表示方法を選んでください。</div>
           </div>
 
-          <div class="recruitment-editor-step">04 / 募集画像</div>
+          <div class="recruitment-editor-step">募集画像</div>
           <div class="recruitment-image-preview-box recruitment-editor-image-card">
             <div class="recruitment-image-preview-title" id="recruitmentEditorImageTitle">現在の登録画像</div>
             <img id="recruitmentImageCurrentPreview" class="recruitment-image-preview hidden" alt="募集画像プレビュー">
@@ -3149,7 +2985,7 @@
         </div>
         <div id="recruitmentImageMessage" class="message hidden"></div>
       </div>
-      <div class="recruitment-editor-danger-zone">
+      <details class="recruitment-editor-danger-zone"><summary>登録の強制削除 <span>危険な操作・必要な時だけ開く</span></summary>
           <div class="recruitment-image-preview-box" style="border:1px solid rgba(255,92,111,.58);background:rgba(255,47,74,.035)">
             <div class="recruitment-image-preview-title" style="color:#ff7788">いたずら登録の強制削除（ADMIN専用）</div>
             <div class="recruitment-image-status" style="line-height:1.85">
@@ -3166,7 +3002,7 @@
             <div class="recruitment-image-status" id="forceDeleteTargetHint" style="margin-top:10px">対象を選択してください。</div>
             <button id="forceDeleteTargetBtn" class="btn danger" type="button" style="margin-top:12px">選択した登録を強制削除</button>
           </div>
-      </div>
+      </details>
     </section>
 
     <!-- ========================================
@@ -3572,12 +3408,10 @@
 
         <div>
           <div class="eyebrow">
-            PASS REISSUE
+            RECRUITMENT MANAGER
           </div>
 
-          <h2>
-            🔑 募集PASS再発行
-          </h2>
+          <h2>募集管理</h2>
         </div>
 
         <div class="admin-head-actions">
@@ -3592,10 +3426,11 @@
 
       </div>
 
-      <p class="lead">
-        指揮官は現在募集中の募集、ユニオンは現在利用中の会員が対象です。<br>
-        募集タイプを選び、対象をプルダウンから選択してください。
-      </p>
+      <nav class="manage-tabs" aria-label="募集管理メニュー">
+        <button class="manage-tab" type="button" id="switchToRecruitmentDisplay">表示設定・画像</button>
+        <button class="manage-tab is-active" type="button" aria-current="page">PASS再発行</button>
+      </nav>
+      <p class="lead manage-lead">対象を選択してPASSを再発行。</p>
 
       <div class="panel">
 
@@ -6400,6 +6235,12 @@
       );
 
 
+    $("#switchToPassReissue")?.addEventListener("click", async () => {
+      showPassReissueAdmin();
+      await loadPassReissueTargets();
+    });
+    $("#switchToRecruitmentDisplay")?.addEventListener("click", showRecruitmentImageAdmin);
+
     $("#openAccessStatsBtn")
       ?.addEventListener(
         "click",
@@ -8386,43 +8227,89 @@
     function renderGeminiErrors(items) {
       geminiErrors = Array.isArray(items) ? items : [];
       const summary = $("#geminiErrorSummary");
-      const rows = $("#geminiErrorRows");
-      if (!summary || !rows) return;
-      rows.replaceChildren();
-      summary.textContent = geminiErrors.length ? `直近の記録 ${geminiErrors.length}件` : "記録されたGemini APIエラーはありません";
-      for (const [index, item] of geminiErrors.entries()) {
-        const row = document.createElement("div");
-        row.className = "system-check-row " + (Number(item?.status) === 503 || Number(item?.status) === 429 ? "warn" : "info");
-        const mark = document.createElement("div");
-        mark.className = "system-check-mark";
-        mark.textContent = "!";
-        const body = document.createElement("div");
-        const label = document.createElement("div");
-        label.className = "system-check-label";
-        const date = new Date(item?.occurred_at);
-        const dateText = Number.isNaN(date.getTime()) ? "--" : date.toLocaleString("ja-JP", { timeZone:"Asia/Tokyo", month:"2-digit", day:"2-digit", hour:"2-digit", minute:"2-digit" });
-        label.textContent = `${dateText} / ${item?.model || "モデル不明"} / HTTP ${item?.status || "不明"}`;
-        const detail = document.createElement("div");
-        detail.className = "system-check-detail";
-        detail.textContent = `${item?.scope || "Gemini"} / ${item?.code || "APIエラー"}`;
-        body.append(label, detail);
-        const button = document.createElement("button");
-        button.className = "btn blue";
-        button.type = "button";
-        button.textContent = "詳細";
-        button.addEventListener("click", () => {
-          const target = geminiErrors[index];
-          $("#geminiErrorText").textContent = [
-            `発生: ${dateText} JST`, `モデル: ${target?.model || "--"}`,
-            `HTTP: ${target?.status || "--"}`, `エラーコード: ${target?.code || "--"}`,
-            `処理: ${target?.scope || "--"}`,
-            `Google応答: ${target?.message || "詳細情報なし"}`,
-            `再試行指示: ${target?.retry_delay_ms == null ? "指定なし" : String(target.retry_delay_ms) + "ms"}`
-          ].join("\n");
-          $("#geminiErrorDialog")?.showModal();
-        });
-        row.append(mark,body,button);
-        rows.append(row);
+      const root = $("#geminiErrorRows");
+      if (!summary || !root) return;
+      root.replaceChildren();
+
+      // Dates are calculated in JST, not the browser's local timezone.
+      const jstDay = value => {
+        const d = new Date(value);
+        if (Number.isNaN(d.getTime())) return "";
+        const parts = new Intl.DateTimeFormat("en-US", {
+          timeZone: "Asia/Tokyo", year:"numeric", month:"2-digit", day:"2-digit"
+        }).formatToParts(d);
+        const part = type => parts.find(p => p.type === type)?.value || "";
+        return `${part("year")}-${part("month")}-${part("day")}`;
+      };
+      const todayKey = jstDay(new Date());
+      const atNoonJst = new Date(`${todayKey}T12:00:00+09:00`);
+      const days = [0, 1, 2].map(offset => {
+        const date = new Date(atNoonJst.getTime() - offset * 86400000);
+        return { key: jstDay(date), label: ["今日", "昨日", "一昨日"][offset],
+          display: new Intl.DateTimeFormat("ja-JP", {timeZone:"Asia/Tokyo",month:"2-digit",day:"2-digit"}).format(date) };
+      });
+      const modelNames = ["gemini-3.5-flash-lite", "gemini-3.6-flash", "gemini-3.8-flash"];
+      for (const event of geminiErrors) {
+        const name = String(event?.model || "").trim();
+        if (name && !modelNames.includes(name)) modelNames.push(name);
+      }
+      const make = (tag, className, content) => {
+        const el = document.createElement(tag);
+        if (className) el.className = className;
+        if (content != null) el.textContent = content;
+        return el;
+      };
+      const recent = geminiErrors.filter(e => days.some(d => d.key === jstDay(e?.occurred_at)));
+      summary.textContent = `直近3日間の取得済みエラー ${recent.length}件 ｜ 成功は未計測`;
+      for (const day of days) {
+        const panel = make("section", "ai-day");
+        const header = make("div", "ai-day-header");
+        header.append(make("strong", "", `${day.display}　${day.label}`), make("span", "", "成功 / 失敗・原因"));
+        panel.append(header);
+        for (const model of modelNames) {
+          const events = recent.filter(e => jstDay(e?.occurred_at) === day.key && String(e?.model || "").trim() === model);
+          const counts = new Map();
+          for (const event of events) {
+            const n = String(event?.status || event?.code || "不明").trim();
+            const code = /^\d{3}$/.test(n) ? `HTTP ${n}` : n;
+            counts.set(code, (counts.get(code) || 0) + 1);
+          }
+          const row = make("div", "ai-model-row");
+          const name = make("div", "ai-model-name", model);
+          const success = make("div", "ai-success", "成功  未確認");
+          const failures = make("div", events.length ? "ai-fail has-errors" : "ai-fail",
+            events.length ? `失敗  ${events.length}件` : "失敗  記録なし");
+          const codes = make("div", "ai-causes", events.length ? [...counts].map(([code,n]) => `${code} ×${n}`).join(" / ") : "—");
+          const result = make("div", "ai-model-outcome");
+          result.append(success, failures, codes);
+          row.append(name, result);
+          panel.append(row);
+        }
+        root.append(panel);
+      }
+      // A full diagnostic is still available for errors through the existing dialog.
+      if (recent.length) {
+        const details = make("details", "ai-error-details");
+        details.append(make("summary", "", `個別エラーの詳細を見る（${recent.length}件）`));
+        const list = make("div", "ai-error-detail-list");
+        for (const event of recent) {
+          const button = make("button", "btn ai-error-button", `${jstDay(event?.occurred_at)} ｜ ${event?.model || "モデル不明"} ｜ ${event?.status || event?.code || "不明"}`);
+          button.type = "button";
+          button.addEventListener("click", () => {
+            const date = new Date(event?.occurred_at);
+            const dateText = Number.isNaN(date.getTime()) ? "--" : date.toLocaleString("ja-JP", {timeZone:"Asia/Tokyo"});
+            $("#geminiErrorText").textContent = [
+              `発生: ${dateText} JST`, `モデル: ${event?.model || "--"}`,
+              `HTTP: ${event?.status || "--"}`, `エラーコード: ${event?.code || "--"}`,
+              `処理: ${event?.scope || "--"}`, `Google応答: ${event?.message || "詳細情報なし"}`,
+              `再試行指示: ${event?.retry_delay_ms == null ? "指定なし" : String(event.retry_delay_ms) + "ms"}`
+            ].join("\n");
+            $("#geminiErrorDialog")?.showModal();
+          });
+          list.append(button);
+        }
+        details.append(list);
+        root.append(details);
       }
     }
     $("#closeGeminiErrorDialog")?.addEventListener("click", () => $("#geminiErrorDialog")?.close());
