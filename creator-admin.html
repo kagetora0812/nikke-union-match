@@ -8039,6 +8039,7 @@ main.container>section, main.container>section:not(.hidden), #menuSection, #auto
         const key=String(member.union_identity_id || "");
         if(key && !byIdentity.has(key)) byIdentity.set(key,String(member.union_name || "名称取得不可"));
       }
+      // One combined management-notification error per guild (X + digest).
       const deliveryByGuild = new Map();
       const deliveryDataAvailable = !deliveryResult.error && Array.isArray(deliveryResult.data);
       if (deliveryDataAvailable) {
@@ -8083,8 +8084,8 @@ main.container>section, main.container>section:not(.hidden), #menuSection, #auto
         if(delivery){
           row.classList.add("has-delivery-error");
           const label=/missing access/i.test(String(delivery.error_message||""))
-            ? "送信エラー：Missing Access"
-            : "送信エラー："+String(delivery.error_code||"配信失敗");
+            ? "管理通知エラー：Missing Access"
+            : "管理通知エラー："+String(delivery.error_message||"配信失敗");
           const indicator=badge(label,"problem");
           const lastAt=Date.parse(delivery.last_error_at);
           if(Number.isFinite(lastAt)) indicator.title="最終発生: "+new Date(lastAt).toLocaleString("ja-JP",{timeZone:"Asia/Tokyo"})+" JST";
