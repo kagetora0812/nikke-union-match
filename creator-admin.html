@@ -2102,6 +2102,7 @@
     .bot-guild-info{display:flex;flex-direction:row;align-items:baseline;flex-wrap:wrap;gap:5px 12px;min-width:0}.bot-guild-info strong{font-size:12px;white-space:nowrap}.bot-guild-info small{font-size:10px;color:#93B9D5;white-space:nowrap}
     .bot-guild-flags{display:flex;flex-wrap:wrap;gap:6px}
     .bot-guild-flag{padding:4px 6px;border:1px solid #32383f;border-radius:5px;font-size:10px;font-weight:750}
+    .bot-guild-row.has-delivery-error{border-color:#8d444b}
     .bot-guild-flag.on{border-color:#258B6C;color:#36D4A0}.bot-guild-flag.off{color:#A4B4C5}.bot-guild-flag.unknown{color:#FFD18B}.bot-guild-flag.problem{border-color:#e0525d;color:#ff8b92}
     .bot-guild-note{font-size:10px;color:#9BAEC4;margin:9px 0 0;line-height:1.5}
     .bot-exit-details{border:1px solid #32383f;border-radius:8px;background:#14171b;padding:0 12px 12px}
@@ -2775,7 +2776,7 @@ main.container>section, main.container>section:not(.hidden), #menuSection, #auto
       <div class="bot-guild-overview panel" id="botGuildOverview">
         <div class="bot-guild-top"><strong>導入先のBOT連携</strong><span id="botGuildOverviewSummary">未取得</span></div>
         <div id="botGuildOverviewRows" class="bot-guild-rows"><div class="empty">読み込み前</div></div>
-        <p class="bot-guild-note">サイト登録済み・退出対象外のみ表示。ON/OFFは設定値で、送信成否は確認できません。</p>
+        <p class="bot-guild-note">サイト登録済み・退出対象外のみ表示。ON/OFFは設定値です。配信エラーは直近24時間の実記録を表示します。</p>
       </div>
       <details class="bot-exit-details" open><summary>自動退出カウント・退出履歴</summary>
       <div id="autoLeaveSummary" class="union-registry-summary">読み込み前</div>
@@ -8017,12 +8018,13 @@ main.container>section, main.container>section:not(.hidden), #menuSection, #auto
       if (!token) { summary.textContent = "未認証"; return; }
       // Read-only reconciliation: registered unions, PASS/settings and the same
       // snapshot used by the auto-leave countdown. No BOT state is mutated.
-      const [statusResult, membersResult, leaveResult] = await Promise.all([
+      const [statusResult, membersResult, leaveResult, deliveryResult] = await Promise.all([
         sb.rpc("creator_admin_union_bot_status", {p_token:token}),
         sb.from("union_registrations")
           .select("union_name,union_identity_id,expires_at")
           .gt("expires_at",new Date().toISOString()),
-        sb.rpc("creator_admin_auto_leave_countdown", {p_token:token})
+        sb.rpc("creator_admin_auto_leave_countdown", {p_token:token}),
+        sb.rpc("creator_admin_bot_delivery_errors", {p_token:token})
       ]);
       if (statusResult.error || membersResult.error) {
         summary.textContent = "取得失敗";
@@ -8036,6 +8038,16 @@ main.container>section, main.container>section:not(.hidden), #menuSection, #auto
       for (const member of membersResult.data || []) {
         const key=String(member.union_identity_id || "");
         if(key && !byIdentity.has(key)) byIdentity.set(key,String(member.union_name || "名称取得不可"));
+      }
+      const deliveryByGuild = new Map();
+      const deliveryDataAvailable = !deliveryResult.error && Array.isArray(deliveryResult.data);
+      if (deliveryDataAvailable) {
+        for (const err of deliveryResult.data) {
+          const gid=String(err.guild_id || "");
+          if (gid && !deliveryByGuild.has(gid)) deliveryByGuild.set(gid,err);
+        }
+      } else {
+        console.warn("BOT_DELIVERY_ERROR_FETCH",deliveryResult.error?.message || "unknown");
       }
       const rows=Array.isArray(statusResult.data) ? statusResult.data : [];
       const snapAvailable=!leaveResult.error && leaveResult.data?.snapshot && Number.isFinite(Date.parse(leaveResult.data.updated_at));
@@ -8067,6 +8079,19 @@ main.container>section, main.container>section:not(.hidden), #menuSection, #auto
         info.append(name,id);
         const flags=document.createElement("div");flags.className="bot-guild-flags";
         flags.append(flag("PASS",data.pass_linked),flag("X",data.x_recruitment_enabled),flag("ログイン",data.morning_login_enabled));
+        const delivery=deliveryByGuild.get(String(data.guild_id));
+        if(delivery){
+          row.classList.add("has-delivery-error");
+          const label=/missing access/i.test(String(delivery.error_message||""))
+            ? "送信エラー：Missing Access"
+            : "送信エラー："+String(delivery.error_code||"配信失敗");
+          const indicator=badge(label,"problem");
+          const lastAt=Date.parse(delivery.last_error_at);
+          if(Number.isFinite(lastAt)) indicator.title="最終発生: "+new Date(lastAt).toLocaleString("ja-JP",{timeZone:"Asia/Tokyo"})+" JST";
+          flags.append(indicator);
+        }else if(!deliveryDataAvailable){
+          flags.append(badge("配信状況 未確認","unknown"));
+        }
         row.append(info,flags);root.append(row);
       }
     }
