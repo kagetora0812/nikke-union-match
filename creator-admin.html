@@ -2336,11 +2336,28 @@ main.container>section, main.container>section:not(.hidden), #menuSection, #auto
  .bot-guild-info small{white-space:normal;overflow-wrap:anywhere;font-size:10px}
  .bot-guild-flags{width:100%;margin-left:0;justify-content:flex-start;gap:5px}
  .bot-guild-flag{font-size:10px;line-height:1.35}
- .bot-exit-details .ending-union-card.compact-exit-row {justify-content:flex-start;gap:5px 9px;}
- .compact-exit-row .exit-name {white-space:normal;overflow-wrap:anywhere}
- .compact-exit-row .exit-guild-id {font-size:9px;white-space:normal;overflow-wrap:anywhere}
- .compact-exit-row .exit-reason {margin-left:0}
- .compact-exit-row .exit-remaining {margin-left:auto}
+ /* On phones, each active auto-leave row is ALWAYS exactly two lines. */
+ .bot-exit-details .ending-union-card.compact-exit-row {
+   display:grid; grid-template-columns:minmax(0,1fr) auto;
+   grid-template-rows:auto auto; column-gap:8px; row-gap:4px;
+   align-items:center; padding:9px 10px;
+ }
+ .compact-exit-row .exit-name {
+   grid-column:1; grid-row:1; min-width:0;
+   font-size:11px; white-space:nowrap; overflow:hidden; text-overflow:ellipsis;
+ }
+ .compact-exit-row .exit-guild-id {
+   grid-column:2; grid-row:1; font-size:9px;
+   white-space:nowrap; overflow-wrap:normal;
+ }
+ .compact-exit-row .exit-reason {
+   grid-column:1; grid-row:2; margin-left:0;
+   font-size:10px; white-space:nowrap;
+ }
+ .compact-exit-row .exit-remaining {
+   grid-column:2; grid-row:2; margin-left:0;
+   font-size:11px; text-align:right; white-space:nowrap;
+ }
  .creator-card-head {gap:6px}
  .creator-actions,.x-candidate-actions{display:flex;flex-wrap:wrap;gap:6px}
  .creator-actions .btn,.x-candidate-actions .btn{flex:1 1 auto;min-width:0}
