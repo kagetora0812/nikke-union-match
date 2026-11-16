@@ -2257,6 +2257,12 @@ label {font-size:11px;color:#B2B8C0}
 .ending-union-list {gap:0;margin-top:8px;border:1px solid #34383f;border-radius:5px;overflow:hidden}
 .bot-exit-details .ending-union-card { display:grid; grid-template-columns:minmax(0,1fr) auto; column-gap:12px; row-gap:3px; align-items:center; min-height:0; margin:0; padding:10px 13px; border:0 !important; border-bottom:1px solid #2d3238 !important; border-radius:0 !important; background:#121518 !important; }
 .bot-exit-details .ending-union-card:last-child {border-bottom:0 !important;}
+.bot-exit-details .ending-union-card.compact-exit-row{display:flex;align-items:center;gap:12px;flex-wrap:wrap;padding:10px 13px;}
+.compact-exit-row .exit-name{font-size:12px;color:#F3F5F7;white-space:nowrap;}
+.compact-exit-row .exit-guild-id{font-size:10px;color:#93B9D5;white-space:nowrap;}
+.compact-exit-row .exit-reason{font-size:10px;color:#F0BF70;margin-left:auto;white-space:nowrap;}
+.compact-exit-row .exit-remaining{font-size:11px;font-weight:750;color:#FF686F;white-space:nowrap;}
+@media(max-width:650px){.bot-exit-details .ending-union-card.compact-exit-row{gap:5px 9px;padding:9px;}.compact-exit-row .exit-reason{margin-left:0}.compact-exit-row .exit-remaining{margin-left:auto}}
 .bot-exit-details .ending-union-name {font-size:14px;grid-column:1;grid-row:1;}
 .bot-exit-details .ending-union-rank {font-size:10px;color:#A5ABB5 !important;margin:0;grid-column:1;}
 .bot-exit-details .ending-union-remaining {font-size:12px;grid-column:2;grid-row:1 / span 3;margin:0;padding:0;border:0 !important;background:transparent !important;color:#FF686F !important;text-align:right;white-space:nowrap;}
@@ -2768,7 +2774,7 @@ main.container>section, main.container>section:not(.hidden), #menuSection, #auto
       <div class="bot-guild-overview panel" id="botGuildOverview">
         <div class="bot-guild-top"><strong>導入先のBOT連携</strong><span id="botGuildOverviewSummary">未取得</span></div>
         <div id="botGuildOverviewRows" class="bot-guild-rows"><div class="empty">読み込み前</div></div>
-        <p class="bot-guild-note">サイト登録状態は有効登録と自動退出判定を照合。ON/OFFは設定値です。送信成功・送信エラーは配信ログ未連携のため確認できません。</p>
+        <p class="bot-guild-note">サイト登録済み・退出対象外のみ表示。ON/OFFは設定値で、送信成否は確認できません。</p>
       </div>
       <details class="bot-exit-details" open><summary>自動退出カウント・退出履歴</summary>
       <div id="autoLeaveSummary" class="union-registry-summary">読み込み前</div>
@@ -8033,47 +8039,32 @@ main.container>section, main.container>section:not(.hidden), #menuSection, #auto
       const snapAvailable=!leaveResult.error && leaveResult.data?.snapshot && Number.isFinite(Date.parse(leaveResult.data.updated_at));
       const snap=snapAvailable ? leaveResult.data.snapshot : {};
       const snapNames=snapAvailable ? (leaveResult.data.guild_names || {}) : {};
-      const protectedGuild="1546382067745431592";
-      const guilds=new Map();
-      for(const row of rows) if(row.guild_id) guilds.set(String(row.guild_id),row);
-      if(snapAvailable) for (const [guildId,entry] of Object.entries(snap)) {
-        if(!/^\d{15,22}$/.test(guildId) || guildId===protectedGuild || !entry || !AUTO_LEAVE_REASONS[entry.reason]) continue;
-        if(!guilds.has(guildId)) guilds.set(guildId,{guild_id:guildId});
+      // Show only confirmed site-registered, non-exit-target guilds here.
+      // Exit candidates are presented separately by loadAutoLeaveAdmin().
+      const exitIds=new Set();
+      if(snapAvailable) for(const [id,entry] of Object.entries(snap)) {
+        if(/^\d{15,22}$/.test(id) && entry && AUTO_LEAVE_REASONS[entry.reason]) exitIds.add(id);
       }
-      summary.textContent=`連携 ${rows.length}件${snapAvailable ? ` ／ 退出判定 ${Object.keys(snap).filter(g=>/^\d{15,22}$/.test(g)&&snap[g]?.reason&&g!==protectedGuild).length}件` : " ／ 退出情報未確認"}`;
-      if(!guilds.size){const empty=document.createElement("div");empty.className="empty";empty.textContent="連携情報はありません";root.append(empty);return;}
+      const registered=rows.filter(row=>row.guild_id &&
+        byIdentity.has(String(row.union_identity_id||"")) &&
+        !exitIds.has(String(row.guild_id)));
+      summary.textContent=`登録ユニオン ${registered.length}件${snapAvailable ? ` ／ 自動退出対象 ${exitIds.size}件（下の一覧）` : " ／ 自動退出情報未確認"}`;
+      if(!registered.length){
+        const empty=document.createElement("div");empty.className="empty";
+        empty.textContent="登録済みで退出対象外のBOT連携はありません";
+        root.append(empty);return;
+      }
       const badge=(label,kind)=>{const el=document.createElement("span");el.className="bot-guild-flag "+kind;el.textContent=label;return el;};
       const flag=(label,enabled)=>badge(label+" "+(enabled===true?"ON":enabled===false?"OFF":"未確認"),enabled===true?"on":enabled===false?"off":"unknown");
-      const names=record=>{
-        const id=String(record.guild_id || "");
-        const linked=byIdentity.get(String(record.union_identity_id || ""));
-        return linked || String(snap[id]?.name || snapNames[id] || "サーバー名未取得");
-      };
-      const all=[...guilds.values()].sort((a,b)=>names(a).localeCompare(names(b),"ja"));
-      for(const data of all){
-        const guildId=String(data.guild_id||"");
-        const snapshotEntry=snap[guildId];
-        const linked=byIdentity.has(String(data.union_identity_id||""));
-        const reason=snapshotEntry?.reason;
+      registered.sort((a,b)=>byIdentity.get(String(a.union_identity_id)).localeCompare(byIdentity.get(String(b.union_identity_id)),"ja"));
+      for(const data of registered){
         const row=document.createElement("div");row.className="bot-guild-row";
         const info=document.createElement("div");info.className="bot-guild-info";
-        const name=document.createElement("strong");name.textContent=names(data);
-        const id=document.createElement("small");id.textContent="Guild "+guildId;
+        const name=document.createElement("strong");name.textContent=byIdentity.get(String(data.union_identity_id));
+        const id=document.createElement("small");id.textContent="Guild "+String(data.guild_id);
         info.append(name,id);
         const flags=document.createElement("div");flags.className="bot-guild-flags";
-        if(linked){ flags.append(badge("サイト登録済み","on")); }
-        else if(snapAvailable && reason==="registration_missing") { flags.append(badge("サイト未登録","problem")); }
-        else if(snapAvailable && reason==="registration_expired") {flags.append(badge("掲載期限切れ","problem"));}
-        else if(data.union_identity_id && !linked){flags.append(badge("有効登録と不一致","problem"));}
-        else{flags.append(badge("サイト照合未確認","unknown"));}
-        if(rows.includes(data)){
-          flags.append(flag("PASS",data.pass_linked),flag("X",data.x_recruitment_enabled),flag("ログイン",data.morning_login_enabled));
-        }else{flags.append(badge("BOT設定未取得","unknown"));}
-        if(snapAvailable && reason && AUTO_LEAVE_REASONS[reason]){
-          const since=Date.parse(snapshotEntry.since||"");
-          const days=Number.isFinite(since) ? Math.max(0,Math.ceil((AUTO_LEAVE_WEEK_MS-(Date.now()-since))/86400000)) : null;
-          flags.append(badge(`退出カウント中${days == null ? "" : `・残り${days}日`}`,"problem"));
-        }
+        flags.append(flag("PASS",data.pass_linked),flag("X",data.x_recruitment_enabled),flag("ログイン",data.morning_login_enabled));
         row.append(info,flags);root.append(row);
       }
     }
@@ -8146,20 +8137,20 @@ main.container>section, main.container>section:not(.hidden), #menuSection, #auto
       }
       for (const row of rows) {
         const card = document.createElement("article");
-        card.className = "ending-union-card";
-        const title = document.createElement("div");
-        title.className = "ending-union-name";
-        title.textContent = row.name;
-        const details = document.createElement("div");
-        details.className = "ending-union-rank";
-        details.textContent = `判定：${row.reason} ｜ サーバーID：${row.id}`;
-        const count = document.createElement("div");
-        count.className = "ending-union-remaining";
-        count.textContent = `残り ${Math.ceil(row.remaining/86400000)} 日${row.stale ? "（要再確認）" : ""}`;
-        const since = document.createElement("div");
-        since.className = "ending-union-rank";
-        since.textContent = `カウント開始：${new Date(row.since).toLocaleString("ja-JP",{timeZone:"Asia/Tokyo"})} JST`;
-        card.append(title, details, count, since);
+        card.className = "ending-union-card compact-exit-row";
+        const name = document.createElement("strong");
+        name.className = "exit-name";
+        name.textContent = row.name;
+        const id = document.createElement("span");
+        id.className = "exit-guild-id";
+        id.textContent = `Guild ${row.id}`;
+        const reason = document.createElement("span");
+        reason.className = "exit-reason";
+        reason.textContent = row.reason === "サイト登録なし" ? "サイト未登録" : row.reason;
+        const count = document.createElement("span");
+        count.className = "exit-remaining";
+        count.textContent = `残り${Math.ceil(row.remaining/86400000)}日${row.stale ? "（要再確認）" : ""}`;
+        card.append(name,id,reason,count);
         list.append(card);
       }
       for (const departed of recentDepartures) {
