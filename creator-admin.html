@@ -8168,18 +8168,19 @@ main.container>section, main.container>section:not(.hidden), #menuSection, #auto
       $("#autoLeaveSection")?.classList.remove("hidden");
     }
 
-    const AUTO_LEAVE_WEEK_MS = 7 * 86400000;
+    const AUTO_LEAVE_GRACE_MS = 30 * 86400000;
+    const AUTO_LEAVE_DEPARTURE_HISTORY_MS = 7 * 86400000;
     function formatAdminCountdown(targetMs, kind) {
       if (!Number.isFinite(targetMs)) return "期限不明";
       const minutes=Math.ceil((targetMs-Date.now())/60000);
-      if (minutes<=0) return kind==="registration" ? "期限到達" : "退出判定待ち";
+      if (minutes<=0) return kind==="registration" ? "期限到達" : "30日経過・次回確認待ち";
       const days=Math.floor(minutes/1440);
       const hours=Math.floor((minutes%1440)/60);
       const mins=minutes%60;
       return `残り ${days ? days+"日 " : ""}${String(hours).padStart(2,"0")}:${String(mins).padStart(2,"0")}`;
     }
     function updateAdminCountdowns() {
-      document.querySelectorAll("#autoLeaveSection [data-auto-countdown-target]").forEach(el=>{
+      document.querySelectorAll("[data-auto-countdown-target]").forEach(el=>{
         const target=Number(el.dataset.autoCountdownTarget);
         const kind=el.dataset.autoCountdownKind;
         const prefix="";
@@ -8220,7 +8221,7 @@ main.container>section, main.container>section:not(.hidden), #menuSection, #auto
       const names = data?.guild_names || {};
       const updatedMs = data?.updated_at ? Date.parse(data.updated_at) : NaN;
       if (!Number.isFinite(updatedMs)) {
-        summary.textContent = "未同期：共有BOTのDRY_RUN実行後に同期が必要です。";
+        summary.textContent = "未同期：共有BOTの自動退出確認後に同期が必要です。";
         return;
       }
       const now = Date.now();
@@ -8228,13 +8229,13 @@ main.container>section, main.container>section:not(.hidden), #menuSection, #auto
         if (id === "1546382067745431592" || !/^\d{15,22}$/.test(id) || !entry || !AUTO_LEAVE_REASONS[entry.reason]) return [];
         const since = Date.parse(entry.since || "");
         if (!Number.isFinite(since) || since > now) return [];
-        const remaining = Math.max(0, AUTO_LEAVE_WEEK_MS - (now-since));
+        const remaining = Math.max(0, AUTO_LEAVE_GRACE_MS - (now-since));
         const lastChecked = Date.parse(entry.lastChecked || "");
         return [{id, name:String(entry.name || names[id] || "サーバー名未取得"), reason:AUTO_LEAVE_REASONS[entry.reason], remaining, since, stale:!Number.isFinite(lastChecked) || now-lastChecked>36*3600000}];
       }).sort((a,b) => a.remaining-b.remaining);
       const recentDepartures = (Array.isArray(state._departures) ? state._departures : []).filter(item => {
         const leftAt = Date.parse(item?.leftAt || "");
-        return /^\d{15,22}$/.test(String(item?.id || "")) && String(item.id) !== "1546382067745431592" && Number.isFinite(leftAt) && leftAt <= now && now - leftAt < AUTO_LEAVE_WEEK_MS;
+        return /^\d{15,22}$/.test(String(item?.id || "")) && String(item.id) !== "1546382067745431592" && Number.isFinite(leftAt) && leftAt <= now && now - leftAt < AUTO_LEAVE_DEPARTURE_HISTORY_MS;
       }).sort((a,b) => Date.parse(b.leftAt) - Date.parse(a.leftAt));
       const when = new Date(updatedMs).toLocaleString("ja-JP", {timeZone:"Asia/Tokyo"});
       summary.textContent = `カウント中 ${rows.length}件 ｜ 退出済み（7日以内）${recentDepartures.length}件 ｜ 永久除外 1件（UNION MATCH通知用） ｜ 最終同期 ${when} JST`;
@@ -8263,10 +8264,10 @@ main.container>section, main.container>section:not(.hidden), #menuSection, #auto
         reason.textContent = row.reason === "サイト登録なし" ? "サイト未登録" : row.reason;
         const count = document.createElement("span");
         count.className = "exit-remaining";
-        count.dataset.autoCountdownTarget = String(row.since+AUTO_LEAVE_WEEK_MS);
+        count.dataset.autoCountdownTarget = String(row.since+AUTO_LEAVE_GRACE_MS);
         count.dataset.autoCountdownKind = "exit";
         if(row.stale) count.dataset.autoCountdownStale = "1";
-        count.textContent = formatAdminCountdown(row.since+AUTO_LEAVE_WEEK_MS,"exit")+(row.stale ? "（要再確認）" : "");
+        count.textContent = formatAdminCountdown(row.since+AUTO_LEAVE_GRACE_MS,"exit")+(row.stale ? "（要再確認）" : "");
         card.append(name,id,reason,count);
         list.append(card);
       }
