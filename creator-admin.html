@@ -2262,7 +2262,7 @@ label {font-size:11px;color:#B2B8C0}
 .compact-exit-row .exit-name{font-size:12px;color:#F3F5F7;white-space:nowrap;}
 .compact-exit-row .exit-guild-id{font-size:10px;color:#93B9D5;white-space:nowrap;}
 .compact-exit-row .exit-reason{font-size:10px;color:#F0BF70;margin-left:auto;white-space:nowrap;}
-.compact-exit-row .exit-remaining{font-size:11px;font-weight:750;color:#FF686F;white-space:nowrap;}
+.compact-exit-row .exit-remaining{font-size:11px;font-weight:750;color:#FFFFFF;white-space:nowrap;}
 @media(max-width:650px){.bot-exit-details .ending-union-card.compact-exit-row{gap:5px 9px;padding:9px;}.compact-exit-row .exit-reason{margin-left:0}.compact-exit-row .exit-remaining{margin-left:auto}}
 .bot-exit-details .ending-union-name {font-size:14px;grid-column:1;grid-row:1;}
 .bot-exit-details .ending-union-rank {font-size:10px;color:#A5ABB5 !important;margin:0;grid-column:1;}
@@ -2277,7 +2277,7 @@ label {font-size:11px;color:#B2B8C0}
 .bot-guild-row.has-countdown{display:grid;grid-template-columns:minmax(0,1fr) auto auto;align-items:center;column-gap:12px;row-gap:6px;flex-wrap:nowrap}
 .bot-guild-row.has-countdown .bot-guild-info{grid-column:1;min-width:0}
 .bot-guild-row.has-countdown .bot-guild-flags{grid-column:2;max-width:100%;margin-left:0;justify-content:flex-end}
-.bot-guild-countdown{grid-column:3;font-size:11px;font-weight:800;color:#FF686F;text-align:right;white-space:nowrap;font-variant-numeric:tabular-nums}
+.bot-guild-countdown{grid-column:3;font-size:11px;font-weight:800;color:#FFFFFF;text-align:right;white-space:nowrap;font-variant-numeric:tabular-nums}
 .bot-guild-note {font-size:10px !important;line-height:1.4}
 .system-check-summary {padding:11px 13px;margin-top:8px;background:#11191d !important;border:1px solid #2e3e46 !important;}
 .system-check-overall {font-size:15px}
@@ -8155,7 +8155,7 @@ main.container>section, main.container>section:not(.hidden), #menuSection, #auto
           countdown.dataset.autoCountdownTarget=String(expiry);
           countdown.dataset.autoCountdownKind="registration";
           countdown.title="掲載期限："+new Date(expiry).toLocaleString("ja-JP",{timeZone:"Asia/Tokyo"})+" JST";
-          countdown.textContent="掲載 "+formatAdminCountdown(expiry,"registration");
+          countdown.textContent=formatAdminCountdown(expiry,"registration");
         } else {
           countdown.textContent="掲載期限未確認";
         }
@@ -8176,19 +8176,19 @@ main.container>section, main.container>section:not(.hidden), #menuSection, #auto
       const days=Math.floor(minutes/1440);
       const hours=Math.floor((minutes%1440)/60);
       const mins=minutes%60;
-      return `残り${days ? days+"日" : ""}${days || hours ? hours+"時間" : ""}${mins}分`;
+      return `残り ${days ? days+"日 " : ""}${String(hours).padStart(2,"0")}:${String(mins).padStart(2,"0")}`;
     }
     function updateAdminCountdowns() {
       document.querySelectorAll("#autoLeaveSection [data-auto-countdown-target]").forEach(el=>{
         const target=Number(el.dataset.autoCountdownTarget);
         const kind=el.dataset.autoCountdownKind;
-        const prefix=kind==="registration" ? "掲載 " : "";
+        const prefix="";
         const stale=el.dataset.autoCountdownStale==="1" ? "（要再確認）" : "";
         el.textContent=prefix+formatAdminCountdown(target,kind)+stale;
       });
     }
     // 表示だけ更新。DB書き込み・BOTの退出判定は行わない。
-    setInterval(updateAdminCountdowns,30000);
+    setInterval(updateAdminCountdowns,60000);
     const AUTO_LEAVE_REASONS = {
       no_guild_settings: "BOT設定なし",
       pass_not_linked: "PASS未連携",
