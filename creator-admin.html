@@ -8071,13 +8071,14 @@ main.container>section, main.container>section:not(.hidden), #menuSection, #auto
       if (!token) { summary.textContent = "未認証"; return; }
       // Read-only reconciliation: registered unions, PASS/settings and the same
       // snapshot used by the auto-leave countdown. No BOT state is mutated.
-      const [statusResult, membersResult, leaveResult, deliveryResult] = await Promise.all([
+      const [statusResult, membersResult, leaveResult, deliveryResult, notificationResult] = await Promise.all([
         sb.rpc("creator_admin_union_bot_status", {p_token:token}),
         sb.from("union_registrations")
           .select("union_name,union_identity_id,expires_at")
           .gt("expires_at",new Date().toISOString()),
         sb.rpc("creator_admin_auto_leave_countdown", {p_token:token}),
-        sb.rpc("creator_admin_bot_delivery_errors", {p_token:token})
+        sb.rpc("creator_admin_bot_delivery_errors", {p_token:token}),
+        sb.rpc("creator_admin_bot_notification_usage", {p_token:token})
       ]);
       if (statusResult.error || membersResult.error) {
         summary.textContent = "取得失敗";
@@ -8107,6 +8108,15 @@ main.container>section, main.container>section:not(.hidden), #menuSection, #auto
         console.warn("BOT_DELIVERY_ERROR_FETCH",deliveryResult.error?.message || "unknown");
       }
       const rows=Array.isArray(statusResult.data) ? statusResult.data : [];
+      const notificationAvailable=!notificationResult.error && Array.isArray(notificationResult.data);
+      const notificationsByGuild=new Map();
+      if (notificationAvailable) {
+        for (const usage of notificationResult.data) {
+          if (usage.guild_id) notificationsByGuild.set(String(usage.guild_id),usage);
+        }
+      } else {
+        console.warn("BOT_NOTIFICATION_USAGE_FETCH",notificationResult.error?.message || "unknown");
+      }
       const snapAvailable=!leaveResult.error && leaveResult.data?.snapshot && Number.isFinite(Date.parse(leaveResult.data.updated_at));
       const snap=snapAvailable ? leaveResult.data.snapshot : {};
       const snapNames=snapAvailable ? (leaveResult.data.guild_names || {}) : {};
@@ -8119,7 +8129,10 @@ main.container>section, main.container>section:not(.hidden), #menuSection, #auto
       const registered=rows.filter(row=>row.guild_id &&
         byIdentity.has(String(row.union_identity_id||"")) &&
         !exitIds.has(String(row.guild_id)));
-      summary.textContent=`登録ユニオン ${registered.length}件${snapAvailable ? ` ／ 自動退出対象 ${exitIds.size}件（下の一覧）` : " ／ 自動退出情報未確認"}`;
+      const notificationSummary=notificationAvailable
+        ? ` ／ 指揮官通知 ${registered.filter(row=>notificationsByGuild.get(String(row.guild_id))?.commander_notification_enabled===true).length}件ON ／ ユニオン通知 ${registered.filter(row=>notificationsByGuild.get(String(row.guild_id))?.union_notification_enabled===true).length}件ON`
+        : " ／ 通知利用状況 未確認";
+      summary.textContent=`登録ユニオン ${registered.length}件${notificationSummary}${snapAvailable ? ` ／ 自動退出対象 ${exitIds.size}件（下の一覧）` : " ／ 自動退出情報未確認"}`;
       if(!registered.length){
         const empty=document.createElement("div");empty.className="empty";
         empty.textContent="登録済みで退出対象外のBOT連携はありません";
@@ -8136,6 +8149,11 @@ main.container>section, main.container>section:not(.hidden), #menuSection, #auto
         info.append(name,id);
         const flags=document.createElement("div");flags.className="bot-guild-flags";
         flags.append(flag("PASS",data.pass_linked),flag("X",data.x_recruitment_enabled),flag("ログイン",data.morning_login_enabled));
+        const notification=notificationsByGuild.get(String(data.guild_id));
+        flags.append(
+          flag("指揮官通知",notificationAvailable && notification ? notification.commander_notification_enabled : null),
+          flag("ユニオン通知",notificationAvailable && notification ? notification.union_notification_enabled : null)
+        );
         const delivery=deliveryByGuild.get(String(data.guild_id));
         if(delivery){
           row.classList.add("has-delivery-error");
