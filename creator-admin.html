@@ -2273,6 +2273,11 @@ label {font-size:11px;color:#B2B8C0}
 .bot-guild-overview {margin-top:8px !important}
 .bot-guild-row {padding:9px 11px !important;min-height:40px;gap:7px 14px}
 .bot-guild-flags{margin-left:auto;justify-content:flex-end;flex-shrink:0}
+/* BOT管理の残り時間。PCは1行の右端、スマホだけ2段目の右端。 */
+.bot-guild-row.has-countdown{display:grid;grid-template-columns:minmax(0,1fr) auto auto;align-items:center;column-gap:12px;row-gap:6px;flex-wrap:nowrap}
+.bot-guild-row.has-countdown .bot-guild-info{grid-column:1;min-width:0}
+.bot-guild-row.has-countdown .bot-guild-flags{grid-column:2;max-width:100%;margin-left:0;justify-content:flex-end}
+.bot-guild-countdown{grid-column:3;font-size:11px;font-weight:800;color:#FF686F;text-align:right;white-space:nowrap;font-variant-numeric:tabular-nums}
 .bot-guild-note {font-size:10px !important;line-height:1.4}
 .system-check-summary {padding:11px 13px;margin-top:8px;background:#11191d !important;border:1px solid #2e3e46 !important;}
 .system-check-overall {font-size:15px}
@@ -2336,6 +2341,10 @@ main.container>section, main.container>section:not(.hidden), #menuSection, #auto
  .bot-guild-info small{white-space:normal;overflow-wrap:anywhere;font-size:10px}
  .bot-guild-flags{width:100%;margin-left:0;justify-content:flex-start;gap:5px}
  .bot-guild-flag{font-size:10px;line-height:1.35}
+ .bot-guild-row.has-countdown{grid-template-columns:minmax(0,1fr) auto;grid-template-rows:auto auto;gap:7px 6px !important}
+ .bot-guild-row.has-countdown .bot-guild-info{grid-column:1/-1;grid-row:1;flex:initial}
+ .bot-guild-row.has-countdown .bot-guild-flags{grid-column:1;grid-row:2;width:auto;min-width:0;margin-left:0;justify-content:flex-start;flex-wrap:wrap}
+ .bot-guild-row.has-countdown .bot-guild-countdown{grid-column:2;grid-row:2;font-size:10px}
  /* On phones, each active auto-leave row is ALWAYS exactly two lines. */
  .bot-exit-details .ending-union-card.compact-exit-row {
    display:grid; grid-template-columns:minmax(0,1fr) auto;
@@ -8079,9 +8088,12 @@ main.container>section, main.container>section:not(.hidden), #menuSection, #auto
         return;
       }
       const byIdentity=new Map();
+      const expiryByIdentity=new Map();
       for (const member of membersResult.data || []) {
         const key=String(member.union_identity_id || "");
         if(key && !byIdentity.has(key)) byIdentity.set(key,String(member.union_name || "名称取得不可"));
+        const expiry=Date.parse(member.expires_at || "");
+        if(key && Number.isFinite(expiry) && expiry>(expiryByIdentity.get(key)||0)) expiryByIdentity.set(key,expiry);
       }
       // One combined management-notification error per guild (X + digest).
       const deliveryByGuild = new Map();
@@ -8117,7 +8129,7 @@ main.container>section, main.container>section:not(.hidden), #menuSection, #auto
       const flag=(label,enabled)=>badge(label+" "+(enabled===true?"ON":enabled===false?"OFF":"未確認"),enabled===true?"on":enabled===false?"off":"unknown");
       registered.sort((a,b)=>byIdentity.get(String(a.union_identity_id)).localeCompare(byIdentity.get(String(b.union_identity_id)),"ja"));
       for(const data of registered){
-        const row=document.createElement("div");row.className="bot-guild-row";
+        const row=document.createElement("div");row.className="bot-guild-row has-countdown";
         const info=document.createElement("div");info.className="bot-guild-info";
         const name=document.createElement("strong");name.textContent=byIdentity.get(String(data.union_identity_id));
         const id=document.createElement("small");id.textContent="Guild "+String(data.guild_id);
@@ -8137,7 +8149,17 @@ main.container>section, main.container>section:not(.hidden), #menuSection, #auto
         }else if(!deliveryDataAvailable){
           flags.append(badge("配信状況 未確認","unknown"));
         }
-        row.append(info,flags);root.append(row);
+        const expiry=expiryByIdentity.get(String(data.union_identity_id||""));
+        const countdown=document.createElement("span");countdown.className="bot-guild-countdown";
+        if(Number.isFinite(expiry)) {
+          countdown.dataset.autoCountdownTarget=String(expiry);
+          countdown.dataset.autoCountdownKind="registration";
+          countdown.title="掲載期限："+new Date(expiry).toLocaleString("ja-JP",{timeZone:"Asia/Tokyo"})+" JST";
+          countdown.textContent="掲載 "+formatAdminCountdown(expiry,"registration");
+        } else {
+          countdown.textContent="掲載期限未確認";
+        }
+        row.append(info,flags,countdown);root.append(row);
       }
     }
 
@@ -8147,6 +8169,26 @@ main.container>section, main.container>section:not(.hidden), #menuSection, #auto
     }
 
     const AUTO_LEAVE_WEEK_MS = 7 * 86400000;
+    function formatAdminCountdown(targetMs, kind) {
+      if (!Number.isFinite(targetMs)) return "期限不明";
+      const minutes=Math.ceil((targetMs-Date.now())/60000);
+      if (minutes<=0) return kind==="registration" ? "期限到達" : "退出判定待ち";
+      const days=Math.floor(minutes/1440);
+      const hours=Math.floor((minutes%1440)/60);
+      const mins=minutes%60;
+      return `残り${days ? days+"日" : ""}${days || hours ? hours+"時間" : ""}${mins}分`;
+    }
+    function updateAdminCountdowns() {
+      document.querySelectorAll("#autoLeaveSection [data-auto-countdown-target]").forEach(el=>{
+        const target=Number(el.dataset.autoCountdownTarget);
+        const kind=el.dataset.autoCountdownKind;
+        const prefix=kind==="registration" ? "掲載 " : "";
+        const stale=el.dataset.autoCountdownStale==="1" ? "（要再確認）" : "";
+        el.textContent=prefix+formatAdminCountdown(target,kind)+stale;
+      });
+    }
+    // 表示だけ更新。DB書き込み・BOTの退出判定は行わない。
+    setInterval(updateAdminCountdowns,30000);
     const AUTO_LEAVE_REASONS = {
       no_guild_settings: "BOT設定なし",
       pass_not_linked: "PASS未連携",
@@ -8221,7 +8263,10 @@ main.container>section, main.container>section:not(.hidden), #menuSection, #auto
         reason.textContent = row.reason === "サイト登録なし" ? "サイト未登録" : row.reason;
         const count = document.createElement("span");
         count.className = "exit-remaining";
-        count.textContent = `残り${Math.ceil(row.remaining/86400000)}日${row.stale ? "（要再確認）" : ""}`;
+        count.dataset.autoCountdownTarget = String(row.since+AUTO_LEAVE_WEEK_MS);
+        count.dataset.autoCountdownKind = "exit";
+        if(row.stale) count.dataset.autoCountdownStale = "1";
+        count.textContent = formatAdminCountdown(row.since+AUTO_LEAVE_WEEK_MS,"exit")+(row.stale ? "（要再確認）" : "");
         card.append(name,id,reason,count);
         list.append(card);
       }
