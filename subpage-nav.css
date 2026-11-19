@@ -27,14 +27,15 @@
     bottom: 0 !important;
     z-index: 220 !important;
     height: calc(68px + env(safe-area-inset-bottom));
+    box-sizing: border-box;
     display: grid !important;
     grid-template-columns: repeat(4, minmax(0, 1fr));
     padding-bottom: env(safe-area-inset-bottom);
-    border-top: 1px solid rgba(255,255,255,.12);
-    background: #090a0d;
+    border-top: 1px solid rgba(255,255,255,.10);
+    background: rgba(9,10,13,.82);
     backdrop-filter: blur(14px);
     -webkit-backdrop-filter: blur(14px);
-    box-shadow: 0 -8px 28px rgba(0,0,0,.22);
+    box-shadow: none;
     transform: none !important;
   }
 
@@ -47,8 +48,9 @@
     flex-direction: column;
     gap: 4px;
     color: rgba(255,255,255,.66);
+    font-family: "Noto Sans JP", sans-serif;
     font-size: 10px;
-    font-weight: 700;
+    font-weight: 800;
     line-height: 1.2;
     text-align: center;
     text-decoration: none;
@@ -56,7 +58,7 @@
 
   .subpage-bottom-nav a.active {
     color: #fff;
-    background: rgba(26,176,241,.22);
+    background: transparent;
     box-shadow: none;
   }
 }
