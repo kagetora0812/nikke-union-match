@@ -24,7 +24,8 @@ body {
   text-rendering:optimizeLegibility
 }
 .site-header {
-  height:70px;
+  box-sizing:border-box;
+  height:64px;
   background:#090a0c;
   border-bottom:1px solid #26292d;
   display:flex;
@@ -323,7 +324,7 @@ body {
 }
 @media(max-width:600px) {
   .site-header {
-  height:66px;
+  height:58px;
   padding:0 14px
 }
 .brand img {
