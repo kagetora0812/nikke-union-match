@@ -1,34 +1,86 @@
 <!doctype html>
 <html lang="ja">
-<head>
-<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
-<title>使い方ガイド | UNION MATCH</title>
-<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;500;600;700&family=Teko:wght@500;600&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="./guide.css">
-<script src="./guide.js" defer></script>
-</head>
-<body>
-<header class="site-header"><a class="brand" href="../index.html" aria-label="UNION MATCH ホーム"><img src="../assets/union-match-logo-white.png" alt="UNION MATCH"></a><span class="header-guide">GUIDE</span></header>
-<main class="wrap">
-  <div class="heading"><span class="eyebrow">REGISTER GUIDE</span><h1>使い方ガイド</h1><p>登録の流れを順番にご案内します。ここでは実際の登録は行いません。</p></div>
-  <section class="guide-card" id="guideCard" aria-live="polite">
-    <div class="progress"><span id="stepLabel"></span><span id="stepCount"></span></div>
-    <div class="track"><div id="trackFill"></div></div>
-    <div id="demo" class="demo"></div>
-    <div class="description"><h2 id="descriptionTitle"></h2><div id="descriptionText"></div></div>
-    <div class="controls"><button type="button" id="back" class="btn outline">← 戻る</button><button type="button" id="next" class="btn primary">次へ →</button></div>
-  </section>
-  <section class="guide-card finish" id="finish" hidden>
-    <span class="eyebrow">READY TO REGISTER</span><h2>ガイドは以上です！</h2>
-    <p>登録の準備ができました。さっそくUNION MATCHを利用してみましょう！</p>
-    <a class="btn primary register-link" href="../index.html#registerPage">募集登録へ進む →</a>
-    <h3>登録後はもっと便利に！</h3>
-    <div class="feature"><strong>Discord BOT</strong><p>NIKKE公式の最新イベント・キャラクター情報、ログイン通知、新着指揮官情報をDiscordへお届けします。</p></div>
-    <div class="feature"><strong>Webプッシュ通知</strong><p>新着指揮官や掲載期限のお知らせをスマホ・PCへ。大切な情報の見逃しを防ぎます。</p></div>
-    <div class="feature" id="extensionFeature"><strong>14日間の掲載も安心！</strong><p>ユニオンは14日間の期限を延長して継続利用できます。初回PASS連携後は、BOT・プッシュ通知の期限通知からPASS不要で延長できます。</p></div>
-    <p class="note">※PASSは大切に保管してください。通知機能の利用は任意です。</p>
-    <button type="button" id="finishBack" class="btn outline">← ガイドに戻る</button>
-  </section>
-</main>
-</body></html>
+ <head>
+  <meta charset="utf-8"/>
+  <meta content="width=device-width,initial-scale=1" name="viewport"/>
+  <title>
+   案内に沿ってかんたん登録 | UNION MATCH
+  </title>
+  <link href="https://fonts.googleapis.com" rel="preconnect"/>
+  <link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;500;600;700&amp;family=Teko:wght@500;600&amp;display=swap" rel="stylesheet"/>
+  <link href="./guide.css" rel="stylesheet"/>
+  <script defer="" src="./guide.js">
+  </script>
+ </head>
+ <body>
+  <header class="site-header">
+   <a aria-label="UNION MATCH ホーム" class="brand" href="../index.html">
+    <img alt="UNION MATCH" src="../assets/union-match-logo-white.png"/>
+   </a>
+   <button aria-label="ガイドを閉じる" class="close-guide" id="closeGuide" type="button">
+    × 閉じる
+   </button>
+  </header>
+  <main class="wrap">
+   <div class="heading">
+    <span class="eyebrow">
+     REGISTER GUIDE
+    </span>
+    <h1>
+     案内に沿ってかんたん登録
+    </h1>
+    <p>
+     項目を順番に入力するだけ。最後に内容を確認して、そのまま登録へ進めます。
+    </p>
+   </div>
+   <section class="guide-card" id="guideCard">
+    <div class="progress">
+     <span id="stepLabel">
+     </span>
+     <span id="stepCount">
+     </span>
+    </div>
+    <div class="track">
+     <div id="trackFill">
+     </div>
+    </div>
+    <div class="demo" id="demo">
+    </div>
+    <div class="description">
+     <h2 id="descriptionTitle">
+     </h2>
+     <div id="descriptionText">
+     </div>
+    </div>
+    <p class="validation-error" hidden="" id="validationError" role="alert">
+    </p>
+    <div class="controls">
+     <button class="btn outline" id="back" type="button">
+      ← 戻る
+     </button>
+     <button class="btn primary" id="next" type="button">
+      次へ →
+     </button>
+    </div>
+   </section>
+  </main>
+  <dialog class="close-dialog" id="closeDialog">
+   <h2>
+    ガイドを終了しますか？
+   </h2>
+   <p>
+    入力した内容は破棄されます。
+   </p>
+   <div class="controls">
+    <button class="btn outline" id="cancelClose" type="button">
+     続ける
+    </button>
+    <button class="btn primary" id="confirmClose" type="button">
+     終了する
+    </button>
+   </div>
+  </dialog>
+ </body>
+</html>
+
