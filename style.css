@@ -6093,91 +6093,6 @@ body.manage-mode #managePage #loadManageRecruitmentBtn,
 }
 
 
-/* ================================================================
-   NEW UNION REGISTRATION — BOT GUIDE AFTER SUCCESSFUL PASS COPY
-   Only #resultModal; never affects manage/preview/Discord republish.
-   ================================================================ */
-#resultModal .registration-bot-guide {
-  visibility: hidden;
-  pointer-events: none;
-  overflow: hidden;
-  max-height: 0;
-  opacity: 0;
-  margin: 0;
-  padding: 0 13px;
-  border: 0 solid #dce5e9;
-  background: #f8fafb;
-  transform: translateY(-8px);
-  transition:
-    max-height .32s ease,
-    opacity .25s ease,
-    transform .32s ease,
-    padding .32s ease,
-    margin .32s ease;
-}
-#resultModal .registration-bot-guide.is-open {
-  visibility: visible;
-  pointer-events: auto;
-  max-height: 440px;
-  opacity: 1;
-  margin: 12px 0;
-  padding: 13px;
-  border-width: 1px;
-  transform: translateY(0);
-}
-#resultModal .registration-bot-guide h3 {
-  color: #1ab0f1;
-  font: 700 15px/1.5 "Noto Sans JP", sans-serif;
-  letter-spacing: -.025em;
-  margin: 0 0 9px;
-}
-#resultModal .registration-bot-guide p {
-  color: #4e5962;
-  font: 500 12px/1.75 "Noto Sans JP", sans-serif;
-  margin: 0 0 10px;
-}
-#resultModal .registration-bot-guide-link {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  min-height: 46px;
-  margin-top: 12px;
-  padding: 10px 12px;
-  text-decoration: none;
-  text-align: center;
-  font-size: 12px;
-  font-weight: 900;
-  border: 1px solid #1ab0f1 !important;
-  color: #1ab0f1 !important;
-  background: #fff !important;
-  border-radius: 0 !important;
-  clip-path: none !important;
-  box-shadow: none !important;
-  transform: none !important;
-}
-@media (hover: hover) {
-  #resultModal .registration-bot-guide-link:hover {
-    border-color: #079bdc !important;
-    color: #fff !important;
-    background: #079bdc !important;
-  }
-}
-#resultModal .registration-bot-guide-link:focus-visible,
-#resultModal .registration-bot-guide-link:active {
-  border-color: #079bdc !important;
-  color: #fff !important;
-  background: #079bdc !important;
-}
-/* The result modal owns scrolling in both collapsed and expanded states. */
-@media (max-width: 600px) {
-  #resultModal .registration-bot-guide.is-open { padding: 12px; }
-  #resultModal .registration-bot-guide h3 { font-size: 14px; }
-  #resultModal .registration-bot-guide p { font-size: 12.5px; }
-}
-@media (prefers-reduced-motion: reduce) {
-  #resultModal .registration-bot-guide { transition: none; }
-}
-
 /* Registration completion: hierarchy unified around red / gray / cyan */
 #resultModal .registration-pass-warning { color:#59636e; }
 #resultModal .registration-pass-warning > strong {color:#c43246;font-size:12.5px;}
@@ -6185,16 +6100,8 @@ body.manage-mode #managePage #loadManageRecruitmentBtn,
 #resultModal .registration-pass-intro {margin:7px 0 9px; color:#65717a !important;font-weight:600;}
 #resultModal .registration-pass-role {margin:10px 0 4px !important;color:#098ec7!important;font-weight:900; font-size:13px;}
 #resultModal .registration-pass-item {padding:3px 0 3px 10px; border-left:2px solid #dce5ec;color:#303943!important;font-weight:700;}
-#resultModal .registration-bot-guide.is-open {max-height:550px;}
-#resultModal .registration-bot-eyebrow {margin-bottom:5px;color:#098ec7;font-size:10px;font-weight:900;letter-spacing:.16em;}
-#resultModal .registration-bot-guide h3 {color:#283038;font-size:16px;font-weight:900;}
-#resultModal .registration-bot-guide p {font-size:12.5px;line-height:1.8;}
-#resultModal .registration-bot-guide p strong {color:#303943;font-weight:900;}
-#resultModal .registration-bot-accent {color:#098ec7;font-weight:900;}
-#resultModal .registration-bot-support {padding-top:9px;border-top:1px solid #dce5e9;color:#65717a!important;font-size:11.5px!important;}
 #resultModal .share-choice-title {font-size:19px!important;line-height:1.4;}
 #resultModal .share-choice-help {font-size:15px!important;line-height:1.7; color:#58646d!important;}
-@media(max-width:600px){#resultModal .share-choice-title{font-size:16px!important;}#resultModal .share-choice-help{font-size:14px!important;}#resultModal .registration-bot-guide h3{font-size:14px;}}
 /* Management action dialog centered on desktop, tablet and phone */
 .manage-action-dialog {position:fixed;inset:0;z-index:99999;background:rgba(12,18,25,.62);display:flex;align-items:center;justify-content:center;padding:16px;}
 .manage-action-dialog.hidden {display:none!important;}
@@ -6235,7 +6142,6 @@ body, button, input, select, textarea {font-family:"Noto Sans JP",sans-serif;}
 #resultModal .share-choice-title {font-size:17px!important;line-height:1.45;}
 #resultModal .share-choice-help {font-size:14px!important;}
 #resultModal .copy-btn,
-#resultModal .registration-bot-guide-link,
 #resultModal #shareXBtn,
 #resultModal #resultDone {
   border-radius:0!important;clip-path:none!important;
