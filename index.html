@@ -708,8 +708,8 @@
             var(--cyan, #1ab0f1) 100%
           ) !important;
         color: #fff !important;
-        box-shadow: 0 4px 12px rgba(26,176,241,.28) !important;
-        transform: translateY(-1px);
+        box-shadow: none !important;
+        transform: none !important;
       }
     }
 
@@ -1307,8 +1307,7 @@
 
   <style id="v51-10-pass-manage-safe-fix">
     /* PASS呼び出し後は入力画面を隠し、管理カードへ切替 */
-    #managePage.manage-loaded-mode #closeForm,
-    #managePage.manage-loaded-mode .manage-pass-notice {
+    #managePage.manage-loaded-mode #closeForm {
       display: none !important;
     }
 
@@ -1320,30 +1319,28 @@
       color: var(--cyan, #18abf4) !important;
     }
 
-    /* 利用確認完了：チェックを少し大きくし、文言は1行のまま */
-    #manageMembershipConfirmedNotice {
-      display: flex !important;
-      align-items: center !important;
-      flex-wrap: nowrap !important;
-      gap: 9px !important;
-      white-space: normal !important;
-      font-size: 12px !important;
-      line-height: 1.7 !important;
-      overflow: visible;
+    /* PASS管理：確認結果は白背景と細い枠で表示。左帯・絵文字は使用しない。 */
+    #managePage #manageMembershipConfirmedNotice {
+      display: block !important;
+      padding: 18px 20px !important;
+      border: 1px solid #dce2e7 !important;
+      border-left: 1px solid #dce2e7 !important;
+      background: #fff !important;
+      background-image: none !important;
+      clip-path: none !important;
+      border-radius: 0 !important;
+      box-shadow: none !important;
+      color: #24282c !important;
+      font: 400 13px/1.75 "Noto Sans JP", sans-serif !important;
     }
-    #manageMembershipConfirmedNotice .manage-confirm-check {
-      display: inline-block;
-      flex: 0 0 auto;
-      margin-right: 0 !important;
-      font-size: 20px;
-      line-height: 1;
-      vertical-align: -2px;
-    }
-    #manageMembershipConfirmedNotice > span:last-child {
-      display: inline-block;
-      min-width: 0;
-      white-space: normal !important;
-    }
+    #managePage #manageMembershipConfirmedNotice::before,
+    #managePage #manageMembershipConfirmedNotice::after { content: none !important; display: none !important; }
+    #managePage #manageMembershipConfirmedNotice.hidden { display: none !important; }
+    #manageMembershipConfirmedNotice .um-confirm-title { display: block; font-size: 15px; font-weight: 500; }
+    #manageMembershipConfirmedNotice .um-confirm-date { display: flex; flex-wrap: wrap; gap: 4px 16px; justify-content: space-between; margin-top: 12px; padding-top: 12px; border-top: 1px solid #e6eaed; }
+    #manageMembershipConfirmedNotice .um-confirm-date-label { color: #6b747c; }
+    #manageMembershipConfirmedNotice .um-confirm-date-value { font-size: 15px; font-weight: 500; font-variant-numeric: tabular-nums; }
+    #manageMembershipConfirmedNotice .um-confirm-note { display: block; margin-top: 10px; color: #69747d; font-size: 12px; font-weight: 400; }
 
     /* PASS編集：「編集をやめる」だけ境界線の四角ボタンへ統一 */
     #managePage #cancelManageEditBtn {
@@ -1358,9 +1355,10 @@
     /* 登録削除：通常は白とルビーレッド、PCホバー時だけ赤背景。 */
     html body #managePage #deleteUnionMembershipBtn.manage-delete-btn {
       margin-top: 72px !important;
-      min-height: 52px !important;
-      border: 1px solid #C43246 !important;
-      color: #C43246 !important;
+      min-height: 48px !important;
+      font: 400 13px/1.5 "Noto Sans JP", sans-serif !important;
+      border: 1px solid #9E3445 !important;
+      color: #9E3445 !important;
       background: #fff !important;
       background-image: none !important;
       clip-path: none !important;
@@ -1371,8 +1369,8 @@
 
     @media (hover: hover) and (pointer: fine) {
       html body #managePage #deleteUnionMembershipBtn.manage-delete-btn:hover {
-        border-color: #C43246 !important;
-        background: #C43246 !important;
+        border-color: #9E3445 !important;
+        background: #9E3445 !important;
         background-image: none !important;
         color: #fff !important;
         box-shadow: none !important;
