@@ -5553,10 +5553,10 @@ body.register-mode .register-inline-title h2 {
 #registerPage .register-field-help {
   display: block;
   margin-top: 7px;
-  color: #727980;
-  font-size: 11px;
-  font-weight: 700;
-  line-height: 1.55;
+  color: #7b8085;
+  font-size: 12px;
+  font-weight: 400;
+  line-height: 1.8;
 }
 
 body.register-mode #registerPage .register-guide-entry {
@@ -5576,7 +5576,7 @@ body.register-mode #registerPage .register-guide-entry:hover {
 
 #registerPage .register-usage-block {
   margin-top: 14px;
-  padding: 14px;
+  padding: 0;
   border: 0;
   background: transparent;
 }
@@ -5652,7 +5652,7 @@ body.register-mode #registerPage .register-guide-entry:hover {
 
 #registerPage .register-usage-note {
   margin: 8px 0 0;
-  color: #44464a;
+  color: #62666a;
   font-size: 14px;
   font-weight: 400;
   line-height: 1.8;
@@ -5682,7 +5682,7 @@ body.manage-mode .hero {
 
 @media screen and (max-width: 600px) {
   #registerPage .register-usage-block {
-    padding: 12px;
+    padding: 0;
   }
 
   #registerPage .register-usage-head {
@@ -5931,7 +5931,7 @@ body.manage-mode #managePage #loadManageRecruitmentBtn,
   box-sizing:border-box!important; display:inline-flex!important;align-items:center!important;justify-content:center!important;
   min-height:48px!important;padding:12px 20px!important;border-radius:0!important;clip-path:none!important;
   font:700 13px "Noto Sans JP",sans-serif!important;letter-spacing:normal!important;text-align:center!important;
-  border:1px solid #1ab0f1!important;background:#f2fbff!important;background-image:none!important;color:#0b8fc8!important;
+  border:1px solid #1ab0f1!important;border-left:1px solid #1ab0f1!important;background:#f2fbff!important;background-image:none!important;color:#0b8fc8!important;
   box-shadow:none!important;text-shadow:none!important;cursor:pointer!important;
   transition:background-color .15s ease,color .15s ease,border-color .15s ease!important;
 }
@@ -6219,5 +6219,6 @@ body, button, input, select, textarea {font-family:"Noto Sans JP",sans-serif;}
   margin-top: 12px;
 }
 #managePage .um-manage-help .manage-pass-notice strong:not(.manage-help-subhead) {
-  font-weight: 600;
+  font-weight: 400;
+  color: inherit;
 }
