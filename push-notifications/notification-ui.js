@@ -121,7 +121,8 @@
     refreshLocalState();
     const close=()=>{dialog.dataset.open='false';};
     const open=()=>{if(document.body.classList.contains('menu-open'))document.getElementById('siteMenuClose')?.click();setPassStatus(false);showNotificationState(false);dialog.dataset.open='true';refreshLocalState();};
-    document.querySelectorAll('.um-notification-bell,[data-um-notification-open]').forEach(button=>button.addEventListener('click',open));
+    document.addEventListener('click',event=>{if(event.target.closest('.um-notification-bell,[data-um-notification-open]'))open();});
+    window.addEventListener('pageshow',refreshLocalState);
     dialog.querySelector('.um-close').addEventListener('click',close);
     dialog.addEventListener('click',event=>{if(event.target===dialog)close();});
     save.addEventListener('click',async()=>{
