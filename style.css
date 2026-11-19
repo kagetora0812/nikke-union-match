@@ -3988,8 +3988,8 @@ body .video-topbar {
   padding: 0 14px !important;
   border-bottom: 0 !important;
   background: rgba(5,7,10,.72) !important;
-  backdrop-filter: none !important;
-  -webkit-backdrop-filter: none !important;
+  backdrop-filter: blur(15px) saturate(120%) !important;
+  -webkit-backdrop-filter: blur(15px) saturate(120%) !important;
 }
 
 body .video-logo-switch {
@@ -5132,8 +5132,8 @@ body .video-topbar {
     z-index: 120 !important;
 
     background: rgba(5,7,10,.72) !important;
-    backdrop-filter: none !important;
-    -webkit-backdrop-filter: none !important;
+    backdrop-filter: blur(15px) saturate(120%) !important;
+    -webkit-backdrop-filter: blur(15px) saturate(120%) !important;
     box-shadow: none !important;
   }
 
@@ -6349,8 +6349,8 @@ body.manage-mode #manageEditPanel button[type="submit"]{min-height:48px!importan
   html body .subpage-bottom-nav,
   html body .um-shared-footer {
     background: rgba(5,7,10,.72) !important;
-    backdrop-filter: blur(15px) saturate(120%) !important;
-    -webkit-backdrop-filter: blur(15px) saturate(120%) !important;
+    backdrop-filter: none !important;
+    -webkit-backdrop-filter: none !important;
     box-sizing: border-box !important;
     height: calc(var(--um-nav-bar-height) + env(safe-area-inset-bottom)) !important;
     padding: 0 0 env(safe-area-inset-bottom) !important;
