@@ -69,19 +69,22 @@ body {
   margin-bottom:26px
 }
 .eyebrow {
-  font:800 11px/1 'Teko',sans-serif;
+  display:block;
+  font:700 11px/1 'Teko',sans-serif;
   color:var(--blue);
   letter-spacing:2.2px
 }
 .heading h1 {
   color:#fff;
-  margin:8px 0;
+  margin:2px 0 0;
+  line-height:1.25;
   font-size:26px;
   font-weight:700;
   letter-spacing:-.025em
 }
 .heading p {
   color:#b6c0c9;
+  margin:8px 0 0;
   font-size:13px;
   letter-spacing:normal;
   font-weight:500;
@@ -183,7 +186,7 @@ body {
 .description p {
   margin:0 0 10px;
   color:#44464a;
-  font-weight:500;
+  font-weight:400;
   letter-spacing:normal;
   overflow-wrap:anywhere
 }
@@ -348,11 +351,10 @@ body {
 /* Guide header: same left-aligned title hierarchy as REGISTER / MANAGE. */
 .heading-row{display:flex;align-items:center;justify-content:flex-start;gap:14px;min-width:0}
 .heading-titles{min-width:0;flex:1 1 auto}
-.heading p{margin:12px 0 0}
 .close-guide{flex:0 0 auto;color:#c5cdd5;border-color:#69727b;white-space:nowrap;transition:background-color .15s,color .15s,border-color .15s}
 /* Validation belongs to its field, not to the navigation buttons. */
 .field-label-row{display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;column-gap:12px;row-gap:2px;margin-bottom:8px}
 .demo .field-label-row label{margin:0}
 .field-label-row .validation-error{margin:0;color:#c93748;font-size:12px;font-weight:500;line-height:1.5}
 .demo .validation-error:not(.field-label-row .validation-error){margin:0 0 8px;color:#c93748;font-size:12px;font-weight:500}
-@media(max-width:600px){.heading-row{align-items:center;gap:12px}.heading h1{font-size:21px;line-height:1.4}.close-guide{padding:0 9px;font-size:12px}.heading p{font-size:12px}.field-label-row{align-items:flex-start}}
+@media(max-width:600px){.heading-row{align-items:center;gap:12px}.heading h1{font-size:21px;line-height:1.25}.close-guide{padding:0 9px;font-size:12px}.heading p{font-size:12px}.field-label-row{align-items:flex-start}}
