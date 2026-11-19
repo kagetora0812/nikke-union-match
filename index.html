@@ -42,7 +42,7 @@
 
   <link
     rel="stylesheet"
-    href="./style.css?v=51.31"
+    href="./style.css?v=51.32"
   >
 
 
@@ -249,20 +249,6 @@
     /* app.js互換用。画面には出さないがIDは残す。 */
     #previewImageClearBtn {
       display: none !important;
-    }
-
-    #closeLoadedRecruitmentBtn {
-      background: var(--red, #ff5364) !important;
-      border-color: var(--red, #ff5364) !important;
-      color: #fff !important;
-      box-shadow: 0 7px 18px rgba(255,83,100,.24) !important;
-    }
-
-    #closeLoadedRecruitmentBtn:hover,
-    #closeLoadedRecruitmentBtn:active {
-      background: #e94759 !important;
-      border-color: #ff7180 !important;
-      color: #fff !important;
     }
 
     .manage-edit-choice-panel {
@@ -2191,7 +2177,7 @@
 
           </form>
 
-          <details class="um-manage-help"><summary>使い方を見る</summary>
+          <div class="um-manage-help"><button id="manageHelpToggle" class="um-manage-help-toggle" type="button" aria-expanded="false" aria-controls="manageHelpContent">▶ 使い方を見る</button><div id="manageHelpContent" hidden>
           <div class="manage-pass-notice">
             ユニオン・指揮官の登録情報を管理できます。
             <span>登録時に発行された8文字のPASSを入力し、「登録内容を呼び出す」を押してください。</span>
@@ -2203,7 +2189,8 @@
             <span>BOTを利用している場合は、Discordに届く期限通知からPASS不要で掲載期限（14日）の延長・募集状況の切り替えができます。</span>
             <span>BOTを利用していない場合は、14日ごとにPASSを入力し、掲載の継続や募集状況の変更など、必要な操作を行ってください。</span>
           </div>
-          </details>
+          </div>
+          </div>
 
           <div
             id="manageLoadedPanel"
@@ -3153,7 +3140,7 @@
     </div>
   </div>
 
-  <script src="./app.js?v=51.31"></script>
+  <script src="./app.js?v=51.32"></script>
 
   <script id="preview-image-check-adapter-v5114">
     (() => {
