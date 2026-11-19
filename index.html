@@ -569,33 +569,11 @@
       #registrationPreviewModal .registration-preview-actions .btn {
         width: 100% !important;
         min-width: 0 !important;
-        min-height: 54px !important;
+        min-height: 48px !important;
         margin: 0 !important;
         padding: 10px 8px !important;
         font-size: 13px !important;
         line-height: 1.2 !important;
-      }
-
-      #registrationPreviewBack {
-        border-color: #686b70 !important;
-        color: #222428 !important;
-        background: #ffffff !important;
-      }
-
-      #registrationPreviewConfirm {
-        border-color: var(--cyan, #1ab0f1) !important;
-        color: #ffffff !important;
-
-        background:
-          linear-gradient(
-            180deg,
-            var(--cyan-2, #28b8f4) 0%,
-            var(--cyan, #1ab0f1) 100%
-          ) !important;
-
-        box-shadow:
-          0 6px 16px
-          rgba(26, 176, 241, .28) !important;
       }
 
       #registrationPreviewConfirm::before {
@@ -606,35 +584,8 @@
 
 
   <style id="pass-notice-visual-correction">
-    /* PASS管理の説明表示のみ。既存機能・他ページは変更しない。 */
-    #managePage .manage-pass-notice > strong,
-    #managePage .manage-pass-notice > span {
-      display: block;
-      line-height: 1.8;
-    }
-    #managePage .manage-pass-notice > strong:first-child {
-      margin-bottom: 8px;
-    }
-    #managePage .manage-pass-notice > strong:nth-of-type(2),
-    #managePage .manage-pass-notice > strong:nth-of-type(3) {
-      margin-top: 13px;
-      margin-bottom: 3px;
-      color: #159ac8 !important;
-      -webkit-text-fill-color: #159ac8 !important;
-    }
-    #managePage .manage-pass-notice strong[style*="#159ac8"] {
-      color: #159ac8 !important;
-      -webkit-text-fill-color: #159ac8 !important;
-    }
-    #managePage .manage-pass-notice strong[style*="#c43246"] {
-      color: #c43246 !important;
-      -webkit-text-fill-color: #c43246 !important;
-    }
-    /* PASS管理画面の下部ナビ境界線のみ撤去。 */
-    body.manage-mode #bottomNav {
-      border-top: 0 !important;
-      box-shadow: none !important;
-    }
+    /* PASS管理の下部ナビ境界線のみ維持。説明はstyle.cssのガイド基準に統一。 */
+    body.manage-mode #bottomNav {border-top:0!important;box-shadow:none!important;}
   </style>
 
   <style id="manage-match-register-v512">
@@ -1891,10 +1842,7 @@
 
 
 
-            <a class="register-guide-entry" href="./guide/index.html">
-              <span>はじめての方はこちら</span>
-              <strong>登録ガイドを見る →</strong>
-            </a>
+            <a class="register-guide-entry" href="./guide/index.html">はじめての方はこちら　登録ガイドを見る →</a>
 
             <form
               id="registerForm"
