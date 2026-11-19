@@ -1,9 +1,9 @@
 :root {
   --blue:#1ab0f1;
-  --deep:#159ac8;
+  --deep:#0b8fc8;
   --ink:#222428;
   --muted:#7b8085;
-  --line:#c8cdd0;
+  --line:#b9bfc5;
   --panel:#fff
 }
 * {
@@ -62,7 +62,7 @@ body {
 }
 .eyebrow {
   font:800 11px/1 'Teko',sans-serif;
-  color:#28b8f4;
+  color:#62666a;
   letter-spacing:2.2px
 }
 .heading h1 {
@@ -104,30 +104,31 @@ body {
 }
 .demo {
   padding:24px;
-  border:1px solid #c9e1ee;
-  background:#f7fbfe;
+  border:1px solid #e1e3e5;
+  background:#f8fafb;
   min-height:118px
 }
 .demo label,.demo .demo-label {
   display:block;
   font-weight:900;
   margin-bottom:8px;
-  color:#30485a
+  color:#62666a
 }
 .mock-input,.mock-select {
   width:100%;
   background:#fff;
-  border:1px solid #cbd8e2;
+  border:1px solid #b7bcc0;
   border-radius:0;
   min-height:46px;
   padding:10px 13px;
-  color:#26394a;
+  color:#222428;
   font:inherit;
   letter-spacing:normal
 }
 .mock-input:focus,.mock-select:focus {
-  outline:2px solid #9bdaf5;
-  outline-offset:1px
+  outline:none;
+  border-color:#1ab0f1;
+  box-shadow:inset 0 0 0 1px #1ab0f1
 }
 .choice-row {
   display:grid;
@@ -135,18 +136,18 @@ body {
   gap:10px
 }
 .choice {
-  border:1px solid #cbd8e2;
+  border:1px solid #b9bfc5;
   background:#fff;
   padding:12px;
-  font:inherit;
+  font:700 12px "Noto Sans JP",sans-serif;
   cursor:pointer;
-  color:#34363a
+  color:#3f444a
 }
 .choice.active {
   border-color:#1ab0f1;
-  background:#e8f6fc;
-  color:#0877b2;
-  font-weight:900
+  background:#f2fbff;
+  color:#0b8fc8;
+  font-weight:700
 }
 .demo-note {
   font-size:12px;
@@ -169,16 +170,16 @@ body {
   color:#44464a
 }
 .description .hint {
-  color:#087db9;
+  color:#0b8fc8;
   font-size:12px;
   font-weight:900
 }
 .description .extra {
   margin-top:14px;
   padding:16px;
-  background:#edf8fe;
-  border:1px solid #d3e9f5;
-  color:#334d60
+  background:#f2fbff;
+  border:1px solid #c8cdd0;
+  color:#44464a
 }
 .description .extra p {
   margin:0 0 12px
@@ -187,7 +188,7 @@ body {
   margin-bottom:0
 }
 .description .extra strong {
-  color:#0877b2
+  color:#0b8fc8
 }
 .controls {
   display:grid;
@@ -207,7 +208,7 @@ body {
   cursor:pointer
 }
 .btn.primary {
-  background:linear-gradient(180deg,#28b8f4 0%,#1ab0f1 100%);
+  background:#1ab0f1;
   color:#fff;
   border:1px solid #1ab0f1
 }
@@ -217,10 +218,10 @@ body {
 .btn.outline {
   background:#fff;
   border:1px solid #cbd8e2;
-  color:#34363a
+  color:#3f444a
 }
 .btn.outline:hover {
-  background:#f0f8fc
+  background:#f2fbff
 }
 .btn:disabled {
   opacity:.4;
@@ -249,14 +250,14 @@ body {
 }
 .notice {
   padding:12px;
-  border:1px solid #cbe5f3;
-  background:#eff9ff;
-  color:#28536d
+  border:1px solid #c8cdd0;
+  background:#f2fbff;
+  color:#44464a
 }
 .close-dialog {
   max-width:min(430px,calc(100% - 32px));
   width:100%;
-  border:1px solid #cbd8e2;
+  border:1px solid #b9bfc5;
   padding:24px;
   color:var(--ink);
   font-family:inherit
@@ -312,4 +313,4 @@ body {
 
 /* 全STEP共通：マウス操作時のブラウザ標準枠を除去し、キーボード操作時は可視化 */
 .btn:focus:not(:focus-visible),.choice:focus:not(:focus-visible){outline:none}
-.btn:focus-visible,.choice:focus-visible,.close-guide:focus-visible{outline:2px solid #1ab0f1;outline-offset:3px}
+.btn:focus-visible,.choice:focus-visible,.close-guide:focus-visible{outline:2px solid #1ab0f1;outline-offset:2px}
