@@ -5747,17 +5747,15 @@ body.manage-mode .hero {
 body.register-mode #registerPage,
 body.manage-mode #managePage { font-family:"Noto Sans JP",sans-serif; color:#23272b; }
 body.register-mode .register-inline-top,
-body.register-mode .register-inline-top,
-body.manage-mode .manage-inline-top { display:flex!important; align-items:center!important; gap:14px!important; margin-bottom:26px!important; }
-body.register-mode .register-inline-title .eyebrow,
+body.manage-mode .manage-inline-top { display:flex!important; align-items:center!important; gap:12px!important; min-height:44px!important; margin-bottom:26px!important; }
+body.register-mode .register-inline-title,
+body.manage-mode .manage-inline-title {display:flex!important;flex-direction:column!important;justify-content:center!important;min-height:44px!important;}
 body.register-mode .register-inline-title .eyebrow,
 body.manage-mode .manage-inline-title .eyebrow { color:#1ab0f1!important; font:700 11px/1 "Teko",sans-serif!important; letter-spacing:2.2px!important; }
 body.register-mode .register-inline-title h2,
-body.register-mode .register-inline-title h2,
 body.manage-mode .manage-inline-title h2 { margin:2px 0 0!important; color:#222428!important; font:700 26px/1.25 "Noto Sans JP",sans-serif!important; letter-spacing:-.025em!important; }
 body.register-mode #registerPage .register-back-btn,
-body.register-mode #registerPage .register-back-btn,
-body.manage-mode #managePage .manage-back-btn {box-sizing:border-box!important; width:88px!important;min-height:44px!important;height:44px!important;min-width:88px!important;padding:0 12px!important;display:inline-flex!important;align-items:center!important;justify-content:center!important;white-space:nowrap!important;clip-path:none!important;border:1px solid #69727b!important;border-radius:0!important;background:transparent!important;box-shadow:none!important;color:#222428!important;font:700 13px "Noto Sans JP",sans-serif!important;letter-spacing:normal!important;transition:background-color .15s,color .15s,border-color .15s!important;}
+body.manage-mode #managePage .manage-back-btn {box-sizing:border-box!important; width:88px!important;min-height:44px!important;height:44px!important;min-width:88px!important;flex:0 0 88px!important;padding:0 9px!important;display:inline-flex!important;align-items:center!important;justify-content:center!important;white-space:nowrap!important;clip-path:none!important;border:1px solid #69727b!important;border-left-width:1px!important;border-radius:0!important;background:transparent!important;box-shadow:none!important;color:#222428!important;font:700 13px "Noto Sans JP",sans-serif!important;letter-spacing:normal!important;transition:background-color .15s,color .15s,border-color .15s!important;}
 @media(hover:hover) and (pointer:fine) {
  body.register-mode #registerPage .register-back-btn:hover,
  body.manage-mode #managePage .manage-back-btn:hover {border-color:#1ab0f1!important;color:#fff!important;background:#1ab0f1!important;}
@@ -6344,3 +6342,30 @@ body, button, input, select, textarea {font-family:"Noto Sans JP",sans-serif;}
 #managePage .um-manage-auth-status {margin:0 0 14px;padding:12px 14px;border:1px solid #e1e5e8;background:#fff;color:#28333b;font:400 12px/1.7 "Noto Sans JP",sans-serif;}
 #managePage .um-manage-auth-status.um-manage-error {border-color:#d8b6bd;color:#9e3445;}
 #managePage .um-manage-auth-status[hidden] {display:none!important;}
+
+/* UNION MATCH shared form tokens: REGISTER / PASS / authenticated edit. */
+:root{--um-form-blue:#1ab0f1;--um-form-text:#222428;--um-form-label:#62666a;--um-form-muted:#7b8085;--um-form-border:#cdd3d8}
+body.register-mode #registerForm label,
+body.manage-mode #closeForm label,
+body.manage-mode #manageEditPanel label,
+body.manage-mode #manageLoadedPanel label{font:700 13px/1.6 "Noto Sans JP",sans-serif!important;color:var(--um-form-label)!important}
+body.register-mode #registerForm input:not([type="checkbox"]):not([type="radio"]):not([type="file"]),
+body.register-mode #registerForm select,
+body.register-mode #registerForm textarea,
+body.manage-mode #closeForm input:not([type="checkbox"]),
+body.manage-mode #manageEditPanel input:not([type="checkbox"]):not([type="radio"]):not([type="file"]),
+body.manage-mode #manageEditPanel select,
+body.manage-mode #manageEditPanel textarea{box-sizing:border-box!important;min-height:46px!important;padding:10px 13px!important;border:1px solid var(--um-form-border)!important;border-radius:0!important;background:#fff!important;color:var(--um-form-text)!important;box-shadow:none!important;font:400 14px/1.6 "Noto Sans JP",sans-serif!important}
+body.register-mode #registerForm label>input:not([type="checkbox"]):not([type="radio"]),
+body.register-mode #registerForm label>select,
+body.register-mode #registerForm label>textarea,
+body.manage-mode #closeForm label>input,
+body.manage-mode #manageEditPanel label>input:not([type="checkbox"]),
+body.manage-mode #manageEditPanel label>select,
+body.manage-mode #manageEditPanel label>textarea{margin-top:8px!important}
+body.register-mode #registerForm small,
+body.manage-mode #closeForm small,
+body.manage-mode #manageEditPanel small{font-size:12px!important;line-height:1.6!important;color:var(--um-form-muted)!important}
+body.register-mode #registerForm button[type="submit"],
+body.manage-mode #closeForm button[type="submit"],
+body.manage-mode #manageEditPanel button[type="submit"]{min-height:48px!important;font:700 13px/1.4 "Noto Sans JP",sans-serif!important}
