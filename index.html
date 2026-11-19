@@ -42,7 +42,7 @@
 
   <link
     rel="stylesheet"
-    href="./style.css?v=51.32"
+    href="./style.css?v=51.35"
   >
 
 
@@ -701,13 +701,8 @@
       #managePreviewBack:hover,
       #managePreviewBack:active {
         border-color: var(--cyan, #1ab0f1) !important;
-        background:
-          linear-gradient(
-            180deg,
-            var(--cyan-2, #28b8f4) 0%,
-            var(--cyan, #1ab0f1) 100%
-          ) !important;
-        color: #fff !important;
+        background: #e3f6ff !important;
+        color: #0b8fc8 !important;
         box-shadow: none !important;
         transform: none !important;
       }
@@ -716,8 +711,8 @@
     #registrationPreviewBack:focus-visible,
     #managePreviewBack:focus-visible {
       border-color: var(--cyan, #1ab0f1) !important;
-      background: var(--cyan, #1ab0f1) !important;
-      color: #fff !important;
+      background: #e3f6ff !important;
+      color: #0b8fc8 !important;
     }
 
     /* スマホ / タブレット共通。
@@ -1559,17 +1554,6 @@
       line-height: 1.2 !important;
     }
 
-    /* PASS再登録確認：「修正する」を登録確認と同じ境界線だけの四角へ */
-    html body #managePreviewBack,
-    html.form-mobile-layout body #managePreviewBack,
-    html.tablet-device body #managePreviewBack {
-      border-radius: 0 !important;
-      clip-path: none !important;
-      border: 1px solid #686b70 !important;
-      background: #ffffff !important;
-      color: #222428 !important;
-      box-shadow: none !important;
-    }
 
     @media screen and (max-width: 420px) {
       html body #managePreviewModal .registration-preview-modal-card,
@@ -2195,30 +2179,27 @@
             class="panel manage-loaded-panel hidden"
           >
 
-            <div class="manage-loaded-head">
-              <div>
-                <div id="manageLoadedEyebrow" class="eyebrow">CURRENT RECRUITMENT</div>
+            <div class="um-membership-summary" aria-label="登録情報">
+              <div class="um-membership-cell um-name-cell">
+                <span class="um-summary-label" id="manageNameLabel">ユニオン名</span>
+                <div id="manageLoadedEyebrow" class="eyebrow hidden" aria-hidden="true">UNION MEMBERSHIP</div>
                 <h3 id="manageCurrentName">--</h3>
               </div>
-              <span id="manageCurrentStatus" class="manage-status-chip">--</span>
-            </div>
-
-            <div id="manageMembershipConfirmedNotice" class="notice hidden" style="margin-top:14px;"></div>
-
-            <div class="manage-current-grid">
-              <div>
-                <span>現在の内容</span>
-                <strong id="manageCurrentDetail">--</strong>
+              <div class="um-membership-cell um-status-cell">
+                <span class="um-summary-label">登録状態</span>
+                <span id="manageCurrentStatus" class="manage-status-chip">--</span>
               </div>
-              <div>
-                <span id="manageCurrentExpiryLabel">現在の期限</span>
-                <strong id="manageCurrentExpiry">--</strong>
+              <div class="um-membership-cell um-rank-cell">
+                <span class="um-summary-label" id="manageDetailLabel">ユニオンランク</span>
+                <span id="manageCurrentDetail" class="um-summary-value">--</span>
               </div>
-              <div id="manageMembershipExpiryBox" class="hidden">
-                <span>次回利用確認期限</span>
-                <strong id="manageMembershipExpiry">--</strong>
+              <div class="um-membership-cell um-expiry-cell">
+                <span id="manageCurrentExpiryLabel" class="um-summary-label">次回利用確認期限</span>
+                <span id="manageCurrentExpiry" class="um-summary-value">--</span>
               </div>
             </div>
+            <div id="manageMembershipConfirmedNotice" class="notice hidden"></div>
+            <div id="manageMembershipExpiryBox" class="hidden" hidden><span>次回利用確認期限</span><span id="manageMembershipExpiry">--</span></div>
 
             <div class="manage-current-url">
               <span>募集記事URL</span>
@@ -3138,7 +3119,7 @@
     </div>
   </div>
 
-  <script src="./app.js?v=51.32"></script>
+  <script src="./app.js?v=51.35"></script>
 
   <script id="preview-image-check-adapter-v5114">
     (() => {
