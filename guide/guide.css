@@ -243,15 +243,15 @@ body {
 }
 .btn.primary:hover:not(:disabled),
 .btn.outline:hover:not(:disabled) {
-  background:#1ab0f1;
-  color:#fff;
+  background:#e3f5ff;
+  color:#0b8fc8;
   border-color:#1ab0f1;
 }
 .btn.primary:active:not(:disabled),
 .btn.outline:active:not(:disabled) {
-  background:#0b8fc8;
-  border-color:#0b8fc8;
-  color:#fff;
+  background:#d5effd;
+  border-color:#1ab0f1;
+  color:#0b8fc8;
 }
 .btn:disabled {
   background:#fff;
@@ -261,6 +261,9 @@ body {
   cursor:default
 }
 .validation-error {
+  display:block;
+  margin:8px 0 0;
+  line-height:1.55;
   color:#c93748;
   font-size:13px;
   font-weight:600
@@ -346,7 +349,9 @@ body {
 
 /* 全STEP共通：マウス操作時のブラウザ標準枠を除去し、キーボード操作時は可視化 */
 .btn:focus:not(:focus-visible),.choice:focus:not(:focus-visible){outline:none}
-.btn:focus-visible,.choice:focus-visible,.close-guide:focus-visible{outline:2px solid #1ab0f1;outline-offset:2px}
+/* Buttons already have a blue border; avoid the second rectangular focus ring. */
+.btn:focus-visible{outline:none;border-color:#0877b2;background:#e3f5ff}
+.choice:focus-visible,.close-guide:focus-visible{outline:2px solid #1ab0f1;outline-offset:2px}
 
 /* Guide header: same left-aligned title hierarchy as REGISTER / MANAGE. */
 .heading-row{display:flex;align-items:center;justify-content:flex-start;gap:14px;min-width:0}
