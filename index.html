@@ -42,7 +42,7 @@
 
   <link
     rel="stylesheet"
-    href="./style.css?v=51.35"
+    href="./style.css?v=51.36"
   >
 
 
@@ -581,25 +581,6 @@
        ロジック・ID・Supabase/BOT処理は変更しない。
        ========================================================= */
 
-    body.manage-mode .manage-inline-top {
-      display: flex !important;
-      align-items: center !important;
-      gap: 12px !important;
-    }
-
-    body.manage-mode .manage-inline-title {
-      min-width: 0;
-    }
-
-    body.manage-mode .manage-inline-title .eyebrow {
-      margin-bottom: 2px;
-      color: var(--cyan) !important;
-    }
-
-    body.manage-mode .manage-inline-title h2 {
-      margin: 0;
-    }
-
     /* PASS入力部は募集登録フォームと同じ白ベース＋シアン枠 */
     #managePage #closeForm {
       margin-top: 0;
@@ -672,14 +653,6 @@
 
     /* スマホでも募集登録ページと同じタイトル並びを維持 */
     @media screen and (max-width: 600px) {
-      body.manage-mode .manage-inline-top {
-        align-items: center !important;
-      }
-
-      body.manage-mode .manage-inline-title h2 {
-        font-size: clamp(22px, 7vw, 30px);
-        line-height: 1.15;
-      }
     }
   </style>
 
