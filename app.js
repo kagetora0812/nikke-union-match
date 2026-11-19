@@ -184,39 +184,59 @@ async function callWebPushManage(action, extra = {}) {
   if (!response.ok) throw new Error(result.error || "端末認証エラー");
   return result;
 }
+let webPushManageOpening = false;
+function showWebPushManageStatus(message, isError = false) {
+  const node = document.getElementById("umWebPushManageStatus");
+  if (!node) return;
+  node.textContent = message;
+  node.hidden = !message;
+  node.classList.toggle("um-manage-error", isError);
+}
 async function openWebPushManageIfAuthorized() {
-  if (discordManageV1Mode || !localStorage.getItem(WEB_PUSH_MANAGE_TOKEN_KEY)) return;
+  if (discordManageV1Mode || webPushManageOpening) return;
+  if (!localStorage.getItem(WEB_PUSH_MANAGE_TOKEN_KEY)) return;
+  webPushManageOpening = true;
+  showWebPushManageStatus("端末認証を確認しています…");
   try {
     const result = await callWebPushManage("manage_get");
     if (!document.getElementById("managePage")?.classList.contains("active")) return;
-    if (!result?.authorized || result?.managed?.type !== "union") return;
+    if (!result?.authorized || result?.managed?.type !== "union") {
+      throw new Error("この端末ではユニオンの管理認証を確認できませんでした。");
+    }
     clearLoadedManageRecruitment();
     loadedManagedRecruitment = result.managed;
     webPushManageMode = true;
-    // 認証成功後に既存の利用期限延長APIを実行する。単なる取得では完了扱いにしない。
+    loadedManagePass = "";
+    loadedManagePassHash = "";
+    resetManageImageState();
+    resetManageActionMenu();
+    // 管理情報を表示できても期限延長の成功とはみなさない。
+    showWebPushManageStatus("利用確認と14日延長を処理しています…");
     try {
       const renewed = await callWebPushManage("renew");
-      if (!renewed?.renewed || !renewed?.expires_at) throw new Error("期限延長の結果を確認できませんでした。");
+      if (!renewed?.renewed || !renewed?.expires_at) {
+        throw new Error("期限延長の成功結果が返されませんでした。");
+      }
       loadedManagedRecruitment = {
         ...loadedManagedRecruitment,
         member_expires_at: renewed.expires_at,
         expires_at: renewed.expires_at
       };
       manageMembershipRenewalConfirmed = true;
+      showWebPushManageStatus("");
     } catch (renewError) {
       manageMembershipRenewalConfirmed = false;
-      console.error("PASS不要の利用確認に失敗", renewError);
-      alert("利用確認の延長に失敗しました。期限は更新されていません。PASSで管理するか、もう一度お試しください。");
+      console.error("端末認証後の期限延長失敗", renewError);
+      showWebPushManageStatus("期限を更新できませんでした（" + String(renewError?.message || "通信エラー") + "）。PASSでの利用確認も可能です。", true);
     }
-    loadedManagePass = "";
-    loadedManagePassHash = "";
-    resetManageImageState();
-    resetManageActionMenu();
     renderLoadedManageRecruitment();
     document.getElementById("umWebPushManageNotice")?.remove();
     await loadTotalRegisteredUnionCount();
   } catch (error) {
-    console.info("Web Push端末認証が利用できません。通常のPASS管理を使用してください。", error?.message || error);
+    console.error("Web Push端末管理認証失敗", error);
+    showWebPushManageStatus("端末認証を確認できませんでした（" + String(error?.message || "通信エラー") + "）。PASSでの利用確認をお試しください。", true);
+  } finally {
+    webPushManageOpening = false;
   }
 }
 
