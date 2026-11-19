@@ -10,15 +10,15 @@
   <link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
   <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;500;600;700;800;900&amp;family=Teko:wght@500;600;700&amp;display=swap" rel="stylesheet"/>
   <link href="./guide.css" rel="stylesheet"/>
+  <link href="../push-notifications/notification-ui.css" rel="stylesheet"/>
+  <link href="../shared/navigation.css" rel="stylesheet"/>
+  <script defer src="../push-notifications/notification-ui.js"></script>
+  <script defer src="../shared/navigation.js"></script>
   <script defer="" src="./guide.js">
   </script>
  </head>
  <body>
-  <header class="site-header">
-   <a aria-label="UNION MATCH ホーム" class="brand" href="../index.html">
-    <img alt="UNION MATCH" src="../assets/union-match-logo-white.png"/>
-   </a>
-  </header>
+  <div id="umSharedNavigation" data-um-nav-root="../"></div>
   <main class="wrap">
    <div class="heading">
     <div class="heading-row">

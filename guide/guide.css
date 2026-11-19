@@ -133,6 +133,8 @@ body {
 }
 .demo label,.demo .demo-label {
   display:block;
+  font-size:13px;
+  line-height:1.6;
   font-weight:700;
   margin-bottom:8px;
   color:#62666a
@@ -140,7 +142,7 @@ body {
 .mock-input,.mock-select {
   width:100%;
   background:#fff;
-  border:1px solid #b7bcc0;
+  border:1px solid #cdd3d8;
   border-radius:0;
   min-height:46px;
   padding:10px 13px;
@@ -317,7 +319,7 @@ body {
   display:none!important
 }
 @media (min-width:601px) and (max-width:1024px) {
-  .wrap { padding-top:52px; }
+  .wrap { padding-top:34px; }
 }
 @media(max-width:600px) {
   .site-header {
@@ -331,7 +333,7 @@ body {
   padding:28px 13px 54px
 }
 .heading h1 {
-  font-size:23px
+  font-size:21px
 }
 .guide-card {
   padding:20px 17px
@@ -357,12 +359,17 @@ body {
 .btn:focus-visible,.choice:focus-visible,.close-guide:focus-visible{outline:2px solid #1ab0f1;outline-offset:2px}
 
 /* Guide header: same left-aligned title hierarchy as REGISTER / MANAGE. */
-.heading-row{display:flex;align-items:center;justify-content:flex-start;gap:14px;min-width:0}
-.heading-titles{min-width:0;flex:1 1 auto}
-.close-guide{flex:0 0 auto;color:#c5cdd5;border-color:#69727b;white-space:nowrap;transition:background-color .15s,color .15s,border-color .15s}
+.heading-row{display:flex;align-items:center;justify-content:flex-start;gap:12px;min-width:0;min-height:44px}
+.heading-titles{min-width:0;flex:1 1 auto;min-height:44px;display:flex;flex-direction:column;justify-content:center}
+.close-guide{flex:0 0 88px;border-left-width:1px;color:#c5cdd5;border-color:#69727b;white-space:nowrap;transition:background-color .15s,color .15s,border-color .15s}
 /* Validation belongs to its field, not to the navigation buttons. */
 .field-label-row{display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;column-gap:12px;row-gap:2px;margin-bottom:8px}
 .demo .field-label-row label{margin:0}
 .field-label-row .validation-error{margin:0;color:#c93748;font-size:12px;font-weight:500;line-height:1.5}
 .demo .validation-error:not(.field-label-row .validation-error){margin:0 0 8px;color:#c93748;font-size:12px;font-weight:500}
 @media(max-width:600px){.heading-row{align-items:center;gap:12px}.heading h1{font-size:21px;line-height:1.25}.close-guide{padding:0 9px;font-size:13px}.heading p{font-size:12px}.field-label-row{align-items:flex-start}}
+
+/* Shared navigation controls fixed header and footer; retain guide's own registration behavior. */
+body:has(#umSharedNavigation){background:#111317}
+body:has(#umSharedNavigation) .wrap{padding-top:34px}
+@media(max-width:600px){body:has(#umSharedNavigation) .wrap{padding-top:28px}}
