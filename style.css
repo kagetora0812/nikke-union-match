@@ -1,3 +1,4 @@
+html { scrollbar-gutter: stable; }
 @import url("https://fonts.googleapis.com/css2?family=Teko:wght@500;600;700&family=Noto+Sans+JP:wght@400;500;600;700;800;900&display=swap");
 
 /* =========================================================
@@ -2000,19 +2001,14 @@ body.manage-mode #managePage {
   bottom: 0;
   z-index: 50;
 
-  height: 68px;
+  height: calc(68px + env(safe-area-inset-bottom));
 
   display: flex;
   justify-content: center;
 
-  border-top: 2px solid var(--cyan);
+  border-top: 1px solid rgba(255,255,255,.12);
 
-  background:
-    linear-gradient(
-      180deg,
-      #2d2e31,
-      #1d1e21
-    );
+  background: #090a0d;
 
   box-shadow:
     0 -4px 14px rgba(0, 0, 0, .16);
@@ -5105,7 +5101,7 @@ body .video-topbar {
     pointer-events: none !important;
     transition: none !important;
 
-    background: linear-gradient(180deg, #2d2e31, #1d1e21) !important;
+    background: #090a0d !important;
 
     -webkit-backface-visibility: hidden;
     backface-visibility: hidden;
