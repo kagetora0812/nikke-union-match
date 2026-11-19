@@ -1744,21 +1744,10 @@ body.manage-mode #managePage {
   line-height: 1.45;
 }
 
-#registerPage .register-period-note {
-  display: flex;
-  align-items: baseline;
-  flex-wrap: wrap;
-  gap: 3px 10px;
-}
 
-#registerPage .register-period-note > span {
-  color: var(--cyan-dark);
-  font-weight: 900;
-}
 
 @media screen and (max-width: 600px) {
-  #registerPage .form-label-line,
-  #registerPage .register-period-note {
+  #registerPage .form-label-line {
     align-items: flex-start;
   }
 }
@@ -5570,11 +5559,37 @@ body.register-mode .register-inline-title h2 {
   line-height: 1.55;
 }
 
+body.register-mode #registerPage .register-guide-entry {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  margin: 0 0 14px;
+  padding: 13px 16px;
+  border: 1px solid #d9e0e5;
+  background: #fff;
+  color: #62666a;
+  font: 500 12px/1.6 "Noto Sans JP", sans-serif;
+  text-decoration: none;
+}
+body.register-mode #registerPage .register-guide-entry strong {
+  color: #0b8fc8;
+  font-weight: 700;
+  white-space: nowrap;
+}
+body.register-mode #registerPage .register-guide-entry:hover {
+  border-color: #1ab0f1;
+  background: #f2fbff;
+}
+@media(max-width:600px) {
+  body.register-mode #registerPage .register-guide-entry {flex-wrap:wrap}
+}
+
 #registerPage .register-usage-block {
   margin-top: 14px;
   padding: 14px;
-  border: 1px solid rgba(26, 176, 241, .24);
-  background: rgba(26, 176, 241, .035);
+  border: 0;
+  background: transparent;
 }
 
 #registerPage .register-usage-head {
@@ -5588,9 +5603,9 @@ body.register-mode .register-inline-title h2 {
 #registerPage .register-usage-title {
   flex: 0 0 auto;
   margin: 0;
-  color: #222428;
+  color: #62666a;
   font-size: 13px;
-  font-weight: 900;
+  font-weight: 700;
 }
 
 #registerPage .register-usage-bot-note {
@@ -5609,11 +5624,11 @@ body.register-mode .register-inline-title h2 {
 }
 
 #registerPage .register-usage-option {
-  min-height: 58px;
-  padding: 8px 10px;
-  border: 1px solid #c8ccd0;
+  min-height: 48px;
+  padding: 12px;
+  border: 1px solid #b9bfc5;
   background: #fff;
-  color: #33373b;
+  color: #3f444a;
   cursor: pointer;
 }
 
@@ -5623,8 +5638,8 @@ body.register-mode .register-inline-title h2 {
 }
 
 #registerPage .register-usage-option strong {
-  font-size: 13px;
-  font-weight: 900;
+  font-size: 12px;
+  font-weight: 700;
 }
 
 #registerPage .register-usage-option small {
@@ -5636,9 +5651,9 @@ body.register-mode .register-inline-title h2 {
 
 #registerPage .register-usage-option.active {
   border-color: var(--cyan);
-  background: rgba(26, 176, 241, .10);
-  color: #078fc7;
-  box-shadow: inset 0 0 0 1px rgba(26, 176, 241, .10);
+  background: #f2fbff;
+  color: #0b8fc8;
+  box-shadow: none;
 }
 
 #registerPage .register-usage-option.active small {
@@ -5648,27 +5663,15 @@ body.register-mode .register-inline-title h2 {
 #registerPage .register-usage-note {
   margin: 9px 0 0;
   color: #555c63;
-  font-size: 10.5px;
-  font-weight: 800;
-  line-height: 1.55;
+  font-size: 12px;
+  font-weight: 400;
+  line-height: 1.8;
 }
 
 #registerPage #recruitmentInputFields.hidden {
   display: none !important;
 }
 
-#registerPage .register-period-note {
-  display: block !important;
-}
-
-#registerPage .register-period-note > span {
-  display: block;
-  margin-top: 4px;
-  color: #6e7379 !important;
-  font-size: 10.5px;
-  font-weight: 700 !important;
-  line-height: 1.55;
-}
 
 .registration-result-mode-note {
   margin: 12px 0 0;
@@ -5855,26 +5858,8 @@ body.register-mode #registerForm input:focus-visible,
 body.register-mode #registerForm select:focus-visible,
 body.register-mode #registerForm textarea:focus-visible,
 body.manage-mode #closeForm input:focus-visible { outline:1px solid #20b8f4!important; outline-offset:0!important; border-color:#20b8f4!important; }
-body.register-mode #registerPage .register-period-note,
 body.manage-mode #managePage .manage-pass-notice { border:0!important; border-left:3px solid #20b8f4!important; border-radius:0!important; clip-path:none!important; background:#f0f9fd!important; box-shadow:none!important; padding:14px 16px!important; color:#4e5962!important; }
-body.register-mode #registerPage .register-period-note strong,
 body.manage-mode #managePage .manage-pass-notice strong { color:#222428!important; }
-/* 募集登録：掲載終了と指揮官への注意は赤、BOTのPASS不要はシアン。 */
-body.register-mode #registerPage .register-period-note .register-period-ending,
-body.register-mode #registerPage .register-period-note .register-period-commander-note {
-  color:#c43246!important;
-  -webkit-text-fill-color:#c43246!important;
-  font-weight:900!important;
-}
-body.register-mode #registerPage .register-period-note .register-period-bot {
-  color:#078fc8!important;
-  -webkit-text-fill-color:#078fc8!important;
-  font-weight:900!important;
-}
-body.register-mode #registerPage .register-period-note .register-period-commander-note {
-  display:block;
-  font-size:11px;
-}
 @media(max-width:600px) {
  body.register-mode .register-inline-top,
  body.manage-mode .manage-inline-top { margin-bottom:16px!important; }
@@ -6222,3 +6207,31 @@ body, button, input, select, textarea {font-family:"Noto Sans JP",sans-serif;}
 #registrationPreviewCard .registration-only-preview-notice strong {display:block;margin-bottom:5px;font-weight:800;}
 #registrationPreviewCard .registration-only-preview-notice span {color:var(--ink-soft);}
 
+
+/* PASS help: retain collapsible behavior, use the guide's readable text hierarchy. */
+#managePage .um-manage-help summary {
+  border: 0;
+  outline-offset: 2px;
+  font: 700 13px/1.6 "Noto Sans JP", sans-serif;
+}
+#managePage .um-manage-help .manage-pass-notice {
+  border: 0;
+  border-left: 2px solid #1ab0f1;
+  background: #f2fbff;
+  padding: 14px 16px;
+  color: #555c63;
+  font: 400 12px/1.8 "Noto Sans JP", sans-serif;
+}
+#managePage .um-manage-help .manage-pass-notice > * {
+  display: block;
+  margin: 0 0 8px;
+  font-weight: 400;
+}
+#managePage .um-manage-help .manage-pass-notice > .manage-help-subhead {
+  color: #0b8fc8;
+  font-weight: 700;
+  margin-top: 12px;
+}
+#managePage .um-manage-help .manage-pass-notice strong:not(.manage-help-subhead) {
+  font-weight: 600;
+}
