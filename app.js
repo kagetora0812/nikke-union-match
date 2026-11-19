@@ -155,6 +155,7 @@ let loadedManagedRecruitment = null;
 let loadedManagePass = "";
 let loadedManagePassHash = "";
 let webPushManageMode = false;
+let manageMembershipRenewalConfirmed = false;
 let manageEditPreparedFile = null;
 let manageEditObjectUrl = null;
 
@@ -192,6 +193,20 @@ async function openWebPushManageIfAuthorized() {
     clearLoadedManageRecruitment();
     loadedManagedRecruitment = result.managed;
     webPushManageMode = true;
+    // 認証成功後に既存の利用期限延長APIを実行する。単なる取得では完了扱いにしない。
+    try {
+      const renewed = await callWebPushManage("renew");
+      if (!renewed?.renewed || !renewed?.expires_at) throw new Error("期限延長の結果を確認できませんでした。");
+      loadedManagedRecruitment = {
+        ...loadedManagedRecruitment,
+        member_expires_at: renewed.expires_at
+      };
+      manageMembershipRenewalConfirmed = true;
+    } catch (renewError) {
+      manageMembershipRenewalConfirmed = false;
+      console.error("PASS不要の利用確認に失敗", renewError);
+      alert("利用確認の延長に失敗しました。期限は更新されていません。PASSで管理するか、もう一度お試しください。");
+    }
     loadedManagePass = "";
     loadedManagePassHash = "";
     resetManageImageState();
@@ -5381,6 +5396,7 @@ function showManageEditActionChoices() {
 
 function clearLoadedManageRecruitment() {
   webPushManageMode = false;
+  manageMembershipRenewalConfirmed = false;
 
   loadedManagedRecruitment = null;
   loadedManagePass = "";
@@ -5539,9 +5555,12 @@ function renderLoadedManageRecruitment() {
           ? formatDate(item.member_expires_at)
           : "14日後";
 
+      // PASS認証・端末認証に続く期限更新が成功した場合だけ完了を表示する。
+      const confirmed = Boolean(manageMembershipRenewalConfirmed);
       membershipNotice.innerHTML =
-        `<span class="manage-confirm-check" aria-hidden="true">✅</span>`
-        + `<span><strong>利用確認が完了しました。</strong><span class="um-confirm-date">次回確認期限：${escapeHtml(nextDate)}</span><span class="um-confirm-note">登録内容に変更がない場合は、左上の「戻る」からお戻りください。</span></span>`;
+        `<span class="um-confirm-title">${confirmed ? "利用確認が完了しました" : "次回利用確認期限"}</span>`
+        + `<span class="um-confirm-date"><span class="um-confirm-date-label">${confirmed ? "次回確認期限" : "現在の期限"}</span><span class="um-confirm-date-value">${escapeHtml(nextDate)}</span></span>`
+        + `<span class="um-confirm-note">${confirmed ? "登録内容に変更がなければ、そのままお戻りいただけます。" : "利用確認はまだ完了していません。再度管理画面を開くか、PASSで管理してください。"}</span>`;
       membershipNotice.classList.remove("hidden");
     } else {
       membershipNotice.classList.add("hidden");
@@ -5889,6 +5908,7 @@ async function loadRecruitmentForManage() {
         : membershipResult.data;
 
     if (membershipData) {
+      manageMembershipRenewalConfirmed = true;
 
       loadedManagedRecruitment =
         membershipData;
@@ -8666,14 +8686,13 @@ void initializeDiscordManageV1();
 })();
 
 /* PASS management help: explicit accessible toggle (no native details clipping). */
-(() => {
-  const toggle = document.getElementById("manageHelpToggle");
+document.addEventListener("click", event => {
+  const toggle = event.target.closest?.("#manageHelpToggle");
+  if (!toggle) return;
   const content = document.getElementById("manageHelpContent");
-  if (!toggle || !content) return;
-  toggle.addEventListener("click", () => {
-    const opening = content.hidden;
-    content.hidden = !opening;
-    toggle.setAttribute("aria-expanded", String(opening));
-    toggle.textContent = (opening ? "▼" : "▶") + " 使い方を見る";
-  });
-})();
+  if (!content) return;
+  const opening = content.hidden;
+  content.hidden = !opening;
+  toggle.setAttribute("aria-expanded", String(opening));
+  toggle.textContent = (opening ? "▼" : "▶") + " 使い方を見る";
+});
