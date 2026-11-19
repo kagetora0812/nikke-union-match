@@ -239,7 +239,7 @@ textarea {
 
   color: #fff;
 
-  background: #0d1016;
+  background: rgba(13,16,22,.72);
   box-shadow: none;
 }
 
@@ -3980,7 +3980,7 @@ body .video-topbar {
   height: var(--index-header-height) !important;
   padding: 0 14px !important;
   border-bottom: 0 !important;
-  background: #0d1016 !important;
+  background: rgba(13,16,22,.72) !important;
   backdrop-filter: none !important;
   -webkit-backdrop-filter: none !important;
 }
@@ -5059,7 +5059,7 @@ body .video-topbar {
 
     z-index: 120 !important;
 
-    background: #0d1016 !important;
+    background: rgba(13,16,22,.72) !important;
     backdrop-filter: none !important;
     -webkit-backdrop-filter: none !important;
     box-shadow: none !important;
@@ -5140,7 +5140,7 @@ html.tablet-device body .video-topbar {
   top: 0 !important;
   z-index: 120 !important;
   height: var(--index-header-height) !important;
-  background: #0d1016 !important;
+  background: rgba(13,16,22,.72) !important;
   backdrop-filter: none !important;
   -webkit-backdrop-filter: none !important;
 }
