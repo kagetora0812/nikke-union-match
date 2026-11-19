@@ -49,10 +49,12 @@ body {
   border:1px solid #53616e;
   padding:6px 13px;
   cursor:pointer;
-  font:900 13px 'Noto Sans JP',sans-serif
+  font:600 12px 'Noto Sans JP',sans-serif
 }
 .close-guide:hover {
-  background:#26313b
+  background:#1ab0f1;
+  color:#fff;
+  border-color:#1ab0f1
 }
 .wrap {
   width:100%;
@@ -62,7 +64,7 @@ body {
   padding:38px 18px 80px
 }
 .heading {
-  text-align:center;
+  text-align:left;
   margin-bottom:26px
 }
 .eyebrow {
@@ -341,3 +343,15 @@ body {
 /* 全STEP共通：マウス操作時のブラウザ標準枠を除去し、キーボード操作時は可視化 */
 .btn:focus:not(:focus-visible),.choice:focus:not(:focus-visible){outline:none}
 .btn:focus-visible,.choice:focus-visible,.close-guide:focus-visible{outline:2px solid #1ab0f1;outline-offset:2px}
+
+/* Guide header: same left-aligned title hierarchy as REGISTER / MANAGE. */
+.heading-row{display:flex;align-items:center;justify-content:space-between;gap:16px;min-width:0}
+.heading-titles{min-width:0}
+.heading p{margin:12px 0 0}
+.close-guide{flex:0 0 auto;color:#c5cdd5;border-color:#69727b;transition:background-color .15s,color .15s,border-color .15s}
+/* Validation belongs to its field, not to the navigation buttons. */
+.field-label-row{display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;column-gap:12px;row-gap:2px;margin-bottom:8px}
+.demo .field-label-row label{margin:0}
+.field-label-row .validation-error{margin:0;color:#c93748;font-size:12px;font-weight:500;line-height:1.5}
+.demo .validation-error:not(.field-label-row .validation-error){margin:0 0 8px;color:#c93748;font-size:12px;font-weight:500}
+@media(max-width:600px){.heading-row{align-items:flex-start;gap:10px}.heading h1{font-size:21px;line-height:1.4}.close-guide{padding:6px 9px;font-size:11px}.heading p{font-size:12px}.field-label-row{align-items:flex-start}}
