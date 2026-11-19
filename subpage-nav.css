@@ -31,7 +31,7 @@
     grid-template-columns: repeat(4, minmax(0, 1fr));
     padding-bottom: env(safe-area-inset-bottom);
     border-top: 1px solid rgba(255,255,255,.12);
-    background: rgba(16,18,22,.96);
+    background: #090a0d;
     backdrop-filter: blur(14px);
     -webkit-backdrop-filter: blur(14px);
     box-shadow: 0 -8px 28px rgba(0,0,0,.22);
@@ -44,9 +44,11 @@
     align-items: center;
     justify-content: center;
     padding: 6px 4px;
+    flex-direction: column;
+    gap: 4px;
     color: rgba(255,255,255,.66);
     font-size: 10px;
-    font-weight: 900;
+    font-weight: 700;
     line-height: 1.2;
     text-align: center;
     text-decoration: none;
@@ -55,7 +57,7 @@
   .subpage-bottom-nav a.active {
     color: #fff;
     background: rgba(26,176,241,.22);
-    box-shadow: inset 0 2px 0 #1ab0f1;
+    box-shadow: none;
   }
 }
 
