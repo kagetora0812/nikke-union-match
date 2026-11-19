@@ -6,7 +6,7 @@
 @media screen and (max-width: 1366px) {
   body {
     padding-top: 64px !important;
-    padding-bottom: calc(72px + env(safe-area-inset-bottom)) !important;
+    padding-bottom: calc(68px + env(safe-area-inset-bottom)) !important;
   }
 
   .creator-topbar,
