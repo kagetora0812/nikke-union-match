@@ -106,5 +106,7 @@ html body .site-menu-drawer .site-menu-disclaimer {
 .um-notification-panel .um-pass-wrap{padding:12px 0;font:500 12px "Noto Sans JP",sans-serif}
 .um-notification-panel .um-pass-wrap[hidden]{display:none}
 .um-notification-panel input[type=password]{width:100%;padding:12px;border:1px solid #c8cdd0;border-radius:0;background:#fff}
-.um-notification-panel .um-save{box-sizing:border-box;display:block;width:100%;min-height:48px;margin-top:18px;padding:12px 16px;background:#f2fbff;color:#0b8fc8;border:1px solid #1ab0f1;border-radius:0;font:600 13px/1.5 "Noto Sans JP",sans-serif;text-align:center;cursor:pointer}
+.um-notification-panel .um-save{box-sizing:border-box;display:inline-flex;align-items:center;justify-content:center;width:100%;min-height:48px;margin-top:18px;padding:12px 20px;background:#f2fbff;color:#0b8fc8;border:1px solid #1ab0f1;border-radius:0;font:700 13px "Noto Sans JP",sans-serif;letter-spacing:normal;text-align:center;cursor:pointer;transition:background-color .15s ease,color .15s ease,border-color .15s ease}
+@media(hover:hover) and (pointer:fine){.um-notification-panel .um-save:hover:not(:disabled){background:#1ab0f1;color:#fff;border-color:#1ab0f1}}
+.um-notification-panel .um-save:disabled{background:#fff;border-color:#e2e8ed;color:#b2b7bc;opacity:1;cursor:default}
 .um-notification-panel .um-status,.um-notification-panel .um-hint{margin-top:10px;font:400 11px/1.6 "Noto Sans JP",sans-serif;color:#62666a}
