@@ -55,6 +55,19 @@ $('demo').addEventListener('click',event=>{
 $('back').addEventListener('click',()=>{if(index>0){index--;render();}});
 $('next').addEventListener('click',()=>{if(!validate())return;if(index<steps().length-1){index++;render();return;}handoffToRegistration();});
 $('closeGuide').addEventListener('click',()=>{if(state.name||state.unionName||state.slv||state.url||state.image){$('closeDialog').showModal();}else location.href='../index.html#registerPage';});$('cancelClose').addEventListener('click',()=>$('closeDialog').close());$('confirmClose').addEventListener('click',()=>{sessionStorage.removeItem('unionMatchGuideDraft');location.href='../index.html#registerPage';});render();
+// プレビューの「修正する」から戻った場合は入力済み状態を復元する。
+try {
+  const raw=sessionStorage.getItem('unionMatchGuideReturn');
+  if(raw){
+    sessionStorage.removeItem('unionMatchGuideReturn');
+    const draft=JSON.parse(raw);
+    for(const key of ['type','mode','name','unionName','slv','rank','url']){
+      if(typeof draft[key]==='string')state[key]=draft[key];
+    }
+    index=steps().length-1;
+    render();
+  }
+} catch(error){console.warn('ガイド復元失敗',error);}
 
 // FileはsessionStorageに格納できないため、同一オリジンのIndexedDBで一度だけ受け渡す。
 function openGuideTransferDB(){return new Promise((resolve,reject)=>{const req=indexedDB.open('um-guide-transfer',1);req.onupgradeneeded=()=>req.result.createObjectStore('handoff');req.onsuccess=()=>resolve(req.result);req.onerror=()=>reject(req.error);});}
