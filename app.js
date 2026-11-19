@@ -5449,94 +5449,11 @@ function getManagedRecruitmentStatus(item) {
 
 
 function applyManageActionButtonState(button) {
-
-  if (!button) {
-    return;
-  }
-
-  const setBlack = () => {
-    button.style.setProperty(
-      "border-color",
-      "#56585c",
-      "important"
-    );
-
-    button.style.setProperty(
-      "color",
-      "#ffffff",
-      "important"
-    );
-
-    button.style.setProperty(
-      "background",
-      "linear-gradient(180deg, #48494d 0%, #35363a 100%)",
-      "important"
-    );
-
-    button.style.setProperty(
-      "box-shadow",
-      "0 3px 8px rgba(0, 0, 0, .15)",
-      "important"
-    );
-  };
-
-  const setBlue = () => {
-    button.style.setProperty(
-      "border-color",
-      "var(--cyan)",
-      "important"
-    );
-
-    button.style.setProperty(
-      "color",
-      "#ffffff",
-      "important"
-    );
-
-    button.style.setProperty(
-      "background",
-      "linear-gradient(180deg, var(--cyan-2), var(--cyan))",
-      "important"
-    );
-
-    button.style.setProperty(
-      "box-shadow",
-      "0 4px 12px rgba(26, 176, 241, .28)",
-      "important"
-    );
-  };
-
-  setBlack();
-
-  if (
-    button.dataset
-      .manageActionHoverBound
-    !==
-    "1"
-  ) {
-    button.addEventListener(
-      "mouseenter",
-      setBlue
-    );
-
-    button.addEventListener(
-      "mouseleave",
-      setBlack
-    );
-
-    button.addEventListener(
-      "focus",
-      setBlue
-    );
-
-    button.addEventListener(
-      "blur",
-      setBlack
-    );
-
-    button.dataset
-      .manageActionHoverBound =
-      "1";
+  if (!button) return;
+  // The guide-style button appearance is owned by style.css.
+  // Remove obsolete inline colors/gradients that overrode that stylesheet.
+  for (const property of ["border-color", "color", "background", "box-shadow"]) {
+    button.style.removeProperty(property);
   }
 }
 
@@ -8746,4 +8663,17 @@ void initializeDiscordManageV1();
   };
   new MutationObserver(updateCount).observe(list, { childList: true });
   updateCount();
+})();
+
+/* PASS management help: explicit accessible toggle (no native details clipping). */
+(() => {
+  const toggle = document.getElementById("manageHelpToggle");
+  const content = document.getElementById("manageHelpContent");
+  if (!toggle || !content) return;
+  toggle.addEventListener("click", () => {
+    const opening = content.hidden;
+    content.hidden = !opening;
+    toggle.setAttribute("aria-expanded", String(opening));
+    toggle.textContent = (opening ? "▼" : "▶") + " 使い方を見る";
+  });
 })();
