@@ -1686,6 +1686,26 @@
   </style>
 
 <link rel="stylesheet" href="./push-notifications/notification-ui.css?v=3">
+
+<style id="um-register-manage-unified-20261119">
+/* 共通見出し・プレビュー */
+#registrationPreviewModal .eyebrow{color:#1ab0f1!important;margin-bottom:2px!important}
+#registrationPreviewModal h2{margin-top:0!important}
+#registrationPreviewModal .registration-preview-actions .btn{background:#f2fbff!important;color:#0b8fc8!important;border:1px solid #1ab0f1!important;box-shadow:none!important}
+#registrationPreviewModal .registration-preview-actions .btn:hover{background:#1ab0f1!important;color:#fff!important}
+/* 登録・PASS入力: PCではホバー、タッチ端末では常時淡い青 */
+@media (hover:hover) and (pointer:fine){#registerForm input:hover,#registerForm select:hover,#closeForm input:hover{border-color:#1ab0f1!important}}
+#registerForm input:focus,#registerForm select:focus,#closeForm input:focus{border-color:#1ab0f1!important;outline:1px solid #1ab0f1!important;outline-offset:0}
+@media (hover:none), (pointer:coarse){#registerForm input,#registerForm select,#closeForm input{border-color:#8bd8f7!important}}
+/* 利用方法: 二重枠と過度な強調を除去 */
+#unionUsageBlock{border:0!important;background:transparent!important;padding-left:0!important;padding-right:0!important}
+#unionUsageBlock .register-usage-title{color:#62666a!important;font-weight:700!important}
+#unionUsageBlock .register-usage-option.active{background:#f2fbff!important;color:#0b8fc8!important;border-color:#1ab0f1!important}
+#unionUsageBlock .register-usage-note{font-weight:400!important;color:#62666a!important}
+#managePage .manage-pass-notice{margin-top:14px}
+#managePage .um-manage-help summary{cursor:pointer;color:#0b8fc8;font-weight:700;padding:12px 0}
+#managePage .um-manage-help .manage-pass-notice{margin-top:0}
+</style>
 </head>
 
 
@@ -2034,7 +2054,7 @@
                 <section id="unionUsageBlock" class="register-usage-block">
                   <div class="register-usage-head">
                     <div class="register-usage-title">利用方法</div>
-                    <div class="register-usage-bot-note">募集する・登録のみでもBOTをご利用できます。</div>
+                    
                   </div>
 
                   <div class="register-usage-options" role="group" aria-label="ユニオンの利用方法">
@@ -2141,9 +2161,7 @@
 
               <div class="notice register-period-note">
                 <strong>管理期間：14日間</strong>
-                <span>登録から14日後に掲載期限を迎え、<strong class="register-period-ending">掲載が終了します。</strong></span>
-                <span>ユニオンはPASS管理から<strong>登録情報の変更・削除、募集状況の切り替え、掲載期限（14日）の延長</strong>ができます。</span>
-                <span>BOTを利用している場合は、Discordに届く期限通知から<strong class="register-period-bot">PASS不要で掲載期限（14日）の延長・募集状況の切り替え</strong>ができます。</span>
+                <span>登録から14日後に掲載が終了します。</span>
                 <span class="register-period-commander-note">※指揮官の募集は延長できません。</span>
               </div>
 
@@ -2232,6 +2250,7 @@
 
           </form>
 
+          <details class="um-manage-help"><summary>使い方を見る</summary>
           <div class="notice manage-pass-notice">
             <strong>ユニオン・指揮官の登録情報を管理できます。</strong>
             <span>登録時に発行された<strong>8文字のPASS</strong>を入力し、<strong style="color:#159ac8;">「登録内容を呼び出す」</strong>を押してください。</span>
@@ -2243,6 +2262,7 @@
             <span>BOTを利用している場合は、Discordに届く期限通知から<strong>PASS不要で掲載期限（14日）の延長・募集状況の切り替え</strong>ができます。</span>
             <span>BOTを利用していない場合は、<strong style="color:#c43246;">14日ごとにPASSを入力</strong>し、<strong>掲載の継続や募集状況の変更</strong>など、必要な操作を行ってください。</span>
           </div>
+          </details>
 
           <div
             id="manageLoadedPanel"
@@ -2893,30 +2913,6 @@
         <span id="registrationPassWarningText">PASSは以下の操作に必要です。</span>
       </p>
 
-
-
-      <!-- 新規ユニオン登録のみ：PASSコピー成功後に展開するBOT案内 -->
-      <section
-        id="registrationBotGuide"
-        class="registration-bot-guide"
-        role="region"
-        aria-label="Discord BOTのご案内"
-        aria-hidden="true"
-      >
-        <div class="registration-bot-eyebrow">DISCORD BOT</div>
-        <h3>募集情報もイベント情報も、Discordへ。</h3>
-        <p>
-          ユニオンを探している指揮官の情報や、NIKKE公式Xなどで発表されるイベント・最新情報をDiscordへ自動通知。
-        </p>
-        <p>登録情報の<strong>変更・削除</strong>、<strong>募集状況の切り替え</strong>、<strong>掲載期限（14日）の延長</strong>など、Discordから<span class="registration-bot-accent">PASS不要</span>で操作できます。</p>
-        
-        <a
-          class="btn ghost wide registration-bot-guide-link"
-          href="./bot.html?um_source=registration"
-          target="_blank"
-          rel="noopener noreferrer"
-        >BOTについて詳しく見る ↗</a>
-      </section>
 
 
       <!-- ========================================
