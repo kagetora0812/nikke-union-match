@@ -41,7 +41,8 @@
     transform: none !important;
   }
 
-  .subpage-bottom-nav a {
+  .subpage-bottom-nav > a,
+  .subpage-bottom-nav > button {
     min-width: 0;
     display: flex;
     align-items: center;
@@ -56,9 +57,13 @@
     line-height: 1.2;
     text-align: center;
     text-decoration: none;
+    border: 0;
+    background: transparent;
+    cursor: pointer;
   }
 
-  .subpage-bottom-nav a.active {
+  .subpage-bottom-nav > a.active,
+  .subpage-bottom-nav > button.active {
     color: #fff;
     background: transparent;
     box-shadow: none;
