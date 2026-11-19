@@ -5925,6 +5925,25 @@ body.register-mode #registerForm input:not([type="checkbox"]):not([type="radio"]
 body.register-mode #registerForm select,
 body.register-mode #registerForm textarea,
 body.manage-mode #closeForm input { border:1px solid #cdd3d8!important; background:#fff!important; color:#222428!important; border-radius:0!important; box-shadow:none!important; }
+/* PC native selects: readable choices without changing browser option rendering. */
+@media (min-width: 1025px) {
+  body.register-mode #registerForm #registrationType,
+  body.register-mode #registerForm #unionRank {
+    min-height: 46px;
+    padding: 11px 12px;
+    border: 1px solid #b7bcc0 !important;
+    background: #fff !important;
+    color: #222428 !important;
+    font: 600 15px/1.5 "Noto Sans JP", sans-serif;
+    cursor: pointer;
+  }
+  body.register-mode #registerForm #registrationType:hover,
+  body.register-mode #registerForm #unionRank:hover,
+  body.register-mode #registerForm #registrationType:focus,
+  body.register-mode #registerForm #unionRank:focus {
+    border-color: #1ab0f1 !important;
+  }
+}
 body.register-mode #registerForm input:focus-visible,
 body.register-mode #registerForm select:focus-visible,
 body.register-mode #registerForm textarea:focus-visible,
@@ -5997,8 +6016,8 @@ body.manage-mode #closeForm input:focus-visible { outline:1px solid #20b8f4!impo
    Exact 48px min-height, 12px 20px padding, 700 13px font, #f2fbff/#0b8fc8/#1ab0f1. */
 body.register-mode #registerPage #registerPreviewBtn,
 body.manage-mode #managePage #loadManageRecruitmentBtn,
-#managePage #openManageActionBtn,
-#managePage #closeLoadedRecruitmentBtn,
+body.manage-mode #managePage #manageLoadedPanel #openManageActionBtn,
+body.manage-mode #managePage #manageLoadedPanel #closeLoadedRecruitmentBtn,
 #managePage #openManageEditBtn,
 #managePage #backManageActionBtn,
 #managePage #manageEditPreviewBtn,
@@ -6026,7 +6045,7 @@ body.manage-mode #managePage #loadManageRecruitmentBtn:hover:not(:disabled),
 #managePreviewModal .registration-preview-actions .btn:hover:not(:disabled),
 #resultModal .copy-btn:hover:not(:disabled),#manageResultModal .copy-btn:hover:not(:disabled),
 #manageResultModal #manageResultDone:hover:not(:disabled),.manage-action-dialog-actions .btn:hover:not(:disabled){
- background:#1ab0f1!important;color:#fff!important;border-color:#1ab0f1!important;transform:none!important;filter:none!important;
+ background:#e3f6ff!important;color:#0b8fc8!important;border-color:#1ab0f1!important;transform:none!important;filter:none!important;
 }}
 body.register-mode #registerPage #registerPreviewBtn:disabled,
 body.manage-mode #managePage #loadManageRecruitmentBtn:disabled,
@@ -6073,9 +6092,9 @@ body.manage-mode #managePage #loadManageRecruitmentBtn:disabled,
   #resultModal .copy-btn:hover,
   #manageResultModal .copy-btn:hover,
   #manageResultModal #manageResultDone:hover {
-    background:#18a9e0!important;
-    border-color:#18a9e0!important;
-    color:#fff!important;
+    background:#e3f6ff!important;
+    border-color:#1ab0f1!important;
+    color:#0b8fc8!important;
     transform:none!important;
     box-shadow:none!important;
   }
@@ -6092,7 +6111,7 @@ body.manage-mode #managePage #loadManageRecruitmentBtn:disabled,
   #managePage .manage-current-url,
   #managePage .manage-fixed-name {padding:11px 12px!important;}
   #managePage .manage-action-stack {gap:10px!important;}
-  #managePage .manage-action-stack .btn {min-height:44px!important;}
+  #managePage .manage-action-stack .btn {min-height:48px!important;}
   #registrationPreviewModal .registration-preview-modal-card,
   #managePreviewModal .registration-preview-modal-card,
   #resultModal .modal-card,
@@ -6276,11 +6295,12 @@ body, button, input, select, textarea {font-family:"Noto Sans JP",sans-serif;}
 
 
 /* PASS help: retain collapsible behavior, use the guide's readable text hierarchy. */
-#managePage .um-manage-help summary {
-  border: 0;
+#managePage .um-manage-help .um-manage-help-toggle {
+  display:block; width:auto; padding:12px 0; border:0; background:transparent; color:#0b8fc8; cursor:pointer; text-align:left;
   outline-offset: 2px;
-  font: 600 13px/1.6 "Noto Sans JP", sans-serif;
+  font: 700 13px/1.6 "Noto Sans JP", sans-serif;
 }
+#managePage .um-manage-help #manageHelpContent[hidden] { display:none!important; }
 #managePage .um-manage-help .manage-pass-notice {
   border: 0;
   border-left: 0;
