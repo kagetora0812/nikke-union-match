@@ -3933,7 +3933,7 @@ body .bottom-nav .nav-btn.active:hover {
   border: 1px solid rgba(123, 128, 133, .34);
   color: #7b8085;
   font-size: 10px;
-  font-weight: 900;
+  font-weight: 400;
   letter-spacing: .08em;
   vertical-align: middle;
 }
@@ -3942,8 +3942,8 @@ body .bottom-nav .nav-btn.active:hover {
   display: block;
   margin-top: 8px;
   color: #7b8085;
-  font-size: 11px;
-  font-weight: 700;
+  font-size: 12px;
+  font-weight: 400;
   line-height: 1.65;
 }
 
@@ -5615,7 +5615,7 @@ body.register-mode #registerPage .register-guide-entry:hover {
 #registerPage .register-usage-option {
   min-height: 48px;
   padding: 12px;
-  font: 700 12px "Noto Sans JP", sans-serif;
+  font: 400 13px "Noto Sans JP", sans-serif;
   border: 1px solid #b9bfc5;
   background: #fff;
   color: #3f444a;
@@ -5628,8 +5628,8 @@ body.register-mode #registerPage .register-guide-entry:hover {
 }
 
 #registerPage .register-usage-option strong {
-  font-size: 12px;
-  font-weight: 700;
+  font-size: 13px;
+  font-weight: 400;
 }
 
 #registerPage .register-usage-option small {
@@ -5826,11 +5826,11 @@ body.manage-mode #managePage { font-family:"Noto Sans JP",sans-serif; color:#232
 body.register-mode .register-inline-top,
 body.manage-mode .manage-inline-top { display:flex!important; align-items:center!important; gap:14px!important; margin-bottom:22px!important; }
 body.register-mode .register-inline-title .eyebrow,
-body.manage-mode .manage-inline-title .eyebrow { color:#1ab0f1!important; font:600 12px/1 "Teko",sans-serif!important; letter-spacing:.16em!important; }
+body.manage-mode .manage-inline-title .eyebrow { color:#1ab0f1!important; font:400 13px/1 "Teko",sans-serif!important; letter-spacing:2px!important; }
 body.register-mode .register-inline-title h2,
-body.manage-mode .manage-inline-title h2 { margin:2px 0 0!important; color:#222428!important; font:700 clamp(22px,2.2vw,28px)/1.3 "Noto Sans JP",sans-serif!important; letter-spacing:-.03em!important; }
+body.manage-mode .manage-inline-title h2 { margin:2px 0 0!important; color:#222428!important; font:500 clamp(22px,2.2vw,28px)/1.3 "Noto Sans JP",sans-serif!important; letter-spacing:-.03em!important; }
 body.register-mode #registerPage .register-back-btn,
-body.manage-mode #managePage .manage-back-btn {box-sizing:border-box!important; width:80px!important;min-height:44px!important;height:44px!important;min-width:80px!important;padding:0 10px!important;display:inline-flex!important;align-items:center!important;justify-content:center!important;white-space:nowrap!important;clip-path:none!important;border:1px solid #53616e!important;border-radius:0!important;background:transparent!important;box-shadow:none!important;color:#222428!important;font:700 13px "Noto Sans JP",sans-serif!important;letter-spacing:normal!important;transition:background-color .15s,color .15s,border-color .15s!important;}
+body.manage-mode #managePage .manage-back-btn {box-sizing:border-box!important; width:88px!important;min-height:44px!important;height:44px!important;min-width:88px!important;padding:0 10px!important;display:inline-flex!important;align-items:center!important;justify-content:center!important;white-space:nowrap!important;clip-path:none!important;border:1px solid #53616e!important;border-radius:0!important;background:transparent!important;box-shadow:none!important;color:#222428!important;font:400 13px "Noto Sans JP",sans-serif!important;letter-spacing:normal!important;transition:background-color .15s,color .15s,border-color .15s!important;}
 @media(hover:hover) and (pointer:fine) {
  body.register-mode #registerPage .register-back-btn:hover,
  body.manage-mode #managePage .manage-back-btn:hover {border-color:#1ab0f1!important;color:#fff!important;background:#1ab0f1!important;}
@@ -5861,7 +5861,7 @@ body.register-mode #registerForm label,
 body.manage-mode #closeForm label {
   color:#62666a!important;
   font-size:13px!important;
-  font-weight:700!important;
+  font-weight:400!important;
   line-height:1.6;
 }
 body.register-mode #registerForm label {
@@ -5896,12 +5896,24 @@ body.register-mode #registerForm .preview-image-field {
 }
 body.register-mode #registerForm #previewImage {
   padding:9px 12px;
+  font:400 13px/1.6 "Noto Sans JP",sans-serif;
+  color:#62666a;
+}
+body.register-mode #registerForm #previewImage::file-selector-button {
+  font:400 13px/1.6 "Noto Sans JP",sans-serif;
+  color:#3f444a;
+  background:#fff;
+  border:1px solid #cdd3d8;
+  border-radius:0;
+  padding:7px 12px;
+  margin-right:12px;
+  cursor:pointer;
 }
 body.register-mode #registerForm .register-usage-block {
   margin:0;
 }
 body.register-mode #registerForm .register-usage-title {
-  font:700 13px/1.6 "Noto Sans JP",sans-serif;
+  font:400 13px/1.6 "Noto Sans JP",sans-serif;
   color:#62666a;
 }
 body.register-mode #registerForm .register-usage-note {
@@ -5911,10 +5923,10 @@ body.register-mode #registerForm .register-usage-note {
 }
 body.register-mode #registerForm .register-usage-option {
   min-height:48px;
-  font:700 12px "Noto Sans JP",sans-serif;
+  font:400 13px "Noto Sans JP",sans-serif;
 }
 body.register-mode #registerForm .register-usage-option strong {
-  font:700 12px "Noto Sans JP",sans-serif;
+  font:400 13px "Noto Sans JP",sans-serif;
 }
 @media(max-width:600px){
   body.register-mode #registerForm label > input:not([type="checkbox"]):not([type="radio"]),
@@ -5979,7 +5991,6 @@ body.manage-mode #closeForm input:focus-visible { outline:1px solid #20b8f4!impo
 #managePage .manage-loaded-head h3,
 #managePage #manageEditTitle {font:700 clamp(20px,2.2vw,26px)/1.35 "Noto Sans JP",sans-serif!important;letter-spacing:-.025em!important;color:#23272b!important;}
 #managePage .manage-loaded-panel .eyebrow,
-#managePage .manage-edit-panel .eyebrow,
 #registrationPreviewModal .eyebrow,
 #managePreviewModal .eyebrow,
 #resultModal .eyebrow,
@@ -5988,21 +5999,99 @@ body.manage-mode #closeForm input:focus-visible { outline:1px solid #20b8f4!impo
 #managePreviewModal h2,
 #resultModal h2,
 #manageResultModal h2 {font:700 clamp(20px,2.2vw,26px)/1.35 "Noto Sans JP",sans-serif!important;letter-spacing:-.025em!important;color:#23272b!important;}
-/* Compact informational rows; no towering boxes on phones. */
-#managePage .manage-current-grid {gap:10px!important;}
-#managePage .manage-current-grid>div,
+/* Unified union details: one border, no nested boxes or left stripes. */
+#managePage .um-membership-summary {
+  display:grid; grid-template-columns:minmax(0,1fr) minmax(0,1fr);
+  gap:20px 24px; border:1px solid #e1e5e8; padding:18px 20px;
+  background:#fff; border-radius:0; box-shadow:none;
+}
+#managePage .um-membership-cell {min-width:0; display:flex; flex-direction:column; gap:7px;}
+#managePage .um-summary-label, #managePage .manage-fixed-name span {
+  font:400 12px/1.5 "Noto Sans JP",sans-serif; color:#77818a;
+}
+#managePage .um-membership-summary #manageCurrentName {
+  margin:0; font:400 clamp(15px,1.6vw,19px)/1.5 "Noto Sans JP",sans-serif!important;
+  overflow-wrap:anywhere; letter-spacing:normal!important;
+}
+#managePage .um-membership-summary #manageCurrentStatus,
+#managePage .um-membership-summary .um-summary-value {
+  font:400 13px/1.65 "Noto Sans JP",sans-serif!important;
+  color:#28333b; overflow-wrap:anywhere; margin:0;
+}
+#managePage .um-membership-summary #manageCurrentStatus {
+  align-self:flex-start; border:1px solid #b6ddeb; padding:2px 9px;
+  background:#f4fbff; color:#0879aa; border-radius:0; box-shadow:none;
+}
+#managePage .um-membership-summary .eyebrow {display:none!important;}
 #managePage .manage-current-url,
 #managePage .manage-fixed-name,
 #managePage .manage-edit-choice-panel,
-#managePage .manage-current-image-box {border:1px solid #e2e6e9!important;border-radius:0!important;box-shadow:none!important;background:#fff!important;padding:13px 15px!important;}
-#managePage .manage-current-grid span,
-#managePage .manage-fixed-name span {color:#788089!important;font-size:11px!important;}
+#managePage .manage-current-image-box {
+  border:1px solid #e2e6e9!important; border-radius:0!important;
+  box-shadow:none!important; background:#fff!important; padding:13px 15px!important;
+}
+#managePage #manageMembershipConfirmedNotice {
+  margin-top:14px; padding:14px 16px; border:1px solid #e1e5e8!important;
+  border-left:1px solid #e1e5e8!important; background:#fff!important;
+  box-shadow:none!important; border-radius:0!important; font-weight:400!important;
+}
+#managePage #manageMembershipConfirmedNotice .um-confirm-title {font-weight:400!important;}
+#managePage #manageMembershipConfirmedNotice .um-confirm-date {display:none!important;}
+#managePage #manageMembershipConfirmedNotice .um-confirm-note {font-weight:400!important;}
+/* Edit form: shared typography and consistent control height. */
+#managePage #manageEditPanel > .eyebrow {
+  font:400 13px/1.4 "Teko",sans-serif!important;
+  letter-spacing:1.6px!important;color:#1ab0f1!important;
+}
+#managePage #manageEditPanel label:not(.manage-remove-image-row),
+#managePage #manageEditPanel .manage-fixed-name > span,
+#managePage #manageEditPanel .manage-current-image-box > span {
+  font:400 13px/1.6 "Noto Sans JP",sans-serif!important;
+  letter-spacing:normal!important;color:#28333b!important;
+}
+#managePage #manageEditPanel .manage-fixed-name > strong {
+  font:400 15px/1.6 "Noto Sans JP",sans-serif!important;
+  color:#28333b!important;
+}
+#managePage #manageEditPanel label > small,
+#managePage #manageEditPanel .manage-fixed-name > small,
+#managePage #manageEditPanel #manageEditImageStatus {
+  display:block;margin-top:8px;
+  font:400 12px/1.7 "Noto Sans JP",sans-serif!important;
+  letter-spacing:normal!important;color:#77818a!important;
+}
+#managePage #manageEditPanel .optional-label {
+  font:400 12px/1.5 "Noto Sans JP",sans-serif!important;
+  letter-spacing:normal!important;color:#77818a!important;
+}
 #managePage #manageEditPanel input:not([type=checkbox]):not([type=file]),
 #managePage #manageEditPanel select,
-#managePage #manageEditPanel textarea {border:1px solid #cdd3d8!important;border-radius:0!important;background:#fff!important;box-shadow:none!important;color:#24282c!important;min-height:42px!important;font-family:"Noto Sans JP",sans-serif!important;}
+#managePage #manageEditPanel textarea {
+  box-sizing:border-box!important;width:100%;min-height:48px!important;
+  border:1px solid #cdd3d8!important;border-radius:0!important;
+  background:#fff!important;box-shadow:none!important;color:#24282c!important;
+  font:400 14px/1.5 "Noto Sans JP",sans-serif!important;
+  letter-spacing:normal!important;
+}
+#managePage #manageEditPanel #manageEditImage {
+  box-sizing:border-box;width:100%;min-height:48px;
+  font:400 13px/1.5 "Noto Sans JP",sans-serif!important;
+  color:#58636c!important;letter-spacing:normal!important;
+}
+#managePage #manageEditPanel #manageEditImage::file-selector-button {
+  font:400 13px/1.5 "Noto Sans JP",sans-serif;
+  padding:7px 12px;margin-right:12px;background:#fff;color:#28333b;
+  border:1px solid #cdd3d8;border-radius:0;cursor:pointer;
+}
+#managePage #manageEditPanel .manage-remove-image-row {
+  font:400 12px/1.7 "Noto Sans JP",sans-serif!important;
+}
+#managePage #manageEditPanel .manage-remove-image-row input[type=checkbox] {
+  flex:0 0 auto;
+}
 #managePage #manageEditPanel input:focus-visible,
 #managePage #manageEditPanel select:focus-visible,
-#managePage #manageEditPanel textarea:focus-visible {outline:1px solid #20b8f4!important;border-color:#20b8f4!important;}
+#managePage #manageEditPanel textarea:focus-visible {outline:none!important;outline-offset:0!important;border-color:#20b8f4!important;box-shadow:0 0 0 1px #20b8f4 inset!important;}
 #registrationPreviewModal .registration-preview-modal-card,
 #managePreviewModal .registration-preview-modal-card,
 #resultModal .modal-card,
@@ -6011,9 +6100,8 @@ body.manage-mode #closeForm input:focus-visible { outline:1px solid #20b8f4!impo
 #manageResultModal .pass-box,
 #managePage .manage-renew-note,
 #managePage .manage-result-new-note,
-#managePage .manage-result-summary {background:#edf8fe!important;border:0!important;border-left:3px solid #20b8f4!important;border-radius:0!important;clip-path:none!important;box-shadow:none!important;color:#4e5962!important;padding:12px 14px!important;}
-/* Guide source: guide/guide.css .btn, .btn.primary/.outline, .btn:disabled.
-   Exact 48px min-height, 12px 20px padding, 700 13px font, #f2fbff/#0b8fc8/#1ab0f1. */
+#managePage .manage-result-summary {background:#fff!important;border:1px solid #dce2e7!important;border-radius:0!important;clip-path:none!important;box-shadow:none!important;color:#4e5962!important;padding:12px 14px!important;}
+/* Edit and manage buttons: 48px height, regular 13px text, no hover movement. */
 body.register-mode #registerPage #registerPreviewBtn,
 body.manage-mode #managePage #loadManageRecruitmentBtn,
 body.manage-mode #managePage #manageLoadedPanel #openManageActionBtn,
@@ -6030,7 +6118,7 @@ body.manage-mode #managePage #manageLoadedPanel #closeLoadedRecruitmentBtn,
 .manage-action-dialog-actions .btn {
   box-sizing:border-box!important; display:inline-flex!important;align-items:center!important;justify-content:center!important;
   min-height:48px!important;padding:12px 20px!important;border-radius:0!important;clip-path:none!important;
-  font:700 13px "Noto Sans JP",sans-serif!important;letter-spacing:normal!important;text-align:center!important;
+  font:400 13px "Noto Sans JP",sans-serif!important;letter-spacing:normal!important;text-align:center!important;
   border:1px solid #1ab0f1!important;border-left:1px solid #1ab0f1!important;background:#f2fbff!important;background-image:none!important;color:#0b8fc8!important;
   box-shadow:none!important;text-shadow:none!important;cursor:pointer!important;
   transition:background-color .15s ease,color .15s ease,border-color .15s ease!important;
@@ -6083,34 +6171,16 @@ body.manage-mode #managePage #loadManageRecruitmentBtn:disabled,
     box-shadow: none !important;
   }
 }
-@media(hover:hover) and (pointer:fine){
-  body.register-mode #registerPage #registerPreviewBtn:hover,
-  body.manage-mode #managePage #loadManageRecruitmentBtn:hover,
-  #managePage #openManageActionBtn:hover,
-  #managePage #closeLoadedRecruitmentBtn:hover,
-  #managePage #openManageEditBtn:hover,
-  #managePage #manageEditPreviewBtn:hover,
-  #registrationPreviewModal #registrationPreviewConfirm:hover,
-  #managePreviewModal #managePreviewConfirm:hover,
-  #resultModal .copy-btn:hover,
-  #manageResultModal .copy-btn:hover,
-  #manageResultModal #manageResultDone:hover {
-    background:#e3f6ff!important;
-    border-color:#1ab0f1!important;
-    color:#0b8fc8!important;
-    transform:none!important;
-    box-shadow:none!important;
-  }
-
-}
 @media(max-width:600px){
+  #managePage .um-membership-summary {grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:16px 10px;padding:14px 12px;}
+  #managePage .um-membership-summary .um-rank-cell,
+  #managePage .um-membership-summary .um-expiry-cell {grid-column:1/-1;}
   body.manage-mode #managePage .manage-inline-top {gap:10px!important;margin-bottom:14px!important;}
   
   body.manage-mode #managePage .manage-inline-title h2 {font-size:21px!important;}
   #managePage #manageLoadedPanel,
   #managePage #manageEditPanel,
   #managePage #manageEditActionChoices {padding:16px 14px!important;}
-  #managePage .manage-current-grid>div,
   #managePage .manage-current-url,
   #managePage .manage-fixed-name {padding:11px 12px!important;}
   #managePage .manage-action-stack {gap:10px!important;}
@@ -6301,7 +6371,7 @@ body, button, input, select, textarea {font-family:"Noto Sans JP",sans-serif;}
 #managePage .um-manage-help .um-manage-help-toggle {
   display:block; width:auto; padding:12px 0; border:0; background:transparent; color:#0b8fc8; cursor:pointer; text-align:left;
   outline-offset: 2px;
-  font: 700 13px/1.6 "Noto Sans JP", sans-serif;
+  font: 400 13px/1.6 "Noto Sans JP", sans-serif;
 }
 #managePage .um-manage-help #manageHelpContent[hidden] { display:none!important; }
 #managePage .um-manage-help .manage-pass-notice {
@@ -6319,7 +6389,7 @@ body, button, input, select, textarea {font-family:"Noto Sans JP",sans-serif;}
 }
 #managePage .um-manage-help .manage-pass-notice > .manage-help-subhead {
   color: #0b8fc8;
-  font-weight: 700;
+  font-weight: 400;
   margin-top: 12px;
 }
 #managePage .um-manage-help .manage-pass-notice strong:not(.manage-help-subhead) {
