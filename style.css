@@ -511,7 +511,7 @@ h3 {
     );
 }
 
-.btn.primary::before {
+.btn.primary:not(#registerPreviewBtn):not(#loadManageRecruitmentBtn)::before {
   content: "";
 
   position: absolute;
@@ -534,8 +534,8 @@ h3 {
     );
 }
 
-.btn.primary:hover::before,
-.btn.primary:active::before {
+.btn.primary:not(#registerPreviewBtn):not(#loadManageRecruitmentBtn):hover::before,
+.btn.primary:not(#registerPreviewBtn):not(#loadManageRecruitmentBtn):active::before {
   background: #fff;
 }
 
@@ -5838,8 +5838,89 @@ body.manage-mode #managePage .manage-back-btn {box-sizing:border-box!important; 
 body.register-mode #registerPage #registerForm,
 body.manage-mode #managePage #closeForm,
 body.manage-mode #managePage .manage-loaded-panel { border:1px solid #e1e5e8!important; border-radius:0!important; clip-path:none!important; background:#fff!important; box-shadow:none!important; padding:clamp(16px,3vw,26px)!important; }
+/* Registration fields: same spacing, type scale and left edge for each field. */
+body.register-mode #registerForm {
+  display:flex;
+  flex-direction:column;
+  gap:18px;
+}
+body.register-mode #registerForm #commanderFields,
+body.register-mode #registerForm #unionFields,
+body.register-mode #registerForm #recruitmentInputFields {
+  display:flex;
+  flex-direction:column;
+  gap:18px;
+  min-width:0;
+}
+body.register-mode #registerForm #commanderFields.hidden,
+body.register-mode #registerForm #unionFields.hidden,
+body.register-mode #registerForm #recruitmentInputFields.hidden {
+  display:none!important;
+}
 body.register-mode #registerForm label,
-body.manage-mode #closeForm label { color:#5e646a!important; font-size:12px!important; font-weight:600!important; }
+body.manage-mode #closeForm label {
+  color:#62666a!important;
+  font-size:13px!important;
+  font-weight:700!important;
+  line-height:1.6;
+}
+body.register-mode #registerForm label {
+  display:block;
+  min-width:0;
+  margin:0;
+}
+body.register-mode #registerForm label > input:not([type="checkbox"]):not([type="radio"]),
+body.register-mode #registerForm label > select,
+body.register-mode #registerForm label > textarea {
+  box-sizing:border-box;
+  display:block;
+  width:100%;
+  min-height:46px;
+  margin:8px 0 0;
+  padding:10px 13px;
+  font:400 14px/1.6 "Noto Sans JP",sans-serif;
+}
+body.register-mode #registerForm .form-label-line {
+  display:flex;
+  align-items:baseline;
+  gap:6px;
+  min-height:0;
+}
+body.register-mode #registerForm .register-field-help {
+  margin:8px 0 0;
+  font:400 12px/1.8 "Noto Sans JP",sans-serif;
+  color:#7b8085;
+}
+body.register-mode #registerForm .preview-image-field {
+  margin:0;
+}
+body.register-mode #registerForm #previewImage {
+  padding:9px 12px;
+}
+body.register-mode #registerForm .register-usage-block {
+  margin:0;
+}
+body.register-mode #registerForm .register-usage-title {
+  font:700 13px/1.6 "Noto Sans JP",sans-serif;
+  color:#62666a;
+}
+body.register-mode #registerForm .register-usage-note {
+  margin:8px 0 0;
+  font:400 12px/1.8 "Noto Sans JP",sans-serif;
+  color:#62666a;
+}
+body.register-mode #registerForm .register-usage-option {
+  min-height:48px;
+  font:700 12px "Noto Sans JP",sans-serif;
+}
+body.register-mode #registerForm .register-usage-option strong {
+  font:700 12px "Noto Sans JP",sans-serif;
+}
+@media(max-width:600px){
+  body.register-mode #registerForm label > input:not([type="checkbox"]):not([type="radio"]),
+  body.register-mode #registerForm label > select,
+  body.register-mode #registerForm label > textarea {font-size:16px!important;}
+}
 body.register-mode #registerForm input:not([type="checkbox"]):not([type="radio"]):not([type="file"]),
 body.register-mode #registerForm select,
 body.register-mode #registerForm textarea,
