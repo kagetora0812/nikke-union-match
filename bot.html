@@ -133,8 +133,8 @@
       inset:var(--header-h) 0 0;
       z-index:108;
       background:rgba(0,0,0,.28);
-      backdrop-filter:blur(4px);
-      -webkit-backdrop-filter:blur(4px);
+      backdrop-filter:none;
+      -webkit-backdrop-filter:none;
     }
     .site-menu-drawer{
       position:fixed;
@@ -146,11 +146,11 @@
       padding:12px;
       transform:translateX(105%);
       overflow-y:auto;
-      background:rgba(12,15,21,.78);
-      border-left:1px solid rgba(255,255,255,.10);
-      box-shadow:-18px 0 50px rgba(0,0,0,.30);
-      backdrop-filter:blur(18px) saturate(120%);
-      -webkit-backdrop-filter:blur(18px) saturate(120%);
+      background:#0d1016;
+      border-left:0;
+      box-shadow:none;
+      backdrop-filter:none;
+      -webkit-backdrop-filter:none;
       transition:transform .24s ease;
     }
     body.menu-open .site-menu-drawer{transform:translateX(0)}
