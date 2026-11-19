@@ -12,3 +12,84 @@ body:has(#umSharedNavigation){padding-top:var(--um-header-height);}
 
 /* Keep shared drawer above all header and notification controls. */
 .um-shared-backdrop{z-index:1190}.um-shared-drawer{z-index:1200}.um-shared-header{width:100%;box-sizing:border-box}
+
+/* UNION MATCH: one sizing source for all four-item navigation bars.
+   Do not change visibility, transforms, or scroll timing on INDEX. */
+:root { --um-nav-bar-height: 68px; --um-nav-icon-size: 21px; --um-nav-label-size: 10px; --um-nav-item-gap: 4px; --um-nav-drawer-item-height: 46px; }
+@media screen and (max-width: 1366px) {
+  html body #bottomNav.bottom-nav,
+  html body .subpage-bottom-nav,
+  html body .um-shared-footer {
+    background: rgba(5,7,10,.72) !important;
+    backdrop-filter: blur(15px) saturate(120%) !important;
+    -webkit-backdrop-filter: blur(15px) saturate(120%) !important;
+    box-sizing: border-box !important;
+    height: calc(var(--um-nav-bar-height) + env(safe-area-inset-bottom)) !important;
+    padding: 0 0 env(safe-area-inset-bottom) !important;
+    grid-template-columns: repeat(4, minmax(0, 1fr)) !important;
+    border-top: 1px solid rgba(255,255,255,.12) !important;
+  }
+  html body #bottomNav.bottom-nav > .um-footer-item,
+  html body .subpage-bottom-nav > .um-footer-item,
+  html body .um-shared-footer > a,
+  html body .um-shared-footer > button {
+    box-sizing: border-box !important;
+    flex: 1 1 25% !important;
+    width: 25% !important;
+    max-width: none !important;
+    min-width: 0 !important;
+    min-height: 0 !important;
+    height: 100% !important;
+    margin: 0 !important;
+    padding: 6px 4px !important;
+    display: flex !important;
+    flex-direction: column !important;
+    justify-content: center !important;
+    align-items: center !important;
+    gap: var(--um-nav-item-gap) !important;
+    font: 900 var(--um-nav-label-size)/1.2 'Noto Sans JP',sans-serif !important;
+    text-align: center !important;
+  }
+  html body #bottomNav.bottom-nav > .um-footer-item svg,
+  html body .subpage-bottom-nav > .um-footer-item svg,
+  html body .um-shared-footer svg {
+    display: block !important;
+    flex: 0 0 var(--um-nav-icon-size) !important;
+    width: var(--um-nav-icon-size) !important;
+    height: var(--um-nav-icon-size) !important;
+    margin: 0 !important;
+  }
+  html body #bottomNav.bottom-nav > .um-footer-item span,
+  html body .subpage-bottom-nav > .um-footer-item span,
+  html body .um-shared-footer span {
+    display: block !important;
+    margin: 0 !important;
+    font: inherit !important;
+    line-height: 1.2 !important;
+  }
+}
+/* Drawer menu rows share one minimum tap target, without changing open/close logic. */
+html body .site-menu-drawer > a,
+html body .site-menu-drawer > button,
+html body .um-shared-drawer > a,
+html body .um-shared-drawer > [data-um-notification-open] {
+  box-sizing: border-box !important;
+  min-height: var(--um-nav-drawer-item-height) !important;
+  display: flex !important;
+  align-items: center !important;
+}
+/* Preserve the deliberate INDEX video-hero footer extension and fade. */
+@media screen and (max-width: 600px) {
+  html body:not(.register-mode):not(.manage-mode) #bottomNav.bottom-nav {
+    height: calc(var(--um-nav-bar-height) + env(safe-area-inset-bottom) + 24px) !important;
+    padding-bottom: calc(env(safe-area-inset-bottom) + 24px) !important;
+  }
+}
+
+/* Surface parity with the original BOT header. Does not change INDEX scroll behavior. */
+html body .um-shared-header,
+html body .site-header,
+html body .index-header {
+  background-color: rgba(5,7,10,.72);
+}
+
