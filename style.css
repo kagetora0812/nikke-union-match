@@ -4362,6 +4362,21 @@ body.manage-mode main.container > .hero {
   margin-top: 18px !important;
 }
 
+/* PC: match the guide heading's 108px viewport start (70px header + 38px wrap).
+   The main site's PC header is 74px; keep 34px between its bottom and heading.
+   Register and PASS share this single alignment rule; mobile stays unchanged. */
+@media screen and (min-width: 1025px) {
+  body.register-mode main.container > .hero,
+  body.manage-mode main.container > .hero {
+    margin-top: 0 !important;
+    padding-top: 0 !important;
+  }
+  body.register-mode #heroRegisterArea,
+  body.manage-mode #heroManageArea {
+    margin-top: 34px;
+  }
+}
+
 /* Current hero copy/action buttons are no longer used */
 body main.container > .hero .hero-left > h1,
 body main.container > .hero .hero-left > p,
