@@ -201,17 +201,6 @@ async function openWebPushManageIfAuthorized() {
     await loadTotalRegisteredUnionCount();
   } catch (error) {
     console.info("Web Push端末認証が利用できません。通常のPASS管理を使用してください。", error?.message || error);
-    const form = document.getElementById("closeForm");
-    if (form && document.getElementById("managePage")?.classList.contains("active")) {
-      let notice = document.getElementById("umWebPushManageNotice");
-      if (!notice) {
-        notice = document.createElement("p");
-        notice.id = "umWebPushManageNotice";
-        notice.style.cssText = "font-size:13px;color:#676b72;margin:12px 0 0;line-height:1.6;overflow-wrap:anywhere;";
-        form.appendChild(notice);
-      }
-      notice.textContent = "端末認証で自動表示できませんでした（" + String(error?.message || "通信エラー") + "）。通常のPASS入力は引き続き利用できます。";
-    }
   }
 }
 
@@ -3687,6 +3676,67 @@ async function initializeDiscordRepublishV2() {
 }
 
 
+// 登録ガイドからの一度きりの入力引き継ぎ。登録は既存フォームの処理だけを使用する。
+let registrationFromGuide = false;
+async function importGuideDraft() {
+  const raw = sessionStorage.getItem('unionMatchGuideDraft');
+  if (!raw) return;
+  let draft;
+  try { draft = JSON.parse(raw); } catch { sessionStorage.removeItem('unionMatchGuideDraft'); return; }
+  if (!draft || !['union','commander'].includes(draft.type) || Date.now()-draft.createdAt>3600000) {
+    sessionStorage.removeItem('unionMatchGuideDraft'); return;
+  }
+  const type = document.getElementById('registrationType');
+  if (!type) return;
+  type.value = draft.type;
+  updateRegistrationFields();
+  if (draft.type === 'union') {
+    document.getElementById('unionName').value = draft.unionName || '';
+    document.getElementById('unionRank').value = draft.rank || 'チャレンジャー';
+    setUnionRegistrationMode(draft.mode);
+  } else {
+    document.getElementById('name').value = draft.name || '';
+    document.getElementById('slv').value = draft.slv || '';
+  }
+  document.getElementById('xUrl').value = draft.url || '';
+  if (draft.hasImage) {
+    try {
+      const db = await new Promise((resolve,reject) => {
+        const req = indexedDB.open('um-guide-transfer',1);
+        req.onsuccess=()=>resolve(req.result); req.onerror=()=>reject(req.error);
+      });
+      const file = await new Promise((resolve,reject) => {
+        const tx=db.transaction('handoff','readonly');
+        const req=tx.objectStore('handoff').get('image');
+        req.onsuccess=()=>resolve(req.result); req.onerror=()=>reject(req.error);
+      });
+      db.close();
+      if (!(file instanceof File)) throw new Error('IMAGE_NOT_FOUND');
+      const dt=new DataTransfer(); dt.items.add(file);
+      document.getElementById('previewImage').files=dt.files;
+    } catch(error) {
+      console.warn('ガイド画像引き継ぎ失敗',error);
+      alert('画像を引き継げませんでした。登録画面で画像を選び直してください。');
+      sessionStorage.removeItem('unionMatchGuideDraft');
+      return;
+    }
+  }
+  registrationFromGuide=true;
+  sessionStorage.removeItem('unionMatchGuideDraft');
+  document.getElementById('registerForm')?.requestSubmit();
+}
+// 既存のフォーム初期化が済んでから実行する。
+window.addEventListener('load', () => { void importGuideDraft(); });
+function returnToGuideIfNeeded() {
+  if (!registrationFromGuide) return false;
+  registrationFromGuide=false;
+  const type=document.getElementById('registrationType')?.value||'commander';
+  const data={type,mode:unionRegistrationMode,name:document.getElementById('name')?.value||'',unionName:document.getElementById('unionName')?.value||'',slv:document.getElementById('slv')?.value||'',rank:document.getElementById('unionRank')?.value||'',url:document.getElementById('xUrl')?.value||'',returnToConfirm:true};
+  sessionStorage.setItem('unionMatchGuideReturn',JSON.stringify(data));
+  location.href='./guide/';
+  return true;
+}
+
 // ========================================
 // 登録前プレビュー
 // ========================================
@@ -4000,10 +4050,10 @@ async function showRegistrationPreview() {
 
 
 $("#registrationPreviewBack")
-  ?.addEventListener("click", () => closeRegistrationPreview(false));
+  ?.addEventListener("click", () => { closeRegistrationPreview(false); returnToGuideIfNeeded(); });
 
 $("#registrationPreviewClose")
-  ?.addEventListener("click", () => closeRegistrationPreview(false));
+  ?.addEventListener("click", () => { closeRegistrationPreview(false); returnToGuideIfNeeded(); });
 
 $("#registrationPreviewModal")
   ?.addEventListener(
@@ -4112,21 +4162,6 @@ $("#previewImageClearBtn")
   );
 
 
-// ========================================
-// 新規ユニオン登録のBOT案内（PASSコピー後のみ表示）
-// ========================================
-
-function resetRegistrationBotGuide(isUnion = false) {
-  const modal = $("#resultModal");
-  const guide = $("#registrationBotGuide");
-
-  modal?.classList.toggle("bot-guide-available", isUnion);
-  modal?.classList.remove("bot-guide-expanded");
-  guide?.classList.remove("is-open");
-  guide?.setAttribute("aria-hidden", "true");
-}
-
-
 // 登録結果を開いたとき、カードのスクロール位置だけを初期化する。
 function resetRegistrationResultScroll() {
   const modal = $("#resultModal");
@@ -4146,7 +4181,6 @@ function showRegistrationResult(
   isUnion = false
 ) {
 
-  resetRegistrationBotGuide(isUnion);
 
   const registrationResultTitle =
     $("#registrationResultTitle");
@@ -4237,15 +4271,9 @@ function showRegistrationResult(
   }
 
   if (registrationPassWarningText) {
-    registrationPassWarningText.innerHTML = `
-      <span class="registration-pass-intro">PASSは以下の操作に必要です。</span>
-      <span class="registration-pass-grid">
-        <span class="registration-pass-item">・登録情報の削除 <small>※指揮官のみ</small></span>
-        <span class="registration-pass-item">・登録の変更・削除</span>
-        <span class="registration-pass-item">・募集状況の切り替え</span>
-        <span class="registration-pass-item">・掲載期限（14日）の延長</span>
-        <span class="registration-pass-item">・Discord BOTとの連携</span>
-      </span>`;
+    registrationPassWarningText.textContent = isUnion
+      ? "PASSは登録情報の変更・削除、募集状況の切り替え、掲載期限（14日）の延長、Discord BOTとの連携、Webプッシュ通知の14日間の掲載期限通知の設定に必要です。"
+      : "PASSは登録情報の変更・削除に必要です。指揮官の掲載期限は14日間で、延長できません。";
   }
 
   if (resultModeNote) {
@@ -4282,7 +4310,6 @@ function showRegistrationResult(
 function showDiscordRepublishV2Result(result, registerOnly = false) {
 
   // BOT経由の再掲載には新規登録案内を出さない。
-  resetRegistrationBotGuide(false);
 
   const registrationResultTitle =
     $("#registrationResultTitle");
@@ -5088,23 +5115,6 @@ $("#copyPass")
           .writeText(
             pass
           );
-
-        // 既存のPASSコピーが成功した場合だけ、ユニオン向けBOT案内を展開。
-        const modal = $("#resultModal");
-        const guide = $("#registrationBotGuide");
-        if (
-          modal?.classList.contains("bot-guide-available") &&
-          !modal.classList.contains("hidden") &&
-          guide
-        ) {
-          guide.setAttribute("aria-hidden", "false");
-          guide.classList.add("is-open");
-          modal.classList.add("bot-guide-expanded");
-
-          // PASSコピー前と同じく、案内展開後も先頭を表示する。
-          resetRegistrationResultScroll();
-        }
-
 
         const button =
           $("#copyPass");
