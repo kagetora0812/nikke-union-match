@@ -1,9 +1,9 @@
 :root {
-  --blue:#17a6df;
-  --deep:#087ab4;
-  --ink:#26394a;
-  --muted:#657787;
-  --line:#d7e2ea;
+  --blue:#1ab0f1;
+  --deep:#159ac8;
+  --ink:#222428;
+  --muted:#7b8085;
+  --line:#c8cdd0;
   --panel:#fff
 }
 * {
@@ -11,16 +11,19 @@
 }
 body {
   margin:0;
-  background:#f7fafc;
+  background:#111317;
   color:var(--ink);
   font-family:'Noto Sans JP',sans-serif;
   font-size:14px;
-  line-height:1.8
+  font-weight:700;
+  line-height:1.8;
+  -webkit-font-smoothing:antialiased;
+  text-rendering:optimizeLegibility
 }
 .site-header {
   height:70px;
-  background:#111820;
-  border-bottom:1px solid #26323b;
+  background:#090a0c;
+  border-bottom:1px solid #26292d;
   display:flex;
   align-items:center;
   justify-content:space-between;
@@ -43,7 +46,7 @@ body {
   border:1px solid #53616e;
   padding:6px 13px;
   cursor:pointer;
-  font:600 13px 'Noto Sans JP',sans-serif
+  font:900 13px 'Noto Sans JP',sans-serif
 }
 .close-guide:hover {
   background:#26313b
@@ -58,18 +61,21 @@ body {
   margin-bottom:26px
 }
 .eyebrow {
-  font:600 19px/1 'Teko',sans-serif;
-  color:#139fd8;
-  letter-spacing:1.6px
+  font:800 11px/1 'Teko',sans-serif;
+  color:#28b8f4;
+  letter-spacing:2.2px
 }
 .heading h1 {
+  color:#fff;
   margin:8px 0;
   font-size:26px;
-  letter-spacing:.02em
+  font-weight:900;
+  letter-spacing:-.06em
 }
 .heading p {
-  color:var(--muted);
-  font-size:13px
+  color:#b6c0c9;
+  font-size:13px;
+  letter-spacing:normal
 }
 .guide-card {
   background:var(--panel);
@@ -83,7 +89,7 @@ body {
   gap:10px;
   font-size:12px;
   color:var(--muted);
-  font-weight:700
+  font-weight:900
 }
 .track {
   height:3px;
@@ -104,7 +110,7 @@ body {
 }
 .demo label,.demo .demo-label {
   display:block;
-  font-weight:700;
+  font-weight:900;
   margin-bottom:8px;
   color:#30485a
 }
@@ -116,7 +122,8 @@ body {
   min-height:46px;
   padding:10px 13px;
   color:#26394a;
-  font:inherit
+  font:inherit;
+  letter-spacing:normal
 }
 .mock-input:focus,.mock-select:focus {
   outline:2px solid #9bdaf5;
@@ -133,13 +140,13 @@ body {
   padding:12px;
   font:inherit;
   cursor:pointer;
-  color:#344a5b
+  color:#34363a
 }
 .choice.active {
-  border-color:#75c7ed;
-  background:#e9f6fc;
+  border-color:#1ab0f1;
+  background:#e8f6fc;
   color:#0877b2;
-  font-weight:700
+  font-weight:900
 }
 .demo-note {
   font-size:12px;
@@ -152,17 +159,19 @@ body {
 }
 .description h2 {
   font-size:16px;
+  font-weight:900;
+  letter-spacing:-.06em;
   margin:0 0 8px;
-  color:#26394a
+  color:#222428
 }
 .description p {
   margin:0 0 10px;
-  color:#45596a
+  color:#44464a
 }
 .description .hint {
   color:#087db9;
   font-size:12px;
-  font-weight:700
+  font-weight:900
 }
 .description .extra {
   margin-top:14px;
@@ -189,25 +198,26 @@ body {
   display:inline-flex;
   align-items:center;
   justify-content:center;
-  min-height:46px;
-  padding:10px 18px;
+  min-height:48px;
+  padding:12px 20px;
   border-radius:0;
-  font:700 14px 'Noto Sans JP',sans-serif;
+  font:900 14px 'Noto Sans JP',sans-serif;
+  letter-spacing:normal;
   text-decoration:none;
   cursor:pointer
 }
 .btn.primary {
-  background:var(--blue);
+  background:linear-gradient(180deg,#28b8f4 0%,#1ab0f1 100%);
   color:#fff;
-  border:1px solid var(--blue)
+  border:1px solid #1ab0f1
 }
 .btn.primary:hover {
-  background:#078fc8
+  background:#159ac8
 }
 .btn.outline {
   background:#fff;
   border:1px solid #cbd8e2;
-  color:#344a5b
+  color:#34363a
 }
 .btn.outline:hover {
   background:#f0f8fc
@@ -299,3 +309,7 @@ body {
 
 }
 
+
+/* 全STEP共通：マウス操作時のブラウザ標準枠を除去し、キーボード操作時は可視化 */
+.btn:focus:not(:focus-visible),.choice:focus:not(:focus-visible){outline:none}
+.btn:focus-visible,.choice:focus-visible,.close-guide:focus-visible{outline:2px solid #1ab0f1;outline-offset:3px}
