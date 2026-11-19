@@ -199,7 +199,8 @@ async function openWebPushManageIfAuthorized() {
       if (!renewed?.renewed || !renewed?.expires_at) throw new Error("期限延長の結果を確認できませんでした。");
       loadedManagedRecruitment = {
         ...loadedManagedRecruitment,
-        member_expires_at: renewed.expires_at
+        member_expires_at: renewed.expires_at,
+        expires_at: renewed.expires_at
       };
       manageMembershipRenewalConfirmed = true;
     } catch (renewError) {
@@ -949,6 +950,15 @@ async function uploadDiscordRepublishV2PreviewImage(
 // ========================================
 // 日付
 // ========================================
+
+function formatManageExpiryJst(value) {
+  const date = new Date(value);
+  if (!Number.isFinite(date.getTime())) return "--";
+  return new Intl.DateTimeFormat("ja-JP", {
+    timeZone: "Asia/Tokyo", year: "numeric", month: "2-digit", day: "2-digit",
+    hour: "2-digit", minute: "2-digit", hour12: false
+  }).format(date) + "（JST）";
+}
 
 function formatDate(date) {
 
@@ -5522,22 +5532,14 @@ function renderLoadedManageRecruitment() {
     $("#manageCurrentDetail").textContent = detail;
   }
 
+  if ($("#manageNameLabel")) $("#manageNameLabel").textContent = isUnion ? "ユニオン名" : "指揮官名";
+  if ($("#manageDetailLabel")) $("#manageDetailLabel").textContent = isUnion ? "ユニオンランク" : "シンクロレベル";
   if ($("#manageCurrentExpiryLabel")) {
-    $("#manageCurrentExpiryLabel").textContent =
-      isUnion
-        ? (
-            isUnionRecruiting
-              ? "募集掲載期限"
-              : "次回利用確認期限"
-          )
-        : "現在の期限";
+    $("#manageCurrentExpiryLabel").textContent = isUnion ? "次回利用確認期限" : "現在の期限";
   }
-
   if ($("#manageCurrentExpiry")) {
-    $("#manageCurrentExpiry").textContent =
-      item.expires_at
-        ? formatDate(item.expires_at)
-        : "--";
+    const expiry = isUnion ? (item.member_expires_at || item.expires_at) : item.expires_at;
+    $("#manageCurrentExpiry").textContent = expiry ? formatManageExpiryJst(expiry) : "--";
   }
 
   if ($("#manageCurrentStatus")) {
@@ -5552,15 +5554,14 @@ function renderLoadedManageRecruitment() {
     if (isUnion) {
       const nextDate =
         item.member_expires_at
-          ? formatDate(item.member_expires_at)
-          : "14日後";
+          ? formatManageExpiryJst(item.member_expires_at)
+          : "未取得";
 
       // PASS認証・端末認証に続く期限更新が成功した場合だけ完了を表示する。
       const confirmed = Boolean(manageMembershipRenewalConfirmed);
       membershipNotice.innerHTML =
-        `<span class="um-confirm-title">${confirmed ? "利用確認が完了しました" : "次回利用確認期限"}</span>`
-        + `<span class="um-confirm-date"><span class="um-confirm-date-label">${confirmed ? "次回確認期限" : "現在の期限"}</span><span class="um-confirm-date-value">${escapeHtml(nextDate)}</span></span>`
-        + `<span class="um-confirm-note">${confirmed ? "登録内容に変更がなければ、そのままお戻りいただけます。" : "利用確認はまだ完了していません。再度管理画面を開くか、PASSで管理してください。"}</span>`;
+        `<span class="um-confirm-title">${confirmed ? "利用確認が完了しました" : "利用確認は完了していません"}</span>`
+        + `<span class="um-confirm-note">${confirmed ? "登録内容に変更がなければ、そのままお戻りいただけます。" : "期限は更新されていません。PASSで管理するか、再度お試しください。"}</span>`;
       membershipNotice.classList.remove("hidden");
     } else {
       membershipNotice.classList.add("hidden");
@@ -5581,7 +5582,7 @@ function renderLoadedManageRecruitment() {
   if ($("#manageMembershipExpiry")) {
     $("#manageMembershipExpiry").textContent =
       item.member_expires_at
-        ? formatDate(item.member_expires_at)
+        ? formatManageExpiryJst(item.member_expires_at)
         : "--";
   }
 
@@ -6616,7 +6617,7 @@ function showManageResult(mode, result) {
   if ($("#manageResultExpiry")) {
     $("#manageResultExpiry").textContent =
       result?.expires_at
-        ? formatDate(result.expires_at)
+        ? formatManageExpiryJst(result.expires_at)
         : "14日後";
   }
 
