@@ -3340,15 +3340,7 @@ function setUnionRegistrationMode(mode) {
 
   if (unionUsageNote) {
     unionUsageNote.textContent =
-      registerOnly
-        ? "ユニオン情報のみ登録します。求人広告には掲載されませんが、「ユニオンリスト」には表示されます。"
-        : "求人広告を掲載します。";
-
-    unionUsageNote.style.color =
-      registerOnly ? "var(--cyan, #1ab0f1)" : "";
-
-    unionUsageNote.style.fontWeight =
-      registerOnly ? "900" : "";
+      "メンバーを募集する場合は「募集する」、募集せずにユニオン名だけを登録する場合は「登録のみ」を選択してください。";
   }
 
   updateRegistrationFields();
