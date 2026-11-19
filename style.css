@@ -4067,8 +4067,8 @@ body .site-menu-backdrop {
   inset: var(--index-header-height) 0 0;
   z-index: 108;
   background: rgba(0, 0, 0, .48);
-  backdrop-filter: blur(2px);
-  -webkit-backdrop-filter: blur(2px);
+  backdrop-filter: none;
+  -webkit-backdrop-filter: none;
 }
 
 body .site-menu-drawer {
@@ -4081,10 +4081,10 @@ body .site-menu-drawer {
   padding: 12px;
   transform: translateX(105%);
   overflow-y: auto;
-  background: rgba(5,7,10,.72);
-  backdrop-filter: blur(14px);
-  -webkit-backdrop-filter: blur(14px);
-  box-shadow: -18px 0 50px rgba(0, 0, 0, .32);
+  background: #0d1016;
+  backdrop-filter: none;
+  -webkit-backdrop-filter: none;
+  box-shadow: none;
   transition: transform .24s ease;
 }
 
@@ -4686,16 +4686,16 @@ body .bottom-nav .nav-link-btn {
 @media screen and (max-width: 1024px) {
   html body .site-menu-backdrop {
     background: rgba(0, 0, 0, .18) !important;
-    backdrop-filter: blur(4px) !important;
-    -webkit-backdrop-filter: blur(4px) !important;
+    backdrop-filter: none;
+  -webkit-backdrop-filter: none;
   }
 
   html body .site-menu-drawer {
-    background: rgba(13, 16, 22, .62) !important;
-    border-left: 1px solid rgba(255,255,255,.12) !important;
-    box-shadow: -12px 0 34px rgba(0,0,0,.18) !important;
-    backdrop-filter: blur(14px) saturate(118%) !important;
-    -webkit-backdrop-filter: blur(14px) saturate(118%) !important;
+    background: #0d1016 !important;
+    border-left: 0 !important;
+    box-shadow: none !important;
+    backdrop-filter: none !important;
+    -webkit-backdrop-filter: none !important;
   }
 
   html body .site-menu-drawer > button,
@@ -4776,51 +4776,6 @@ body .video-topbar {
 
 
 /* =========================================================
-   v27 SMARTPHONE CHROME SCROLL STABILITY
-   2026-09-10
-   - smartphone only (<=600px)
-   - tablet / PC are untouched
-   - keep video as an underlay while cards scroll over it
-   - avoid mobile Chrome sticky + viewport runaway scrolling
-   - no JS / Supabase / card logic changes
-   ========================================================= */
-
-@media screen and (max-width: 600px) {
-
-  /* In list/TOP mode only:
-     use a fixed video underlay instead of sticky on smartphones. */
-  html body:not(.register-mode):not(.manage-mode) .video-hero {
-    position: fixed !important;
-    top: var(--index-header-height) !important;
-    left: 0 !important;
-    right: 0 !important;
-    bottom: auto !important;
-
-    width: 100% !important;
-    height: calc(100svh - var(--index-header-height)) !important;
-    min-height: calc(100svh - var(--index-header-height)) !important;
-    max-height: calc(100svh - var(--index-header-height)) !important;
-
-    z-index: 1 !important;
-  }
-
-  /* The fixed hero is removed from normal flow,
-     so reserve exactly one smartphone hero-height before the list.
-     This makes the document end at the real end of the cards. */
-  html body:not(.register-mode):not(.manage-mode) main.container {
-    margin-top: calc(100svh - var(--index-header-height)) !important;
-    min-height: 0 !important;
-  }
-
-  html body:not(.register-mode):not(.manage-mode) #listPage {
-    height: auto !important;
-    min-height: 0 !important;
-    margin-top: 0 !important;
-  }
-}
-
-
-/* =========================================================
    v29 MOBILE INDEPENDENT SCROLL SHELL
    2026-09-10
    - smartphone Chrome: finite independent scroll area
@@ -4868,26 +4823,6 @@ body .video-topbar {
     -webkit-overflow-scrolling: touch;
   }
 
-  /*
-    Cancel v27 fixed mode.
-    Sticky now belongs to the finite shell instead of Chrome's root viewport.
-  */
-  html body:not(.register-mode):not(.manage-mode) .video-hero {
-    position: -webkit-sticky !important;
-    position: sticky !important;
-
-    top: 0 !important;
-    left: auto !important;
-    right: auto !important;
-    bottom: auto !important;
-
-    width: 100% !important;
-    height: calc(100dvh - var(--index-header-height)) !important;
-    min-height: calc(100dvh - var(--index-header-height)) !important;
-    max-height: calc(100dvh - var(--index-header-height)) !important;
-
-    z-index: 1 !important;
-  }
 
   /* Remove v27's artificial flow spacer. */
   html body:not(.register-mode):not(.manage-mode) main.container {
@@ -5036,7 +4971,7 @@ body .video-topbar {
     position: relative !important;
     z-index: 8 !important;
 
-    margin-top: calc(100dvh - var(--index-header-height) + 28px) !important;
+    margin-top: calc(100dvh - var(--index-header-height)) !important;
     min-height: 0 !important;
   }
 
@@ -5065,9 +5000,9 @@ body .video-topbar {
 
   html body:not(.register-mode):not(.manage-mode)
   #bottomNav.bottom-nav {
-    bottom: -24px !important;
-    height: calc(68px + env(safe-area-inset-bottom) + 24px) !important;
-    padding-bottom: calc(env(safe-area-inset-bottom) + 24px) !important;
+    bottom: 0 !important;
+    height: calc(68px + env(safe-area-inset-bottom)) !important;
+    padding-bottom: env(safe-area-inset-bottom) !important;
 
     z-index: 220 !important;
 
@@ -5267,7 +5202,7 @@ html.tablet-device body .hero-background-video {
 html.tablet-device body:not(.register-mode):not(.manage-mode) main.container {
   position: relative !important;
   z-index: 8 !important;
-  margin-top: calc(100dvh - var(--index-header-height) + 28px) !important;
+  margin-top: calc(100dvh - var(--index-header-height)) !important;
   min-height: 0 !important;
 }
 
@@ -6357,7 +6292,10 @@ body.manage-mode #manageEditPanel button[type="submit"]{min-height:48px!importan
     grid-template-columns: repeat(4, minmax(0, 1fr)) !important;
     border-top: 1px solid rgba(255,255,255,.12) !important;
   }
+  html body #bottomNav.bottom-nav > .nav-btn,
   html body #bottomNav.bottom-nav > .um-footer-item,
+  html body .subpage-bottom-nav > a,
+  html body .subpage-bottom-nav > button,
   html body .subpage-bottom-nav > .um-footer-item,
   html body .um-shared-footer > a,
   html body .um-shared-footer > button {
@@ -6405,13 +6343,6 @@ html body .um-shared-drawer > [data-um-notification-open] {
   min-height: var(--um-nav-drawer-item-height) !important;
   display: flex !important;
   align-items: center !important;
-}
-/* Preserve the deliberate INDEX video-hero footer extension and fade. */
-@media screen and (max-width: 600px) {
-  html body:not(.register-mode):not(.manage-mode) #bottomNav.bottom-nav {
-    height: calc(var(--um-nav-bar-height) + env(safe-area-inset-bottom) + 24px) !important;
-    padding-bottom: calc(env(safe-area-inset-bottom) + 24px) !important;
-  }
 }
 
 /* Surface parity with the original BOT header. Does not change INDEX scroll behavior. */
