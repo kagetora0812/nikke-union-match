@@ -1,4 +1,3 @@
-html { scrollbar-gutter: stable; }
 @import url("https://fonts.googleapis.com/css2?family=Teko:wght@500;600;700&family=Noto+Sans+JP:wght@400;500;600;700;800;900&display=swap");
 html { scrollbar-gutter: stable; }
 
@@ -1992,8 +1991,8 @@ body.manage-mode #managePage {
   border-top: 1px solid rgba(255,255,255,.12);
 
   background: rgba(5,7,10,.72);
-  backdrop-filter: blur(14px);
-  -webkit-backdrop-filter: blur(14px);
+  backdrop-filter: none;
+  -webkit-backdrop-filter: none;
 
   box-shadow:
     0 -4px 14px rgba(0, 0, 0, .16);
@@ -6350,8 +6349,8 @@ body.manage-mode #manageEditPanel button[type="submit"]{min-height:48px!importan
   html body .subpage-bottom-nav,
   html body .um-shared-footer {
     background: rgba(5,7,10,.72) !important;
-    backdrop-filter: blur(15px) saturate(120%) !important;
-    -webkit-backdrop-filter: blur(15px) saturate(120%) !important;
+    backdrop-filter: none !important;
+    -webkit-backdrop-filter: none !important;
     box-sizing: border-box !important;
     height: calc(var(--um-nav-bar-height) + env(safe-area-inset-bottom)) !important;
     padding: 0 0 env(safe-area-inset-bottom) !important;
