@@ -5044,7 +5044,7 @@ body .video-topbar {
 @media screen and (min-width: 1025px) {
 
   html:not(.tablet-device) body:not(.register-mode):not(.manage-mode) {
-    --pc-video-height: calc(100dvh - var(--index-header-height));
+    --pc-video-height: 100dvh;
   }
 
   /* Header: no sticky repaint / no card shadow showing through. */
@@ -5065,10 +5065,10 @@ body .video-topbar {
     box-shadow: none !important;
   }
 
-  /* Video: hard lock below the header. */
+  /* Video extends behind the translucent header; no separate band. */
   html:not(.tablet-device) body:not(.register-mode):not(.manage-mode) .video-hero {
     position: fixed !important;
-    top: var(--index-header-height) !important;
+    top: 0 !important;
     left: 0 !important;
     right: 0 !important;
     bottom: auto !important;
@@ -5096,8 +5096,7 @@ body .video-topbar {
 
     margin-top:
       calc(
-        var(--index-header-height)
-        + var(--pc-video-height)
+        var(--pc-video-height)
       ) !important;
   }
 
