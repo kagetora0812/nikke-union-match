@@ -7,10 +7,8 @@
   <title>NIKKE UNION MATCH - ユニオンリスト</title>
   <meta name="description" content="NIKKE UNION MATCHを現在利用中のユニオン一覧です。募集中のユニオンは募集記事から応募できます。">
 
-  <link rel="stylesheet" href="../style.css?v=51.8">
-  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;500;600;700;800&display=swap" rel="stylesheet">
-
-  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;500;600;700;800&display=swap">
+  <link rel="stylesheet" href="../style.css?v=51.38">
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Teko:wght@500;600;700&family=Noto+Sans+JP:wght@400;500;600;700;800;900&display=swap">
   <style>
     body {
       min-height: 100vh;
@@ -255,7 +253,7 @@
     .union-list-status-btn.active {
       border-color: var(--cyan);
       background: #f2fbff;
-      color: var(--cyan-dark);   
+      color: var(--cyan-dark);
     }
 
     /* UNION LIST専用カード: 共通 .card の装飾に依存しない */
@@ -493,10 +491,11 @@
     .union-list-topbar {
       height: 64px !important;
       padding: 0 20px !important;
-      border-bottom: 1px solid rgba(255,255,255,.07) !important;
-      background: rgba(8,9,12,.92) !important;
-      backdrop-filter: blur(14px);
-      -webkit-backdrop-filter: blur(14px);
+      box-sizing: border-box !important;
+      border-bottom: 0 !important;
+      background: rgba(5,7,10,.72) !important;
+      backdrop-filter: none !important;
+      -webkit-backdrop-filter: none !important;
       box-shadow: none !important;
     }
 
