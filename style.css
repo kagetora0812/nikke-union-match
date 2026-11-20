@@ -1773,7 +1773,7 @@ body.manage-mode #managePage {
 .modal {
   position: fixed;
   inset: 0;
-  z-index: 60;
+  z-index: 1300;
 
   display: grid;
   place-items: center;
@@ -3880,6 +3880,13 @@ body .video-scroll-button b {
   50% { transform: translateY(4px); opacity: 1; }
 }
 
+/* Non-tablet list link anchors respect the same header offset as menu scrolling. */
+@media screen and (min-width:601px) {
+  html:not(.tablet-device) body.um-index-page #listPage {
+    scroll-margin-top: calc(var(--index-header-height) + 12px);
+  }
+}
+
 /* In list mode the old hero copy/buttons disappear.
    Register/manage forms themselves remain untouched and use existing logic. */
 body:not(.register-mode):not(.manage-mode) main.container > .hero {
@@ -4302,6 +4309,8 @@ body:not(.register-mode):not(.manage-mode) #listPage {
   /* Forms need room above the fixed footer. */
   html body.register-mode .mobile-scroll-shell,
   html body.manage-mode .mobile-scroll-shell {
+    top: 0 !important;
+    padding-top: var(--index-header-height) !important;
     padding-bottom:
       calc(76px + env(safe-area-inset-bottom)) !important;
   }
@@ -4605,15 +4614,16 @@ html.tablet-device body.manage-mode .mobile-scroll-shell {
 html.tablet-device body.register-mode .mobile-scroll-shell,
 html.tablet-device body.manage-mode .mobile-scroll-shell {
   position: fixed !important;
-  top: var(--index-header-height) !important;
+  top: 0 !important;
   right: 0 !important;
-  bottom: calc(68px + env(safe-area-inset-bottom)) !important;
+  bottom: 0 !important;
   left: 0 !important;
   width: 100% !important;
   height: auto !important;
   min-height: 0 !important;
   max-height: none !important;
-  padding-bottom: 0 !important;
+  padding-top: var(--index-header-height) !important;
+  padding-bottom: calc(var(--um-nav-bar-height) + env(safe-area-inset-bottom)) !important;
   overflow-x: hidden !important;
   overflow-y: auto !important;
   overscroll-behavior-y: none !important;
@@ -4630,15 +4640,16 @@ html.tablet-device body.manage-mode .mobile-scroll-shell {
   html body.register-mode .mobile-scroll-shell,
   html body.manage-mode .mobile-scroll-shell {
     position: fixed !important;
-    top: var(--index-header-height) !important;
+    top: 0 !important;
     right: 0 !important;
-    bottom: calc(68px + env(safe-area-inset-bottom)) !important;
+    bottom: 0 !important;
     left: 0 !important;
     width: 100% !important;
     height: auto !important;
     min-height: 0 !important;
     max-height: none !important;
-    padding-bottom: 0 !important;
+    padding-top: var(--index-header-height) !important;
+    padding-bottom: calc(var(--um-nav-bar-height) + env(safe-area-inset-bottom)) !important;
     overflow-x: hidden !important;
     overflow-y: auto !important;
     overscroll-behavior-y: none !important;

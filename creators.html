@@ -654,7 +654,7 @@
   </style>
 
   <link rel="stylesheet" href="./subpage-nav.css?v=20261121-visual-align-v2">
-  <link rel="stylesheet" href="./shared/navigation.css?v=20261121-visual-align-v2">
+  <link rel="stylesheet" href="./shared/navigation.css?v=20261121-nav-transparency-v1">
 
 
   
@@ -680,6 +680,7 @@
       body {
         box-sizing: border-box !important;
         height: 100dvh !important;
+        padding-top: 0 !important;
       }
 
       body > main.container {
@@ -687,6 +688,8 @@
         height: 100% !important;
         min-height: 0 !important;
         max-height: 100% !important;
+        padding-top: calc(var(--index-header-height) + 28px) !important;
+        padding-bottom: calc(46px + var(--um-nav-bar-height) + env(safe-area-inset-bottom)) !important;
         overflow-x: hidden !important;
         overflow-y: auto !important;
         scrollbar-gutter: stable;
@@ -697,7 +700,8 @@
     }
 
     @media screen and (max-width: 600px) {
-      body {
+      body > main.container {
+        padding-top: calc(var(--index-header-height) + 12px) !important;
       }
     }
   </style>
