@@ -368,12 +368,12 @@
       .union-card-top .countdown {font-size:9px !important;}
     }
   </style>
-  <link rel="stylesheet" href="../subpage-nav.css?v=20261120-layout-stability-1">
+  <link rel="stylesheet" href="../subpage-nav.css?v=20261120-menu-form-unify-v5">
 <link rel="stylesheet" href="../push-notifications/notification-ui.css?v=20261120-form-align-1">
 </head>
 
 <body class="um-union-list-page">
-  <header class="topbar union-list-topbar video-topbar">
+  <header class="video-topbar">
     <a class="brand video-logo-switch" href="../index.html#videoHero" aria-label="UNION MATCH TOPへ戻る"><img src="../assets/union-match-logo-white.png" alt="UNION MATCH"></a>
 
     <button class="um-notification-bell" type="button" aria-label="プッシュ通知設定を開く" title="プッシュ通知設定"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.65" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M18 8a6 6 0 0 0-12 0c0 7-3 7-3 9h18c0-2-3-2-3-9M10 21h4"/></svg><span class="um-bell-light" aria-hidden="true"></span></button>
@@ -530,11 +530,12 @@
         closeSiteMenu();
       }
     });
-    // The bottom Menu button uses the existing header hamburger toggle.
-    document.addEventListener('DOMContentLoaded', () => {
-      document.querySelector('[data-um-menu-open]')?.addEventListener('click', () => {
-        document.getElementById('siteMenuButton')?.click();
-      });
+    // Footer and header share the same single menu state handler.
+    document.addEventListener('click', (event) => {
+      if (!event.target.closest('.union-list-bottom-nav [data-um-menu-open]')) return;
+      event.preventDefault();
+      if (document.body.classList.contains('menu-open')) closeSiteMenu();
+      else openSiteMenu();
     });
 
   </script>
