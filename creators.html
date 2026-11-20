@@ -663,119 +663,6 @@
   </style>
 
 
-  <style id="creator-menu-v9">
-    /* ===== requested creator-page navigation changes only ===== */
-
-    
-
-    .creator-brand{
-      gap: 9px;
-      color: #fff;
-      font: 700 22px/1 "Teko", "Noto Sans JP", sans-serif;
-      letter-spacing: .16em;
-    }
-
-
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    @media  screen and (max-width: 1024px) {
-      
-
-      
-
-      
-
-      
-    }
-
-    @media  screen and (max-width: 600px) {
-      .creator-brand{
-        font-size: 19px;
-      }
-
-      
-
-      
-    }
-
-    /* ===== v10 creator bottom nav only ===== */
-    @media  screen and (max-width: 1024px) {
-      
-
-      
-
-      
-
-      @media  (hover:hover) and (pointer:fine) {
-        
-      }
-    }
-
-  </style>
-
-
-  <style id="subpage-hard-fixed-v22">
-    /* v22: BOT / CREATOR mobile+tablet hard fixed navigation.
-       Embedded here so this does not depend on subpage-nav.css loading/cache. */
-    @media  screen and (max-width: 1366px) {
-      html{
-        scroll-padding-top: 64px !important;
-      }
-
-      body{
-        padding-top: 64px !important;
-        padding-bottom: calc(68px + env(safe-area-inset-bottom)) !important;
-      }
-
-      
-
-      
-
-      /* Keep the slide-out menu below the fixed header. */
-      
-
-      
-    }
-
-    @media  screen and (max-width: 600px) {
-      html{
-        scroll-padding-top: 58px !important;
-      }
-
-      body{
-        padding-top: 58px !important;
-      }
-
-      
-
-      
-    }
-  </style>
-
-
   <style id="subpage-browser-ui-lock-v23">
     /* v23: mobile/tablet viewport lock.
        Keep the document itself from scrolling so Safari/Chrome browser UI
@@ -792,8 +679,8 @@
       body{
         box-sizing: border-box !important;
         height: 100dvh !important;
-        padding-top: 64px !important;
-        padding-bottom: calc(68px + env(safe-area-inset-bottom)) !important;
+        padding-top: var(--um-header-height) !important;
+        padding-bottom: calc(var(--um-footer-height) + env(safe-area-inset-bottom)) !important;
       }
 
       body > main.container{
@@ -811,25 +698,21 @@
 
     @media  screen and (max-width: 600px) {
       body{
-        padding-top: 58px !important;
+        padding-top: var(--um-header-height) !important;
       }
     }
   </style>
 
-  <style id="site-menu-fansite-note-v1">
-    
-  </style>
-
 <link rel="stylesheet" href="./push-notifications/notification-ui.css?v=3">
 
-<link rel="stylesheet" href="./shared/navigation.css?v=20261120">
+<link rel="stylesheet" href="./shared/navigation.css?v=20261120c">
 </head>
 
 
 <body>
   <div id="umSharedNavigation" data-um-nav-root="./" data-um-page="subpage" data-um-title="CREATOR LIST"></div>
 
-<script src="./shared/navigation.js?v=20261120"></script>
+<script src="./shared/navigation.js?v=20261120c"></script>
 
 
 
