@@ -1560,7 +1560,11 @@ if (document.readyState === "loading") {
   queueMicrotask(openExpiryPushLandingOnce);
 }
 function showPage(name) {
-  if (name === "manage") queueMicrotask(() => { openWebPushManageIfAuthorized(); });
+  if (name === "manage") {
+    // Do not retain a previous auto-auth status when entering PASS normally.
+    showWebPushManageStatus("");
+    queueMicrotask(() => { openWebPushManageIfAuthorized(); });
+  }
 
   // 登録・締切モード
   document.body.classList.toggle(
@@ -8029,6 +8033,13 @@ function applyInitialRecruitmentView() {
     new URLSearchParams(
       window.location.search
     );
+
+  // Registration guide returns via a query parameter, not an element hash.
+  // Avoid the browser's delayed native anchor scroll after showPage() runs.
+  if (params.get("um_page") === "register") {
+    showPage("register");
+    return;
+  }
 
   const requestedView =
     params.get(
