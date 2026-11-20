@@ -2,12 +2,12 @@
 <html lang="ja">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta name="theme-color" content="#06070a">
   <title>NIKKE UNION MATCH - Discord BOT</title>
   <meta name="description" content="NIKKE UNION MATCH Discord BOTの導入方法・通知機能・キャラクター設定・コマンドを紹介するページです。">
 
-  <link rel="stylesheet" href="./subpage-nav.css?v=20261120-bundle-1">
+  <link rel="stylesheet" href="./subpage-nav.css?v=20261120-bot-overlay-1">
   <script>
     // PC uses SPECIAL; phones and tablets never load those assets.
     (() => {
@@ -923,15 +923,19 @@
         overflow:hidden;
         overscroll-behavior:none;
       }
+      /* Let content scroll BEHIND the fixed translucent header/footer.
+         Insets belong to the scroll area, not to the scroll viewport. */
       body{
         height:100dvh;
-        padding-top:var(--header-h);
-        padding-bottom:calc(var(--bottom-h) + env(safe-area-inset-bottom));
+        padding-top:0;
+        padding-bottom:0;
       }
       main.lux-page{
         box-sizing:border-box;
-        height:100%;
-        max-height:100%;
+        height:100dvh;
+        max-height:100dvh;
+        padding-top:var(--header-h);
+        padding-bottom:calc(var(--bottom-h) + env(safe-area-inset-bottom));
         overflow-x:hidden;
         overflow-y:auto;
         overscroll-behavior-y:contain;
@@ -3795,6 +3799,14 @@
 
     document.getElementById("siteMenuClose")?.addEventListener("click", closeSiteMenu);
     document.getElementById("siteMenuBackdrop")?.addEventListener("click", closeSiteMenu);
+
+    // Footer is parsed later than this script. Delegate so it always works.
+    document.addEventListener("click", (event) => {
+      if (event.target.closest(".bot-bottom-nav [data-um-menu-open]")) {
+        if (document.body.classList.contains("menu-open")) closeSiteMenu();
+        else openSiteMenu();
+      }
+    });
 
     document.querySelectorAll("#siteMenuDrawer a").forEach((link) => {
       link.addEventListener("click", closeSiteMenu);
