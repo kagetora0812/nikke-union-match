@@ -14,7 +14,7 @@
 body {
   margin:0;
   min-width:0;
-  background:#111317;
+  background:#f3f6f8;
   color:var(--ink);
   font-family:'Noto Sans JP',sans-serif;
   font-size:14px;
@@ -45,17 +45,17 @@ body {
 }
 .close-guide {
   background:transparent;
-  color:#dbe5ed;
-  border:1px solid #53616e;
+  color:#222428;
+  border:1px solid #69727b;
   padding:0 12px;
   width:88px;
-  height:44px;
-  min-height:44px;
+  height:48px;
+  min-height:48px;
   display:inline-flex;
   align-items:center;
   justify-content:center;
   cursor:pointer;
-  font:700 13px 'Noto Sans JP',sans-serif
+  font:500 13px/1.4 'Noto Sans JP',sans-serif
 }
 .close-guide:hover {
   background:#1ab0f1;
@@ -63,11 +63,11 @@ body {
   border-color:#1ab0f1
 }
 .wrap {
-  width:100%;
+  width:calc(100% - 32px);
   max-width:760px;
   min-width:0;
   margin:0 auto;
-  padding:34px 18px 80px
+  padding:112px 0 80px
 }
 .heading {
   text-align:left;
@@ -80,7 +80,7 @@ body {
   letter-spacing:2.2px
 }
 .heading h1 {
-  color:#fff;
+  color:#222428;
   margin:2px 0 0;
   line-height:1.25;
   font-size:26px;
@@ -88,7 +88,7 @@ body {
   letter-spacing:-.025em
 }
 .heading p {
-  color:#b6c0c9;
+  color:#62666a;
   margin:8px 0 0;
   font-size:13px;
   letter-spacing:normal;
@@ -98,7 +98,7 @@ body {
 .guide-card {
   background:var(--panel);
   border:1px solid var(--line);
-  border-radius:3px;
+  border-radius:0;
   padding:30px;
   min-width:0
 }
@@ -164,7 +164,7 @@ body {
   border:1px solid #b9bfc5;
   background:#fff;
   padding:12px;
-  font:700 12px "Noto Sans JP",sans-serif;
+  font:500 13px/1.4 "Noto Sans JP",sans-serif;
   cursor:pointer;
   color:#3f444a
 }
@@ -233,7 +233,7 @@ body {
   min-height:48px;
   padding:12px 20px;
   border-radius:0;
-  font:700 13px 'Noto Sans JP',sans-serif;
+  font:500 13px/1.4 'Noto Sans JP',sans-serif;
   letter-spacing:normal;
   text-decoration:none;
   cursor:pointer;
@@ -319,7 +319,7 @@ body {
   display:none!important
 }
 @media (min-width:601px) and (max-width:1024px) {
-  .wrap { padding-top:34px; }
+  .wrap { padding-top:72px; }
 }
 @media(max-width:600px) {
   .site-header {
@@ -330,7 +330,7 @@ body {
   max-width:145px
 }
 .wrap {
-  padding:28px 13px 54px
+  padding:50px 0 96px
 }
 .heading h1 {
   font-size:21px
@@ -358,18 +358,18 @@ body {
 .btn:focus:not(:focus-visible),.choice:focus:not(:focus-visible){outline:none}
 .btn:focus-visible,.choice:focus-visible,.close-guide:focus-visible{outline:2px solid #1ab0f1;outline-offset:2px}
 
-/* Guide header: same left-aligned title hierarchy as REGISTER / MANAGE. */
-.heading-row{display:flex;align-items:center;justify-content:flex-start;gap:20px;min-width:0;min-height:44px}
-.heading-titles{min-width:0;flex:1 1 auto;min-height:44px;display:flex;flex-direction:column;justify-content:center}
-.close-guide{flex:0 0 88px;border-left-width:0;color:#c5cdd5;border-color:#69727b;white-space:nowrap;transition:background-color .15s,color .15s,border-color .15s}
+/* REGISTER / PASSと同じ見出し列：ボタン48px、見出し48px、間隔20px。 */
+.heading-row{display:flex;align-items:center;justify-content:flex-start;gap:20px;min-width:0;min-height:48px;width:100%}
+.heading-titles{min-width:0;flex:1 1 auto;min-height:48px;display:flex;flex-direction:column;justify-content:center}
+.close-guide{box-sizing:border-box;flex:0 0 88px;width:88px;height:48px;min-height:48px;white-space:nowrap;border:1px solid #69727b;color:#222428;transition:background-color .15s,color .15s,border-color .15s}
 /* Validation belongs to its field, not to the navigation buttons. */
 .field-label-row{display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;column-gap:12px;row-gap:2px;margin-bottom:8px}
 .demo .field-label-row label{margin:0}
 .field-label-row .validation-error{margin:0;color:#c93748;font-size:12px;font-weight:500;line-height:1.5}
 .demo .validation-error:not(.field-label-row .validation-error){margin:0 0 8px;color:#c93748;font-size:12px;font-weight:500}
-@media(max-width:600px){.heading-row{align-items:center;gap:16px}.heading h1{font-size:21px;line-height:1.25}.close-guide{padding:0 9px;font-size:13px}.heading p{font-size:12px}.field-label-row{align-items:flex-start}}
+@media(max-width:600px){.heading-row{align-items:center;gap:20px}.heading h1{font-size:21px;line-height:1.25}.close-guide{padding:0 9px;font-size:13px}.heading p{font-size:12px}.field-label-row{align-items:flex-start}}
 
-/* Shared navigation controls fixed header and footer; retain guide's own registration behavior. */
-body:has(#umSharedNavigation){background:#111317}
-body:has(#umSharedNavigation) .wrap{padding-top:42px}
-@media(max-width:600px){body:has(#umSharedNavigation) .wrap{padding-top:34px}}
+/* Shared navigation owns the fixed header/footer; guide spacing lives in
+   the .wrap rules above, with no duplicate :has() overrides. */
+body:has(#umSharedNavigation){background:#f3f6f8}
+
