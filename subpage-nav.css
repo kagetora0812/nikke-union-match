@@ -14,7 +14,7 @@
 @media screen and (max-width: 1366px) {
   /* BOT scrolls its content under the fixed bars; its viewport inset
      is owned by main.lux-page instead of the body. */
-  body:not(.um-index-page):not(.um-bot-page) {
+  body:not(.um-index-page):not(.um-bot-page):not(.um-guide-page) {
     padding-top: 64px !important;
     padding-bottom: calc(68px + env(safe-area-inset-bottom)) !important;
   }
@@ -98,7 +98,7 @@
 }
 
 @media screen and (max-width: 600px) {
-  body:not(.um-index-page):not(.um-bot-page) {
+  body:not(.um-index-page):not(.um-bot-page):not(.um-guide-page) {
     padding-top: 58px !important;
   }
 }
@@ -439,4 +439,49 @@ html.tablet-device body.um-index-page #bottomNav.bottom-nav { display: flex; }
    Composite the same translucent header color over black so it doesn't turn gray. */
 body.um-union-list-page .video-topbar {
   background: linear-gradient(rgba(5,7,10,.72), rgba(5,7,10,.72)), #000;
+}
+
+/* Canonical REGISTER / MANAGE / GUIDE / NOTIFICATIONS visual tokens. */
+html:has(body.um-guide-page){scrollbar-gutter:stable}
+:root {
+  --um-form-font: "Noto Sans JP", sans-serif;
+  --um-form-en-font: "Teko", sans-serif;
+  --um-form-text: #222428;
+  --um-form-label: #62666a;
+  --um-form-muted: #7b8085;
+  --um-form-cyan: #1ab0f1;
+  --um-form-cyan-text: #0b8fc8;
+  --um-form-line: #cdd3d8;
+  --um-form-head-height: 48px;
+  --um-form-head-gap: 20px;
+  --um-form-title-size: 26px;
+}
+@media (max-width:600px) { :root { --um-form-title-size: 21px; } }
+/* GUIDE uses the same fixed header sizes and logo/bell positions as INDEX.
+   shared/navigation.js still owns markup + button behavior. */
+body.um-guide-page .um-shared-header {
+  box-sizing:border-box; height:var(--index-header-height);
+  padding:0 14px; background:rgba(5,7,10,.72);
+  border-bottom:0; backdrop-filter:none; -webkit-backdrop-filter:none;
+}
+body.um-guide-page .um-shared-brand img {
+  display:block; width:clamp(154px,18vw,238px); max-width:46vw;
+  height:auto; max-height:54px; object-fit:contain; object-position:left center;
+}
+body.um-guide-page .um-shared-actions { gap:0; }
+body.um-guide-page .um-shared-menu-toggle {
+  flex:0 0 46px; width:46px; height:46px; padding:0;
+  align-items:center; justify-content:center; gap:5px;
+}
+body.um-guide-page .um-shared-menu-toggle span {width:25px;height:2px;border-radius:99px}
+body.um-guide-page .um-notification-bell {
+  position:absolute; right:72px; top:50%; transform:translateY(-50%);
+  margin:0;
+}
+@media (min-width:601px) and (max-width:1024px) {
+  body.um-guide-page .um-notification-bell {right:66px}
+}
+@media (max-width:600px) {
+  body.um-guide-page .um-shared-brand img {width:clamp(148px,43vw,196px);max-width:46vw}
+  body.um-guide-page .um-notification-bell {right:58px}
 }
