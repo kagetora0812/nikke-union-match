@@ -8301,7 +8301,7 @@ void initializeDiscordManageV1();
   const root = document.documentElement;
   const body = document.body;
   const modal = document.getElementById("registrationPreviewModal");
-  const topbar = document.querySelector(".topbar");
+  const topbar = document.querySelector(".um-shared-header");
 
   if (!body || !modal) {
     return;
@@ -8321,7 +8321,7 @@ void initializeDiscordManageV1();
     const headerHeight =
       Number.isFinite(rect?.height) && rect.height > 0
         ? rect.height
-        : 66;
+        : (parseFloat(getComputedStyle(root).getPropertyValue("--index-header-height")) || 64);
 
     const viewportHeight =
       window.visualViewport?.height
