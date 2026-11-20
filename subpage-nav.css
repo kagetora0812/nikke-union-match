@@ -428,7 +428,13 @@ html.tablet-device body.um-index-page #bottomNav.bottom-nav { display: flex; }
   }
 }
 
-html.um-union-list-root { scrollbar-gutter: auto; }
+/* Wide desktop document scrolling: reserve gutter before remote cards are drawn.
+   On phones/tablets, each main scroller owns its own stable gutter. */
+@media screen and (min-width: 1367px) {
+  html.um-union-list-root,
+  html:has(body.um-creators-page),
+  html:has(body.um-bot-page) { scrollbar-gutter: stable; }
+}
 /* The UNION LIST has a white content surface, unlike INDEX's dark video.
    Composite the same translucent header color over black so it doesn't turn gray. */
 body.um-union-list-page .video-topbar {
