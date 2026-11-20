@@ -66,7 +66,7 @@ $('demo').addEventListener('click',event=>{
 });
 $('back').addEventListener('click',()=>{if(index>0){index--;render();}});
 $('next').addEventListener('click',()=>{if(!validate())return;if(index<steps().length-1){index++;render();return;}handoffToRegistration();});
-$('closeGuide').addEventListener('click',()=>{if(state.name||state.unionName||state.slv||state.url||state.image){$('closeDialog').showModal();}else location.href='../index.html#registerPage';});$('cancelClose').addEventListener('click',()=>$('closeDialog').close());$('confirmClose').addEventListener('click',()=>{sessionStorage.removeItem('unionMatchGuideDraft');location.href='../index.html#registerPage';});render();
+$('closeGuide').addEventListener('click',()=>{if(state.name||state.unionName||state.slv||state.url||state.image){$('closeDialog').showModal();}else location.href='../index.html?um_page=register';});$('cancelClose').addEventListener('click',()=>$('closeDialog').close());$('confirmClose').addEventListener('click',()=>{sessionStorage.removeItem('unionMatchGuideDraft');location.href='../index.html?um_page=register';});render();
 // プレビューの「修正する」から戻った場合は入力済み状態を復元する。
 try {
   const raw=sessionStorage.getItem('unionMatchGuideReturn');
@@ -90,6 +90,6 @@ async function handoffToRegistration(){
     if(db) await new Promise((resolve,reject)=>{const tx=db.transaction('handoff','readwrite');tx.objectStore('handoff').put(state.image||null,'image');tx.oncomplete=resolve;tx.onerror=()=>reject(tx.error);});
     if(db) db.close();
     sessionStorage.setItem('unionMatchGuideDraft',JSON.stringify({type:state.type,mode:state.mode,name:state.name,unionName:state.unionName,slv:state.slv,rank:state.rank,url:state.url,hasImage:Boolean(state.image),createdAt:Date.now()}));
-    location.href='../index.html#registerPage';
+    location.href='../index.html?um_page=register';
   }catch(error){$('validationError').textContent='登録画面への引き継ぎに失敗しました。もう一度お試しください。';$('validationError').hidden=false;next.disabled=false;console.error(error);}
 }
