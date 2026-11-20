@@ -94,7 +94,7 @@
       white-space: nowrap;
     }
 
-    @media  (min-width: 1025px) {
+    @media   (min-width: 1025px) {
       .container{
         max-width: 1540px;
         padding-left: 28px;
@@ -123,7 +123,7 @@
       }
     }
 
-    @media  (min-width: 601px) and (max-width: 1024px) {
+    @media   (min-width: 601px) and (max-width: 1024px) {
       .container{
         max-width: 100%;
         padding-left: 20px;
@@ -145,7 +145,7 @@
       }
     }
 
-    @media  (max-width: 600px) {
+    @media   (max-width: 600px) {
       .container{
         max-width: none !important;
         padding-left: 6px !important;
@@ -184,7 +184,7 @@
       }
     }
 
-    @media  (max-width: 360px) {
+    @media   (max-width: 360px) {
       .container{
         padding-left: 4px !important;
         padding-right: 4px !important;
@@ -268,15 +268,15 @@
 
     
 
-    @media  screen and (min-width: 601px) and (max-width: 1024px) {
+    @media   screen and (min-width: 601px) and (max-width: 1024px) {
       
     }
 
-    @media  screen and (max-width: 600px) {
+    @media   screen and (max-width: 600px) {
       
     }
 
-    @media  screen and (max-width: 360px) {
+    @media   screen and (max-width: 360px) {
       
     }
   </style>
@@ -428,7 +428,7 @@
       margin-top: 18px;
     }
 
-    @media  screen and (max-width: 600px) {
+    @media   screen and (max-width: 600px) {
       .manage-current-grid{
         grid-template-columns: 1fr;
       }
@@ -447,7 +447,7 @@
        ブラウザ下部に「この内容で登録」が埋もれないようにする。
        ※ registrationPreviewModal のみに限定。既存機能・他モーダルは変更しない。
        ========================================================= */
-    @media  screen and (max-width: 600px) {
+    @media   screen and (max-width: 600px) {
       #registrationPreviewModal{
         padding:
           max(6px, env(safe-area-inset-top))
@@ -530,7 +530,7 @@
 
   <style id="pass-notice-visual-correction">
     /* PASS管理の下部ナビ境界線のみ維持。説明はstyle.cssのガイド基準に統一。 */
-    body.manage-mode #bottomNav{border-top:0!important;box-shadow:none!important;}
+    
   </style>
 
   <style id="manage-match-register-v512">
@@ -602,7 +602,7 @@
     }
 
     /* スマホでも募集登録ページと同じタイトル並びを維持 */
-    @media  screen and (max-width: 600px) {
+    @media   screen and (max-width: 600px) {
     }
   </style>
 
@@ -618,7 +618,7 @@
        ========================================================= */
 
     /* PC: 「修正する」をホバー時にシアン表示 */
-    @media  (hover: hover) and (pointer: fine) {
+    @media   (hover: hover) and (pointer: fine) {
       #registrationPreviewBack:hover, #registrationPreviewBack:active, #managePreviewBack:hover, #managePreviewBack:active{
         border-color: var(--cyan, #1ab0f1) !important;
         background: #e3f6ff !important;
@@ -743,13 +743,7 @@
 
     /* 登録フォーム入力中は、従来どおり入力欄をキーボード上へ追従。
        下部ナビだけ退避して、最後の登録ボタンまでスクロールできる。 */
-    html.form-mobile-layout body.register-mode.form-input-active #bottomNav.bottom-nav, html.form-mobile-layout body.register-mode.form-keyboard-open #bottomNav.bottom-nav{
-      opacity: 0 !important;
-      visibility: hidden !important;
-      pointer-events: none !important;
-      transform: none !important;
-      transition: none !important;
-    }
+    
 
     html.form-mobile-layout body.register-mode.form-input-active .mobile-scroll-shell{
       padding-bottom:
@@ -772,7 +766,7 @@
     }
 
     /* 横向き端末でもタイトルを先頭に残し、全体スクロールで最後まで到達可能。 */
-    @media  screen and (max-height: 520px) {
+    @media   screen and (max-height: 520px) {
       html.form-mobile-layout body #registrationPreviewModal.registration-preview-modal{
         padding-top: max(6px, env(safe-area-inset-top)) !important;
       }
@@ -899,7 +893,7 @@
     }
 
     /* PCの「修正する」はホバーでシアン。 */
-    @media  (hover: hover) and (pointer: fine) {
+    @media   (hover: hover) and (pointer: fine) {
       #registrationPreviewBack:hover, #registrationPreviewBack:active{
         border-color: var(--cyan, #1ab0f1) !important;
         background:
@@ -914,7 +908,7 @@
     }
 
     /* スマホはボタンを縦積みにして押しやすくする。 */
-    @media  screen and (max-width: 600px) {
+    @media   screen and (max-width: 600px) {
       #registrationPreviewModal.registration-preview-modal{
         padding-top: 8px !important;
       }
@@ -957,12 +951,7 @@
       overflow: hidden !important;
     }
 
-    body.registration-preview-open #bottomNav.bottom-nav{
-      display: none !important;
-      visibility: hidden !important;
-      opacity: 0 !important;
-      pointer-events: none !important;
-    }
+    
 
     html body #registrationPreviewModal.registration-preview-modal, html.form-mobile-layout body #registrationPreviewModal.registration-preview-modal, html.tablet-device body #registrationPreviewModal.registration-preview-modal, html.form-mobile-layout.tablet-device body #registrationPreviewModal.registration-preview-modal{
       position: fixed !important;
@@ -1075,7 +1064,7 @@
       color: #222428 !important;
     }
 
-    @media  (hover: hover) and (pointer: fine) {
+    @media   (hover: hover) and (pointer: fine) {
       #registrationPreviewBack:hover, #registrationPreviewBack:active{
         border-color: var(--cyan, #1ab0f1) !important;
         background:
@@ -1091,7 +1080,7 @@
     }
 
     /* 小さいスマホでも2ボタンが潰れないよう文字だけ少し調整。 */
-    @media  screen and (max-width: 420px) {
+    @media   screen and (max-width: 420px) {
       html body #registrationPreviewModal .registration-preview-modal-card, html.form-mobile-layout body #registrationPreviewModal .registration-preview-modal-card{
         padding: 14px 12px 18px !important;
       }
@@ -1122,7 +1111,7 @@
       HERO内にある登録タイトルの REGISTER まで隠していたため、
       register-mode の登録見出しだけ明示的に復元する。
     */
-    @media  screen and (max-width: 600px) {
+    @media   screen and (max-width: 600px) {
       body.register-mode #registerPage .register-inline-title .eyebrow{
         display: block !important;
         visibility: visible !important;
@@ -1154,7 +1143,7 @@
     }
 
     /* スマホ / タブレットはブラウザ下部UI分を多めに確保。 */
-    @media  screen and (max-width: 1024px) {
+    @media   screen and (max-width: 1024px) {
       html body #registrationPreviewModal.registration-preview-modal, html.form-mobile-layout body #registrationPreviewModal.registration-preview-modal, html.tablet-device body #registrationPreviewModal.registration-preview-modal, html.form-mobile-layout.tablet-device body #registrationPreviewModal.registration-preview-modal{
         padding-bottom: calc(124px + env(safe-area-inset-bottom)) !important;
         scroll-padding-bottom: calc(124px + env(safe-area-inset-bottom)) !important;
@@ -1244,7 +1233,7 @@
       transform: none !important;
     }
 
-    @media  (hover: hover) and (pointer: fine) {
+    @media   (hover: hover) and (pointer: fine) {
       html body #managePage #deleteUnionMembershipBtn.manage-delete-btn:hover{
         border-color: #9E3445 !important;
         background: #9E3445 !important;
@@ -1255,7 +1244,7 @@
       }
     }
 
-    @media  screen and (max-width: 600px) {
+    @media   screen and (max-width: 600px) {
       #managePage #deleteUnionMembershipBtn.manage-delete-btn{
         margin-top: 60px !important;
       }
@@ -1273,20 +1262,9 @@
       scroll-margin-bottom: 126px !important;
     }
 
-    #bottomNav .nav-key-icon{
-      display: block;
-      width: 22px;
-      height: 22px;
-      margin: 0 auto 2px;
-      fill: none;
-      stroke: currentColor;
-      stroke-width: 2;
-      stroke-linecap: square;
-      stroke-linejoin: miter;
-      flex: 0 0 auto;
-    }
+    
 
-    @media  screen and (max-width: 1024px) {
+    @media   screen and (max-width: 1024px) {
       body.manage-mode #heroManageArea{
         padding-bottom: calc(92px + env(safe-area-inset-bottom)) !important;
       }
@@ -1414,7 +1392,7 @@
     }
 
 
-    @media  screen and (max-width: 420px) {
+    @media   screen and (max-width: 420px) {
       html body #managePreviewModal .registration-preview-modal-card, html.form-mobile-layout body #managePreviewModal .registration-preview-modal-card{
         padding: 14px 12px 18px !important;
       }
@@ -1432,13 +1410,13 @@
 
 
   <style id="topbar-mobile-header-alignment">
-    @media  screen and (max-width: 600px) {
+    @media   screen and (max-width: 600px) {
       .video-logo-switch img{ transform:none; }
       
       
       
     }
-    @media  screen and (max-width:360px) {
+    @media   screen and (max-width:360px) {
       
       .video-logo-switch img{ transform:none; }
       
@@ -1460,22 +1438,22 @@
 #registrationPreviewModal .registration-preview-actions .btn{background:#f2fbff!important;color:#0b8fc8!important;border:1px solid #1ab0f1!important;box-shadow:none!important}
 #registrationPreviewModal .registration-preview-actions .btn:hover{background:#1ab0f1!important;color:#fff!important}
 /* 登録・PASS入力: PCではホバー、タッチ端末では常時淡い青 */
-@media  (hover:hover) and (pointer:fine){#registerForm input:hover, #registerForm select:hover, #closeForm input:hover{border-color:#1ab0f1!important}}
+@media   (hover:hover) and (pointer:fine){#registerForm input:hover, #registerForm select:hover, #closeForm input:hover{border-color:#1ab0f1!important}}
 #registerForm input:focus, #registerForm select:focus, #closeForm input:focus{border-color:#1ab0f1!important;outline:1px solid #1ab0f1!important;outline-offset:0}
-@media  (hover:none), (pointer:coarse){#registerForm input, #registerForm select, #closeForm input{border-color:#8bd8f7!important}}
+@media   (hover:none), (pointer:coarse){#registerForm input, #registerForm select, #closeForm input{border-color:#8bd8f7!important}}
 #managePage .manage-pass-notice{margin-top:14px}
 #managePage .um-manage-help summary{cursor:pointer;color:#0b8fc8;font-weight:700;padding:12px 0}
 #managePage .um-manage-help .manage-pass-notice{margin-top:0}
 </style>
 
-<link rel="stylesheet" href="./shared/navigation.css?v=20261120">
+<link rel="stylesheet" href="./shared/navigation.css?v=20261120c">
 </head>
 
 
 <body>
   <div id="umSharedNavigation" data-um-nav-root="./" data-um-page="index" data-um-title=""></div>
 
-<script src="./shared/navigation.js?v=20261120"></script>
+<script src="./shared/navigation.js?v=20261120c"></script>
 
 
 
