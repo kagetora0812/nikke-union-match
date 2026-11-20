@@ -461,7 +461,7 @@ html:has(body.um-guide-page){scrollbar-gutter:stable}
    shared/navigation.js still owns markup + button behavior. */
 body.um-guide-page .um-shared-header {
   box-sizing:border-box; height:var(--index-header-height);
-  padding:0 14px; background:rgba(5,7,10,.72);
+  padding:0 14px; background:#05070a;
   border-bottom:0; backdrop-filter:none; -webkit-backdrop-filter:none;
 }
 body.um-guide-page .um-shared-brand img {
