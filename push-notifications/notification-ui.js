@@ -55,6 +55,9 @@
   }
   function freshToken(){const bytes=new Uint8Array(32);crypto.getRandomValues(bytes);return Array.from(bytes,b=>b.toString(16).padStart(2,'0')).join('');}
   function init() {
+    const siteMenu=document.getElementById('siteMenuButton');
+    document.querySelectorAll('[data-um-menu-open]').forEach(button=>button.addEventListener('click',()=>siteMenu?.click()));
+    document.querySelector('[data-um-home]')?.addEventListener('click',()=>document.getElementById('videoTopSwitch')?.click());
     const dialog=document.createElement('div');
     dialog.className='um-notification-dialog';dialog.setAttribute('role','dialog');dialog.setAttribute('aria-label','プッシュ通知設定');dialog.setAttribute('aria-modal','true');
     dialog.innerHTML=`<div class="um-notification-panel">
@@ -98,21 +101,28 @@
         const subscription=await reg?.pushManager?.getSubscription();
         if(!subscription){xToggle.checked=false;siteToggle.checked=false;expiryToggle.checked=false;wasExpiryOn=false;syncPass();setBell(false);showNotificationState(false);status.textContent='';return;}
         const saved=await postSettings(subscription,'get',false,false);
-        const on=saved.enabled===true&&(saved.notify_x===true||saved.notify_site===true||saved.notify_expiry===true);
-        xToggle.checked=on&&saved.notify_x===true;siteToggle.checked=on&&saved.notify_site===true;
-        expiryToggle.checked=on&&saved.notify_expiry===true;wasExpiryOn=expiryToggle.checked;
-        syncPass();setBell(on);
-        showNotificationState(on);status.textContent='';
-        // 表示だけを追加。PASS連携済みの判断は必ずサーバーのcheckで行う。
-        if(on && saved.notify_expiry===true && Notification.permission==='granted'){
-          const token=localStorage.getItem(TOKEN_KEY);
-          if(token){
-            try{
-              const verification=await postUnion(subscription,'check',{session_token:token});
-              if(sequence===restoreSequence)setPassStatus(verification.authorized===true);
-            }catch(_){if(sequence===restoreSequence)setPassStatus(false);}
-          }
+        // X/site and union-expiry are separate server APIs.  An expiry-only
+        // subscription can be active even if the X/site settings say OFF.
+        const newsEnabled=saved.enabled===true;
+        const xOn=newsEnabled&&saved.notify_x===true;
+        const siteOn=newsEnabled&&saved.notify_site===true;
+        let expiryOn=saved.enabled===true&&saved.notify_expiry===true;
+        let passAuthorized=false;
+        const token=localStorage.getItem(TOKEN_KEY);
+        if(token && Notification.permission==='granted'){
+          try{
+            const verification=await postUnion(subscription,'check',{session_token:token});
+            passAuthorized=verification.authorized===true;
+            expiryOn=expiryOn||passAuthorized;
+          }catch(error){console.warn('[UM push] union status check failed:',error?.message||error);}
         }
+        if(sequence!==restoreSequence)return;
+        xToggle.checked=xOn;siteToggle.checked=siteOn;
+        expiryToggle.checked=expiryOn;wasExpiryOn=expiryOn;
+        syncPass();setPassStatus(passAuthorized);
+        const on=xOn||siteOn||expiryOn;
+        setBell(Notification.permission==='granted'&&on);
+        showNotificationState(on);status.textContent='';
       }catch(error){console.warn('[UM push] restore failed:',error);status.textContent='設定の読み込みに失敗しました。';}
     }
     refreshLocalState();
@@ -150,7 +160,7 @@
           const token=wasExpiryOn?localStorage.getItem(TOKEN_KEY):freshToken();
           if(!token)throw new Error('認証情報がありません。期限通知をOFFにして、PASSから再設定してください。');
           if(!wasExpiryOn){await postUnion(subscription,'bind',{pass:passInput.value.trim(),session_token:token});localStorage.setItem(TOKEN_KEY,token);}
-          else await postUnion(subscription,'check',{session_token:token});
+          else {const verification=await postUnion(subscription,'check',{session_token:token});if(verification.authorized!==true)throw new Error('掲載期限通知の連携を確認できませんでした。PASSから再設定してください。');}
           wasExpiryOn=true;passInput.value='';
         }
         syncPass();setBell(true);showNotificationState(true);setPassStatus(notifyExpiry && wasExpiryOn);status.textContent='';
