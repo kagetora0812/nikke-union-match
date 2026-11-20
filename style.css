@@ -3981,7 +3981,7 @@ body:is(.register-mode,.manage-mode) {
 }
 
 /* Header: uploaded UNION MATCH logo is the hidden TOP switch */
-body .video-topbar {
+body.um-index-page .video-topbar {
   position: sticky !important;
   top: 0 !important;
   z-index: 120 !important;
@@ -4785,7 +4785,7 @@ body:not(.register-mode):not(.manage-mode) #listPage {
 }
 
 /* Keep the header and hamburger menu above both layers. */
-body .video-topbar {
+body.um-index-page .video-topbar {
   z-index: 120 !important;
 }
 
@@ -5070,7 +5070,7 @@ body .video-topbar {
   }
 
   /* Header: no sticky repaint / no card shadow showing through. */
-  html:not(.tablet-device) body:not(.register-mode):not(.manage-mode) .video-topbar {
+  html:not(.tablet-device) body.um-index-page:not(.register-mode):not(.manage-mode) .video-topbar {
     position: fixed !important;
     top: 0 !important;
     left: 0 !important;
@@ -5156,7 +5156,7 @@ html.tablet-device body {
 }
 
 /* Keep the tablet top bar itself in its existing sticky form. */
-html.tablet-device body .video-topbar {
+html.tablet-device body.um-index-page .video-topbar {
   position: sticky !important;
   top: 0 !important;
   z-index: 120 !important;
