@@ -1657,47 +1657,23 @@ function showPage(name) {
       return;
     }
 
-    setTimeout(() => {
+    // Change page and scroll in the same turn: no delayed or animated jump.
+    const listPage = document.getElementById("listPage");
+    if (!listPage) return;
 
-      const listPage =
-        document.getElementById("listPage");
-
-      if (!listPage) {
-        return;
-      }
-
-      const mobileShell =
-        getMobileScrollShell();
-
-      if (mobileShell) {
-
-        scrollAppElementToTop(
-          listPage,
-          "smooth"
-        );
-
-        return;
-      }
-
+    const mobileShell = getMobileScrollShell();
+    if (mobileShell) {
+      scrollAppElementToTop(listPage, "instant");
+    } else {
       const headerOffset = 76;
-
-      const targetTop =
-        listPage.getBoundingClientRect().top +
-        window.pageYOffset -
-        headerOffset;
-
-      window.scrollTo({
-        top: Math.max(0, targetTop),
-        behavior: "smooth"
-      });
-
-    }, 120);
+      const targetTop = listPage.getBoundingClientRect().top + window.pageYOffset - headerOffset;
+      window.scrollTo({ top: Math.max(0, targetTop), behavior: "instant" });
+    }
 
   } else {
 
-    scrollAppToTop(
-      "smooth"
-    );
+    // Page transitions must not perform a visible smooth-scroll adjustment.
+    scrollAppToTop("instant");
 
   }
 }
@@ -7476,9 +7452,7 @@ function returnToVideoTop() {
       "is-visible"
     );
 
-  scrollAppToTop(
-    "smooth"
-  );
+  scrollAppToTop("instant");
 
 }
 
@@ -8078,65 +8052,18 @@ function applyInitialRecruitmentView() {
     return;
   }
 
-  if (
-    requestedHash ===
-    "#listPage"
-  ) {
-
-    setTimeout(
-      () => {
-
-        const listPage =
-          document.getElementById(
-            "listPage"
-          );
-
-        if (!listPage) {
-          return;
-        }
-
-        if (
-          document.documentElement
-            .classList
-            .contains(
-              "tablet-device"
-            )
-        ) {
-
-          mobileFooterHideUntilTop =
-            false;
-
-          scrollAppElementToTop(
-            listPage,
-            "auto"
-          );
-
-          document
-            .getElementById(
-              "bottomNav"
-            )
-            ?.classList
-            .add(
-              "is-visible"
-            );
-
-          return;
-        }
-
-        listPage
-          .scrollIntoView({
-            behavior:
-              "auto",
-            block:
-              "start"
-          });
-
-      },
-      180
-    );
-
+  if (requestedHash === "#listPage") {
+    const listPage = document.getElementById("listPage");
+    if (listPage) {
+      if (document.documentElement.classList.contains("tablet-device")) {
+        mobileFooterHideUntilTop = false;
+        scrollAppElementToTop(listPage, "instant");
+        document.getElementById("bottomNav")?.classList.add("is-visible");
+      } else {
+        scrollAppElementToTop(listPage, "instant");
+      }
+    }
   }
-
 }
 
 
