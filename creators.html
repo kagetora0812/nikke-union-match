@@ -684,6 +684,9 @@
       }
 
       body > main.container {
+        /* Keep the independent mobile/tablet scroll layer behind the fixed shared footer. */
+        position: relative;
+        z-index: 0;
         box-sizing: border-box !important;
         height: 100% !important;
         min-height: 0 !important;
