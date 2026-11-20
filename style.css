@@ -3570,15 +3570,6 @@ html body .slv .slv-label {
   margin-top: 18px;
 }
 
-/* 登録確認：「修正する」を完全な四角にして切り欠きの隙間をなくす */
-#registrationPreviewBack {
-  clip-path: none !important;
-  border: 1px solid #686b70 !important;
-  background: #ffffff !important;
-  color: #222428 !important;
-  box-shadow: none !important;
-}
-
 /* PASS編集：「編集をやめる」を他の境界線ボタンと同じ四角形に統一 */
 #cancelManageEditBtn {
   clip-path: none !important;
@@ -3903,7 +3894,7 @@ body.manage-mode .video-hero {
 body.register-mode main.container > .hero,
 body.manage-mode main.container > .hero {
   display: grid !important;
-  margin-top: 18px !important;
+  margin-top: 0 !important;
 }
 
 /* Form screens start BELOW the fixed header on desktop.  On tablets
@@ -3912,21 +3903,25 @@ body.manage-mode main.container > .hero {
   html:not(.tablet-device) body.register-mode main.container > .hero,
   html:not(.tablet-device) body.manage-mode main.container > .hero {
     margin-top: 0 !important;
-    padding-top: calc(var(--index-header-height, 64px) + 48px) !important;
-  }
-  html:not(.tablet-device) body.register-mode #heroRegisterArea,
-  html:not(.tablet-device) body.manage-mode #heroManageArea {
-    margin-top: 0;
+    padding-top: calc(var(--index-header-height, 64px) + var(--um-form-top-gap, 48px)) !important;
   }
 }
-/* Tablet registration/PASS: reserve the fixed 64px header before the
-   existing 34px content gap. Avoid using body padding because INDEX owns
-   its own scroll shell. */
-@media screen and (min-width: 601px) and (max-width: 1024px) {
+/* Form scroll shells already start below the fixed header. Reserve only
+   the content gap, including physical tablets in landscape. */
+@media screen and (max-width: 1024px) {
   body.um-index-page.register-mode main.container > .hero,
   body.um-index-page.manage-mode main.container > .hero {
-    padding-top: 98px !important;
+    padding-top: var(--um-form-top-gap, 34px) !important;
   }
+}
+html.tablet-device body.um-index-page.register-mode main.container > .hero,
+html.tablet-device body.um-index-page.manage-mode main.container > .hero {
+  padding-top: var(--um-form-top-gap, 34px) !important;
+}
+/* The form headings themselves must not add a second vertical offset. */
+body.register-mode #heroRegisterArea,
+body.manage-mode #heroManageArea {
+  margin-top: 0;
 }
 
 /* PASS occupies the same first grid row as registration; the empty
@@ -4320,22 +4315,8 @@ body:not(.register-mode):not(.manage-mode) #listPage {
 }
 
 
-/* =========================================================
-   v30 FOOTER EARLY FADE + PC VIDEO POSITION
-   2026-09-10
-   - smartphone footer: presentation remains opacity-only
-   - PC video: shift visible video content slightly downward
-     so the upper/head area is less cropped
-   - tablet unchanged
-   ========================================================= */
-
-/* PC only: move the video picture downward inside the existing hero frame.
-   Smaller Y percentage = rendered video content sits lower when cover-cropped. */
-@media screen and (min-width: 1025px) {
-  html body .hero-background-video {
-    object-position: center 42% !important;
-  }
-}
+/* The PC hero uses the same centered video crop as other viewports.
+   Sizing, fixed positioning and scroll behavior are unchanged. */
 
 
 /* =========================================================
@@ -5130,15 +5111,22 @@ body.manage-mode #closeForm input:focus-visible { outline:1px solid #20b8f4!impo
 #managePage .manage-loaded-head {margin-bottom:15px!important;}
 #managePage .manage-loaded-head h3,
 #managePage #manageEditTitle {font:700 clamp(22px,2.2vw,26px)/1.3 "Noto Sans JP",sans-serif!important;letter-spacing:-.03em!important;color:#222428!important;}
-#managePage .manage-loaded-panel .eyebrow,
+#managePage .manage-loaded-panel .eyebrow {font:600 19px/1 "Teko",sans-serif!important;letter-spacing:1.6px!important;color:#1ab0f1!important;}
+/* Confirmation/result headings use the same two-level title scale as REGISTER / MANAGE. */
 #registrationPreviewModal .eyebrow,
 #managePreviewModal .eyebrow,
 #resultModal .eyebrow,
-#manageResultModal .eyebrow {font:600 19px/1 "Teko",sans-serif!important;letter-spacing:1.6px!important;color:#1ab0f1!important;}
+#manageResultModal .eyebrow {
+  font:700 11px/1 var(--um-form-en-font)!important;
+  letter-spacing:2.2px!important; color:var(--um-form-cyan)!important;
+}
 #registrationPreviewModal h2,
 #managePreviewModal h2,
 #resultModal h2,
-#manageResultModal h2 {font:700 clamp(22px,2.2vw,26px)/1.3 "Noto Sans JP",sans-serif!important;letter-spacing:-.03em!important;color:#222428!important;}
+#manageResultModal h2 {
+  font:700 var(--um-form-title-size)/1.25 var(--um-form-font)!important;
+  letter-spacing:-.025em!important;color:var(--um-form-text)!important;
+}
 /* Unified union details: one border, no nested boxes or left stripes. */
 #managePage .um-membership-summary {
   display:grid; grid-template-columns:minmax(0,1fr) minmax(0,1fr);
@@ -5306,6 +5294,20 @@ body.manage-mode #managePage #loadManageRecruitmentBtn:disabled,
 .manage-action-dialog-actions .btn:disabled {
  background:#fff!important;border-color:#e2e8ed!important;color:#b2b7bc!important;opacity:1!important;cursor:default!important;
 }
+/* Back/cancel in both preview flows remains white and flat; only confirmation is cyan. */
+#registrationPreviewModal #registrationPreviewBack,
+#managePreviewModal #managePreviewBack {
+  background:#fff!important; background-image:none!important;
+  border:1px solid #b9bfc5!important; color:var(--um-form-text)!important;
+  box-shadow:none!important; clip-path:none!important;
+}
+@media (hover:hover) and (pointer:fine) {
+  #registrationPreviewModal #registrationPreviewBack:hover,
+  #managePreviewModal #managePreviewBack:hover {
+    background:#f2fbff!important; border-color:var(--um-form-cyan)!important;
+    color:var(--um-form-cyan-text)!important; transform:none!important;
+  }
+}
 /* Action buttons use a single 1px outline; remove inherited decorative bars. */
 #managePage #manageEditPreviewBtn::before,
 #managePage #cancelManageEditBtn::before,
@@ -5410,23 +5412,6 @@ body.manage-mode #managePage #loadManageRecruitmentBtn:disabled,
 #resultModal .registration-pass-intro {margin:7px 0 9px; color:#65717a !important;font-weight:600;}
 #resultModal .registration-pass-role {margin:10px 0 4px !important;color:#098ec7!important;font-weight:900; font-size:13px;}
 #resultModal .registration-pass-item {padding:3px 0 3px 10px; border-left:2px solid #dce5ec;color:#303943!important;font-weight:700;}
-#resultModal .share-choice-title {font-size:19px!important;line-height:1.4;}
-#resultModal .share-choice-help {font-size:15px!important;line-height:1.7; color:#58646d!important;}
-/* Management action dialog centered on desktop, tablet and phone */
-.manage-action-dialog {position:fixed;inset:0;z-index:99999;background:rgba(12,18,25,.62);display:flex;align-items:center;justify-content:center;padding:16px;}
-.manage-action-dialog.hidden {display:none!important;}
-.manage-action-dialog-panel {width:min(100%,460px);max-height:calc(100dvh - 32px);overflow-y:auto;background:#fff;border:1px solid #b9cbd6;padding:26px 24px;box-shadow:0 18px 60px rgba(0,0,0,.28);}
-.manage-action-dialog-kicker {color:#098ec7;font-size:11px;letter-spacing:.15em;font-weight:900;margin-bottom:9px;}
-.manage-action-dialog-panel h2 {font-size:23px;line-height:1.4;margin:0 0 14px;color:#283038;}
-.manage-action-dialog-panel p {white-space:pre-line;font-size:14px;font-weight:600;line-height:1.85;color:#4e5962;margin:0 0 22px;}
-.manage-action-dialog.is-danger .manage-action-dialog-kicker {color:#c43246;}
-.manage-action-dialog-actions {display:flex;gap:10px;justify-content:flex-end;}
-.manage-action-dialog-actions .btn {min-width:108px;}
-.manage-action-dialog-actions .hidden {display:none!important;}
-.manage-action-dialog.is-danger #manageActionDialogAccept {border-color:#c43246;background:#c43246;color:#fff;}
-@media(max-width:600px){.manage-action-dialog-panel{padding:22px 18px;}.manage-action-dialog-panel h2{font-size:20px;}.manage-action-dialog-actions .btn{flex:1;min-width:0;}}
-
-
 /* 2026-10-21 — Consistent square controls and Japanese typography */
 body, button, input, select, textarea {font-family:"Noto Sans JP",sans-serif;}
 /* Keep display typography for the brand, large hero title, numbers and English labels. */
@@ -5457,31 +5442,93 @@ body, button, input, select, textarea {font-family:"Noto Sans JP",sans-serif;}
   border-radius:0!important;clip-path:none!important;
   font-family:"Noto Sans JP",sans-serif!important;
 }
-/* Dialog buttons: existing primary cyan/gray and danger red; no beveled corners. */
-.manage-action-dialog-panel {font-family:"Noto Sans JP",sans-serif!important;border-color:var(--line)!important;}
-.manage-action-dialog-kicker {color:var(--cyan)!important;font-family:"Teko","Noto Sans JP",sans-serif;letter-spacing:.16em;}
-.manage-action-dialog.is-danger .manage-action-dialog-kicker {color:var(--red)!important;}
-.manage-action-dialog-actions {display:grid!important;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px;}
-.manage-action-dialog-actions .btn {width:100%;min-width:0;min-height:48px;border-radius:0!important;clip-path:none!important;box-shadow:none!important;font:700 14px/1.4 "Noto Sans JP",sans-serif!important;}
-.manage-action-dialog-actions #manageActionDialogCancel {background:#fff!important;border:1px solid var(--line-strong)!important;color:var(--ink)!important;}
-.manage-action-dialog-actions #manageActionDialogAccept {background:var(--charcoal)!important;border:1px solid var(--charcoal)!important;color:#fff!important;}
-.manage-action-dialog.is-danger #manageActionDialogAccept {background:var(--red)!important;border-color:var(--red)!important;color:#fff!important;}
-.manage-action-dialog-actions .btn:hover {transform:none!important;filter:brightness(.96);}
-.manage-action-dialog-actions #manageActionDialogCancel.hidden {display:none!important;}
+/* Management confirmation/result share the current form typography and controls. */
+.manage-action-dialog {
+  position:fixed; inset:0; z-index:99999;
+  display:flex; align-items:center; justify-content:center;
+  box-sizing:border-box; padding:16px;
+  background:rgba(12,18,25,.62);
+}
+.manage-action-dialog.hidden { display:none!important; }
+.manage-action-dialog-panel {
+  box-sizing:border-box; width:min(100%,460px);
+  max-height:calc(100dvh - 32px); overflow-y:auto;
+  background:#fff; color:var(--um-form-text); border:1px solid #e1e5e8;
+  border-radius:0; padding:clamp(18px,2.5vw,26px);
+  font-family:var(--um-form-font); box-shadow:none;
+}
+.manage-action-dialog-kicker {
+  color:var(--um-form-cyan); font:700 11px/1 var(--um-form-en-font);
+  letter-spacing:2.2px; margin-bottom:8px;
+}
+.manage-action-dialog.is-danger .manage-action-dialog-kicker {color:#9e3445;}
+.manage-action-dialog-panel h2 {
+  margin:0 0 12px; color:var(--um-form-text);
+  font:700 var(--um-form-title-size)/1.25 var(--um-form-font);
+  letter-spacing:-.025em;
+}
+.manage-action-dialog-panel p {
+  margin:0 0 22px; color:var(--um-form-label);
+  font:400 13px/1.8 var(--um-form-font); white-space:pre-line;
+}
+.manage-action-dialog-actions {display:grid; grid-template-columns:repeat(2,minmax(0,1fr));gap:10px;}
 .manage-action-dialog-actions:has(#manageActionDialogCancel.hidden) {grid-template-columns:1fr;}
+.manage-action-dialog-actions .hidden {display:none!important;}
+.manage-action-dialog-actions .btn {
+  box-sizing:border-box!important; display:inline-flex!important;
+  align-items:center!important; justify-content:center!important;
+  width:100%!important; min-width:0!important; min-height:48px!important;
+  padding:12px 10px!important; border-radius:0!important; clip-path:none!important;
+  box-shadow:none!important; text-shadow:none!important;
+  font:500 13px/1.4 var(--um-form-font)!important;
+  transition:background-color .15s,color .15s,border-color .15s!important;
+}
+.manage-action-dialog-actions #manageActionDialogCancel {
+  background:#fff!important; border:1px solid #b9bfc5!important; color:var(--um-form-text)!important;
+}
+.manage-action-dialog-actions #manageActionDialogAccept {
+  background:#f2fbff!important; border:1px solid var(--um-form-cyan)!important; color:var(--um-form-cyan-text)!important;
+}
+.manage-action-dialog.is-danger #manageActionDialogAccept {
+  background:#fff!important; border-color:#9e3445!important; color:#9e3445!important;
+}
+@media(hover:hover) and (pointer:fine){
+  .manage-action-dialog-actions #manageActionDialogCancel:hover {background:#f2fbff!important;border-color:var(--um-form-cyan)!important;color:var(--um-form-cyan-text)!important;}
+  .manage-action-dialog-actions #manageActionDialogAccept:hover {background:#e3f6ff!important;}
+  .manage-action-dialog.is-danger #manageActionDialogAccept:hover {background:#9e3445!important;color:#fff!important;}
+}
+.manage-action-dialog-actions .btn:focus:not(:focus-visible) {outline:none!important;}
+.manage-action-dialog-actions .btn:focus-visible {outline:2px solid var(--um-form-cyan)!important;outline-offset:-2px!important;}
+@media(max-width:600px){.manage-action-dialog-panel{padding:22px 18px;}}
+/* The share buttons on the registration result must not inherit old beveled gradients. */
+#resultModal :is(#shareXBtn,#resultDone) {
+  box-sizing:border-box!important; min-height:48px!important; padding:12px 16px!important;
+  clip-path:none!important; border-radius:0!important; box-shadow:none!important;
+  background-image:none!important; text-shadow:none!important;
+  font:500 13px/1.4 var(--um-form-font)!important; letter-spacing:normal!important;
+}
+#resultModal #shareXBtn {background:#f2fbff!important;border:1px solid var(--um-form-cyan)!important;color:var(--um-form-cyan-text)!important;}
+#resultModal #resultDone {background:#fff!important;border:1px solid #b9bfc5!important;color:var(--um-form-text)!important;}
+#resultModal :is(#shareXBtn,#resultDone)::before {content:none!important;display:none!important;}
+@media(hover:hover) and (pointer:fine){
+  #resultModal #shareXBtn:hover {background:#e3f6ff!important;color:var(--um-form-cyan-text)!important;}
+  #resultModal #resultDone:hover {background:#f2fbff!important;border-color:var(--um-form-cyan)!important;color:var(--um-form-cyan-text)!important;}
+}
+#resultModal :is(#shareXBtn,#resultDone):focus:not(:focus-visible),
+#resultModal #copyPass:focus:not(:focus-visible) {outline:none!important;}
 @media(max-width:600px){
   #resultModal .share-choice-title{font-size:15px!important;}
   #resultModal .share-choice-help{font-size:13px!important;}
   #resultModal .registration-pass-grid{gap:8px;}
   #resultModal .registration-pass-grid .registration-pass-item{font-size:11px!important;}
 }
-/* Registration result only: one scroll container, fixed above the site header. */
+/* Registration result: centered within viewport; one scroll container on short screens. */
 #resultModal {
   position: fixed;
   inset: 0;
   z-index: 1300;
   display: flex;
-  align-items: flex-start;
+  align-items: center;
   justify-content: center;
   box-sizing: border-box;
   padding: 12px;
