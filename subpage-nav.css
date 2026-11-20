@@ -107,134 +107,141 @@
   z-index: 1200 !important;
 }
 
-/* INDEX header, logo, hamburger and drawer: moved unchanged from style.css. */
-/* Header: uploaded UNION MATCH logo is the hidden TOP switch */
-body .video-topbar {
-  position: sticky !important;
-  top: 0 !important;
-  z-index: 120 !important;
-  height: var(--index-header-height) !important;
-  padding: 0 14px !important;
-  border-bottom: 0 !important;
-  background: rgba(13,16,22,.72) !important;
-  backdrop-filter: none !important;
-  -webkit-backdrop-filter: none !important;
+
+/* ============================================================
+   INDEX navigation — canonical styles, migrated from style.css
+   Only this file owns the INDEX header, drawer, logo and footer.
+   BOT / CREATOR styles above are unchanged.
+   ============================================================ */
+:root { --index-header-height: 64px; --um-nav-bar-height: 68px; }
+@media screen and (max-width: 600px) {
+  :root { --index-header-height: 58px; }
 }
 
-body .video-logo-switch {
-  width: auto !important;
-  max-width: none !important;
-  height: 100% !important;
-  display: flex !important;
-  align-items: center !important;
-  padding: 0 !important;
-  margin: 0 !important;
-  border: 0 !important;
-  background: transparent !important;
-  box-shadow: none !important;
-  cursor: pointer;
+/* The video and header sit against true black, never a white page surface.
+   The white recruitment sheet keeps its own background in style.css. */
+html:has(body.um-index-page) { background-color: #000; }
+body.um-index-page:not(.register-mode):not(.manage-mode) { background: #000; }
+body.um-index-page:not(.register-mode):not(.manage-mode) .video-hero { background: #000; }
+
+body.um-index-page .video-topbar {
+  position: fixed;
+  top: 0; left: 0; right: 0;
+  z-index: 1250;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+  height: var(--index-header-height);
+  min-height: 0;
+  padding: 0 14px;
+  border: 0;
+  color: #fff;
+  background: rgba(5,7,10,.72);
+  backdrop-filter: none;
+  -webkit-backdrop-filter: none;
+  box-shadow: none;
+  transform: none;
+}
+body.um-index-page .video-logo-switch {
+  display: flex;
+  align-items: center;
+  flex-direction: row;
+  width: auto;
+  height: 100%;
+  padding: 0;
+  margin: 0;
+  border: 0;
+  color: #fff;
+  background: transparent;
   appearance: none;
-  -webkit-appearance: none;
+  box-shadow: none;
+  cursor: pointer;
 }
-
-body .video-logo-switch img {
-  display: block !important;
-  width: clamp(154px, 18vw, 238px) !important;
-  max-width: 46vw !important;
-  height: auto !important;
-  max-height: 54px !important;
-  object-fit: contain !important;
-  object-position: left center !important;
+body.um-index-page .video-logo-switch img {
+  display: block;
+  width: clamp(154px, 18vw, 238px);
+  max-width: 46vw;
+  height: auto;
+  max-height: 54px;
+  object-fit: contain;
+  object-position: left center;
   pointer-events: none;
+  transform: none;
 }
-
-body .video-logo-switch:hover,
-body .video-logo-switch:focus,
-body .video-logo-switch:active {
-  border: 0 !important;
-  outline: 0 !important;
-  background: transparent !important;
-  box-shadow: none !important;
-  transform: none !important;
+body.um-index-page .video-logo-switch:is(:hover,:focus,:active) {
+  border: 0;
+  background: transparent;
+  box-shadow: none;
+  transform: none;
 }
-
-body .site-menu-button {
-  width: 46px;
-  height: 46px;
+body.um-index-page .site-menu-button {
   display: grid;
   place-content: center;
   gap: 5px;
+  flex: 0 0 auto;
+  width: 46px;
+  height: 46px;
+  margin: 0;
   padding: 0;
   border: 0;
   background: transparent;
   cursor: pointer;
 }
-
-body .site-menu-button span {
+body.um-index-page .site-menu-button span {
   display: block;
   width: 25px;
   height: 2px;
-  border-radius: 99px;
   background: #fff;
+  border-radius: 99px;
   transition: transform .22s ease, opacity .22s ease;
 }
+body.um-index-page.menu-open .site-menu-button span:nth-child(1) { transform: translateY(7px) rotate(45deg); }
+body.um-index-page.menu-open .site-menu-button span:nth-child(2) { opacity: 0; }
+body.um-index-page.menu-open .site-menu-button span:nth-child(3) { transform: translateY(-7px) rotate(-45deg); }
 
-body.menu-open .site-menu-button span:nth-child(1) {
-  transform: translateY(7px) rotate(45deg);
-}
-
-body.menu-open .site-menu-button span:nth-child(2) {
-  opacity: 0;
-}
-
-body.menu-open .site-menu-button span:nth-child(3) {
-  transform: translateY(-7px) rotate(-45deg);
-}
-
-body .site-menu-backdrop {
+body.um-index-page .site-menu-backdrop {
   position: fixed;
   inset: var(--index-header-height) 0 0;
-  z-index: 108;
-  background: rgba(0, 0, 0, .48);
+  z-index: 1190;
+  background: rgba(0,0,0,.28);
   backdrop-filter: none;
   -webkit-backdrop-filter: none;
 }
-
-body .site-menu-drawer {
+body.um-index-page .site-menu-backdrop[hidden] { display: none; }
+body.um-index-page .site-menu-drawer {
   position: fixed;
   top: var(--index-header-height);
   right: 0;
-  z-index: 110;
-  width: min(86vw, 340px);
+  z-index: 1200;
+  width: min(86vw,340px);
   height: calc(100dvh - var(--index-header-height));
   padding: 12px;
-  transform: translateX(105%);
+  overflow-x: hidden;
   overflow-y: auto;
-  background: #0d1016;
+  background: rgba(13,16,22,.72);
   backdrop-filter: none;
   -webkit-backdrop-filter: none;
+  border-left: 0;
   box-shadow: none;
+  transform: translateX(105%);
   transition: transform .24s ease;
 }
-
-body.menu-open .site-menu-drawer {
-  transform: translateX(0);
-}
-
-body .site-menu-head {
+body.um-index-page.menu-open .site-menu-drawer { transform: translateX(0); }
+body.um-index-page .site-menu-head {
   display: flex;
   align-items: center;
   justify-content: space-between;
   min-height: 48px;
   padding: 0 6px 10px;
   color: rgba(255,255,255,.7);
-  font: 800 12px "Teko", sans-serif;
+  font: 800 12px "Teko",sans-serif;
   letter-spacing: .24em;
 }
-
-body .site-menu-head button {
+body.um-index-page .site-menu-head button {
   width: 38px;
   height: 38px;
+  padding: 0;
   border: 0;
   color: #fff;
   background: transparent;
@@ -242,28 +249,138 @@ body .site-menu-head button {
   line-height: 1;
   cursor: pointer;
 }
-
-body .site-menu-drawer > button,
-body .site-menu-drawer > a {
-  width: 100%;
-  min-height: 52px;
+body.um-index-page .site-menu-drawer > :is(button,a) {
   display: flex;
   align-items: center;
-  padding: 0 14px;
-  border: 0;
-  border-bottom: 1px solid rgba(255,255,255,.09);
+  box-sizing: border-box;
+  min-height: 46px;
   color: #fff;
   background: transparent;
-  font-size: 14px;
-  font-weight: 800;
-  text-align: left;
+  border: 0;
+  border-bottom: 1px solid rgba(255,255,255,.1);
   text-decoration: none;
+  text-align: left;
   cursor: pointer;
 }
-
-body .site-menu-drawer > button:hover,
-body .site-menu-drawer > a:hover {
-  background: rgba(255,255,255,.06);
+body.um-index-page .site-menu-disclaimer {
+  margin: 22px 8px 8px;
+  padding: 14px 10px 0;
+  border-top: 1px solid rgba(255,255,255,.12);
+  color: rgba(255,255,255,.48);
+  font-size: 10px;
+  font-weight: 700;
+  line-height: 1.7;
+  letter-spacing: .01em;
 }
 
+/* INDEX footer: JS toggles only .is-visible; keep its native scroll timing. */
+body.um-index-page #bottomNav.bottom-nav {
+  position: fixed;
+  left: 0; right: 0; bottom: 0;
+  z-index: 220;
+  display: none;
+  width: 100%;
+  height: calc(var(--um-nav-bar-height) + env(safe-area-inset-bottom));
+  padding: 0 0 env(safe-area-inset-bottom);
+  box-sizing: border-box;
+  align-items: stretch;
+  justify-content: space-between;
+  border: 0;
+  border-top: 1px solid rgba(255,255,255,.12);
+  background: rgba(5,7,10,.72);
+  backdrop-filter: none;
+  -webkit-backdrop-filter: none;
+  box-shadow: none;
+  opacity: 1;
+  visibility: hidden;
+  pointer-events: none;
+  transform: none;
+  transition: none;
+}
+body.um-index-page #bottomNav.bottom-nav.is-visible,
+body.um-index-page:is(.register-mode,.manage-mode) #bottomNav.bottom-nav {
+  visibility: visible;
+  pointer-events: auto;
+}
+body.um-index-page #bottomNav.bottom-nav > .nav-btn {
+  display: flex;
+  flex: 1 1 25%;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 4px;
+  box-sizing: border-box;
+  min-width: 0;
+  max-width: none;
+  width: 25%;
+  height: 100%;
+  margin: 0;
+  padding: 6px 4px;
+  color: rgba(255,255,255,.9);
+  background: transparent;
+  border: 0;
+  clip-path: none;
+  font: 500 10px/1.2 "Noto Sans JP",sans-serif;
+  letter-spacing: normal;
+  text-align: center;
+  text-decoration: none;
+  cursor: pointer;
+  opacity: 0;
+  transition: opacity .18s ease;
+}
+body.um-index-page #bottomNav.bottom-nav.is-visible > .nav-btn,
+body.um-index-page:is(.register-mode,.manage-mode) #bottomNav.bottom-nav > .nav-btn { opacity: 1; }
+body.um-index-page #bottomNav.bottom-nav > .nav-btn:is(.active,:hover) { color: #fff; }
+body.um-index-page #bottomNav.bottom-nav > .nav-btn svg {
+  display: block;
+  width: 21px;
+  height: 21px;
+  flex: 0 0 21px;
+  margin: 0;
+}
+body.um-index-page #bottomNav.bottom-nav > .nav-btn:first-child svg { width: 19px; height: 19px; }
+body.um-index-page #bottomNav.bottom-nav > .nav-btn span {
+  display: block;
+  margin: 0;
+  font: 500 10px/1.2 "Noto Sans JP",sans-serif;
+}
 
+/* Prevent the footer from covering the form keyboard and preview. */
+body.um-index-page.registration-preview-open #bottomNav.bottom-nav { display: none !important; }
+html.form-mobile-layout body.um-index-page.register-mode:is(.form-input-active,.form-keyboard-open) #bottomNav.bottom-nav {
+  visibility: hidden !important;
+  pointer-events: none !important;
+}
+
+/* At 1366px and narrower, keep the footer visible on list scroll. */
+@media screen and (max-width: 1366px) {
+  body.um-index-page #bottomNav.bottom-nav { display: flex; }
+}
+/* Landscape physical tablets above 1366px retain the tablet navigation. */
+html.tablet-device body.um-index-page #bottomNav.bottom-nav { display: flex; }
+
+@media screen and (max-width: 1024px) {
+  body.um-index-page .site-menu-backdrop { background: rgba(0,0,0,.18); }
+}
+@media screen and (min-width: 601px) and (max-width: 1024px) {
+  body.um-index-page .video-logo-switch img { width: clamp(178px,26vw,236px); }
+}
+@media screen and (max-width: 600px) {
+  body.um-index-page .video-logo-switch img {
+    width: clamp(90px,27vw,116px);
+    max-width: 29vw;
+    max-height: 40px;
+  }
+  body.um-index-page .video-topbar { padding-right: 14px; }
+  body.um-index-page .site-menu-button { width: 34px; height: 34px; }
+  body.um-index-page .site-menu-button span { width: 24px; }
+}
+@media screen and (max-width: 360px) {
+  body.um-index-page .video-topbar { padding-right: 12px; }
+  body.um-index-page .site-menu-button { width: 32px; height: 32px; }
+  body.um-index-page .site-menu-button span { width: 22px; }
+}
+@media (prefers-reduced-motion: reduce) {
+  body.um-index-page .site-menu-drawer,
+  body.um-index-page #bottomNav.bottom-nav { transition: none; }
+}
