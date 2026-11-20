@@ -7456,7 +7456,7 @@ function returnToVideoTop() {
     ?.classList.add("active");
 
   document
-    .querySelectorAll(".bottom-nav .nav-btn")
+    .querySelectorAll(".um-index-footer .um-footer-item[data-page]")
     .forEach(button => {
       button.classList.toggle(
         "active",
