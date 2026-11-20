@@ -12,6 +12,10 @@
 }
 
 @media screen and (max-width: 1366px) {
+  /* UNION LIST owns an inner scroller, so its root needs no extra scrollbar gutter.
+     This keeps the fixed header/footer full viewport width on phones/tablets. */
+  html.um-union-list-root { scrollbar-gutter: auto; }
+
   /* BOT scrolls its content under the fixed bars; its viewport inset
      is owned by main.lux-page instead of the body. */
   body:not(.um-index-page):not(.um-bot-page):not(.um-guide-page) {
