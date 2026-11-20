@@ -55,9 +55,7 @@
   }
   function freshToken(){const bytes=new Uint8Array(32);crypto.getRandomValues(bytes);return Array.from(bytes,b=>b.toString(16).padStart(2,'0')).join('');}
   function init() {
-    const siteMenu=document.getElementById('siteMenuButton');
-    document.querySelectorAll('[data-um-menu-open]').forEach(button=>button.addEventListener('click',()=>siteMenu?.click()));
-    document.querySelector('[data-um-home]')?.addEventListener('click',()=>document.getElementById('videoTopSwitch')?.click());
+    // Menu and Home controls belong to each page navigation, not this notification UI.
     const dialog=document.createElement('div');
     dialog.className='um-notification-dialog';dialog.setAttribute('role','dialog');dialog.setAttribute('aria-label','プッシュ通知設定');dialog.setAttribute('aria-modal','true');
     dialog.innerHTML=`<div class="um-notification-panel">
