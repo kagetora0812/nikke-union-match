@@ -26,7 +26,7 @@
     @import url("https://fonts.googleapis.com/css2?family=Teko:wght@500;600;700&family=Noto+Sans+JP:wght@400;500;600;700;800;900&display=swap");
 
 
-    :root{
+    :root {
       --bg: #08090c;
       --bg2: #0d0f13;
       --panel: #121419;
@@ -44,15 +44,15 @@
       --red: #ff6977;
     }
 
-    *{
+    * {
       box-sizing: border-box;
     }
 
-    html{
+    html {
       background: var(--bg);
     }
 
-    body{
+    body {
       margin: 0;
       min-height: 100vh;
       color: var(--text);
@@ -67,7 +67,7 @@
       text-rendering: optimizeLegibility;
     }
 
-    body::before{
+    body::before {
       content: "";
       position: fixed;
       inset: 0;
@@ -78,69 +78,39 @@
         linear-gradient(135deg, transparent 0 74%, rgba(255,255,255,.025) 74% 74.35%, transparent 74.35% 100%);
     }
 
-    a{
+    a {
       color: inherit;
     }
 
-    button{
+    button {
       font: inherit;
     }
 
-    .hidden{
+    .hidden {
       display: none !important;
     }
 
     /* ================= HEADER ================= */
     
 
-    .brand{
-      display: flex;
-      flex-direction: column;
-      font-family:
-        
-        "Futura PT Condensed",
-        "Industry",
-        "Azonix",
-        "Teko",
-        "Noto Sans JP", sans-serif;
-      line-height: .82;
-    }
+    
 
-    .brand-small{
-      color: var(--accent);
-      font-size: 9px;
-      font-weight: 800;
-      letter-spacing: 3.7px;
-    }
+    
 
-    .brand-main{
-      margin-top: 5px;
-      color: #fff;
-      font-size: 23px;
-      font-weight: 800;
-      letter-spacing: -.035em;
-      line-height: .82;
-    }
+    
 
-    .status{
-      display: inline-flex;
-      align-items: center;
-      gap: 8px;
-      color: #c7cbd0;
-      font: 800 11px "Teko", "Noto Sans JP", sans-serif;
-      letter-spacing: 1.6px;
-    }
+    
 
-    .status::before{ display: none; }
+    
 
     /* ================= LAYOUT ================= */
-    .container{
+    .container {
       width: min(1180px, calc(100% - 28px));
       margin: 0 auto;
       padding: 28px 0 46px;
     }
 
-    .eyebrow{
+    .eyebrow {
       margin-bottom: 7px;
       color: var(--accent);
       font: 800 11px "Teko", "Noto Sans JP", sans-serif;
@@ -148,7 +118,8 @@
       text-transform: uppercase;
     }
 
-    h1, h2{
+    h1,
+    h2 {
       margin: 0;
       color: #fff;
       font-family:
@@ -158,17 +129,17 @@
       letter-spacing: -.055em;
     }
 
-    h1{
+    h1 {
       font-size: clamp(31px, 6vw, 52px);
       line-height: 1.05;
     }
 
-    h2{
+    h2 {
       font-size: clamp(22px, 4vw, 30px);
       line-height: 1.15;
     }
 
-    .lead{
+    .lead {
       max-width: 680px;
       margin: 13px 0 0;
       color: #b5bac1;
@@ -177,7 +148,9 @@
     }
 
     /* ================= NIKKE WHITE / BLUE TAP ================= */
-    .back-btn, .creator-link, .recruit-x-btn{
+    .back-btn,
+    .creator-link,
+    .recruit-x-btn {
       -webkit-tap-highlight-color: transparent;
       position: relative;
       overflow: hidden;
@@ -189,7 +162,9 @@
         transform .08s ease;
     }
 
-    .back-btn::after, .creator-link::after, .recruit-x-btn::after{
+    .back-btn::after,
+    .creator-link::after,
+    .recruit-x-btn::after {
       content: "";
       position: absolute;
       left: 0;
@@ -202,8 +177,10 @@
     }
 
     /* PCではカーソルを合わせた時だけ白＋シアン */
-    @media  (hover: hover) and (pointer: fine) {
-      .back-btn:hover, .creator-link:hover, .recruit-x-btn:hover{
+    @media (hover: hover) and (pointer: fine) {
+      .back-btn:hover,
+      .creator-link:hover,
+      .recruit-x-btn:hover {
         border-color: #a9dff6 !important;
         background: linear-gradient(180deg, #ffffff 0%, #edf4f8 100%) !important;
         color: #118fc9 !important;
@@ -213,12 +190,19 @@
           inset 0 -2px 0 rgba(40,185,232,.20);
       }
 
-      .back-btn:hover::after, .creator-link:hover::after, .recruit-x-btn:hover::after{
+      .back-btn:hover::after,
+      .creator-link:hover::after,
+      .recruit-x-btn:hover::after {
         background: var(--cyan);
       }
     }
 
-    .back-btn:focus-visible, .creator-link:focus-visible, .recruit-x-btn:focus-visible, .back-btn:active, .creator-link:active, .recruit-x-btn:active{
+    .back-btn:focus-visible,
+    .creator-link:focus-visible,
+    .recruit-x-btn:focus-visible,
+    .back-btn:active,
+    .creator-link:active,
+    .recruit-x-btn:active {
       border-color: #7dd8f5 !important;
       background: linear-gradient(180deg, #ffffff 0%, #e8f2f7 100%) !important;
       color: #0c8fc9 !important;
@@ -230,20 +214,27 @@
       outline: none;
     }
 
-    .back-btn:focus-visible::after, .creator-link:focus-visible::after, .recruit-x-btn:focus-visible::after, .back-btn:active::after, .creator-link:active::after, .recruit-x-btn:active::after{
+    .back-btn:focus-visible::after,
+    .creator-link:focus-visible::after,
+    .recruit-x-btn:focus-visible::after,
+    .back-btn:active::after,
+    .creator-link:active::after,
+    .recruit-x-btn:active::after {
       background: var(--cyan);
     }
 
-    .back-btn:active, .creator-link:active, .recruit-x-btn:active{
+    .back-btn:active,
+    .creator-link:active,
+    .recruit-x-btn:active {
       transform: translateY(1px) scale(.995);
     }
 
     /* ================= LIST ================= */
-    .list-section{
+    .list-section {
       margin-top: 0;
     }
 
-    .section-title-row{
+    .section-title-row {
       display: flex;
       align-items: baseline;
       justify-content: flex-start;
@@ -252,14 +243,14 @@
       padding: 0 2px 16px;
       border-bottom: 1px solid var(--line);
     }
-    .creator-list-title{
+    .creator-list-title {
       margin: 0;
       color: var(--accent);
       font: 700 clamp(27px, 3vw, 38px)/1 "Teko", sans-serif;
       letter-spacing: .1em;
       white-space: nowrap;
     }
-    .creator-list-description{
+    .creator-list-description {
       margin: 0;
       color: #c0c6cf;
       font-size: 12px;
@@ -267,20 +258,20 @@
       line-height: 1.8;
     }
 
-    .creator-description-mobile{ display: none; }
-    @media  screen and (max-width: 600px) {
-      .creator-description-desktop{ display: none; }
-      .creator-description-mobile{ display: inline; }
+    .creator-description-mobile { display: none; }
+    @media screen and (max-width: 600px) {
+      .creator-description-desktop { display: none; }
+      .creator-description-mobile { display: inline; }
     }
 
-    .creator-grid{
+    .creator-grid {
       display: grid;
       grid-template-columns: repeat(3, minmax(0, 1fr));
       gap: 14px;
       margin-top: 14px;
     }
 
-    .creator-card{
+    .creator-card {
       position: relative;
       overflow: hidden;
       display: flex;
@@ -294,7 +285,7 @@
       transition: transform .18s ease, border-color .18s ease, background .18s ease;
     }
 
-    .creator-card::before{
+    .creator-card::before {
       content: "";
       position: absolute;
       top: 0;
@@ -304,7 +295,7 @@
       background: var(--accent);
     }
 
-    .creator-card::after{
+    .creator-card::after {
       content: "";
       position: absolute;
       width: 82px;
@@ -316,13 +307,13 @@
       pointer-events: none;
     }
 
-    .creator-card:hover{
+    .creator-card:hover {
       transform: translateY(-2px);
       border-color: #41444b;
       background: linear-gradient(145deg, #1a1d22 0%, #121419 100%);
     }
 
-    .creator-badge{
+    .creator-badge {
       display: inline-flex;
       align-items: center;
       width: fit-content;
@@ -335,13 +326,14 @@
       letter-spacing: 1.4px;
     }
 
-    .creator-icon-wrap{
+    .creator-icon-wrap {
       margin-top: 17px;
       display: flex;
       justify-content: center;
     }
 
-    .creator-icon, .creator-icon-placeholder{
+    .creator-icon,
+    .creator-icon-placeholder {
       width: 92px;
       height: 92px;
       border-radius: 50%;
@@ -350,11 +342,11 @@
       box-shadow: 0 0 0 5px rgba(255,255,255,.018);
     }
 
-    .creator-icon{
+    .creator-icon {
       object-fit: cover;
     }
 
-    .creator-icon-placeholder{
+    .creator-icon-placeholder {
       display: flex;
       align-items: center;
       justify-content: center;
@@ -362,7 +354,7 @@
       font-size: 32px;
     }
 
-    .creator-name{
+    .creator-name {
       width: 100%;
       margin-top: 13px;
       color: #fff;
@@ -373,7 +365,7 @@
       word-break: break-word;
     }
 
-    .creator-description{
+    .creator-description {
       flex: 1;
       width: min(100%, 360px);
       margin: 9px auto 0;
@@ -387,7 +379,7 @@
       overflow-wrap: anywhere;
     }
 
-    .creator-links{
+    .creator-links {
       width: 100%;
       display: grid;
       grid-template-columns: 1fr 1fr;
@@ -395,11 +387,11 @@
       margin-top: 15px;
     }
 
-    .creator-links.single{
+    .creator-links.single {
       grid-template-columns: 1fr;
     }
 
-    .creator-link{
+    .creator-link {
       display: flex;
       align-items: center;
       justify-content: center;
@@ -415,24 +407,25 @@
     }
 
 
-    .creator-link.x{
+    .creator-link.x {
       font-family: "Noto Sans JP", sans-serif;
       letter-spacing: .02em;
     }
 
-    .creator-link.youtube:hover, .creator-link.x:hover{
+    .creator-link.youtube:hover,
+    .creator-link.x:hover {
       border-color: #a9dff6;
     }
 
     /* ================= UNION MATCH CONTENT ================= */
-    .creator-match-content{
+    .creator-match-content {
       width: 100%;
       margin-top: 14px;
       padding-top: 13px;
       border-top: 1px solid #2d3138;
     }
 
-    .creator-match-label{
+    .creator-match-label {
       margin-bottom: 8px;
       color: var(--cyan);
       font-family: "Teko", "Noto Sans JP", sans-serif;
@@ -442,18 +435,18 @@
       text-align: left;
     }
 
-    .creator-match-links{
+    .creator-match-links {
       display: grid;
       grid-template-columns: 1fr 1fr;
       gap: 8px;
       width: 100%;
     }
 
-    .creator-match-links.single{
+    .creator-match-links.single {
       grid-template-columns: 1fr;
     }
 
-    .creator-match-link{
+    .creator-match-link {
       display: flex;
       align-items: center;
       justify-content: center;
@@ -470,21 +463,23 @@
       transition: .18s ease;
     }
 
-    .creator-match-link:hover, .creator-match-link:active{
+    .creator-match-link:hover,
+    .creator-match-link:active {
       border-color: #a9dff6;
       background: #f7fbfd;
       color: #079fd9;
     }
 
-    @media  (hover: none), (pointer: coarse) {
-      .creator-match-link:not(:active):hover{
+    @media (hover: none), (pointer: coarse) {
+      .creator-match-link:not(:active):hover {
         border-color: rgba(26, 176, 241, .38);
         background: rgba(26, 176, 241, .055);
         color: #dcecf4;
       }
     }
 
-    .empty, .error{
+    .empty,
+    .error {
       margin-top: 14px;
       padding: 28px 18px;
       border: 1px dashed #33363d;
@@ -493,13 +488,13 @@
       font-size: 13px;
     }
 
-    .error{
+    .error {
       color: #ff9aa5;
       border-color: rgba(255,105,119,.35);
     }
 
     /* ================= RECRUIT ================= */
-    .creator-recruit-box{
+    .creator-recruit-box {
       position: relative;
       overflow: hidden;
       margin-top: 30px;
@@ -508,7 +503,7 @@
       background: linear-gradient(110deg, #15171c 0%, #0f1115 100%);
     }
 
-    .creator-recruit-box::before{
+    .creator-recruit-box::before {
       content: "";
       position: absolute;
       left: 0;
@@ -518,7 +513,7 @@
       background: var(--accent);
     }
 
-    .creator-recruit-box p{
+    .creator-recruit-box p {
       max-width: 760px;
       margin: 10px 0 0;
       color: #aeb3ba;
@@ -526,14 +521,14 @@
       line-height: 1.75;
     }
 
-    .creator-recruit-actions{
+    .creator-recruit-actions {
       display: flex;
       gap: 10px;
       flex-wrap: wrap;
       margin-top: 17px;
     }
 
-    .recruit-x-btn{
+    .recruit-x-btn {
       min-height: 44px;
       padding: 0 16px;
       display: inline-flex;
@@ -548,11 +543,11 @@
       transition: .18s ease;
     }
 
-    .recruit-x-btn:hover{
+    .recruit-x-btn:hover {
       border-color: #a9dff6;
     }
 
-    .bottom-area{
+    .bottom-area {
       margin-top: 28px;
       padding: 20px 2px 0;
       border-top: 1px solid #23262c;
@@ -562,55 +557,51 @@
       gap: 16px;
     }
 
-    .bottom-copy{
+    .bottom-copy {
       color: #666b72;
       font: 800 10px "Teko", "Noto Sans JP", sans-serif;
       letter-spacing: 1.5px;
       line-height: 1.5;
     }
 
-    @media  screen and (min-width: 601px) and (max-width: 1024px) {
-      .creator-grid{
+    @media screen and (min-width: 601px) and (max-width: 1024px) {
+      .creator-grid {
         grid-template-columns: repeat(2, minmax(0, 1fr));
       }
     }
 
-    @media  screen and (max-width: 600px) {
+    @media screen and (max-width: 600px) {
       
 
-      .brand-main{
-        font-size: 20px;
-      }
+      
 
-      .status{
-        font-size: 10px;
-      }
+      
 
-      .container{
+      .container {
         width: calc(100% - 16px);
         padding-top: 12px;
       }
 
 
 
-      .section-title-row{
+      .section-title-row {
         align-items: flex-start;
         flex-direction: column;
         gap: 7px;
       }
-      .creator-list-description{ font-size: 11px; }
+      .creator-list-description { font-size: 11px; }
 
-      .creator-grid{
+      .creator-grid {
         grid-template-columns: 1fr;
         gap: 10px;
       }
 
-      .creator-card{
+      .creator-card {
         min-height: 0;
         padding: 16px;
       }
 
-      .creator-description{
+      .creator-description {
         min-height: 0;
         width: min(100%, 330px);
         margin-top: 8px;
@@ -619,56 +610,65 @@
         line-height: 1.78;
       }
 
-      .creator-icon-wrap{
+      .creator-icon-wrap {
         margin-top: 15px;
       }
 
-      .creator-name{
+      .creator-name {
         margin-top: 12px;
       }
 
-      .creator-links{
+      .creator-links {
         margin-top: 14px;
       }
 
-      .creator-match-links{
+      .creator-match-links {
         grid-template-columns: 1fr;
       }
 
-      .creator-match-label{
+      .creator-match-label {
         text-align: center;
       }
 
-      .creator-recruit-box{
+      .creator-recruit-box {
         padding: 21px 18px;
       }
 
-      .recruit-x-btn{
+      .recruit-x-btn {
         width: 100%;
       }
 
-      .bottom-area{
+      .bottom-area {
         flex-direction: column;
         align-items: stretch;
       }
 
-      .bottom-copy{
+      .bottom-copy {
         text-align: center;
       }
 
-      .bottom-area .back-btn{
+      .bottom-area .back-btn {
         width: 100%;
       }
     }
   </style>
+
+  <link rel="stylesheet" href="./subpage-nav.css?v=20261120-bundle-1">
+
+
+  
+
+
+  
 
 
   <style id="subpage-browser-ui-lock-v23">
     /* v23: mobile/tablet viewport lock.
        Keep the document itself from scrolling so Safari/Chrome browser UI
        does not collapse/expand with page scroll. Only <main> scrolls. */
-    @media  screen and (max-width: 1366px) {
-      html, body{
+    @media screen and (max-width: 1366px) {
+      html,
+      body {
         width: 100% !important;
         height: 100% !important;
         min-height: 0 !important;
@@ -676,14 +676,12 @@
         overscroll-behavior: none !important;
       }
 
-      body{
+      body {
         box-sizing: border-box !important;
         height: 100dvh !important;
-        padding-top: var(--um-header-height) !important;
-        padding-bottom: calc(var(--um-footer-height) + env(safe-area-inset-bottom)) !important;
       }
 
-      body > main.container{
+      body > main.container {
         box-sizing: border-box !important;
         height: 100% !important;
         min-height: 0 !important;
@@ -696,35 +694,80 @@
       }
     }
 
-    @media  screen and (max-width: 600px) {
-      body{
-        padding-top: var(--um-header-height) !important;
+    @media screen and (max-width: 600px) {
+      body {
       }
     }
   </style>
 
-<link rel="stylesheet" href="./push-notifications/notification-ui.css?v=3">
+  
 
-<link rel="stylesheet" href="./shared/navigation.css?v=20261120c">
+<link rel="stylesheet" href="./push-notifications/notification-ui.css?v=3">
 </head>
 
 
-<body>
-  <div id="umSharedNavigation" data-um-nav-root="./" data-um-page="subpage" data-um-title="CREATOR LIST"></div>
-
-<script src="./shared/navigation.js?v=20261120c"></script>
-
+<body class="um-creators-page">
 
 
   <!-- ========================================
        ヘッダー
   ========================================= -->
 
-  
+  <header class="topbar creator-topbar video-topbar">
 
-  
+    <a class="brand video-logo-switch" href="./index.html#videoHero" aria-label="UNION MATCH TOPへ戻る"><img src="./assets/union-match-logo-white.png" alt="UNION MATCH"></a>
 
-  
+    <button class="um-notification-bell" type="button" aria-label="プッシュ通知設定を開く" title="プッシュ通知設定"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.65" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M18 8a6 6 0 0 0-12 0c0 7-3 7-3 9h18c0-2-3-2-3-9M10 21h4"/></svg><span class="um-bell-light" aria-hidden="true"></span></button>
+
+    <button
+      id="siteMenuButton"
+      class="site-menu-button"
+      type="button"
+      aria-label="メニューを開く"
+      aria-expanded="false"
+      aria-controls="siteMenuDrawer"
+    >
+      <span></span>
+      <span></span>
+      <span></span>
+    </button>
+
+  </header>
+
+  <div
+    id="siteMenuBackdrop"
+    class="site-menu-backdrop"
+    hidden
+  ></div>
+
+  <aside
+    id="siteMenuDrawer"
+    class="site-menu-drawer"
+    aria-hidden="true"
+  >
+    <div class="site-menu-head">
+      <span>MENU</span>
+      <button
+        id="siteMenuClose"
+        type="button"
+        aria-label="メニューを閉じる"
+      >×</button>
+    </div>
+
+    <a href="./index.html#videoHero">ホーム</a>
+    <a href="./index.html?view=commander#listPage">指揮官を見る</a>
+    <a href="./index.html?view=union#listPage">ユニオンを見る</a>
+    <a href="./index.html#registerPage">募集登録</a>
+    <a href="./index.html#managePage">PASS管理</a>
+    <button type="button" class="um-notification-menu-entry" data-um-notification-open>プッシュ通知設定</button>
+    <a href="./html/union-list.html">ユニオンリスト</a>
+    <a href="./bot.html">Discord BOT</a>
+    <a href="./creators.html">応援クリエイター</a>
+    <div class="site-menu-disclaimer">
+      このサイトはSHIFT UPが提供する「勝利の女神：NIKKE」の公式サイトではありません。<br>
+      ファンサイトです。
+    </div>
+  </aside>
 
 <main class="container">
 
@@ -787,12 +830,550 @@
 
 
 
-  
+  <script>
+
+    // ========================================
+    // Supabase
+    // ========================================
+
+    const SUPABASE_URL =
+      "https://igoekrvpgnjberppiawf.supabase.co";
+
+    const SUPABASE_ANON_KEY =
+      "sb_publishable_xSjnNTnh667o9IesU5g5Kw_xcdg9bbh";
+
+
+    const sb =
+      window.supabase.createClient(
+        SUPABASE_URL,
+        SUPABASE_ANON_KEY
+      );
+
+
+    // ========================================
+    // 共通
+    // ========================================
+
+    const $ = selector =>
+      document.querySelector(selector);
+
+
+    function escapeHtml(value) {
+
+      return String(
+        value ?? ""
+      ).replace(
+        /[&<>"']/g,
+        char => ({
+          "&": "&amp;",
+          "<": "&lt;",
+          ">": "&gt;",
+          '"': "&quot;",
+          "'": "&#039;"
+        }[char])
+      );
+
+    }
+
+
+    // ========================================
+    // URL確認
+    // ========================================
+
+    function safeUrl(value) {
+
+      const raw = String(value || "").trim();
+
+      if (!raw) {
+        return "";
+      }
+
+      // 管理画面から保存した JPG / PNG / WEBP の data URL を許可
+      if (/^data:image\/(?:jpeg|png|webp);base64,/i.test(raw)) {
+        return raw;
+      }
+
+      try {
+
+        const url = new URL(raw);
+
+        if (
+          url.protocol !== "https:"
+          &&
+          url.protocol !== "http:"
+        ) {
+          return "";
+        }
+
+        return url.href;
+
+      } catch {
+        return "";
+      }
+
+    }
+
+
+    // ========================================
+    // クリエイター取得
+    // 公開中だけ表示
+    // ========================================
+
+    async function loadCreators() {
+
+      const grid =
+        $("#creatorGrid");
+
+      const empty =
+        $("#emptyState");
+
+      const errorState =
+        $("#errorState");
+
+grid.innerHTML =
+        "";
+
+
+      empty.classList.add(
+        "hidden"
+      );
+
+
+      errorState.classList.add(
+        "hidden"
+      );
+
+
+      const {
+        data,
+        error
+      } =
+        await sb
+          .from(
+            "creators"
+          )
+          .select(
+            "id, creator_name, icon_url, youtube_url, x_url, union_match_video_url, union_match_x_url, description, display_order, created_at"
+          )
+          .eq(
+            "is_public",
+            true
+          )
+          .order(
+            "display_order",
+            {
+              ascending:
+                true
+            }
+          )
+          .order(
+            "created_at",
+            {
+              ascending:
+                false
+            }
+          );
+
+
+      if (error) {
+
+        console.error(
+          "クリエイター取得エラー",
+          error
+        );
+
+
+errorState.classList.remove(
+          "hidden"
+        );
+
+
+        return;
+
+      }
+
+
+      const creators =
+        Array.isArray(data)
+          ? data
+          : [];
+
+
+if (
+        creators.length ===
+        0
+      ) {
+
+        empty.classList.remove(
+          "hidden"
+        );
+
+        return;
+
+      }
+
+
+      grid.innerHTML =
+        creators
+          .map(
+            creator => {
+
+              const iconUrl =
+                safeUrl(
+                  creator.icon_url
+                );
+
+
+              const youtubeUrl =
+                safeUrl(
+                  creator.youtube_url
+                );
+
+
+              const xUrl =
+                safeUrl(
+                  creator.x_url
+                );
+
+
+              const unionMatchVideoUrl =
+                safeUrl(
+                  creator.union_match_video_url
+                );
+
+
+              const unionMatchXUrl =
+                safeUrl(
+                  creator.union_match_x_url
+                );
+
+
+              const links = [];
+
+
+              if (youtubeUrl) {
+
+                links.push(`
+
+                  <a
+                    class="creator-link youtube"
+                    href="${escapeHtml(
+                      youtubeUrl
+                    )}"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                  >
+                    YouTube ↗
+                  </a>
+
+                `);
+
+              }
+
+
+              if (xUrl) {
+
+                links.push(`
+
+                  <a
+                    class="creator-link x"
+                    href="${escapeHtml(
+                      xUrl
+                    )}"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                  >
+                    Xを見る ↗
+                  </a>
+
+                `);
+
+              }
+
+
+              const linkClass =
+                links.length === 1
+                  ? "creator-links single"
+                  : "creator-links";
+
+
+              const unionMatchLinks = [];
+
+
+              if (unionMatchVideoUrl) {
+
+                unionMatchLinks.push(`
+
+                  <a
+                    class="creator-match-link video"
+                    href="${escapeHtml(
+                      unionMatchVideoUrl
+                    )}"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                  >
+                    ▶ UNION MATCH 紹介動画
+                  </a>
+
+                `);
+
+              }
+
+
+              if (unionMatchXUrl) {
+
+                unionMatchLinks.push(`
+
+                  <a
+                    class="creator-match-link x"
+                    href="${escapeHtml(
+                      unionMatchXUrl
+                    )}"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                  >
+                    X UNION MATCH 紹介投稿
+                  </a>
+
+                `);
+
+              }
+
+
+              const unionMatchClass =
+                unionMatchLinks.length === 1
+                  ? "creator-match-links single"
+                  : "creator-match-links";
+
+
+              const iconHtml =
+                iconUrl
+                  ? `
+
+                    <div class="creator-icon-wrap">
+
+                      <img
+                        class="creator-icon"
+                        src="${escapeHtml(
+                          iconUrl
+                        )}"
+                        alt="${escapeHtml(
+                          creator.creator_name
+                        )}"
+                        loading="lazy"
+                        onerror="
+                          this.style.display='none';
+                          this.nextElementSibling.style.display='flex';
+                        "
+                      >
+
+                      <div
+                        class="creator-icon-placeholder"
+                        style="display:none;"
+                      >
+                        📺
+                      </div>
+
+                    </div>
+
+                  `
+                  : `
+
+                    <div class="creator-icon-wrap">
+
+                      <div
+                        class="creator-icon-placeholder"
+                      >
+                        📺
+                      </div>
+
+                    </div>
+
+                  `;
+
+
+              return `
+
+                <article class="creator-card">
+
+
+                  <div class="creator-badge">
+                    SUPPORT CREATOR
+                  </div>
+
+
+                  ${iconHtml}
+
+
+                  <div class="creator-name">
+
+                    ${escapeHtml(
+                      creator.creator_name
+                    )}
+
+                  </div>
+
+
+                  ${
+                    creator.description
+                      ? `
+                        <div class="creator-description">
+                          ${escapeHtml(
+                            creator.description
+                          )}
+                        </div>
+                      `
+                      : `
+                        <div class="creator-description">
+                          NIKKE UNION MATCH
+                          応援クリエイター
+                        </div>
+                      `
+                  }
+
+
+                  ${
+                    links.length
+                      ? `
+                        <div class="${linkClass}">
+                          ${links.join("")}
+                        </div>
+                      `
+                      : ""
+                  }
+
+
+                  ${
+                    unionMatchLinks.length
+                      ? `
+                        <div class="creator-match-content">
+
+                          <div class="creator-match-label">
+                            UNION MATCH CONTENT
+                          </div>
+
+                          <div class="${unionMatchClass}">
+                            ${unionMatchLinks.join("")}
+                          </div>
+
+                        </div>
+                      `
+                      : ""
+                  }
+
+
+                </article>
+
+              `;
+
+            }
+          )
+          .join("");
+
+    }
+
+    // ========================================
+    // 起動
+    // ========================================
+
+    document.addEventListener(
+      "DOMContentLoaded",
+      loadCreators
+    );
+
+
+    // ========================================
+    // クリエイターページ 三本線メニュー
+    // ========================================
+
+    function closeSiteMenu() {
+      document.body.classList.remove("menu-open");
+
+      const button =
+        document.getElementById("siteMenuButton");
+
+      const drawer =
+        document.getElementById("siteMenuDrawer");
+
+      const backdrop =
+        document.getElementById("siteMenuBackdrop");
+
+      button?.setAttribute("aria-expanded", "false");
+      drawer?.setAttribute("aria-hidden", "true");
+
+      if (backdrop) {
+        backdrop.hidden = true;
+      }
+    }
+
+    function openSiteMenu() {
+      document.body.classList.add("menu-open");
+
+      const button =
+        document.getElementById("siteMenuButton");
+
+      const drawer =
+        document.getElementById("siteMenuDrawer");
+
+      const backdrop =
+        document.getElementById("siteMenuBackdrop");
+
+      button?.setAttribute("aria-expanded", "true");
+      drawer?.setAttribute("aria-hidden", "false");
+
+      if (backdrop) {
+        backdrop.hidden = false;
+      }
+    }
+
+    document
+      .getElementById("siteMenuButton")
+      ?.addEventListener("click", () => {
+        if (document.body.classList.contains("menu-open")) {
+          closeSiteMenu();
+        } else {
+          openSiteMenu();
+        }
+      });
+
+    document
+      .getElementById("siteMenuClose")
+      ?.addEventListener("click", closeSiteMenu);
+
+    document
+      .getElementById("siteMenuBackdrop")
+      ?.addEventListener("click", closeSiteMenu);
+
+    document
+      .querySelectorAll("#siteMenuDrawer a")
+      .forEach(link => {
+        link.addEventListener("click", closeSiteMenu);
+      });
+
+    document.addEventListener("keydown", event => {
+      if (event.key === "Escape") {
+        closeSiteMenu();
+      }
+    });
+    // The bottom Menu button uses the existing header hamburger toggle.
+    document.addEventListener('DOMContentLoaded', () => {
+      document.querySelector('[data-um-menu-open]')?.addEventListener('click', () => {
+        document.getElementById('siteMenuButton')?.click();
+      });
+    });
+
+
+  </script>
 
 
 
 
-  
+  <nav class="subpage-bottom-nav creator-bottom-nav" aria-label="フッターメニュー">
+  <a class="um-footer-item" href="./index.html#videoHero"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m3 10 9-7 9 7v10H3z"/></svg><span>ホーム</span></a>
+  <a class="um-footer-item" href="./index.html#registerPage"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" aria-hidden="true"><path d="M12 5v14M5 12h14"/></svg><span>登録</span></a>
+  <a class="um-footer-item" href="./index.html#managePage"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="7.5" cy="12" r="4"/><path d="M11.5 12H21m-4 0v3m3-3v3"/></svg><span>PASS</span></a>
+  <button type="button" class="um-footer-item" data-um-menu-open><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" aria-hidden="true"><path d="M4 6h16M4 12h16M4 18h16"/></svg><span>メニュー</span></button>
+</nav>
 
 <script src="./push-notifications/notification-ui.js?v=20261027-5" defer></script>
 </body>
