@@ -10,16 +10,14 @@
   <link rel="stylesheet" href="../style.css?v=51.38">
   <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Teko:wght@500;600;700&family=Noto+Sans+JP:wght@400;500;600;700;800;900&display=swap">
   <style>
-    body {
+    body{
       min-height: 100vh;
       padding-bottom: 40px;
     }
 
-    .union-list-topbar {
-      z-index: 120;
-    }
+    
 
-    .union-list-brand-label {
+    .union-list-brand-label{
       display: inline-flex;
       align-items: center;
       gap: 9px;
@@ -28,157 +26,59 @@
       letter-spacing: .12em;
     }
 
-    .union-list-brand-label {
+    .union-list-brand-label{
       text-decoration: none;
       cursor: pointer;
     }
 
-    .union-list-brand-label:hover,
-    .union-list-brand-label:focus-visible {
+    .union-list-brand-label:hover, .union-list-brand-label:focus-visible{
       color: #fff;
       opacity: .82;
     }
 
-    .site-menu-button {
-      width: 46px;
-      height: 46px;
-      display: grid;
-      place-content: center;
-      gap: 5px;
-      padding: 0;
-      border: 0;
-      background: transparent;
-      cursor: pointer;
-    }
+    
 
-    .site-menu-button span {
-      display: block;
-      width: 25px;
-      height: 2px;
-      border-radius: 99px !important;
-      background: #fff;
-      transition: transform .22s ease, opacity .22s ease;
-    }
+    
 
-    body.menu-open .site-menu-button span:nth-child(1) {
-      transform: translateY(7px) rotate(45deg);
-    }
+    
 
-    body.menu-open .site-menu-button span:nth-child(2) {
-      opacity: 0;
-    }
+    
 
-    body.menu-open .site-menu-button span:nth-child(3) {
-      transform: translateY(-7px) rotate(-45deg);
-    }
+    
 
-    .site-menu-backdrop {
-      position: fixed;
-      inset: 66px 0 0;
-      z-index: 108;
-      background: rgba(0,0,0,.22);
-      backdrop-filter: blur(4px);
-      -webkit-backdrop-filter: blur(4px);
-    }
+    
 
-    .site-menu-drawer {
-      position: fixed;
-      top: 64px;
-      right: 0;
-      z-index: 110;
-      width: min(86vw, 340px);
-      height: calc(100dvh - 64px);
-      padding: 12px;
-      transform: translateX(105%);
-      overflow-y: auto;
-      background: #0d1016;
-      border-left: 0;
-      box-shadow: none;
-      backdrop-filter: blur(14px) saturate(118%);
-      -webkit-backdrop-filter: none;
-      transition: transform .24s ease;
-    }
+    
 
-    body.menu-open .site-menu-drawer {
-      transform: translateX(0);
-    }
+    
 
-    .site-menu-head {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      min-height: 48px;
-      padding: 0 6px 10px;
-      color: rgba(255,255,255,.70);
-      font: 800 12px "Teko", sans-serif;
-      letter-spacing: .24em;
-    }
+    
 
-    .site-menu-head button {
-      width: 38px;
-      height: 38px;
-      border: 0;
-      color: #fff;
-      background: transparent;
-      font-size: 28px;
-      line-height: 1;
-      cursor: pointer;
-    }
+    
 
-    .site-menu-drawer > a {
-      width: 100%;
-      min-height: 52px;
-      display: flex;
-      align-items: center;
-      padding: 0 14px;
-      border: 0;
-      border-bottom: 1px solid rgba(255,255,255,.10);
-      color: #fff;
-      background: transparent;
-      font-size: 14px;
-      font-weight: 800;
-      text-align: left;
-      text-decoration: none;
-      cursor: pointer;
-    }
+    
 
-    .site-menu-drawer > a:hover,
-    .site-menu-drawer > a:active {
-      color: var(--cyan);
-      background: rgba(255,255,255,.06);
-    }
+    
 
-    .site-menu-drawer > a.current-page {
-      color: #fff;
-      background: rgba(26,176,241,.15);
-      box-shadow: inset 3px 0 0 var(--cyan);
-    }
+    
 
-    .site-menu-disclaimer {
-      margin: 22px 8px 8px;
-      padding: 14px 10px 0;
-      border-top: 1px solid rgba(255,255,255,.12);
-      color: rgba(255,255,255,.48);
-      font-size: 10px;
-      font-weight: 700;
-      line-height: 1.7;
-    }
+    
 
-    .union-list-page {
+    .union-list-page{
       width: 100%;
       max-width: 1380px;
       margin: 0 auto;
       padding: 30px 18px 60px;
     }
 
-    .union-list-toolbar {
+    .union-list-toolbar{
       margin-top: 0;
       padding: 15px 16px 16px;
       border: 1px solid var(--line);
       background: #fff;
       box-shadow: var(--shadow-soft);
     }
-    .union-list-summary {
+    .union-list-summary{
       margin: 0 0 12px;
       min-height: 20px;
       display: flex;
@@ -192,24 +92,24 @@
       line-height: 1.5;
       text-align: right;
     }
-    .union-list-summary strong {
+    .union-list-summary strong{
       color: #079ed8;
       font-size: 15px;
       font-weight: 700;
       font-variant-numeric: tabular-nums;
     }
-    .union-list-summary .sep { color: #c4c8cc; padding: 0 4px; }
-    .union-list-controls {
+    .union-list-summary .sep{ color: #c4c8cc; padding: 0 4px; }
+    .union-list-controls{
       display: grid;
       grid-template-columns: repeat(3, minmax(0, 1fr));
       gap: 8px;
       align-items: stretch;
     }
-    .union-list-rank-select {
+    .union-list-rank-select{
       position: relative;
       min-width: 0;
     }
-    .union-list-rank-select label {
+    .union-list-rank-select label{
       position: absolute;
       z-index: 1;
       left: 12px;
@@ -220,7 +120,7 @@
       font-weight: 600;
       line-height: 1.2;
     }
-    .union-list-rank-select select {
+    .union-list-rank-select select{
       width: 100%;
       height: 47px;
       margin: 0;
@@ -229,12 +129,12 @@
       border-radius: 0 !important;
       background: #fff;
       color: #292e33;
-      font-family: 'Noto Sans JP', sans-serif;
+      font-family: "Noto Sans JP", sans-serif;
       font-size: 12px;
       font-weight: 700;
       cursor: pointer;
     }
-    .union-list-status-btn {
+    .union-list-status-btn{
       width: 100%;
       min-width: 0;
       min-height: 47px;
@@ -243,22 +143,22 @@
       border-radius: 0 !important;
       background: #fff;
       color: #3f444a;
-      font-family: 'Noto Sans JP', sans-serif;
+      font-family: "Noto Sans JP", sans-serif;
       font-size: 12px;
       font-weight: 700;
       white-space: nowrap;
       cursor: pointer;
       clip-path: none !important;
     }
-    .union-list-status-btn.active {
+    .union-list-status-btn.active{
       border-color: var(--cyan);
       background: #f2fbff;
       color: var(--cyan-dark);
     }
 
     /* UNION LIST専用カード: 共通 .card の装飾に依存しない */
-    .union-list-grid { margin-top:14px; display:grid; grid-template-columns:repeat(4,minmax(0,1fr)); gap:14px; }
-    .union-list-grid article.card.union-card {
+    .union-list-grid{ margin-top:14px; display:grid; grid-template-columns:repeat(4,minmax(0,1fr)); gap:14px; }
+    .union-list-grid article.card.union-card{
       display:flex !important; flex-direction:column; min-width:0; min-height:230px;
       padding:20px 20px 0 !important; overflow:hidden;
       border:1px solid #e1e3e5 !important; border-radius:0 !important;
@@ -266,15 +166,14 @@
       box-shadow:none !important; clip-path:none !important; transform:none;
       font-family:"Noto Sans JP",sans-serif;
     }
-    .union-list-grid article.card.union-card::before,
-    .union-list-grid article.card.union-card::after { content:none !important; display:none !important; }
+    .union-list-grid article.card.union-card::before, .union-list-grid article.card.union-card::after{ content:none !important; display:none !important; }
     /* 登録済み募集画像だけ、カードの内側3pxにごく薄く常時表示する */
-    .union-list-grid article.card.union-card {
+    .union-list-grid article.card.union-card{
       position: relative;
       isolation: isolate;
       transition: border-color .25s ease, transform .25s ease, box-shadow .25s ease !important;
     }
-    .union-list-grid article.card.union-card > .union-card-watermark {
+    .union-list-grid article.card.union-card > .union-card-watermark{
       position: absolute;
       inset: 3px;
       z-index: 0;
@@ -282,7 +181,7 @@
       pointer-events: none;
       background: #fff;
     }
-    .union-list-grid article.card.union-card > .union-card-watermark img {
+    .union-list-grid article.card.union-card > .union-card-watermark img{
       display: block;
       width: 100%;
       height: 100%;
@@ -291,38 +190,36 @@
       opacity: .15;
       transition: opacity .25s ease;
     }
-    .union-list-grid article.card.union-card > :not(.union-card-watermark) {
+    .union-list-grid article.card.union-card > :not(.union-card-watermark){
       position: relative;
       z-index: 1;
     }
-    @media (hover: hover) and (pointer: fine) {
-      html:not(.tablet-device) .union-list-grid article.card.union-card > .union-card-watermark img { opacity: .15; }
-      .union-list-grid article.card.union-card:hover {
+    @media  (hover: hover) and (pointer: fine) {
+      html:not(.tablet-device) .union-list-grid article.card.union-card > .union-card-watermark img{ opacity: .15; }
+      .union-list-grid article.card.union-card:hover{
         transform: scale(1.01) !important;
         box-shadow: 0 5px 16px rgba(14, 43, 63, .08) !important;
         z-index: 2;
       }
-      html:not(.tablet-device) .union-list-grid article.card.union-card:hover > .union-card-watermark img { opacity: .30; }
+      html:not(.tablet-device) .union-list-grid article.card.union-card:hover > .union-card-watermark img{ opacity: .30; }
     }
-    @media (hover: none), (pointer: coarse) {
-      .union-list-grid article.card.union-card { transform: none !important; }
+    @media  (hover: none), (pointer: coarse) {
+      .union-list-grid article.card.union-card{ transform: none !important; }
     }
-    @media (hover:hover) and (pointer:fine) { .union-list-grid article.card.union-card:hover { border-color:#20b8f4 !important; } }
-    .union-list-grid article.card.union-card.is-in-view { border-color:#20b8f4 !important; }
-    .union-card-top { display:flex;justify-content:space-between;align-items:center;gap:8px;min-width:0; }
-    .union-card-top .countdown { margin:0 !important;padding:0 !important;border:0 !important;background:none !important;color:#757c81 !important;font-size:10px !important;font-weight:500 !important;line-height:1.6;white-space:nowrap; }
-    .union-card-state { font-size:11px; color:#099bd3; font-weight:700; white-space:nowrap; }
-    .union-card.status-closed .union-card-state { color:#848a8e; }
-    .union-list-grid .union-card .name { margin:24px 0 12px !important;color:#222428 !important;font-size:clamp(17px,1.45vw,23px) !important;line-height:1.4 !important;font-weight:700 !important;overflow-wrap:anywhere; }
-    .union-list-grid .union-card .union-rank { display:inline-block !important;align-self:flex-start;width:auto !important;min-width:0 !important;margin:0 !important;padding:5px 12px !important;font-size:11px !important;font-weight:700 !important;line-height:1.4;clip-path:none !important; }
-    .union-list-grid .union-card .x-post-area { margin-top:auto !important;padding:24px 0 0 !important;border:0 !important;background:none !important; }
-    .union-list-grid .union-card .x-btn { display:flex !important;align-items:center;justify-content:space-between;width:100%;min-height:50px;padding:12px 0 !important;border:0 !important;border-top:1px solid #e7e7e7 !important;background:transparent !important;color:#272a2d !important;font-family:"Noto Sans JP",sans-serif !important;font-size:12px !important;font-weight:600 !important;text-align:left;clip-path:none !important;box-shadow:none !important;text-decoration:none; }
-    .union-list-grid .union-card .x-btn:hover { color:#079ed8 !important; }
-    .union-card-no-link { margin-top:auto;padding:24px 0 16px;color:#92979b;font-size:11px; }
-    @media screen and (min-width:601px) and (max-width:1024px) { .union-list-grid { grid-template-columns:repeat(2,minmax(0,1fr)); } }
-    .union-list-empty,
-    .union-list-error,
-    .union-list-loading {
+    @media  (hover:hover) and (pointer:fine) { .union-list-grid article.card.union-card:hover{ border-color:#20b8f4 !important; } }
+    .union-list-grid article.card.union-card.is-in-view{ border-color:#20b8f4 !important; }
+    .union-card-top{ display:flex;justify-content:space-between;align-items:center;gap:8px;min-width:0; }
+    .union-card-top .countdown{ margin:0 !important;padding:0 !important;border:0 !important;background:none !important;color:#757c81 !important;font-size:10px !important;font-weight:500 !important;line-height:1.6;white-space:nowrap; }
+    .union-card-state{ font-size:11px; color:#099bd3; font-weight:700; white-space:nowrap; }
+    .union-card.status-closed .union-card-state{ color:#848a8e; }
+    .union-list-grid .union-card .name{ margin:24px 0 12px !important;color:#222428 !important;font-size:clamp(17px,1.45vw,23px) !important;line-height:1.4 !important;font-weight:700 !important;overflow-wrap:anywhere; }
+    .union-list-grid .union-card .union-rank{ display:inline-block !important;align-self:flex-start;width:auto !important;min-width:0 !important;margin:0 !important;padding:5px 12px !important;font-size:11px !important;font-weight:700 !important;line-height:1.4;clip-path:none !important; }
+    .union-list-grid .union-card .x-post-area{ margin-top:auto !important;padding:24px 0 0 !important;border:0 !important;background:none !important; }
+    .union-list-grid .union-card .x-btn{ display:flex !important;align-items:center;justify-content:space-between;width:100%;min-height:50px;padding:12px 0 !important;border:0 !important;border-top:1px solid #e7e7e7 !important;background:transparent !important;color:#272a2d !important;font-family:"Noto Sans JP",sans-serif !important;font-size:12px !important;font-weight:600 !important;text-align:left;clip-path:none !important;box-shadow:none !important;text-decoration:none; }
+    .union-list-grid .union-card .x-btn:hover{ color:#079ed8 !important; }
+    .union-card-no-link{ margin-top:auto;padding:24px 0 16px;color:#92979b;font-size:11px; }
+    @media  screen and (min-width:601px) and (max-width:1024px) { .union-list-grid{ grid-template-columns:repeat(2,minmax(0,1fr)); } }
+    .union-list-empty, .union-list-error, .union-list-loading{
       margin-top: 14px;
       padding: 26px 18px;
       border: 1px solid var(--line);
@@ -334,16 +231,16 @@
       box-shadow: var(--shadow-soft);
     }
 
-    .union-list-error {
+    .union-list-error{
       border-color: rgba(255,83,100,.45);
       color: #d84555;
     }
 
-    .hidden {
+    .hidden{
       display: none !important;
     }
 
-    .union-list-footer {
+    .union-list-footer{
       margin-top: 28px;
       padding-top: 18px;
       border-top: 1px solid var(--line);
@@ -353,30 +250,25 @@
       text-align: center;
     }
 
-    .union-list-bottom-nav {
-      display: none;
-    }
+    
 
-    @media screen and (max-width: 1024px) {
+    @media  screen and (max-width: 1024px) {
 
 
-      .union-list-grid {
+      .union-list-grid{
         grid-template-columns: repeat(2, minmax(0,1fr));
       }
 
     }
 
-    @media screen and (max-width: 1366px) {
+    @media  screen and (max-width: 1366px) {
       /*
         Smartphone / Tablet:
         browser viewport itself is locked.
         Header and bottom navigation stay fixed.
         Only the UNION LIST main area scrolls.
       */
-      html,
-      body,
-      html.tablet-device,
-      html.tablet-device body {
+      html, body, html.tablet-device, html.tablet-device body{
         width: 100% !important;
         height: 100% !important;
         min-height: 0 !important;
@@ -385,8 +277,7 @@
         overscroll-behavior: none !important;
       }
 
-      body,
-      html.tablet-device body {
+      body, html.tablet-device body{
         position: static !important;
         height: 100dvh !important;
         min-height: 0 !important;
@@ -394,7 +285,7 @@
         touch-action: none !important;
       }
 
-      body > main.union-list-page {
+      body > main.union-list-page{
         position: fixed !important;
         top: 64px !important;
         bottom: calc(68px + env(safe-area-inset-bottom)) !important;
@@ -414,69 +305,21 @@
         touch-action: pan-y !important;
       }
 
-      .union-list-topbar {
-        position: fixed !important;
-        top: 0 !important;
-        left: 0 !important;
-        right: 0 !important;
-        width: 100% !important;
-        z-index: 220 !important;
-        transform: none !important;
+      
+
+      
+
+      
+
+      
+
+      
+
+      @media  (hover:hover) and (pointer:fine) {
+        
       }
 
-      .union-list-bottom-nav {
-        position: fixed !important;
-        left: 0 !important;
-        right: 0 !important;
-        bottom: 0 !important;
-        z-index: 220 !important;
-        height: calc(68px + env(safe-area-inset-bottom));
-        display: grid !important;
-        grid-template-columns: repeat(4, minmax(0,1fr));
-        padding-bottom: env(safe-area-inset-bottom);
-        border-top: 1px solid rgba(255,255,255,.12);
-        background: rgba(16,18,22,.96);
-        backdrop-filter: blur(14px);
-        -webkit-backdrop-filter: blur(14px);
-        box-shadow: 0 -8px 28px rgba(0,0,0,.22);
-      }
-
-      .union-list-bottom-nav a {
-        min-width: 0;
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-        justify-content: center;
-        gap: 4px;
-        padding: 6px 3px 8px;
-        color: rgba(255,255,255,.72);
-        font-size: 10px;
-        font-weight: 900;
-        line-height: 1;
-        text-align: center;
-        text-decoration: none;
-      }
-
-      .union-list-bottom-nav .union-nav-icon {
-        display: block;
-        min-height: 19px;
-        color: rgba(255,255,255,.94);
-        font: 800 21px/.9 "Teko", "Zen Kaku Gothic New", sans-serif;
-      }
-
-      .union-list-bottom-nav .union-nav-label {
-        display: block;
-        font-size: 10px;
-        font-weight: 900;
-        white-space: nowrap;
-      }
-
-      @media (hover:hover) and (pointer:fine) {
-        .union-list-bottom-nav > a:hover,
-        .union-list-bottom-nav > a:hover .union-nav-icon { color:#20b8f4; }
-      }
-
-      .union-list-page {
+      .union-list-page{
         padding-bottom: 86px;
       }
     }
@@ -488,136 +331,75 @@
        - Smartphone header: 58px
      ======================================== */
 
-    .union-list-topbar {
-      height: 64px !important;
-      padding: 0 20px !important;
-      box-sizing: border-box !important;
-      border-bottom: 0 !important;
-      background: rgba(5,7,10,.72) !important;
-      backdrop-filter: blur(15px) saturate(120%) !important;
-      -webkit-backdrop-filter: blur(15px) saturate(120%) !important;
-      box-shadow: none !important;
-    }
+    
 
-    .union-list-brand-label {
+    .union-list-brand-label{
       gap: 0;
       font: 700 22px/1 "Teko", "Zen Kaku Gothic New", sans-serif;
       letter-spacing: .16em;
     }
 
-    .site-menu-backdrop {
-      inset: 64px 0 0;
-    }
+    
 
-    .site-menu-drawer {
-      top: 64px;
-      height: calc(100dvh - 64px);
-    }
+    
 
-    @media screen and (max-width: 600px) {
-      .union-list-topbar {
-        height: 58px !important;
-        padding: 0 12px !important;
-      }
+    @media  screen and (max-width: 600px) {
+      
 
 
 
-      body > main.union-list-page {
+      body > main.union-list-page{
         top: 58px !important;
         bottom: calc(68px + env(safe-area-inset-bottom)) !important;
         padding: 14px 8px 40px !important;
       }
 
-      .union-list-brand-label {
+      .union-list-brand-label{
         font-size: 19px;
       }
 
-      .site-menu-backdrop {
-        inset: 58px 0 0;
-      }
+      
 
-      .site-menu-drawer {
-        top: 58px;
-        height: calc(100dvh - 58px);
-      }
+      
 
 
 
-      .union-list-grid {
+      .union-list-grid{
         grid-template-columns: 1fr;
         gap: 9px;
       }
 
-      .union-list-toolbar { padding: 12px 8px; }
-      .union-list-controls { gap: 5px; }
-      .union-list-status-btn { font-size: 11px; padding: 0 3px; }
-      .union-list-rank-select select { font-size: 11px; padding-left: 8px; }
-      .union-list-rank-select label { left: 8px; }
-      .union-list-summary { font-size: 10px; }
-      .union-list-summary strong { font-size: 13px; }
+      .union-list-toolbar{ padding: 12px 8px; }
+      .union-list-controls{ gap: 5px; }
+      .union-list-status-btn{ font-size: 11px; padding: 0 3px; }
+      .union-list-rank-select select{ font-size: 11px; padding-left: 8px; }
+      .union-list-rank-select label{ left: 8px; }
+      .union-list-summary{ font-size: 10px; }
+      .union-list-summary strong{ font-size: 13px; }
     }
 
-    html.tablet-device .union-list-grid { grid-template-columns:repeat(2,minmax(0,1fr)); }
-    @media screen and (max-width:600px) {
-      .union-list-grid,html.tablet-device .union-list-grid {grid-template-columns:1fr;}
-      .union-list-grid article.card.union-card {min-height:210px;padding:18px 17px 0 !important;}
-      .union-card-top .countdown {font-size:9px !important;}
+    html.tablet-device .union-list-grid{ grid-template-columns:repeat(2,minmax(0,1fr)); }
+    @media  screen and (max-width:600px) {
+      .union-list-grid, html.tablet-device .union-list-grid{grid-template-columns:1fr;}
+      .union-list-grid article.card.union-card{min-height:210px;padding:18px 17px 0 !important;}
+      .union-card-top .countdown{font-size:9px !important;}
     }
   </style>
 <link rel="stylesheet" href="../push-notifications/notification-ui.css?v=3">
+
+<link rel="stylesheet" href="../shared/navigation.css?v=20261120">
 </head>
 
 <body>
-  <header class="topbar union-list-topbar">
-    <a class="union-list-brand-label" href="../index.html#videoHero" aria-label="UNION MATCH TOPへ戻る">UNION LIST</a>
+  <div id="umSharedNavigation" data-um-nav-root="../" data-um-page="subpage" data-um-title="UNION LIST"></div>
 
-    <button class="um-notification-bell" type="button" aria-label="プッシュ通知設定を開く" title="プッシュ通知設定"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.65" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M18 8a6 6 0 0 0-12 0c0 7-3 7-3 9h18c0-2-3-2-3-9M10 21h4"/></svg><span class="um-bell-light" aria-hidden="true"></span></button>
+<script src="../shared/navigation.js?v=20261120"></script>
 
-    <button
-      id="siteMenuButton"
-      class="site-menu-button"
-      type="button"
-      aria-label="メニューを開く"
-      aria-expanded="false"
-      aria-controls="siteMenuDrawer"
-    >
-      <span></span>
-      <span></span>
-      <span></span>
-    </button>
-  </header>
+  
 
-  <div id="siteMenuBackdrop" class="site-menu-backdrop" hidden></div>
+  
 
-  <aside
-    id="siteMenuDrawer"
-    class="site-menu-drawer"
-    aria-hidden="true"
-  >
-    <div class="site-menu-head">
-      <span>MENU</span>
-      <button
-        id="siteMenuClose"
-        type="button"
-        aria-label="メニューを閉じる"
-      >×</button>
-    </div>
-
-    <a href="../index.html#videoHero">ホーム</a>
-    <a href="../index.html?view=commander#listPage">指揮官を見る</a>
-    <a href="../index.html?view=union#listPage">ユニオンを見る</a>
-    <a href="../index.html#registerPage">募集登録</a>
-    <a href="../index.html#managePage">PASS管理</a>
-    <button type="button" class="um-notification-menu-entry" data-um-notification-open>プッシュ通知設定</button>
-    <a href="./union-list.html">ユニオンリスト</a>
-    <a href="../bot.html">Discord BOT</a>
-    <a href="../creators.html">応援クリエイター</a>
-
-    <div class="site-menu-disclaimer">
-      このサイトはSHIFT UPが提供する「勝利の女神：NIKKE」の公式サイトではありません。<br>
-      ファンサイトです。
-    </div>
-  </aside>
+  
 
   <main class="union-list-page">
 
@@ -658,74 +440,11 @@
 
   </main>
 
-  <nav class="union-list-bottom-nav" aria-label="フッターメニュー">
-  <a class="um-footer-item" href="../index.html#videoHero"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m3 10 9-7 9 7v10H3z"/></svg><span>ホーム</span></a>
-  <a class="um-footer-item" href="../index.html#registerPage"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" aria-hidden="true"><path d="M12 5v14M5 12h14"/></svg><span>登録</span></a>
-  <a class="um-footer-item" href="../index.html#managePage"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="7.5" cy="12" r="4"/><path d="M11.5 12H21m-4 0v3m3-3v3"/></svg><span>PASS</span></a>
-  <button type="button" class="um-footer-item" data-um-menu-open><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" aria-hidden="true"><path d="M4 6h16M4 12h16M4 18h16"/></svg><span>メニュー</span></button>
-</nav>
+  
 
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 
-  <script>
-    function closeSiteMenu() {
-      document.body.classList.remove("menu-open");
-      const button = document.getElementById("siteMenuButton");
-      const drawer = document.getElementById("siteMenuDrawer");
-      const backdrop = document.getElementById("siteMenuBackdrop");
-
-      button?.setAttribute("aria-expanded", "false");
-      drawer?.setAttribute("aria-hidden", "true");
-
-      if (backdrop) {
-        backdrop.hidden = true;
-      }
-    }
-
-    function openSiteMenu() {
-      document.body.classList.add("menu-open");
-      const button = document.getElementById("siteMenuButton");
-      const drawer = document.getElementById("siteMenuDrawer");
-      const backdrop = document.getElementById("siteMenuBackdrop");
-
-      button?.setAttribute("aria-expanded", "true");
-      drawer?.setAttribute("aria-hidden", "false");
-
-      if (backdrop) {
-        backdrop.hidden = false;
-      }
-    }
-
-    document
-      .getElementById("siteMenuButton")
-      ?.addEventListener("click", () => {
-        if (document.body.classList.contains("menu-open")) {
-          closeSiteMenu();
-        } else {
-          openSiteMenu();
-        }
-      });
-
-    document
-      .getElementById("siteMenuClose")
-      ?.addEventListener("click", closeSiteMenu);
-
-    document
-      .getElementById("siteMenuBackdrop")
-      ?.addEventListener("click", closeSiteMenu);
-
-    document
-      .querySelectorAll("#siteMenuDrawer a")
-      .forEach(link => {
-        link.addEventListener("click", closeSiteMenu);
-      });
-
-    document.addEventListener("keydown", event => {
-      if (event.key === "Escape") {
-        closeSiteMenu();
-      }
-    });
-  </script>
+  
 
   <script>
     const SUPABASE_URL =
