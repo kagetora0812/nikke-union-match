@@ -42,10 +42,10 @@
 
   <link
     rel="stylesheet"
-    href="./style.css?v=20261120-forms-final-v4"
+    href="./style.css?v=20261121-visual-align-v2"
   >
-  <link rel="stylesheet" href="./subpage-nav.css?v=20261120-menu-form-unify-v5">
-  <link rel="stylesheet" href="./shared/navigation.css?v=20261120-shared-nav-v1">
+  <link rel="stylesheet" href="./subpage-nav.css?v=20261121-visual-align-v2">
+  <link rel="stylesheet" href="./shared/navigation.css?v=20261121-visual-align-v2">
 
   <style>
     /* Header phrase: remove gap between 「を」 and 「つなぐ。」 */
@@ -795,161 +795,7 @@
     }
   </style>
 
-
-  <style id="v51-6-preview-below-topbar-universal-scroll">
-    /* =========================================================
-       v51.6 FINAL CONFIRMATION POSITION / SCROLL
-       - PC / smartphone / tablet 共通
-       - 登録確認画面は上部メニューバー直下から表示
-       - 確認カード全体を1本の縦スクロールにする
-       - 「修正する / この内容で登録」は固定せず最下部に通常配置
-       - 上部タイトルが画面外へ切れないようにする
-       ※ 登録確認モーダルの見た目だけ。登録処理は変更しない。
-       ========================================================= */
-
-    #registrationPreviewModal.registration-preview-modal {
-      position: fixed !important;
-      top: 66px !important;
-      right: 0 !important;
-      bottom: 0 !important;
-      left: 0 !important;
-
-      width: 100% !important;
-      height: auto !important;
-      min-height: 0 !important;
-      max-height: none !important;
-
-      display: block !important;
-      padding:
-        12px
-        max(8px, env(safe-area-inset-left))
-        calc(24px + env(safe-area-inset-bottom))
-        max(8px, env(safe-area-inset-right)) !important;
-
-      overflow-x: hidden !important;
-      overflow-y: auto !important;
-      overscroll-behavior: contain;
-      -webkit-overflow-scrolling: touch;
-      scroll-padding-top: 12px !important;
-      scroll-padding-bottom: 24px !important;
-    }
-
-    #registrationPreviewModal.registration-preview-modal.hidden {
-      display: none !important;
-    }
-
-    #registrationPreviewModal .registration-preview-modal-card {
-      position: relative !important;
-      inset: auto !important;
-
-      width: min(760px, 100%) !important;
-      height: auto !important;
-      min-height: 0 !important;
-      max-height: none !important;
-
-      display: block !important;
-      margin: 0 auto !important;
-      padding: 16px 14px !important;
-
-      overflow: visible !important;
-      transform: none !important;
-    }
-
-    #registrationPreviewModal .eyebrow {
-      margin-top: 0 !important;
-      margin-bottom: 5px !important;
-    }
-
-    #registrationPreviewModal h2 {
-      margin: 0 !important;
-      line-height: 1.15 !important;
-    }
-
-    #registrationPreviewModal .registration-preview-note {
-      margin: 8px 0 12px !important;
-      line-height: 1.6 !important;
-    }
-
-    #registrationPreviewCard {
-      display: block !important;
-      width: 100% !important;
-      min-height: 0 !important;
-      max-height: none !important;
-      overflow: visible !important;
-      padding-bottom: 0 !important;
-    }
-
-    #registrationPreviewModal .registration-preview-actions {
-      position: static !important;
-      inset: auto !important;
-      z-index: auto !important;
-
-      display: grid !important;
-      grid-template-columns: minmax(0, 1fr) minmax(0, 1fr) !important;
-      gap: 10px !important;
-
-      margin: 14px 0 0 !important;
-      padding: 0 !important;
-
-      border: 0 !important;
-      background: transparent !important;
-      box-shadow: none !important;
-      transform: none !important;
-    }
-
-    #registrationPreviewModal .registration-preview-actions .btn {
-      width: 100% !important;
-      min-width: 0 !important;
-      min-height: 52px !important;
-      margin: 0 !important;
-    }
-
-    /* PCの「修正する」はホバーでシアン。 */
-    @media (hover: hover) and (pointer: fine) {
-      #registrationPreviewBack:hover,
-      #registrationPreviewBack:active {
-        border-color: var(--cyan, #1ab0f1) !important;
-        background:
-          linear-gradient(
-            180deg,
-            var(--cyan-2, #28b8f4) 0%,
-            var(--cyan, #1ab0f1) 100%
-          ) !important;
-        color: #fff !important;
-        box-shadow: 0 4px 12px rgba(26,176,241,.28) !important;
-      }
-    }
-
-    /* スマホはボタンを縦積みにして押しやすくする。 */
-    @media screen and (max-width: 600px) {
-      #registrationPreviewModal.registration-preview-modal {
-        padding-top: 8px !important;
-      }
-
-      #registrationPreviewModal .registration-preview-modal-card {
-        padding: 14px 12px !important;
-      }
-
-      #registrationPreviewModal .registration-preview-actions {
-        grid-template-columns: 1fr !important;
-        gap: 8px !important;
-      }
-
-      #registrationPreviewModal .registration-preview-actions .btn {
-        min-height: 50px !important;
-      }
-    }
-
-    /* タブレットも同じくメニューバー直下から自然にスクロール。 */
-    html.tablet-device body #registrationPreviewModal.registration-preview-modal {
-      top: 66px !important;
-      bottom: 0 !important;
-      height: auto !important;
-    }
-  </style>
-
-
-  <style id="v51-7-registration-preview-final-fix">
+<style id="v51-7-registration-preview-final-fix">
     /* =========================================================
        v51.7 REGISTRATION PREVIEW FINAL FIX
        PC / smartphone / tablet 共通
@@ -971,7 +817,7 @@
     html.tablet-device body #registrationPreviewModal.registration-preview-modal,
     html.form-mobile-layout.tablet-device body #registrationPreviewModal.registration-preview-modal {
       position: fixed !important;
-      top: var(--registration-preview-top, 66px) !important;
+      top: var(--registration-preview-top, var(--index-header-height,64px)) !important;
       right: 0 !important;
       bottom: 0 !important;
       left: 0 !important;
@@ -984,7 +830,7 @@
       display: block !important;
 
       padding:
-        10px
+        var(--um-form-top-gap,48px)
         max(8px, env(safe-area-inset-right))
         max(28px, calc(18px + env(safe-area-inset-bottom)))
         max(8px, env(safe-area-inset-left)) !important;
@@ -1097,21 +943,6 @@
       color: #222428 !important;
     }
 
-    @media (hover: hover) and (pointer: fine) {
-      #registrationPreviewBack:hover,
-      #registrationPreviewBack:active {
-        border-color: var(--cyan, #1ab0f1) !important;
-        background:
-          linear-gradient(
-            180deg,
-            var(--cyan-2, #28b8f4) 0%,
-            var(--cyan, #1ab0f1) 100%
-          ) !important;
-        color: #fff !important;
-        box-shadow: 0 4px 12px rgba(26,176,241,.28) !important;
-        transform: translateY(-1px) !important;
-      }
-    }
 
     /* 小さいスマホでも2ボタンが潰れないよう文字だけ少し調整。 */
     @media screen and (max-width: 420px) {
@@ -1167,10 +998,10 @@
     html.form-mobile-layout body #registrationPreviewModal.registration-preview-modal,
     html.tablet-device body #registrationPreviewModal.registration-preview-modal,
     html.form-mobile-layout.tablet-device body #registrationPreviewModal.registration-preview-modal {
-      top: var(--registration-preview-top, 66px) !important;
+      top: var(--registration-preview-top, var(--index-header-height,64px)) !important;
       bottom: auto !important;
-      height: var(--registration-preview-height, calc(100dvh - 66px)) !important;
-      max-height: var(--registration-preview-height, calc(100dvh - 66px)) !important;
+      height: var(--registration-preview-height, calc(100dvh - var(--index-header-height,64px))) !important;
+      max-height: var(--registration-preview-height, calc(100dvh - var(--index-header-height,64px))) !important;
       min-height: 0 !important;
 
       overflow-x: hidden !important;
@@ -1339,22 +1170,22 @@
     html.tablet-device body #managePreviewModal.registration-preview-modal,
     html.form-mobile-layout.tablet-device body #managePreviewModal.registration-preview-modal {
       position: fixed !important;
-      top: var(--registration-preview-top, 64px) !important;
+      top: var(--registration-preview-top, var(--index-header-height,64px)) !important;
       right: 0 !important;
       bottom: auto !important;
       left: 0 !important;
 
       width: 100% !important;
-      height: var(--registration-preview-height, calc(100dvh - 64px)) !important;
+      height: var(--registration-preview-height, calc(100dvh - var(--index-header-height,64px))) !important;
       min-height: 0 !important;
-      max-height: var(--registration-preview-height, calc(100dvh - 64px)) !important;
+      max-height: var(--registration-preview-height, calc(100dvh - var(--index-header-height,64px))) !important;
 
       display: block !important;
       align-items: initial !important;
       justify-content: initial !important;
 
       padding:
-        10px
+        var(--um-form-top-gap,48px)
         max(8px, env(safe-area-inset-right))
         calc(104px + env(safe-area-inset-bottom))
         max(8px, env(safe-area-inset-left)) !important;
@@ -1488,14 +1319,12 @@
 
   
 
-<link rel="stylesheet" href="./push-notifications/notification-ui.css?v=20261120-forms-final-v4">
+<link rel="stylesheet" href="./push-notifications/notification-ui.css?v=20261121-visual-align-v2">
 
 <style id="um-register-manage-unified-20261119">
 /* 共通見出し・プレビュー */
 #registrationPreviewModal .eyebrow{color:#1ab0f1!important;margin-bottom:2px!important}
 #registrationPreviewModal h2{margin-top:0!important}
-#registrationPreviewModal .registration-preview-actions .btn{background:#f2fbff!important;color:#0b8fc8!important;border:1px solid #1ab0f1!important;box-shadow:none!important}
-#registrationPreviewModal .registration-preview-actions .btn:hover{background:#1ab0f1!important;color:#fff!important}
 /* 登録・PASS入力: PCではホバー、タッチ端末では常時淡い青 */
 @media (hover:hover) and (pointer:fine){#registerForm input:hover,#registerForm select:hover,#closeForm input:hover{border-color:#1ab0f1!important}}
 #registerForm input:focus,#registerForm select:focus,#closeForm input:focus{border-color:#1ab0f1!important;outline:1px solid #1ab0f1!important;outline-offset:0}
@@ -2936,7 +2765,7 @@
     </div>
   </div>
 
-  <script src="./app.js?v=20261120-forms-final-v4"></script>
+  <script src="./app.js?v=20261121-visual-align-v2"></script>
 
   <script id="preview-image-check-adapter-v5114">
     (() => {
