@@ -7483,88 +7483,6 @@ function returnToVideoTop() {
 }
 
 
-function closeSiteMenu() {
-
-  document.body
-    .classList
-    .remove(
-      "menu-open"
-    );
-
-  const button =
-    document.getElementById(
-      "siteMenuButton"
-    );
-
-  const drawer =
-    document.getElementById(
-      "siteMenuDrawer"
-    );
-
-  const backdrop =
-    document.getElementById(
-      "siteMenuBackdrop"
-    );
-
-  button?.setAttribute(
-    "aria-expanded",
-    "false"
-  );
-
-  drawer?.setAttribute(
-    "aria-hidden",
-    "true"
-  );
-
-  if (backdrop) {
-    backdrop.hidden =
-      true;
-  }
-
-}
-
-
-function openSiteMenu() {
-
-  document.body
-    .classList
-    .add(
-      "menu-open"
-    );
-
-  const button =
-    document.getElementById(
-      "siteMenuButton"
-    );
-
-  const drawer =
-    document.getElementById(
-      "siteMenuDrawer"
-    );
-
-  const backdrop =
-    document.getElementById(
-      "siteMenuBackdrop"
-    );
-
-  button?.setAttribute(
-    "aria-expanded",
-    "true"
-  );
-
-  drawer?.setAttribute(
-    "aria-hidden",
-    "false"
-  );
-
-  if (backdrop) {
-    backdrop.hidden =
-      false;
-  }
-
-}
-
-
 document
   .getElementById(
     "videoTopSwitch"
@@ -7598,50 +7516,6 @@ document
       );
 
     }
-  );
-
-
-document
-  .getElementById(
-    "siteMenuButton"
-  )
-  ?.addEventListener(
-    "click",
-    () => {
-
-      if (
-        document.body
-          .classList
-          .contains(
-            "menu-open"
-          )
-      ) {
-        closeSiteMenu();
-      } else {
-        openSiteMenu();
-      }
-
-    }
-  );
-
-
-document
-  .getElementById(
-    "siteMenuClose"
-  )
-  ?.addEventListener(
-    "click",
-    closeSiteMenu
-  );
-
-
-document
-  .getElementById(
-    "siteMenuBackdrop"
-  )
-  ?.addEventListener(
-    "click",
-    closeSiteMenu
   );
 
 
@@ -8482,7 +8356,7 @@ void initializeDiscordManageV1();
   const root = document.documentElement;
   const body = document.body;
   const modal = document.getElementById("registrationPreviewModal");
-  const topbar = document.querySelector(".topbar");
+  const topbar = document.querySelector(".um-shared-header");
 
   if (!body || !modal) {
     return;
