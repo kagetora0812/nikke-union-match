@@ -1622,7 +1622,7 @@ function showPage(name) {
 
   // 下部ナビ
   document
-    .querySelectorAll(".nav-btn")
+    .querySelectorAll("#bottomNav .um-footer-item[data-page]")
     .forEach(button => {
 
       button.classList.toggle(
@@ -7455,7 +7455,7 @@ function returnToVideoTop() {
     ?.classList.add("active");
 
   document
-    .querySelectorAll(".bottom-nav .nav-btn")
+    .querySelectorAll("#bottomNav .um-footer-item[data-page]")
     .forEach(button => {
       button.classList.toggle(
         "active",
@@ -7479,87 +7479,6 @@ function returnToVideoTop() {
 
 }
 
-
-function closeSiteMenu() {
-
-  document.body
-    .classList
-    .remove(
-      "menu-open"
-    );
-
-  const button =
-    document.getElementById(
-      "siteMenuButton"
-    );
-
-  const drawer =
-    document.getElementById(
-      "siteMenuDrawer"
-    );
-
-  const backdrop =
-    document.getElementById(
-      "siteMenuBackdrop"
-    );
-
-  button?.setAttribute(
-    "aria-expanded",
-    "false"
-  );
-
-  drawer?.setAttribute(
-    "aria-hidden",
-    "true"
-  );
-
-  if (backdrop) {
-    backdrop.hidden =
-      true;
-  }
-
-}
-
-
-function openSiteMenu() {
-
-  document.body
-    .classList
-    .add(
-      "menu-open"
-    );
-
-  const button =
-    document.getElementById(
-      "siteMenuButton"
-    );
-
-  const drawer =
-    document.getElementById(
-      "siteMenuDrawer"
-    );
-
-  const backdrop =
-    document.getElementById(
-      "siteMenuBackdrop"
-    );
-
-  button?.setAttribute(
-    "aria-expanded",
-    "true"
-  );
-
-  drawer?.setAttribute(
-    "aria-hidden",
-    "false"
-  );
-
-  if (backdrop) {
-    backdrop.hidden =
-      false;
-  }
-
-}
 
 
 document
@@ -7595,50 +7514,6 @@ document
       );
 
     }
-  );
-
-
-document
-  .getElementById(
-    "siteMenuButton"
-  )
-  ?.addEventListener(
-    "click",
-    () => {
-
-      if (
-        document.body
-          .classList
-          .contains(
-            "menu-open"
-          )
-      ) {
-        closeSiteMenu();
-      } else {
-        openSiteMenu();
-      }
-
-    }
-  );
-
-
-document
-  .getElementById(
-    "siteMenuClose"
-  )
-  ?.addEventListener(
-    "click",
-    closeSiteMenu
-  );
-
-
-document
-  .getElementById(
-    "siteMenuBackdrop"
-  )
-  ?.addEventListener(
-    "click",
-    closeSiteMenu
   );
 
 
@@ -7732,28 +7607,8 @@ document
   );
 
 
-document
-  .addEventListener(
-    "keydown",
-    event => {
-
-      if (
-        event.key ===
-        "Escape"
-      ) {
-        closeSiteMenu();
-      }
-
-    }
-  );
-
-
-// Footer Home and Menu call the same existing functions as the top controls.
+// Home behavior remains in app.js; the shared navigation owns menu opening.
 document.querySelector("#bottomNav [data-um-home]")?.addEventListener("click", returnToVideoTop);
-document.querySelector("#bottomNav [data-um-menu-open]")?.addEventListener("click", () => {
-  if (document.body.classList.contains("menu-open")) closeSiteMenu();
-  else openSiteMenu();
-});
 
 // 白い募集エリアまで来た時だけ
 // スマホ / タブレット下部メニューを表示
