@@ -3750,11 +3750,12 @@ body .video-hero-stats {
 }
 
 body .video-current-row {
-  position: relative;
-  display: flex;
-  justify-content: center;
-  align-items: flex-start;
-  gap: clamp(46px, 11vw, 150px);
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  align-items: center;
+  gap: clamp(10px, 1.4vw, 20px);
+  width: clamp(140px, 18vw, 198px);
+  margin: 0 auto;
 }
 
 /* X LISTED はabsoluteで中央に重ねるため、
@@ -3799,10 +3800,12 @@ body .video-x-listed-stat span {
 }
 
 body .video-current-stat {
-  min-width: 110px;
+  min-width: 0;
+  text-align: center;
 }
 
 body .video-current-stat strong {
+  position: relative;
   display: block;
   color: #fff !important;
   font-family: "Teko", "Arial Narrow", sans-serif;
@@ -3810,26 +3813,47 @@ body .video-current-stat strong {
   font-weight: 700;
   line-height: .86;
   letter-spacing: -.025em;
+  /* Hairline signal dropout, never thick horizontal black glitch bars. */
+  -webkit-mask-image: linear-gradient(to bottom,
+    #000 0%, #000 34.6%, transparent 34.85%, #000 35.1%,
+    #000 72.3%, transparent 72.55%, #000 72.8%, #000 100%);
+  mask-image: linear-gradient(to bottom,
+    #000 0%, #000 34.6%, transparent 34.85%, #000 35.1%,
+    #000 72.3%, transparent 72.55%, #000 72.8%, #000 100%);
+  animation: um-stat-signal 12s steps(1, end) infinite;
+}
+@keyframes um-stat-signal {
+  0%, 95%, 97%, 100% { transform: translateX(0); opacity: 1; }
+  95.4% { transform: translateX(1px); opacity: .94; }
+  95.8% { transform: translateX(-1px); opacity: 1; }
+}
+@media (prefers-reduced-motion: reduce) {
+  body .video-current-stat strong { animation: none; }
 }
 
-body .video-current-stat span {
-  display: block;
-  margin-top: 9px;
+body .video-current-label {
+  margin-top: 5px;
   color: rgba(255,255,255,.96);
   font-family: "Teko", "Arial Narrow", sans-serif;
   font-size: clamp(13px, 1.6vw, 18px);
   font-weight: 700;
-  line-height: 1;
-  letter-spacing: .19em;
+  line-height: 1.15;
+  letter-spacing: .15em;
+  white-space: nowrap;
+}
+body .video-current-label span {
+  display: inline-block;
+  margin: 0 .4em;
+  color: rgba(255,255,255,.72);
 }
 
 body .video-history-row {
-  margin-top: clamp(22px, 3vw, 36px);
-  color: rgba(255,255,255,.68);
+  margin-top: clamp(10px, 1.6vw, 18px);
+  color: rgba(255,255,255,.67);
   font-family: "Teko", "Arial Narrow", sans-serif;
-  font-size: clamp(11px, 1.25vw, 14px);
+  font-size: clamp(10px, 1vw, 12px);
   font-weight: 600;
-  letter-spacing: .13em;
+  letter-spacing: .10em;
   white-space: nowrap;
 }
 
@@ -3840,7 +3864,7 @@ body .video-history-row strong {
 
 body .video-history-slash {
   display: inline-block;
-  margin: 0 12px;
+  margin: 0 7px;
   color: rgba(255,255,255,.42);
 }
 
@@ -3968,12 +3992,12 @@ body #listPage {
     font-size: clamp(42px, 8.8vw, 68px);
   }
 
-  body .video-current-stat span {
-    font-size: clamp(10px, 2vw, 14px);
+  body .video-current-label {
+    font-size: clamp(12px, 1.7vw, 16px);
   }
 
   body .video-history-row {
-    font-size: clamp(9px, 1.7vw, 12px);
+    font-size: clamp(10px, 1.4vw, 12px);
   }
 
   body .container {
@@ -4012,15 +4036,12 @@ body #listPage {
   }
 
   body .video-current-row {
-    gap: clamp(34px, 12vw, 60px);
-  }
-
-  body .video-current-stat {
-    min-width: 102px;
+    width: clamp(132px, 37vw, 164px);
+    gap: 10px;
   }
 
   body .video-history-row {
-    margin-top: 19px;
+    margin-top: 11px;
   }
 
   body #listPage {
@@ -4069,28 +4090,6 @@ body #listPage {
 }
 
 
-/* =========================================================
-   v18 MOBILE HOTFIX
-   ========================================================= */
-
-/* MATCHED / TOTAL UNIONS: labels stay small, numbers only larger */
-@media screen and (max-width: 1024px) {
-  html body .video-history-row {
-    font-size: clamp(12px, 3vw, 15px) !important;
-  }
-
-  html body .video-history-row strong {
-    display: inline-block !important;
-    font-size: 1.55em !important;
-    font-weight: 800 !important;
-    line-height: .8 !important;
-    vertical-align: -0.04em !important;
-    letter-spacing: .04em !important;
-    margin-left: 3px !important;
-    margin-right: 2px !important;
-  }
-}
-
 /* Mobile/tablet footer: force all 3 buttons to exist side-by-side */
 
 
@@ -4099,8 +4098,7 @@ body #listPage {
    v19 MOBILE TOP ONLY FIX
    2026-09-09
    - smartphone logo smaller
-   - main COMMANDERS / UNIONS larger
-   - MATCHED / TOTAL UNIONS numbers only larger
+   - original smartphone number sizing retained
    - hamburger drawer glass/translucent
    - video fills first viewport; white list stays below fold
    - bottom navigation forced to three equal buttons
@@ -4131,46 +4129,25 @@ body #listPage {
     width: min(94%, 420px) !important;
   }
 
-  html body .video-current-row {
-    gap: clamp(46px, 15vw, 82px) !important;
-  }
-
-  html body .video-current-stat {
-    min-width: 118px !important;
-  }
-
   html body .video-current-stat strong {
     font-size: clamp(76px, 19vw, 94px) !important;
     line-height: .80 !important;
   }
 
-  html body .video-current-stat span {
-    margin-top: 12px !important;
-    font-size: clamp(15px, 4.1vw, 18px) !important;
-    line-height: 1 !important;
-    letter-spacing: .17em !important;
+  html body .video-current-label {
+    margin-top: 5px;
+    font-size: clamp(12px, 3.2vw, 15px);
   }
 
   html body .video-history-row {
-    margin-top: 24px !important;
-    font-size: clamp(12px, 3.1vw, 14px) !important;
-    line-height: 1.15 !important;
+    margin-top: 12px;
+    font-size: clamp(9px, 2.4vw, 11px);
+    line-height: 1.2;
   }
 
-  /* Only the 12 / 16 etc. are enlarged */
   html body .video-history-row strong {
-    display: inline-block !important;
-    font-size: 1.72em !important;
-    font-weight: 800 !important;
-    line-height: .74 !important;
-    vertical-align: -0.08em !important;
-    letter-spacing: .02em !important;
-    margin: 0 2px 0 3px !important;
-  }
-
-  html body .video-history-slash {
-    margin-left: 10px !important;
-    margin-right: 10px !important;
+    font-size: 1.12em;
+    font-weight: 700;
   }
 
   /* SCROLL gets its own safe zone and no longer overlaps stats */
