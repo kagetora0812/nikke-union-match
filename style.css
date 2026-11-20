@@ -1631,6 +1631,8 @@ body.register-mode .hero-left,
 body.manage-mode .hero-left {
   width: 100% !important;
   max-width: 760px !important;
+  padding-right: 0 !important;
+  padding-left: 0 !important;
 }
 
 body.register-mode #registerPage,
@@ -4332,13 +4334,23 @@ body.manage-mode main.container > .hero {
   html:not(.tablet-device) body.register-mode main.container > .hero,
   html:not(.tablet-device) body.manage-mode main.container > .hero {
     margin-top: 0 !important;
-    padding-top: calc(var(--index-header-height, 64px) + 38px) !important;
+    padding-top: calc(var(--index-header-height, 64px) + 48px) !important;
   }
   html:not(.tablet-device) body.register-mode #heroRegisterArea,
   html:not(.tablet-device) body.manage-mode #heroManageArea {
     margin-top: 0;
   }
 }
+/* Tablet registration/PASS: reserve the fixed 64px header before the
+   existing 34px content gap. Avoid using body padding because INDEX owns
+   its own scroll shell. */
+@media screen and (min-width: 601px) and (max-width: 1024px) {
+  body.um-index-page.register-mode main.container > .hero,
+  body.um-index-page.manage-mode main.container > .hero {
+    padding-top: 98px !important;
+  }
+}
+
 /* PASS occupies the same first grid row as registration; the empty
    registration column must not push PASS down a second grid row. */
 body.manage-mode main.container > .hero > .hero-left {
@@ -4415,8 +4427,8 @@ body .bottom-nav .nav-link-btn {
 
   body.register-mode main.container,
   body.manage-mode main.container {
-    padding-left: 14px !important;
-    padding-right: 14px !important;
+    padding-left: 16px !important;
+    padding-right: 16px !important;
   }
 
   body.register-mode #listPage,
@@ -5649,9 +5661,9 @@ body.manage-mode .hero {
 body.register-mode #registerPage,
 body.manage-mode #managePage { font-family:"Noto Sans JP",sans-serif; color:#23272b; }
 body.register-mode .register-inline-top,
-body.manage-mode .manage-inline-top { display:flex!important; align-items:center!important; gap:20px!important; min-height:48px!important; margin-bottom:26px!important; }
+body.manage-mode .manage-inline-top { display:flex!important; align-items:center!important; justify-content:flex-start!important; gap:20px!important; min-height:48px!important; margin-bottom:26px!important; width:100%!important; }
 body.register-mode .register-inline-title,
-body.manage-mode .manage-inline-title {display:flex!important;flex-direction:column!important;justify-content:center!important;min-height:48px!important;}
+body.manage-mode .manage-inline-title {display:flex!important;flex:1 1 auto!important;min-width:0!important;flex-direction:column!important;justify-content:center!important;min-height:48px!important;}
 body.register-mode .register-inline-title .eyebrow,
 body.manage-mode .manage-inline-title .eyebrow { color:#1ab0f1!important; font:700 11px/1 "Teko",sans-serif!important; letter-spacing:2.2px!important; }
 body.register-mode .register-inline-title h2,
