@@ -45,6 +45,7 @@
     href="./style.css?v=20261120-forms-final-v4"
   >
   <link rel="stylesheet" href="./subpage-nav.css?v=20261120-menu-form-unify-v5">
+  <link rel="stylesheet" href="./shared/navigation.css?v=20261120-shared-nav-v1">
 
   <style>
     /* Header phrase: remove gap between 「を」 and 「つなぐ。」 */
@@ -1513,72 +1514,8 @@
        ヘッダー
   ========================================= -->
 
-  <header class="topbar video-topbar">
-
-    <button
-      id="videoTopSwitch"
-      class="brand video-logo-switch"
-      type="button"
-      aria-label="動画トップへ戻る"
-      title="TOP"
-    >
-      <img
-        src="./assets/union-match-logo-white.png"
-        alt="UNION MATCH"
-      >
-    </button>
-
-    <button class="um-notification-bell" type="button" aria-label="プッシュ通知設定を開く" title="プッシュ通知設定"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.65" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M18 8a6 6 0 0 0-12 0c0 7-3 7-3 9h18c0-2-3-2-3-9M10 21h4"/></svg><span class="um-bell-light" aria-hidden="true"></span></button>
-
-    <button
-      id="siteMenuButton"
-      class="site-menu-button"
-      type="button"
-      aria-label="メニューを開く"
-      aria-expanded="false"
-      aria-controls="siteMenuDrawer"
-    >
-      <span></span>
-      <span></span>
-      <span></span>
-    </button>
-
-  </header>
-
-  <div
-    id="siteMenuBackdrop"
-    class="site-menu-backdrop"
-    hidden
-  ></div>
-
-  <aside
-    id="siteMenuDrawer"
-    class="site-menu-drawer"
-    aria-hidden="true"
-  >
-    <div class="site-menu-head">
-      <span>MENU</span>
-      <button
-        id="siteMenuClose"
-        type="button"
-        aria-label="メニューを閉じる"
-      >×</button>
-    </div>
-
-    <button type="button" data-menu-action="top">ホーム</button>
-    <button type="button" data-menu-action="commander">指揮官を見る</button>
-    <button type="button" data-menu-action="union">ユニオンを見る</button>
-    <button type="button" data-menu-action="register">募集登録</button>
-    <button type="button" data-menu-action="manage">PASS管理</button>
-    <button type="button" class="um-notification-menu-entry" data-um-notification-open>プッシュ通知設定</button>
-    <a href="./html/union-list.html">ユニオンリスト</a>
-    <a href="./bot.html?um_source=index">Discord BOT</a>
-    <a href="./creators.html">応援クリエイター</a>
-    <div class="site-menu-disclaimer">
-      このサイトはSHIFT UPが提供する「勝利の女神：NIKKE」の公式サイトではありません。<br>
-      ファンサイトです。
-    </div>
-  </aside>
+  <div id="umSharedNavigation" data-um-nav-root="./" data-um-page="index"></div>
+  <script src="./shared/navigation.js?v=20261120-shared-nav-v1"></script>
 
 
 
@@ -2555,13 +2492,6 @@
        スマホ / タブレット 下部固定メニュー
        動画TOPでは非表示、募集エリアで表示
   ========================================= -->
-
-  <nav class="bottom-nav" id="bottomNav" aria-label="メインメニュー">
-  <button class="nav-btn um-footer-item" type="button" data-um-home><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m3 10 9-7 9 7v10H3z"/></svg><span>ホーム</span></button>
-  <button class="nav-btn um-footer-item" type="button" data-page="register"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" aria-hidden="true"><path d="M12 5v14M5 12h14"/></svg><span>登録</span></button>
-  <button class="nav-btn um-footer-item" type="button" data-page="manage"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="7.5" cy="12" r="4"/><path d="M11.5 12H21m-4 0v3m3-3v3"/></svg><span>PASS</span></button>
-  <button class="nav-btn um-footer-item" type="button" data-um-menu-open><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" aria-hidden="true"><path d="M4 6h16M4 12h16M4 18h16"/></svg><span>メニュー</span></button>
-</nav>
 
 
 
