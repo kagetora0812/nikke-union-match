@@ -17,13 +17,9 @@ body:is(.um-creators-page,.um-union-list-page,.um-guide-page) { padding-top:var(
   display:flex; align-items:center; justify-content:space-between;
   box-sizing:border-box; height:var(--index-header-height); min-height:0;
   padding:0 14px; color:#fff; border:0;
-  background:rgba(5,7,10,.72); box-shadow:none;
+  background:#44464a; box-shadow:none;
   backdrop-filter:none; -webkit-backdrop-filter:none;
 }
-/* Forms and previews use one opaque header surface over light content. */
-body:is(.register-mode,.manage-mode,.um-guide-page,.registration-preview-open) .um-shared-header { background:#44464a; }
-/* White UNION LIST should not lighten the translucent dark bar. */
-body.um-union-list-page .um-shared-header { background:linear-gradient(rgba(5,7,10,.72),rgba(5,7,10,.72)),#000; }
 .um-shared-brand {
   display:flex; align-items:center; justify-content:center; flex:0 1 auto;
   box-sizing:border-box; width:auto; height:100%; min-width:0;
