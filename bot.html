@@ -8,6 +8,7 @@
   <meta name="description" content="NIKKE UNION MATCH Discord BOTの導入方法・通知機能・キャラクター設定・コマンドを紹介するページです。">
 
   <link rel="stylesheet" href="./subpage-nav.css?v=20261120-menu-form-unify-v5">
+  <link rel="stylesheet" href="./shared/navigation.css?v=20261120-shared-nav-v1">
   <script>
     // PC uses SPECIAL; phones and tablets never load those assets.
     (() => {
@@ -2387,8 +2388,8 @@
 
     /* Keep the real page/content visible while it moves upward. */
     body.special-running .lux-page,
-    body.special-running .topbar,
-    body.special-running .subpage-bottom-nav{
+    body.special-running .um-shared-header,
+    body.special-running .um-shared-footer{
       visibility:visible !important;
       filter:none !important;
       transition:none !important;
@@ -2398,8 +2399,8 @@
       opacity:var(--site-fade,1) !important;
     }
 
-    body.special-running .topbar,
-    body.special-running .subpage-bottom-nav{
+    body.special-running .um-shared-header,
+    body.special-running .um-shared-footer{
       opacity:var(--site-fade,1) !important;
     }
 
@@ -2986,46 +2987,8 @@
     <video id="botBackgroundVideo" autoplay muted loop playsinline preload="auto"></video>
   </div>
 
-  <header class="topbar bot-topbar video-topbar">
-    <a class="bot-brand video-logo-switch" href="./index.html#videoHero" aria-label="UNION MATCH TOPへ戻る"><img src="./assets/union-match-logo-white.png" alt="UNION MATCH"></a>
-
-    <button class="um-notification-bell" type="button" aria-label="プッシュ通知設定を開く" title="プッシュ通知設定"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.65" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M18 8a6 6 0 0 0-12 0c0 7-3 7-3 9h18c0-2-3-2-3-9M10 21h4"/></svg><span class="um-bell-light" aria-hidden="true"></span></button>
-
-    <button
-      id="siteMenuButton"
-      class="site-menu-button"
-      type="button"
-      aria-label="メニューを開く"
-      aria-expanded="false"
-      aria-controls="siteMenuDrawer"
-    >
-      <span></span><span></span><span></span>
-    </button>
-  </header>
-
-  <div id="siteMenuBackdrop" class="site-menu-backdrop" hidden></div>
-
-  <aside id="siteMenuDrawer" class="site-menu-drawer" aria-hidden="true">
-    <div class="site-menu-head">
-      <span>MENU</span>
-      <button id="siteMenuClose" type="button" aria-label="メニューを閉じる">×</button>
-    </div>
-
-    <a href="./index.html#videoHero">ホーム</a>
-    <a href="./index.html?view=commander#listPage">指揮官を見る</a>
-    <a href="./index.html?view=union#listPage">ユニオンを見る</a>
-    <a href="./index.html#registerPage">募集登録</a>
-    <a href="./index.html#managePage">PASS管理</a>
-    <button type="button" class="um-notification-menu-entry" data-um-notification-open>プッシュ通知設定</button>
-    <a href="./html/union-list.html">ユニオンリスト</a>
-    <a href="./bot.html">Discord BOT</a>
-    <a href="./creators.html">応援クリエイター</a>
-
-    <div class="site-menu-disclaimer">
-      このサイトはSHIFT UPが提供する「勝利の女神：NIKKE」の公式サイトではありません。<br>
-      ファンサイトです。
-    </div>
-  </aside>
+  <div id="umSharedNavigation" data-um-nav-root="./"></div>
+  <script src="./shared/navigation.js?v=20261120-shared-nav-v1"></script>
 
   <main class="container bot-redesign lux-page">
 
@@ -3554,58 +3517,6 @@
     });
   </script>
 
-  <script>
-    function closeSiteMenu() {
-      document.body.classList.remove("menu-open");
-      const button = document.getElementById("siteMenuButton");
-      const drawer = document.getElementById("siteMenuDrawer");
-      const backdrop = document.getElementById("siteMenuBackdrop");
-
-      button?.setAttribute("aria-expanded", "false");
-      drawer?.setAttribute("aria-hidden", "true");
-
-      if (backdrop) backdrop.hidden = true;
-    }
-
-    function openSiteMenu() {
-      document.body.classList.add("menu-open");
-      const button = document.getElementById("siteMenuButton");
-      const drawer = document.getElementById("siteMenuDrawer");
-      const backdrop = document.getElementById("siteMenuBackdrop");
-
-      button?.setAttribute("aria-expanded", "true");
-      drawer?.setAttribute("aria-hidden", "false");
-
-      if (backdrop) backdrop.hidden = false;
-    }
-
-    document.getElementById("siteMenuButton")?.addEventListener("click", () => {
-      if (document.body.classList.contains("menu-open")) {
-        closeSiteMenu();
-      } else {
-        openSiteMenu();
-      }
-    });
-
-    document.getElementById("siteMenuClose")?.addEventListener("click", closeSiteMenu);
-    document.getElementById("siteMenuBackdrop")?.addEventListener("click", closeSiteMenu);
-
-    // Footer is parsed later than this script. Delegate so it always works.
-    document.addEventListener("click", (event) => {
-      if (event.target.closest(".bot-bottom-nav [data-um-menu-open]")) {
-        if (document.body.classList.contains("menu-open")) closeSiteMenu();
-        else openSiteMenu();
-      }
-    });
-
-    document.querySelectorAll("#siteMenuDrawer a").forEach((link) => {
-      link.addEventListener("click", closeSiteMenu);
-    });
-
-    document.addEventListener("keydown", (event) => {
-      if (event.key === "Escape") closeSiteMenu();
-    });
-  </script>
 
   <script>
     (() => {
@@ -3853,13 +3764,6 @@
 
     <div id="specialImpactBlack" class="special-impact-black" aria-hidden="true"></div>
   </div>
-
-  <nav class="subpage-bottom-nav bot-bottom-nav" aria-label="フッターメニュー">
-  <a class="um-footer-item" href="./index.html#videoHero"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m3 10 9-7 9 7v10H3z"/></svg><span>ホーム</span></a>
-  <a class="um-footer-item" href="./index.html#registerPage"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" aria-hidden="true"><path d="M12 5v14M5 12h14"/></svg><span>登録</span></a>
-  <a class="um-footer-item" href="./index.html#managePage"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="7.5" cy="12" r="4"/><path d="M11.5 12H21m-4 0v3m3-3v3"/></svg><span>PASS</span></a>
-  <button type="button" class="um-footer-item" data-um-menu-open><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" aria-hidden="true"><path d="M4 6h16M4 12h16M4 18h16"/></svg><span>メニュー</span></button>
-</nav>
 
 
   <script>
