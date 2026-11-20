@@ -5920,17 +5920,27 @@ body.manage-mode #closeForm input:focus-visible { outline:1px solid #20b8f4!impo
   margin-bottom:2px!important;
 }
 #managePage #manageEditPanel #manageEditTitle {
-  margin:0 0 22px!important;
+  margin:0!important;
   font:700 var(--um-form-title-size)/1.25 var(--um-form-font)!important;
 }
+#managePage #manageEditPanel:not(.hidden) {
+  display:flex!important;
+  flex-direction:column;
+  gap:18px;
+}
+#managePage #manageEditPanel > .um-edit-heading {display:flex;flex-direction:column;gap:2px;margin:0 0 4px}
 #managePage #manageEditPanel > label,
 #managePage #manageEditPanel #manageCommanderEditFields > label,
-#managePage #manageEditPanel #manageUnionEditFields > label { display:block; margin:0 0 18px!important; }
+#managePage #manageEditPanel #manageUnionEditFields > label { display:block; margin:0!important; }
+#managePage #manageEditPanel #manageCommanderEditFields,
+#managePage #manageEditPanel #manageUnionEditFields {margin:0!important;}
+#managePage #manageEditPanel #manageCommanderEditFields.hidden,
+#managePage #manageEditPanel #manageUnionEditFields.hidden {display:none!important;}
 #managePage #manageEditPanel label > input:not([type=checkbox]),
 #managePage #manageEditPanel label > select { display:block; margin:8px 0 0!important; }
 #managePage #manageEditPanel label > small { margin:8px 0 0!important; }
-#managePage #manageEditPanel .manage-fixed-name { margin-bottom:18px!important; }
-#managePage #manageEditPanel .manage-action-stack { margin-top:18px!important; }
+#managePage #manageEditPanel .manage-fixed-name { margin:0!important; }
+#managePage #manageEditPanel .manage-action-stack { margin:0!important; }
 #managePage #manageEditPanel label:not(.manage-remove-image-row),
 #managePage #manageEditPanel .manage-fixed-name > span,
 #managePage #manageEditPanel .manage-current-image-box > span {
@@ -5972,6 +5982,7 @@ body.manage-mode #closeForm input:focus-visible { outline:1px solid #20b8f4!impo
   border:1px solid #cdd3d8;border-radius:0;cursor:pointer;
 }
 #managePage #manageEditPanel .manage-remove-image-row {
+  display:flex;align-items:center;gap:8px;margin:0!important;
   font:400 12px/1.7 "Noto Sans JP",sans-serif!important;
 }
 #managePage #manageEditPanel .manage-remove-image-row input[type=checkbox] {
