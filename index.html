@@ -1337,6 +1337,14 @@
 
 
 <body class="um-index-page">
+  <script>
+    // ガイドから登録へ戻る場合、動画TOPを一瞬表示してしまうのを防ぐ。
+    // 既存の showPage("register") が通常どおり画面を初期化する。
+    if (new URLSearchParams(location.search).get("um_page") === "register" ||
+        location.hash === "#registerPage") {
+      document.body.classList.add("register-mode");
+    }
+  </script>
 
 
   <!-- ========================================
