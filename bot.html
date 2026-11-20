@@ -7,7 +7,7 @@
   <title>NIKKE UNION MATCH - Discord BOT</title>
   <meta name="description" content="NIKKE UNION MATCH Discord BOTの導入方法・通知機能・キャラクター設定・コマンドを紹介するページです。">
 
-  <link rel="stylesheet" href="./subpage-nav.css?v=20261120-bot-overlay-1">
+  <link rel="stylesheet" href="./subpage-nav.css?v=20261120-layout-stability-1">
   <script>
     // PC uses SPECIAL; phones and tablets never load those assets.
     (() => {
@@ -901,17 +901,8 @@
     }
 
     /* ---------- reveal ---------- */
-    .js .reveal-up{
-      opacity:0;
-      transform:translateY(56px) scale(.985);
-    }
-    .js .reveal-up.is-visible{
-      opacity:1;
-      transform:translateY(0) scale(1);
-      transition:
-        opacity .75s cubic-bezier(.2,.72,.2,1) var(--delay,0ms),
-        transform .88s cubic-bezier(.2,.72,.2,1) var(--delay,0ms);
-    }
+    
+    
 
     /* ---------- bottom nav ---------- */
 
@@ -1086,10 +1077,7 @@
         scroll-behavior:auto!important;
         transition-duration:.001ms!important;
       }
-      .js .reveal-up{
-        opacity:1!important;
-        transform:none!important;
-      }
+      
     }
 
 
@@ -1799,33 +1787,12 @@
     }
 
     /* Subtle section-specific motion. */
-    .js .reveal-up.motion-left{
-      opacity:0;
-      transform:translateX(-24px);
-    }
-    .js .reveal-up.motion-right{
-      opacity:0;
-      transform:translateX(24px);
-    }
-    .js .reveal-up.motion-rise{
-      opacity:0;
-      transform:translateY(22px);
-    }
-    .js .reveal-up.motion-step{
-      opacity:0;
-      transform:translateY(18px) translateX(8px);
-    }
+    
+    
+    
+    
 
-    .js .reveal-up.motion-left.is-visible,
-    .js .reveal-up.motion-right.is-visible,
-    .js .reveal-up.motion-rise.is-visible,
-    .js .reveal-up.motion-step.is-visible{
-      opacity:1;
-      transform:translate(0,0);
-      transition:
-        opacity .64s cubic-bezier(.2,.72,.2,1) var(--delay,0ms),
-        transform .72s cubic-bezier(.2,.72,.2,1) var(--delay,0ms);
-    }
+    
 
     @media (max-width:1024px){
       .intro-section .section-en,
@@ -1894,18 +1861,10 @@
       }
 
       /* Reduce travel distance on small screens; still visibly different. */
-      .js .reveal-up.motion-left{
-        transform:translateX(-14px);
-      }
-      .js .reveal-up.motion-right{
-        transform:translateX(14px);
-      }
-      .js .reveal-up.motion-rise{
-        transform:translateY(16px);
-      }
-      .js .reveal-up.motion-step{
-        transform:translateY(14px) translateX(5px);
-      }
+      
+      
+      
+      
     }
 
   
@@ -1940,71 +1899,30 @@
     }
 
     /* Stronger, but still restrained section motion. */
-    .js .reveal-up.motion-left{
-      opacity:0;
-      transform:translateX(-42px);
-    }
+    
 
-    .js .reveal-up.motion-right{
-      opacity:0;
-      transform:translateX(42px);
-    }
+    
 
-    .js .reveal-up.motion-rise{
-      opacity:0;
-      transform:translateY(38px) scale(.988);
-    }
+    
 
-    .js .reveal-up.motion-step{
-      opacity:0;
-      transform:translateY(34px) translateX(14px) scale(.988);
-    }
+    
 
-    .js .reveal-up.motion-left.is-visible,
-    .js .reveal-up.motion-right.is-visible,
-    .js .reveal-up.motion-rise.is-visible,
-    .js .reveal-up.motion-step.is-visible{
-      opacity:1;
-      transform:translate(0,0) scale(1);
-      transition:
-        opacity .72s cubic-bezier(.18,.76,.2,1) var(--delay,0ms),
-        transform .9s cubic-bezier(.18,.76,.2,1) var(--delay,0ms);
-    }
+    
 
     /* Give lower sections a little more personality without changing their HTML. */
-    .js .character-card.reveal-up{
-      transform:translateY(44px) scale(.965);
-    }
+    
 
-    .js .character-card.reveal-up.is-visible{
-      transform:translateY(0) scale(1);
-      transition:
-        opacity .78s cubic-bezier(.18,.76,.2,1) var(--delay,0ms),
-        transform 1s cubic-bezier(.18,.76,.2,1) var(--delay,0ms);
-    }
+    
 
-    .js .command-card.reveal-up{
-      transform:translateX(32px) translateY(18px);
-    }
+    
 
-    .js .command-card.reveal-up:nth-child(even){
-      transform:translateX(-32px) translateY(18px);
-    }
+    
 
-    .js .command-card.reveal-up.is-visible{
-      transform:translate(0,0);
-      transition:
-        opacity .72s cubic-bezier(.18,.76,.2,1) var(--delay,0ms),
-        transform .9s cubic-bezier(.18,.76,.2,1) var(--delay,0ms);
-    }
+    
 
-    .js .important-item.reveal-up{
-      transform:translateY(30px);
-    }
+    
 
-    .js .important-item.reveal-up.is-visible{
-      transform:translateY(0);
-    }
+    
 
     /* BACK TO TOP */
     .back-to-top-wrap{
@@ -2061,51 +1979,28 @@
       }
     }
 
-    .js .reveal-up.motion-backtop{
-      opacity:0;
-      transform:translateY(34px);
-    }
+    
 
-    .js .reveal-up.motion-backtop.is-visible{
-      opacity:1;
-      transform:translateY(0);
-      transition:
-        opacity .72s cubic-bezier(.18,.76,.2,1),
-        transform .9s cubic-bezier(.18,.76,.2,1);
-    }
+    
 
     html{
       scroll-behavior:smooth;
     }
 
     @media (max-width:600px){
-      .js .reveal-up.motion-left{
-        transform:translateX(-24px);
-      }
+      
 
-      .js .reveal-up.motion-right{
-        transform:translateX(24px);
-      }
+      
 
-      .js .reveal-up.motion-rise{
-        transform:translateY(28px) scale(.99);
-      }
+      
 
-      .js .reveal-up.motion-step{
-        transform:translateY(26px) translateX(9px) scale(.99);
-      }
+      
 
-      .js .character-card.reveal-up{
-        transform:translateY(30px) scale(.975);
-      }
+      
 
-      .js .command-card.reveal-up{
-        transform:translateX(20px) translateY(14px);
-      }
+      
 
-      .js .command-card.reveal-up:nth-child(even){
-        transform:translateX(-20px) translateY(14px);
-      }
+      
 
       .back-to-top-wrap{
         width:calc(100% - 28px);
@@ -2122,14 +2017,7 @@
     }
 
     @media (prefers-reduced-motion:reduce){
-      .js .character-card.reveal-up,
-      .js .command-card.reveal-up,
-      .js .command-card.reveal-up:nth-child(even),
-      .js .important-item.reveal-up,
-      .js .reveal-up.motion-backtop{
-        opacity:1!important;
-        transform:none!important;
-      }
+      
     }
 
   
@@ -2149,18 +2037,9 @@
     }
 
     /* Command cards now use only a vertical reveal, so layout never shifts sideways. */
-    .js .command-card.reveal-up{
-      opacity:0;
-      transform:translateY(26px) !important;
-    }
+    
 
-    .js .command-card.reveal-up.is-visible{
-      opacity:1;
-      transform:translateY(0) !important;
-      transition:
-        opacity .72s cubic-bezier(.18,.76,.2,1) var(--delay,0ms),
-        transform .82s cubic-bezier(.18,.76,.2,1) var(--delay,0ms) !important;
-    }
+    
 
     /* With five commands, let the final diagnostic command use the full row on desktop. */
     .command-card-channelcheck{
@@ -2192,9 +2071,7 @@
     }
 
     @media (max-width:600px){
-      .js .command-card.reveal-up{
-        transform:translateY(20px) !important;
-      }
+      
 
       .bottom-invite-wrap{
         width:calc(100% - 28px);
@@ -2203,11 +2080,7 @@
     }
 
     @media (prefers-reduced-motion:reduce){
-      .js .command-card.reveal-up,
-      .js .command-card.reveal-up.is-visible{
-        opacity:1 !important;
-        transform:none !important;
-      }
+      
     }
 
   
@@ -2216,36 +2089,15 @@
        ========================================================= */
 
     /* Reduce travel distance, extend duration. */
-    .js .reveal-up.motion-left{
-      opacity:0;
-      transform:translateX(-28px);
-    }
+    
 
-    .js .reveal-up.motion-right{
-      opacity:0;
-      transform:translateX(28px);
-    }
+    
 
-    .js .reveal-up.motion-rise{
-      opacity:0;
-      transform:translateY(26px) scale(.994);
-    }
+    
 
-    .js .reveal-up.motion-step{
-      opacity:0;
-      transform:translateY(24px) translateX(8px) scale(.994);
-    }
+    
 
-    .js .reveal-up.motion-left.is-visible,
-    .js .reveal-up.motion-right.is-visible,
-    .js .reveal-up.motion-rise.is-visible,
-    .js .reveal-up.motion-step.is-visible{
-      opacity:1;
-      transform:translate(0,0) scale(1);
-      transition:
-        opacity .95s cubic-bezier(.22,.72,.22,1) var(--delay,0ms),
-        transform 1.12s cubic-bezier(.22,.72,.22,1) var(--delay,0ms);
-    }
+    
 
     /* Editorial rows: slightly more breathing room between reveals. */
     .feature-editorial-list .editorial-item:nth-child(1){ --delay:80ms; }
@@ -2259,99 +2111,40 @@
     .step-editorial-list .editorial-item:nth-child(3){ --delay:390ms; }
 
     /* Characters: slower and gentler. */
-    .js .character-card.reveal-up{
-      opacity:0;
-      transform:translateY(30px) scale(.982);
-    }
+    
 
-    .js .character-card.reveal-up.is-visible{
-      opacity:1;
-      transform:translateY(0) scale(1);
-      transition:
-        opacity 1.05s cubic-bezier(.22,.72,.22,1) var(--delay,0ms),
-        transform 1.28s cubic-bezier(.22,.72,.22,1) var(--delay,0ms);
-    }
+    
 
     /* Commands: vertical only, slower and stable. */
-    .js .command-card.reveal-up{
-      opacity:0;
-      transform:translateY(22px) !important;
-    }
+    
 
-    .js .command-card.reveal-up.is-visible{
-      opacity:1;
-      transform:translateY(0) !important;
-      transition:
-        opacity .9s cubic-bezier(.22,.72,.22,1) var(--delay,0ms),
-        transform 1.08s cubic-bezier(.22,.72,.22,1) var(--delay,0ms) !important;
-    }
+    
 
     /* Important/footer CTA motion also softened. */
-    .js .important-item.reveal-up{
-      opacity:0;
-      transform:translateY(22px);
-    }
+    
 
-    .js .important-item.reveal-up.is-visible{
-      opacity:1;
-      transform:translateY(0);
-      transition:
-        opacity .92s cubic-bezier(.22,.72,.22,1) var(--delay,0ms),
-        transform 1.08s cubic-bezier(.22,.72,.22,1) var(--delay,0ms);
-    }
+    
 
-    .js .reveal-up.motion-backtop{
-      opacity:0;
-      transform:translateY(24px);
-    }
+    
 
-    .js .reveal-up.motion-backtop.is-visible{
-      opacity:1;
-      transform:translateY(0);
-      transition:
-        opacity 1s cubic-bezier(.22,.72,.22,1),
-        transform 1.16s cubic-bezier(.22,.72,.22,1);
-    }
+    
 
     @media (max-width:600px){
-      .js .reveal-up.motion-left{
-        transform:translateX(-18px);
-      }
+      
 
-      .js .reveal-up.motion-right{
-        transform:translateX(18px);
-      }
+      
 
-      .js .reveal-up.motion-rise{
-        transform:translateY(20px) scale(.996);
-      }
+      
 
-      .js .reveal-up.motion-step{
-        transform:translateY(18px) translateX(5px) scale(.996);
-      }
+      
 
-      .js .character-card.reveal-up{
-        transform:translateY(22px) scale(.986);
-      }
+      
 
-      .js .command-card.reveal-up{
-        transform:translateY(18px) !important;
-      }
+      
     }
 
     @media (prefers-reduced-motion:reduce){
-      .js .reveal-up.motion-left,
-      .js .reveal-up.motion-right,
-      .js .reveal-up.motion-rise,
-      .js .reveal-up.motion-step,
-      .js .character-card.reveal-up,
-      .js .command-card.reveal-up,
-      .js .important-item.reveal-up,
-      .js .reveal-up.motion-backtop{
-        opacity:1 !important;
-        transform:none !important;
-        transition:none !important;
-      }
+      
     }
 
   
@@ -3071,9 +2864,6 @@
 
 </style>
 
-  <script>
-    document.documentElement.classList.add("js");
-  </script>
 <link rel="stylesheet" href="./push-notifications/notification-ui.css?v=3">
 </head>
 
@@ -3819,21 +3609,7 @@
 
   <script>
     (() => {
-      const observer = new IntersectionObserver(
-        (entries) => {
-          entries.forEach((entry) => {
-            if (entry.isIntersecting) {
-              window.setTimeout(() => {
-                entry.target.classList.add("is-visible");
-              }, 180);
-              observer.unobserve(entry.target);
-            }
-          });
-        },
-        { root:null, threshold:.2, rootMargin:"0px 0px -18% 0px" }
-      );
-
-      document.querySelectorAll(".reveal-up").forEach((el) => observer.observe(el));
+      // Content is visible immediately; the old deferred reveal observer was removed.
 
       const sliders = [
         { id:"featureSlider", card:".feature-card", status:"featureSliderStatus", controls:"featureSliderControls" },
