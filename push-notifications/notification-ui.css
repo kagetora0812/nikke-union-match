@@ -94,9 +94,9 @@ html body .site-menu-drawer .site-menu-disclaimer {
   html body .site-menu-drawer > a:last-of-type { border-bottom: 0 !important; }
 }
 /* Notification dialog: white square-edged NIKKE style with restrained cyan accents. */
-.um-notification-dialog{position:fixed;inset:0;z-index:4000;display:none;align-items:center;justify-content:center;padding:16px;background:rgba(0,0,0,.55)}
+.um-notification-dialog{position:fixed;inset:0;z-index:4000;display:none;box-sizing:border-box;align-items:flex-start;justify-content:center;overflow-y:auto;padding:calc(var(--index-header-height, 64px) + 38px) 16px max(24px, env(safe-area-inset-bottom));background:rgba(0,0,0,.55)}
 .um-notification-dialog[data-open="true"]{display:flex}
-.um-notification-panel{box-sizing:border-box;width:min(440px,100%);max-height:88dvh;overflow:auto;padding:23px 22px;background:#f8fafb;color:#222428;border:1px solid #c8cdd0;border-radius:0;font-family:"Noto Sans JP",sans-serif;box-shadow:0 12px 32px rgba(0,0,0,.20)}
+.um-notification-panel{box-sizing:border-box;width:min(760px,100%);max-height:calc(100dvh - var(--index-header-height, 64px) - 76px);overflow:auto;padding:clamp(16px,3vw,26px);background:#f8fafb;color:#222428;border:1px solid #c8cdd0;border-radius:0;font-family:"Noto Sans JP",sans-serif;box-shadow:0 12px 32px rgba(0,0,0,.20)}
 .um-notification-panel h2{margin:0;color:#1ab0f1;font:700 25px/1 "Teko",sans-serif;letter-spacing:.06em}
 .um-notification-panel .um-subtitle{font:500 12px/1.5 "Noto Sans JP",sans-serif;color:#62666a;margin:7px 0 15px}
 .um-notification-panel .um-close{float:right;width:35px;height:35px;border:0;background:transparent;color:#222428;font:400 28px/1 sans-serif;cursor:pointer}
@@ -106,7 +106,18 @@ html body .site-menu-drawer .site-menu-disclaimer {
 .um-notification-panel .um-pass-wrap{padding:12px 0;font:500 12px "Noto Sans JP",sans-serif}
 .um-notification-panel .um-pass-wrap[hidden]{display:none}
 .um-notification-panel input[type=password]{width:100%;padding:12px;border:1px solid #c8cdd0;border-radius:0;background:#fff}
-.um-notification-panel .um-save{box-sizing:border-box;display:inline-flex;align-items:center;justify-content:center;width:100%;min-height:48px;margin-top:18px;padding:12px 20px;background:#f2fbff;color:#0b8fc8;border:1px solid #1ab0f1;border-radius:0;font:700 13px "Noto Sans JP",sans-serif;letter-spacing:normal;text-align:center;cursor:pointer;transition:background-color .15s ease,color .15s ease,border-color .15s ease}
+.um-notification-panel .um-save{box-sizing:border-box;display:inline-flex;align-items:center;justify-content:center;width:100%;min-height:48px;margin-top:18px;padding:12px 20px;background:#f2fbff;color:#0b8fc8;border:1px solid #1ab0f1;border-radius:0;font:500 13px/1.4 "Noto Sans JP",sans-serif;letter-spacing:normal;text-align:center;cursor:pointer;transition:background-color .15s ease,color .15s ease,border-color .15s ease}
 @media(hover:hover) and (pointer:fine){.um-notification-panel .um-save:hover:not(:disabled){background:#1ab0f1;color:#fff;border-color:#1ab0f1}}
 .um-notification-panel .um-save:disabled{background:#fff;border-color:#e2e8ed;color:#b2b7bc;opacity:1;cursor:default}
 .um-notification-panel .um-status,.um-notification-panel .um-hint{margin-top:10px;font:400 11px/1.6 "Noto Sans JP",sans-serif;color:#62666a}
+
+/* Compact layouts use the same distance from their fixed header, not the
+   viewport's vertical center (which changes when explanatory rows expand). */
+@media screen and (max-width: 1024px) {
+ .um-notification-dialog { padding:calc(var(--index-header-height, 64px) + 24px) 12px max(86px, calc(68px + env(safe-area-inset-bottom))); }
+ .um-notification-panel { max-height:calc(100dvh - var(--index-header-height, 64px) - 118px); padding:16px 14px; }
+}
+@media screen and (max-width: 600px) {
+ .um-notification-dialog { padding-top:calc(var(--index-header-height, 58px) + 24px); }
+ .um-notification-panel { max-height:calc(100dvh - var(--index-header-height, 58px) - 118px); }
+}
