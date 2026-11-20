@@ -1,37 +1,162 @@
-/* The only source for public header, hamburger, drawer and footer dimensions. */
-:root{--um-header-height:64px;--um-footer-height:68px;--um-header-background:rgba(5,7,10,.72)}
-body:has(#umSharedNavigation):not(:has(.um-index-header)){padding-top:var(--um-header-height)}
-.um-shared-header{position:fixed;top:0;left:0;right:0;z-index:220;box-sizing:border-box;height:var(--um-header-height);display:flex;align-items:center;justify-content:space-between;padding:0 24px;color:white;background:var(--um-header-background);border:0;box-shadow:none;backdrop-filter:none;-webkit-backdrop-filter:none}
-.um-shared-brand{display:flex;align-items:center;justify-content:center;min-width:0;height:100%;border:0;background:none;color:#fff;text-decoration:none;font:700 28px/1 'Teko','Noto Sans JP',sans-serif;letter-spacing:.06em;cursor:pointer}
-.um-page-label{font:700 12px/1 "Noto Sans JP",sans-serif;letter-spacing:.02em;margin-left:12px;white-space:nowrap}.um-shared-brand img{display:block;max-width:158px;max-height:48px;width:auto;height:auto;object-fit:contain}
-.um-shared-actions{display:flex;align-items:center;gap:16px;height:100%}
-.um-shared-menu-toggle{display:flex;flex-direction:column;justify-content:space-around;align-items:center;flex:0 0 34px;width:34px;height:34px;padding:5px;border:0;background:transparent;color:#fff;cursor:pointer}
-.um-shared-menu-toggle span{display:block;flex:0 0 2px;width:24px;height:2px;background:currentColor;transition:transform .18s ease,opacity .18s ease}
-body.menu-open .um-shared-menu-toggle span:nth-child(1){transform:translateY(7px) rotate(45deg)}
-body.menu-open .um-shared-menu-toggle span:nth-child(2){opacity:0}
-body.menu-open .um-shared-menu-toggle span:nth-child(3){transform:translateY(-7px) rotate(-45deg)}
-.um-shared-backdrop{position:fixed;inset:var(--um-header-height) 0 0;z-index:1190;background:rgba(0,0,0,.55)}
-.um-shared-backdrop[hidden]{display:none!important}
-.um-shared-drawer{position:fixed;top:var(--um-header-height);right:0;bottom:0;z-index:1200;width:min(340px,86vw);height:auto;box-sizing:border-box;overflow-y:auto;background:#0c1017;color:white;transform:translateX(105%);transition:transform .2s ease;box-shadow:-12px 0 32px #0005;backdrop-filter:none;-webkit-backdrop-filter:none}
-body.menu-open .um-shared-drawer{transform:translateX(0)}
-.um-shared-drawer-head{display:flex;align-items:center;justify-content:space-between;height:52px;padding:0 18px;border-bottom:1px solid #ffffff20;font:800 16px 'Teko',sans-serif;letter-spacing:.08em}
-.um-shared-drawer-head button{border:0;background:none;color:white;font-size:28px;cursor:pointer}
-.um-shared-drawer>a,.um-shared-drawer>button[data-menu-action],.um-shared-drawer>[data-um-notification-open]{display:flex;align-items:center;width:100%;min-height:46px;box-sizing:border-box;padding:0 16px;text-align:left;color:#fff;text-decoration:none;font:800 13px 'Noto Sans JP',sans-serif;background:transparent;border:0;border-bottom:1px solid #ffffff16;cursor:pointer}
-.um-shared-drawer p{padding:16px 20px;color:#9ca3ae;font:600 10px/1.7 'Noto Sans JP',sans-serif}
-.um-shared-footer{display:none}
-@media(max-width:1366px){
- body:has(#umSharedNavigation):not(:has(.um-index-header)){padding-bottom:calc(var(--um-footer-height) + env(safe-area-inset-bottom))}
- .um-shared-footer{position:fixed;left:0;right:0;bottom:0;z-index:220;box-sizing:border-box;height:calc(var(--um-footer-height) + env(safe-area-inset-bottom)) !important;padding:0 0 env(safe-area-inset-bottom) !important;display:grid;grid-template-columns:repeat(4,minmax(0,1fr));background:rgba(5,7,10,.72);border-top:1px solid #ffffff1f;box-shadow:none;backdrop-filter:none;-webkit-backdrop-filter:none}
- .um-shared-footer>a,.um-shared-footer>button{box-sizing:border-box;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:4px !important;width:auto;max-width:none;min-width:0;min-height:0;height:100%;margin:0;padding:6px 4px !important;color:#ffffffaa;background:transparent;border:0;box-shadow:none;clip-path:none;text-decoration:none;font:800 10px/1.2 'Noto Sans JP',sans-serif;text-align:center;cursor:pointer}
- .um-shared-footer svg{display:block;flex:0 0 21px !important;width:21px !important;height:21px !important}
- .um-shared-footer span{display:block;margin:0;font:inherit;line-height:1.2}
-}
-@media(max-width:600px){:root{--um-header-height:58px}.um-shared-header{padding:0 14px}.um-page-label{font:700 12px/1 "Noto Sans JP",sans-serif;letter-spacing:.02em;margin-left:12px;white-space:nowrap}.um-shared-brand img{max-width:145px}.um-shared-actions{gap:12px}}
-/* INDEX-only footer visibility: app.js toggles is-visible. */
-@media(max-width:1366px){
- .um-index-footer{opacity:0;visibility:hidden;pointer-events:none;transition:opacity .2s ease,visibility .2s ease}
- .um-index-footer.is-visible,body.register-mode .um-index-footer,body.manage-mode .um-index-footer{opacity:1;visibility:visible;pointer-events:auto}
- body.form-input-active .um-index-footer,body.form-keyboard-open .um-index-footer{opacity:0;visibility:hidden;pointer-events:none}
-}
-@media(max-width:600px){.um-page-label{font-size:10px;margin-left:7px}}
+/* Shared navigation — the only public header / hamburger / drawer / footer stylesheet. */
+:root { --index-header-height:64px; --um-nav-bar-height:68px; }
+@media (max-width:600px) { :root { --index-header-height:58px; } }
 
+/* Preserve each page's existing content scroll model. */
+body:is(.um-creators-page,.um-union-list-page,.um-guide-page) { padding-top:var(--index-header-height); }
+@media (max-width:1366px) {
+  body:is(.um-creators-page,.um-union-list-page,.um-guide-page) { padding-bottom:calc(var(--um-nav-bar-height) + env(safe-area-inset-bottom)); }
+}
+/* INDEX previously reserved a sticky header row at tablet/browser widths.
+   Keep exactly that layout space while the shared header remains fixed. */
+@media (min-width:601px) and (max-width:1024px) {
+  body.um-index-page > #umSharedNavigation { height:var(--index-header-height); }
+}
+.um-shared-header {
+  position:fixed; top:0; left:0; right:0; z-index:1250;
+  display:flex; align-items:center; justify-content:space-between;
+  box-sizing:border-box; height:var(--index-header-height); min-height:0;
+  padding:0 14px; color:#fff; border:0;
+  background:rgba(5,7,10,.72); box-shadow:none;
+  backdrop-filter:none; -webkit-backdrop-filter:none;
+}
+/* White UNION LIST should not lighten the translucent dark bar. */
+body.um-union-list-page .um-shared-header { background:linear-gradient(rgba(5,7,10,.72),rgba(5,7,10,.72)),#000; }
+.um-shared-brand {
+  display:flex; align-items:center; justify-content:center; flex:0 1 auto;
+  box-sizing:border-box; width:auto; height:100%; min-width:0;
+  padding:0; margin:0; border:0; background:transparent;
+  color:#fff; cursor:pointer; text-decoration:none;
+  appearance:none; box-shadow:none;
+}
+.um-shared-brand img {
+  display:block; width:clamp(154px,18vw,238px); max-width:46vw;
+  height:auto; max-height:54px; object-fit:contain; object-position:left center;
+  pointer-events:none; transform:none;
+}
+.um-shared-actions { display:flex; align-items:center; justify-content:flex-end; height:100%; gap:0; }
+.um-shared-menu-toggle {
+  display:grid; place-content:center; gap:5px; flex:0 0 46px;
+  width:46px; height:46px; padding:0; margin:0;
+  border:0; background:transparent; color:#fff; cursor:pointer;
+}
+.um-shared-menu-toggle span {
+  display:block; width:25px; height:2px; background:currentColor;
+  border-radius:99px; transition:transform .22s ease,opacity .22s ease;
+}
+body.menu-open .um-shared-menu-toggle span:nth-child(1) { transform:translateY(7px) rotate(45deg); }
+body.menu-open .um-shared-menu-toggle span:nth-child(2) { opacity:0; }
+body.menu-open .um-shared-menu-toggle span:nth-child(3) { transform:translateY(-7px) rotate(-45deg); }
+
+/* Notification bell stays in the same place relative to the hamburger on every page. */
+.um-shared-header .um-notification-bell {
+  position:absolute; top:50%; right:72px; transform:translateY(-50%);
+  display:flex; align-items:center; justify-content:center;
+  box-sizing:border-box; flex:0 0 36px; width:36px; height:44px;
+  margin:0; padding:0; color:#fff; background:transparent; border:0; cursor:pointer;
+}
+.um-shared-header .um-notification-bell svg { display:block; width:20px; height:20px; flex:none; overflow:visible; }
+.um-shared-header .um-bell-light {
+  position:absolute; top:10px; right:5px; width:6px; height:6px;
+  background:#898c91; border:1px solid #121418; border-radius:50%;
+}
+.um-shared-header .um-notification-bell[data-status="on"] .um-bell-light { background:#42b8ff; }
+
+.um-shared-backdrop {
+  position:fixed; inset:var(--index-header-height) 0 0; z-index:1190;
+  background:transparent; backdrop-filter:none; -webkit-backdrop-filter:none;
+}
+.um-shared-backdrop[hidden] { display:none!important; }
+.um-shared-drawer {
+  position:fixed; top:var(--index-header-height); right:0; bottom:0; z-index:1200;
+  box-sizing:border-box; width:min(86vw,340px); height:auto; padding:12px;
+  overflow-x:hidden; overflow-y:auto; background:rgba(13,16,22,.82); color:#fff;
+  border:0; box-shadow:none; backdrop-filter:none; -webkit-backdrop-filter:none;
+  transform:translateX(105%); transition:transform .24s ease;
+}
+body.menu-open .um-shared-drawer { transform:translateX(0); }
+.um-shared-drawer-head {
+  display:flex; align-items:center; justify-content:space-between;
+  box-sizing:border-box; min-height:48px; padding:0 6px 10px;
+  color:#1ab0f1; font:800 12px "Teko",sans-serif; letter-spacing:.16em;
+}
+.um-shared-drawer-head button {
+  width:38px; height:38px; padding:0; background:transparent; border:0;
+  color:#fff; font:400 28px/1 "Noto Sans JP",sans-serif; cursor:pointer;
+}
+.um-shared-drawer > :is(a,button) {
+  display:flex; align-items:center; box-sizing:border-box; flex:0 0 auto;
+  width:calc(100% - 28px); min-height:52px; height:52px;
+  margin:0 14px; padding:0; color:#fff; background:transparent;
+  border:0; border-bottom:1px solid rgba(255,255,255,.10);
+  border-radius:0; text-align:left; text-decoration:none;
+  font:500 14px/1.35 "Noto Sans JP",sans-serif; cursor:pointer;
+  transition:background-color .18s ease,color .18s ease;
+  -webkit-tap-highlight-color:transparent;
+}
+.um-shared-drawer > :is(a,button):focus-visible { outline:2px solid #1ab0f1; outline-offset:-2px; }
+.um-shared-drawer > a:last-of-type { border-bottom:0; }
+.um-shared-disclaimer {
+  box-sizing:border-box; margin:0 14px 8px; padding:12px 0 0;
+  border-top:1px solid rgba(255,255,255,.10); color:rgba(255,255,255,.48);
+  font:700 10px/1.7 "Noto Sans JP",sans-serif; letter-spacing:.01em;
+}
+@media (hover:hover) and (pointer:fine) {
+  .um-shared-drawer > :is(a,button):hover { background:rgba(255,255,255,.065); color:#fff; }
+}
+
+/* Four footer cells, 1366px and below, including resized PC browser windows. */
+.um-shared-footer { display:none; }
+@media (max-width:1366px) {
+  .um-shared-footer { display:flex; }
+}
+/* Physical iPads/Android tablets may be wider than 1366px in landscape. */
+html.tablet-device .um-shared-footer { display:flex; }
+.um-shared-footer {
+  position:fixed; left:0; right:0; bottom:0; z-index:220;
+  box-sizing:border-box; width:100%; height:calc(var(--um-nav-bar-height) + env(safe-area-inset-bottom));
+  padding:0 0 env(safe-area-inset-bottom); align-items:stretch; justify-content:space-between;
+  border:0; border-top:1px solid rgba(255,255,255,.12);
+  background:rgba(5,7,10,.72); box-shadow:none; backdrop-filter:none; -webkit-backdrop-filter:none;
+}
+.um-shared-footer > .um-footer-item {
+  display:flex; flex:1 1 25%; flex-direction:column; align-items:center; justify-content:center;
+  box-sizing:border-box; width:25%; max-width:none; min-width:0; height:100%; min-height:0;
+  margin:0; padding:6px 4px; gap:4px; color:rgba(255,255,255,.9);
+  border:0; background:transparent; text-align:center; text-decoration:none;
+  font:500 10px/1.2 "Noto Sans JP",sans-serif; cursor:pointer;
+}
+.um-shared-footer > .um-footer-item:is(.active,:hover) { color:#fff; }
+.um-shared-footer > .um-footer-item svg { display:block; width:21px; height:21px; flex:0 0 21px; margin:0; }
+.um-shared-footer > .um-footer-item:first-child svg { width:19px; height:19px; }
+.um-shared-footer > .um-footer-item span { display:block; margin:0; font:inherit; line-height:1.2; }
+
+/* INDEX's original app.js controls when the footer appears during video scrolling. */
+.um-index-footer { visibility:hidden; pointer-events:none; opacity:0; transition:opacity .18s ease; }
+.um-index-footer.is-visible,body:is(.register-mode,.manage-mode) .um-index-footer {
+  visibility:visible; pointer-events:auto; opacity:1;
+}
+body.registration-preview-open .um-index-footer,
+body.form-input-active .um-index-footer,
+body.form-keyboard-open .um-index-footer { visibility:hidden!important; pointer-events:none!important; opacity:0!important; }
+
+@media (min-width:601px) and (max-width:1024px) {
+  .um-shared-brand img { width:clamp(178px,26vw,236px); }
+  .um-shared-header .um-notification-bell { right:66px; }
+}
+@media (max-width:600px) {
+  .um-shared-brand img { width:clamp(90px,27vw,116px); max-width:29vw; max-height:40px; }
+  .um-shared-menu-toggle { flex-basis:34px; width:34px; height:34px; }
+  .um-shared-menu-toggle span { width:24px; }
+  .um-shared-header .um-notification-bell { right:58px; }
+  .um-shared-drawer { width:min(94vw,440px); }
+  .um-shared-drawer > :is(a,button) { min-height:48px; height:48px; }
+}
+@media (max-width:360px) {
+  .um-shared-menu-toggle { flex-basis:32px; width:32px; height:32px; }
+  .um-shared-menu-toggle span { width:22px; }
+  .um-shared-header .um-notification-bell { right:54px; }
+}
+@media (prefers-reduced-motion:reduce) {
+  .um-shared-drawer,.um-shared-menu-toggle span,.um-index-footer { transition:none; }
+}
