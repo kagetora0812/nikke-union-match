@@ -124,7 +124,7 @@ html:has(body.um-index-page) { background-color: #000; }
 body.um-index-page:not(.register-mode):not(.manage-mode) { background: #000; }
 body.um-index-page:not(.register-mode):not(.manage-mode) .video-hero { background: #000; }
 
-body.um-index-page .video-topbar {
+:is(body.um-index-page,body.um-bot-page,body.um-creators-page,body.um-union-list-page) .video-topbar {
   position: fixed;
   top: 0; left: 0; right: 0;
   z-index: 1250;
@@ -143,7 +143,7 @@ body.um-index-page .video-topbar {
   box-shadow: none;
   transform: none;
 }
-body.um-index-page .video-logo-switch {
+:is(body.um-index-page,body.um-bot-page,body.um-creators-page,body.um-union-list-page) .video-logo-switch {
   display: flex;
   align-items: center;
   flex-direction: row;
@@ -158,7 +158,7 @@ body.um-index-page .video-logo-switch {
   box-shadow: none;
   cursor: pointer;
 }
-body.um-index-page .video-logo-switch img {
+:is(body.um-index-page,body.um-bot-page,body.um-creators-page,body.um-union-list-page) .video-logo-switch img {
   display: block;
   width: clamp(154px, 18vw, 238px);
   max-width: 46vw;
@@ -169,13 +169,13 @@ body.um-index-page .video-logo-switch img {
   pointer-events: none;
   transform: none;
 }
-body.um-index-page .video-logo-switch:is(:hover,:focus,:active) {
+:is(body.um-index-page,body.um-bot-page,body.um-creators-page,body.um-union-list-page) .video-logo-switch:is(:hover,:focus,:active) {
   border: 0;
   background: transparent;
   box-shadow: none;
   transform: none;
 }
-body.um-index-page .site-menu-button {
+:is(body.um-index-page,body.um-bot-page,body.um-creators-page,body.um-union-list-page) .site-menu-button {
   display: grid;
   place-content: center;
   gap: 5px;
@@ -188,7 +188,7 @@ body.um-index-page .site-menu-button {
   background: transparent;
   cursor: pointer;
 }
-body.um-index-page .site-menu-button span {
+:is(body.um-index-page,body.um-bot-page,body.um-creators-page,body.um-union-list-page) .site-menu-button span {
   display: block;
   width: 25px;
   height: 2px;
@@ -196,11 +196,11 @@ body.um-index-page .site-menu-button span {
   border-radius: 99px;
   transition: transform .22s ease, opacity .22s ease;
 }
-body.um-index-page.menu-open .site-menu-button span:nth-child(1) { transform: translateY(7px) rotate(45deg); }
-body.um-index-page.menu-open .site-menu-button span:nth-child(2) { opacity: 0; }
-body.um-index-page.menu-open .site-menu-button span:nth-child(3) { transform: translateY(-7px) rotate(-45deg); }
+:is(body.um-index-page,body.um-bot-page,body.um-creators-page,body.um-union-list-page).menu-open .site-menu-button span:nth-child(1) { transform: translateY(7px) rotate(45deg); }
+:is(body.um-index-page,body.um-bot-page,body.um-creators-page,body.um-union-list-page).menu-open .site-menu-button span:nth-child(2) { opacity: 0; }
+:is(body.um-index-page,body.um-bot-page,body.um-creators-page,body.um-union-list-page).menu-open .site-menu-button span:nth-child(3) { transform: translateY(-7px) rotate(-45deg); }
 
-body.um-index-page .site-menu-backdrop {
+:is(body.um-index-page,body.um-bot-page,body.um-creators-page,body.um-union-list-page) .site-menu-backdrop {
   position: fixed;
   inset: var(--index-header-height) 0 0;
   z-index: 1190;
@@ -208,8 +208,8 @@ body.um-index-page .site-menu-backdrop {
   backdrop-filter: none;
   -webkit-backdrop-filter: none;
 }
-body.um-index-page .site-menu-backdrop[hidden] { display: none; }
-body.um-index-page .site-menu-drawer {
+:is(body.um-index-page,body.um-bot-page,body.um-creators-page,body.um-union-list-page) .site-menu-backdrop[hidden] { display: none; }
+:is(body.um-index-page,body.um-bot-page,body.um-creators-page,body.um-union-list-page) .site-menu-drawer {
   position: fixed;
   top: var(--index-header-height);
   right: 0;
@@ -227,8 +227,8 @@ body.um-index-page .site-menu-drawer {
   transform: translateX(105%);
   transition: transform .24s ease;
 }
-body.um-index-page.menu-open .site-menu-drawer { transform: translateX(0); }
-body.um-index-page .site-menu-head {
+:is(body.um-index-page,body.um-bot-page,body.um-creators-page,body.um-union-list-page).menu-open .site-menu-drawer { transform: translateX(0); }
+:is(body.um-index-page,body.um-bot-page,body.um-creators-page,body.um-union-list-page) .site-menu-head {
   display: flex;
   align-items: center;
   justify-content: space-between;
@@ -238,7 +238,7 @@ body.um-index-page .site-menu-head {
   font: 800 12px "Teko",sans-serif;
   letter-spacing: .24em;
 }
-body.um-index-page .site-menu-head button {
+:is(body.um-index-page,body.um-bot-page,body.um-creators-page,body.um-union-list-page) .site-menu-head button {
   width: 38px;
   height: 38px;
   padding: 0;
@@ -249,7 +249,7 @@ body.um-index-page .site-menu-head button {
   line-height: 1;
   cursor: pointer;
 }
-body.um-index-page .site-menu-drawer > :is(button,a) {
+:is(body.um-index-page,body.um-bot-page,body.um-creators-page,body.um-union-list-page) .site-menu-drawer > :is(button,a) {
   display: flex;
   align-items: center;
   box-sizing: border-box;
@@ -262,7 +262,7 @@ body.um-index-page .site-menu-drawer > :is(button,a) {
   text-align: left;
   cursor: pointer;
 }
-body.um-index-page .site-menu-disclaimer {
+:is(body.um-index-page,body.um-bot-page,body.um-creators-page,body.um-union-list-page) .site-menu-disclaimer {
   margin: 22px 8px 8px;
   padding: 14px 10px 0;
   border-top: 1px solid rgba(255,255,255,.12);
@@ -360,32 +360,67 @@ html.form-mobile-layout body.um-index-page.register-mode:is(.form-input-active,.
 html.tablet-device body.um-index-page #bottomNav.bottom-nav { display: flex; }
 
 @media screen and (max-width: 1024px) {
-  body.um-index-page .site-menu-backdrop { background: transparent; }
+  :is(body.um-index-page,body.um-bot-page,body.um-creators-page,body.um-union-list-page) .site-menu-backdrop { background: transparent; }
 }
 @media screen and (min-width: 601px) and (max-width: 1024px) {
-  body.um-index-page .video-logo-switch img { width: clamp(178px,26vw,236px); }
+  :is(body.um-index-page,body.um-bot-page,body.um-creators-page,body.um-union-list-page) .video-logo-switch img { width: clamp(178px,26vw,236px); }
 }
 @media screen and (max-width: 600px) {
-  body.um-index-page .video-logo-switch img {
+  :is(body.um-index-page,body.um-bot-page,body.um-creators-page,body.um-union-list-page) .video-logo-switch img {
     width: clamp(90px,27vw,116px);
     max-width: 29vw;
     max-height: 40px;
   }
-  body.um-index-page .video-topbar {
+  :is(body.um-index-page,body.um-bot-page,body.um-creators-page,body.um-union-list-page) .video-topbar {
     padding-right: 14px;
     background: rgba(5, 7, 10, .45);
     backdrop-filter: none;
     -webkit-backdrop-filter: none;
   }
-  body.um-index-page .site-menu-button { width: 34px; height: 34px; }
-  body.um-index-page .site-menu-button span { width: 24px; }
+  :is(body.um-index-page,body.um-bot-page,body.um-creators-page,body.um-union-list-page) .site-menu-button { width: 34px; height: 34px; }
+  :is(body.um-index-page,body.um-bot-page,body.um-creators-page,body.um-union-list-page) .site-menu-button span { width: 24px; }
 }
 @media screen and (max-width: 360px) {
-  body.um-index-page .video-topbar { padding-right: 12px; }
-  body.um-index-page .site-menu-button { width: 32px; height: 32px; }
-  body.um-index-page .site-menu-button span { width: 22px; }
+  :is(body.um-index-page,body.um-bot-page,body.um-creators-page,body.um-union-list-page) .video-topbar { padding-right: 12px; }
+  :is(body.um-index-page,body.um-bot-page,body.um-creators-page,body.um-union-list-page) .site-menu-button { width: 32px; height: 32px; }
+  :is(body.um-index-page,body.um-bot-page,body.um-creators-page,body.um-union-list-page) .site-menu-button span { width: 22px; }
 }
 @media (prefers-reduced-motion: reduce) {
-  body.um-index-page .site-menu-drawer,
+  :is(body.um-index-page,body.um-bot-page,body.um-creators-page,body.um-union-list-page) .site-menu-drawer,
   body.um-index-page #bottomNav.bottom-nav { transition: none; }
+}
+
+
+/* BOT bottom navigation: same spacing and proportions as INDEX footer.
+   Only BOT is changed; other subpages retain their existing rules. */
+@media screen and (max-width: 1366px) {
+  :is(body.um-bot-page,body.um-creators-page,body.um-union-list-page) .subpage-bottom-nav {
+    display: flex !important;
+    align-items: stretch;
+    justify-content: space-between;
+  }
+  :is(body.um-bot-page,body.um-creators-page,body.um-union-list-page) .subpage-bottom-nav > :is(a, button) {
+    flex: 1 1 25%;
+    width: 25%;
+    min-width: 0;
+    height: 100%;
+    padding: 6px 4px;
+    gap: 4px;
+    color: rgba(255,255,255,.9);
+    font: 500 10px/1.2 "Noto Sans JP",sans-serif;
+  }
+  :is(body.um-bot-page,body.um-creators-page,body.um-union-list-page) .subpage-bottom-nav > :is(a, button) > span {
+    font: 500 10px/1.2 "Noto Sans JP",sans-serif;
+  }
+  :is(body.um-bot-page,body.um-creators-page,body.um-union-list-page) .subpage-bottom-nav > :is(a, button):first-child svg {
+    width: 19px;
+    height: 19px;
+  }
+}
+
+html.um-union-list-root { scrollbar-gutter: auto; }
+/* The UNION LIST has a white content surface, unlike INDEX's dark video.
+   Composite the same translucent header color over black so it doesn't turn gray. */
+body.um-union-list-page .video-topbar {
+  background: linear-gradient(rgba(5,7,10,.72), rgba(5,7,10,.72)), #000;
 }
