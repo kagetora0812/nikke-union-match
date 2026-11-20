@@ -44,11 +44,14 @@
     rel="stylesheet"
     href="./style.css?v=51.37"
   >
+  <link rel="stylesheet" href="./subpage-nav.css?v=index-stage1-20261120">
 
 
   <style>
     /* Header phrase: remove gap between 「を」 and 「つなぐ。」 */
-    
+    .topbar .brand {
+      gap: 0 !important;
+    }
 
     /* =========================================================
        HERO title balance + width tuning
@@ -57,7 +60,7 @@
        - mobile: use almost full screen width
        ========================================================= */
 
-    .hero h1{
+    .hero h1 {
       display: block;
       width: 100%;
       min-width: 0;
@@ -73,7 +76,7 @@
       white-space: nowrap;
     }
 
-    .hero h1 .hero-title-line1{
+    .hero h1 .hero-title-line1 {
       display: block;
       margin: 0 0 .18em .04em;
       color: var(--cyan);
@@ -84,7 +87,7 @@
       white-space: nowrap;
     }
 
-    .hero h1 .hero-title-line2{
+    .hero h1 .hero-title-line2 {
       display: block;
       color: var(--ink);
       font-size: clamp(60px, 7vw, 104px);
@@ -94,14 +97,14 @@
       white-space: nowrap;
     }
 
-    @media   (min-width: 1025px) {
-      .container{
+    @media (min-width: 1025px) {
+      .container {
         max-width: 1540px;
         padding-left: 28px;
         padding-right: 28px;
       }
 
-      .hero{
+      .hero {
         grid-template-columns:
           minmax(520px, 1.16fr)
           minmax(460px, .84fr) !important;
@@ -109,97 +112,103 @@
         align-items: start !important;
       }
 
-      .hero h1 .hero-title-line1{
+      .hero h1 .hero-title-line1 {
         font-size: clamp(16px, 1.05vw, 22px);
         letter-spacing: .24em;
       }
 
-      .hero h1 .hero-title-line2{
+      .hero h1 .hero-title-line2 {
         font-size: clamp(78px, 5.8vw, 112px);
       }
 
-      .hero-stats{
+      .hero-stats {
         min-height: 240px;
       }
     }
 
-    @media   (min-width: 601px) and (max-width: 1024px) {
-      .container{
+    @media (min-width: 601px) and (max-width: 1024px) {
+      .container {
         max-width: 100%;
         padding-left: 20px;
         padding-right: 20px;
       }
 
-      .hero{
+      .hero {
         grid-template-columns: 1fr !important;
         gap: 22px !important;
       }
 
-      .hero h1 .hero-title-line1{
+      .hero h1 .hero-title-line1 {
         font-size: clamp(14px, 2vw, 18px);
         letter-spacing: .18em;
       }
 
-      .hero h1 .hero-title-line2{
+      .hero h1 .hero-title-line2 {
         font-size: clamp(60px, 10vw, 86px);
       }
     }
 
-    @media   (max-width: 600px) {
-      .container{
+    @media (max-width: 600px) {
+      .container {
         max-width: none !important;
         padding-left: 6px !important;
         padding-right: 6px !important;
       }
 
-      .hero{
+      .hero {
         gap: 16px !important;
         padding-top: 12px !important;
         padding-bottom: 20px !important;
       }
 
-      .hero-left{
+      .hero-left {
         width: 100% !important;
         min-width: 0 !important;
         padding: 0 6px !important;
       }
 
-      .hero h1{
+      .hero h1 {
         width: 100% !important;
       }
 
-      .hero h1 .hero-title-line1{
+      .hero h1 .hero-title-line1 {
         font-size: clamp(12px, 3.6vw, 16px);
         letter-spacing: .16em;
         margin: 0 0 .14em .02em;
       }
 
-      .hero h1 .hero-title-line2{
+      .hero h1 .hero-title-line2 {
         font-size: clamp(58px, 15.5vw, 74px);
         letter-spacing: -.055em;
       }
 
-      .hero-stats, .filters, .card, .panel, .notice, .easy-register-box, .search-tabs{
+      .hero-stats,
+      .filters,
+      .card,
+      .panel,
+      .notice,
+      .easy-register-box,
+      .search-tabs {
         width: 100% !important;
       }
     }
 
-    @media   (max-width: 360px) {
-      .container{
+    @media (max-width: 360px) {
+      .container {
         padding-left: 4px !important;
         padding-right: 4px !important;
       }
 
-      .hero-left{
+      .hero-left {
         padding: 0 4px !important;
       }
 
-      .hero h1 .hero-title-line1{
+      .hero h1 .hero-title-line1 {
         font-size: 11px;
         letter-spacing: .12em;
       }
 
-      .hero h1 .hero-title-line2{
+      .hero h1 .hero-title-line2 {
         font-size: clamp(50px, 15.2vw, 64px);
       }
     }
@@ -212,7 +221,7 @@
 
     /* 募集登録 / PASS編集：画像削除UIをチェック式で統一。
        既存の登録処理は触らず、旧解除ボタンを内部トリガーとして残す。 */
-    .image-remove-check-row{
+    .image-remove-check-row {
       display: flex !important;
       align-items: center !important;
       gap: 8px !important;
@@ -225,11 +234,11 @@
       user-select: none;
     }
 
-    .image-remove-check-row.hidden{
+    .image-remove-check-row.hidden {
       display: none !important;
     }
 
-    .image-remove-check-row input[type="checkbox"]{
+    .image-remove-check-row input[type="checkbox"] {
       width: 16px !important;
       height: 16px !important;
       margin: 0 !important;
@@ -239,18 +248,18 @@
     }
 
     /* app.js互換用。画面には出さないがIDは残す。 */
-    #previewImageClearBtn{
+    #previewImageClearBtn {
       display: none !important;
     }
 
-    .manage-edit-choice-panel{
+    .manage-edit-choice-panel {
       margin-top: 16px;
       padding: 14px;
       border: 1px solid rgba(0,177,255,.28);
       background: rgba(0,177,255,.04);
     }
 
-    .manage-edit-choice-title{
+    .manage-edit-choice-title {
       margin-bottom: 10px;
       color: var(--cyan);
       font-size: 12px;
@@ -262,27 +271,49 @@
 
   <style>
     /* Header text as one continuous string: no space between を and つなぐ。 */
-    
-
-    
-
-    
-
-    @media   screen and (min-width: 601px) and (max-width: 1024px) {
-      
+    .topbar .brand {
+      display: block !important;
+      line-height: 1 !important;
+      white-space: nowrap !important;
     }
 
-    @media   screen and (max-width: 600px) {
-      
+    .topbar .brand-copy {
+      color: #fff !important;
+      font-family:
+        "JTCウインZ10",
+        "Noto Sans JP",
+        sans-serif !important;
+      font-size: 14px !important;
+      font-weight: 900 !important;
+      line-height: 1 !important;
+      letter-spacing: -.055em !important;
+      white-space: nowrap !important;
     }
 
-    @media   screen and (max-width: 360px) {
-      
+    .topbar .brand-accent {
+      color: var(--cyan) !important;
+      font: inherit !important;
+      letter-spacing: inherit !important;
+    }
+
+    @media screen and (min-width: 601px) and (max-width: 1024px) {
+      .topbar .brand-copy { font-size: 13px !important; }
+    }
+
+    @media screen and (max-width: 600px) {
+      .topbar .brand-copy { font-size: 12px !important; }
+    }
+
+    @media screen and (max-width: 360px) {
+      .topbar .brand-copy { font-size: 11px !important; }
     }
   </style>
 
   <style id="slv-label-gray-fix">
-    html body .card .slv > small, html body .card.commander-card .slv > small, html body article.card.commander-card .slv > small, html body .slv small{
+    html body .card .slv > small,
+    html body .card.commander-card .slv > small,
+    html body article.card.commander-card .slv > small,
+    html body .slv small {
       color: #7b8085 !important;
       -webkit-text-fill-color: #7b8085 !important;
       text-shadow: none !important;
@@ -292,7 +323,7 @@
 
 
   <style id="slv-label-gray-fix-v119">
-    html body .slv .slv-label{
+    html body .slv .slv-label {
       color: #7b8085 !important;
       -webkit-text-fill-color: #7b8085 !important;
       text-shadow: none !important;
@@ -303,23 +334,25 @@
 
 
   <style id="pass-reregister-v1316">
-    .manage-loaded-panel, .manage-edit-panel{
+    .manage-loaded-panel,
+    .manage-edit-panel {
       margin-top: 18px;
     }
 
-    .manage-loaded-head{
+    .manage-loaded-head {
       display: flex;
       justify-content: space-between;
       align-items: flex-start;
       gap: 12px;
     }
 
-    .manage-loaded-head h3, .manage-edit-panel h3{
+    .manage-loaded-head h3,
+    .manage-edit-panel h3 {
       margin: 0;
       font-size: 24px;
     }
 
-    .manage-status-chip{
+    .manage-status-chip {
       flex: 0 0 auto;
       padding: 6px 9px;
       border: 1px solid var(--cyan);
@@ -328,20 +361,25 @@
       font-weight: 900;
     }
 
-    .manage-current-grid{
+    .manage-current-grid {
       display: grid;
       grid-template-columns: repeat(2, minmax(0, 1fr));
       gap: 10px;
       margin-top: 16px;
     }
 
-    .manage-current-grid > div, .manage-current-url, .manage-fixed-name{
+    .manage-current-grid > div,
+    .manage-current-url,
+    .manage-fixed-name {
       padding: 13px;
       border: 1px solid rgba(255,255,255,.12);
       background: rgba(0,0,0,.18);
     }
 
-    .manage-current-grid span, .manage-current-url span, .manage-fixed-name span, .manage-current-image-box > span{
+    .manage-current-grid span,
+    .manage-current-url span,
+    .manage-fixed-name span,
+    .manage-current-image-box > span {
       display: block;
       margin-bottom: 5px;
       color: #8f98a5;
@@ -349,29 +387,30 @@
       font-weight: 800;
     }
 
-    .manage-current-grid strong, .manage-fixed-name strong{
+    .manage-current-grid strong,
+    .manage-fixed-name strong {
       display: block;
       font-size: 16px;
     }
 
-    .manage-current-url{
+    .manage-current-url {
       margin-top: 10px;
       word-break: break-all;
     }
 
-    .manage-current-url a{
+    .manage-current-url a {
       color: var(--cyan);
       font-size: 12px;
     }
 
-    .manage-current-image-box{
+    .manage-current-image-box {
       margin-top: 12px;
       padding: 12px;
       border: 1px solid rgba(255,255,255,.12);
       background: rgba(0,0,0,.18);
     }
 
-    .manage-current-image-box img{
+    .manage-current-image-box img {
       display: block;
       width: 100%;
       max-height: 480px;
@@ -379,35 +418,38 @@
       background: #080b12;
     }
 
-    .manage-action-stack{
+    .manage-action-stack {
       display: grid;
       gap: 10px;
       margin-top: 16px;
     }
 
-    .manage-renew-note, .manage-result-new-note, .manage-result-summary{
+    .manage-renew-note,
+    .manage-result-new-note,
+    .manage-result-summary {
       margin-top: 14px;
       color: #aab3bf;
       font-size: 12px;
       line-height: 1.7;
     }
 
-    .manage-renew-note strong, .manage-result-new-note{
+    .manage-renew-note strong,
+    .manage-result-new-note {
       color: #ffb15c;
       font-weight: 900;
     }
 
-    .manage-fixed-name{
+    .manage-fixed-name {
       margin: 16px 0;
     }
 
-    .manage-fixed-name small{
+    .manage-fixed-name small {
       display: block;
       margin-top: 5px;
       color: #8f98a5;
     }
 
-    .manage-remove-image-row{
+    .manage-remove-image-row {
       display: flex !important;
       align-items: center;
       gap: 8px;
@@ -415,25 +457,25 @@
       color: #ff9ca7 !important;
     }
 
-    .manage-remove-image-row input{
+    .manage-remove-image-row input {
       width: auto !important;
       margin: 0 !important;
     }
 
-    .manage-same-pass-warning{
+    .manage-same-pass-warning {
       border-left-color: var(--cyan) !important;
     }
 
-    #manageResultDone{
+    #manageResultDone {
       margin-top: 18px;
     }
 
-    @media   screen and (max-width: 600px) {
-      .manage-current-grid{
+    @media screen and (max-width: 600px) {
+      .manage-current-grid {
         grid-template-columns: 1fr;
       }
 
-      .manage-loaded-head{
+      .manage-loaded-head {
         flex-direction: column;
       }
     }
@@ -447,15 +489,15 @@
        ブラウザ下部に「この内容で登録」が埋もれないようにする。
        ※ registrationPreviewModal のみに限定。既存機能・他モーダルは変更しない。
        ========================================================= */
-    @media   screen and (max-width: 600px) {
-      #registrationPreviewModal{
+    @media screen and (max-width: 600px) {
+      #registrationPreviewModal {
         padding:
           max(6px, env(safe-area-inset-top))
           6px
           max(6px, env(safe-area-inset-bottom)) !important;
       }
 
-      #registrationPreviewModal .registration-preview-modal-card{
+      #registrationPreviewModal .registration-preview-modal-card {
         width: calc(100vw - 12px) !important;
 
         height: calc(100vh - 12px);
@@ -471,12 +513,12 @@
         overflow: hidden !important;
       }
 
-      #registrationPreviewModal .registration-preview-note{
+      #registrationPreviewModal .registration-preview-note {
         flex: 0 0 auto;
         margin: 8px 0 10px !important;
       }
 
-      #registrationPreviewCard{
+      #registrationPreviewCard {
         flex: 1 1 auto;
         min-height: 0;
         overflow-y: auto;
@@ -485,7 +527,7 @@
         padding-bottom: 8px;
       }
 
-      #registrationPreviewModal .registration-preview-actions{
+      #registrationPreviewModal .registration-preview-actions {
         flex: 0 0 auto;
 
         display: grid !important;
@@ -511,7 +553,7 @@
           rgba(0, 0, 0, .12);
       }
 
-      #registrationPreviewModal .registration-preview-actions .btn{
+      #registrationPreviewModal .registration-preview-actions .btn {
         width: 100% !important;
         min-width: 0 !important;
         min-height: 48px !important;
@@ -521,7 +563,7 @@
         line-height: 1.2 !important;
       }
 
-      #registrationPreviewConfirm::before{
+      #registrationPreviewConfirm::before {
         background: #ffffff !important;
       }
     }
@@ -530,7 +572,7 @@
 
   <style id="pass-notice-visual-correction">
     /* PASS管理の下部ナビ境界線のみ維持。説明はstyle.cssのガイド基準に統一。 */
-    
+    body.manage-mode #bottomNav {border-top:0!important;box-shadow:none!important;}
   </style>
 
   <style id="manage-match-register-v512">
@@ -541,68 +583,77 @@
        ========================================================= */
 
     /* PASS入力部は募集登録フォームと同じ白ベース＋シアン枠 */
-    #managePage #closeForm{
+    #managePage #closeForm {
       margin-top: 0;
     }
 
-    #managePage .manage-pass-notice{
+    #managePage .manage-pass-notice {
       margin-top: 14px;
     }
 
     /* 呼び出し後の現在情報も登録フォームと同じ明るいUIへ */
-    #managePage .manage-current-grid > div, #managePage .manage-current-url, #managePage .manage-fixed-name{
+    #managePage .manage-current-grid > div,
+    #managePage .manage-current-url,
+    #managePage .manage-fixed-name {
       padding: 13px;
       border: 1px solid #c8ccd0 !important;
       background: #fff !important;
       color: var(--ink) !important;
     }
 
-    #managePage .manage-current-grid span, #managePage .manage-current-url span, #managePage .manage-fixed-name span, #managePage .manage-current-image-box > span{
+    #managePage .manage-current-grid span,
+    #managePage .manage-current-url span,
+    #managePage .manage-fixed-name span,
+    #managePage .manage-current-image-box > span {
       color: #727980 !important;
     }
 
-    #managePage .manage-current-grid strong, #managePage .manage-fixed-name strong{
+    #managePage .manage-current-grid strong,
+    #managePage .manage-fixed-name strong {
       color: var(--ink) !important;
     }
 
-    #managePage .manage-current-image-box{
+    #managePage .manage-current-image-box {
       border: 1px solid #c8ccd0 !important;
       background: #fff !important;
     }
 
-    #managePage .manage-current-image-box img{
+    #managePage .manage-current-image-box img {
       background: #f2f5f7 !important;
     }
 
-    #managePage .manage-status-chip{
+    #managePage .manage-status-chip {
       border-color: var(--cyan) !important;
       color: var(--cyan-dark) !important;
       background: rgba(26,176,241,.06);
     }
 
-    #managePage .manage-edit-choice-panel{
+    #managePage .manage-edit-choice-panel {
       margin-top: 16px;
       padding: 14px;
       border: 1px solid rgba(26,176,241,.24) !important;
       background: rgba(26,176,241,.035) !important;
     }
 
-    #managePage .manage-edit-choice-title{
+    #managePage .manage-edit-choice-title {
       color: #222428 !important;
       font-size: 13px;
       letter-spacing: 0;
     }
 
-    #managePage .manage-renew-note, #managePage .manage-result-new-note, #managePage .manage-result-summary, #managePage .manage-fixed-name small{
+    #managePage .manage-renew-note,
+    #managePage .manage-result-new-note,
+    #managePage .manage-result-summary,
+    #managePage .manage-fixed-name small {
       color: #6e7379 !important;
     }
 
-    #managePage .manage-remove-image-row{
+    #managePage .manage-remove-image-row {
       color: #d84555 !important;
     }
 
     /* スマホでも募集登録ページと同じタイトル並びを維持 */
-    @media   screen and (max-width: 600px) {
+    @media screen and (max-width: 600px) {
     }
   </style>
 
@@ -618,8 +669,11 @@
        ========================================================= */
 
     /* PC: 「修正する」をホバー時にシアン表示 */
-    @media   (hover: hover) and (pointer: fine) {
-      #registrationPreviewBack:hover, #registrationPreviewBack:active, #managePreviewBack:hover, #managePreviewBack:active{
+    @media (hover: hover) and (pointer: fine) {
+      #registrationPreviewBack:hover,
+      #registrationPreviewBack:active,
+      #managePreviewBack:hover,
+      #managePreviewBack:active {
         border-color: var(--cyan, #1ab0f1) !important;
         background: #e3f6ff !important;
         color: #0b8fc8 !important;
@@ -628,7 +682,8 @@
       }
     }
 
-    #registrationPreviewBack:focus-visible, #managePreviewBack:focus-visible{
+    #registrationPreviewBack:focus-visible,
+    #managePreviewBack:focus-visible {
       border-color: var(--cyan, #1ab0f1) !important;
       background: #e3f6ff !important;
       color: #0b8fc8 !important;
@@ -636,7 +691,7 @@
 
     /* スマホ / タブレット共通。
        form-mobile-layout は app.js が1024px以下または tablet-device に付与する。 */
-    html.form-mobile-layout body #registrationPreviewModal.registration-preview-modal{
+    html.form-mobile-layout body #registrationPreviewModal.registration-preview-modal {
       position: fixed !important;
       top: var(--app-vv-offset-top, 0px) !important;
       right: 0 !important;
@@ -661,12 +716,12 @@
       scroll-padding-top: max(10px, env(safe-area-inset-top));
     }
 
-    html.form-mobile-layout body #registrationPreviewModal.registration-preview-modal.hidden{
+    html.form-mobile-layout body #registrationPreviewModal.registration-preview-modal.hidden {
       display: none !important;
     }
 
     /* カード自体は固定高にしない。上から下まで1本のスクロールにする。 */
-    html.form-mobile-layout body #registrationPreviewModal .registration-preview-modal-card{
+    html.form-mobile-layout body #registrationPreviewModal .registration-preview-modal-card {
       position: relative !important;
       width: min(720px, 100%) !important;
       height: auto !important;
@@ -680,23 +735,23 @@
       overflow: visible !important;
     }
 
-    html.form-mobile-layout body #registrationPreviewModal .eyebrow{
+    html.form-mobile-layout body #registrationPreviewModal .eyebrow {
       margin-top: 0 !important;
       margin-bottom: 5px !important;
     }
 
-    html.form-mobile-layout body #registrationPreviewModal h2{
+    html.form-mobile-layout body #registrationPreviewModal h2 {
       margin: 0 !important;
       line-height: 1.15 !important;
     }
 
-    html.form-mobile-layout body #registrationPreviewModal .registration-preview-note{
+    html.form-mobile-layout body #registrationPreviewModal .registration-preview-note {
       margin: 8px 0 12px !important;
       line-height: 1.6 !important;
     }
 
     /* 募集カードだけを別スクロールにしない。 */
-    html.form-mobile-layout body #registrationPreviewCard{
+    html.form-mobile-layout body #registrationPreviewCard {
       display: block !important;
       width: 100% !important;
       min-height: 0 !important;
@@ -705,7 +760,7 @@
     }
 
     /* 下部固定を廃止。PCと同じくカードの下に通常配置。 */
-    html.form-mobile-layout body #registrationPreviewModal .registration-preview-actions{
+    html.form-mobile-layout body #registrationPreviewModal .registration-preview-actions {
       position: static !important;
       inset: auto !important;
       z-index: auto !important;
@@ -722,7 +777,7 @@
       box-shadow: none !important;
     }
 
-    html.form-mobile-layout body #registrationPreviewModal .registration-preview-actions .btn{
+    html.form-mobile-layout body #registrationPreviewModal .registration-preview-actions .btn {
       width: 100% !important;
       min-width: 0 !important;
       min-height: 52px !important;
@@ -733,7 +788,7 @@
     }
 
     /* スマホでは修正ボタンも完全な四角のまま。 */
-    html.form-mobile-layout body #registrationPreviewBack{
+    html.form-mobile-layout body #registrationPreviewBack {
       clip-path: none !important;
       border: 1px solid #686b70 !important;
       background: #fff !important;
@@ -743,9 +798,16 @@
 
     /* 登録フォーム入力中は、従来どおり入力欄をキーボード上へ追従。
        下部ナビだけ退避して、最後の登録ボタンまでスクロールできる。 */
-    
+    html.form-mobile-layout body.register-mode.form-input-active #bottomNav.bottom-nav,
+    html.form-mobile-layout body.register-mode.form-keyboard-open #bottomNav.bottom-nav {
+      opacity: 0 !important;
+      visibility: hidden !important;
+      pointer-events: none !important;
+      transform: none !important;
+      transition: none !important;
+    }
 
-    html.form-mobile-layout body.register-mode.form-input-active .mobile-scroll-shell{
+    html.form-mobile-layout body.register-mode.form-input-active .mobile-scroll-shell {
       padding-bottom:
         calc(
           max(var(--app-keyboard-height, 0px), 240px)
@@ -761,21 +823,21 @@
         ) !important;
     }
 
-    html.form-mobile-layout.tablet-device body.register-mode.form-input-active .mobile-scroll-shell{
+    html.form-mobile-layout.tablet-device body.register-mode.form-input-active .mobile-scroll-shell {
       bottom: 0 !important;
     }
 
     /* 横向き端末でもタイトルを先頭に残し、全体スクロールで最後まで到達可能。 */
-    @media   screen and (max-height: 520px) {
-      html.form-mobile-layout body #registrationPreviewModal.registration-preview-modal{
+    @media screen and (max-height: 520px) {
+      html.form-mobile-layout body #registrationPreviewModal.registration-preview-modal {
         padding-top: max(6px, env(safe-area-inset-top)) !important;
       }
 
-      html.form-mobile-layout body #registrationPreviewModal .registration-preview-modal-card{
+      html.form-mobile-layout body #registrationPreviewModal .registration-preview-modal-card {
         padding-top: 12px !important;
       }
 
-      html.form-mobile-layout body #registrationPreviewModal .registration-preview-note{
+      html.form-mobile-layout body #registrationPreviewModal .registration-preview-note {
         margin: 5px 0 8px !important;
         font-size: 10.5px !important;
         line-height: 1.45 !important;
@@ -795,7 +857,7 @@
        ※ 登録確認モーダルの見た目だけ。登録処理は変更しない。
        ========================================================= */
 
-    #registrationPreviewModal.registration-preview-modal{
+    #registrationPreviewModal.registration-preview-modal {
       position: fixed !important;
       top: 66px !important;
       right: 0 !important;
@@ -822,11 +884,11 @@
       scroll-padding-bottom: 24px !important;
     }
 
-    #registrationPreviewModal.registration-preview-modal.hidden{
+    #registrationPreviewModal.registration-preview-modal.hidden {
       display: none !important;
     }
 
-    #registrationPreviewModal .registration-preview-modal-card{
+    #registrationPreviewModal .registration-preview-modal-card {
       position: relative !important;
       inset: auto !important;
 
@@ -843,22 +905,22 @@
       transform: none !important;
     }
 
-    #registrationPreviewModal .eyebrow{
+    #registrationPreviewModal .eyebrow {
       margin-top: 0 !important;
       margin-bottom: 5px !important;
     }
 
-    #registrationPreviewModal h2{
+    #registrationPreviewModal h2 {
       margin: 0 !important;
       line-height: 1.15 !important;
     }
 
-    #registrationPreviewModal .registration-preview-note{
+    #registrationPreviewModal .registration-preview-note {
       margin: 8px 0 12px !important;
       line-height: 1.6 !important;
     }
 
-    #registrationPreviewCard{
+    #registrationPreviewCard {
       display: block !important;
       width: 100% !important;
       min-height: 0 !important;
@@ -867,7 +929,7 @@
       padding-bottom: 0 !important;
     }
 
-    #registrationPreviewModal .registration-preview-actions{
+    #registrationPreviewModal .registration-preview-actions {
       position: static !important;
       inset: auto !important;
       z-index: auto !important;
@@ -885,7 +947,7 @@
       transform: none !important;
     }
 
-    #registrationPreviewModal .registration-preview-actions .btn{
+    #registrationPreviewModal .registration-preview-actions .btn {
       width: 100% !important;
       min-width: 0 !important;
       min-height: 52px !important;
@@ -893,8 +955,9 @@
     }
 
     /* PCの「修正する」はホバーでシアン。 */
-    @media   (hover: hover) and (pointer: fine) {
-      #registrationPreviewBack:hover, #registrationPreviewBack:active{
+    @media (hover: hover) and (pointer: fine) {
+      #registrationPreviewBack:hover,
+      #registrationPreviewBack:active {
         border-color: var(--cyan, #1ab0f1) !important;
         background:
           linear-gradient(
@@ -908,27 +971,27 @@
     }
 
     /* スマホはボタンを縦積みにして押しやすくする。 */
-    @media   screen and (max-width: 600px) {
-      #registrationPreviewModal.registration-preview-modal{
+    @media screen and (max-width: 600px) {
+      #registrationPreviewModal.registration-preview-modal {
         padding-top: 8px !important;
       }
 
-      #registrationPreviewModal .registration-preview-modal-card{
+      #registrationPreviewModal .registration-preview-modal-card {
         padding: 14px 12px !important;
       }
 
-      #registrationPreviewModal .registration-preview-actions{
+      #registrationPreviewModal .registration-preview-actions {
         grid-template-columns: 1fr !important;
         gap: 8px !important;
       }
 
-      #registrationPreviewModal .registration-preview-actions .btn{
+      #registrationPreviewModal .registration-preview-actions .btn {
         min-height: 50px !important;
       }
     }
 
     /* タブレットも同じくメニューバー直下から自然にスクロール。 */
-    html.tablet-device body #registrationPreviewModal.registration-preview-modal{
+    html.tablet-device body #registrationPreviewModal.registration-preview-modal {
       top: 66px !important;
       bottom: 0 !important;
       height: auto !important;
@@ -947,13 +1010,21 @@
        - 旧v51.5 / v51.6 の高詳細度ルールを確実に上書き
        ========================================================= */
 
-    body.registration-preview-open{
+    body.registration-preview-open {
       overflow: hidden !important;
     }
 
-    
+    body.registration-preview-open #bottomNav.bottom-nav {
+      display: none !important;
+      visibility: hidden !important;
+      opacity: 0 !important;
+      pointer-events: none !important;
+    }
 
-    html body #registrationPreviewModal.registration-preview-modal, html.form-mobile-layout body #registrationPreviewModal.registration-preview-modal, html.tablet-device body #registrationPreviewModal.registration-preview-modal, html.form-mobile-layout.tablet-device body #registrationPreviewModal.registration-preview-modal{
+    html body #registrationPreviewModal.registration-preview-modal,
+    html.form-mobile-layout body #registrationPreviewModal.registration-preview-modal,
+    html.tablet-device body #registrationPreviewModal.registration-preview-modal,
+    html.form-mobile-layout.tablet-device body #registrationPreviewModal.registration-preview-modal {
       position: fixed !important;
       top: var(--registration-preview-top, 66px) !important;
       right: 0 !important;
@@ -984,11 +1055,16 @@
       z-index: 29 !important;
     }
 
-    html body #registrationPreviewModal.registration-preview-modal.hidden, html.form-mobile-layout body #registrationPreviewModal.registration-preview-modal.hidden, html.tablet-device body #registrationPreviewModal.registration-preview-modal.hidden, html.form-mobile-layout.tablet-device body #registrationPreviewModal.registration-preview-modal.hidden{
+    html body #registrationPreviewModal.registration-preview-modal.hidden,
+    html.form-mobile-layout body #registrationPreviewModal.registration-preview-modal.hidden,
+    html.tablet-device body #registrationPreviewModal.registration-preview-modal.hidden,
+    html.form-mobile-layout.tablet-device body #registrationPreviewModal.registration-preview-modal.hidden {
       display: none !important;
     }
 
-    html body #registrationPreviewModal .registration-preview-modal-card, html.form-mobile-layout body #registrationPreviewModal .registration-preview-modal-card, html.tablet-device body #registrationPreviewModal .registration-preview-modal-card{
+    html body #registrationPreviewModal .registration-preview-modal-card,
+    html.form-mobile-layout body #registrationPreviewModal .registration-preview-modal-card,
+    html.tablet-device body #registrationPreviewModal .registration-preview-modal-card {
       position: relative !important;
       inset: auto !important;
 
@@ -1005,22 +1081,30 @@
       transform: none !important;
     }
 
-    html body #registrationPreviewModal .eyebrow, html.form-mobile-layout body #registrationPreviewModal .eyebrow, html.tablet-device body #registrationPreviewModal .eyebrow{
+    html body #registrationPreviewModal .eyebrow,
+    html.form-mobile-layout body #registrationPreviewModal .eyebrow,
+    html.tablet-device body #registrationPreviewModal .eyebrow {
       margin-top: 0 !important;
       margin-bottom: 4px !important;
     }
 
-    html body #registrationPreviewModal h2, html.form-mobile-layout body #registrationPreviewModal h2, html.tablet-device body #registrationPreviewModal h2{
+    html body #registrationPreviewModal h2,
+    html.form-mobile-layout body #registrationPreviewModal h2,
+    html.tablet-device body #registrationPreviewModal h2 {
       margin: 0 !important;
       line-height: 1.15 !important;
     }
 
-    html body #registrationPreviewModal .registration-preview-note, html.form-mobile-layout body #registrationPreviewModal .registration-preview-note, html.tablet-device body #registrationPreviewModal .registration-preview-note{
+    html body #registrationPreviewModal .registration-preview-note,
+    html.form-mobile-layout body #registrationPreviewModal .registration-preview-note,
+    html.tablet-device body #registrationPreviewModal .registration-preview-note {
       margin: 8px 0 12px !important;
       line-height: 1.6 !important;
     }
 
-    html body #registrationPreviewCard, html.form-mobile-layout body #registrationPreviewCard, html.tablet-device body #registrationPreviewCard{
+    html body #registrationPreviewCard,
+    html.form-mobile-layout body #registrationPreviewCard,
+    html.tablet-device body #registrationPreviewCard {
       display: block !important;
       width: 100% !important;
       height: auto !important;
@@ -1030,7 +1114,9 @@
       padding-bottom: 0 !important;
     }
 
-    html body #registrationPreviewModal .registration-preview-actions, html.form-mobile-layout body #registrationPreviewModal .registration-preview-actions, html.tablet-device body #registrationPreviewModal .registration-preview-actions{
+    html body #registrationPreviewModal .registration-preview-actions,
+    html.form-mobile-layout body #registrationPreviewModal .registration-preview-actions,
+    html.tablet-device body #registrationPreviewModal .registration-preview-actions {
       position: static !important;
       inset: auto !important;
       z-index: auto !important;
@@ -1048,7 +1134,9 @@
       transform: none !important;
     }
 
-    html body #registrationPreviewModal .registration-preview-actions .btn, html.form-mobile-layout body #registrationPreviewModal .registration-preview-actions .btn, html.tablet-device body #registrationPreviewModal .registration-preview-actions .btn{
+    html body #registrationPreviewModal .registration-preview-actions .btn,
+    html.form-mobile-layout body #registrationPreviewModal .registration-preview-actions .btn,
+    html.tablet-device body #registrationPreviewModal .registration-preview-actions .btn {
       width: 100% !important;
       min-width: 0 !important;
       min-height: 52px !important;
@@ -1058,14 +1146,15 @@
     }
 
     /* 修正ボタン：PCはホバー時にシアン。タッチ端末は通常白。 */
-    #registrationPreviewBack{
+    #registrationPreviewBack {
       border-color: #686b70 !important;
       background: #fff !important;
       color: #222428 !important;
     }
 
-    @media   (hover: hover) and (pointer: fine) {
-      #registrationPreviewBack:hover, #registrationPreviewBack:active{
+    @media (hover: hover) and (pointer: fine) {
+      #registrationPreviewBack:hover,
+      #registrationPreviewBack:active {
         border-color: var(--cyan, #1ab0f1) !important;
         background:
           linear-gradient(
@@ -1080,16 +1169,19 @@
     }
 
     /* 小さいスマホでも2ボタンが潰れないよう文字だけ少し調整。 */
-    @media   screen and (max-width: 420px) {
-      html body #registrationPreviewModal .registration-preview-modal-card, html.form-mobile-layout body #registrationPreviewModal .registration-preview-modal-card{
+    @media screen and (max-width: 420px) {
+      html body #registrationPreviewModal .registration-preview-modal-card,
+      html.form-mobile-layout body #registrationPreviewModal .registration-preview-modal-card {
         padding: 14px 12px 18px !important;
       }
 
-      html body #registrationPreviewModal .registration-preview-actions, html.form-mobile-layout body #registrationPreviewModal .registration-preview-actions{
+      html body #registrationPreviewModal .registration-preview-actions,
+      html.form-mobile-layout body #registrationPreviewModal .registration-preview-actions {
         gap: 8px !important;
       }
 
-      html body #registrationPreviewModal .registration-preview-actions .btn, html.form-mobile-layout body #registrationPreviewModal .registration-preview-actions .btn{
+      html body #registrationPreviewModal .registration-preview-actions .btn,
+      html.form-mobile-layout body #registrationPreviewModal .registration-preview-actions .btn {
         min-height: 50px !important;
         font-size: 12.5px !important;
       }
@@ -1111,8 +1203,8 @@
       HERO内にある登録タイトルの REGISTER まで隠していたため、
       register-mode の登録見出しだけ明示的に復元する。
     */
-    @media   screen and (max-width: 600px) {
-      body.register-mode #registerPage .register-inline-title .eyebrow{
+    @media screen and (max-width: 600px) {
+      body.register-mode #registerPage .register-inline-title .eyebrow {
         display: block !important;
         visibility: visible !important;
         opacity: 1 !important;
@@ -1126,7 +1218,10 @@
       「実際に見えている高さ」を使用。Safari / iPadOS のブラウザUIに
       登録ボタンが潜り込むのを防ぐ。
     */
-    html body #registrationPreviewModal.registration-preview-modal, html.form-mobile-layout body #registrationPreviewModal.registration-preview-modal, html.tablet-device body #registrationPreviewModal.registration-preview-modal, html.form-mobile-layout.tablet-device body #registrationPreviewModal.registration-preview-modal{
+    html body #registrationPreviewModal.registration-preview-modal,
+    html.form-mobile-layout body #registrationPreviewModal.registration-preview-modal,
+    html.tablet-device body #registrationPreviewModal.registration-preview-modal,
+    html.form-mobile-layout.tablet-device body #registrationPreviewModal.registration-preview-modal {
       top: var(--registration-preview-top, 66px) !important;
       bottom: auto !important;
       height: var(--registration-preview-height, calc(100dvh - 66px)) !important;
@@ -1143,28 +1238,35 @@
     }
 
     /* スマホ / タブレットはブラウザ下部UI分を多めに確保。 */
-    @media   screen and (max-width: 1024px) {
-      html body #registrationPreviewModal.registration-preview-modal, html.form-mobile-layout body #registrationPreviewModal.registration-preview-modal, html.tablet-device body #registrationPreviewModal.registration-preview-modal, html.form-mobile-layout.tablet-device body #registrationPreviewModal.registration-preview-modal{
+    @media screen and (max-width: 1024px) {
+      html body #registrationPreviewModal.registration-preview-modal,
+      html.form-mobile-layout body #registrationPreviewModal.registration-preview-modal,
+      html.tablet-device body #registrationPreviewModal.registration-preview-modal,
+      html.form-mobile-layout.tablet-device body #registrationPreviewModal.registration-preview-modal {
         padding-bottom: calc(124px + env(safe-area-inset-bottom)) !important;
         scroll-padding-bottom: calc(124px + env(safe-area-inset-bottom)) !important;
       }
     }
 
     /* iPad横向き等、幅1024pxを超えてtablet-device判定される場合も同じ余白。 */
-    html.tablet-device body #registrationPreviewModal.registration-preview-modal, html.form-mobile-layout.tablet-device body #registrationPreviewModal.registration-preview-modal{
+    html.tablet-device body #registrationPreviewModal.registration-preview-modal,
+    html.form-mobile-layout.tablet-device body #registrationPreviewModal.registration-preview-modal {
       padding-bottom: calc(124px + env(safe-area-inset-bottom)) !important;
       scroll-padding-bottom: calc(124px + env(safe-area-inset-bottom)) !important;
     }
 
     /* アクションは通常フローのまま。クリック領域を確実に前面へ。 */
-    html body #registrationPreviewModal .registration-preview-actions, html.form-mobile-layout body #registrationPreviewModal .registration-preview-actions, html.tablet-device body #registrationPreviewModal .registration-preview-actions{
+    html body #registrationPreviewModal .registration-preview-actions,
+    html.form-mobile-layout body #registrationPreviewModal .registration-preview-actions,
+    html.tablet-device body #registrationPreviewModal .registration-preview-actions {
       position: relative !important;
       z-index: 2 !important;
       margin-bottom: 0 !important;
       pointer-events: auto !important;
     }
 
-    #registrationPreviewBack, #registrationPreviewConfirm{
+    #registrationPreviewBack,
+    #registrationPreviewConfirm {
       pointer-events: auto !important;
       touch-action: manipulation;
     }
@@ -1174,12 +1276,12 @@
 
   <style id="v51-10-pass-manage-safe-fix">
     /* PASS呼び出し後は入力画面を隠し、管理カードへ切替 */
-    #managePage.manage-loaded-mode #closeForm{
+    #managePage.manage-loaded-mode #closeForm {
       display: none !important;
     }
 
     /* スマホでもPASS管理の上の青いMANAGEを必ず表示 */
-    #managePage .manage-inline-title .eyebrow{
+    #managePage .manage-inline-title .eyebrow {
       display: block !important;
       visibility: visible !important;
       opacity: 1 !important;
@@ -1187,7 +1289,7 @@
     }
 
     /* PASS管理：確認結果は白背景と細い枠で表示。左帯・絵文字は使用しない。 */
-    #managePage #manageMembershipConfirmedNotice{
+    #managePage #manageMembershipConfirmedNotice {
       display: block !important;
       padding: 18px 20px !important;
       border: 1px solid #dce2e7 !important;
@@ -1200,16 +1302,17 @@
       color: #24282c !important;
       font: 400 13px/1.75 "Noto Sans JP", sans-serif !important;
     }
-    #managePage #manageMembershipConfirmedNotice::before, #managePage #manageMembershipConfirmedNotice::after{ content: none !important; display: none !important; }
-    #managePage #manageMembershipConfirmedNotice.hidden{ display: none !important; }
-    #manageMembershipConfirmedNotice .um-confirm-title{ display: block; font-size: 15px; font-weight: 500; }
-    #manageMembershipConfirmedNotice .um-confirm-date{ display: flex; flex-wrap: wrap; gap: 4px 16px; justify-content: space-between; margin-top: 12px; padding-top: 12px; border-top: 1px solid #e6eaed; }
-    #manageMembershipConfirmedNotice .um-confirm-date-label{ color: #6b747c; }
-    #manageMembershipConfirmedNotice .um-confirm-date-value{ font-size: 15px; font-weight: 500; font-variant-numeric: tabular-nums; }
-    #manageMembershipConfirmedNotice .um-confirm-note{ display: block; margin-top: 10px; color: #69747d; font-size: 12px; font-weight: 400; }
+    #managePage #manageMembershipConfirmedNotice::before,
+    #managePage #manageMembershipConfirmedNotice::after { content: none !important; display: none !important; }
+    #managePage #manageMembershipConfirmedNotice.hidden { display: none !important; }
+    #manageMembershipConfirmedNotice .um-confirm-title { display: block; font-size: 15px; font-weight: 500; }
+    #manageMembershipConfirmedNotice .um-confirm-date { display: flex; flex-wrap: wrap; gap: 4px 16px; justify-content: space-between; margin-top: 12px; padding-top: 12px; border-top: 1px solid #e6eaed; }
+    #manageMembershipConfirmedNotice .um-confirm-date-label { color: #6b747c; }
+    #manageMembershipConfirmedNotice .um-confirm-date-value { font-size: 15px; font-weight: 500; font-variant-numeric: tabular-nums; }
+    #manageMembershipConfirmedNotice .um-confirm-note { display: block; margin-top: 10px; color: #69747d; font-size: 12px; font-weight: 400; }
 
     /* PASS編集：「編集をやめる」だけ境界線の四角ボタンへ統一 */
-    #managePage #cancelManageEditBtn{
+    #managePage #cancelManageEditBtn {
       border-radius: 0 !important;
       clip-path: none !important;
       border: 1px solid #686b70 !important;
@@ -1219,7 +1322,7 @@
     }
 
     /* 登録削除：通常は白とルビーレッド、PCホバー時だけ赤背景。 */
-    html body #managePage #deleteUnionMembershipBtn.manage-delete-btn{
+    html body #managePage #deleteUnionMembershipBtn.manage-delete-btn {
       margin-top: 72px !important;
       min-height: 48px !important;
       font: 400 13px/1.5 "Noto Sans JP", sans-serif !important;
@@ -1233,8 +1336,8 @@
       transform: none !important;
     }
 
-    @media   (hover: hover) and (pointer: fine) {
-      html body #managePage #deleteUnionMembershipBtn.manage-delete-btn:hover{
+    @media (hover: hover) and (pointer: fine) {
+      html body #managePage #deleteUnionMembershipBtn.manage-delete-btn:hover {
         border-color: #9E3445 !important;
         background: #9E3445 !important;
         background-image: none !important;
@@ -1244,28 +1347,41 @@
       }
     }
 
-    @media   screen and (max-width: 600px) {
-      #managePage #deleteUnionMembershipBtn.manage-delete-btn{
+    @media screen and (max-width: 600px) {
+      #managePage #deleteUnionMembershipBtn.manage-delete-btn {
         margin-top: 60px !important;
       }
     }
 
     /* 管理カードが固定UIの下に潜りにくいようPASS画面だけ余白確保 */
-    body.manage-mode #managePage, body.manage-mode #heroManageArea{
+    body.manage-mode #managePage,
+    body.manage-mode #heroManageArea {
       height: auto !important;
       min-height: 0 !important;
       max-height: none !important;
       overflow: visible !important;
     }
-    body.manage-mode #manageLoadedPanel, body.manage-mode #manageEditPanel{
+    body.manage-mode #manageLoadedPanel,
+    body.manage-mode #manageEditPanel {
       scroll-margin-top: 82px !important;
       scroll-margin-bottom: 126px !important;
     }
 
-    
+    #bottomNav .nav-key-icon {
+      display: block;
+      width: 22px;
+      height: 22px;
+      margin: 0 auto 2px;
+      fill: none;
+      stroke: currentColor;
+      stroke-width: 2;
+      stroke-linecap: square;
+      stroke-linejoin: miter;
+      flex: 0 0 auto;
+    }
 
-    @media   screen and (max-width: 1024px) {
-      body.manage-mode #heroManageArea{
+    @media screen and (max-width: 1024px) {
+      body.manage-mode #heroManageArea {
         padding-bottom: calc(92px + env(safe-area-inset-bottom)) !important;
       }
     }
@@ -1284,7 +1400,10 @@
        ※ 登録処理 / PASS処理 / BOT / Creator / 他モーダルは変更しない
        ========================================================= */
 
-    html body #managePreviewModal.registration-preview-modal, html.form-mobile-layout body #managePreviewModal.registration-preview-modal, html.tablet-device body #managePreviewModal.registration-preview-modal, html.form-mobile-layout.tablet-device body #managePreviewModal.registration-preview-modal{
+    html body #managePreviewModal.registration-preview-modal,
+    html.form-mobile-layout body #managePreviewModal.registration-preview-modal,
+    html.tablet-device body #managePreviewModal.registration-preview-modal,
+    html.form-mobile-layout.tablet-device body #managePreviewModal.registration-preview-modal {
       position: fixed !important;
       top: var(--registration-preview-top, 64px) !important;
       right: 0 !important;
@@ -1317,11 +1436,17 @@
       box-sizing: border-box !important;
     }
 
-    html body #managePreviewModal.registration-preview-modal.hidden, html.form-mobile-layout body #managePreviewModal.registration-preview-modal.hidden, html.tablet-device body #managePreviewModal.registration-preview-modal.hidden, html.form-mobile-layout.tablet-device body #managePreviewModal.registration-preview-modal.hidden{
+    html body #managePreviewModal.registration-preview-modal.hidden,
+    html.form-mobile-layout body #managePreviewModal.registration-preview-modal.hidden,
+    html.tablet-device body #managePreviewModal.registration-preview-modal.hidden,
+    html.form-mobile-layout.tablet-device body #managePreviewModal.registration-preview-modal.hidden {
       display: none !important;
     }
 
-    html body #managePreviewModal .registration-preview-modal-card, html.form-mobile-layout body #managePreviewModal .registration-preview-modal-card, html.tablet-device body #managePreviewModal .registration-preview-modal-card, html.form-mobile-layout.tablet-device body #managePreviewModal .registration-preview-modal-card{
+    html body #managePreviewModal .registration-preview-modal-card,
+    html.form-mobile-layout body #managePreviewModal .registration-preview-modal-card,
+    html.tablet-device body #managePreviewModal .registration-preview-modal-card,
+    html.form-mobile-layout.tablet-device body #managePreviewModal .registration-preview-modal-card {
       position: relative !important;
       inset: auto !important;
 
@@ -1339,22 +1464,30 @@
       box-sizing: border-box !important;
     }
 
-    html body #managePreviewModal .eyebrow, html.form-mobile-layout body #managePreviewModal .eyebrow, html.tablet-device body #managePreviewModal .eyebrow{
+    html body #managePreviewModal .eyebrow,
+    html.form-mobile-layout body #managePreviewModal .eyebrow,
+    html.tablet-device body #managePreviewModal .eyebrow {
       margin-top: 0 !important;
       margin-bottom: 4px !important;
     }
 
-    html body #managePreviewModal h2, html.form-mobile-layout body #managePreviewModal h2, html.tablet-device body #managePreviewModal h2{
+    html body #managePreviewModal h2,
+    html.form-mobile-layout body #managePreviewModal h2,
+    html.tablet-device body #managePreviewModal h2 {
       margin: 0 !important;
       line-height: 1.15 !important;
     }
 
-    html body #managePreviewModal .registration-preview-note, html.form-mobile-layout body #managePreviewModal .registration-preview-note, html.tablet-device body #managePreviewModal .registration-preview-note{
+    html body #managePreviewModal .registration-preview-note,
+    html.form-mobile-layout body #managePreviewModal .registration-preview-note,
+    html.tablet-device body #managePreviewModal .registration-preview-note {
       margin: 8px 0 12px !important;
       line-height: 1.6 !important;
     }
 
-    html body #managePreviewCard, html.form-mobile-layout body #managePreviewCard, html.tablet-device body #managePreviewCard{
+    html body #managePreviewCard,
+    html.form-mobile-layout body #managePreviewCard,
+    html.tablet-device body #managePreviewCard {
       display: block !important;
       width: 100% !important;
       height: auto !important;
@@ -1364,7 +1497,9 @@
       padding-bottom: 0 !important;
     }
 
-    html body #managePreviewModal .registration-preview-actions, html.form-mobile-layout body #managePreviewModal .registration-preview-actions, html.tablet-device body #managePreviewModal .registration-preview-actions{
+    html body #managePreviewModal .registration-preview-actions,
+    html.form-mobile-layout body #managePreviewModal .registration-preview-actions,
+    html.tablet-device body #managePreviewModal .registration-preview-actions {
       position: static !important;
       inset: auto !important;
       z-index: auto !important;
@@ -1382,7 +1517,9 @@
       transform: none !important;
     }
 
-    html body #managePreviewModal .registration-preview-actions .btn, html.form-mobile-layout body #managePreviewModal .registration-preview-actions .btn, html.tablet-device body #managePreviewModal .registration-preview-actions .btn{
+    html body #managePreviewModal .registration-preview-actions .btn,
+    html.form-mobile-layout body #managePreviewModal .registration-preview-actions .btn,
+    html.tablet-device body #managePreviewModal .registration-preview-actions .btn {
       width: 100% !important;
       min-width: 0 !important;
       min-height: 52px !important;
@@ -1392,16 +1529,19 @@
     }
 
 
-    @media   screen and (max-width: 420px) {
-      html body #managePreviewModal .registration-preview-modal-card, html.form-mobile-layout body #managePreviewModal .registration-preview-modal-card{
+    @media screen and (max-width: 420px) {
+      html body #managePreviewModal .registration-preview-modal-card,
+      html.form-mobile-layout body #managePreviewModal .registration-preview-modal-card {
         padding: 14px 12px 18px !important;
       }
 
-      html body #managePreviewModal .registration-preview-actions, html.form-mobile-layout body #managePreviewModal .registration-preview-actions{
+      html body #managePreviewModal .registration-preview-actions,
+      html.form-mobile-layout body #managePreviewModal .registration-preview-actions {
         gap: 8px !important;
       }
 
-      html body #managePreviewModal .registration-preview-actions .btn, html.form-mobile-layout body #managePreviewModal .registration-preview-actions .btn{
+      html body #managePreviewModal .registration-preview-actions .btn,
+      html.form-mobile-layout body #managePreviewModal .registration-preview-actions .btn {
         min-height: 50px !important;
         font-size: 12.5px !important;
       }
@@ -1410,23 +1550,32 @@
 
 
   <style id="topbar-mobile-header-alignment">
-    @media   screen and (max-width: 600px) {
-      .video-logo-switch img{ transform:none; }
-      
-      
-      
+    @media screen and (max-width: 600px) {
+      .video-logo-switch img { transform:none; }
+      .topbar { padding-right:14px !important; }
+      .site-menu-button { width:34px !important;height:34px !important;margin:0 !important;padding:0 !important; }
+      .site-menu-button span { width:24px !important; }
     }
-    @media   screen and (max-width:360px) {
-      
-      .video-logo-switch img{ transform:none; }
-      
-      
+    @media screen and (max-width:360px) {
+      .topbar { padding-right:12px !important; }
+      .video-logo-switch img { transform:none; }
+      .site-menu-button { width:32px !important;height:32px !important; }
+      .site-menu-button span { width:22px !important; }
     }
   </style>
 
 
   <style id="site-menu-fansite-note-v1">
-    
+    .site-menu-disclaimer {
+      margin: 22px 8px 8px;
+      padding: 14px 10px 0;
+      border-top: 1px solid rgba(255,255,255,.12);
+      color: rgba(255,255,255,.48);
+      font-size: 10px;
+      font-weight: 700;
+      line-height: 1.7;
+      letter-spacing: .01em;
+    }
   </style>
 
 <link rel="stylesheet" href="./push-notifications/notification-ui.css?v=3">
@@ -1438,34 +1587,89 @@
 #registrationPreviewModal .registration-preview-actions .btn{background:#f2fbff!important;color:#0b8fc8!important;border:1px solid #1ab0f1!important;box-shadow:none!important}
 #registrationPreviewModal .registration-preview-actions .btn:hover{background:#1ab0f1!important;color:#fff!important}
 /* 登録・PASS入力: PCではホバー、タッチ端末では常時淡い青 */
-@media   (hover:hover) and (pointer:fine){#registerForm input:hover, #registerForm select:hover, #closeForm input:hover{border-color:#1ab0f1!important}}
-#registerForm input:focus, #registerForm select:focus, #closeForm input:focus{border-color:#1ab0f1!important;outline:1px solid #1ab0f1!important;outline-offset:0}
-@media   (hover:none), (pointer:coarse){#registerForm input, #registerForm select, #closeForm input{border-color:#8bd8f7!important}}
+@media (hover:hover) and (pointer:fine){#registerForm input:hover,#registerForm select:hover,#closeForm input:hover{border-color:#1ab0f1!important}}
+#registerForm input:focus,#registerForm select:focus,#closeForm input:focus{border-color:#1ab0f1!important;outline:1px solid #1ab0f1!important;outline-offset:0}
+@media (hover:none), (pointer:coarse){#registerForm input,#registerForm select,#closeForm input{border-color:#8bd8f7!important}}
 #managePage .manage-pass-notice{margin-top:14px}
 #managePage .um-manage-help summary{cursor:pointer;color:#0b8fc8;font-weight:700;padding:12px 0}
 #managePage .um-manage-help .manage-pass-notice{margin-top:0}
 </style>
-
-<link rel="stylesheet" href="./shared/navigation.css?v=20261120c">
 </head>
 
 
-<body>
-  <div id="umSharedNavigation" data-um-nav-root="./" data-um-page="index" data-um-title=""></div>
-
-<script src="./shared/navigation.js?v=20261120c"></script>
-
+<body class="um-index-page">
 
 
   <!-- ========================================
        ヘッダー
   ========================================= -->
 
-  
+  <header class="topbar video-topbar">
 
-  
+    <button
+      id="videoTopSwitch"
+      class="brand video-logo-switch"
+      type="button"
+      aria-label="動画トップへ戻る"
+      title="TOP"
+    >
+      <img
+        src="./assets/union-match-logo-white.png"
+        alt="UNION MATCH"
+      >
+    </button>
 
-  
+    <button class="um-notification-bell" type="button" aria-label="プッシュ通知設定を開く" title="プッシュ通知設定"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.65" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M18 8a6 6 0 0 0-12 0c0 7-3 7-3 9h18c0-2-3-2-3-9M10 21h4"/></svg><span class="um-bell-light" aria-hidden="true"></span></button>
+
+    <button
+      id="siteMenuButton"
+      class="site-menu-button"
+      type="button"
+      aria-label="メニューを開く"
+      aria-expanded="false"
+      aria-controls="siteMenuDrawer"
+    >
+      <span></span>
+      <span></span>
+      <span></span>
+    </button>
+
+  </header>
+
+  <div
+    id="siteMenuBackdrop"
+    class="site-menu-backdrop"
+    hidden
+  ></div>
+
+  <aside
+    id="siteMenuDrawer"
+    class="site-menu-drawer"
+    aria-hidden="true"
+  >
+    <div class="site-menu-head">
+      <span>MENU</span>
+      <button
+        id="siteMenuClose"
+        type="button"
+        aria-label="メニューを閉じる"
+      >×</button>
+    </div>
+
+    <button type="button" data-menu-action="top">ホーム</button>
+    <button type="button" data-menu-action="commander">指揮官を見る</button>
+    <button type="button" data-menu-action="union">ユニオンを見る</button>
+    <button type="button" data-menu-action="register">募集登録</button>
+    <button type="button" data-menu-action="manage">PASS管理</button>
+    <button type="button" class="um-notification-menu-entry" data-um-notification-open>プッシュ通知設定</button>
+    <a href="./html/union-list.html">ユニオンリスト</a>
+    <a href="./bot.html?um_source=index">Discord BOT</a>
+    <a href="./creators.html">応援クリエイター</a>
+    <div class="site-menu-disclaimer">
+      このサイトはSHIFT UPが提供する「勝利の女神：NIKKE」の公式サイトではありません。<br>
+      ファンサイトです。
+    </div>
+  </aside>
 
 
 
@@ -2441,7 +2645,12 @@
        動画TOPでは非表示、募集エリアで表示
   ========================================= -->
 
-  
+  <nav class="bottom-nav" id="bottomNav" aria-label="メインメニュー">
+  <button class="nav-btn um-footer-item" type="button" data-um-home><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m3 10 9-7 9 7v10H3z"/></svg><span>ホーム</span></button>
+  <button class="nav-btn um-footer-item" type="button" data-page="register"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" aria-hidden="true"><path d="M12 5v14M5 12h14"/></svg><span>登録</span></button>
+  <button class="nav-btn um-footer-item" type="button" data-page="manage"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="7.5" cy="12" r="4"/><path d="M11.5 12H21m-4 0v3m3-3v3"/></svg><span>PASS</span></button>
+  <button class="nav-btn um-footer-item" type="button" data-um-menu-open><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" aria-hidden="true"><path d="M4 6h16M4 12h16M4 18h16"/></svg><span>メニュー</span></button>
+</nav>
 
 
 
