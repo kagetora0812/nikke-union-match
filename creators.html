@@ -653,7 +653,7 @@
     }
   </style>
 
-  <link rel="stylesheet" href="./subpage-nav.css?v=20261120-layout-stability-1">
+  <link rel="stylesheet" href="./subpage-nav.css?v=20261120-menu-form-unify-v5">
 
 
   
@@ -1357,10 +1357,11 @@ if (
       }
     });
     // The bottom Menu button uses the existing header hamburger toggle.
-    document.addEventListener('DOMContentLoaded', () => {
-      document.querySelector('[data-um-menu-open]')?.addEventListener('click', () => {
-        document.getElementById('siteMenuButton')?.click();
-      });
+    document.addEventListener('click', (event) => {
+      if (!event.target.closest('.creator-bottom-nav [data-um-menu-open]')) return;
+      event.preventDefault();
+      if (document.body.classList.contains('menu-open')) closeSiteMenu();
+      else openSiteMenu();
     });
 
 
