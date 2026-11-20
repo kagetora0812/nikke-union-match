@@ -4,7 +4,7 @@
 }
 
 @media screen and (max-width: 1366px) {
-  body {
+  body:not(.um-index-page) {
     padding-top: 64px !important;
     padding-bottom: calc(68px + env(safe-area-inset-bottom)) !important;
   }
@@ -88,7 +88,7 @@
 }
 
 @media screen and (max-width: 600px) {
-  body {
+  body:not(.um-index-page) {
     padding-top: 58px !important;
   }
 }
@@ -106,3 +106,164 @@
 .site-menu-drawer {
   z-index: 1200 !important;
 }
+
+/* INDEX header, logo, hamburger and drawer: moved unchanged from style.css. */
+/* Header: uploaded UNION MATCH logo is the hidden TOP switch */
+body .video-topbar {
+  position: sticky !important;
+  top: 0 !important;
+  z-index: 120 !important;
+  height: var(--index-header-height) !important;
+  padding: 0 14px !important;
+  border-bottom: 0 !important;
+  background: rgba(13,16,22,.72) !important;
+  backdrop-filter: none !important;
+  -webkit-backdrop-filter: none !important;
+}
+
+body .video-logo-switch {
+  width: auto !important;
+  max-width: none !important;
+  height: 100% !important;
+  display: flex !important;
+  align-items: center !important;
+  padding: 0 !important;
+  margin: 0 !important;
+  border: 0 !important;
+  background: transparent !important;
+  box-shadow: none !important;
+  cursor: pointer;
+  appearance: none;
+  -webkit-appearance: none;
+}
+
+body .video-logo-switch img {
+  display: block !important;
+  width: clamp(154px, 18vw, 238px) !important;
+  max-width: 46vw !important;
+  height: auto !important;
+  max-height: 54px !important;
+  object-fit: contain !important;
+  object-position: left center !important;
+  pointer-events: none;
+}
+
+body .video-logo-switch:hover,
+body .video-logo-switch:focus,
+body .video-logo-switch:active {
+  border: 0 !important;
+  outline: 0 !important;
+  background: transparent !important;
+  box-shadow: none !important;
+  transform: none !important;
+}
+
+body .site-menu-button {
+  width: 46px;
+  height: 46px;
+  display: grid;
+  place-content: center;
+  gap: 5px;
+  padding: 0;
+  border: 0;
+  background: transparent;
+  cursor: pointer;
+}
+
+body .site-menu-button span {
+  display: block;
+  width: 25px;
+  height: 2px;
+  border-radius: 99px;
+  background: #fff;
+  transition: transform .22s ease, opacity .22s ease;
+}
+
+body.menu-open .site-menu-button span:nth-child(1) {
+  transform: translateY(7px) rotate(45deg);
+}
+
+body.menu-open .site-menu-button span:nth-child(2) {
+  opacity: 0;
+}
+
+body.menu-open .site-menu-button span:nth-child(3) {
+  transform: translateY(-7px) rotate(-45deg);
+}
+
+body .site-menu-backdrop {
+  position: fixed;
+  inset: var(--index-header-height) 0 0;
+  z-index: 108;
+  background: rgba(0, 0, 0, .48);
+  backdrop-filter: none;
+  -webkit-backdrop-filter: none;
+}
+
+body .site-menu-drawer {
+  position: fixed;
+  top: var(--index-header-height);
+  right: 0;
+  z-index: 110;
+  width: min(86vw, 340px);
+  height: calc(100dvh - var(--index-header-height));
+  padding: 12px;
+  transform: translateX(105%);
+  overflow-y: auto;
+  background: #0d1016;
+  backdrop-filter: none;
+  -webkit-backdrop-filter: none;
+  box-shadow: none;
+  transition: transform .24s ease;
+}
+
+body.menu-open .site-menu-drawer {
+  transform: translateX(0);
+}
+
+body .site-menu-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  min-height: 48px;
+  padding: 0 6px 10px;
+  color: rgba(255,255,255,.7);
+  font: 800 12px "Teko", sans-serif;
+  letter-spacing: .24em;
+}
+
+body .site-menu-head button {
+  width: 38px;
+  height: 38px;
+  border: 0;
+  color: #fff;
+  background: transparent;
+  font-size: 28px;
+  line-height: 1;
+  cursor: pointer;
+}
+
+body .site-menu-drawer > button,
+body .site-menu-drawer > a {
+  width: 100%;
+  min-height: 52px;
+  display: flex;
+  align-items: center;
+  padding: 0 14px;
+  border: 0;
+  border-bottom: 1px solid rgba(255,255,255,.09);
+  color: #fff;
+  background: transparent;
+  font-size: 14px;
+  font-weight: 800;
+  text-align: left;
+  text-decoration: none;
+  cursor: pointer;
+}
+
+body .site-menu-drawer > button:hover,
+body .site-menu-drawer > a:hover {
+  background: rgba(255,255,255,.06);
+}
+
+
