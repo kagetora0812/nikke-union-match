@@ -371,7 +371,12 @@ html.tablet-device body.um-index-page #bottomNav.bottom-nav { display: flex; }
     max-width: 29vw;
     max-height: 40px;
   }
-  body.um-index-page .video-topbar { padding-right: 14px; }
+  body.um-index-page .video-topbar {
+    padding-right: 14px;
+    background: rgba(5, 7, 10, .45);
+    backdrop-filter: none;
+    -webkit-backdrop-filter: none;
+  }
   body.um-index-page .site-menu-button { width: 34px; height: 34px; }
   body.um-index-page .site-menu-button span { width: 24px; }
 }
