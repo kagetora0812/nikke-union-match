@@ -1,5 +1,5 @@
 /* Shared navigation — the only public header / hamburger / drawer / footer stylesheet. */
-:root { --index-header-height:64px; --um-nav-bar-height:68px; }
+:root { --index-header-height:64px; --um-nav-bar-height:68px; --um-nav-surface:rgba(5,7,10,.72); }
 @media (max-width:600px) { :root { --index-header-height:58px; } }
 
 /* Preserve each page's existing content scroll model. */
@@ -17,7 +17,7 @@ body:is(.um-creators-page,.um-union-list-page,.um-guide-page) { padding-top:var(
   display:flex; align-items:center; justify-content:space-between;
   box-sizing:border-box; height:var(--index-header-height); min-height:0;
   padding:0 14px; color:#fff; border:0;
-  background:#44464a; box-shadow:none;
+  background:var(--um-nav-surface); box-shadow:none;
   backdrop-filter:none; -webkit-backdrop-filter:none;
 }
 .um-shared-brand {
@@ -115,7 +115,7 @@ html.tablet-device .um-shared-footer { display:flex; }
   box-sizing:border-box; width:100%; height:calc(var(--um-nav-bar-height) + env(safe-area-inset-bottom));
   padding:0 0 env(safe-area-inset-bottom); align-items:stretch; justify-content:space-between;
   border:0; border-top:1px solid rgba(255,255,255,.12);
-  background:rgba(5,7,10,.72); box-shadow:none; backdrop-filter:none; -webkit-backdrop-filter:none;
+  background:var(--um-nav-surface); box-shadow:none; backdrop-filter:none; -webkit-backdrop-filter:none;
 }
 .um-shared-footer > .um-footer-item {
   display:flex; flex:1 1 25%; flex-direction:column; align-items:center; justify-content:center;
