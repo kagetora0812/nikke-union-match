@@ -7456,7 +7456,7 @@ function returnToVideoTop() {
     ?.classList.add("active");
 
   document
-    .querySelectorAll(".um-index-footer .um-footer-item[data-page]")
+    .querySelectorAll(".bottom-nav .nav-btn")
     .forEach(button => {
       button.classList.toggle(
         "active",
@@ -7479,6 +7479,88 @@ function returnToVideoTop() {
   scrollAppToTop(
     "smooth"
   );
+
+}
+
+
+function closeSiteMenu() {
+
+  document.body
+    .classList
+    .remove(
+      "menu-open"
+    );
+
+  const button =
+    document.getElementById(
+      "siteMenuButton"
+    );
+
+  const drawer =
+    document.getElementById(
+      "siteMenuDrawer"
+    );
+
+  const backdrop =
+    document.getElementById(
+      "siteMenuBackdrop"
+    );
+
+  button?.setAttribute(
+    "aria-expanded",
+    "false"
+  );
+
+  drawer?.setAttribute(
+    "aria-hidden",
+    "true"
+  );
+
+  if (backdrop) {
+    backdrop.hidden =
+      true;
+  }
+
+}
+
+
+function openSiteMenu() {
+
+  document.body
+    .classList
+    .add(
+      "menu-open"
+    );
+
+  const button =
+    document.getElementById(
+      "siteMenuButton"
+    );
+
+  const drawer =
+    document.getElementById(
+      "siteMenuDrawer"
+    );
+
+  const backdrop =
+    document.getElementById(
+      "siteMenuBackdrop"
+    );
+
+  button?.setAttribute(
+    "aria-expanded",
+    "true"
+  );
+
+  drawer?.setAttribute(
+    "aria-hidden",
+    "false"
+  );
+
+  if (backdrop) {
+    backdrop.hidden =
+      false;
+  }
 
 }
 
@@ -7516,6 +7598,50 @@ document
       );
 
     }
+  );
+
+
+document
+  .getElementById(
+    "siteMenuButton"
+  )
+  ?.addEventListener(
+    "click",
+    () => {
+
+      if (
+        document.body
+          .classList
+          .contains(
+            "menu-open"
+          )
+      ) {
+        closeSiteMenu();
+      } else {
+        openSiteMenu();
+      }
+
+    }
+  );
+
+
+document
+  .getElementById(
+    "siteMenuClose"
+  )
+  ?.addEventListener(
+    "click",
+    closeSiteMenu
+  );
+
+
+document
+  .getElementById(
+    "siteMenuBackdrop"
+  )
+  ?.addEventListener(
+    "click",
+    closeSiteMenu
   );
 
 
@@ -8356,7 +8482,7 @@ void initializeDiscordManageV1();
   const root = document.documentElement;
   const body = document.body;
   const modal = document.getElementById("registrationPreviewModal");
-  const topbar = document.querySelector(".um-shared-header");
+  const topbar = document.querySelector(".topbar");
 
   if (!body || !modal) {
     return;
