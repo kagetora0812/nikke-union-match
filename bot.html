@@ -7,7 +7,7 @@
   <title>NIKKE UNION MATCH - Discord BOT</title>
   <meta name="description" content="NIKKE UNION MATCH Discord BOTの導入方法・通知機能・キャラクター設定・コマンドを紹介するページです。">
 
-  <link rel="stylesheet" href="./subpage-nav.css?v=20261120-bot">
+  <link rel="stylesheet" href="./subpage-nav.css?v=20261120-bundle-1">
   <script>
     // PC uses SPECIAL; phones and tablets never load those assets.
     (() => {
@@ -3189,7 +3189,7 @@
   </script>
 
   <div class="bot-motion-bg" aria-hidden="true">
-    <video id="botBackgroundVideo" autoplay muted loop playsinline preload="metadata"></video>
+    <video id="botBackgroundVideo" autoplay muted loop playsinline preload="auto"></video>
   </div>
 
   <header class="topbar bot-topbar video-topbar">
@@ -3927,13 +3927,10 @@
         "./assets/bot/hero4.mp4"
       ];
 
-      const mobileVideo = document.documentElement.classList.contains("um-bot-handheld");
+      // Only one original high-quality background movie is requested per visit.
+      // Keep the original MP4 cache URLs; no low-resolution mobile copies.
       const selectedVideo = videos[Math.floor(Math.random() * videos.length)];
-      const videoPath = mobileVideo
-        ? selectedVideo.replace("./assets/bot/", "./assets/bot/mobile/")
-        : selectedVideo;
-      video.src = videoPath;
-      video.poster = videoPath.replace(/\.mp4$/i, ".jpg");
+      video.src = selectedVideo;
       video.muted = true;
       video.loop = true;
       video.playsInline = true;
