@@ -3813,22 +3813,6 @@ body .video-current-stat strong {
   font-weight: 700;
   line-height: .86;
   letter-spacing: -.025em;
-  /* Hairline signal dropout, never thick horizontal black glitch bars. */
-  -webkit-mask-image: linear-gradient(to bottom,
-    #000 0%, #000 34.6%, transparent 34.85%, #000 35.1%,
-    #000 72.3%, transparent 72.55%, #000 72.8%, #000 100%);
-  mask-image: linear-gradient(to bottom,
-    #000 0%, #000 34.6%, transparent 34.85%, #000 35.1%,
-    #000 72.3%, transparent 72.55%, #000 72.8%, #000 100%);
-  animation: um-stat-signal 12s steps(1, end) infinite;
-}
-@keyframes um-stat-signal {
-  0%, 95%, 97%, 100% { transform: translateX(0); opacity: 1; }
-  95.4% { transform: translateX(1px); opacity: .94; }
-  95.8% { transform: translateX(-1px); opacity: 1; }
-}
-@media (prefers-reduced-motion: reduce) {
-  body .video-current-stat strong { animation: none; }
 }
 
 body .video-current-label {
@@ -3988,18 +3972,6 @@ body #listPage {
     aspect-ratio: 1 / 1;
   }
 
-  body .video-current-stat strong {
-    font-size: clamp(42px, 8.8vw, 68px);
-  }
-
-  body .video-current-label {
-    font-size: clamp(12px, 1.7vw, 16px);
-  }
-
-  body .video-history-row {
-    font-size: clamp(10px, 1.4vw, 12px);
-  }
-
   body .container {
     padding-left: 0 !important;
     padding-right: 0 !important;
@@ -4051,10 +4023,22 @@ body #listPage {
 }
 
 @media screen and (min-width: 601px) and (max-width: 1024px) {
-  
-
+  /* PCと同じ文字サイズ・横幅、SCROLLとの下端距離。 */
   body .video-hero-stats {
-    bottom: 72px;
+    bottom: 108px;
+  }
+  body .video-current-row {
+    width: 198px;
+    gap: 20px;
+  }
+  body .video-current-stat strong {
+    font-size: 92px;
+  }
+  body .video-current-label {
+    font-size: 18px;
+  }
+  body .video-history-row {
+    font-size: 12px;
   }
 
   /* keep the existing tablet card grid; only the top is replaced */
@@ -4065,6 +4049,23 @@ body #listPage {
 }
 
 @media screen and (min-width: 1025px) {
+  html.tablet-device body .video-hero-stats {
+    bottom: 108px;
+  }
+  html.tablet-device body .video-current-row {
+    width: 198px;
+    gap: 20px;
+  }
+  html.tablet-device body .video-current-stat strong {
+    font-size: 92px;
+  }
+  html.tablet-device body .video-current-label {
+    font-size: 18px;
+  }
+  html.tablet-device body .video-history-row {
+    font-size: 12px;
+  }
+
   body .video-hero {
     aspect-ratio: 16 / 9;
     max-height: calc(100svh - var(--index-header-height));
@@ -4123,25 +4124,25 @@ body #listPage {
     object-position: center center !important;
   }
 
-  /* Put the stats lower in the frame, while leaving room for SCROLL */
+  /* PCの統計ブロックとSCROLLの距離（108-14=94px）をスマホでも保持（116-22=94px）。 */
   html body .video-hero-stats {
-    bottom: 92px !important;
+    bottom: 116px !important;
     width: min(94%, 420px) !important;
   }
 
   html body .video-current-stat strong {
-    font-size: clamp(76px, 19vw, 94px) !important;
+    font-size: 82px !important;
     line-height: .80 !important;
   }
 
   html body .video-current-label {
     margin-top: 5px;
-    font-size: clamp(12px, 3.2vw, 15px);
+    font-size: 16px;
   }
 
   html body .video-history-row {
     margin-top: 12px;
-    font-size: clamp(9px, 2.4vw, 11px);
+    font-size: 9.4px;
     line-height: 1.2;
   }
 
