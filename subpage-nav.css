@@ -22,6 +22,11 @@ html:has(body.um-guide-page){scrollbar-gutter:stable}
   --um-form-line: #cdd3d8;
   --um-form-head-height: 48px;
   --um-form-head-gap: 20px;
+  --um-form-top-gap: 48px;
   --um-form-title-size: 26px;
 }
+/* Small viewports and physical tablets use the same form-heading gap,
+   including tablet landscape widths larger than 1024px. */
+@media (max-width:1024px) { :root { --um-form-top-gap: 34px; } }
+html.tablet-device { --um-form-top-gap: 34px; }
 @media (max-width:600px) { :root { --um-form-title-size: 21px; } }
