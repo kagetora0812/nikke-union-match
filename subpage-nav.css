@@ -1,4 +1,12 @@
 /* UNION MATCH v21 - BOT / CREATOR tablet-mobile fixed navigation */
+/* PC wide view: reserve space for the fixed header on list pages.
+   At <=1366px their existing mobile/tablet scroll layouts manage this space. */
+@media screen and (min-width: 1367px) {
+  body:is(.um-creators-page, .um-union-list-page) {
+    padding-top: var(--index-header-height, 64px);
+  }
+}
+
 .subpage-bottom-nav {
   display: none;
 }
