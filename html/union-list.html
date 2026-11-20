@@ -281,8 +281,8 @@
 
       body > main.union-list-page {
         position: fixed !important;
-        top: 64px !important;
-        bottom: calc(68px + env(safe-area-inset-bottom)) !important;
+        top: 0 !important;
+        bottom: 0 !important;
         left: 0 !important;
         right: 0 !important;
         width: 100% !important;
@@ -291,7 +291,7 @@
         min-height: 0 !important;
         max-height: none !important;
         margin: 0 auto !important;
-        padding: 30px 18px 60px !important;
+        padding: calc(30px + var(--index-header-height)) 18px calc(60px + var(--um-nav-bar-height) + env(safe-area-inset-bottom)) !important;
         overflow-x: hidden !important;
         overflow-y: auto !important;
         scrollbar-gutter: stable;
@@ -334,9 +334,7 @@
 
 
       body > main.union-list-page {
-        top: 58px !important;
-        bottom: calc(68px + env(safe-area-inset-bottom)) !important;
-        padding: 14px 8px 40px !important;
+        padding: calc(14px + var(--index-header-height)) 8px calc(40px + var(--um-nav-bar-height) + env(safe-area-inset-bottom)) !important;
       }
 
       
@@ -369,7 +367,7 @@
     }
   </style>
   <link rel="stylesheet" href="../subpage-nav.css?v=20261121-visual-align-v2">
-  <link rel="stylesheet" href="../shared/navigation.css?v=20261121-visual-align-v2">
+  <link rel="stylesheet" href="../shared/navigation.css?v=20261121-nav-transparency-v1">
 <link rel="stylesheet" href="../push-notifications/notification-ui.css?v=20261121-visual-align-v2">
 </head>
 
