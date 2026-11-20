@@ -4315,10 +4315,14 @@ body:not(.register-mode):not(.manage-mode) #listPage {
 }
 
 
-/* PC INDEX video: preserve the original 42% crop position.
-   The video frame, fixed scrolling, and tablet/phone crops stay unchanged. */
+/* PC INDEX: start the picture below the 64px fixed header, without moving
+   the full-height hero, counts, recruitment sheet or scroll reservation.
+   Keep the original 42% crop and leave phone/tablet rules unchanged. */
 @media screen and (min-width: 1025px) {
   html:not(.tablet-device) body .hero-background-video {
+    top: var(--index-header-height) !important;
+    bottom: auto !important;
+    height: calc(100% - var(--index-header-height)) !important;
     object-position: center 42% !important;
   }
 }
