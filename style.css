@@ -143,12 +143,13 @@ textarea:focus-visible {
   --cut-lg: 12px;
 }
 
-.btn, 
-.creator-link-btn, 
-.search-tab, 
-.copy-btn, 
-.x-btn, 
-.close-reason-btn{
+.btn,
+.creator-link-btn,
+.search-tab,
+.copy-btn,
+.x-btn,
+.close-reason-btn,
+.nav-btn {
   border-radius: 0 !important;
 
   clip-path:
@@ -201,9 +202,10 @@ textarea {
   --cut-sm: 8px;
 }
 
-.search-tab.active, 
-.btn:active, 
-.btn.active{
+.search-tab.active,
+.btn:active,
+.btn.active,
+.nav-btn.active {
   clip-path:
     polygon(
       8px 0,
@@ -220,17 +222,77 @@ textarea {
    HEADER
    ========================================================= */
 
+.topbar {
+  position: sticky;
+  top: 0;
+  z-index: 30;
 
+  height: 66px;
 
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
 
+  padding: 0 18px;
 
+  border-bottom: 0;
 
+  color: #fff;
 
+  background: rgba(13,16,22,.72);
+  box-shadow: none;
+}
 
+.brand {
+  display: flex;
+  flex-direction: column;
 
+  font-family: "Teko", "Noto Sans JP", sans-serif;
 
+  line-height: .82;
+}
 
+.brand-small {
+  color: var(--cyan);
 
+  font-size: 10px;
+  font-weight: 800;
+
+  letter-spacing: 4px;
+}
+
+.brand-main {
+  color: #fff;
+
+  font-size: 28px;
+  font-weight: 700;
+
+  letter-spacing: 1.4px;
+}
+
+.status-dot {
+  color: #d7dadd;
+
+  font:
+    700 11px "Teko",
+    sans-serif;
+
+  letter-spacing: 1.4px;
+}
+
+.status-dot span {
+  display: inline-block;
+
+  width: 8px;
+  height: 8px;
+
+  margin-right: 7px;
+
+  background: var(--green);
+
+  box-shadow:
+    0 0 10px rgba(53, 215, 140, .85);
+}
 
 
 /* =========================================================
@@ -250,14 +312,15 @@ textarea {
    TYPOGRAPHY
    ========================================================= */
 
-h1, 
-h2, 
-h3, 
-.hero-stat-title, 
-.hero-graduate-title, 
-.btn, 
-.search-tab, 
-.recruitment-type, 
+h1,
+h2,
+h3,
+.hero-stat-title,
+.hero-graduate-title,
+.btn,
+.search-tab,
+.nav-btn,
+.recruitment-type,
 .state {
   font-family:
     "Noto Sans JP",
@@ -1905,14 +1968,60 @@ body.manage-mode #managePage {
    BOTTOM NAV
    ========================================================= */
 
+.bottom-nav {
+  position: fixed;
 
+  left: 0;
+  right: 0;
+  bottom: 0;
+  z-index: 50;
 
+  height: calc(68px + env(safe-area-inset-bottom));
 
+  display: flex;
+  justify-content: center;
 
+  border-top: 1px solid rgba(255,255,255,.12);
 
+  background: rgba(5,7,10,.72);
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
 
+  box-shadow:
+    0 -4px 14px rgba(0, 0, 0, .16);
+}
 
+.nav-btn {
+  flex: 1;
 
+  max-width: 300px;
+
+  border: 0;
+
+  color: #d0d2d4;
+
+  background: transparent;
+
+  font-size: 10px;
+  font-weight: 900;
+
+  cursor: pointer;
+
+  transition: .15s;
+}
+
+.nav-btn span {
+  display: block;
+
+  margin-bottom: 3px;
+
+  font-size: 20px;
+
+  line-height: 19px;
+}
+
+.nav-btn:hover { color: #20b8f4; }
+.nav-btn.active { color:#fff; background:transparent; box-shadow: none; }
 
 
 
@@ -1922,22 +2031,27 @@ body.manage-mode #managePage {
    Spaceeland / Industry 系の「細長く硬い」方向
    ========================================================= */
 
-
-.eyebrow, 
-.hero-stat-number strong, 
-.hero-graduate-number strong, 
-.registration-count strong, 
-.graduated-commander-number strong, 
-.pass-box strong, 
-.pass-box span, 
-.slv, 
+.brand,
+.status-dot,
+.eyebrow,
+.hero-stat-number strong,
+.hero-graduate-number strong,
+.registration-count strong,
+.graduated-commander-number strong,
+.pass-box strong,
+.pass-box span,
+.slv,
 .hero-stat-update {
   font-family: "Teko", "Noto Sans JP", sans-serif;
 }
 
+.brand-main {
+  font-stretch: condensed;
+  text-transform: uppercase;
+}
 
-
-.eyebrow, 
+.eyebrow,
+.status-dot,
 .hero-stat-update {
   letter-spacing: .08em;
 }
@@ -1984,8 +2098,10 @@ body.manage-mode #managePage {
 }
 
 /* NIKKE logo / English UI */
-
-.eyebrow, 
+.brand-main,
+.brand-small,
+.status-dot,
+.eyebrow,
 .hero-stat-update {
   font-family:
     "Futura PT Condensed",
@@ -1996,15 +2112,16 @@ body.manage-mode #managePage {
 }
 
 /* Japanese headings: MB101 direction with free fallback */
-.hero h1, 
-.section-head h2, 
-.name, 
-.easy-register-title, 
-.commander-close-reason-title, 
-.hero-stat-title, 
-.hero-graduate-title, 
-.btn, 
-.search-tab{
+.hero h1,
+.section-head h2,
+.name,
+.easy-register-title,
+.commander-close-reason-title,
+.hero-stat-title,
+.hero-graduate-title,
+.btn,
+.search-tab,
+.nav-btn {
   font-family:
     "Noto Sans JP",
     sans-serif !important;
@@ -2171,14 +2288,15 @@ body.manage-mode #managePage {
 }
 
 /* No outline/glow around text */
-.hero h1 em, 
-.commander-stat *, 
-.union-stat *, 
-.hero-graduate-stat *, 
-.slv, 
-.section-head, 
-.card, 
-.btn, 
+.hero h1 em,
+.commander-stat *,
+.union-stat *,
+.hero-graduate-stat *,
+.slv,
+.brand,
+.section-head,
+.card,
+.btn,
 .search-tab {
   text-shadow: none !important;
   -webkit-text-stroke: 0 !important;
@@ -2197,13 +2315,21 @@ body.manage-mode #managePage {
 
 /* PC readability: the previous version was slightly too small */
 @media screen and (min-width: 1025px) {
-  
+  .topbar {
+    min-height: 74px;
+  }
 
-  
+  .brand-small {
+    font-size: 12px;
+  }
 
-  
+  .brand-main {
+    font-size: 28px;
+  }
 
-  
+  .status-dot {
+    font-size: 12px;
+  }
 
   .hero {
     grid-template-columns:
@@ -2340,11 +2466,19 @@ body.manage-mode #managePage {
     padding-bottom: 68px;
   }
 
-  
+  .topbar {
+    height: 62px;
 
-  
+    padding: 0 14px;
+  }
 
-  
+  .brand-small {
+    font-size: 9px;
+  }
+
+  .brand-main {
+    font-size: 21px;
+  }
 
   .container {
     padding-left: 9px;
@@ -2588,15 +2722,41 @@ body.manage-mode #managePage {
 
 /* ---------- HEADER: 日本語キャッチは小さく固定 ---------- */
 
+.topbar .brand {
+  display: flex !important;
+  flex-direction: row !important;
+  align-items: baseline !important;
+  gap: 5px !important;
 
+  line-height: 1 !important;
+  white-space: nowrap !important;
+}
 
+.topbar .brand-small,
+.topbar .brand-main {
+  font-family:
+    "JTCウインZ10",
+    "Noto Sans JP",
+    sans-serif !important;
 
+  font-weight: 900 !important;
+  line-height: 1 !important;
+  letter-spacing: -.06em !important;
+  white-space: nowrap !important;
+  text-transform: none !important;
+}
 
 /* 指揮官とユニオンを */
-
+.topbar .brand-small {
+  color: #ffffff !important;
+  font-size: 15px !important;
+}
 
 /* つなぐ。 */
-
+.topbar .brand-main {
+  color: var(--cyan) !important;
+  font-size: 15px !important;
+}
 
 
 /* ---------- HERO: NIKKE / UNION MATCH ---------- */
@@ -2669,7 +2829,10 @@ body.manage-mode #managePage {
 
 @media screen and (min-width: 1025px) {
 
-  
+  .topbar .brand-small,
+  .topbar .brand-main {
+    font-size: 14px !important;
+  }
 
   .hero h1 {
     font-size: 68px !important;
@@ -2695,7 +2858,10 @@ body.manage-mode #managePage {
 
 @media screen and (min-width: 601px) and (max-width: 1024px) {
 
-  
+  .topbar .brand-small,
+  .topbar .brand-main {
+    font-size: 13px !important;
+  }
 
   .hero h1 {
     font-size:
@@ -2715,11 +2881,20 @@ body.manage-mode #managePage {
 
 @media screen and (max-width: 600px) {
 
-  
+  .topbar {
+    padding-left: 12px !important;
+    padding-right: 12px !important;
+  }
 
-  
+  .topbar .brand {
+    max-width: calc(100vw - 125px) !important;
+    overflow: hidden !important;
+  }
 
-  
+  .topbar .brand-small,
+  .topbar .brand-main {
+    font-size: 12px !important;
+  }
 
   .hero-left {
     width: 100% !important;
@@ -2757,7 +2932,10 @@ body.manage-mode #managePage {
 /* 小型スマホ */
 @media screen and (max-width: 360px) {
 
-  
+  .topbar .brand-small,
+  .topbar .brand-main {
+    font-size: 11px !important;
+  }
 
   .hero h1 {
     font-size:
@@ -2772,15 +2950,42 @@ body.manage-mode #managePage {
 
 /* ---------- HEADER ---------- */
 
+.topbar .brand {
+  display: flex !important;
+  flex-direction: row !important;
+  align-items: baseline !important;
+  gap: 5px !important;
 
+  white-space: nowrap !important;
+  line-height: 1 !important;
+}
 
+.topbar .brand-small,
+.topbar .brand-main {
+  font-family:
+    "JTCウインZ10",
+    "Noto Sans JP",
+    sans-serif !important;
 
+  font-weight: 900 !important;
+  line-height: 1 !important;
+  letter-spacing: -.055em !important;
+
+  white-space: nowrap !important;
+  text-transform: none !important;
+}
 
 /* 指揮官とユニオンを */
-
+.topbar .brand-small {
+  color: #ffffff !important;
+  font-size: 14px !important;
+}
 
 /* つなぐ。 */
-
+.topbar .brand-main {
+  color: var(--cyan) !important;
+  font-size: 14px !important;
+}
 
 
 /* ---------- HERO LOGO ---------- */
@@ -2852,7 +3057,10 @@ body.manage-mode #managePage {
 
 @media screen and (min-width: 1025px) {
 
-  
+  .topbar .brand-small,
+  .topbar .brand-main {
+    font-size: 14px !important;
+  }
 
   .hero h1 {
     font-size: 70px !important;
@@ -2874,7 +3082,10 @@ body.manage-mode #managePage {
 
 @media screen and (min-width: 601px) and (max-width: 1024px) {
 
-  
+  .topbar .brand-small,
+  .topbar .brand-main {
+    font-size: 13px !important;
+  }
 
   .hero h1 {
     font-size:
@@ -2890,11 +3101,20 @@ body.manage-mode #managePage {
 
 @media screen and (max-width: 600px) {
 
-  
+  .topbar {
+    padding-left: 12px !important;
+    padding-right: 12px !important;
+  }
 
-  
+  .topbar .brand {
+    max-width: calc(100vw - 125px) !important;
+    overflow: hidden !important;
+  }
 
-  
+  .topbar .brand-small,
+  .topbar .brand-main {
+    font-size: 12px !important;
+  }
 
   .hero-left {
     width: 100% !important;
@@ -2929,7 +3149,10 @@ body.manage-mode #managePage {
 
 @media screen and (max-width: 360px) {
 
-  
+  .topbar .brand-small,
+  .topbar .brand-main {
+    font-size: 11px !important;
+  }
 
   .hero h1 {
     font-size:
@@ -2946,19 +3169,76 @@ body.manage-mode #managePage {
    ========================================================= */
 
 /* ---------- HEADER ---------- */
-
+.topbar .brand {
+  display: block !important;
+  max-width: none !important;
+  overflow: visible !important;
+  gap: 0 !important;
+  white-space: nowrap !important;
+  line-height: 1 !important;
+}
 
 /* New one-piece header markup */
+.topbar .brand-copy {
+  display: inline !important;
+  margin: 0 !important;
+  padding: 0 !important;
 
+  color: #fff !important;
 
+  font-family:
+    "JTCウインZ10",
+    "Noto Sans JP",
+    sans-serif !important;
 
+  font-size: 14px !important;
+  font-weight: 900 !important;
+  line-height: 1 !important;
+  letter-spacing: -.055em !important;
+
+  white-space: nowrap !important;
+}
+
+.topbar .brand-accent {
+  display: inline !important;
+  margin: 0 !important;
+  padding: 0 !important;
+
+  color: var(--cyan) !important;
+
+  font: inherit !important;
+  letter-spacing: inherit !important;
+  line-height: inherit !important;
+
+  white-space: nowrap !important;
+}
 
 /* Compatibility with the older two-span header markup */
+.topbar .brand-small,
+.topbar .brand-main {
+  margin: 0 !important;
+  padding: 0 !important;
 
+  font-family:
+    "JTCウインZ10",
+    "Noto Sans JP",
+    sans-serif !important;
 
+  font-size: 14px !important;
+  font-weight: 900 !important;
+  line-height: 1 !important;
+  letter-spacing: -.055em !important;
 
+  white-space: nowrap !important;
+}
 
+.topbar .brand-small {
+  color: #fff !important;
+}
 
+.topbar .brand-main {
+  color: var(--cyan) !important;
+}
 
 
 /* ---------- HERO LOGO ---------- */
@@ -3056,7 +3336,11 @@ body.manage-mode #managePage {
 
 /* ---------- TABLET ---------- */
 @media screen and (min-width: 601px) and (max-width: 1024px) {
-  
+  .topbar .brand-copy,
+  .topbar .brand-small,
+  .topbar .brand-main {
+    font-size: 13px !important;
+  }
 
   .container {
     max-width: 100% !important;
@@ -3082,11 +3366,21 @@ body.manage-mode #managePage {
 
 /* ---------- MOBILE ---------- */
 @media screen and (max-width: 600px) {
-  
+  .topbar {
+    padding-left: 12px !important;
+    padding-right: 12px !important;
+  }
 
-  
+  .topbar .brand {
+    max-width: calc(100vw - 112px) !important;
+    overflow: visible !important;
+  }
 
-  
+  .topbar .brand-copy,
+  .topbar .brand-small,
+  .topbar .brand-main {
+    font-size: 12px !important;
+  }
 
   .container {
     width: 100% !important;
@@ -3139,7 +3433,11 @@ body.manage-mode #managePage {
 
 /* ---------- SMALL MOBILE ---------- */
 @media screen and (max-width: 360px) {
-  
+  .topbar .brand-copy,
+  .topbar .brand-small,
+  .topbar .brand-main {
+    font-size: 11px !important;
+  }
 
   .container {
     padding-left: 4px !important;
@@ -3391,18 +3689,46 @@ html body .slv .slv-label {
    - PC hoverでは青点灯させない
    ========================================================= */
 
+body .bottom-nav {
+  display: grid !important;
+  grid-template-columns: repeat(3, minmax(0, 1fr)) !important;
+  justify-content: stretch !important;
+  align-items: stretch !important;
+  width: 100% !important;
+}
 
-
-
+body .bottom-nav .nav-btn {
+  width: 100% !important;
+  max-width: none !important;
+  min-width: 0 !important;
+  flex: none !important;
+  color: #d0d2d4 !important;
+  background: transparent !important;
+}
 
 /* 現在ページは白文字＋細い水色ラインのみ */
-
+body .bottom-nav .nav-btn.active,
+body .bottom-nav .nav-btn.active:hover {
+  color:#fff !important;
+  background:transparent !important;
+  box-shadow:none !important;
+}
 
 /* PCのマウスオーバーは薄く反応するだけ */
-
+@media (hover: hover) and (pointer: fine) {
+  body .bottom-nav .nav-btn:not(.active):hover {
+    color: #fff !important;
+    background: rgba(255, 255, 255, .07) !important;
+  }
+}
 
 /* スマホはhover残りを完全無効化 */
-
+@media (hover: none), (pointer: coarse) {
+  body .bottom-nav .nav-btn:not(.active):hover {
+    color: #d0d2d4 !important;
+    background: transparent !important;
+  }
+}
 
 /* =========================================================
    v12.4 DEADLINE NEAR
@@ -3635,6 +3961,11 @@ html body .slv .slv-label {
 }
 
 
+/* Index header height is shared by the hero, scroll viewport and drawer. */
+:root { --index-header-height: 64px; }
+@media screen and (max-width: 600px) {
+  :root { --index-header-height: 58px; }
+}
 
 /* =========================================================
    v15 VIDEO TOP / HEADER / MOBILE+TABLET NAV
@@ -3642,37 +3973,162 @@ html body .slv .slv-label {
    ========================================================= */
 
 /* Header: uploaded UNION MATCH logo is the hidden TOP switch */
+body .video-topbar {
+  position: sticky !important;
+  top: 0 !important;
+  z-index: 120 !important;
+  height: var(--index-header-height) !important;
+  padding: 0 14px !important;
+  border-bottom: 0 !important;
+  background: rgba(13,16,22,.72) !important;
+  backdrop-filter: none !important;
+  -webkit-backdrop-filter: none !important;
+}
 
+body .video-logo-switch {
+  width: auto !important;
+  max-width: none !important;
+  height: 100% !important;
+  display: flex !important;
+  align-items: center !important;
+  padding: 0 !important;
+  margin: 0 !important;
+  border: 0 !important;
+  background: transparent !important;
+  box-shadow: none !important;
+  cursor: pointer;
+  appearance: none;
+  -webkit-appearance: none;
+}
 
+body .video-logo-switch img {
+  display: block !important;
+  width: clamp(154px, 18vw, 238px) !important;
+  max-width: 46vw !important;
+  height: auto !important;
+  max-height: 54px !important;
+  object-fit: contain !important;
+  object-position: left center !important;
+  pointer-events: none;
+}
 
+body .video-logo-switch:hover,
+body .video-logo-switch:focus,
+body .video-logo-switch:active {
+  border: 0 !important;
+  outline: 0 !important;
+  background: transparent !important;
+  box-shadow: none !important;
+  transform: none !important;
+}
 
+body .site-menu-button {
+  width: 46px;
+  height: 46px;
+  display: grid;
+  place-content: center;
+  gap: 5px;
+  padding: 0;
+  border: 0;
+  background: transparent;
+  cursor: pointer;
+}
 
+body .site-menu-button span {
+  display: block;
+  width: 25px;
+  height: 2px;
+  border-radius: 99px;
+  background: #fff;
+  transition: transform .22s ease, opacity .22s ease;
+}
 
+body.menu-open .site-menu-button span:nth-child(1) {
+  transform: translateY(7px) rotate(45deg);
+}
 
+body.menu-open .site-menu-button span:nth-child(2) {
+  opacity: 0;
+}
 
+body.menu-open .site-menu-button span:nth-child(3) {
+  transform: translateY(-7px) rotate(-45deg);
+}
 
+body .site-menu-backdrop {
+  position: fixed;
+  inset: var(--index-header-height) 0 0;
+  z-index: 108;
+  background: rgba(0, 0, 0, .48);
+  backdrop-filter: none;
+  -webkit-backdrop-filter: none;
+}
 
+body .site-menu-drawer {
+  position: fixed;
+  top: var(--index-header-height);
+  right: 0;
+  z-index: 110;
+  width: min(86vw, 340px);
+  height: calc(100dvh - var(--index-header-height));
+  padding: 12px;
+  transform: translateX(105%);
+  overflow-y: auto;
+  background: #0d1016;
+  backdrop-filter: none;
+  -webkit-backdrop-filter: none;
+  box-shadow: none;
+  transition: transform .24s ease;
+}
 
+body.menu-open .site-menu-drawer {
+  transform: translateX(0);
+}
 
+body .site-menu-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  min-height: 48px;
+  padding: 0 6px 10px;
+  color: rgba(255,255,255,.7);
+  font: 800 12px "Teko", sans-serif;
+  letter-spacing: .24em;
+}
 
+body .site-menu-head button {
+  width: 38px;
+  height: 38px;
+  border: 0;
+  color: #fff;
+  background: transparent;
+  font-size: 28px;
+  line-height: 1;
+  cursor: pointer;
+}
 
+body .site-menu-drawer > button,
+body .site-menu-drawer > a {
+  width: 100%;
+  min-height: 52px;
+  display: flex;
+  align-items: center;
+  padding: 0 14px;
+  border: 0;
+  border-bottom: 1px solid rgba(255,255,255,.09);
+  color: #fff;
+  background: transparent;
+  font-size: 14px;
+  font-weight: 800;
+  text-align: left;
+  text-decoration: none;
+  cursor: pointer;
+}
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+body .site-menu-drawer > button:hover,
+body .site-menu-drawer > a:hover {
+  background: rgba(255,255,255,.06);
+}
 
 /* Video hero */
 body .video-hero {
@@ -3870,19 +4326,23 @@ body.manage-mode main.container > .hero {
   margin-top: 18px !important;
 }
 
-/* PC: match the guide heading's 108px viewport start (70px header + 38px wrap).
-   The main site's PC header is 74px; keep 34px between its bottom and heading.
-   Register and PASS share this single alignment rule; mobile stays unchanged. */
+/* Form screens start BELOW the fixed header on desktop.  On tablets
+   (including iPad landscape) the dedicated scroll shell owns that offset. */
 @media screen and (min-width: 1025px) {
-  body.register-mode main.container > .hero,
-  body.manage-mode main.container > .hero {
+  html:not(.tablet-device) body.register-mode main.container > .hero,
+  html:not(.tablet-device) body.manage-mode main.container > .hero {
     margin-top: 0 !important;
-    padding-top: 0 !important;
+    padding-top: calc(var(--index-header-height, 64px) + 38px) !important;
   }
-  body.register-mode #heroRegisterArea,
-  body.manage-mode #heroManageArea {
-    margin-top: 34px;
+  html:not(.tablet-device) body.register-mode #heroRegisterArea,
+  html:not(.tablet-device) body.manage-mode #heroManageArea {
+    margin-top: 0;
   }
+}
+/* PASS occupies the same first grid row as registration; the empty
+   registration column must not push PASS down a second grid row. */
+body.manage-mode main.container > .hero > .hero-left {
+  display: none !important;
 }
 
 /* Current hero copy/action buttons are no longer used */
@@ -3899,12 +4359,30 @@ body #listPage {
   background: #fff;
 }
 
+/* Bottom nav: smartphone/tablet only.
+   Hidden on video; fades in when list area enters the viewport. */
+body .bottom-nav {
+  opacity: 0 !important;
+  transform: translateY(calc(100% + 18px)) !important;
+  pointer-events: none !important;
+  transition:
+    opacity .24s ease,
+    transform .24s ease !important;
+}
 
+body .bottom-nav.is-visible {
+  opacity: 1 !important;
+  transform: translateY(0) !important;
+  pointer-events: auto !important;
+}
 
-
-
-
-
+body .bottom-nav .nav-link-btn {
+  box-sizing: border-box;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  text-decoration: none !important;
+}
 
 @media screen and (max-width: 1024px) {
   body .video-hero {
@@ -3946,13 +4424,25 @@ body #listPage {
     display: none !important;
   }
 
-  
+  body .bottom-nav {
+    display: flex !important;
+    bottom: 0 !important;
+    padding-bottom: env(safe-area-inset-bottom);
+    height: calc(68px + env(safe-area-inset-bottom)) !important;
+  }
 
-  
+  body .bottom-nav .nav-btn {
+    min-width: 0;
+    max-width: none !important;
+    padding-left: 4px !important;
+    padding-right: 4px !important;
+  }
 }
 
 @media screen and (max-width: 600px) {
-  
+  body .video-logo-switch img {
+    width: clamp(148px, 43vw, 196px) !important;
+  }
 
   body .video-hero-stats {
     bottom: 48px;
@@ -3977,7 +4467,9 @@ body #listPage {
 }
 
 @media screen and (min-width: 601px) and (max-width: 1024px) {
-  
+  body .video-logo-switch img {
+    width: clamp(178px, 26vw, 236px) !important;
+  }
 
   body .video-hero-stats {
     bottom: 72px;
@@ -4004,7 +4496,9 @@ body #listPage {
     box-shadow: 0 -20px 60px rgba(0,0,0,.16);
   }
 
-  
+  body .bottom-nav {
+    display: none !important;
+  }
 }
 
 @media (prefers-reduced-motion: reduce) {
@@ -4012,7 +4506,10 @@ body #listPage {
     animation: none;
   }
 
-  
+  body .site-menu-drawer,
+  body .bottom-nav {
+    transition: none !important;
+  }
 }
 
 
@@ -4039,7 +4536,42 @@ body #listPage {
 }
 
 /* Mobile/tablet footer: force all 3 buttons to exist side-by-side */
+@media screen and (max-width: 1024px) {
+  html body #bottomNav.bottom-nav {
+    display: grid !important;
+    grid-template-columns: repeat(3, minmax(0, 1fr)) !important;
+    grid-auto-flow: column !important;
+    width: 100% !important;
+    left: 0 !important;
+    right: 0 !important;
+    overflow: visible !important;
+  }
 
+  html body #bottomNav.bottom-nav > .nav-btn {
+    display: flex !important;
+    visibility: visible !important;
+    opacity: 1 !important;
+    position: relative !important;
+    grid-column: auto !important;
+    width: 100% !important;
+    min-width: 0 !important;
+    max-width: none !important;
+    height: 100% !important;
+    margin: 0 !important;
+    padding: 7px 2px 10px !important;
+    flex: none !important;
+    flex-direction: column !important;
+    align-items: center !important;
+    justify-content: center !important;
+    text-align: center !important;
+    white-space: nowrap !important;
+  }
+
+  html body #bottomNav.bottom-nav > .nav-btn span {
+    display: block !important;
+    margin: 0 0 4px !important;
+  }
+}
 
 
 /* =========================================================
@@ -4055,7 +4587,11 @@ body #listPage {
 
 @media screen and (max-width: 600px) {
   /* Left logo: about two steps smaller than the previous mobile size */
-  
+  html body .video-logo-switch img {
+    width: clamp(90px, 27vw, 116px) !important;
+    max-width: 29vw !important;
+    max-height: 40px !important;
+  }
 
   /* Hero occupies the viewport below the var(--index-header-height) sticky header.
      The white recruitment sheet starts only after scrolling. */
@@ -4144,7 +4680,63 @@ body #listPage {
 }
 
 /* Hamburger drawer: lighter transparent black / glass */
+@media screen and (max-width: 1024px) {
+  html body .site-menu-backdrop {
+    background: rgba(0, 0, 0, .18) !important;
+    backdrop-filter: none;
+  -webkit-backdrop-filter: none;
+  }
 
+  html body .site-menu-drawer {
+    background: #0d1016 !important;
+    border-left: 0 !important;
+    box-shadow: none !important;
+    backdrop-filter: none !important;
+    -webkit-backdrop-filter: none !important;
+  }
+
+  html body .site-menu-drawer > button,
+  html body .site-menu-drawer > a {
+    border-bottom-color: rgba(255,255,255,.12) !important;
+  }
+
+  /* Bottom nav: exactly three equal buttons, never a single stretched item */
+  html body #bottomNav.bottom-nav {
+    display: flex !important;
+    grid-template-columns: none !important;
+    grid-auto-flow: initial !important;
+    align-items: stretch !important;
+    justify-content: stretch !important;
+    width: 100% !important;
+    left: 0 !important;
+    right: 0 !important;
+    overflow: hidden !important;
+  }
+
+  html body #bottomNav.bottom-nav > .nav-btn {
+    display: flex !important;
+    visibility: visible !important;
+    opacity: 1 !important;
+    position: static !important;
+    flex: 1 1 33.333333% !important;
+    width: 33.333333% !important;
+    min-width: 0 !important;
+    max-width: none !important;
+    height: 100% !important;
+    margin: 0 !important;
+    padding:6px 4px !important;
+    flex-direction: column !important;
+    align-items: center !important;
+    justify-content: center !important;
+    text-align: center !important;
+    white-space: nowrap !important;
+  }
+
+  html body #bottomNav.bottom-nav > .nav-btn span {
+    display: block !important;
+    margin: 0 0 4px !important;
+  }
+}
 
 
 /* =========================================================
@@ -4175,7 +4767,9 @@ body:not(.register-mode):not(.manage-mode) #listPage {
 }
 
 /* Keep the header and hamburger menu above both layers. */
-
+body .video-topbar {
+  z-index: 120 !important;
+}
 
 
 /* =========================================================
@@ -4249,9 +4843,28 @@ body:not(.register-mode):not(.manage-mode) #listPage {
     Footer does not slide anymore on smartphone.
     Only opacity changes, so Chrome cannot repeatedly animate its position.
   */
-  
+  html body #bottomNav.bottom-nav {
+    opacity: 0 !important;
+    visibility: hidden !important;
+    pointer-events: none !important;
 
-  
+    transform: none !important;
+    translate: none !important;
+
+    transition: opacity .18s ease !important;
+    animation: none !important;
+  }
+
+  html body #bottomNav.bottom-nav.is-visible,
+  html body.register-mode #bottomNav.bottom-nav,
+  html body.manage-mode #bottomNav.bottom-nav {
+    opacity: 1 !important;
+    visibility: visible !important;
+    pointer-events: auto !important;
+
+    transform: none !important;
+    translate: none !important;
+  }
 
   /* Forms need room above the fixed footer. */
   html body.register-mode .mobile-scroll-shell,
@@ -4380,7 +4993,46 @@ body:not(.register-mode):not(.manage-mode) #listPage {
    - tablet / PC / register / manage unchanged
    ========================================================= */
 
+@media screen and (max-width: 600px) {
 
+  html body:not(.register-mode):not(.manage-mode)
+  #bottomNav.bottom-nav {
+    bottom: 0 !important;
+    height: calc(68px + env(safe-area-inset-bottom)) !important;
+    padding-bottom: env(safe-area-inset-bottom) !important;
+
+    z-index: 220 !important;
+
+    opacity: 1 !important;
+    visibility: hidden !important;
+    pointer-events: none !important;
+    transition: none !important;
+
+    background: rgba(5,7,10,.72) !important;
+
+    -webkit-backface-visibility: hidden;
+    backface-visibility: hidden;
+    transform: translateZ(0) !important;
+  }
+
+  html body:not(.register-mode):not(.manage-mode)
+  #bottomNav.bottom-nav.is-visible {
+    opacity: 1 !important;
+    visibility: visible !important;
+    pointer-events: auto !important;
+  }
+
+  html body:not(.register-mode):not(.manage-mode)
+  #bottomNav.bottom-nav > .nav-btn {
+    opacity: 0 !important;
+    transition: opacity .18s ease !important;
+  }
+
+  html body:not(.register-mode):not(.manage-mode)
+  #bottomNav.bottom-nav.is-visible > .nav-btn {
+    opacity: 1 !important;
+  }
+}
 
 
 /* =========================================================
@@ -4400,7 +5052,22 @@ body:not(.register-mode):not(.manage-mode) #listPage {
   }
 
   /* Header: no sticky repaint / no card shadow showing through. */
-  
+  html:not(.tablet-device) body:not(.register-mode):not(.manage-mode) .video-topbar {
+    position: fixed !important;
+    top: 0 !important;
+    left: 0 !important;
+    right: 0 !important;
+
+    width: 100% !important;
+    height: var(--index-header-height) !important;
+
+    z-index: 120 !important;
+
+    background: rgba(13,16,22,.72) !important;
+    backdrop-filter: none !important;
+    -webkit-backdrop-filter: none !important;
+    box-shadow: none !important;
+  }
 
   /* Video extends behind the translucent header; no separate band. */
   html:not(.tablet-device) body:not(.register-mode):not(.manage-mode) .video-hero {
@@ -4471,7 +5138,15 @@ html.tablet-device body {
 }
 
 /* Keep the tablet top bar itself in its existing sticky form. */
-
+html.tablet-device body .video-topbar {
+  position: sticky !important;
+  top: 0 !important;
+  z-index: 120 !important;
+  height: var(--index-header-height) !important;
+  background: rgba(13,16,22,.72) !important;
+  backdrop-filter: none !important;
+  -webkit-backdrop-filter: none !important;
+}
 
 /* The shell becomes the tablet's only vertical scroller. */
 html.tablet-device body .mobile-scroll-shell {
@@ -4536,11 +5211,40 @@ html.tablet-device body:not(.register-mode):not(.manage-mode) #listPage {
 }
 
 /* Wide iPad landscape may exceed 1024px; keep the tablet footer available. */
+html.tablet-device body #bottomNav.bottom-nav {
+  display: flex !important;
+  position: fixed !important;
+  left: 0 !important;
+  right: 0 !important;
+  bottom: 0 !important;
+  z-index: 220 !important;
 
+  width: 100% !important;
+  height: calc(68px + env(safe-area-inset-bottom)) !important;
+  padding-bottom: env(safe-area-inset-bottom) !important;
 
+  opacity: 0 !important;
+  visibility: hidden !important;
+  pointer-events: none !important;
+  transform: none !important;
+  translate: none !important;
+}
 
+html.tablet-device body #bottomNav.bottom-nav.is-visible,
+html.tablet-device body.register-mode #bottomNav.bottom-nav,
+html.tablet-device body.manage-mode #bottomNav.bottom-nav {
+  opacity: 1 !important;
+  visibility: visible !important;
+  pointer-events: auto !important;
+}
 
-
+html.tablet-device body #bottomNav.bottom-nav > .nav-btn {
+  display: flex !important;
+  flex: 1 1 33.333333% !important;
+  width: 33.333333% !important;
+  min-width: 0 !important;
+  max-width: none !important;
+}
 
 html.tablet-device body.register-mode .mobile-scroll-shell,
 html.tablet-device body.manage-mode .mobile-scroll-shell {
@@ -4558,7 +5262,20 @@ html.tablet-device body.manage-mode .mobile-scroll-shell {
    ========================================================= */
 
 /* Physical tablet: hard-lock the top bar to the viewport. */
-
+html.tablet-device body.register-mode .video-topbar,
+html.tablet-device body.manage-mode .video-topbar {
+  position: fixed !important;
+  top: 0 !important;
+  right: 0 !important;
+  left: 0 !important;
+  width: 100% !important;
+  height: var(--index-header-height) !important;
+  z-index: 240 !important;
+  transform: none !important;
+  -webkit-backface-visibility: hidden !important;
+  backface-visibility: hidden !important;
+  will-change: auto !important;
+}
 
 /* Physical tablet: only the center area scrolls. */
 html.tablet-device body.register-mode .mobile-scroll-shell,
@@ -4580,11 +5297,41 @@ html.tablet-device body.manage-mode .mobile-scroll-shell {
 }
 
 /* Physical tablet: hard-lock the footer. */
-
+html.tablet-device body.register-mode #bottomNav.bottom-nav,
+html.tablet-device body.manage-mode #bottomNav.bottom-nav {
+  position: fixed !important;
+  right: 0 !important;
+  bottom: 0 !important;
+  left: 0 !important;
+  width: 100% !important;
+  height: calc(68px + env(safe-area-inset-bottom)) !important;
+  z-index: 240 !important;
+  opacity: 1 !important;
+  visibility: visible !important;
+  pointer-events: auto !important;
+  transform: none !important;
+  translate: none !important;
+  transition: none !important;
+  animation: none !important;
+  -webkit-backface-visibility: hidden !important;
+  backface-visibility: hidden !important;
+  will-change: auto !important;
+}
 
 /* Fallback for tablet viewport when browser UA does not receive tablet-device. */
 @media screen and (min-width: 601px) and (max-width: 1024px) {
-  
+  html body.register-mode .video-topbar,
+  html body.manage-mode .video-topbar {
+    position: fixed !important;
+    top: 0 !important;
+    right: 0 !important;
+    left: 0 !important;
+    width: 100% !important;
+    height: var(--index-header-height) !important;
+    z-index: 240 !important;
+    transform: none !important;
+    will-change: auto !important;
+  }
 
   html body.register-mode .mobile-scroll-shell,
   html body.manage-mode .mobile-scroll-shell {
@@ -4604,7 +5351,24 @@ html.tablet-device body.manage-mode .mobile-scroll-shell {
     -webkit-overflow-scrolling: touch;
   }
 
-  
+  html body.register-mode #bottomNav.bottom-nav,
+  html body.manage-mode #bottomNav.bottom-nav {
+    position: fixed !important;
+    right: 0 !important;
+    bottom: 0 !important;
+    left: 0 !important;
+    width: 100% !important;
+    height: calc(68px + env(safe-area-inset-bottom)) !important;
+    z-index: 240 !important;
+    opacity: 1 !important;
+    visibility: visible !important;
+    pointer-events: auto !important;
+    transform: none !important;
+    translate: none !important;
+    transition: none !important;
+    animation: none !important;
+    will-change: auto !important;
+  }
 }
 
 #registerPage .form-label-help {
@@ -4765,9 +5529,13 @@ body.manage-mode .hero {
    - 三本線メニューを下部固定ナビより前面に統一
    - 表示順だけを変更。レイアウト / 機能 / データ処理は変更しない
    ========================================================= */
+.site-menu-backdrop {
+  z-index: 1190 !important;
+}
 
-
-
+.site-menu-drawer {
+  z-index: 1200 !important;
+}
 
 
 /* =========================================================
@@ -4881,15 +5649,15 @@ body.manage-mode .hero {
 body.register-mode #registerPage,
 body.manage-mode #managePage { font-family:"Noto Sans JP",sans-serif; color:#23272b; }
 body.register-mode .register-inline-top,
-body.manage-mode .manage-inline-top { display:flex!important; align-items:center!important; gap:20px!important; min-height:44px!important; margin-bottom:26px!important; }
+body.manage-mode .manage-inline-top { display:flex!important; align-items:center!important; gap:20px!important; min-height:48px!important; margin-bottom:26px!important; }
 body.register-mode .register-inline-title,
-body.manage-mode .manage-inline-title {display:flex!important;flex-direction:column!important;justify-content:center!important;min-height:44px!important;}
+body.manage-mode .manage-inline-title {display:flex!important;flex-direction:column!important;justify-content:center!important;min-height:48px!important;}
 body.register-mode .register-inline-title .eyebrow,
 body.manage-mode .manage-inline-title .eyebrow { color:#1ab0f1!important; font:700 11px/1 "Teko",sans-serif!important; letter-spacing:2.2px!important; }
 body.register-mode .register-inline-title h2,
 body.manage-mode .manage-inline-title h2 { margin:2px 0 0!important; color:#222428!important; font:700 26px/1.25 "Noto Sans JP",sans-serif!important; letter-spacing:-.025em!important; }
 body.register-mode #registerPage .register-back-btn,
-body.manage-mode #managePage .manage-back-btn {box-sizing:border-box!important; width:88px!important;min-height:44px!important;height:44px!important;min-width:88px!important;flex:0 0 88px!important;padding:0 9px!important;display:inline-flex!important;align-items:center!important;justify-content:center!important;white-space:nowrap!important;clip-path:none!important;border:1px solid #69727b!important;border-radius:0!important;background:transparent!important;box-shadow:none!important;color:#222428!important;font:700 13px "Noto Sans JP",sans-serif!important;letter-spacing:normal!important;transition:background-color .15s,color .15s,border-color .15s!important;}
+body.manage-mode #managePage .manage-back-btn {box-sizing:border-box!important; width:88px!important;min-height:48px!important;height:48px!important;min-width:88px!important;flex:0 0 88px!important;padding:0 9px!important;display:inline-flex!important;align-items:center!important;justify-content:center!important;white-space:nowrap!important;clip-path:none!important;border:1px solid #69727b!important;border-radius:0!important;background:transparent!important;box-shadow:none!important;color:#222428!important;font:500 13px/1.4 "Noto Sans JP",sans-serif!important;letter-spacing:normal!important;transition:background-color .15s,color .15s,border-color .15s!important;}
 @media(hover:hover) and (pointer:fine) {
  body.register-mode #registerPage .register-back-btn:hover,
  body.manage-mode #managePage .manage-back-btn:hover {border-color:#1ab0f1!important;color:#fff!important;background:#1ab0f1!important;}
@@ -5187,7 +5955,7 @@ body.manage-mode #managePage #manageLoadedPanel #closeLoadedRecruitmentBtn,
 .manage-action-dialog-actions .btn {
   box-sizing:border-box!important; display:inline-flex!important;align-items:center!important;justify-content:center!important;
   min-height:48px!important;padding:12px 20px!important;border-radius:0!important;clip-path:none!important;
-  font:400 13px "Noto Sans JP",sans-serif!important;letter-spacing:normal!important;text-align:center!important;
+  font:500 13px/1.4 "Noto Sans JP",sans-serif!important;letter-spacing:normal!important;text-align:center!important;
   border:1px solid #1ab0f1!important;background:#f2fbff!important;background-image:none!important;color:#0b8fc8!important;
   box-shadow:none!important;text-shadow:none!important;cursor:pointer!important;
   transition:background-color .15s ease,color .15s ease,border-color .15s ease!important;
@@ -5267,8 +6035,12 @@ body.manage-mode #managePage #loadManageRecruitmentBtn:disabled,
 }
 
 /* 2026-10-09: Shared header/nav dimensions and single-line listing count. */
-
-
+@media (min-width:601px) {
+  html body .topbar, html body .video-topbar {height:64px !important;}
+}
+@media (max-width:600px) {
+  html body .topbar, html body .video-topbar {height:58px !important;}
+}
 #listPage .recruitment-filter-count {white-space:nowrap !important;flex-shrink:0 !important;display:inline-flex;align-items:center;gap:3px;}
 #listPage .recruitment-filter-count-value {white-space:nowrap !important;}
 
@@ -5498,14 +6270,81 @@ body.manage-mode #closeForm small,
 body.manage-mode #manageEditPanel small{font-size:12px!important;line-height:1.6!important;color:var(--um-form-muted)!important}
 body.register-mode #registerForm button[type="submit"],
 body.manage-mode #closeForm button[type="submit"],
-body.manage-mode #manageEditPanel button[type="submit"]{min-height:48px!important;font:700 13px/1.4 "Noto Sans JP",sans-serif!important}
+body.manage-mode #manageEditPanel button[type="submit"]{min-height:48px!important;font:500 13px/1.4 "Noto Sans JP",sans-serif!important}
+/* The first form and the PASS re-registration form share field rhythm. */
+body.manage-mode #manageEditPanel .manage-edit-panel-form,
+body.manage-mode #manageEditPanel .manage-edit-fields{row-gap:18px}
+body.manage-mode #manageEditPanel .register-field-help,
+body.manage-mode #manageEditPanel .form-label-help{display:block;margin:8px 0 0;color:var(--um-form-muted);font:400 12px/1.8 "Noto Sans JP",sans-serif}
 
 /* UNION MATCH: one sizing source for all four-item navigation bars.
    Do not change visibility, transforms, or scroll timing on INDEX. */
 :root { --um-nav-bar-height: 68px; --um-nav-icon-size: 21px; --um-nav-label-size: 10px; --um-nav-item-gap: 4px; --um-nav-drawer-item-height: 46px; }
-
+@media screen and (max-width: 1366px) {
+  html body #bottomNav.bottom-nav,
+  html body .subpage-bottom-nav,
+  html body .um-shared-footer {
+    background: rgba(5,7,10,.72) !important;
+    backdrop-filter: none !important;
+    -webkit-backdrop-filter: none !important;
+    box-sizing: border-box !important;
+    height: calc(var(--um-nav-bar-height) + env(safe-area-inset-bottom)) !important;
+    padding: 0 0 env(safe-area-inset-bottom) !important;
+    grid-template-columns: repeat(4, minmax(0, 1fr)) !important;
+    border-top: 1px solid rgba(255,255,255,.12) !important;
+  }
+  html body #bottomNav.bottom-nav > .nav-btn,
+  html body #bottomNav.bottom-nav > .um-footer-item,
+  html body .subpage-bottom-nav > a,
+  html body .subpage-bottom-nav > button,
+  html body .subpage-bottom-nav > .um-footer-item,
+  html body .um-shared-footer > a,
+  html body .um-shared-footer > button {
+    box-sizing: border-box !important;
+    flex: 1 1 25% !important;
+    width: 25% !important;
+    max-width: none !important;
+    min-width: 0 !important;
+    min-height: 0 !important;
+    height: 100% !important;
+    margin: 0 !important;
+    padding: 6px 4px !important;
+    display: flex !important;
+    flex-direction: column !important;
+    justify-content: center !important;
+    align-items: center !important;
+    gap: var(--um-nav-item-gap) !important;
+    font: 900 var(--um-nav-label-size)/1.2 'Noto Sans JP',sans-serif !important;
+    text-align: center !important;
+  }
+  html body #bottomNav.bottom-nav > .um-footer-item svg,
+  html body .subpage-bottom-nav > .um-footer-item svg,
+  html body .um-shared-footer svg {
+    display: block !important;
+    flex: 0 0 var(--um-nav-icon-size) !important;
+    width: var(--um-nav-icon-size) !important;
+    height: var(--um-nav-icon-size) !important;
+    margin: 0 !important;
+  }
+  html body #bottomNav.bottom-nav > .um-footer-item span,
+  html body .subpage-bottom-nav > .um-footer-item span,
+  html body .um-shared-footer span {
+    display: block !important;
+    margin: 0 !important;
+    font: inherit !important;
+    line-height: 1.2 !important;
+  }
+}
 /* Drawer menu rows share one minimum tap target, without changing open/close logic. */
-
+html body .site-menu-drawer > a,
+html body .site-menu-drawer > button,
+html body .um-shared-drawer > a,
+html body .um-shared-drawer > [data-um-notification-open] {
+  box-sizing: border-box !important;
+  min-height: var(--um-nav-drawer-item-height) !important;
+  display: flex !important;
+  align-items: center !important;
+}
 
 /* Surface parity with the original BOT header. Does not change INDEX scroll behavior. */
 html body .um-shared-header,
