@@ -165,6 +165,8 @@ const WEB_PUSH_MANAGE_API = "https://igoekrvpgnjberppiawf.supabase.co/functions/
 async function callWebPushManage(action, extra = {}) {
   const token = localStorage.getItem(WEB_PUSH_MANAGE_TOKEN_KEY);
   if (!token) throw new Error("端末認証がありません。PASSで管理してください。");
+  if ('Notification' in window && Notification.permission !== 'granted')
+    throw new Error("通知許可が解除されています。PASSで管理してください。");
   const scopeUrl = new URL("../", document.querySelector('script[src*="notification-ui.js"]')?.src || document.baseURI).href;
   let reg = await navigator.serviceWorker?.getRegistration(scopeUrl);
   if (!reg && navigator.serviceWorker) {
@@ -183,6 +185,14 @@ async function callWebPushManage(action, extra = {}) {
   const result = await response.json();
   if (!response.ok) throw new Error(result.error || "端末認証エラー");
   return result;
+}
+// Browser-stored credentials must not outlive an explicitly revoked or lost
+// local PushSubscription. Transient network/server failures are NOT revocations.
+function isWebPushDeviceDefinitelyInvalid(error) {
+  const msg=String(error?.message||'');
+  return msg.includes('通知登録がありません')
+    || msg.includes('通知許可が解除されています')
+    || ['DEVICE_NOT_VERIFIED','SUBSCRIPTION_NOT_OWNED','MEMBERSHIP_EXPIRED','TOKEN_REQUIRED'].some(code=>msg.includes(code));
 }
 let webPushManageOpening = false;
 function showWebPushManageStatus(message, isError = false) {
@@ -233,8 +243,17 @@ async function openWebPushManageIfAuthorized() {
     document.getElementById("umWebPushManageNotice")?.remove();
     await loadTotalRegisteredUnionCount();
   } catch (error) {
-    console.error("Web Push端末管理認証失敗", error);
-    showWebPushManageStatus("端末認証を確認できませんでした（" + String(error?.message || "通信エラー") + "）。PASSでの利用確認をお試しください。", true);
+    if (isWebPushDeviceDefinitelyInvalid(error)) {
+      // Stale local device token: do not display a permanent error on PASS.
+      localStorage.removeItem(WEB_PUSH_MANAGE_TOKEN_KEY);
+      webPushManageMode = false;
+      showWebPushManageStatus("");
+    } else {
+      // Automatic device auth is only a convenience. Network/SW startup
+      // failures must never leave a red banner on the normal PASS screen.
+      console.warn("Web Push端末管理の自動確認をスキップ", error);
+      showWebPushManageStatus("");
+    }
   } finally {
     webPushManageOpening = false;
   }
