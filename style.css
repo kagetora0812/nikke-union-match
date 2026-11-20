@@ -495,7 +495,7 @@ h3 {
     );
 }
 
-.btn.primary:not(#registerPreviewBtn):not(#loadManageRecruitmentBtn)::before {
+body:not(.register-mode):not(.manage-mode) .btn.primary:not(#registerPreviewBtn):not(#loadManageRecruitmentBtn)::before {
   content: "";
 
   position: absolute;
@@ -518,8 +518,8 @@ h3 {
     );
 }
 
-.btn.primary:not(#registerPreviewBtn):not(#loadManageRecruitmentBtn):hover::before,
-.btn.primary:not(#registerPreviewBtn):not(#loadManageRecruitmentBtn):active::before {
+body:not(.register-mode):not(.manage-mode) .btn.primary:not(#registerPreviewBtn):not(#loadManageRecruitmentBtn):hover::before,
+body:not(.register-mode):not(.manage-mode) .btn.primary:not(#registerPreviewBtn):not(#loadManageRecruitmentBtn):active::before {
   background: #fff;
 }
 
@@ -3974,6 +3974,12 @@ body .bottom-nav .nav-btn.active:hover {
    2026-09-09
    ========================================================= */
 
+/* Form pages share an even dark surface behind the translucent top bar.
+   Home remains video-transparent; do not duplicate header CSS rules. */
+body:is(.register-mode,.manage-mode) {
+  --um-form-header-underlay: #000;
+}
+
 /* Header: uploaded UNION MATCH logo is the hidden TOP switch */
 body .video-topbar {
   position: sticky !important;
@@ -3982,7 +3988,7 @@ body .video-topbar {
   height: var(--index-header-height) !important;
   padding: 0 14px !important;
   border-bottom: 0 !important;
-  background: rgba(13,16,22,.72) !important;
+  background: linear-gradient(rgba(13,16,22,.72), rgba(13,16,22,.72)), var(--um-form-header-underlay, transparent) !important;
   backdrop-filter: none !important;
   -webkit-backdrop-filter: none !important;
 }
@@ -5155,7 +5161,7 @@ html.tablet-device body .video-topbar {
   top: 0 !important;
   z-index: 120 !important;
   height: var(--index-header-height) !important;
-  background: rgba(13,16,22,.72) !important;
+  background: linear-gradient(rgba(13,16,22,.72), rgba(13,16,22,.72)), var(--um-form-header-underlay, transparent) !important;
   backdrop-filter: none !important;
   -webkit-backdrop-filter: none !important;
 }
@@ -5656,23 +5662,53 @@ body.manage-mode .hero {
  #listPage #commanderFilterBox label,#listPage #unionFilterBox label{flex:1 1 auto;width:auto;max-width:calc(100% - 80px);gap:8px;padding:0 10px;}
 }
 
-/* REGISTER / PASS MANAGE: white editorial UI shared by ordinary and BOT deep links.
-   Deliberately visual-only: existing IDs, events and navigation are untouched. */
-body.register-mode #registerPage,
-body.manage-mode #managePage { font-family:"Noto Sans JP",sans-serif; color:#23272b; }
+/* REGISTER / MANAGE: same heading/button geometry and typography as GUIDE.
+   All shared sizes/colors come from subpage-nav.css. */
+body:is(.register-mode,.manage-mode) :is(#registerPage,#managePage) {font-family:var(--um-form-font);color:var(--um-form-text)}
 body.register-mode .register-inline-top,
-body.manage-mode .manage-inline-top { display:flex!important; align-items:center!important; justify-content:flex-start!important; gap:20px!important; min-height:48px!important; margin-bottom:26px!important; width:100%!important; }
+body.manage-mode .manage-inline-top {
+  display:flex!important; align-items:center!important; justify-content:flex-start!important;
+  gap:var(--um-form-head-gap)!important; min-height:var(--um-form-head-height)!important;
+  width:100%!important; margin:0 0 26px!important;
+}
 body.register-mode .register-inline-title,
-body.manage-mode .manage-inline-title {display:flex!important;flex:1 1 auto!important;min-width:0!important;flex-direction:column!important;justify-content:center!important;min-height:48px!important;}
+body.manage-mode .manage-inline-title {
+  display:flex!important; flex:1 1 auto!important; min-width:0!important;
+  flex-direction:column!important; justify-content:center!important;
+  min-height:var(--um-form-head-height)!important;
+}
 body.register-mode .register-inline-title .eyebrow,
-body.manage-mode .manage-inline-title .eyebrow { color:#1ab0f1!important; font:700 11px/1 "Teko",sans-serif!important; letter-spacing:2.2px!important; }
+body.manage-mode .manage-inline-title .eyebrow {
+  color:var(--um-form-cyan)!important;
+  font:700 11px/1 var(--um-form-en-font)!important; letter-spacing:2.2px!important;
+  margin:0!important;
+}
 body.register-mode .register-inline-title h2,
-body.manage-mode .manage-inline-title h2 { margin:2px 0 0!important; color:#222428!important; font:700 26px/1.25 "Noto Sans JP",sans-serif!important; letter-spacing:-.025em!important; }
+body.manage-mode .manage-inline-title h2 {
+  margin:2px 0 0!important; color:var(--um-form-text)!important;
+  font:700 var(--um-form-title-size)/1.25 var(--um-form-font)!important;
+  letter-spacing:-.025em!important;
+}
 body.register-mode #registerPage .register-back-btn,
-body.manage-mode #managePage .manage-back-btn {box-sizing:border-box!important; width:88px!important;min-height:48px!important;height:48px!important;min-width:88px!important;flex:0 0 88px!important;padding:0 9px!important;display:inline-flex!important;align-items:center!important;justify-content:center!important;white-space:nowrap!important;clip-path:none!important;border:1px solid #69727b!important;border-radius:0!important;background:transparent!important;box-shadow:none!important;color:#222428!important;font:500 13px/1.4 "Noto Sans JP",sans-serif!important;letter-spacing:normal!important;transition:background-color .15s,color .15s,border-color .15s!important;}
-@media(hover:hover) and (pointer:fine) {
- body.register-mode #registerPage .register-back-btn:hover,
- body.manage-mode #managePage .manage-back-btn:hover {border-color:#1ab0f1!important;color:#fff!important;background:#1ab0f1!important;}
+body.manage-mode #managePage .manage-back-btn {
+  box-sizing:border-box!important; flex:0 0 88px!important;
+  width:88px!important; min-width:88px!important;
+  height:var(--um-form-head-height)!important; min-height:var(--um-form-head-height)!important;
+  padding:0 9px!important; display:inline-flex!important;
+  align-items:center!important; justify-content:center!important;
+  white-space:nowrap!important; clip-path:none!important;
+  border:1px solid #69727b!important; border-radius:0!important;
+  background:transparent!important;box-shadow:none!important;color:var(--um-form-text)!important;
+  font:500 13px/1.4 var(--um-form-font)!important;
+  letter-spacing:normal!important;
+  transition:background-color .15s,color .15s,border-color .15s!important;
+}
+@media (hover:hover) and (pointer:fine) {
+  body.register-mode #registerPage .register-back-btn:hover,
+  body.manage-mode #managePage .manage-back-btn:hover {
+    border-color:var(--um-form-cyan)!important;
+    color:var(--um-form-cyan-text)!important; background:#f2fbff!important;
+  }
 }
 body.register-mode #registerPage #registerForm,
 body.manage-mode #managePage #closeForm,
@@ -5875,23 +5911,26 @@ body.manage-mode #closeForm input:focus-visible { outline:1px solid #20b8f4!impo
   box-shadow:none!important; border-radius:0!important; font-weight:400!important;
 }
 #managePage #manageMembershipConfirmedNotice .um-confirm-title {font-weight:400!important;}
-#managePage #manageMembershipConfirmedNotice .um-confirm-date {display:none!important;}
+#managePage #manageMembershipConfirmedNotice .um-confirm-date {display:block!important;}
 #managePage #manageMembershipConfirmedNotice .um-confirm-note {font-weight:400!important;}
 /* Edit form: shared typography and consistent control height. */
 #managePage #manageEditPanel > .eyebrow {
-  font:600 19px/1 "Teko",sans-serif!important;
-  letter-spacing:1.6px!important;color:#1ab0f1!important;
+  font:700 11px/1 var(--um-form-en-font)!important;
+  letter-spacing:2.2px!important;color:var(--um-form-cyan)!important;
+  margin-bottom:2px!important;
 }
-#managePage #manageEditPanel > .eyebrow { margin-bottom:8px!important; }
-#managePage #manageEditTitle { margin:0 0 26px!important; }
+#managePage #manageEditPanel #manageEditTitle {
+  margin:0 0 22px!important;
+  font:700 var(--um-form-title-size)/1.25 var(--um-form-font)!important;
+}
 #managePage #manageEditPanel > label,
 #managePage #manageEditPanel #manageCommanderEditFields > label,
 #managePage #manageEditPanel #manageUnionEditFields > label { display:block; margin:0 0 18px!important; }
 #managePage #manageEditPanel label > input:not([type=checkbox]),
 #managePage #manageEditPanel label > select { display:block; margin:8px 0 0!important; }
 #managePage #manageEditPanel label > small { margin:8px 0 0!important; }
-#managePage #manageEditPanel .manage-fixed-name { margin-bottom:26px!important; }
-#managePage #manageEditPanel .manage-action-stack { margin-top:26px!important; }
+#managePage #manageEditPanel .manage-fixed-name { margin-bottom:18px!important; }
+#managePage #manageEditPanel .manage-action-stack { margin-top:18px!important; }
 #managePage #manageEditPanel label:not(.manage-remove-image-row),
 #managePage #manageEditPanel .manage-fixed-name > span,
 #managePage #manageEditPanel .manage-current-image-box > span {
