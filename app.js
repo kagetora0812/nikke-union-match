@@ -7751,6 +7751,13 @@ document
   );
 
 
+// Footer Home and Menu call the same existing functions as the top controls.
+document.querySelector("#bottomNav [data-um-home]")?.addEventListener("click", returnToVideoTop);
+document.querySelector("#bottomNav [data-um-menu-open]")?.addEventListener("click", () => {
+  if (document.body.classList.contains("menu-open")) closeSiteMenu();
+  else openSiteMenu();
+});
+
 // 白い募集エリアまで来た時だけ
 // スマホ / タブレット下部メニューを表示
 const bottomNavigation =
