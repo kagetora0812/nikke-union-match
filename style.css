@@ -4315,8 +4315,13 @@ body:not(.register-mode):not(.manage-mode) #listPage {
 }
 
 
-/* The PC hero uses the same centered video crop as other viewports.
-   Sizing, fixed positioning and scroll behavior are unchanged. */
+/* PC INDEX video: preserve the original 42% crop position.
+   The video frame, fixed scrolling, and tablet/phone crops stay unchanged. */
+@media screen and (min-width: 1025px) {
+  html:not(.tablet-device) body .hero-background-video {
+    object-position: center 42% !important;
+  }
+}
 
 
 /* =========================================================
