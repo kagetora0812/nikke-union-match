@@ -298,8 +298,10 @@ body {
 [hidden] {
   display:none!important
 }
-/* Mobile/tablet: clip guide content at the bottom edge of the fixed header.
-   Scroll only inside the space between the shared header and footer. */
+/* Mobile/tablet: only the guide's central content scrolls.
+   The page-root color is black for the iOS Home Screen status bar;
+   an independent light underlay preserves the existing translucent header
+   and guide canvas. No shared navigation rules are changed. */
 @media (max-width:1366px) {
   html:has(body.um-guide-page),
   body.um-guide-page {
@@ -311,9 +313,19 @@ body {
   body.um-guide-page {
     height:100dvh;
     padding:0;
+    background:#080b12;
+  }
+  body.um-guide-page::before {
+    content:"";
+    position:fixed;
+    inset:0;
+    z-index:0;
+    pointer-events:none;
+    background:#f3f6f8;
   }
   body.um-guide-page > main.wrap {
     position:fixed;
+    z-index:1;
     top:var(--index-header-height);
     right:0;
     bottom:calc(var(--um-nav-bar-height) + env(safe-area-inset-bottom));
@@ -324,6 +336,7 @@ body {
     padding-bottom:80px;
     overflow-x:hidden;
     overflow-y:auto;
+    clip-path:inset(0);
     overscroll-behavior-y:contain;
     -webkit-overflow-scrolling:touch;
   }
