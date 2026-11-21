@@ -298,9 +298,43 @@ body {
 [hidden] {
   display:none!important
 }
+/* Mobile/tablet: clip guide content at the bottom edge of the fixed header.
+   Scroll only inside the space between the shared header and footer. */
+@media (max-width:1366px) {
+  html:has(body.um-guide-page),
+  body.um-guide-page {
+    height:100%;
+    min-height:0;
+    overflow:hidden;
+    overscroll-behavior:none;
+  }
+  body.um-guide-page {
+    height:100dvh;
+    padding:0;
+  }
+  body.um-guide-page > main.wrap {
+    position:fixed;
+    top:var(--index-header-height);
+    right:0;
+    bottom:calc(var(--um-nav-bar-height) + env(safe-area-inset-bottom));
+    left:0;
+    height:auto;
+    min-height:0;
+    padding-top:var(--um-form-top-gap,48px);
+    padding-bottom:80px;
+    overflow-x:hidden;
+    overflow-y:auto;
+    overscroll-behavior-y:contain;
+    -webkit-overflow-scrolling:touch;
+  }
+}
 @media(max-width:600px) {
 .wrap {
   padding:var(--um-form-top-gap,34px) 0 96px
+}
+body.um-guide-page > main.wrap {
+  padding-top:var(--um-form-top-gap,34px);
+  padding-bottom:96px;
 }
 .heading h1 {
   font-size:var(--um-form-title-size)
@@ -339,7 +373,4 @@ body {
 .demo .validation-error:not(.field-label-row .validation-error){margin:0 0 8px;color:#c93748;font-size:12px;font-weight:500}
 @media(max-width:600px){.heading-row{align-items:center;gap:20px}.heading h1{font-size:21px;line-height:1.25}.close-guide{padding:0 9px;font-size:13px}.heading p{font-size:12px}.field-label-row{align-items:flex-start}}
 
-/* Shared navigation owns the fixed header/footer; guide spacing lives in
-   the .wrap rules above, with no duplicate :has() overrides. */
-body:has(#umSharedNavigation){background:#f3f6f8}
 
