@@ -280,24 +280,11 @@
         touch-action: none !important;
       }
 
-      /* Keep the light page surface only below the shared fixed header. */
-      body.um-union-list-page::before {
-        content: "";
-        position: fixed;
-        top: var(--index-header-height);
-        right: 0;
-        bottom: 0;
-        left: 0;
-        z-index: 0;
-        background: #f2f5f7;
-        pointer-events: none;
-      }
-
       body > main.union-list-page {
         position: fixed !important;
         z-index: 1 !important;
-        top: var(--index-header-height) !important;
-        bottom: calc(var(--um-nav-bar-height) + env(safe-area-inset-bottom)) !important;
+        top: 0 !important;
+        bottom: 0 !important;
         left: 0 !important;
         right: 0 !important;
         width: 100% !important;
@@ -306,7 +293,8 @@
         min-height: 0 !important;
         max-height: none !important;
         margin: 0 auto !important;
-        padding: 30px 18px 60px !important;
+        padding: calc(30px + var(--index-header-height)) 18px calc(60px + var(--um-nav-bar-height) + env(safe-area-inset-bottom)) !important;
+        background: #f2f5f7 !important;
         overflow-x: hidden !important;
         overflow-y: auto !important;
         scrollbar-gutter: stable;
@@ -349,7 +337,7 @@
 
 
       body > main.union-list-page {
-        padding: 14px 8px 40px !important;
+        padding: calc(14px + var(--index-header-height)) 8px calc(40px + var(--um-nav-bar-height) + env(safe-area-inset-bottom)) !important;
       }
 
       
