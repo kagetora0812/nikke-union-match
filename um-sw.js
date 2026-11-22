@@ -1,4 +1,4 @@
-/* Standalone UNION MATCH push handler (not yet registered on production). */
+/* Standalone UNION MATCH push handler. */
 'use strict';
 const SCOPE = new URL(self.registration.scope);
 self.addEventListener('push', (event) => {
@@ -13,10 +13,14 @@ self.addEventListener('push', (event) => {
   const tag = typeof payload.tag === 'string' ? payload.tag.slice(0, 100) : ('um-' + type);
   event.waitUntil((async () => {
     await self.registration.showNotification(title, { body, tag, data:{url:target, type} });
-    // UM_PUSH_BADGE_V1
+    // サイトを表示中なら未読バッジを残さない。背景時だけ赤いバッジを表示。
     try {
-      if (typeof self.navigator?.setAppBadge === 'function')
-        await self.navigator.setAppBadge(1);
+      const openWindows = await self.clients.matchAll({type:'window', includeUncontrolled:true});
+      if (openWindows.some(w => w.visibilityState === 'visible' && w.url.startsWith(SCOPE.href))) {
+        await self.navigator?.clearAppBadge?.();
+      } else {
+        await self.navigator?.setAppBadge?.(1);
+      }
     } catch (_) {}
   })());
 });
@@ -34,5 +38,13 @@ self.addEventListener('notificationclick', (event) => {
     const match = windows.find(w => w.url.split('#')[0] === url.split('#')[0]);
     if (match) { await match.focus(); await match.navigate(url); return; }
     await clients.openWindow(url);
+  })());
+});
+
+// ページを直接開いた場合も、Service Worker 側でホーム画面バッジを消す。
+self.addEventListener('message', event => {
+  if (event.data?.type !== 'UM_CLEAR_APP_BADGE') return;
+  event.waitUntil((async () => {
+    try { await self.navigator?.clearAppBadge?.(); } catch (_) {}
   })());
 });
