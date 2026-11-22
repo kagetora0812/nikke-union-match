@@ -33,10 +33,26 @@
     if (Notification.permission === 'denied') return '通知がブロックされています。ブラウザの設定から通知を許可してください。';
     return '通知を受け取るには、ブラウザの通知許可が必要です。「通知設定を保存」を押して、通知を許可してください。';
   }
+  // ホーム画面の赤い通知バッジは、通知をタップせずサイトを開いた時点で解除する。
+  // ページ側と Service Worker 側の両方から実行し、対応ブラウザの違いを吸収する。
+  async function clearAppBadgeOnVisit() {
+    if (document.hidden) return;
+    try { await navigator.clearAppBadge?.(); } catch (_) {}
+    if (!('serviceWorker' in navigator) || document.hidden) return;
+    try {
+      const reg = await navigator.serviceWorker.getRegistration(base.href);
+      if (!document.hidden) reg?.active?.postMessage({type:'UM_CLEAR_APP_BADGE'});
+    } catch (_) {}
+  }
   if (isSecureContext && 'serviceWorker' in navigator) {
     navigator.serviceWorker.register(new URL('um-sw.js', base).href, {scope:base.pathname})
+      .then(clearAppBadgeOnVisit)
       .catch(error => console.warn('[UM push] Service Worker registration failed:', error?.message || error));
   }
+  clearAppBadgeOnVisit();
+  window.addEventListener('pageshow', clearAppBadgeOnVisit);
+  window.addEventListener('focus', clearAppBadgeOnVisit);
+  document.addEventListener('visibilitychange', clearAppBadgeOnVisit);
   function decodeVapid(value) {
     const text = (value + '='.repeat((4 - value.length % 4) % 4)).replace(/-/g, '+').replace(/_/g, '/');
     return Uint8Array.from(atob(text), ch => ch.charCodeAt(0));
