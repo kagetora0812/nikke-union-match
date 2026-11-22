@@ -1461,13 +1461,43 @@ function renderXEmbeds(retry = 0) {
 // 登録・締切モードを確実に解除
 // ========================================
 
-// UM_PUSH_EXPIRY_MANAGE_V2 — 48時間前PUSHからのみ開く専用画面。
-// 通常のPASS管理・Discord管理画面は変更しない。
+// UM_PUSH_EXPIRY_MANAGE_V3 — 通知リンクなしでも、期限48時間以内なら最初に案内する。
+// 通常のPASS管理・Discord管理画面は変更しない。延長は本人がボタンで確定する。
+let expiryLandingOfferedThisVisit = false;
+let expiryLandingChecking = false;
 async function openExpiryPushLandingOnce() {
+  if (expiryLandingOfferedThisVisit || expiryLandingChecking) return;
   const url = new URL(location.href);
-  if (url.searchParams.get("um_push") !== "expiry_48h") return;
-  url.searchParams.delete("um_push");
-  history.replaceState(history.state, "", url.toString());
+  const fromPush = url.searchParams.get("um_push") === "expiry_48h";
+  let preloadedManage = null;
+
+  if (fromPush) {
+    url.searchParams.delete("um_push");
+    history.replaceState(history.state, "", url.toString());
+  } else {
+    // 他人の閲覧、未連携端末、登録・PASS操作中には割り込まない。
+    if (document.hidden || !localStorage.getItem(WEB_PUSH_MANAGE_TOKEN_KEY)) return;
+    if (document.body.classList.contains("register-mode") || document.body.classList.contains("manage-mode")) return;
+    const hash = new URLSearchParams(location.hash.replace(/^#/, ""));
+    if (hash.has(DISCORD_MANAGE_V1_PARAM) || hash.has(DISCORD_REPUBLISH_V2_PARAM)) return;
+    expiryLandingChecking = true;
+    try {
+      const response = await callWebPushManage("manage_get");
+      const managed = response?.managed;
+      if (!response?.authorized || managed?.type !== "union" || !managed?.membership_id) return;
+      const remaining = new Date(managed.member_expires_at || managed.expires_at).getTime() - Date.now();
+      if (!Number.isFinite(remaining) || remaining <= 0 || remaining > 48 * 60 * 60 * 1000) return;
+      preloadedManage = response;
+    } catch (_) {
+      // 接続障害時に通常のサイト表示を妨げない。
+      return;
+    } finally {
+      expiryLandingChecking = false;
+    }
+    if (document.hidden || document.body.classList.contains("register-mode") || document.body.classList.contains("manage-mode")) return;
+  }
+  if (expiryLandingOfferedThisVisit || document.getElementById("umExpiryPushScreen")) return;
+  expiryLandingOfferedThisVisit = true;
 
   const overlay = document.createElement("section");
   overlay.id = "umExpiryPushScreen";
@@ -1500,7 +1530,7 @@ async function openExpiryPushLandingOnce() {
   });
 
   try {
-    const response = await callWebPushManage("manage_get");
+    const response = preloadedManage || await callWebPushManage("manage_get");
     if (!overlay.isConnected) return;
     const managed = response?.managed;
     if (!response?.authorized || managed?.type !== "union" || !managed?.membership_id) {
@@ -1559,6 +1589,10 @@ if (document.readyState === "loading") {
 } else {
   queueMicrotask(openExpiryPushLandingOnce);
 }
+// 起動済みのホーム画面に戻った時も期限を確認。案内はこの訪問中に一度だけ表示。
+document.addEventListener("visibilitychange", () => {
+  if (!document.hidden) openExpiryPushLandingOnce();
+});
 function showPage(name) {
   if (name === "manage") {
     // Do not retain a previous auto-auth status when entering PASS normally.
