@@ -2891,83 +2891,13 @@
     src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"
   ></script>
 
-
-
-  <!-- 登録・締切画面レイアウト切替 -->
-
+  <!-- 登録・PASSの戻るボタンのみ接続。画面切替は app.js の showPage に一本化。 -->
   <script>
-
-    document.addEventListener(
-      "DOMContentLoaded",
-      () => {
-
-
-        document
-          .querySelectorAll("[data-page]")
-          .forEach(button => {
-
-
-            button.addEventListener(
-              "click",
-              () => {
-
-
-                const page =
-                  button.dataset.page;
-
-
-                document.body.classList.toggle(
-                  "register-mode",
-                  page === "register"
-                );
-
-
-                document.body.classList.toggle(
-                  "manage-mode",
-                  page === "manage"
-                );
-
-
-              }
-            );
-
-
-          });
-
-
-
-        document
-          .getElementById("registerBackBtn")
-          ?.addEventListener(
-            "click",
-            () => {
-
-
-              returnToVideoTop();
-
-
-            }
-          );
-
-
-
-        document
-          .getElementById("manageBackBtn")
-          ?.addEventListener(
-            "click",
-            () => {
-
-
-              returnToVideoTop();
-
-
-            }
-          );
-
-
+    document.addEventListener("DOMContentLoaded", () => {
+      for (const id of ["registerBackBtn", "manageBackBtn"]) {
+        document.getElementById(id)?.addEventListener("click", returnToVideoTop);
       }
-    );
-
+    });
   </script>
 
 
