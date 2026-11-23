@@ -5,11 +5,11 @@ const state={type:'commander',mode:'recruit',name:'',unionName:'',slv:'',rank:'�
 let index=0;
 // 一度未入力で次へ進もうとした場合、登録タイプ切替後もエラーを維持する。
 let nameValidationAttempted=false;
-const commanderSteps=['type','name','slv','url','period','confirm'];
-const unionSteps=['type','name','rank','usage','url','period','confirm'];
+const commanderSteps=['type','name','slv','url','period'];
+const unionSteps=['type','name','rank','usage','url','period'];
 const steps=()=>state.type==='commander'?commanderSteps:unionSteps.filter(k=>k!=='url'||state.mode==='recruit');
-const labels={type:'登録タイプ',name:'指揮官名／ユニオン名',slv:'SLV',rank:'ユニオンランク',usage:'利用方法',url:'募集記事URL・画像',period:'管理期間：14日間',confirm:'登録内容を確認する'};
-const info={type:['登録タイプ','指揮官として移籍先を探す方は「指揮官」、メンバーを募集するユニオンの方は「ユニオン」を選択してください。'],name:['名前を入力','ゲーム内で使用している名前を入力してください。'],slv:['SLV','現在のシンクロレベルを入力してください。'],rank:['ユニオンランク','ユニオンレイドでのランクを選択してください。'],usage:['利用方法','メンバーを募集する場合は「募集する」、募集せずにユニオン名だけを登録する場合は「登録のみ」を選択してください。'],url:['募集記事URL・画像','X・BlablaLink・Discordなどに投稿した募集記事のURLを入力してください。募集画像がある場合は追加できます。画像の登録は任意です。画像を選択した場合は、登録画像を優先表示します。'],period:['管理期間：14日間',''],confirm:['登録内容を確認する','入力内容を確認し、問題がなければ登録へ進んでください。']};
+const labels={type:'登録タイプ',name:'指揮官名／ユニオン名',slv:'SLV',rank:'ユニオンランク',usage:'利用方法',url:'募集記事URL・画像',period:'最終確認'};
+const info={type:['登録タイプ','指揮官として移籍先を探す方は「指揮官」、メンバーを募集するユニオンの方は「ユニオン」を選択してください。'],name:['名前を入力','ゲーム内で使用している名前を入力してください。'],slv:['SLV','現在のシンクロレベルを入力してください。'],rank:['ユニオンランク','ユニオンレイドでのランクを選択してください。'],usage:['利用方法','メンバーを募集する場合は「募集する」、募集せずにユニオン名だけを登録する場合は「登録のみ」を選択してください。'],url:['募集記事URL・画像','X・BlablaLink・Discordなどに投稿した募集記事のURLを入力してください。募集画像がある場合は追加できます。画像の登録は任意です。画像を選択した場合は、登録画像を優先表示します。'],period:['14日間とPASSのご案内','']};
 
 function escapeHtml(s){return String(s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));}
 
@@ -17,9 +17,12 @@ function choice(name,value,label){return `<button type="button" class="choice ${
 
 function field(label,id,value,attrs=''){return `<label for="${id}">${label}</label><input class="mock-input" id="${id}" value="${escapeHtml(value)}" ${attrs}>`;}
 
-function summary(){const rows=[['登録タイプ',state.type==='union'?'ユニオン':'指揮官'],[state.type==='union'?'ユニオン名':'指揮官名',state.type==='union'?state.unionName:state.name]];if(state.type==='union'){rows.push(['ユニオンランク',state.rank],['利用方法',state.mode==='recruit'?'募集する':'登録のみ']);}else rows.push(['SLV',state.slv]);if(state.type==='commander'||state.mode==='recruit'){rows.push(['募集記事URL',state.url||'未入力'],['募集画像',state.image?state.image.name:'なし']);}return `<dl class="summary">${rows.map(([a,b])=>`<div><dt>${escapeHtml(a)}</dt><dd>${escapeHtml(b)}</dd></div>`).join('')}</dl>`;}
-
-function panel(key){switch(key){case 'type':return `<div class="demo-label">登録タイプ</div><div class="choice-row">${choice('type','commander','指揮官')}${choice('type','union','ユニオン')}</div>`;case 'name':return field(state.type==='union'?'ユニオン名':'指揮官名','nameInput',state.type==='union'?state.unionName:state.name,'maxlength="40" autocomplete="off" placeholder="名前を入力"');case 'slv':return field('SLV','slvInput',state.slv,'type="number" min="1" max="1200" step="1" placeholder="例：850"');case 'rank':return `<label for="rankInput">ユニオンランク</label><select class="mock-select" id="rankInput">${['チャレンジャー','ダイヤ','プラチナ','ゴールド','シルバー','駆け出しユニオン'].map(v=>`<option ${state.rank===v?'selected':''}>${v}</option>`).join('')}</select>`;case 'usage':return `<div class="demo-label">利用方法</div><div class="choice-row">${choice('mode','recruit','募集する')}${choice('mode','register-only','登録のみ')}</div>`;case 'url':return `<label for="urlInput">募集記事URL</label><input id="urlInput" type="url" class="mock-input" placeholder="https://..." value="${escapeHtml(state.url)}"><label for="imageInput" style="margin-top:16px">募集記事の画像（任意）</label><input id="imageInput" type="file" accept="image/jpeg,image/png,image/webp" class="mock-input"><div class="demo-note" id="imageName">${state.image?'選択中：'+escapeHtml(state.image.name):'画像は任意です'}</div>`;case 'period':return '<div class="demo-label">管理期間：14日間</div><div class="demo-note">登録情報の管理期間について</div>';case 'confirm':return summary();}}
+function panel(key){switch(key){case 'type':return `<div class="demo-label">登録タイプ</div><div class="choice-row">${choice('type','commander','指揮官')}${choice('type','union','ユニオン')}</div>`;case 'name':return field(state.type==='union'?'ユニオン名':'指揮官名','nameInput',state.type==='union'?state.unionName:state.name,'maxlength="40" autocomplete="off" placeholder="名前を入力"');case 'slv':return field('SLV','slvInput',state.slv,'type="number" min="1" max="1200" step="1" placeholder="例：850"');case 'rank':return `<label for="rankInput">ユニオンランク</label><select class="mock-select" id="rankInput">${['チャレンジャー','ダイヤ','プラチナ','ゴールド','シルバー','駆け出しユニオン'].map(v=>`<option ${state.rank===v?'selected':''}>${v}</option>`).join('')}</select>`;case 'usage':return `<div class="demo-label">利用方法</div><div class="choice-row">${choice('mode','recruit','募集する')}${choice('mode','register-only','登録のみ')}</div>`;case 'url':return `<label for="urlInput">募集記事URL</label><input id="urlInput" type="url" class="mock-input" placeholder="https://..." value="${escapeHtml(state.url)}">
+<label for="imageInput" class="guide-image-label" style="margin-top:16px">募集記事の画像 <span class="guide-image-optional">任意</span></label>
+<input id="imageInput" type="file" accept="image/jpeg,image/png,image/webp" class="mock-input guide-image-input">
+<small class="guide-image-help">画像を選択した場合は登録画像を優先表示します。20MBまで。</small>
+<small class="guide-image-status" id="imageName">${state.image?'選択中：'+escapeHtml(state.image.name):''}</small>
+<label class="guide-image-remove-row" id="guideImageRemoveRow" ${state.image?'':'hidden'}><input id="guideImageRemoveCheck" type="checkbox" aria-label="選択画像を削除する">選択画像を削除する</label>`;case 'period':return '<div class="demo-label">管理期間：14日間</div><div class="demo-note">掲載期限と、登録後に発行されるPASSの保管についてご確認ください。</div>';}}
 
 function appendParagraph(parent,text,cls){const p=document.createElement('p');if(cls)p.className=cls;p.textContent=text;parent.append(p);}
 
@@ -27,13 +30,32 @@ function render(){
 // 前ステップで入力欄の直下へ移動した警告要素を、再描画で消さない。
 const preservedError=$('validationError');
 if(preservedError&&preservedError.parentElement!==$('guideCard'))$('guideCard').insertBefore(preservedError,$('guideCard').querySelector('.controls'));
-const list=steps();index=Math.min(index,list.length-1);const key=list[index];$('stepLabel').textContent=labels[key]==='指揮官名／ユニオン名'?(state.type==='union'?'ユニオン名':'指揮官名'):labels[key];$('stepCount').textContent=`STEP ${index+1} / ${list.length}`;$('trackFill').style.width=`${(index+1)/list.length*100}%`;$('demo').innerHTML=panel(key);$('descriptionTitle').textContent=key==='name'?(state.type==='union'?'ユニオン名':'指揮官名'):info[key][0];const desc=$('descriptionText');desc.replaceChildren();if(info[key][1])appendParagraph(desc,info[key][1]);if(key==='usage'&&state.mode==='register-only'){appendParagraph(desc,'ユニオン名のみを登録します。募集記事は掲載されず、ユニオンリストに名前が表示されます。募集を再開する際は、PASS管理から「募集する」に切り替えられます。');const extra=document.createElement('div');extra.className='extra';extra.innerHTML='<p><strong>「登録のみ」でもDiscord BOTをご利用いただけます！</strong></p><p>NIKKE公式Xのイベント情報や新キャラクター情報、NIKKE公式Discordのログインリマインダー機能に加え、移籍先を探している指揮官の新着情報もDiscordへお届けします。</p><p>継続掲載に便利な期限延長や、募集状況の切り替え機能も搭載しています。</p><p><strong>便利な通知機能が使えるDiscord BOTを、ぜひご利用ください！</strong></p>';desc.append(extra);}if(key==='period'){if(state.type==='union'){appendParagraph(desc,'管理期間は14日間です。');appendParagraph(desc,'PASS管理から、登録情報の変更・削除、募集状況の切り替え、掲載期限の延長ができます。');appendParagraph(desc,'Discord BOTをご利用の場合は、期限通知からPASS不要で掲載期限の延長や募集状況の切り替えもできます。');}else appendParagraph(desc,'掲載期間は14日間です。指揮官の募集は延長できません。');}if(key==='confirm'){const extra=document.createElement('div');extra.className='notice';extra.textContent='登録完了後に8文字のPASSが発行されます。スクリーンショットやメモで必ず保管してください。PASSは登録情報の変更や掲載管理に必要です。';desc.append(extra);appendParagraph(desc,'次へ進むと、サイトの登録確認画面を表示します。','hint');}else appendParagraph(desc,index+1<list.length?`次は「${labels[list[index+1]]}」へ進みます。`:'','hint');$('back').disabled=index===0;$('next').textContent=key==='confirm'?'登録内容を確認する →':'次へ →';const errorNode=$('validationError');errorNode.textContent='';errorNode.hidden=true;if(errorNode.parentElement!==$('guideCard'))$('guideCard').insertBefore(errorNode,$('guideCard').querySelector('.controls'));
+const list=steps();index=Math.min(index,list.length-1);const key=list[index];$('stepLabel').textContent=labels[key]==='指揮官名／ユニオン名'?(state.type==='union'?'ユニオン名':'指揮官名'):labels[key];$('stepCount').textContent=`STEP ${index+1} / ${list.length}`;$('trackFill').style.width=`${(index+1)/list.length*100}%`;$('demo').innerHTML=panel(key);$('descriptionTitle').textContent=key==='name'?(state.type==='union'?'ユニオン名':'指揮官名'):info[key][0];const desc=$('descriptionText');desc.replaceChildren();if(info[key][1])appendParagraph(desc,info[key][1]);if(key==='usage'&&state.mode==='register-only'){appendParagraph(desc,'ユニオン名のみを登録します。募集記事は掲載されず、ユニオンリストに名前が表示されます。募集を再開する際は、PASS管理から「募集する」に切り替えられます。');const extra=document.createElement('div');extra.className='extra';extra.innerHTML='<p><strong>「登録のみ」でもDiscord BOTをご利用いただけます！</strong></p><p>NIKKE公式Xのイベント情報や新キャラクター情報、NIKKE公式Discordのログインリマインダー機能に加え、移籍先を探している指揮官の新着情報もDiscordへお届けします。</p><p>継続掲載に便利な期限延長や、募集状況の切り替え機能も搭載しています。</p><p><strong>便利な通知機能が使えるDiscord BOTを、ぜひご利用ください！</strong></p>';desc.append(extra);}if(key==='period'){if(state.type==='union'){appendParagraph(desc,'管理期間は14日間です。');appendParagraph(desc,'PASS管理から、登録情報の変更・削除、募集状況の切り替え、掲載期限の延長ができます。');appendParagraph(desc,'Discord BOTをご利用の場合は、期限通知からPASS不要で掲載期限の延長や募集状況の切り替えもできます。');}else appendParagraph(desc,'掲載期間は14日間です。指揮官の募集は延長できません。');}if(index===list.length-1){const extra=document.createElement('div');extra.className='notice';extra.textContent='登録完了後に8文字のPASSが発行されます。スクリーンショットやメモで必ず保管してください。PASSは登録情報の変更や掲載管理に必要です。';desc.append(extra);appendParagraph(desc,'次へ進むと、サイトの登録確認画面を表示します。','hint');}else appendParagraph(desc,`次は「${labels[list[index+1]]}」へ進みます。`,'hint');$('back').disabled=index===0;$('next').textContent=index===list.length-1?'登録内容を確認する →':'次へ →';const errorNode=$('validationError');errorNode.textContent='';errorNode.hidden=true;if(errorNode.parentElement!==$('guideCard'))$('guideCard').insertBefore(errorNode,$('guideCard').querySelector('.controls'));
 if(key==='name'&&nameValidationAttempted&&!(state.type==='union'?state.unionName:state.name).trim()){
   const input=$('nameInput');
   if(input)input.insertAdjacentElement('afterend',errorNode);
   errorNode.textContent='名前を入力してください。';
   errorNode.hidden=false;
-}const bindings={nameInput:state.type==='union'?'unionName':'name',slvInput:'slv',rankInput:'rank',urlInput:'url'};for(const [id,prop] of Object.entries(bindings)){const el=$(id);if(el)el.addEventListener('input',()=>{state[prop]=el.value;if(id==='nameInput'&&el.value.trim())nameValidationAttempted=false;el.removeAttribute('aria-invalid');el.removeAttribute('aria-describedby');const err=$('validationError');if(!err.hidden){err.textContent='';err.hidden=true;}});}if($('imageInput'))$('imageInput').addEventListener('change',e=>{state.image=e.target.files[0]||null;$('imageName').textContent=state.image?'選択中：'+state.image.name:'画像は任意です';});}
+}const bindings={nameInput:state.type==='union'?'unionName':'name',slvInput:'slv',rankInput:'rank',urlInput:'url'};for(const [id,prop] of Object.entries(bindings)){const el=$(id);if(el)el.addEventListener('input',()=>{state[prop]=el.value;if(id==='nameInput'&&el.value.trim())nameValidationAttempted=false;el.removeAttribute('aria-invalid');el.removeAttribute('aria-describedby');const err=$('validationError');if(!err.hidden){err.textContent='';err.hidden=true;}});}const imageInput=$('imageInput');
+if(imageInput){
+  const status=$('imageName');
+  const removeRow=$('guideImageRemoveRow');
+  const removeCheck=$('guideImageRemoveCheck');
+  imageInput.addEventListener('change',e=>{
+    state.image=e.target.files?.[0]||null;
+    status.textContent=state.image?'選択中：'+state.image.name:'';
+    removeRow.hidden=!state.image;
+    removeCheck.checked=false;
+  });
+  removeCheck.addEventListener('change',()=>{
+    if(!removeCheck.checked)return;
+    state.image=null;
+    imageInput.value='';
+    status.textContent='';
+    removeRow.hidden=true;
+    removeCheck.checked=false;
+  });
+}}
 
 // 入力イベントの発火順に依存しないよう、遷移直前に画面の値を同期する。
 function syncVisibleInput(){
