@@ -51,6 +51,7 @@
     rel="stylesheet"
     href="./style.css?v=20261121-stats-balance-clean-v1"
   >
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Zen+Maru+Gothic:wght@400;500;600;700;800;900&display=swap">
   <link rel="stylesheet" href="./subpage-nav.css?v=20261121-visual-align-v2">
   <link rel="stylesheet" href="./shared/navigation.css?v=20261121-nav-transparency-v1">
 
@@ -1513,6 +1514,67 @@
       #videoHero .um-top-rail-number { font-size: clamp(60px, 17vw, 72px); }
       #videoHero .um-top-rail-label { font-size: clamp(18px, 5.1vw, 22px); margin-top: 5px; }
       #videoHero .um-top-rail-group { padding-bottom: 7px; }
+    }
+
+    /* INDEX募集一覧のみ：既存の四角いUI・カード・X表示を変えず、文字と小ラベルを統一する。 */
+    #listPage {
+      font-family: "Zen Maru Gothic", "Noto Sans JP", sans-serif;
+    }
+    #listPage .section-head h2,
+    #listPage .section-head-actions .text-btn,
+    #listPage .search-tab,
+    #listPage #commanderFilterBox label,
+    #listPage #unionFilterBox label,
+    #listPage #commanderFilterBox select,
+    #listPage #unionFilterBox select,
+    #listPage .recruitment-filter-count,
+    #listPage #recruitmentList.cards article.card,
+    #listPage #recruitmentList.cards article.card .name,
+    #listPage #recruitmentList.cards article.card .countdown,
+    #listPage #recruitmentList.cards article.card .recruitment-type,
+    #listPage #recruitmentList.cards article.card .new-badge,
+    #listPage #recruitmentList.cards article.card .deadline-badge,
+    #listPage #recruitmentList.cards article.card .x-listed-badge {
+      font-family: "Zen Maru Gothic", "Noto Sans JP", sans-serif !important;
+    }
+
+    /* ユニオンリストで確定した淡色ランク表示を、INDEXの募集一覧内だけで再現。 */
+    #listPage #recruitmentList.cards article.card.union-card .union-rank {
+      display: inline-flex !important;
+      align-items: center;
+      gap: 5px;
+      width: fit-content;
+      margin-top: 7px;
+      padding: 5px 10px !important;
+      border: 1px solid transparent !important;
+      border-radius: 8px !important;
+      clip-path: none !important;
+      box-shadow: none !important;
+      font: 700 11px/1.3 "Zen Maru Gothic", "Noto Sans JP", sans-serif !important;
+      letter-spacing: 0;
+      white-space: nowrap;
+    }
+    #listPage #recruitmentList.cards article.card.union-card .union-rank::after {
+      content: "RANK";
+      position: relative;
+      top: 2px;
+      font: 600 10px/1.3 "Teko", sans-serif;
+      letter-spacing: .04em;
+      opacity: .8;
+    }
+    #listPage #recruitmentList.cards article.card.union-card .rank-challenger { background: rgba(255,239,241,.88) !important; border-color: rgba(196,50,70,.25) !important; color: #c43246 !important; }
+    #listPage #recruitmentList.cards article.card.union-card .rank-diamond    { background: rgba(247,239,255,.86) !important; border-color: rgba(141,90,190,.23) !important; color: #8051b4 !important; }
+    #listPage #recruitmentList.cards article.card.union-card .rank-platinum   { background: rgba(236,250,255,.82) !important; border-color: rgba(23,151,197,.24) !important; color: #0b8eb8 !important; }
+    #listPage #recruitmentList.cards article.card.union-card .rank-gold       { background: rgba(255,249,234,.86) !important; border-color: rgba(172,128,51,.23) !important; color: #9b772d !important; }
+    #listPage #recruitmentList.cards article.card.union-card .rank-silver     { background: rgba(244,246,248,.89) !important; border-color: rgba(133,147,157,.28) !important; color: #798690 !important; }
+    #listPage #recruitmentList.cards article.card.union-card .rank-rookie     { background: rgba(244,251,237,.89) !important; border-color: rgba(104,148,57,.28) !important; color: #618b38 !important; }
+    #listPage #recruitmentList.cards article.card.union-card .rank-default    { background: rgba(246,248,250,.85) !important; border-color: rgba(140,151,159,.26) !important; color: #687983 !important; }
+
+    /* NEW / 締切間近：既存の文字・色・サイズは維持して角だけ丸める。 */
+    #listPage #recruitmentList.cards article.card .new-badge,
+    #listPage #recruitmentList.cards article.card .deadline-badge {
+      border-radius: 6px !important;
+      clip-path: none !important;
     }
   </style>
 </head>
