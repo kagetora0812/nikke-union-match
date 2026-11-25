@@ -2386,7 +2386,23 @@ main.container>section, main.container>section:not(.hidden), #menuSection, #auto
     .creator-gallery-art-help{font-size:11px;color:#9faec0;line-height:1.8}
     .creator-gallery-art-actions{display:flex;gap:12px;align-items:center;flex-wrap:wrap}
     .creator-gallery-art-actions span{font-size:11px;color:#b4cbd8}
-    .creator-gallery-art-preview{display:block;width:100%;max-width:360px;height:220px;object-fit:contain;object-position:center bottom;border:1px solid #334456;background:linear-gradient(130deg,#172538,#101824);border-radius:8px}
+    /* Gallery guide is an outline ONLY; the real card is not duplicated in ADMIN. */
+    .creator-gallery-guide-wrap{--guide-x:50%;width:100%;max-width:360px;min-width:0}
+    .creator-gallery-guide-modes{display:flex;gap:6px;margin:0 0 8px}
+    .creator-gallery-guide-modes button{min-height:32px;min-width:65px;padding:5px 9px;border:1px solid #40576e;border-radius:6px;background:#111c2b;color:#c0d0df;font-size:11px;font-weight:750;cursor:pointer}
+    .creator-gallery-guide-modes button[aria-pressed="true"]{background:#16436a;border-color:#63c3ef;color:#fff}
+    .creator-gallery-guide-modes button:focus-visible{outline:2px solid #78dcff;outline-offset:2px}
+    .creator-gallery-guide-stage{--guide-char-h:85%;--guide-char-bottom:21%;--guide-card-w:59.5%;--guide-card-h:42%;position:relative;width:100%;aspect-ratio:850/730;overflow:hidden;border:1px solid #40556b;border-radius:8px;background:linear-gradient(130deg,#172538,#101824);isolation:isolate}
+    .creator-gallery-guide-wrap[data-mode="tablet"] .creator-gallery-guide-stage{aspect-ratio:920/620;--guide-char-h:82%;--guide-char-bottom:21%;--guide-card-w:53%;--guide-card-h:48%}
+    .creator-gallery-guide-wrap[data-mode="phone"] .creator-gallery-guide-stage{aspect-ratio:367/560;--guide-char-h:79%;--guide-char-bottom:24%;--guide-card-w:88%;--guide-card-h:46%}
+    .creator-gallery-guide-stage .creator-gallery-art-preview{display:block;position:absolute;z-index:1;height:var(--guide-char-h);width:auto;max-width:none;bottom:var(--guide-char-bottom);left:var(--guide-x);object-fit:contain;object-position:center bottom;transform:translateX(-50%) scale(.97);transform-origin:center bottom;border:0;background:none;border-radius:0;pointer-events:none}
+    .creator-gallery-card-guide{position:absolute;z-index:2;left:50%;top:49%;transform:translate(-50%,-50%);width:var(--guide-card-w);height:var(--guide-card-h);border:1.5px dashed #75cbf1;border-radius:13px;background:transparent;box-shadow:0 0 0 1px rgba(7,16,28,.65),inset 0 0 0 1px rgba(8,20,33,.35);pointer-events:none}
+    .creator-gallery-card-guide::before{content:"カード表示範囲（目安）";position:absolute;bottom:calc(100% + 5px);left:50%;transform:translateX(-50%);white-space:nowrap;color:#bceaff;text-shadow:0 1px 3px #071522;font-size:10px;line-height:1.4;font-weight:750}
+    .creator-gallery-guide-wrap[data-recruit="true"] .creator-gallery-guide-stage{--guide-card-h:33%}
+    .creator-gallery-guide-wrap[data-recruit="true"][data-mode="tablet"] .creator-gallery-guide-stage{--guide-card-h:39%}
+    .creator-gallery-guide-wrap[data-recruit="true"][data-mode="phone"] .creator-gallery-guide-stage{--guide-card-h:39%}
+    .creator-gallery-guide-note{font-size:10px;color:#9faec0;line-height:1.6;margin-top:6px}
+    .creator-gallery-guide-wrap .creator-gallery-art-preview.hidden{display:none!important}
     .creator-gallery-art-controls input[type=range]{padding:0;min-height:26px;accent-color:#41c8f4;border:0;background:transparent}
     .creator-gallery-recruit-controls{margin-top:20px}
     .creator-gallery-recruit-controls input[type=file]{width:100%}
@@ -3986,7 +4002,18 @@ main.container>section, main.container>section:not(.hidden), #menuSection, #auto
             <label for="galleryArtFile">キャラクター画像を選択（最大20MB／保存時に自動圧縮）</label>
             <input id="galleryArtFile" type="file" accept="image/png,image/jpeg,image/webp,.png,.jpg,.jpeg,.webp">
             <div class="creator-gallery-art-actions"><button id="galleryArtRemoveBtn" type="button" class="btn danger">キャラクター画像を外す</button><span id="galleryArtStatus" role="status">画像未設定</span></div>
-            <img id="galleryArtPreview" class="creator-gallery-art-preview hidden" alt="ギャラリーの立ち絵プレビュー">
+            <div class="creator-gallery-guide-wrap hidden" data-mode="pc">
+                <div class="creator-gallery-guide-modes" role="group" aria-label="枠の表示サイズ">
+                  <button type="button" data-gallery-guide-mode="pc" aria-pressed="true">PC</button>
+                  <button type="button" data-gallery-guide-mode="tablet" aria-pressed="false">タブレット横</button>
+                  <button type="button" data-gallery-guide-mode="phone" aria-pressed="false">スマホ</button>
+                </div>
+                <div class="creator-gallery-guide-stage">
+                  <img id="galleryArtPreview" class="creator-gallery-art-preview hidden" alt="ギャラリーの立ち絵プレビュー">
+                  <div class="creator-gallery-card-guide" aria-hidden="true"></div>
+                </div>
+                <div class="creator-gallery-guide-note">点線は本番カードの位置・大きさの目安です（詳細文の長さで高さは変わります）。画像と枠の重なりを見ながら調整できます。</div>
+              </div>
             <label for="galleryRole">役職（詳細名刺のみに表示・任意）</label>
             <input id="galleryRole" maxlength="60" placeholder="例：イラストレーター / 配信者">
             <label for="galleryOffsetX">画像の横位置：<output id="galleryOffsetXValue">50%</output></label>
@@ -4121,7 +4148,18 @@ main.container>section, main.container>section:not(.hidden), #menuSection, #auto
         <p class="creator-gallery-art-help">変更できるのはキャラクター画像だけです。募集文と連絡先は固定です。</p>
         <label for="recruitGalleryFile">募集枠のキャラクター画像を選択</label>
         <input id="recruitGalleryFile" type="file" accept="image/png,image/jpeg,image/webp,.png,.jpg,.jpeg,.webp">
-        <img id="recruitGalleryPreview" class="creator-gallery-art-preview hidden" alt="募集枠の立ち絵プレビュー">
+        <div class="creator-gallery-guide-wrap hidden" data-mode="pc" data-recruit="true">
+                <div class="creator-gallery-guide-modes" role="group" aria-label="枠の表示サイズ">
+                  <button type="button" data-gallery-guide-mode="pc" aria-pressed="true">PC</button>
+                  <button type="button" data-gallery-guide-mode="tablet" aria-pressed="false">タブレット横</button>
+                  <button type="button" data-gallery-guide-mode="phone" aria-pressed="false">スマホ</button>
+                </div>
+                <div class="creator-gallery-guide-stage">
+                  <img id="recruitGalleryPreview" class="creator-gallery-art-preview hidden" alt="募集枠の立ち絵プレビュー">
+                  <div class="creator-gallery-card-guide" aria-hidden="true"></div>
+                </div>
+                <div class="creator-gallery-guide-note">点線は本番カードの位置・大きさの目安です（詳細文の長さで高さは変わります）。画像と枠の重なりを見ながら調整できます。</div>
+              </div>
         <div class="button-row" style="margin-top:12px">
           <button id="recruitGallerySaveBtn" type="button" class="btn blue">募集枠の画像を保存</button>
           <button id="recruitGalleryRemoveBtn" type="button" class="btn danger">画像を外す</button>
@@ -10475,10 +10513,24 @@ main.container>section, main.container>section:not(.hidden), #menuSection, #auto
       const image = $(selector);
       if (!image) return;
       const url = safeUrl(value);
+      const guide = image.closest('.creator-gallery-guide-wrap');
+      if (guide) guide.classList.toggle('hidden', !url);
       image.classList.toggle('hidden', !url);
       if (url) image.src = url;
       else image.removeAttribute('src');
     }
+
+    // Read-only guide: PC/tablet/phone frame sizes. No image data is saved here.
+    document.querySelectorAll('[data-gallery-guide-mode]').forEach(button => {
+      button.addEventListener('click', () => {
+        const guide = button.closest('.creator-gallery-guide-wrap');
+        if (!guide) return;
+        guide.dataset.mode = button.dataset.galleryGuideMode;
+        guide.querySelectorAll('[data-gallery-guide-mode]').forEach(b => {
+          b.setAttribute('aria-pressed', String(b === button));
+        });
+      });
+    });
 
     async function prepareGalleryArtFile(file) {
       if (!file || !['image/png','image/webp','image/jpeg'].includes(file.type)) throw new Error('対応するPNG・WEBP・JPGを選択してください。');
@@ -10503,7 +10555,8 @@ main.container>section, main.container>section:not(.hidden), #menuSection, #auto
 
     $('#galleryOffsetX')?.addEventListener('input',()=>{
       $('#galleryOffsetXValue').textContent = $('#galleryOffsetX').value + '%';
-      const image=$('#galleryArtPreview');if(image)image.style.objectPosition=$('#galleryOffsetX').value+'% bottom';
+      const guide=$('#galleryArtPreview')?.closest('.creator-gallery-guide-wrap');
+      if (guide) guide.style.setProperty('--guide-x',$('#galleryOffsetX').value+'%');
     });
     $('#galleryArtFile')?.addEventListener('change',e=>{
       const file=e.target.files?.[0];if(!file)return;
@@ -11272,7 +11325,7 @@ main.container>section, main.container>section:not(.hidden), #menuSection, #auto
       $("#galleryOffsetX").value = String(creator.gallery_offset_x ?? 50);
       $("#galleryOffsetXValue").textContent = $("#galleryOffsetX").value + "%";
       galleryPreviewImage('#galleryArtPreview', galleryArtCurrent);
-      $("#galleryArtPreview").style.objectPosition = $("#galleryOffsetX").value + '% bottom';
+      $("#galleryArtPreview").closest('.creator-gallery-guide-wrap')?.style.setProperty('--guide-x', $("#galleryOffsetX").value + '%');
       $("#galleryArtStatus").textContent = galleryArtCurrent ? '現在の立ち絵を表示中' : '画像未設定';
 
       $("#youtubeUrl").value =
@@ -11349,6 +11402,7 @@ main.container>section, main.container>section:not(.hidden), #menuSection, #auto
       $("#galleryRole").value = "";
       $("#galleryOffsetX").value = "50";
       $("#galleryOffsetXValue").textContent = "50%";
+      $("#galleryArtPreview").closest('.creator-gallery-guide-wrap')?.style.setProperty('--guide-x', '50%');
       $("#galleryArtFile").value = "";
       $("#galleryArtStatus").textContent = "画像未設定";
       galleryPreviewImage('#galleryArtPreview','');
