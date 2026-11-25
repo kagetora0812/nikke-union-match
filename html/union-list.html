@@ -63,7 +63,8 @@
       margin-top: 0;
       padding: 15px 16px 16px;
       border: 1px solid rgba(174,187,197,.72);
-      border-radius: 16px;
+      border-radius: 16px !important;
+      clip-path: none !important;
       background: linear-gradient(132deg,rgba(255,255,255,.97),rgba(246,250,253,.89) 57%,rgba(255,255,255,.96));
       box-shadow: 0 8px 20px rgba(42,61,77,.055),inset 0 2px 2px #fff,inset -2px -2px 4px rgba(119,139,154,.08);
     }
@@ -194,23 +195,6 @@
       pointer-events:none;
     }
     .union-list-grid article.um-union-crystal-card.union-card > :not(.union-card-watermark) {position:relative;z-index:2;}
-    .union-list-grid article.um-union-crystal-card.union-card > .crystal-sweep {
-      position:absolute;z-index:4;top:-45%;bottom:-45%;width:45%;left:0;
-      pointer-events:none;opacity:0;
-      background:linear-gradient(90deg,transparent 0%,rgba(158,174,186,.05) 21%,rgba(174,194,208,.26) 42%,rgba(255,255,255,.95) 50%,rgba(161,179,191,.30) 59%,rgba(158,174,186,.05) 79%,transparent 100%);
-      transform:translate3d(-200%,0,0) rotate(22deg);
-      animation:um-union-crystal-sweep 12s ease-in-out infinite;
-    }
-    @keyframes um-union-crystal-sweep {
-      0%,6%{transform:translate3d(-200%,0,0) rotate(22deg);opacity:0}
-      8%{opacity:.34}
-      15%{transform:translate3d(410%,0,0) rotate(22deg);opacity:.83}
-      18%,100%{transform:translate3d(410%,0,0) rotate(22deg);opacity:0}
-    }
-    .union-list-grid article.union-card:nth-child(4n + 2) .crystal-sweep{animation-delay:-4s}
-    .union-list-grid article.union-card:nth-child(4n + 3) .crystal-sweep{animation-delay:-8s}
-    .union-list-grid article.union-card:nth-child(4n + 4) .crystal-sweep{animation-delay:-10s}
-    @media (prefers-reduced-motion:reduce){.union-list-grid .crystal-sweep{animation:none;display:none}}
     @media (hover:hover) and (pointer:fine) {
       .union-list-grid article.um-union-crystal-card.union-card:hover {
         transform:translateY(-2px) !important;
@@ -242,7 +226,7 @@
     .union-card-state {
       display:inline-flex;align-items:center;gap:6px;flex:none;
       padding:5px 8px;border:1px solid rgba(45,172,209,.22);
-      border-radius:100px;background:rgba(231,248,252,.74);
+      border-radius:999px !important;background:rgba(231,248,252,.74);
       color:#048cb3;font-size:10px;font-weight:800;line-height:1;white-space:nowrap;
     }
     .union-card-state::before{content:"";width:6px;height:6px;border-radius:50%;background:#11a4d6;box-shadow:0 0 0 2px rgba(17,164,214,.1)}
@@ -256,17 +240,23 @@
       line-height:1.35 !important;font-weight:700 !important;
       letter-spacing:-.025em;overflow-wrap:anywhere;text-shadow:0 1px 0 rgba(255,255,255,.8);
     }
+    /* Rank: one shape rule, with all six established rank hues preserved. */
     .union-list-grid .union-card .union-rank {
-      display:inline-flex !important;align-self:flex-start;align-items:center;gap:5px;
+      display:inline-flex !important;align-self:flex-start;align-items:center;justify-content:center;gap:6px;
       width:auto !important;min-width:0;margin:0 !important;padding:5px 10px !important;
-      border:1px solid rgba(23,151,197,.24) !important;border-radius:6px !important;
-      background:rgba(236,250,255,.82) !important;
-      color:#0b8eb8 !important;font-size:10px !important;font-weight:700 !important;
-      line-height:1.3 !important;clip-path:none !important;box-shadow:none !important;
+      border:1px solid transparent !important;border-radius:8px !important;
+      font-size:10px !important;font-weight:700 !important;line-height:1.3 !important;
+      clip-path:none !important;box-shadow:none !important;white-space:nowrap;
     }
+    .union-list-grid .union-card .union-rank.rank-challenger{background:rgba(255,239,241,.88) !important;border-color:rgba(196,50,70,.25) !important;color:#c43246 !important}
     .union-list-grid .union-card .union-rank.rank-diamond{background:rgba(247,239,255,.86) !important;border-color:rgba(141,90,190,.23) !important;color:#8051b4 !important}
+    .union-list-grid .union-card .union-rank.rank-platinum{background:rgba(236,250,255,.82) !important;border-color:rgba(23,151,197,.24) !important;color:#0b8eb8 !important}
     .union-list-grid .union-card .union-rank.rank-gold{background:rgba(255,249,234,.86) !important;border-color:rgba(172,128,51,.23) !important;color:#9b772d !important}
-    .union-rank .rank-label{font:600 10px/1 "Teko",sans-serif;opacity:.75;letter-spacing:.04em}
+    .union-list-grid .union-card .union-rank.rank-silver{background:rgba(244,246,248,.89) !important;border-color:rgba(133,147,157,.28) !important;color:#798690 !important}
+    .union-list-grid .union-card .union-rank.rank-rookie{background:rgba(244,251,237,.89) !important;border-color:rgba(104,148,57,.28) !important;color:#618b38 !important}
+    .union-list-grid .union-card .union-rank.rank-default{background:rgba(246,248,250,.85) !important;border-color:rgba(140,151,159,.26) !important;color:#687983 !important}
+    /* Keep the English RANK label vertically centered, not floating above the Japanese name. */
+    .union-list-grid .union-card .union-rank .rank-label{display:inline-flex;align-items:center;justify-content:center;align-self:center;font:600 10px/1.3 "Teko",sans-serif;opacity:.8;letter-spacing:.04em;white-space:nowrap;padding-top:1px}
     .union-card-footer {
       display:flex;align-items:center;min-height:50px;padding:0 17px;
       border-top:1px solid rgba(174,187,196,.43);
@@ -282,7 +272,7 @@
       clip-path:none !important;box-shadow:none !important;text-decoration:none;
     }
     .union-list-grid .union-card .x-btn:hover{color:#009bd5 !important}
-    .x-btn .cta-icon{display:grid;place-items:center;width:29px;height:29px;flex:none;border-radius:9px;border:1px solid rgba(145,161,173,.46);background:rgba(255,255,255,.80);box-shadow:inset 0 1px 1px #fff;color:#415c6a}
+    .x-btn .cta-icon{display:grid;place-items:center;width:29px;height:29px;flex:none;border-radius:9px !important;border:1px solid rgba(145,161,173,.46);background:rgba(255,255,255,.80);box-shadow:inset 0 1px 1px #fff;color:#415c6a}
     .x-btn .cta-icon svg{width:16px;height:16px;stroke:currentColor;fill:none;stroke-width:1.9;stroke-linecap:round;stroke-linejoin:round}
     .union-card-no-link {display:flex;align-items:center;gap:7px;color:#828d96;font-size:11px;font-weight:600}
     .union-card-no-link svg{width:14px;height:14px;fill:none;stroke:#a0a9b1;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round;flex:none}
@@ -760,7 +750,6 @@
           return `
             <article class="um-union-crystal-card union-card ${recruiting ? "status-open" : "status-closed"}">
               ${watermark}
-              <div class="crystal-sweep" aria-hidden="true"></div>
               <div class="union-card-top">
                 <span class="countdown" data-member-expires="${escapeHtml(item.expires_at || "")}"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg><span class="countdown-time">${escapeHtml(getMembershipCountdown(item.expires_at))}</span></span>
                 <span class="union-card-state">${recruiting ? "募集中" : "募集なし"}</span>
