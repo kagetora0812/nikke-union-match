@@ -1528,8 +1528,6 @@
     #listPage #unionFilterBox select,
     #listPage .recruitment-filter-count,
     #listPage #recruitmentList.cards article.card,
-    #listPage #recruitmentList.cards article.card.commander-card .name,
-    #listPage #recruitmentList.cards article.card.x-collected-card .name,
     #listPage #recruitmentList.cards article.card .countdown,
     #listPage #recruitmentList.cards article.card .recruitment-type,
     #listPage #recruitmentList.cards article.card .new-badge,
@@ -1537,9 +1535,11 @@
     #listPage #recruitmentList.cards article.card .x-listed-badge {
       font-family: "Zen Maru Gothic", "Noto Sans JP", sans-serif !important;
     }
-    /* 見出しとユニオン名だけ、元のユニオンリストと同じNoto Sans JP。 */
+    /* 募集一覧の見出しと指揮官名・ユニオン名はNoto Sans JPで統一。 */
     #listPage .section-head h2,
-    #listPage #recruitmentList.cards article.card.union-card .name {
+    #listPage #recruitmentList.cards article.card.union-card .name,
+    #listPage #recruitmentList.cards article.card.commander-card .name,
+    #listPage #recruitmentList.cards article.card.x-collected-card .name {
       font-family: "Noto Sans JP", sans-serif !important;
     }
 
