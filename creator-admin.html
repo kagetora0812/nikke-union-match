@@ -2408,6 +2408,20 @@ main.container>section, main.container>section:not(.hidden), #menuSection, #auto
     .creator-gallery-recruit-controls input[type=file]{width:100%}
     .creator-gallery-recruit-offset-label{display:block;margin-top:12px;color:#b7c9dd;font-size:11px;font-weight:700}
     .creator-gallery-recruit-controls input[type=range]{display:block;width:100%;min-height:30px;padding:0;margin-top:7px;accent-color:#41c8f4;border:0;background:transparent}
+
+    /* Optional links (independent of the existing YouTube/X fields). */
+    .creator-extra-links{display:grid;gap:10px;padding:15px;border:1px solid #40576e;border-radius:11px;background:#0c1726;min-width:0}
+    .creator-extra-links-title{font-size:15px;font-weight:850;color:#dcefff}
+    .creator-extra-links-help{font-size:11px;line-height:1.7;color:#a8bcd0;margin:0}
+    .creator-extra-link-list{display:grid;gap:9px;min-width:0}
+    .creator-extra-link-row{display:grid;grid-template-columns:minmax(0,1.5fr) minmax(0,.85fr) auto;gap:9px;align-items:end;padding:10px;border:1px solid #334b62;border-radius:8px;min-width:0;background:#101b2a}
+    .creator-extra-link-row label{min-width:0}
+    .creator-extra-link-row input{min-width:0;width:100%;margin-top:4px;padding:11px 10px}
+    .creator-extra-link-row .creator-extra-link-remove{min-height:43px;white-space:nowrap;padding:9px 12px}
+    .creator-extra-link-detected{grid-column:1/-1;margin-top:0;font-size:11px;color:#98c7e1;min-height:14px;overflow-wrap:anywhere}
+    .creator-extra-link-actions{display:flex;align-items:center;gap:12px;flex-wrap:wrap}
+    #creatorExtraLinkCount{font-size:11px;color:#a8bcd0}
+    @media(max-width:650px){.creator-extra-link-row{grid-template-columns:minmax(0,1fr) auto}.creator-extra-link-row label:first-child{grid-column:1/-1}.creator-extra-link-row label:nth-child(2){grid-column:1}.creator-extra-link-row .creator-extra-link-remove{grid-column:2}.creator-extra-link-detected{grid-column:1/-1}}
 </style>
 
 
@@ -4051,6 +4065,17 @@ main.container>section, main.container>section:not(.hidden), #menuSection, #auto
 
           </label>
 
+
+
+          <section class="creator-extra-links" aria-label="公式サイト・その他のリンク">
+            <div class="creator-extra-links-title">公式HP・その他のリンク（任意）</div>
+            <p class="creator-extra-links-help">「＋リンクを追加」で最大6件。URLから公式HP・Instagram・pixiv・BOOTHなどのアイコンを自動判別します。判別できないURLは地球アイコンで表示します。YouTube・Xは上の既存欄をそのまま使えます。</p>
+            <div id="creatorExtraLinkList" class="creator-extra-link-list"></div>
+            <div class="creator-extra-link-actions">
+              <button id="creatorExtraLinkAdd" type="button" class="btn blue">＋ リンクを追加</button>
+              <span id="creatorExtraLinkCount" aria-live="polite">0 / 6 件</span>
+            </div>
+          </section>
 
           <label>
 
@@ -10997,6 +11022,78 @@ main.container>section, main.container>section:not(.hidden), #menuSection, #auto
     }
 
 
+
+    // Official website / additional links. One ordered JSON array per creator.
+    // No new logic is added to the existing YouTube/X fields or to their RPC.
+    const EXTRA_LINK_LIMIT = 6;
+    function detectExtraLinkKind(value) {
+      try {
+        const url = new URL(value);
+        const host = url.hostname.toLowerCase();
+        const at = domain => host === domain || host.endsWith('.'+domain);
+        if (at('youtube.com') || at('youtu.be')) return 'YouTube';
+        if (at('x.com') || at('twitter.com')) return 'X';
+        if (at('instagram.com')) return 'Instagram';
+        if (at('pixiv.net')) return 'pixiv';
+        if (at('github.com')) return 'GitHub';
+        if (at('twitch.tv')) return 'Twitch';
+        if (at('tiktok.com')) return 'TikTok';
+        if (at('booth.pm')) return 'BOOTH';
+        if (at('note.com')) return 'note';
+        if (at('nicovideo.jp')) return 'ニコニコ動画';
+        if (at('fanbox.cc')) return 'FANBOX';
+        if (at('lit.link')) return 'lit.link';
+        return '公式HP / その他 (' + host + ')';
+      } catch { return 'URLを入力すると種類を表示します'; }
+    }
+    function validExtraLinkUrl(value) {
+      try {
+        const url = new URL(value);
+        if (!['https:','http:'].includes(url.protocol) || !url.hostname.includes('.') || url.username || url.password || url.href.length > 2000) return '';
+        return url.href;
+      } catch { return ''; }
+    }
+    function updateExtraLinkCounter() {
+      const count = document.querySelectorAll('#creatorExtraLinkList .creator-extra-link-row').length;
+      $('#creatorExtraLinkCount').textContent = count+' / '+EXTRA_LINK_LIMIT+' 件';
+      $('#creatorExtraLinkAdd').disabled = count >= EXTRA_LINK_LIMIT;
+    }
+    function addExtraLinkRow(link={}) {
+      const list = $('#creatorExtraLinkList');
+      if (!list || list.children.length >= EXTRA_LINK_LIMIT) return;
+      const row=document.createElement('div');row.className='creator-extra-link-row';
+      const urlLabel=document.createElement('label'); urlLabel.textContent='URL';
+      const url=document.createElement('input'); url.type='url';url.className='creator-extra-url';url.inputMode='url';url.autocomplete='off';url.maxLength=2000;url.placeholder='https://example.com/';url.value=link.url||''; urlLabel.append(url);
+      const labelEl=document.createElement('label');labelEl.textContent='表示名（任意）';
+      const name=document.createElement('input');name.type='text';name.className='creator-extra-name';name.maxLength=40;name.placeholder='公式HP / 作品集 など';name.value=link.label||'';labelEl.append(name);
+      const remove=document.createElement('button');remove.type='button';remove.className='btn danger creator-extra-link-remove';remove.textContent='削除';remove.setAttribute('aria-label','この追加リンクを削除');
+      const detected=document.createElement('div');detected.className='creator-extra-link-detected';detected.setAttribute('aria-live','polite');
+      const refresh=()=>{detected.textContent=detectExtraLinkKind(url.value.trim());};
+      url.addEventListener('input',refresh);remove.addEventListener('click',()=>{row.remove();updateExtraLinkCounter()});
+      row.append(urlLabel,labelEl,remove,detected);list.append(row);refresh();updateExtraLinkCounter();
+    }
+    function setExtraLinkRows(links) {
+      $('#creatorExtraLinkList').replaceChildren();
+      for (const link of (Array.isArray(links)?links:[]).slice(0,EXTRA_LINK_LIMIT)) {
+        if(link && typeof link.url === 'string') addExtraLinkRow(link);
+      }
+      updateExtraLinkCounter();
+    }
+    function collectExtraLinks() {
+      const result=[];const unique=new Set();
+      for (const row of document.querySelectorAll('#creatorExtraLinkList .creator-extra-link-row')) {
+        const raw=row.querySelector('.creator-extra-url').value.trim();
+        const label=row.querySelector('.creator-extra-name').value.trim();
+        if (!raw && !label) continue;
+        const url=validExtraLinkUrl(raw);
+        if (!url) throw new Error('追加リンクには有効な http / https のURLを入力してください。');
+        if(unique.has(url))throw new Error('同じ追加リンクが重複しています。');
+        unique.add(url);result.push({url,label});
+      }
+      return result;
+    }
+    $('#creatorExtraLinkAdd')?.addEventListener('click',()=>addExtraLinkRow());
+
     // ========================================
     // 登録 / 編集保存
     // ========================================
@@ -11108,6 +11205,10 @@ main.container>section, main.container>section:not(.hidden), #menuSection, #auto
 
           }
 
+
+          let extraLinks;
+          try { extraLinks=collectExtraLinks(); }
+          catch(err){ showMessage($('#adminMessage'),String(err.message||err),'error'); return; }
 
           let result;
 
@@ -11261,6 +11362,15 @@ main.container>section, main.container>section:not(.hidden), #menuSection, #auto
             return;
           }
 
+          const extraLinksResult = await sb.rpc('creator_admin_save_extra_links', {
+            p_token:token, p_id:gallerySavedId, p_links:extraLinks
+          });
+          if (extraLinksResult.error) {
+            console.error(extraLinksResult.error);
+            showMessage($('#adminMessage'), '基本情報と立ち絵は保存しましたが、追加リンクの保存に失敗しました。SQLの適用状況をご確認ください。', 'error');
+            return;
+          }
+
           showMessage(
             $("#adminMessage"),
             id
@@ -11345,6 +11455,8 @@ main.container>section, main.container>section:not(.hidden), #menuSection, #auto
       $("#galleryArtPreview").closest('.creator-gallery-guide-wrap')?.style.setProperty('--guide-x', $("#galleryOffsetX").value + '%');
       $("#galleryArtStatus").textContent = galleryArtCurrent ? '現在の立ち絵を表示中' : '画像未設定';
 
+      setExtraLinkRows(creator.extra_links);
+
       $("#youtubeUrl").value =
         creator.youtube_url ||
         "";
@@ -11409,6 +11521,8 @@ main.container>section, main.container>section:not(.hidden), #menuSection, #auto
 
       $("#creatorForm")
         ?.reset();
+
+      setExtraLinkRows([]);
 
 
       selectedIconData = "";
