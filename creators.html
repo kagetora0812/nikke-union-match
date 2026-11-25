@@ -1,1247 +1,241 @@
-
 <!doctype html>
-<html lang="ja">
-
-<head>
-
-  <meta charset="UTF-8">
-
-  <meta
-    name="viewport"
-    content="width=device-width, initial-scale=1.0"
-  >
-
-  <meta
-    name="theme-color"
-    content="#080b12"
-  >
-
-  <title>
-    NIKKE UNION MATCH - 応援クリエイター
-  </title>
-  <!-- creators v6: description alignment fix / plain X button -->
-
-
-  <style>
-
-    @import url("https://fonts.googleapis.com/css2?family=Teko:wght@500;600;700&family=Noto+Sans+JP:wght@400;500;600;700;800;900&display=swap");
-
-
-    :root {
-      --bg: #08090c;
-      --bg2: #0d0f13;
-      --panel: #121419;
-      --panel2: #171a20;
-      --panel3: #1d2027;
-      --line: #2b2e35;
-      --line-soft: rgba(255, 255, 255, .07);
-      --text: #f1f2f4;
-      --muted: #969ba3;
-      --muted2: #6f747c;
-      --accent: #28b9e8;
-      --accent2: #8edcff;
-      --orange: #e7a22d;
-      --cyan: #28b9e8;
-      --red: #ff6977;
-    }
-
-    * {
-      box-sizing: border-box;
-    }
-
-    html {
-      background: var(--bg);
-    }
-
-    body {
-      margin: 0;
-      min-height: 100vh;
-      color: var(--text);
-      background:
-        radial-gradient(circle at 82% 7%, rgba(255,255,255,.045), transparent 24%),
-        linear-gradient(180deg, #0d0f13 0%, #08090c 56%, #07080a 100%);
-      font-family:
-        "Noto Sans JP",
-        sans-serif;
-      font-weight: 700;
-      -webkit-font-smoothing: antialiased;
-      text-rendering: optimizeLegibility;
-    }
-
-    body::before {
-      content: "";
-      position: fixed;
-      inset: 0;
-      z-index: -1;
-      pointer-events: none;
-      opacity: .32;
-      background:
-        linear-gradient(135deg, transparent 0 74%, rgba(255,255,255,.025) 74% 74.35%, transparent 74.35% 100%);
-    }
-
-    a {
-      color: inherit;
-    }
-
-    button {
-      font: inherit;
-    }
-
-    .hidden {
-      display: none !important;
-    }
-
-    /* ================= HEADER ================= */
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    /* ================= LAYOUT ================= */
-    .container {
-      width: min(1180px, calc(100% - 28px));
-      margin: 0 auto;
-      padding: 28px 0 46px;
-    }
-
-    .eyebrow {
-      margin-bottom: 7px;
-      color: var(--accent);
-      font: 800 11px "Teko", "Noto Sans JP", sans-serif;
-      letter-spacing: 2.4px;
-      text-transform: uppercase;
-    }
-
-    h1,
-    h2 {
-      margin: 0;
-      color: #fff;
-      font-family:
-        "Noto Sans JP",
-        sans-serif;
-      font-weight: 900;
-      letter-spacing: -.055em;
-    }
-
-    h1 {
-      font-size: clamp(31px, 6vw, 52px);
-      line-height: 1.05;
-    }
-
-    h2 {
-      font-size: clamp(22px, 4vw, 30px);
-      line-height: 1.15;
-    }
-
-    .lead {
-      max-width: 680px;
-      margin: 13px 0 0;
-      color: #b5bac1;
-      font-size: 13px;
-      line-height: 1.8;
-    }
-
-    /* ================= NIKKE WHITE / BLUE TAP ================= */
-    .back-btn,
-    .creator-link,
-    .recruit-x-btn {
-      -webkit-tap-highlight-color: transparent;
-      position: relative;
-      overflow: hidden;
-      transition:
-        background .12s ease,
-        color .12s ease,
-        border-color .12s ease,
-        box-shadow .12s ease,
-        transform .08s ease;
-    }
-
-    .back-btn::after,
-    .creator-link::after,
-    .recruit-x-btn::after {
-      content: "";
-      position: absolute;
-      left: 0;
-      right: 0;
-      bottom: 0;
-      height: 3px;
-      background: transparent;
-      transition: background .12s ease;
-      pointer-events: none;
-    }
-
-    /* PCではカーソルを合わせた時だけ白＋シアン */
-    @media (hover: hover) and (pointer: fine) {
-      .back-btn:hover,
-      .creator-link:hover,
-      .recruit-x-btn:hover {
-        border-color: #a9dff6 !important;
-        background: linear-gradient(180deg, #ffffff 0%, #edf4f8 100%) !important;
-        color: #118fc9 !important;
-        box-shadow:
-          0 5px 14px rgba(0,0,0,.24),
-          inset 0 1px 0 rgba(255,255,255,.98),
-          inset 0 -2px 0 rgba(40,185,232,.20);
-      }
-
-      .back-btn:hover::after,
-      .creator-link:hover::after,
-      .recruit-x-btn:hover::after {
-        background: var(--cyan);
-      }
-    }
-
-    .back-btn:focus-visible,
-    .creator-link:focus-visible,
-    .recruit-x-btn:focus-visible,
-    .back-btn:active,
-    .creator-link:active,
-    .recruit-x-btn:active {
-      border-color: #7dd8f5 !important;
-      background: linear-gradient(180deg, #ffffff 0%, #e8f2f7 100%) !important;
-      color: #0c8fc9 !important;
-      box-shadow:
-        0 4px 12px rgba(0,0,0,.24),
-        0 0 0 1px rgba(35,190,235,.12),
-        inset 0 1px 0 rgba(255,255,255,1),
-        inset 0 -3px 0 rgba(35,190,235,.24);
-      outline: none;
-    }
-
-    .back-btn:focus-visible::after,
-    .creator-link:focus-visible::after,
-    .recruit-x-btn:focus-visible::after,
-    .back-btn:active::after,
-    .creator-link:active::after,
-    .recruit-x-btn:active::after {
-      background: var(--cyan);
-    }
-
-    .back-btn:active,
-    .creator-link:active,
-    .recruit-x-btn:active {
-      transform: translateY(1px) scale(.995);
-    }
-
-    /* ================= LIST ================= */
-    .list-section {
-      margin-top: 0;
-    }
-
-    .section-title-row {
-      display: flex;
-      align-items: baseline;
-      justify-content: flex-start;
-      flex-wrap: wrap;
-      gap: 10px 24px;
-      padding: 0 2px 16px;
-      border-bottom: 1px solid var(--line);
-    }
-    .creator-list-title {
-      margin: 0;
-      color: var(--accent);
-      font: 700 clamp(27px, 3vw, 38px)/1 "Teko", sans-serif;
-      letter-spacing: .1em;
-      white-space: nowrap;
-    }
-    .creator-list-description {
-      margin: 0;
-      color: #c0c6cf;
-      font-size: 12px;
-      font-weight: 600;
-      line-height: 1.8;
-    }
-
-    .creator-description-mobile { display: none; }
-    @media screen and (max-width: 600px) {
-      .creator-description-desktop { display: none; }
-      .creator-description-mobile { display: inline; }
-    }
-
-    .creator-grid {
-      display: grid;
-      grid-template-columns: repeat(3, minmax(0, 1fr));
-      gap: 14px;
-      margin-top: 14px;
-    }
-
-    .creator-card {
-      position: relative;
-      overflow: hidden;
-      display: flex;
-      flex-direction: column;
-      min-height: 300px;
-      padding: 18px;
-      border: 1px solid #292c32;
-      background:
-        linear-gradient(145deg, #17191e 0%, #111318 100%);
-      box-shadow: 0 8px 24px rgba(0,0,0,.16);
-      transition: transform .18s ease, border-color .18s ease, background .18s ease;
-    }
-
-    .creator-card::before {
-      content: "";
-      position: absolute;
-      top: 0;
-      left: 0;
-      width: 64px;
-      height: 3px;
-      background: var(--accent);
-    }
-
-    .creator-card::after {
-      content: "";
-      position: absolute;
-      width: 82px;
-      height: 82px;
-      right: -42px;
-      bottom: -42px;
-      border: 1px solid rgba(255,255,255,.045);
-      transform: rotate(45deg);
-      pointer-events: none;
-    }
-
-    .creator-card:hover {
-      transform: translateY(-2px);
-      border-color: #41444b;
-      background: linear-gradient(145deg, #1a1d22 0%, #121419 100%);
-    }
-
-    .creator-badge {
-      display: inline-flex;
-      align-items: center;
-      width: fit-content;
-      min-height: 24px;
-      padding: 0 8px;
-      border: 1px solid #34373e;
-      background: #0e1014;
-      color: #aeb3b9;
-      font: 800 9px "Teko", "Noto Sans JP", sans-serif;
-      letter-spacing: 1.4px;
-    }
-
-    .creator-icon-wrap {
-      margin-top: 17px;
-      display: flex;
-      justify-content: center;
-    }
-
-    .creator-icon,
-    .creator-icon-placeholder {
-      width: 92px;
-      height: 92px;
-      border-radius: 50%;
-      border: 2px solid #34373e;
-      background: #202329;
-      box-shadow: 0 0 0 5px rgba(255,255,255,.018);
-    }
-
-    .creator-icon {
-      object-fit: cover;
-    }
-
-    .creator-icon-placeholder {
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      color: var(--accent2);
-      font-size: 32px;
-    }
-
-    .creator-name {
-      width: 100%;
-      margin-top: 13px;
-      color: #fff;
-      text-align: center;
-      font-size: 18px;
-      font-weight: 900;
-      line-height: 1.35;
-      word-break: break-word;
-    }
-
-    .creator-description {
-      flex: 1;
-      width: min(100%, 360px);
-      margin: 9px auto 0;
-      padding: 0 4px;
-      color: #aeb3ba;
-      font-size: 12px;
-      line-height: 1.72;
-      /* テンプレート側のインデント空白は潰し、入力した改行だけ残す */
-      white-space: pre-line;
-      text-align: center !important;
-      overflow-wrap: anywhere;
-    }
-
-    .creator-links {
-      width: 100%;
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 8px;
-      margin-top: 15px;
-    }
-
-    .creator-links.single {
-      grid-template-columns: 1fr;
-    }
-
-    .creator-link {
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      min-height: 42px;
-      padding: 8px 10px;
-      border: 1px solid #34373e;
-      background: #0d0f13;
-      color: #d6d9dd;
-      text-decoration: none;
-      font-size: 11px;
-      font-weight: 900;
-      transition: .18s ease;
-    }
-
-
-    .creator-link.x {
-      font-family: "Noto Sans JP", sans-serif;
-      letter-spacing: .02em;
-    }
-
-    .creator-link.youtube:hover,
-    .creator-link.x:hover {
-      border-color: #a9dff6;
-    }
-
-    /* ================= UNION MATCH CONTENT ================= */
-    .creator-match-content {
-      width: 100%;
-      margin-top: 14px;
-      padding-top: 13px;
-      border-top: 1px solid #2d3138;
-    }
-
-    .creator-match-label {
-      margin-bottom: 8px;
-      color: var(--cyan);
-      font-family: "Teko", "Noto Sans JP", sans-serif;
-      font-size: 11px;
-      font-weight: 900;
-      letter-spacing: .11em;
-      text-align: left;
-    }
-
-    .creator-match-links {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 8px;
-      width: 100%;
-    }
-
-    .creator-match-links.single {
-      grid-template-columns: 1fr;
-    }
-
-    .creator-match-link {
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      min-height: 42px;
-      padding: 8px 10px;
-      border: 1px solid rgba(26, 176, 241, .38);
-      background: rgba(26, 176, 241, .055);
-      color: #dcecf4;
-      text-decoration: none;
-      font-size: 10.5px;
-      font-weight: 900;
-      line-height: 1.35;
-      text-align: center;
-      transition: .18s ease;
-    }
-
-    .creator-match-link:hover,
-    .creator-match-link:active {
-      border-color: #a9dff6;
-      background: #f7fbfd;
-      color: #079fd9;
-    }
-
-    @media (hover: none), (pointer: coarse) {
-      .creator-match-link:not(:active):hover {
-        border-color: rgba(26, 176, 241, .38);
-        background: rgba(26, 176, 241, .055);
-        color: #dcecf4;
-      }
-    }
-
-    .empty,
-    .error {
-      margin-top: 14px;
-      padding: 28px 18px;
-      border: 1px dashed #33363d;
-      color: var(--muted);
-      text-align: center;
-      font-size: 13px;
-    }
-
-    .error {
-      color: #ff9aa5;
-      border-color: rgba(255,105,119,.35);
-    }
-
-    /* ================= RECRUIT ================= */
-    .creator-recruit-box {
-      position: relative;
-      overflow: hidden;
-      margin-top: 30px;
-      padding: 25px 28px;
-      border: 1px solid #30333a;
-      background: linear-gradient(110deg, #15171c 0%, #0f1115 100%);
-    }
-
-    .creator-recruit-box::before {
-      content: "";
-      position: absolute;
-      left: 0;
-      top: 0;
-      bottom: 0;
-      width: 4px;
-      background: var(--accent);
-    }
-
-    .creator-recruit-box p {
-      max-width: 760px;
-      margin: 10px 0 0;
-      color: #aeb3ba;
-      font-size: 13px;
-      line-height: 1.75;
-    }
-
-    .creator-recruit-actions {
-      display: flex;
-      gap: 10px;
-      flex-wrap: wrap;
-      margin-top: 17px;
-    }
-
-    .recruit-x-btn {
-      min-height: 44px;
-      padding: 0 16px;
-      display: inline-flex;
-      align-items: center;
-      justify-content: center;
-      border: 1px solid #4a4d54;
-      background: #202329;
-      color: #fff;
-      text-decoration: none;
-      font-size: 12px;
-      font-weight: 900;
-      transition: .18s ease;
-    }
-
-    .recruit-x-btn:hover {
-      border-color: #a9dff6;
-    }
-
-    .bottom-area {
-      margin-top: 28px;
-      padding: 20px 2px 0;
-      border-top: 1px solid #23262c;
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      gap: 16px;
-    }
-
-    .bottom-copy {
-      color: #666b72;
-      font: 800 10px "Teko", "Noto Sans JP", sans-serif;
-      letter-spacing: 1.5px;
-      line-height: 1.5;
-    }
-
-    @media screen and (min-width: 601px) and (max-width: 1024px) {
-      .creator-grid {
-        grid-template-columns: repeat(2, minmax(0, 1fr));
-      }
-    }
-
-    @media screen and (max-width: 600px) {
-      
-
-      
-
-      
-
-      .container {
-        width: calc(100% - 16px);
-        padding-top: 12px;
-      }
-
-
-
-      .section-title-row {
-        align-items: flex-start;
-        flex-direction: column;
-        gap: 7px;
-      }
-      .creator-list-description { font-size: 11px; }
-
-      .creator-grid {
-        grid-template-columns: 1fr;
-        gap: 10px;
-      }
-
-      .creator-card {
-        min-height: 0;
-        padding: 16px;
-      }
-
-      .creator-description {
-        min-height: 0;
-        width: min(100%, 330px);
-        margin-top: 8px;
-        padding: 0 2px;
-        font-size: 12px;
-        line-height: 1.78;
-      }
-
-      .creator-icon-wrap {
-        margin-top: 15px;
-      }
-
-      .creator-name {
-        margin-top: 12px;
-      }
-
-      .creator-links {
-        margin-top: 14px;
-      }
-
-      .creator-match-links {
-        grid-template-columns: 1fr;
-      }
-
-      .creator-match-label {
-        text-align: center;
-      }
-
-      .creator-recruit-box {
-        padding: 21px 18px;
-      }
-
-      .recruit-x-btn {
-        width: 100%;
-      }
-
-      .bottom-area {
-        flex-direction: column;
-        align-items: stretch;
-      }
-
-      .bottom-copy {
-        text-align: center;
-      }
-
-      .bottom-area .back-btn {
-        width: 100%;
-      }
-    }
-  </style>
-
-  <link rel="stylesheet" href="./subpage-nav.css?v=20261121-visual-align-v2">
-  <link rel="stylesheet" href="./shared/navigation.css?v=20261121-nav-transparency-v1">
-
-
-  
-
-
-  
-
-
-  <style id="subpage-browser-ui-lock-v23">
-    /* v23: mobile/tablet viewport lock.
-       Keep the document itself from scrolling so Safari/Chrome browser UI
-       does not collapse/expand with page scroll. Only <main> scrolls. */
-    @media screen and (max-width: 1366px) {
-      html,
-      body {
-        width: 100% !important;
-        height: 100% !important;
-        min-height: 0 !important;
-        overflow: hidden !important;
-        overscroll-behavior: none !important;
-      }
-
-      body {
-        box-sizing: border-box !important;
-        height: 100dvh !important;
-        padding-top: 0 !important;
-        padding-bottom: 0 !important;
-      }
-
-      body > main.container {
-        box-sizing: border-box !important;
-        height: 100% !important;
-        min-height: 0 !important;
-        max-height: 100% !important;
-        padding-top: calc(var(--index-header-height) + 28px) !important;
-        padding-bottom: calc(8px + var(--um-nav-bar-height) + env(safe-area-inset-bottom)) !important;
-        overflow-x: hidden !important;
-        overflow-y: auto !important;
-        scrollbar-gutter: stable;
-        overscroll-behavior-y: contain !important;
-        -webkit-overflow-scrolling: touch !important;
-        touch-action: pan-y !important;
-      }
-    }
-
-    @media screen and (max-width: 600px) {
-      body > main.container {
-        padding-top: calc(var(--index-header-height) + 12px) !important;
-      }
-    }
-  </style>
-
-  
-
+<html lang="ja"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"><meta name="theme-color" content="#ffffff"><title>NIKKE UNION MATCH | 応援クリエイター</title>
+<link rel="stylesheet" href="./subpage-nav.css?v=20261121-visual-align-v2">
+<link rel="stylesheet" href="./shared/navigation.css?v=20261121-nav-transparency-v1">
 <link rel="stylesheet" href="./push-notifications/notification-ui.css?v=20261121-visual-align-v2">
-</head>
-
-
-<body class="um-creators-page">
-
-
-  <!-- ========================================
-       ヘッダー
-  ========================================= -->
-
-  <div id="umSharedNavigation" data-um-nav-root="./"></div>
-  <script src="./shared/navigation.js?v=20261120-shared-nav-v1"></script>
-
-<main class="container">
-
-<section class="list-section">
-      <div class="section-title-row">
-        <h1 class="creator-list-title">CREATOR LIST</h1>
-        <p class="creator-list-description"><span class="creator-description-desktop">NIKKE UNION MATCHを応援していただいているクリエイターの皆様をご紹介します。</span><span class="creator-description-mobile">応援していただいているクリエイターの皆様をご紹介します。</span></p>
-      </div>
-
-      <div id="creatorGrid" class="creator-grid"></div>
-
-      <div id="emptyState" class="empty hidden">
-        現在公開中の応援クリエイターはいません。
-      </div>
-
-      <div id="errorState" class="error hidden">
-        クリエイター情報を読み込めませんでした。
-      </div>
-    </section>
-
-    <section class="creator-recruit-box">
-      <div class="eyebrow">CREATOR ENTRY</div>
-      <h2>応援クリエイター募集中</h2>
-      <p>
-        NIKKE UNION MATCHを一緒に盛り上げていただける
-        YouTuber・配信者・NIKKEクリエイター様を募集しています。
-      </p>
-      <p>
-        掲載をご希望の方は、Xからお気軽にご連絡ください。
-      </p>
-      <div class="creator-recruit-actions">
-        <a
-          class="recruit-x-btn"
-          href="https://x.com/KAGETORA_Z00"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          𝕏 掲載について連絡する ↗
-        </a>
-      </div>
-    </section>
-
-    <footer class="bottom-area">
-      <div class="bottom-copy">
-        NIKKE UNION MATCH · SUPPORT CREATORS
-      </div>
-    </footer>
-
-  </main>
-
-
-
-  <!-- ========================================
-       Supabase
-  ========================================= -->
-
-  <script
-    src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"
-  ></script>
-
-
-
-  <script>
-
-    // ========================================
-    // Supabase
-    // ========================================
-
-    const SUPABASE_URL =
-      "https://igoekrvpgnjberppiawf.supabase.co";
-
-    const SUPABASE_ANON_KEY =
-      "sb_publishable_xSjnNTnh667o9IesU5g5Kw_xcdg9bbh";
-
-
-    const sb =
-      window.supabase.createClient(
-        SUPABASE_URL,
-        SUPABASE_ANON_KEY
-      );
-
-
-    // ========================================
-    // 共通
-    // ========================================
-
-    const $ = selector =>
-      document.querySelector(selector);
-
-
-    function escapeHtml(value) {
-
-      return String(
-        value ?? ""
-      ).replace(
-        /[&<>"']/g,
-        char => ({
-          "&": "&amp;",
-          "<": "&lt;",
-          ">": "&gt;",
-          '"': "&quot;",
-          "'": "&#039;"
-        }[char])
-      );
-
-    }
-
-
-    // ========================================
-    // URL確認
-    // ========================================
-
-    function safeUrl(value) {
-
-      const raw = String(value || "").trim();
-
-      if (!raw) {
-        return "";
-      }
-
-      // 管理画面から保存した JPG / PNG / WEBP の data URL を許可
-      if (/^data:image\/(?:jpeg|png|webp);base64,/i.test(raw)) {
-        return raw;
-      }
-
-      try {
-
-        const url = new URL(raw);
-
-        if (
-          url.protocol !== "https:"
-          &&
-          url.protocol !== "http:"
-        ) {
-          return "";
-        }
-
-        return url.href;
-
-      } catch {
-        return "";
-      }
-
-    }
-
-
-    // ========================================
-    // クリエイター取得
-    // 公開中だけ表示
-    // ========================================
-
-    async function loadCreators() {
-
-      const grid =
-        $("#creatorGrid");
-
-      const empty =
-        $("#emptyState");
-
-      const errorState =
-        $("#errorState");
-
-grid.innerHTML =
-        "";
-
-
-      empty.classList.add(
-        "hidden"
-      );
-
-
-      errorState.classList.add(
-        "hidden"
-      );
-
-
-      const {
-        data,
-        error
-      } =
-        await sb
-          .from(
-            "creators"
-          )
-          .select(
-            "id, creator_name, icon_url, youtube_url, x_url, union_match_video_url, union_match_x_url, description, display_order, created_at"
-          )
-          .eq(
-            "is_public",
-            true
-          )
-          .order(
-            "display_order",
-            {
-              ascending:
-                true
-            }
-          )
-          .order(
-            "created_at",
-            {
-              ascending:
-                false
-            }
-          );
-
-
-      if (error) {
-
-        console.error(
-          "クリエイター取得エラー",
-          error
-        );
-
-
-errorState.classList.remove(
-          "hidden"
-        );
-
-
-        return;
-
-      }
-
-
-      const creators =
-        Array.isArray(data)
-          ? data
-          : [];
-
-
-if (
-        creators.length ===
-        0
-      ) {
-
-        empty.classList.remove(
-          "hidden"
-        );
-
-        return;
-
-      }
-
-
-      grid.innerHTML =
-        creators
-          .map(
-            creator => {
-
-              const iconUrl =
-                safeUrl(
-                  creator.icon_url
-                );
-
-
-              const youtubeUrl =
-                safeUrl(
-                  creator.youtube_url
-                );
-
-
-              const xUrl =
-                safeUrl(
-                  creator.x_url
-                );
-
-
-              const unionMatchVideoUrl =
-                safeUrl(
-                  creator.union_match_video_url
-                );
-
-
-              const unionMatchXUrl =
-                safeUrl(
-                  creator.union_match_x_url
-                );
-
-
-              const links = [];
-
-
-              if (youtubeUrl) {
-
-                links.push(`
-
-                  <a
-                    class="creator-link youtube"
-                    href="${escapeHtml(
-                      youtubeUrl
-                    )}"
-                    target="_blank"
-                    rel="noopener noreferrer"
-                  >
-                    YouTube ↗
-                  </a>
-
-                `);
-
-              }
-
-
-              if (xUrl) {
-
-                links.push(`
-
-                  <a
-                    class="creator-link x"
-                    href="${escapeHtml(
-                      xUrl
-                    )}"
-                    target="_blank"
-                    rel="noopener noreferrer"
-                  >
-                    Xを見る ↗
-                  </a>
-
-                `);
-
-              }
-
-
-              const linkClass =
-                links.length === 1
-                  ? "creator-links single"
-                  : "creator-links";
-
-
-              const unionMatchLinks = [];
-
-
-              if (unionMatchVideoUrl) {
-
-                unionMatchLinks.push(`
-
-                  <a
-                    class="creator-match-link video"
-                    href="${escapeHtml(
-                      unionMatchVideoUrl
-                    )}"
-                    target="_blank"
-                    rel="noopener noreferrer"
-                  >
-                    ▶ UNION MATCH 紹介動画
-                  </a>
-
-                `);
-
-              }
-
-
-              if (unionMatchXUrl) {
-
-                unionMatchLinks.push(`
-
-                  <a
-                    class="creator-match-link x"
-                    href="${escapeHtml(
-                      unionMatchXUrl
-                    )}"
-                    target="_blank"
-                    rel="noopener noreferrer"
-                  >
-                    X UNION MATCH 紹介投稿
-                  </a>
-
-                `);
-
-              }
-
-
-              const unionMatchClass =
-                unionMatchLinks.length === 1
-                  ? "creator-match-links single"
-                  : "creator-match-links";
-
-
-              const iconHtml =
-                iconUrl
-                  ? `
-
-                    <div class="creator-icon-wrap">
-
-                      <img
-                        class="creator-icon"
-                        src="${escapeHtml(
-                          iconUrl
-                        )}"
-                        alt="${escapeHtml(
-                          creator.creator_name
-                        )}"
-                        loading="lazy"
-                        onerror="
-                          this.style.display='none';
-                          this.nextElementSibling.style.display='flex';
-                        "
-                      >
-
-                      <div
-                        class="creator-icon-placeholder"
-                        style="display:none;"
-                      >
-                        📺
-                      </div>
-
-                    </div>
-
-                  `
-                  : `
-
-                    <div class="creator-icon-wrap">
-
-                      <div
-                        class="creator-icon-placeholder"
-                      >
-                        📺
-                      </div>
-
-                    </div>
-
-                  `;
-
-
-              return `
-
-                <article class="creator-card">
-
-
-                  <div class="creator-badge">
-                    SUPPORT CREATOR
-                  </div>
-
-
-                  ${iconHtml}
-
-
-                  <div class="creator-name">
-
-                    ${escapeHtml(
-                      creator.creator_name
-                    )}
-
-                  </div>
-
-
-                  ${
-                    creator.description
-                      ? `
-                        <div class="creator-description">
-                          ${escapeHtml(
-                            creator.description
-                          )}
-                        </div>
-                      `
-                      : `
-                        <div class="creator-description">
-                          NIKKE UNION MATCH
-                          応援クリエイター
-                        </div>
-                      `
-                  }
-
-
-                  ${
-                    links.length
-                      ? `
-                        <div class="${linkClass}">
-                          ${links.join("")}
-                        </div>
-                      `
-                      : ""
-                  }
-
-
-                  ${
-                    unionMatchLinks.length
-                      ? `
-                        <div class="creator-match-content">
-
-                          <div class="creator-match-label">
-                            UNION MATCH CONTENT
-                          </div>
-
-                          <div class="${unionMatchClass}">
-                            ${unionMatchLinks.join("")}
-                          </div>
-
-                        </div>
-                      `
-                      : ""
-                  }
-
-
-                </article>
-
-              `;
-
-            }
-          )
-          .join("");
-
-    }
-
-    // ========================================
-    // 起動
-    // ========================================
-
-    document.addEventListener(
-      "DOMContentLoaded",
-      loadCreators
-    );
-
-
-
-
-  </script>
-
+<style>
+
+
+@import url("https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;500;600;700;800;900&family=Teko:wght@500;600;700&display=swap");
+:root{--ink:#193c53;--muted:#6c90a4;--header:62px;--footer:68px;--ease:cubic-bezier(.22,.82,.19,1)}
+*{box-sizing:border-box}
+html,body{width:100%;height:100%;margin:0;overflow:hidden;background:#fff}
+body{font-family:"Noto Sans JP",sans-serif;color:var(--ink);-webkit-font-smoothing:antialiased}
+button,a{font:inherit}button{cursor:pointer}
+
+
+
+
+
+
+.gallery{position:fixed;top:var(--index-header-height,var(--header));right:0;left:0;bottom:0;z-index:0;overflow:hidden;touch-action:none;user-select:none;-webkit-user-select:none;background:radial-gradient(ellipse 70% 60% at 52% 45%,rgba(246,251,253,.8),#fff 78%)}
+@media(max-width:1366px){.gallery{bottom:calc(var(--um-nav-bar-height,var(--footer)) + env(safe-area-inset-bottom))}}
+.scene{--tx:0px;--ty:0px;--scale:1;--a:0;position:absolute;top:50%;left:50%;width:min(850px,86vw);height:min(730px,calc(100% - 18px));transform:translate3d(calc(-50% + var(--tx)),calc(-50% + var(--ty)),0) scale(var(--scale));opacity:var(--a);z-index:var(--z,1);pointer-events:none;isolation:isolate;contain:layout style;transition:transform 890ms var(--ease),opacity 480ms ease}
+.scene[data-slot="0"],.scene[data-slot="-1"],.scene[data-slot="1"]{pointer-events:auto}
+.scene[data-slot="0"]{cursor:pointer}.scene.is-open{cursor:default}
+.scene:focus{outline:none}.scene:focus-visible .caption strong{text-decoration:underline;text-decoration-color:rgba(66,132,171,.6);text-underline-offset:3px}
+.composition{position:absolute;inset:0;transform:perspective(1400px) rotateX(var(--tiltX,0deg)) rotateY(var(--tiltY,0deg));transform-origin:50% 50%;transition:transform 270ms ease-out;transform-style:preserve-3d}
+.figure{position:absolute;z-index:1;inset:0;pointer-events:none;display:flex;align-items:flex-end;justify-content:center}
+.figure img{position:absolute;display:block;height:80%;width:auto;max-width:none;bottom:23%;left:50%;transform:translateX(-50%) scale(var(--figureZoom,1));transform-origin:center bottom;object-fit:contain;object-position:center bottom;transition:transform 770ms var(--ease),filter 500ms ease,opacity 450ms ease;filter:none;opacity:1}
+.scene[data-slot="0"] .figure img{--figureZoom:.97;filter:drop-shadow(0 12px 14px rgba(27,38,45,.10))}
+.scene[data-slot="-1"] .figure img,.scene[data-slot="1"] .figure img{--figureZoom:1}
+.scene.is-open .figure img{opacity:.36;filter:saturate(.82)}
+/* A single neutral crystal slab, with light on the material, not a blue glow. */
+.plate{position:absolute;isolation:isolate;z-index:3;left:50%;top:49%;width:min(506px,62%);max-height:calc(100% - 30px);transform:translate(-50%,-50%) scale(.96);border:1px solid rgba(164,172,180,.48);border-radius:26px;overflow:hidden;pointer-events:none;opacity:0;visibility:hidden;
+background:linear-gradient(126deg,rgba(255,255,255,.85) 0%,rgba(249,250,250,.35) 34%,rgba(255,255,255,.27) 61%,rgba(250,250,251,.67) 100%);
+box-shadow:0 24px 48px rgba(42,48,54,.13),0 6px 16px rgba(38,47,54,.06),inset 0 2px 1px rgba(255,255,255,1),inset 2px 0 3px rgba(255,255,255,.93),inset -2px -2px 4px rgba(130,139,148,.11);backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px);transition:opacity 340ms ease,transform 490ms var(--ease),visibility 340ms}
+.plate::before{content:"";position:absolute;z-index:0;pointer-events:none;inset:0;border-radius:inherit;background:linear-gradient(114deg,rgba(255,255,255,.96),rgba(255,255,255,.07) 24%,transparent 72%,rgba(255,255,255,.37));box-shadow:inset 3px 0 5px rgba(255,255,255,.73),inset -2px 0 5px rgba(160,169,177,.14)}
+.plate::after{content:"";position:absolute;z-index:0;pointer-events:none;top:-120%;left:-70%;width:85%;height:340%;transform:rotate(28deg) translateX(-100%);background:linear-gradient(90deg,transparent 0%,rgba(255,255,255,.08) 45%,rgba(255,255,255,.85) 51%,rgba(255,255,255,.08) 57%,transparent 100%);opacity:0}
+.scene.is-open .plate{opacity:1;visibility:visible;transform:translate(-50%,-50%) scale(1);pointer-events:auto}
+.scene.is-open .plate::after{animation:umcg-sweep 4.6s ease-in-out 1}
+@keyframes umcg-sweep{0%{transform:rotate(28deg) translateX(-100%);opacity:0}18%{opacity:.52}65%{opacity:.34}100%{transform:rotate(28deg) translateX(290%);opacity:0}}
+.plate > *{position:relative;z-index:1}
+.plate-body{padding:26px 28px 23px;display:flex;flex-direction:column;gap:0;min-width:0}
+.profile{display:grid;grid-template-columns:82px minmax(0,1fr);gap:18px;align-items:center;min-width:0;padding-right:27px}
+.avatar-shell{width:82px;height:82px;position:relative;border-radius:50%;padding:3px;background:linear-gradient(144deg,#fff,#d7dce0 33%,#abb5be 63%,#fff);box-shadow:0 0 0 1px rgba(255,255,255,.95),0 0 16px rgba(255,255,255,.95),0 6px 16px rgba(36,42,48,.13)}
+.avatar{display:block;width:100%;height:100%;border-radius:50%;object-fit:cover;object-position:50% 30%;background:#edf2f4}
+.avatar-fallback{display:grid;place-items:center;width:100%;height:100%;border-radius:50%;background:#e9f0f2;color:#536e80;font-size:25px;font-weight:850}
+.identity{min-width:0}.identity h2{margin:0;font:850 clamp(18px,2vw,23px)/1.4 "Noto Sans JP",sans-serif;letter-spacing:-.035em;text-wrap:balance;overflow-wrap:anywhere;color:#243845;text-shadow:0 1px 0 #fff,0 0 8px rgba(255,255,255,.92)}
+.identity .role{margin:6px 0 0;color:#607681;font-size:12px;font-weight:800;letter-spacing:.035em;line-height:1.5;text-shadow:0 0 8px #fff;overflow-wrap:anywhere}
+.cr-rule{height:1px;background:linear-gradient(90deg,transparent,rgba(158,170,179,.35) 20%,rgba(255,255,255,.98) 52%,rgba(153,167,179,.38) 81%,transparent);margin:20px 0 17px;box-shadow:0 1px 1px rgba(112,123,133,.10),0 0 9px rgba(255,255,255,.88)}
+.cr-label{margin:0 0 7px;font:900 10px/1.4 "Noto Sans JP",sans-serif;letter-spacing:.08em;color:#82939e}
+.cr-description{min-height:0;max-height:clamp(55px,22vh,164px);overflow-y:auto;overscroll-behavior:contain;touch-action:pan-y;padding:0 8px 0 0;color:#435965;font-size:12.8px;font-weight:600;line-height:1.9;white-space:pre-line;overflow-wrap:anywhere;scrollbar-width:thin;scrollbar-color:#b8c5cb transparent}
+.cr-description::-webkit-scrollbar{width:4px}.cr-description::-webkit-scrollbar-thumb{background:#b8c5cb;border-radius:4px}
+.cr-footer{display:flex;justify-content:space-between;align-items:center;gap:12px;margin-top:17px;flex-wrap:wrap}
+.cr-footer-label{display:flex;flex-direction:column;gap:4px;color:#8899a2;font-size:10px;font-weight:800;letter-spacing:.075em}
+.cr-footer-label b{font-size:11px;font-weight:650;color:#677e8a;letter-spacing:0}
+.socials{display:flex;align-items:center;gap:12px;justify-content:flex-end;flex-wrap:wrap;max-width:100%}
+.social{display:grid;place-items:center;width:48px;height:48px;flex:0 0 48px;border-radius:12px;background:linear-gradient(145deg,rgba(255,255,255,.98),rgba(246,247,248,.55));border:1px solid rgba(162,174,182,.62);color:#152d3c;text-decoration:none;box-shadow:inset 0 1px 1px #fff,inset 0 -1px 3px rgba(175,186,190,.1),0 5px 11px rgba(50,57,62,.08),0 0 10px rgba(255,255,255,.84);transition:transform .18s ease,box-shadow .18s ease,border-color .18s ease;touch-action:manipulation;-webkit-tap-highlight-color:transparent;cursor:pointer}
+.social svg{width:26px;height:26px;display:block;pointer-events:none}
+.social-letter{font:900 18px/1 "Noto Sans JP",sans-serif;letter-spacing:-.03em;color:#314b59;pointer-events:none}
+.social-letter.social-letter-sm{font-size:13px}
+@media(hover:hover) and (pointer:fine){.social:hover{transform:translateY(-2px);border-color:#a3adb3;box-shadow:inset 0 1px 0 #fff,0 7px 18px rgba(41,48,52,.15),0 0 14px #fff}}
+.social:focus-visible,.close:focus-visible{outline:2px solid #657f91;outline-offset:3px}.social:active{transform:translateY(1px) scale(.97)}
+.close{position:absolute;z-index:8;right:9px;top:9px;width:44px;height:44px;padding:0;border-radius:50%;display:grid;place-items:center;border:1.5px solid rgba(117,139,155,.70);background:rgba(250,252,253,.96);color:#193c53;box-shadow:0 2px 9px rgba(37,58,72,.15),inset 0 1px 1px #fff;cursor:pointer;touch-action:manipulation;-webkit-tap-highlight-color:transparent}
+.close svg{width:19px;height:19px;stroke:currentColor;stroke-width:2.4;stroke-linecap:round;fill:none;pointer-events:none}
+.cr-links-extra{display:flex;gap:8px;flex-wrap:wrap;margin-top:13px}
+.cr-links-extra a{color:#436375;text-decoration:none;font-size:11px;font-weight:750;min-height:36px;display:flex;align-items:center;border:1px solid rgba(166,175,185,.45);border-radius:8px;background:rgba(255,255,255,.5);padding:7px 10px}
+.cr-links-extra a:focus-visible{outline:2px solid #657f91;outline-offset:2px}
+.scene.is-recruit .profile{display:block;padding-right:25px}.scene.is-recruit .identity h2{font-size:clamp(17px,2vw,22px)}
+.scene.is-recruit .cr-description{max-height:clamp(55px,20vh,170px)}
+.scene.has-many-links .cr-description{max-height:clamp(38px,14vh,110px)}
+.scene.has-many-links .cr-footer-label{flex-basis:100%}
+.scene.has-many-links .socials{justify-content:flex-end;width:100%}
+@media(prefers-reduced-motion:reduce){.scene.is-open .plate::after{animation:none}}
+/* Closed presentation: figure and name only; no duplicated footer icon or SNS. */
+.caption{position:absolute;z-index:2;left:0;bottom:1.4%;width:100%;text-align:center;display:flex;justify-content:center;align-items:center;pointer-events:none;opacity:1;transition:opacity 260ms ease}
+.caption strong{display:block;color:#153b53;font:800 17px/1.5 "Noto Sans JP",sans-serif;text-wrap:balance;overflow-wrap:anywhere;max-width:min(440px,86vw)}
+.scene:not([data-slot="0"]) .caption,.scene.is-open .caption{opacity:0;visibility:hidden}
+.figure img{height:85%;bottom:21%;left:var(--fig-left,50%)}
+.scene[data-slot="0"] .figure img{--figureZoom:.97}
+@media(max-width:1024px){
+ .scene{width:90vw;height:min(680px,calc(100% - 14px))}
+ .figure img{height:83%;bottom:22%}
+ .plate{width:min(490px,72%);max-height:calc(100% - 24px)}
+ .caption{bottom:1.6%}
+}
+@media(max-width:600px){
+ .scene{width:94vw;height:min(560px,calc(100% - 12px))}
+ .figure img{height:79%;bottom:24%}
+ .scene[data-slot="0"] .figure img{--figureZoom:.95}
+ .caption{bottom:1.4%}
+ .caption strong{font-size:15px}
+ .plate{width:min(410px,88%);top:49%;max-height:calc(100% - 18px);border-radius:23px}
+ .plate-body{padding:22px 19px 19px}
+ .profile{grid-template-columns:70px minmax(0,1fr);gap:13px;padding-right:23px}
+ .avatar-shell{width:70px;height:70px}
+ .identity h2{font-size:19px}
+ .identity .role{font-size:11px;margin-top:4px}
+ .cr-rule{margin:14px 0 13px}
+ .cr-description{font-size:11.7px;line-height:1.75;max-height:clamp(50px,20vh,135px)}
+ .cr-footer{margin-top:13px}
+ .cr-footer-label{font-size:9px}.cr-footer-label b{font-size:10px}
+ .social{width:48px;height:48px;flex-basis:48px}.socials{gap:10px}
+ .scene.is-recruit .identity h2{font-size:18px}
+}
+@media(max-width:360px){.plate-body{padding:19px 14px}.profile{grid-template-columns:62px minmax(0,1fr);gap:10px}.avatar-shell{width:62px;height:62px}.identity h2{font-size:17px}.cr-footer-label b{font-size:9px}.socials{gap:8px}}
+@media(max-height:680px){
+ .scene{height:calc(100% - 10px)}
+ .figure img{height:78%;bottom:23%}
+ .caption{bottom:1%}
+ .plate{max-height:calc(100% - 12px)}
+ .plate-body{padding-top:17px;padding-bottom:16px}
+ .cr-rule{margin:12px 0 10px}
+ .cr-description{max-height:clamp(36px,15vh,96px)}
+ .cr-footer{margin-top:10px}
+}
+@media(orientation:landscape) and (min-width:601px) and (max-height:860px){
+ .scene{height:min(720px,calc(100% - 14px))}
+ .figure img{height:82%;bottom:21%}
+ .caption{bottom:1.5%}
+ .plate{max-height:calc(100% - 15px)}
+ .cr-description{max-height:clamp(40px,19vh,140px)}
+}
+@media(prefers-reduced-motion:reduce){.scene,.composition,.plate,.figure img,.caption{transition-duration:.01ms!important}}
+
+
+.figure img.figure-pending{height:52%;opacity:.55;filter:grayscale(.3);bottom:37%}
+
+</style></head><body class="um-creators-page">
+<div id="umSharedNavigation" data-um-nav-root="./"></div>
+<script src="./shared/navigation.js?v=20261120-shared-nav-v1"></script>
+<main id="creatorGallery" class="gallery" aria-label="応援クリエイターのご紹介。左右スワイプまたはマウスホイールで切り替えます"></main>
+<p id="galleryStatus" role="status" style="position:fixed;top:50%;left:50%;transform:translate(-50%,-50%);color:#496477;font:700 13px 'Noto Sans JP',sans-serif">読み込み中…</p>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script>
+const SVG_YOUTUBE = `<svg viewBox="0 0 24 24" role="img" aria-label="YouTube"><path fill="#FF0033" d="M23.5 6.2a3.04 3.04 0 0 0-2.13-2.14C19.49 3.55 12 3.55 12 3.55s-7.49 0-9.37.51A3.04 3.04 0 0 0 .5 6.2C0 8.08 0 12 0 12s0 3.92.5 5.8a3.04 3.04 0 0 0 2.13 2.14c1.88.51 9.37.51 9.37.51s7.49 0 9.37-.51a3.04 3.04 0 0 0 2.13-2.14C24 15.92 24 12 24 12s0-3.92-.5-5.8Z"/><path fill="#fff" d="M9.55 15.57V8.43L15.82 12Z"/></svg>`;
+const SVG_X = `<svg viewBox="0 0 24 24" role="img" aria-label="X"><path fill="#000" d="M18.9 1.15h3.68l-8.04 9.19L24 22.85h-7.41l-5.8-7.58-6.64 7.58H.47l8.6-9.83L0 1.15h7.59l5.24 6.94Zm-1.29 19.49h2.04L6.49 3.24H4.3Z"/></svg>`;
+const ICON_CLOSE='<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 5l14 14M19 5L5 19"/></svg>';
+const SUPABASE_URL='https://igoekrvpgnjberppiawf.supabase.co';
+const SUPABASE_ANON_KEY='sb_publishable_xSjnNTnh667o9IesU5g5Kw_xcdg9bbh';
+const sb=window.supabase.createClient(SUPABASE_URL,SUPABASE_ANON_KEY);
+const stage=document.querySelector('#creatorGallery');
+const status=document.querySelector('#galleryStatus');
+let nodes=[],current=0,expanded=true,hover=false,timer=null,touchStart=null,skipClick=0,lastWheel=0,wheelTotal=0,stepAt=-Infinity;
+function esc(s){return String(s??'').replace(/[&<>"']/g,ch=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[ch]))}
+function safeUrl(s){const v=String(s||'').trim();if(!v)return '';if(/^data:image\/(?:jpeg|png|webp);base64,/i.test(v))return v;try{const u=new URL(v);return ['https:','http:'].includes(u.protocol)?u.href:''}catch{return ''}}
+function safeLink(s){const url=safeUrl(s);return /^(https?:)\/\//i.test(url)?url:''}
+
+const ICON_GLOBE='<svg viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="#364f5d" stroke-width="1.7" stroke-linecap="round"><circle cx="12" cy="12" r="9"/><path d="M3 12h18M12 3c-4 4-4 14 0 18M12 3c4 4 4 14 0 18"/></svg>';
+const ICON_INSTAGRAM='<svg viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="#b24782" stroke-width="2" stroke-linecap="round"><rect x="3" y="3" width="18" height="18" rx="5"/><circle cx="12" cy="12" r="4"/><circle cx="17.5" cy="6.6" r=".8" fill="#b24782" stroke="none"/></svg>';
+const ICON_CODE='<svg viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="#33414e" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M8 7 3 12l5 5m8-10 5 5-5 5m-3-13-2 16"/></svg>';
+const ICON_VIDEO='<svg viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="#344e60" stroke-width="1.9" stroke-linejoin="round"><rect x="3" y="5" width="18" height="15" rx="3"/><path d="m10 9 5 3-5 3z"/></svg>';
+const ICON_MUSIC='<svg viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="#253947" stroke-width="2" stroke-linejoin="round" stroke-linecap="round"><path d="M13 4v13a4 4 0 1 1-4-4c1 0 2 .4 2 .4V7c4 1 6 1 9 0v4c-3 1-4 0-7-1"/></svg>';
+function extraKind(urlValue){
+ try {
+  const host=new URL(urlValue).hostname.toLowerCase();const at=d=>host===d||host.endsWith('.'+d);
+  if(at('youtube.com')||at('youtu.be'))return ['YouTube',SVG_YOUTUBE];
+  if(at('x.com')||at('twitter.com'))return ['X',SVG_X];
+  if(at('instagram.com'))return ['Instagram',ICON_INSTAGRAM];
+  if(at('pixiv.net'))return ['pixiv','<span class="social-letter" style="color:#2687d4">p</span>'];
+  if(at('github.com'))return ['GitHub',ICON_CODE];
+  if(at('twitch.tv'))return ['Twitch','<span class="social-letter" style="color:#8063b4">T</span>'];
+  if(at('tiktok.com'))return ['TikTok',ICON_MUSIC];
+  if(at('booth.pm'))return ['BOOTH','<span class="social-letter social-letter-sm">BOOTH</span>'];
+  if(at('note.com'))return ['note','<span class="social-letter">n</span>'];
+  if(at('nicovideo.jp'))return ['ニコニコ動画',ICON_VIDEO];
+  if(at('fanbox.cc'))return ['FANBOX','<span class="social-letter">F</span>'];
+  if(at('lit.link'))return ['lit.link','<span class="social-letter social-letter-sm">lit</span>'];
+  return [host,ICON_GLOBE];
+ }catch{return ['公式HP',ICON_GLOBE]}
+}
+function extraSocialMarkup(item){
+ if(!Array.isArray(item.extra_links))return '';
+ const urls=new Set([safeLink(item.youtube_url),safeLink(item.x_url)].filter(Boolean));
+ return item.extra_links.slice(0,6).map(link=>{
+  const url=safeLink(link?.url);if(!url||urls.has(url))return '';
+  urls.add(url);
+  const [kind,logo]=extraKind(url);
+  const label=String(link?.label||'').trim().slice(0,40)||kind;
+  return `<a class="social" href="${esc(url)}" target="_blank" rel="noopener noreferrer" title="${esc(label)}" aria-label="${esc(item.creator_name)}の${esc(label)}を開く">${logo}</a>`;
+ }).join('');
+}
+
+function socialMarkup(item){const links=[];const yu=safeLink(item.youtube_url),xu=safeLink(item.x_url);if(yu)links.push(`<a class="social" href="${esc(yu)}" target="_blank" rel="noopener noreferrer" aria-label="${esc(item.creator_name)}のYouTubeを開く">${SVG_YOUTUBE}</a>`);if(xu)links.push(`<a class="social" href="${esc(xu)}" target="_blank" rel="noopener noreferrer" aria-label="${esc(item.creator_name)}のXを開く">${SVG_X}</a>`);links.push(extraSocialMarkup(item));return links.join('')}
+function makeCard(d,i){
+ const el=document.createElement('article');el.className='scene'+(d.recruit?' is-recruit':'');el.dataset.index=i;el.dataset.slot='hidden';el.setAttribute('aria-label',d.creator_name+' 詳細カード');el.tabIndex=-1;
+ const art=safeUrl(d.gallery_image_url)||safeUrl(d.icon_url);const pending=!safeUrl(d.gallery_image_url);
+ el.style.setProperty('--fig-left',`${Math.max(0,Math.min(100,Number(d.gallery_offset_x??50)))}%`);
+ const image=art?`<img src="${esc(art)}" class="${pending?'figure-pending':''}" draggable="false" alt="" loading="${i<2?'eager':'lazy'}">`:'';
+ const avatar=safeUrl(d.icon_url)?`<img class="avatar" src="${esc(safeUrl(d.icon_url))}" alt="" draggable="false">`:`<span class="avatar-fallback" aria-hidden="true">${d.recruit?'✦':'C'}</span>`;
+ const customLinksCount=Array.isArray(d.extra_links)?d.extra_links.length:0;
+ if(!d.recruit && customLinksCount >= 3)el.classList.add('has-many-links');
+ const socials=d.recruit?`<a class="social" href="https://x.com/KAGETORA_Z00" target="_blank" rel="noopener noreferrer" aria-label="Xで掲載について問い合わせる">${SVG_X}</a>`:socialMarkup(d);
+ const role=(!d.recruit&&d.gallery_role)?`<p class="role">${esc(d.gallery_role)}</p>`:'';
+ const desc=d.recruit?'NIKKE UNION MATCHを一緒に盛り上げていただけるYouTuber・配信者・NIKKEクリエイター様を募集しています。\n\n掲載をご希望の方は、Xからお気軽にご連絡ください。':(d.description||'NIKKE UNION MATCH 応援クリエイター');
+ const extra=d.recruit?'':[
+    safeLink(d.union_match_video_url)?`<a href="${esc(safeLink(d.union_match_video_url))}" target="_blank" rel="noopener noreferrer">UNION MATCH 紹介動画</a>`:'',
+    safeLink(d.union_match_x_url)?`<a href="${esc(safeLink(d.union_match_x_url))}" target="_blank" rel="noopener noreferrer">UNION MATCH 紹介投稿</a>`:''
+  ].filter(Boolean).join('');
+ el.innerHTML=`<div class="composition"><div class="figure">${image}</div><section class="plate" aria-label="${esc(d.creator_name)} の紹介"><div class="plate-body"><div class="profile">${d.recruit?'':`<span class="avatar-shell">${avatar}</span>`}<div class="identity"><h2>${esc(d.creator_name)}</h2>${role}</div></div><div class="cr-rule"></div><div class="cr-label">ABOUT</div><div class="cr-description" tabindex="0">${esc(desc)}</div>${extra?`<div class="cr-links-extra">${extra}</div>`:''}<div class="cr-footer"><div class="cr-footer-label"><span>CONNECT</span><b>${d.recruit?'掲載についてお問い合わせ':'公式リンク'}</b></div><div class="socials">${socials}</div></div></div><button class="close" type="button" aria-label="カードを閉じる">${ICON_CLOSE}</button></section><div class="caption"><strong>${esc(d.creator_name)}</strong></div></div>`;
+ const closeBtn=el.querySelector('.close');closeBtn.addEventListener('click',e=>{e.preventDefault();e.stopPropagation();close()});
+ el.addEventListener('click',e=>{if(performance.now()<skipClick||e.target.closest('a,button,.cr-description'))return;if(i!==current){go(i);return}if(!expanded)open();});
+ el.addEventListener('keydown',e=>{if(e.target!==el)return;if(e.key==='Enter'||e.key===' '){e.preventDefault();if(i!==current)go(i);else if(!expanded)open()}});
+ el.addEventListener('pointerleave',()=>{if(i===current)resetTilt()});return el;
+}
+function delta(i){let d=(i-current+nodes.length)%nodes.length;if(d>nodes.length/2)d-=nodes.length;return d}
+function position(){if(!nodes.length)return;const w=stage.clientWidth,sh=nodes[0].offsetHeight,sw=nodes[0].offsetWidth,mob=w<=600,tab=w<=1024,scale=mob?.63:tab?.74:.78;const charPeek=mob?48:tab?122:Math.min(295,Math.max(225,w*.17));
+ nodes.forEach((el,i)=>{const d=delta(i),visible=Math.abs(d)<=1;let tx=0,ty=0;
+  if(Math.abs(d)===1){const img=el.querySelector('.figure img');const itemLeft=img?img.offsetLeft-img.offsetWidth*.39:sw*.3;const itemRight=itemLeft+(img?img.offsetWidth:sw*.4);const center=d===-1?charPeek-(itemRight-sw/2)*scale:w-charPeek-(itemLeft-sw/2)*scale;tx=center-w/2;ty=(d===-1?-.43:.43)*sh*(1-scale)}else if(d!==0){tx=Math.sign(d)*(w+sw)}
+  el.dataset.slot=visible?String(d):'hidden';el.classList.toggle('is-open',d===0&&expanded);
+  el.style.setProperty('--tx',tx.toFixed(1)+'px');el.style.setProperty('--ty',ty.toFixed(1)+'px');el.style.setProperty('--scale',d===0?'1':scale);el.style.setProperty('--a',visible?(d===0?'1':'.93'):'0');el.style.setProperty('--z',d===0?'30':'3');el.tabIndex=visible&&d===0?0:-1;el.setAttribute('aria-hidden',visible?'false':'true');el.setAttribute('aria-expanded',String(d===0&&expanded));
+ });}
+function stopAuto(){if(timer){clearInterval(timer);timer=null}}
+function startAuto(){stopAuto();if(!expanded&&!hover&&!document.hidden&&!matchMedia('(prefers-reduced-motion: reduce)').matches)timer=setInterval(()=>go(current+1),6200)}
+function resetTilt(){nodes.forEach(n=>{n.style.removeProperty('--tiltX');n.style.removeProperty('--tiltY')})}
+function open(){if(expanded)return;expanded=true;resetTilt();position();stopAuto()}
+function close(){if(!expanded)return;expanded=false;resetTilt();position();startAuto()}
+function go(i){if(!nodes.length)return;const next=(i+nodes.length)%nodes.length;if(next===current)return;resetTilt();current=next;position();startAuto()}
+async function load(){try{
+ const [r,s]=await Promise.all([sb.from('creators').select('id,creator_name,icon_url,youtube_url,x_url,union_match_video_url,union_match_x_url,description,display_order,created_at,gallery_image_url,gallery_role,gallery_offset_x,extra_links').eq('is_public',true).order('display_order',{ascending:true}).order('created_at',{ascending:false}),sb.from('creator_gallery_settings').select('image_url,offset_x').eq('id','recruitment').maybeSingle()]);
+ if(r.error)throw r.error;if(s.error)throw s.error;
+ const data=[...(r.data||[]),{recruit:true,creator_name:'応援クリエイター募集中',gallery_image_url:s.data?.image_url||'',gallery_offset_x:s.data?.offset_x??50}];
+ nodes=data.map(makeCard);stage.replaceChildren(...nodes);const images=nodes.map(el=>el.querySelector('.figure img')).filter(Boolean);
+ await Promise.all(images.map(im=>im.decode().catch(()=>{})));expanded=true;position();requestAnimationFrame(position);status.hidden=true;stopAuto();
+ }catch(e){console.error('CREATORS_GALLERY_LOAD_ERROR',e);status.textContent='クリエイター情報を読み込めませんでした。';status.hidden=false}}
+stage.addEventListener('pointerenter',e=>{if(e.pointerType==='mouse'){hover=true;stopAuto()}});
+stage.addEventListener('pointerleave',e=>{if(e.pointerType==='mouse'){hover=false;resetTilt();startAuto()}});
+stage.addEventListener('pointermove',e=>{if(e.pointerType!=='mouse'||expanded||!matchMedia('(hover:hover) and (pointer:fine)').matches)return;const el=nodes[current];if(!el||!el.contains(e.target)){resetTilt();return}const r=el.getBoundingClientRect(),x=Math.max(-1,Math.min(1,(e.clientX-r.left-r.width/2)/(r.width*.38))),y=Math.max(-1,Math.min(1,(e.clientY-r.top-r.height/2)/(r.height*.38)));el.style.setProperty('--tiltX',(-y*2.6).toFixed(2)+'deg');el.style.setProperty('--tiltY',(x*3.2).toFixed(2)+'deg')},{passive:true});
+stage.addEventListener('wheel',e=>{if(e.ctrlKey||e.metaKey||matchMedia('(pointer:coarse)').matches)return;const scroll=e.target.closest('.cr-description');if(scroll&&e.deltaY&&scroll.scrollHeight>scroll.clientHeight){const before=scroll.scrollTop;scroll.scrollTop+=e.deltaY;if(scroll.scrollTop!==before){e.preventDefault();return}}
+ const dx=Math.abs(e.deltaY)>=Math.abs(e.deltaX)?e.deltaY:e.deltaX;if(Math.abs(dx)<1)return;e.preventDefault();const now=performance.now();if(now-lastWheel>330)wheelTotal=0;lastWheel=now;if(now-stepAt<900)return;wheelTotal+=e.deltaMode===1?dx*18:dx;if(Math.abs(wheelTotal)<40)return;const sign=Math.sign(wheelTotal);wheelTotal=0;stepAt=now;go(current+sign)},{passive:false});
+stage.addEventListener('touchstart',e=>{if(e.touches.length!==1||e.target.closest('a,button')){touchStart=null;return}const sc=e.target.closest('.cr-description');touchStart={x:e.touches[0].clientX,y:e.touches[0].clientY,sc,scrollTop:sc?.scrollTop||0,handled:false}},{passive:true});
+stage.addEventListener('touchmove',e=>{if(!touchStart||!touchStart.sc)return;const dx=e.touches[0].clientX-touchStart.x,dy=e.touches[0].clientY-touchStart.y;if(Math.abs(dy)<=Math.abs(dx)||Math.abs(dy)<6)return;const sc=touchStart.sc;if(sc.scrollHeight>sc.clientHeight){e.preventDefault();sc.scrollTop=touchStart.scrollTop-dy;touchStart.handled=true}},{passive:false});
+stage.addEventListener('touchcancel',()=>{touchStart=null},{passive:true});
+stage.addEventListener('touchend',e=>{if(!touchStart||!e.changedTouches.length)return;const t=touchStart;touchStart=null;if(t.handled)return;const dx=e.changedTouches[0].clientX-t.x,dy=e.changedTouches[0].clientY-t.y;if(t.sc&&Math.abs(dy)>Math.abs(dx)&&t.sc.scrollHeight>t.sc.clientHeight)return;const primary=Math.abs(dx)>Math.abs(dy)?dx:dy;if(Math.abs(primary)<43)return;skipClick=performance.now()+420;go(current+(primary<0?1:-1))},{passive:true});
+document.addEventListener('keydown',e=>{if(e.key==='Escape')close();else if(e.key==='ArrowLeft'||e.key==='ArrowUp')go(current-1);else if(e.key==='ArrowRight'||e.key==='ArrowDown')go(current+1)});
+window.addEventListener('resize',position);document.addEventListener('visibilitychange',startAuto);
+load();
+
+</script>
 <script src="./push-notifications/notification-ui.js?v=20261120-menu-single-handler-v1" defer></script>
-</body>
-
-</html>
+</body></html>
