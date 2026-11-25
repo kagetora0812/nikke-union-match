@@ -408,7 +408,10 @@
     }
     .bottom-invite-wrap{
       width:min(var(--content),calc(100% - 48px));
-      margin:76px auto 32px;
+      margin:240px auto 80px;
+      opacity:1 !important;
+      transform:none !important;
+      visibility:visible !important;
       display:flex;
       justify-content:center;
       align-items:center;
@@ -417,16 +420,11 @@
     .bottom-invite-wrap .invite-btn{
       margin:0;
     }
-    @media (max-width:600px){
-      .bottom-invite-wrap{
-        width:calc(100% - 28px);
-        margin:60px auto 32px;
-      }
+    @media (max-width:1024px), (pointer:coarse){
+      .bottom-invite-wrap{margin:180px auto 80px}
     }
-    .bottom-invite-wrap{
-      opacity:1 !important;
-      transform:none !important;
-      visibility:visible !important;
+    @media (max-width:600px){
+      .bottom-invite-wrap{width:calc(100% - 28px)}
     }
     body.special-running{
       background:#000 !important;
@@ -642,7 +640,7 @@
       border-bottom:1px solid rgba(255,255,255,.17);
       scroll-margin-top:var(--header-h);
     }
-    .lux-page .bot-chapter:first-of-type{border-top:0}
+    .lux-page #unionMatchBot{padding-top:128px}
     .bot-chapter .section-heading{margin:0;min-width:0}
     .bot-chapter .section-en{
       margin:0;color:#28C0FC;
@@ -658,7 +656,6 @@
     }
     .chapter-copy p{margin:0 0 10px;font:inherit;color:inherit}
     .chapter-copy p:last-child{margin-bottom:0}
-    .chapter-copy .chapter-accent{color:#8EDCFF}
     .feature-list,.install-list{display:grid;gap:0}
     .feature-row,.install-row{padding:15px 0;border-bottom:1px solid rgba(255,255,255,.12)}
     .feature-row:first-child,.install-row:first-child{padding-top:0}
@@ -674,7 +671,7 @@
     .chapter-copy .install-list{margin:18px 0}
     .chapter-copy .install-requirement{color:#fff}
     .chapter-copy .install-note{color:#dce3e8}
-    .chapter-copy code{font:inherit;color:#8EDCFF}
+    .chapter-copy code{font:inherit;color:inherit}
     .command-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:14px;align-items:stretch}
     .command-card{
       min-width:0;min-height:126px;padding:18px 14px;position:relative;
@@ -697,29 +694,31 @@
       animation:commandCopiedNotice .85s ease forwards;pointer-events:none;
     }
     @keyframes commandCopiedNotice{0%{opacity:0}18%,72%{opacity:1}100%{opacity:0}}
-    .bot-chapter.is-reveal-pending:not(:focus-within) .section-heading,
-    .bot-chapter.is-reveal-pending:not(:focus-within) .chapter-copy{opacity:0}
-    .bot-chapter.is-revealed .section-heading{animation:botChapterRise .9s cubic-bezier(.22,.61,.36,1) both}
-    .bot-chapter.is-revealed .chapter-copy{animation:botChapterRise .9s .2s cubic-bezier(.22,.61,.36,1) both}
-    @keyframes botChapterRise{from{opacity:0;transform:translateY(12px)}to{opacity:1;transform:translateY(0)}}
-    @keyframes botChapterFade{from{opacity:0}to{opacity:1}}
+    /* Scroll-position reveal: no timed animation or change to the scroll container. */
+    .bot-chapter.is-scroll-reveal:not(:focus-within) .section-heading{
+      opacity:var(--chapter-heading-opacity,0);
+      transform:translateY(var(--chapter-heading-y,16px));
+    }
+    .bot-chapter.is-scroll-reveal:not(:focus-within) .chapter-copy{
+      opacity:var(--chapter-copy-opacity,0);
+      transform:translateY(var(--chapter-copy-y,16px));
+    }
     @media (max-width:1024px), (pointer:coarse){
-      .lux-page .bot-chapter{width:calc(100% - 34px);grid-template-columns:minmax(0,1fr);gap:12px;padding:34px 0}
+      .lux-page .bot-chapter{width:calc(100% - 34px);grid-template-columns:minmax(0,1fr);gap:22px;padding:54px 0}
       .bot-chapter .section-en{font-size:30px}
       .command-grid{grid-template-columns:repeat(2,minmax(0,1fr));grid-auto-rows:1fr}
-      .bot-chapter.is-revealed .section-heading,.bot-chapter.is-revealed .chapter-copy{animation-name:botChapterFade}
+      .feature-row,.install-row{padding:22px 0}
     }
     @media (max-width:600px){
-      .lux-page .bot-chapter{width:calc(100% - 28px);gap:20px;padding:28px 0}
+      .lux-page .bot-chapter{width:calc(100% - 28px);gap:26px;padding:46px 0}
       .bot-chapter .section-en{font-size:28px}
       .bot-chapter .chapter-copy{font-size:13px}
-      .command-grid{grid-template-columns:minmax(0,1fr);grid-auto-rows:1fr;gap:10px}
+      .command-grid{grid-template-columns:minmax(0,1fr);grid-auto-rows:1fr;gap:14px}
       .command-card{min-height:0;padding:14px}
       .command-card .cmd{font-size:25px}
     }
     @media (prefers-reduced-motion:reduce){
-      .bot-chapter.is-reveal-pending:not(:focus-within) .section-heading,.bot-chapter.is-reveal-pending:not(:focus-within) .chapter-copy{opacity:1}
-      .bot-chapter.is-revealed .section-heading,.bot-chapter.is-revealed .chapter-copy{animation:none}
+      .bot-chapter.is-scroll-reveal .section-heading,.bot-chapter.is-scroll-reveal .chapter-copy{opacity:1!important;transform:none!important}
     }
     .special-install-note{margin:0 auto 12px;text-align:center;color:#dce3e8;font:500 12px/1.6 "Zen Maru Gothic","Noto Sans JP",sans-serif;width:min(var(--content),calc(100% - 48px))}
     html.um-bot-handheld .special-install-note{display:none}
@@ -883,7 +882,7 @@
         <p>UNION MATCHは、BOTを導入しなくてもご利用いただけます。</p>
         <p>BOTを導入することで、募集情報や公式イベントの通知、ユニオン管理がより便利になります。</p>
         <p>初回連携後は、DiscordからPASSの入力不要でサイトをご利用いただけます。</p>
-        <p class="chapter-accent">導入・利用無料。外部サービスの契約も不要です。</p>
+        <p>導入・利用無料。外部サービスの契約も不要です。</p>
       </div>
     </section>
 
@@ -1015,19 +1014,79 @@
   </script>
   <script>
     (() => {
-      const chapters = document.querySelectorAll('main.lux-page .bot-chapter');
-      if (!('IntersectionObserver' in window) || matchMedia('(prefers-reduced-motion: reduce)').matches) return;
-      const observer = new IntersectionObserver((entries) => {
-        for (const entry of entries) {
-          if (!entry.isIntersecting) continue;
-          entry.target.classList.replace('is-reveal-pending','is-revealed');
-          observer.unobserve(entry.target);
+      const page = document.querySelector('main.lux-page');
+      const motionPreference = matchMedia('(prefers-reduced-motion: reduce)');
+      if (!page || motionPreference.matches) return;
+      const pending = new Map(Array.from(page.querySelectorAll('.bot-chapter'), chapter => [chapter, {
+        heading:chapter.querySelector('.section-heading'), h:0, c:0
+      }]));
+      if (!pending.size) return;
+      const clamp = n => Math.max(0, Math.min(1, n));
+      function finish(chapter) {
+        chapter.classList.remove('is-scroll-reveal');
+        for (const key of ['heading-opacity','heading-y','copy-opacity','copy-y']) {
+          chapter.style.removeProperty('--chapter-' + key);
         }
-      }, {root:null, threshold:0, rootMargin:'0px 0px -45px 0px'});
-      chapters.forEach(chapter => {
-        chapter.classList.add('is-reveal-pending');
-        observer.observe(chapter);
-      });
+        pending.delete(chapter);
+      }
+      function update() {
+        if (!pending.size) return;
+        if (motionPreference.matches || document.body.classList.contains('special-running')) {
+          for (const chapter of pending.keys()) finish(chapter);
+          return;
+        }
+        let top = 0;
+        let bottom = window.innerHeight || document.documentElement.clientHeight;
+        const header = document.querySelector('.um-shared-header');
+        const footer = document.querySelector('.um-shared-footer');
+        if (header) {
+          const r = header.getBoundingClientRect();
+          if (r.height > 0 && r.top <= 2 && r.bottom < bottom) top = Math.max(top,r.bottom);
+        }
+        if (footer) {
+          const r = footer.getBoundingClientRect();
+          if (r.height > 0 && r.top >= top && r.bottom >= bottom - 2) bottom = Math.min(bottom,r.top);
+        }
+        const span = Math.max(1,bottom-top);
+        const distance = Math.max(1,Math.min(320,span*.46));
+        const delay = Math.min(44,span*.075);
+        const movement = matchMedia('(max-width:1024px), (pointer:coarse)').matches ? 8 : 16;
+        const changes = [];
+        for (const [chapter,state] of pending) {
+          // Use the untransformed heading position; the reveal cannot feed back into its own progress.
+          const y = chapter.getBoundingClientRect().top + parseFloat(getComputedStyle(chapter).paddingTop);
+          const travel = bottom-y;
+          const h = Math.max(state.h,clamp(travel/distance));
+          const c = Math.max(state.c,clamp((travel-delay)/distance));
+          changes.push([chapter,state,h,c]);
+        }
+        for (const [chapter,state,h,c] of changes) {
+          if (c >= 1 || chapter.contains(document.activeElement)) { finish(chapter); continue; }
+          if (h === state.h && c === state.c && state.drawn) continue;
+          state.h=h; state.c=c; state.drawn=true;
+          chapter.style.setProperty('--chapter-heading-opacity', h.toFixed(3));
+          chapter.style.setProperty('--chapter-copy-opacity', c.toFixed(3));
+          chapter.style.setProperty('--chapter-heading-y', ((1-h)*movement).toFixed(2)+'px');
+          chapter.style.setProperty('--chapter-copy-y', ((1-c)*movement).toFixed(2)+'px');
+        }
+      }
+      let frame=0;
+      function requestUpdate() {
+        if (!pending.size || frame) return;
+        frame=requestAnimationFrame(() => { frame=0; update(); });
+      }
+      for (const chapter of pending.keys()) {
+        chapter.classList.add('is-scroll-reveal');
+        chapter.addEventListener('focusin', () => finish(chapter), {once:true});
+      }
+      page.addEventListener('scroll',requestUpdate,{passive:true});
+      window.addEventListener('scroll',requestUpdate,{passive:true});
+      window.addEventListener('resize',requestUpdate,{passive:true});
+      window.addEventListener('pageshow',requestUpdate);
+      window.addEventListener('load',requestUpdate,{once:true});
+      if (motionPreference.addEventListener) motionPreference.addEventListener('change',requestUpdate);
+      if (document.fonts) document.fonts.ready.then(requestUpdate);
+      update();
     })();
   </script>
   <script>
@@ -1105,7 +1164,9 @@
           }
         }
         const buttonRect = bottomInvite.getBoundingClientRect();
-        const restoreStart = visibleBottom + 40;
+        const lastChapter = document.getElementById("easyStart");
+        const gap = lastChapter ? Math.max(0, buttonRect.top - lastChapter.getBoundingClientRect().bottom) : 0;
+        const restoreStart = visibleBottom + Math.min(120, gap * .5);
         const restoreEnd = visibleBottom - buttonRect.height;
         const beforeBottom = clamp01((buttonRect.top - restoreEnd) / Math.max(1, restoreStart - restoreEnd));
         const smoothBeforeBottom = beforeBottom * beforeBottom * (3 - 2 * beforeBottom);
