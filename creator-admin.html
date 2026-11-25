@@ -2406,6 +2406,8 @@ main.container>section, main.container>section:not(.hidden), #menuSection, #auto
     .creator-gallery-art-controls input[type=range]{padding:0;min-height:26px;accent-color:#41c8f4;border:0;background:transparent}
     .creator-gallery-recruit-controls{margin-top:20px}
     .creator-gallery-recruit-controls input[type=file]{width:100%}
+    .creator-gallery-recruit-offset-label{display:block;margin-top:12px;color:#b7c9dd;font-size:11px;font-weight:700}
+    .creator-gallery-recruit-controls input[type=range]{display:block;width:100%;min-height:30px;padding:0;margin-top:7px;accent-color:#41c8f4;border:0;background:transparent}
 </style>
 
 
@@ -4142,10 +4144,10 @@ main.container>section, main.container>section:not(.hidden), #menuSection, #auto
 
 
 
-      <!-- Gallery recruitment artwork only. Headline, copy and X contact remain fixed. -->
+      <!-- Gallery recruitment artwork and horizontal placement; recruitment text and contact stay fixed. -->
       <div class="panel creator-gallery-recruit-controls">
         <div class="panel-title">ギャラリー「応援クリエイター募集中」の立ち絵</div>
-        <p class="creator-gallery-art-help">変更できるのはキャラクター画像だけです。募集文と連絡先は固定です。</p>
+        <p class="creator-gallery-art-help">変更できるのはキャラクター画像と横位置だけです。募集文と連絡先は固定です。</p>
         <label for="recruitGalleryFile">募集枠のキャラクター画像を選択</label>
         <input id="recruitGalleryFile" type="file" accept="image/png,image/jpeg,image/webp,.png,.jpg,.jpeg,.webp">
         <div class="creator-gallery-guide-wrap hidden" data-mode="pc" data-recruit="true">
@@ -4160,8 +4162,10 @@ main.container>section, main.container>section:not(.hidden), #menuSection, #auto
                 </div>
                 <div class="creator-gallery-guide-note">点線は本番カードの位置・大きさの目安です（詳細文の長さで高さは変わります）。画像と枠の重なりを見ながら調整できます。</div>
               </div>
+        <label for="recruitGalleryOffsetX" class="creator-gallery-recruit-offset-label">募集枠の画像の横位置：<span id="recruitGalleryOffsetXValue">50%</span></label>
+        <input id="recruitGalleryOffsetX" type="range" min="0" max="100" step="1" value="50" aria-label="募集枠のキャラクター画像の横位置">
         <div class="button-row" style="margin-top:12px">
-          <button id="recruitGallerySaveBtn" type="button" class="btn blue">募集枠の画像を保存</button>
+          <button id="recruitGallerySaveBtn" type="button" class="btn blue">募集枠の画像と位置を保存</button>
           <button id="recruitGalleryRemoveBtn" type="button" class="btn danger">画像を外す</button>
         </div>
         <div id="recruitGalleryStatus" class="creator-gallery-art-help" role="status"></div>
@@ -10573,18 +10577,28 @@ main.container>section, main.container>section:not(.hidden), #menuSection, #auto
       $('#galleryArtStatus').textContent='画像を外す指定です（保存すると反映）';
     });
 
+    $('#recruitGalleryOffsetX')?.addEventListener('input', () => {
+      const pos = $('#recruitGalleryOffsetX').value;
+      $('#recruitGalleryOffsetXValue').textContent = pos + '%';
+      const guide = $('#recruitGalleryPreview')?.closest('.creator-gallery-guide-wrap');
+      if (guide) guide.style.setProperty('--guide-x', pos + '%');
+    });
     $('#recruitGalleryFile')?.addEventListener('change',e=>{
       const file=e.target.files?.[0];if(!file)return;
       const status=$('#recruitGalleryStatus');if(status)status.textContent='画像を最適化中…';
       recruitGalleryPreparation=prepareGalleryArtFile(file).then(url=>{
         recruitGallerySelected=url;galleryPreviewImage('#recruitGalleryPreview',url);
-        if(status)status.textContent='✓ 選択済みです。「募集枠の画像を保存」を押してください。';
+        if(status)status.textContent='✓ 選択済みです。「募集枠の画像と位置を保存」を押してください。';
       }).catch(err=>{recruitGallerySelected='';if(status)status.textContent=err.message;throw err;});
     });
     async function loadRecruitmentGalleryImage(){
-      const r=await sb.from('creator_gallery_settings').select('image_url').eq('id','recruitment').maybeSingle();
+      const r=await sb.from('creator_gallery_settings').select('image_url,offset_x').eq('id','recruitment').maybeSingle();
       if(r.error){$('#recruitGalleryStatus').textContent='ギャラリー用DB設定を確認してください（SQL未適用の可能性）。';return}
       recruitGalleryCurrent=r.data?.image_url||'';recruitGallerySelected='';recruitGalleryPreparation=null;
+      const offset = Number.isFinite(Number(r.data?.offset_x)) ? Math.max(0, Math.min(100, Number(r.data?.offset_x))) : 50;
+      $('#recruitGalleryOffsetX').value = String(offset);
+      $('#recruitGalleryOffsetXValue').textContent = offset + '%';
+      $('#recruitGalleryPreview')?.closest('.creator-gallery-guide-wrap')?.style.setProperty('--guide-x', offset + '%');
       galleryPreviewImage('#recruitGalleryPreview',recruitGalleryCurrent);
       $('#recruitGalleryStatus').textContent=recruitGalleryCurrent?'現在の募集枠画像を表示中':'募集枠の立ち絵は未設定';
     }
@@ -10593,12 +10607,15 @@ main.container>section, main.container>section:not(.hidden), #menuSection, #auto
       try{
         if(recruitGalleryPreparation && !remove)await recruitGalleryPreparation;
         const value=remove?'':(recruitGallerySelected||recruitGalleryCurrent);
-        const save=await sb.rpc('creator_admin_save_recruit_gallery_image',{p_token:token,p_image_url:value});
+        const position = Number($('#recruitGalleryOffsetX').value);
+        const save=await sb.rpc('creator_admin_save_recruit_gallery_visual',{
+          p_token:token,p_image_url:value,p_offset_x:position
+        });
         if(save.error)throw save.error;
         recruitGalleryCurrent=value;recruitGallerySelected='';recruitGalleryPreparation=null;
         const input=$('#recruitGalleryFile');if(input)input.value='';
         galleryPreviewImage('#recruitGalleryPreview',value);
-        $('#recruitGalleryStatus').textContent='✓ 募集枠のキャラクター画像を保存しました。';
+        $('#recruitGalleryStatus').textContent='✓ 募集枠の画像と横位置を保存しました。';
       }catch(err){console.error(err);$('#recruitGalleryStatus').textContent='保存できませんでした：'+String(err.message||err)}
     }
     $('#recruitGallerySaveBtn')?.addEventListener('click',()=>saveRecruitmentGallery(false));
