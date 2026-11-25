@@ -217,8 +217,9 @@
       color:#fff;
       background:rgba(5,10,14,.20);
       text-decoration:none;
+      font-family:"Zen Maru Gothic","Noto Sans JP",sans-serif;
       font-size:13px;
-      font-weight:900;
+      font-weight:700;
       letter-spacing:.055em;
       backdrop-filter:blur(6px);
       -webkit-backdrop-filter:blur(6px);
@@ -304,7 +305,6 @@
       width:min(var(--content),calc(100% - 48px));
       margin:0 auto;
       padding:28px 0 14px;
-      border-top:1px solid rgba(255,255,255,.08);
       color:#747d86;
       font:700 11px "Teko",sans-serif;
       letter-spacing:.16em;
@@ -408,7 +408,7 @@
     }
     .bottom-invite-wrap{
       width:min(var(--content),calc(100% - 48px));
-      margin:52px auto 24px;
+      margin:76px auto 32px;
       display:flex;
       justify-content:center;
       align-items:center;
@@ -420,7 +420,7 @@
     @media (max-width:600px){
       .bottom-invite-wrap{
         width:calc(100% - 28px);
-        margin:40px auto 18px;
+        margin:60px auto 32px;
       }
     }
     .bottom-invite-wrap{
@@ -663,15 +663,16 @@
     .feature-row,.install-row{padding:15px 0;border-bottom:1px solid rgba(255,255,255,.12)}
     .feature-row:first-child,.install-row:first-child{padding-top:0}
     .feature-row:last-child,.install-row:last-child{border-bottom:0;padding-bottom:0}
-    .chapter-copy .feature-label,.chapter-copy .step-label{
-      margin:0 0 3px;color:#8EDCFF;
+    .chapter-copy .step-label{
+      margin:0 0 3px;color:#fff;
       font:500 23px/1.1 "Teko",sans-serif;letter-spacing:.045em;
       font-stretch:normal;font-kerning:normal;
     }
     .chapter-copy h3{font:inherit;color:inherit;margin:0 0 3px}
     .feature-row p,.install-row p{margin:0}
-    .install-row{display:grid;grid-template-columns:88px minmax(0,1fr);gap:12px;align-items:start}
+    .install-row{display:grid;grid-template-columns:32px minmax(0,1fr);gap:12px;align-items:start}
     .chapter-copy .install-list{margin:18px 0}
+    .chapter-copy .install-requirement{color:#fff}
     .chapter-copy .install-note{color:#dce3e8}
     .chapter-copy code{font:inherit;color:#8EDCFF}
     .command-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:14px;align-items:stretch}
@@ -696,26 +697,28 @@
       animation:commandCopiedNotice .85s ease forwards;pointer-events:none;
     }
     @keyframes commandCopiedNotice{0%{opacity:0}18%,72%{opacity:1}100%{opacity:0}}
-    .bot-chapter .chapter-reveal{min-width:0}
-    .bot-chapter.is-revealed .section-heading{animation:botChapterRise .4s ease-out both}
-    .bot-chapter.is-revealed .chapter-copy{animation:botChapterRise .45s .08s ease-out both}
-    @keyframes botChapterRise{from{opacity:.12;transform:translateY(8px)}to{opacity:1;transform:translateY(0)}}
-    @keyframes botChapterFade{from{opacity:.18}to{opacity:1}}
+    .bot-chapter.is-reveal-pending:not(:focus-within) .section-heading,
+    .bot-chapter.is-reveal-pending:not(:focus-within) .chapter-copy{opacity:0}
+    .bot-chapter.is-revealed .section-heading{animation:botChapterRise .9s cubic-bezier(.22,.61,.36,1) both}
+    .bot-chapter.is-revealed .chapter-copy{animation:botChapterRise .9s .2s cubic-bezier(.22,.61,.36,1) both}
+    @keyframes botChapterRise{from{opacity:0;transform:translateY(12px)}to{opacity:1;transform:translateY(0)}}
+    @keyframes botChapterFade{from{opacity:0}to{opacity:1}}
     @media (max-width:1024px), (pointer:coarse){
       .lux-page .bot-chapter{width:calc(100% - 34px);grid-template-columns:minmax(0,1fr);gap:12px;padding:34px 0}
       .bot-chapter .section-en{font-size:30px}
-      .command-grid{grid-template-columns:repeat(2,minmax(0,1fr))}
+      .command-grid{grid-template-columns:repeat(2,minmax(0,1fr));grid-auto-rows:1fr}
       .bot-chapter.is-revealed .section-heading,.bot-chapter.is-revealed .chapter-copy{animation-name:botChapterFade}
     }
     @media (max-width:600px){
-      .lux-page .bot-chapter{width:calc(100% - 28px);padding:28px 0}
+      .lux-page .bot-chapter{width:calc(100% - 28px);gap:20px;padding:28px 0}
       .bot-chapter .section-en{font-size:28px}
       .bot-chapter .chapter-copy{font-size:13px}
-      .command-grid{grid-template-columns:minmax(0,1fr);gap:10px}
+      .command-grid{grid-template-columns:minmax(0,1fr);grid-auto-rows:1fr;gap:10px}
       .command-card{min-height:0;padding:14px}
       .command-card .cmd{font-size:25px}
     }
     @media (prefers-reduced-motion:reduce){
+      .bot-chapter.is-reveal-pending:not(:focus-within) .section-heading,.bot-chapter.is-reveal-pending:not(:focus-within) .chapter-copy{opacity:1}
       .bot-chapter.is-revealed .section-heading,.bot-chapter.is-revealed .chapter-copy{animation:none}
     }
     .special-install-note{margin:0 auto 12px;text-align:center;color:#dce3e8;font:500 12px/1.6 "Zen Maru Gothic","Noto Sans JP",sans-serif;width:min(var(--content),calc(100% - 48px))}
@@ -897,32 +900,26 @@
       <div class="chapter-copy">
         <div class="feature-list">
           <div class="feature-row">
-            <div class="feature-label">OFFICIAL EVENTS</div>
             <h3>公式情報</h3>
             <p>レイド・協同作戦・イベント・新キャラクター情報を通知。</p>
           </div>
           <div class="feature-row">
-            <div class="feature-label">X RECRUITMENT</div>
             <h3>X指揮官募集</h3>
             <p>Xでユニオンを探している指揮官の投稿を自動収集・通知。</p>
           </div>
           <div class="feature-row">
-            <div class="feature-label">SITE RECRUITMENT</div>
             <h3>新着指揮官</h3>
             <p>UNION MATCHに登録された新着指揮官を通知。</p>
           </div>
           <div class="feature-row">
-            <div class="feature-label">LOGIN REMINDER</div>
             <h3>ログインリマインダー</h3>
             <p>NIKKE公式Discordのログインリマインダーを毎朝7時にお届け。</p>
           </div>
           <div class="feature-row">
-            <div class="feature-label">DEADLINES</div>
             <h3>掲載期限</h3>
             <p>掲載期限を事前にお知らせ。通知からそのまま延長。</p>
           </div>
           <div class="feature-row">
-            <div class="feature-label">MANAGEMENT</div>
             <h3>ユニオン管理</h3>
             <p>PASS不要で、Discordから募集状態の切り替えや掲載管理ができます。</p>
           </div>
@@ -974,12 +971,12 @@
     <section class="bot-chapter" id="easyStart" aria-labelledby="easyStartTitle">
       <header class="section-heading"><h2 class="section-en" id="easyStartTitle">EASY TO START</h2></header>
       <div class="chapter-copy">
-        <p class="chapter-accent">BOTのご利用には、UNION MATCHへのユニオン登録が必要です。</p>
+        <p class="install-requirement">BOTのご利用には、UNION MATCHへのユニオン登録が必要です。</p>
         <p>メンバーを募集していないユニオンも「登録のみ」でご利用いただけます。</p>
         <div class="install-list">
-          <div class="install-row"><div class="step-label">01 REGISTER</div><p>ユニオン登録・PASSを取得</p></div>
-          <div class="install-row"><div class="step-label">02 INSTALL</div><p>BOTをDiscordサーバーに追加</p></div>
-          <div class="install-row"><div class="step-label">03 SETUP</div><p><code>/setup</code> を実行し、初期設定・PASS連携</p></div>
+          <div class="install-row"><div class="step-label">01</div><p>ユニオン登録・PASSを取得</p></div>
+          <div class="install-row"><div class="step-label">02</div><p>BOTをDiscordサーバーに追加</p></div>
+          <div class="install-row"><div class="step-label">03</div><p><code>/setup</code> を実行し、初期設定・PASS連携</p></div>
         </div>
         <p class="install-note">導入・初期設定にはDiscordサーバーの管理権限が必要です。</p>
         <p class="install-note">ユニオン登録は14日間有効。Discordから延長できます。</p>
@@ -1023,11 +1020,14 @@
       const observer = new IntersectionObserver((entries) => {
         for (const entry of entries) {
           if (!entry.isIntersecting) continue;
-          entry.target.classList.add('is-revealed');
+          entry.target.classList.replace('is-reveal-pending','is-revealed');
           observer.unobserve(entry.target);
         }
       }, {root:null, threshold:0, rootMargin:'0px 0px -45px 0px'});
-      chapters.forEach(chapter => observer.observe(chapter));
+      chapters.forEach(chapter => {
+        chapter.classList.add('is-reveal-pending');
+        observer.observe(chapter);
+      });
     })();
   </script>
   <script>
@@ -1037,7 +1037,8 @@
       const video = document.getElementById("botBackgroundVideo");
       const page = document.querySelector("main.lux-page");
       const hero = document.querySelector(".hero");
-      if (!video || !page || !hero) return;
+      const bottomInvite = document.getElementById("bottomBotInvite");
+      if (!video || !page || !hero || !bottomInvite) return;
 
       const videos = [
         "./assets/bot/hero.mp4",
@@ -1093,14 +1094,26 @@
         // TOPを離れる約0.85画面で、カラーから白黒＋暗めへ移行。
         const intoPage = clamp01(state.top / (heroHeight * .85));
 
-        // 最下部の約1.05画面手前から、白黒＋暗めからカラーへ復帰。
-        const distanceToBottom = Math.max(0, state.max - state.top);
-        const beforeBottom = clamp01(distanceToBottom / Math.max(1, state.viewport * 1.05));
+        // 説明中は暗さを維持し、最下部の導入ボタンが見える直前からカラーへ復帰。
+        // 固定フッターがある場合は、その上端を実際の表示範囲の下端とする。
+        let visibleBottom = state.viewport;
+        const footer = document.querySelector(".um-shared-footer");
+        if (footer) {
+          const rect = footer.getBoundingClientRect();
+          if (rect.height > 0 && rect.top >= 0 && rect.bottom >= visibleBottom - 2) {
+            visibleBottom = Math.min(visibleBottom, rect.top);
+          }
+        }
+        const buttonRect = bottomInvite.getBoundingClientRect();
+        const restoreStart = visibleBottom + 40;
+        const restoreEnd = visibleBottom - buttonRect.height;
+        const beforeBottom = clamp01((buttonRect.top - restoreEnd) / Math.max(1, restoreStart - restoreEnd));
+        const smoothBeforeBottom = beforeBottom * beforeBottom * (3 - 2 * beforeBottom);
 
-        const effect = Math.min(intoPage, beforeBottom);
+        const effect = Math.min(intoPage, smoothBeforeBottom);
         const grayscale = effect;
         const saturate = mix(1, .20, effect);
-        const brightness = mix(.92, .42, effect);
+        const brightness = mix(.92, .38, effect);
         const contrast = mix(1.03, 1.10, effect);
 
         video.style.setProperty("--bot-bg-grayscale", grayscale.toFixed(3));
