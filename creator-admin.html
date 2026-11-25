@@ -2380,6 +2380,16 @@ main.container>section, main.container>section:not(.hidden), #menuSection, #auto
  .system-check-row{overflow-wrap:anywhere}
 }
 
+    /* Gallery image: only the creator management form and its recruitment slot. */
+    .creator-gallery-art-controls{display:grid;gap:10px;padding:15px;border:1px solid #40576e;border-radius:11px;background:#0c1726}
+    .creator-gallery-art-controls .panel-title{margin:0;color:#dcefff}
+    .creator-gallery-art-help{font-size:11px;color:#9faec0;line-height:1.8}
+    .creator-gallery-art-actions{display:flex;gap:12px;align-items:center;flex-wrap:wrap}
+    .creator-gallery-art-actions span{font-size:11px;color:#b4cbd8}
+    .creator-gallery-art-preview{display:block;width:100%;max-width:360px;height:220px;object-fit:contain;object-position:center bottom;border:1px solid #334456;background:linear-gradient(130deg,#172538,#101824);border-radius:8px}
+    .creator-gallery-art-controls input[type=range]{padding:0;min-height:26px;accent-color:#41c8f4;border:0;background:transparent}
+    .creator-gallery-recruit-controls{margin-top:20px}
+    .creator-gallery-recruit-controls input[type=file]{width:100%}
 </style>
 
 
@@ -3970,6 +3980,19 @@ main.container>section, main.container>section:not(.hidden), #menuSection, #auto
 
           </div>
 
+          <div class="creator-gallery-art-controls">
+            <div class="panel-title">ギャラリー用キャラクター画像</div>
+            <div class="creator-gallery-art-help">立ち絵（背景透過PNG・WEBP推奨）。横位置のみ調整できます。上下位置とキャラクターの表示高さは全員共通です。</div>
+            <label for="galleryArtFile">キャラクター画像を選択（最大20MB／保存時に自動圧縮）</label>
+            <input id="galleryArtFile" type="file" accept="image/png,image/jpeg,image/webp,.png,.jpg,.jpeg,.webp">
+            <div class="creator-gallery-art-actions"><button id="galleryArtRemoveBtn" type="button" class="btn danger">キャラクター画像を外す</button><span id="galleryArtStatus" role="status">画像未設定</span></div>
+            <img id="galleryArtPreview" class="creator-gallery-art-preview hidden" alt="ギャラリーの立ち絵プレビュー">
+            <label for="galleryRole">役職（詳細名刺のみに表示・任意）</label>
+            <input id="galleryRole" maxlength="60" placeholder="例：イラストレーター / 配信者">
+            <label for="galleryOffsetX">画像の横位置：<output id="galleryOffsetXValue">50%</output></label>
+            <input id="galleryOffsetX" type="range" min="0" max="100" value="50" step="1">
+          </div>
+
           <label>
 
             YouTube URL
@@ -4092,6 +4115,20 @@ main.container>section, main.container>section:not(.hidden), #menuSection, #auto
 
 
 
+      <!-- Gallery recruitment artwork only. Headline, copy and X contact remain fixed. -->
+      <div class="panel creator-gallery-recruit-controls">
+        <div class="panel-title">ギャラリー「応援クリエイター募集中」の立ち絵</div>
+        <p class="creator-gallery-art-help">変更できるのはキャラクター画像だけです。募集文と連絡先は固定です。</p>
+        <label for="recruitGalleryFile">募集枠のキャラクター画像を選択</label>
+        <input id="recruitGalleryFile" type="file" accept="image/png,image/jpeg,image/webp,.png,.jpg,.jpeg,.webp">
+        <img id="recruitGalleryPreview" class="creator-gallery-art-preview hidden" alt="募集枠の立ち絵プレビュー">
+        <div class="button-row" style="margin-top:12px">
+          <button id="recruitGallerySaveBtn" type="button" class="btn blue">募集枠の画像を保存</button>
+          <button id="recruitGalleryRemoveBtn" type="button" class="btn danger">画像を外す</button>
+        </div>
+        <div id="recruitGalleryStatus" class="creator-gallery-art-help" role="status"></div>
+      </div>
+
       <!-- ========================================
            登録済み一覧
       ========================================= -->
@@ -4177,6 +4214,12 @@ main.container>section, main.container>section:not(.hidden), #menuSection, #auto
 
 
     let creators = [];
+    let galleryArtCurrent = "";
+    let galleryArtSelected = "";
+    let galleryArtPreparation = null;
+    let recruitGalleryCurrent = "";
+    let recruitGallerySelected = "";
+    let recruitGalleryPreparation = null;
     let unionRegistryItems = [];
     let unionRegistryBotStatusAvailable = false;
     let passReissueTargets = [];
@@ -10426,6 +10469,92 @@ main.container>section, main.container>section:not(.hidden), #menuSection, #auto
 
 
     // ========================================
+    // ギャラリー用立ち絵（既存のアイコン加工機能とは独立）
+    // ========================================
+    function galleryPreviewImage(selector, value) {
+      const image = $(selector);
+      if (!image) return;
+      const url = safeUrl(value);
+      image.classList.toggle('hidden', !url);
+      if (url) image.src = url;
+      else image.removeAttribute('src');
+    }
+
+    async function prepareGalleryArtFile(file) {
+      if (!file || !['image/png','image/webp','image/jpeg'].includes(file.type)) throw new Error('対応するPNG・WEBP・JPGを選択してください。');
+      if (file.size > 20*1024*1024) throw new Error('画像は20MB以内にしてください。');
+      const raw = await readFileAsDataUrl(file);
+      const source = await loadImageFromDataUrl(raw);
+      const nw = source.naturalWidth, nh = source.naturalHeight;
+      if (!nw || !nh) throw new Error('画像を開けませんでした。');
+      let limit = 1500;
+      for(let pass=0;pass<7;pass++){
+        const factor=Math.min(1,limit/Math.max(nw,nh));
+        const canvas=document.createElement('canvas');
+        canvas.width=Math.max(1,Math.round(nw*factor));canvas.height=Math.max(1,Math.round(nh*factor));
+        const ctx=canvas.getContext('2d'); if(!ctx)throw new Error('画像を処理できませんでした。');
+        ctx.imageSmoothingQuality='high';ctx.drawImage(source,0,0,canvas.width,canvas.height);
+        const encoded=canvas.toDataURL('image/webp',Math.max(.64,.88-pass*.04));
+        if(encoded.startsWith('data:image/webp;')&&encoded.length<850000) return encoded;
+        limit=Math.round(limit*.83);
+      }
+      throw new Error('画像が大きすぎます。解像度を下げてもう一度お試しください。');
+    }
+
+    $('#galleryOffsetX')?.addEventListener('input',()=>{
+      $('#galleryOffsetXValue').textContent = $('#galleryOffsetX').value + '%';
+      const image=$('#galleryArtPreview');if(image)image.style.objectPosition=$('#galleryOffsetX').value+'% bottom';
+    });
+    $('#galleryArtFile')?.addEventListener('change',e=>{
+      const file=e.target.files?.[0];if(!file)return;
+      const status=$('#galleryArtStatus');if(status)status.textContent='画像を最適化中…';
+      galleryArtPreparation=prepareGalleryArtFile(file).then(url=>{
+        galleryArtSelected=url;galleryPreviewImage('#galleryArtPreview',url);
+        if(status)status.textContent='✓ 画像を選択しました。クリエイター保存時に反映します。';
+      }).catch(err=>{galleryArtSelected='';if(status)status.textContent=err.message;throw err;});
+    });
+    $('#galleryArtRemoveBtn')?.addEventListener('click',()=>{
+      galleryArtCurrent='';galleryArtSelected='';galleryArtPreparation=null;
+      const input=$('#galleryArtFile');if(input)input.value='';
+      galleryPreviewImage('#galleryArtPreview','');
+      $('#galleryArtStatus').textContent='画像を外す指定です（保存すると反映）';
+    });
+
+    $('#recruitGalleryFile')?.addEventListener('change',e=>{
+      const file=e.target.files?.[0];if(!file)return;
+      const status=$('#recruitGalleryStatus');if(status)status.textContent='画像を最適化中…';
+      recruitGalleryPreparation=prepareGalleryArtFile(file).then(url=>{
+        recruitGallerySelected=url;galleryPreviewImage('#recruitGalleryPreview',url);
+        if(status)status.textContent='✓ 選択済みです。「募集枠の画像を保存」を押してください。';
+      }).catch(err=>{recruitGallerySelected='';if(status)status.textContent=err.message;throw err;});
+    });
+    async function loadRecruitmentGalleryImage(){
+      const r=await sb.from('creator_gallery_settings').select('image_url').eq('id','recruitment').maybeSingle();
+      if(r.error){$('#recruitGalleryStatus').textContent='ギャラリー用DB設定を確認してください（SQL未適用の可能性）。';return}
+      recruitGalleryCurrent=r.data?.image_url||'';recruitGallerySelected='';recruitGalleryPreparation=null;
+      galleryPreviewImage('#recruitGalleryPreview',recruitGalleryCurrent);
+      $('#recruitGalleryStatus').textContent=recruitGalleryCurrent?'現在の募集枠画像を表示中':'募集枠の立ち絵は未設定';
+    }
+    async function saveRecruitmentGallery(remove=false){
+      const token=getToken();if(!token){showLogin();return}
+      try{
+        if(recruitGalleryPreparation && !remove)await recruitGalleryPreparation;
+        const value=remove?'':(recruitGallerySelected||recruitGalleryCurrent);
+        const save=await sb.rpc('creator_admin_save_recruit_gallery_image',{p_token:token,p_image_url:value});
+        if(save.error)throw save.error;
+        recruitGalleryCurrent=value;recruitGallerySelected='';recruitGalleryPreparation=null;
+        const input=$('#recruitGalleryFile');if(input)input.value='';
+        galleryPreviewImage('#recruitGalleryPreview',value);
+        $('#recruitGalleryStatus').textContent='✓ 募集枠のキャラクター画像を保存しました。';
+      }catch(err){console.error(err);$('#recruitGalleryStatus').textContent='保存できませんでした：'+String(err.message||err)}
+    }
+    $('#recruitGallerySaveBtn')?.addEventListener('click',()=>saveRecruitmentGallery(false));
+    $('#recruitGalleryRemoveBtn')?.addEventListener('click',()=>{
+      recruitGalleryPreparation=null;recruitGallerySelected='';
+      saveRecruitmentGallery(true);
+    });
+
+    // ========================================
     // 一覧取得
     // ========================================
 
@@ -10499,6 +10628,7 @@ main.container>section, main.container>section:not(.hidden), #menuSection, #auto
 
 
       renderCreators();
+      await loadRecruitmentGalleryImage();
 
     }
 
@@ -10827,6 +10957,11 @@ main.container>section, main.container>section:not(.hidden), #menuSection, #auto
           }
 
 
+          if (galleryArtPreparation) {
+            try { await galleryArtPreparation; }
+            catch (err) { showMessage($("#adminMessage"), String(err.message || err), "error"); return; }
+          }
+
           const id =
             $("#editingId")
               ?.value
@@ -11037,6 +11172,25 @@ main.container>section, main.container>section:not(.hidden), #menuSection, #auto
           }
 
 
+          const gallerySavedId = id || String(result.data || "");
+          if (!gallerySavedId) {
+            showMessage($("#adminMessage"), "保存したクリエイターIDを取得できませんでした。", "error");
+            return;
+          }
+          // When a create succeeds but gallery save fails, retry must UPDATE the new record.
+          if (!id) $("#editingId").value = gallerySavedId;
+          const galleryResult = await sb.rpc('creator_admin_save_gallery_visual', {
+            p_token:token, p_id:gallerySavedId,
+            p_image_url:galleryArtSelected || galleryArtCurrent || '',
+            p_role:$("#galleryRole")?.value?.trim() || '',
+            p_offset_x:Number($("#galleryOffsetX")?.value || 50)
+          });
+          if (galleryResult.error) {
+            console.error(galleryResult.error);
+            showMessage($("#adminMessage"), "基本情報は保存しましたが、ギャラリー設定の保存に失敗しました。SQLの適用状況をご確認ください。", "error");
+            return;
+          }
+
           showMessage(
             $("#adminMessage"),
             id
@@ -11110,6 +11264,17 @@ main.container>section, main.container>section:not(.hidden), #menuSection, #auto
       updateIconPreview();
 
 
+      galleryArtCurrent = creator.gallery_image_url || "";
+      galleryArtSelected = "";
+      galleryArtPreparation = null;
+      $("#galleryArtFile").value = "";
+      $("#galleryRole").value = creator.gallery_role || "";
+      $("#galleryOffsetX").value = String(creator.gallery_offset_x ?? 50);
+      $("#galleryOffsetXValue").textContent = $("#galleryOffsetX").value + "%";
+      galleryPreviewImage('#galleryArtPreview', galleryArtCurrent);
+      $("#galleryArtPreview").style.objectPosition = $("#galleryOffsetX").value + '% bottom';
+      $("#galleryArtStatus").textContent = galleryArtCurrent ? '現在の立ち絵を表示中' : '画像未設定';
+
       $("#youtubeUrl").value =
         creator.youtube_url ||
         "";
@@ -11178,6 +11343,15 @@ main.container>section, main.container>section:not(.hidden), #menuSection, #auto
 
       selectedIconData = "";
       existingIconValue = "";
+      galleryArtCurrent = "";
+      galleryArtSelected = "";
+      galleryArtPreparation = null;
+      $("#galleryRole").value = "";
+      $("#galleryOffsetX").value = "50";
+      $("#galleryOffsetXValue").textContent = "50%";
+      $("#galleryArtFile").value = "";
+      $("#galleryArtStatus").textContent = "画像未設定";
+      galleryPreviewImage('#galleryArtPreview','');
       cropSourceImage = null;
       cropZoom = 1;
       cropOffsetX = 0;
