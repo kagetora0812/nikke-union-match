@@ -1520,7 +1520,6 @@
     #listPage {
       font-family: "Zen Maru Gothic", "Noto Sans JP", sans-serif;
     }
-    #listPage .section-head h2,
     #listPage .section-head-actions .text-btn,
     #listPage .search-tab,
     #listPage #commanderFilterBox label,
@@ -1529,13 +1528,19 @@
     #listPage #unionFilterBox select,
     #listPage .recruitment-filter-count,
     #listPage #recruitmentList.cards article.card,
-    #listPage #recruitmentList.cards article.card .name,
+    #listPage #recruitmentList.cards article.card.commander-card .name,
+    #listPage #recruitmentList.cards article.card.x-collected-card .name,
     #listPage #recruitmentList.cards article.card .countdown,
     #listPage #recruitmentList.cards article.card .recruitment-type,
     #listPage #recruitmentList.cards article.card .new-badge,
     #listPage #recruitmentList.cards article.card .deadline-badge,
     #listPage #recruitmentList.cards article.card .x-listed-badge {
       font-family: "Zen Maru Gothic", "Noto Sans JP", sans-serif !important;
+    }
+    /* 見出しとユニオン名だけ、元のユニオンリストと同じNoto Sans JP。 */
+    #listPage .section-head h2,
+    #listPage #recruitmentList.cards article.card.union-card .name {
+      font-family: "Noto Sans JP", sans-serif !important;
     }
 
     /* ユニオンリストで確定した淡色ランク表示を、INDEXの募集一覧内だけで再現。 */
