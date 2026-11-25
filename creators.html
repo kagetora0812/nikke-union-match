@@ -1,5 +1,15 @@
 <!doctype html>
-<html lang="ja"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="theme-color" content="#05070a"><title>NIKKE UNION MATCH | 応援クリエイター</title>
+<html lang="ja"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="theme-color" content="#080b12"><title>NIKKE UNION MATCH | 応援クリエイター</title>
+<script>
+/* INDEX-compatible physical tablet classification, including landscape widths above 1366px. */
+(() => {
+  const ua = navigator.userAgent || "";
+  const platform = navigator.platform || "";
+  const isIPad = /iPad/i.test(ua) || (platform === "MacIntel" && navigator.maxTouchPoints > 1);
+  const isAndroidTablet = /Android/i.test(ua) && !/Mobile/i.test(ua);
+  if (isIPad || isAndroidTablet) document.documentElement.classList.add("tablet-device");
+})();
+</script>
 <link rel="stylesheet" href="./subpage-nav.css?v=20261121-visual-align-v2">
 <link rel="stylesheet" href="./shared/navigation.css?v=20261121-nav-transparency-v1">
 <link rel="stylesheet" href="./push-notifications/notification-ui.css?v=20261121-visual-align-v2">
@@ -7,11 +17,9 @@
 
 
 @import url("https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;500;600;700;800;900&family=Teko:wght@500;600;700&family=Zen+Maru+Gothic:wght@700&display=swap");
-:root{--ink:#193c53;--muted:#6c90a4;--header:62px;--footer:68px;--ease:cubic-bezier(.22,.82,.19,1)}
+:root{--ink:#193c53;--muted:#6c90a4;--ease:cubic-bezier(.22,.82,.19,1)}
 *{box-sizing:border-box}
-html,body{width:100%;height:100%;margin:0;overflow:hidden}
-html{background:#05070a}
-body{background:#f2f5f7}
+html,body{width:100%;height:100%;margin:0;overflow:hidden;background:#080b12}
 body{font-family:"Noto Sans JP",sans-serif;color:var(--ink);-webkit-font-smoothing:antialiased}
 button,a{font:inherit}button{cursor:pointer}
 
@@ -20,9 +28,12 @@ button,a{font:inherit}button{cursor:pointer}
 
 
 
-.gallery{position:fixed;top:var(--index-header-height,var(--header));right:0;left:0;bottom:0;z-index:0;overflow:hidden;touch-action:none;user-select:none;-webkit-user-select:none;background:radial-gradient(ellipse 70% 60% at 52% 45%,rgba(246,251,253,.8),#fff 78%)}
-@media(max-width:1366px){.gallery{bottom:var(--um-nav-bar-height,var(--footer))}}
-html.tablet-device .gallery{bottom:var(--um-nav-bar-height,var(--footer))}
+/* The document matches INDEX / UNION LIST dark browser chrome. The gallery underlay
+   continues beneath the translucent shared navigation; the stage keeps its own bounds. */
+.gallery-backdrop{position:fixed;inset:0;z-index:0;background:#f2f5f7;pointer-events:none}
+.gallery{position:fixed;top:var(--index-header-height);right:0;left:0;bottom:0;z-index:0;overflow:hidden;touch-action:none;user-select:none;-webkit-user-select:none;background:radial-gradient(ellipse 70% 60% at 52% 45%,rgba(246,251,253,.8),#fff 78%)}
+@media(max-width:1366px){.gallery{bottom:var(--um-nav-bar-height)}}
+html.tablet-device .gallery{bottom:var(--um-nav-bar-height)}
 /* Match the shared 68px footer on iPhone and tablet without enlarging it by safe-area padding. */
 .um-creators-page .um-shared-footer{height:var(--um-nav-bar-height);padding-bottom:0}
 .scene{--tx:0px;--ty:0px;--scale:1;--a:0;position:absolute;top:50%;left:50%;width:min(850px,86vw);height:min(730px,calc(100% - 18px));transform:translate3d(calc(-50% + var(--tx)),calc(-50% + var(--ty)),0) scale(var(--scale));opacity:var(--a);z-index:var(--z,1);pointer-events:none;isolation:isolate;contain:layout style;transition:transform 890ms var(--ease),opacity 480ms ease}
@@ -135,6 +146,7 @@ box-shadow:0 24px 48px rgba(42,48,54,.13),0 6px 16px rgba(38,47,54,.06),inset 0 
 </style></head><body class="um-creators-page">
 <div id="umSharedNavigation" data-um-nav-root="./"></div>
 <script src="./shared/navigation.js?v=20261120-shared-nav-v1"></script>
+<div class="gallery-backdrop" aria-hidden="true"></div>
 <main id="creatorGallery" class="gallery" aria-label="応援クリエイターのご紹介。左右スワイプまたはマウスホイールで切り替えます"></main>
 <p id="galleryStatus" role="status" style="position:fixed;top:50%;left:50%;transform:translate(-50%,-50%);color:#496477;font:700 13px 'Noto Sans JP',sans-serif">読み込み中…</p>
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
