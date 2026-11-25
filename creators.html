@@ -9,7 +9,9 @@
 @import url("https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;500;600;700;800;900&family=Teko:wght@500;600;700&family=Zen+Maru+Gothic:wght@700&display=swap");
 :root{--ink:#193c53;--muted:#6c90a4;--header:62px;--footer:68px;--ease:cubic-bezier(.22,.82,.19,1)}
 *{box-sizing:border-box}
-html,body{width:100%;height:100%;margin:0;overflow:hidden;background:#f2f5f7}
+html,body{width:100%;height:100%;margin:0;overflow:hidden}
+html{background:#05070a}
+body{background:#f2f5f7}
 body{font-family:"Noto Sans JP",sans-serif;color:var(--ink);-webkit-font-smoothing:antialiased}
 button,a{font:inherit}button{cursor:pointer}
 
@@ -78,8 +80,7 @@ box-shadow:0 24px 48px rgba(42,48,54,.13),0 6px 16px rgba(38,47,54,.06),inset 0 
 /* Closed presentation: figure and name only; no duplicated footer icon or SNS. */
 .caption{position:absolute;z-index:2;left:0;bottom:1.4%;width:100%;text-align:center;display:flex;justify-content:center;align-items:center;pointer-events:none;opacity:1;transition:opacity 260ms ease}
 .caption strong{display:block;color:#222428;font:700 17px/1.5 "Zen Maru Gothic","Noto Sans JP",sans-serif;text-wrap:balance;overflow-wrap:anywhere;max-width:min(440px,86vw)}
-.caption-kicker{position:absolute;bottom:calc(100% + 3px);left:0;width:100%;color:#888d93;font:600 16px/1 "Teko",sans-serif;letter-spacing:.25em;white-space:nowrap}
-.caption-rule{position:absolute;top:calc(100% + 2px);left:50%;width:66px;height:1px;transform:translateX(-50%);background:#b9bdc2}
+.caption-kicker{position:absolute;bottom:calc(100% + 3px);left:0;width:100%;color:#94999d;font:600 11px/1 "Teko",sans-serif;letter-spacing:.05em;white-space:nowrap}
 .scene:not([data-slot="0"]) .caption,.scene.is-open .caption{opacity:0;visibility:hidden}
 .figure img{height:85%;bottom:21%;left:var(--fig-left,50%)}
 .scene[data-slot="0"] .figure img{--figureZoom:.97}
@@ -202,7 +203,7 @@ function makeCard(d,i){
     safeLink(d.union_match_video_url)?`<a href="${esc(safeLink(d.union_match_video_url))}" target="_blank" rel="noopener noreferrer">UNION MATCH 紹介動画</a>`:'',
     safeLink(d.union_match_x_url)?`<a href="${esc(safeLink(d.union_match_x_url))}" target="_blank" rel="noopener noreferrer">UNION MATCH 紹介投稿</a>`:''
   ].filter(Boolean).join('');
- el.innerHTML=`<div class="composition"><div class="figure">${image}</div><section class="plate" aria-label="${esc(d.creator_name)} の紹介"><div class="plate-body"><div class="profile">${d.recruit?'':`<span class="avatar-shell">${avatar}</span>`}<div class="identity"><h2>${esc(d.creator_name)}</h2>${role}</div></div><div class="cr-rule"></div><div class="cr-label">ABOUT</div><div class="cr-description" tabindex="0">${esc(desc)}</div>${extra?`<div class="cr-links-extra">${extra}</div>`:''}<div class="cr-footer"><div class="cr-footer-label"><span>CONNECT</span><b>${d.recruit?'掲載についてお問い合わせ':'公式リンク'}</b></div><div class="socials">${socials}</div></div></div><button class="close" type="button" aria-label="カードを閉じる">${ICON_CLOSE}</button></section><div class="caption">${d.recruit?'':'<span class="caption-kicker">FEATURED CREATOR</span>'}<strong>${esc(d.creator_name)}</strong>${d.recruit?'':'<span class="caption-rule" aria-hidden="true"></span>'}</div></div>`;
+ el.innerHTML=`<div class="composition"><div class="figure">${image}</div><section class="plate" aria-label="${esc(d.creator_name)} の紹介"><div class="plate-body"><div class="profile">${d.recruit?'':`<span class="avatar-shell">${avatar}</span>`}<div class="identity"><h2>${esc(d.creator_name)}</h2>${role}</div></div><div class="cr-rule"></div><div class="cr-label">ABOUT</div><div class="cr-description" tabindex="0">${esc(desc)}</div>${extra?`<div class="cr-links-extra">${extra}</div>`:''}<div class="cr-footer"><div class="cr-footer-label"><span>CONNECT</span><b>${d.recruit?'掲載についてお問い合わせ':'公式リンク'}</b></div><div class="socials">${socials}</div></div></div><button class="close" type="button" aria-label="カードを閉じる">${ICON_CLOSE}</button></section><div class="caption"><span class="caption-kicker">${d.recruit?'CREATORS WANTED':'FEATURED CREATOR'}</span><strong>${esc(d.creator_name)}</strong></div></div>`;
  const closeBtn=el.querySelector('.close');closeBtn.addEventListener('click',e=>{e.preventDefault();e.stopPropagation();close()});
  el.addEventListener('click',e=>{if(performance.now()<skipClick||e.target.closest('a,button,.cr-description'))return;if(i!==current){go(i);return}if(!expanded)open();});
  el.addEventListener('keydown',e=>{if(e.target!==el)return;if(e.key==='Enter'||e.key===' '){e.preventDefault();if(i!==current)go(i);else if(!expanded)open()}});
