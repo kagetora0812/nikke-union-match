@@ -9,7 +9,7 @@
 @import url("https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;500;600;700;800;900&family=Teko:wght@500;600;700&family=Zen+Maru+Gothic:wght@700&display=swap");
 :root{--ink:#193c53;--muted:#6c90a4;--header:62px;--footer:68px;--ease:cubic-bezier(.22,.82,.19,1)}
 *{box-sizing:border-box}
-html,body{width:100%;height:100%;margin:0;overflow:hidden;background:#05070a}
+html,body{width:100%;height:100%;margin:0;overflow:hidden;background:#f2f5f7}
 body{font-family:"Noto Sans JP",sans-serif;color:var(--ink);-webkit-font-smoothing:antialiased}
 button,a{font:inherit}button{cursor:pointer}
 
@@ -19,7 +19,10 @@ button,a{font:inherit}button{cursor:pointer}
 
 
 .gallery{position:fixed;top:var(--index-header-height,var(--header));right:0;left:0;bottom:0;z-index:0;overflow:hidden;touch-action:none;user-select:none;-webkit-user-select:none;background:radial-gradient(ellipse 70% 60% at 52% 45%,rgba(246,251,253,.8),#fff 78%)}
-@media(max-width:1366px){.gallery{bottom:calc(var(--um-nav-bar-height,var(--footer)) + env(safe-area-inset-bottom))}}
+@media(max-width:1366px){.gallery{bottom:var(--um-nav-bar-height,var(--footer))}}
+html.tablet-device .gallery{bottom:var(--um-nav-bar-height,var(--footer))}
+/* Match the shared 68px footer on iPhone and tablet without enlarging it by safe-area padding. */
+.um-creators-page .um-shared-footer{height:var(--um-nav-bar-height);padding-bottom:0}
 .scene{--tx:0px;--ty:0px;--scale:1;--a:0;position:absolute;top:50%;left:50%;width:min(850px,86vw);height:min(730px,calc(100% - 18px));transform:translate3d(calc(-50% + var(--tx)),calc(-50% + var(--ty)),0) scale(var(--scale));opacity:var(--a);z-index:var(--z,1);pointer-events:none;isolation:isolate;contain:layout style;transition:transform 890ms var(--ease),opacity 480ms ease}
 .scene[data-slot="0"],.scene[data-slot="-1"],.scene[data-slot="1"]{pointer-events:auto}
 .scene[data-slot="0"]{cursor:pointer}.scene.is-open{cursor:default}
