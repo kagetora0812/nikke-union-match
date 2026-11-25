@@ -150,7 +150,7 @@
 
     /* Crystal cards — replace the former square-card rules as one block. */
     .union-list-grid { margin-top:14px; display:grid; grid-template-columns:repeat(4,minmax(0,1fr)); gap:14px; }
-    .union-list-grid article.card.union-card {
+    .union-list-grid article.um-union-crystal-card.union-card {
       position:relative; isolation:isolate;
       display:flex !important; flex-direction:column; min-width:0; min-height:230px;
       margin:0; padding:0 !important; overflow:hidden;
@@ -164,7 +164,7 @@
       transition:border-color .25s ease,transform .25s ease,box-shadow .25s ease !important;
       font-family:"Zen Maru Gothic","Noto Sans JP",sans-serif;
     }
-    .union-list-grid article.card.union-card::before {
+    .union-list-grid article.um-union-crystal-card.union-card::before {
       content:"" !important;display:block !important;
       position:absolute;z-index:1;pointer-events:none;
       top:1px;left:3%;right:3%;height:35%;
@@ -172,7 +172,7 @@
       background:linear-gradient(172deg,rgba(255,255,255,.68),rgba(255,255,255,.04) 72%,transparent);
       opacity:.88;
     }
-    .union-list-grid article.card.union-card::after {
+    .union-list-grid article.um-union-crystal-card.union-card::after {
       content:"" !important;display:block !important;
       position:absolute;z-index:3;pointer-events:none;inset:3px;
       border:1px solid rgba(255,255,255,.86);border-radius:14px;
@@ -180,32 +180,31 @@
       background:none;
     }
     /* Existing registration image remains optional. It sits under the crystal text. */
-    .union-list-grid article.card.union-card > .union-card-watermark {
-      position:absolute;top:0;right:0;bottom:50px;left:auto;width:76%;
-      z-index:0;overflow:hidden;pointer-events:none;
+    .union-list-grid article.um-union-crystal-card.union-card > .union-card-watermark {
+      position:absolute;inset:0;z-index:0;overflow:hidden;pointer-events:none;
       background:transparent;
     }
-    .union-list-grid article.card.union-card > .union-card-watermark img {
+    .union-list-grid article.um-union-crystal-card.union-card > .union-card-watermark img {
       display:block;width:100%;height:100%;object-fit:cover;object-position:48% 40%;
-      opacity:.15;filter:saturate(.8);transition:opacity .25s ease;
+      opacity:.17;filter:saturate(.8);transition:opacity .25s ease;
     }
-    .union-list-grid article.card.union-card > .union-card-watermark::after {
+    .union-list-grid article.um-union-crystal-card.union-card > .union-card-watermark::after {
       content:"";position:absolute;inset:0;
-      background:linear-gradient(90deg,rgba(255,255,255,.98),rgba(255,255,255,.67) 36%,rgba(255,255,255,.04));
+      background:linear-gradient(90deg,rgba(255,255,255,.59),rgba(255,255,255,.30) 45%,rgba(255,255,255,.12));
       pointer-events:none;
     }
-    .union-list-grid article.card.union-card > :not(.union-card-watermark) {position:relative;z-index:2;}
-    .union-list-grid article.card.union-card > .crystal-sweep {
-      position:absolute;z-index:1;top:-45%;bottom:-45%;width:45%;left:0;
+    .union-list-grid article.um-union-crystal-card.union-card > :not(.union-card-watermark) {position:relative;z-index:2;}
+    .union-list-grid article.um-union-crystal-card.union-card > .crystal-sweep {
+      position:absolute;z-index:4;top:-45%;bottom:-45%;width:45%;left:0;
       pointer-events:none;opacity:0;
-      background:linear-gradient(90deg,transparent,rgba(255,255,255,.07) 18%,rgba(255,255,255,.62) 50%,rgba(255,255,255,.06) 83%,transparent);
+      background:linear-gradient(90deg,transparent 0%,rgba(158,174,186,.05) 21%,rgba(174,194,208,.26) 42%,rgba(255,255,255,.95) 50%,rgba(161,179,191,.30) 59%,rgba(158,174,186,.05) 79%,transparent 100%);
       transform:translate3d(-200%,0,0) rotate(22deg);
       animation:um-union-crystal-sweep 12s ease-in-out infinite;
     }
     @keyframes um-union-crystal-sweep {
       0%,6%{transform:translate3d(-200%,0,0) rotate(22deg);opacity:0}
-      8%{opacity:.25}
-      15%{transform:translate3d(410%,0,0) rotate(22deg);opacity:.46}
+      8%{opacity:.34}
+      15%{transform:translate3d(410%,0,0) rotate(22deg);opacity:.83}
       18%,100%{transform:translate3d(410%,0,0) rotate(22deg);opacity:0}
     }
     .union-list-grid article.union-card:nth-child(4n + 2) .crystal-sweep{animation-delay:-4s}
@@ -213,18 +212,22 @@
     .union-list-grid article.union-card:nth-child(4n + 4) .crystal-sweep{animation-delay:-10s}
     @media (prefers-reduced-motion:reduce){.union-list-grid .crystal-sweep{animation:none;display:none}}
     @media (hover:hover) and (pointer:fine) {
-      .union-list-grid article.card.union-card:hover {
+      .union-list-grid article.um-union-crystal-card.union-card:hover {
         transform:translateY(-2px) !important;
         border-color:rgba(86,173,203,.74) !important;
         box-shadow:0 17px 30px rgba(32,67,86,.14),inset 0 2px 2px #fff,inset -2px -2px 4px rgba(119,139,154,.10) !important;
         z-index:2;
       }
-      .union-list-grid article.card.union-card:hover > .union-card-watermark img {opacity:.30}
+      .union-list-grid article.um-union-crystal-card.union-card:hover > .union-card-watermark img {opacity:.30}
     }
     @media (hover:none), (pointer:coarse) {
-      .union-list-grid article.card.union-card {transform:none !important}
+      .union-list-grid article.um-union-crystal-card.union-card {transform:none !important}
     }
-    .union-list-grid article.card.union-card.is-in-view {border-color:#20b8f4 !important}
+    /* Touch devices: modestly stronger watermark, with continuous full-card coverage. */
+    @media (max-width:600px){
+      .union-list-grid article.um-union-crystal-card.union-card > .union-card-watermark img{opacity:.24}
+    }
+    .union-list-grid article.um-union-crystal-card.union-card.is-in-view {border-color:#20b8f4 !important}
     .union-card-top {
       display:flex;justify-content:space-between;align-items:center;gap:6px;
       padding:17px 17px 0;min-width:0;
@@ -267,7 +270,7 @@
     .union-card-footer {
       display:flex;align-items:center;min-height:50px;padding:0 17px;
       border-top:1px solid rgba(174,187,196,.43);
-      background:linear-gradient(180deg,rgba(255,255,255,.38),rgba(255,255,255,.84));
+      background:linear-gradient(180deg,rgba(255,255,255,.24),rgba(255,255,255,.63));
     }
     .union-list-grid .union-card .x-post-area {width:100%;margin:0 !important;padding:0 !important;border:0 !important;background:transparent !important}
     .union-list-grid .union-card .x-btn {
@@ -442,7 +445,7 @@
     html.tablet-device .union-list-grid { grid-template-columns:repeat(2,minmax(0,1fr)); }
     @media screen and (max-width:600px) {
       .union-list-grid,html.tablet-device .union-list-grid {grid-template-columns:1fr;}
-      .union-list-grid article.card.union-card {min-height:210px;padding:0 !important;}
+      .union-list-grid article.um-union-crystal-card.union-card {min-height:210px;padding:0 !important;}
       .union-card-top .countdown {font-size:9px !important;}
     }
   </style>
@@ -755,7 +758,7 @@
               : "";
 
           return `
-            <article class="card union-card ${recruiting ? "status-open" : "status-closed"}">
+            <article class="um-union-crystal-card union-card ${recruiting ? "status-open" : "status-closed"}">
               ${watermark}
               <div class="crystal-sweep" aria-hidden="true"></div>
               <div class="union-card-top">
