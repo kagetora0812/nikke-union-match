@@ -30,3 +30,22 @@
 }
 
 @media screen and (max-width:600px){.um-notification-panel h2{font-size:var(--um-form-title-size,21px);line-height:1.25}.um-notification-panel .um-notification-heading{gap:20px}}
+
+/* Notification help only: native details/summary, isolated from the settings controls. */
+.um-notification-panel .um-notification-guide{box-sizing:border-box;min-width:0;margin:16px 0 0;font:400 13px/1.75 "Noto Sans JP",sans-serif;overflow-wrap:anywhere}
+.um-notification-panel .um-notification-guide > summary{box-sizing:border-box;display:flex;align-items:center;justify-content:flex-start;gap:4px;min-height:36px;padding:8px 0;list-style:none;color:#007eaf;font:500 12px/1.6 "Noto Sans JP",sans-serif;cursor:pointer}
+.um-notification-panel .um-notification-guide > summary::-webkit-details-marker{display:none}
+.um-notification-panel .um-notification-guide > summary::marker{content:""}
+.um-notification-panel .um-notification-guide > summary::after{content:"→";flex:0 0 auto;display:inline-block;line-height:1}
+.um-notification-panel .um-notification-guide[open] > summary::after{transform:rotate(90deg)}
+.um-notification-panel .um-notification-guide > summary:focus-visible{outline:2px solid #007eaf;outline-offset:2px}
+.um-notification-panel .um-notification-guide .um-guide-body{box-sizing:border-box;margin-top:6px;padding:0 14px 14px;border:1px solid #41464d;background:#111317;color:#fff}
+.um-notification-panel .um-notification-guide .um-guide-section{padding:14px 0;border-top:1px solid #353940}
+.um-notification-panel .um-notification-guide .um-guide-section:last-child{padding-bottom:0}
+.um-notification-panel .um-notification-guide h3{margin:0 0 8px;color:#76cee8;font:500 14px/1.5 "Noto Sans JP",sans-serif;letter-spacing:normal}
+.um-notification-panel .um-notification-guide h4{margin:16px 0 8px;color:#fff;font:500 13px/1.5 "Noto Sans JP",sans-serif;letter-spacing:normal}
+.um-notification-panel .um-notification-guide p{margin:0;color:#fff;font:400 13px/1.75 "Noto Sans JP",sans-serif;opacity:1}
+.um-notification-panel .um-notification-guide p + p{margin-top:8px}
+.um-notification-panel .um-notification-guide .um-guide-steps{display:grid;gap:8px;list-style:none;margin:0 0 8px;padding:0}
+.um-notification-panel .um-notification-guide .um-guide-steps li,.um-notification-panel .um-notification-guide .um-guide-final{display:flex;align-items:flex-start;gap:8px;margin:0;padding:0;color:#fff;font:400 13px/1.75 "Noto Sans JP",sans-serif}
+.um-notification-panel .um-notification-guide .um-guide-icon{display:block;flex:0 0 19px;width:19px;height:19px;margin-top:2px;color:#fff}
