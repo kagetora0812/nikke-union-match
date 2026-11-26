@@ -82,6 +82,54 @@
       <div class="um-pass-wrap" hidden><label for="umPass">登録時のPASS（初回連携のみ）</label><input id="umPass" type="password" autocomplete="off" maxlength="8" placeholder="8文字のPASSを入力"><small>初回のみPASS認証で、この端末を登録します。認証後は、この端末からPASS入力なしで登録情報を管理できます。期限通知をOFFにすると、PASS不要の管理機能も解除されます。</small></div>
       <button type="button" class="um-save">通知設定を保存</button>
       <div class="um-status" role="status"></div><div class="um-hint"></div><div class="um-pass-status" style="color:#168bd2;font-size:11px;line-height:1.5;font-weight:700;display:none" aria-live="polite"></div>
+      <details class="um-notification-guide">
+        <summary>はじめての方はこちら　通知ガイドを見る</summary>
+        <div class="um-guide-body">
+          <div class="um-guide-section">
+            <h3>プッシュ通知とは？</h3>
+            <p>サイトを開いていなくても、スマートフォンやPCで新着募集や掲載期限のお知らせを受け取れる機能です。Discord BOTの導入は不要です。</p>
+          </div>
+          <div class="um-guide-section">
+            <h3>新着指揮官通知</h3>
+            <p>Xやサイトに掲載された、ユニオンを探している指揮官の新着募集をお知らせします。サイトへの登録不要で、どなたでも無料でご利用いただけます。</p>
+          </div>
+          <div class="um-guide-section">
+            <h3>掲載期限通知</h3>
+            <p>ユニオンの掲載期限48時間前にお知らせします。初回設定にはユニオン登録時に発行されたPASSが必要です。</p>
+            <p>PASS連携後は、この端末からPASS入力なしで登録情報を管理できます。</p>
+          </div>
+          <div class="um-guide-section">
+            <h3>通知の設定方法</h3>
+            <p>1. 受け取りたい通知にチェックを入れる。<br>2. 「通知設定を保存」を押す。<br>3. 通知の許可を求められたら「許可」を選ぶ。</p>
+            <p>※ 通知はいつでもON・OFFを切り替えられます。</p>
+            <p>※ 掲載期限通知をOFFにすると、PASS不要の管理機能も解除されます。</p>
+          </div>
+          <div class="um-guide-section">
+            <h3>ホーム画面への追加方法</h3>
+            <p>iPhone・iPadでは、ホーム画面に追加してから通知を設定してください。Android・PCは対応ブラウザから直接通知を設定できます。</p>
+            <h4>iPhone・iPad（Safari / Google Chrome）</h4>
+            <ol class="um-guide-steps">
+            <li><svg class="um-guide-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><circle cx="12" cy="12" r="9"/><path d="M3 12h18M12 3a15 15 0 0 1 0 18 15 15 0 0 1 0-18Z"/></svg><span>1. ブラウザでUNION MATCHを開く。</span></li>
+            <li><svg class="um-guide-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="M12 15V3m-4 4 4-4 4 4M7 10H5v11h14V10h-2"/></svg><span>2. 共有ボタンをタップする。</span></li>
+            <li><svg class="um-guide-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><rect x="4" y="4" width="16" height="16" rx="2"/><path d="M12 8v8m-4-4h8"/></svg><span>3. 「ホーム画面に追加」を選択する。</span></li>
+            <li><svg class="um-guide-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="m5 12 4 4L19 6"/></svg><span>4. 「追加」をタップする。</span></li>
+            </ol>
+            <p>※「ウェブアプリとして開く」が表示される場合はONにしてください。</p>
+            <h4>Android（Google Chrome）</h4>
+            <ol class="um-guide-steps">
+            <li><svg class="um-guide-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><circle cx="12" cy="12" r="9"/><path d="M3 12h18M12 3a15 15 0 0 1 0 18 15 15 0 0 1 0-18Z"/></svg><span>1. ChromeでUNION MATCHを開く。</span></li>
+            <li><svg class="um-guide-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><circle cx="12" cy="5" r="1"/><circle cx="12" cy="12" r="1"/><circle cx="12" cy="19" r="1"/></svg><span>2. 右上のメニューボタンをタップする。</span></li>
+            <li><svg class="um-guide-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><rect x="4" y="4" width="16" height="16" rx="2"/><path d="M12 8v8m-4-4h8"/></svg><span>3. 「ホーム画面に追加」を選択する。</span></li>
+            <li><svg class="um-guide-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="m5 12 4 4L19 6"/></svg><span>4. 「インストール」または「追加」をタップする。</span></li>
+            </ol>
+          </div>
+          <div class="um-guide-section">
+            <h3>追加が完了したら</h3>
+            <p class="um-guide-final"><svg class="um-guide-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="M18 8a6 6 0 0 0-12 0c0 7-3 7-3 9h18c0-2-3-2-3-9M10 21h4"/></svg><span>ホーム画面に追加されたUNION MATCHを開き、ベルマークからプッシュ通知を設定してください。</span></p>
+            <p>※ アプリストアからのダウンロードは不要です。</p>
+          </div>
+        </div>
+      </details>
     </div>`;
     document.body.appendChild(dialog);
     const hint=dialog.querySelector('.um-hint'),status=dialog.querySelector('.um-status'),save=dialog.querySelector('.um-save');
