@@ -83,7 +83,7 @@
       <button type="button" class="um-save">通知設定を保存</button>
       <div class="um-status" role="status"></div><div class="um-hint"></div><div class="um-pass-status" style="color:#168bd2;font-size:11px;line-height:1.5;font-weight:700;display:none" aria-live="polite"></div>
       <details class="um-notification-guide">
-        <summary>はじめての方はこちら　通知ガイドを見る</summary>
+        <summary>使い方を見る</summary>
         <div class="um-guide-body">
           <div class="um-guide-section">
             <h3>プッシュ通知とは？</h3>
