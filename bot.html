@@ -1289,7 +1289,6 @@
       let inviteDone = false;
       let originalScrollBehavior = "";
       let originalPageScrollBehavior = "";
-      let inviteTab = null;
 
       const playSpecialAudio = (audio) => {
         if (!audio) return;
@@ -1421,10 +1420,15 @@
         page.style.scrollBehavior = originalPageScrollBehavior;
         try { specialVideo.pause(); } catch (_) {}
         if (normalVideo) { try { normalVideo.play()?.catch(() => {}); } catch (_) {} }
-        if (inviteTab && !inviteTab.closed) {
-          try { inviteTab.location.replace(inviteUrl); inviteTab.focus(); return; } catch (_) {}
-        }
-        // Popup blocked/closed: native target=_blank on next explicit click.
+        // Open Discord only after SPECIAL has finished; never reserve a blank tab.
+        try {
+          const inviteTab = window.open(inviteUrl, "_blank");
+          if (inviteTab) {
+            try { inviteTab.opener = null; } catch (_) {}
+            return;
+          }
+        } catch (_) {}
+        // Popup blocked: native target=_blank on next explicit click.
         card.dataset.specialDirect = "true";
         const note = document.querySelector(".special-install-note");
         if (note) note.textContent = "導入画面を開けなかった場合は、もう一度「BOTを導入する」を押してください。";
@@ -1660,11 +1664,6 @@
         if (!isDesktop() || card.dataset.specialDirect === "true" || event.ctrlKey || event.metaKey || event.shiftKey || event.altKey) return;
         event.preventDefault();
         if (running) return;
-        // Reserve the tab during the user gesture to avoid popup blocking after the animation.
-        try {
-          inviteTab = window.open("about:blank", "_blank");
-          if (inviteTab) { inviteTab.opener = null; window.focus(); }
-        } catch (_) { inviteTab = null; }
 
         /* Click sound + unlock the delayed impact sound under the same user gesture. */
         playSpecialAudio(buttonAudio);
