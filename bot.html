@@ -496,138 +496,6 @@
       background:#000;
     }
 
-    .special-overlay__bot-wrap{
-      position:absolute;
-      inset:0;
-      z-index:2;
-      display:flex;
-      align-items:center;
-      justify-content:center;
-      pointer-events:none;
-      opacity:0;
-      transform:translateY(-130vh);
-    }
-
-    .special-overlay.is-bot-drop .special-overlay__bot-wrap{
-      opacity:1;
-      animation:specialBotDropFinalSimple .78s cubic-bezier(.18,.82,.25,1) forwards;
-    }
-
-    .special-overlay__bot-img{
-      display:block;
-      width:min(58vw,760px);
-      max-height:64vh;
-      object-fit:contain;
-      opacity:1 !important;
-      filter:none !important;
-      box-shadow:none !important;
-    }
-
-    @keyframes specialBotDropFinalSimple{
-      from{
-        opacity:1;
-        transform:translateY(-130vh);
-      }
-      to{
-        opacity:1;
-        transform:translateY(0);
-      }
-    }
-    .special-impact-black{
-      position:absolute;
-      inset:-4%;
-      z-index:8;
-      pointer-events:none;
-      background:#000;
-      opacity:0;
-    }
-
-    .special-impact-black.is-black{
-      animation:specialImpactBlack .22s ease-in forwards;
-    }
-
-    .special-overlay.is-video-fade .special-overlay__video{
-      opacity:0 !important;
-      transition:opacity .10s cubic-bezier(.20,.70,.20,1) !important;
-    }
-
-    .special-static-stage{
-      position:absolute;
-      inset:0;
-      z-index:5;
-      display:grid;
-      place-items:center;
-      background:#000;
-      opacity:0;
-      pointer-events:none;
-      overflow:hidden;
-    }
-
-    .special-static-stage.is-visible{
-      opacity:1;
-    }
-
-    .special-static-stage__visual{
-      position:relative;
-      width:100%;
-      height:100%;
-      display:grid;
-      place-items:center;
-      opacity:0;
-      transition:opacity .10s linear;
-    }
-
-    .special-static-stage.is-show-ping .special-static-stage__visual{
-      opacity:1;
-    }
-
-    /* Face close-up: intentionally larger than before.
-       Keep the head dominant, with the rest fading into black. */
-    .special-static-stage__img{
-      display:block;
-      width:auto;
-      height:auto;
-      max-width:100vw;
-      max-height:96vh;
-      object-fit:contain;
-      object-position:center center;
-      opacity:.98;
-      transform:scale(1.16);
-      transform-origin:center center;
-      filter:
-        brightness(.72)
-        contrast(1.12)
-        saturate(.88);
-      /* no mask here: avoid visible cutoff on the image */
-      -webkit-mask-image:none !important;
-      mask-image:none !important;
-    }
-
-    @keyframes specialImpactBlack{
-      0%{opacity:0}
-      100%{opacity:1}
-    }
-
-    .special-static-stage::after{
-      content:"";
-      position:absolute;
-      inset:0;
-      z-index:2;
-      pointer-events:none;
-      background:
-        radial-gradient(
-          ellipse 72% 70% at 50% 50%,
-          rgba(0,0,0,0) 0%,
-          rgba(0,0,0,.05) 48%,
-          rgba(0,0,0,.32) 72%,
-          rgba(0,0,0,.78) 100%
-        );
-    }
-
-    .special-static-stage__visual{
-      z-index:1;
-    }
-
     /* BOT editorial content — one typography/layout definition. */
     .lux-page .bot-chapter{
       width:min(var(--content),calc(100% - 48px));
@@ -1241,27 +1109,9 @@
       data-special-src="assets/bot/special-goddessfall.mp4"
     ></video>
 
-    <div class="special-overlay__bot-wrap" aria-hidden="true">
-      <img
-        data-special-src="assets/bot/special-bot-logo-3d.png"
-        alt=""
-        class="special-overlay__bot-img"
-      >
-    </div>
-    <div id="specialStaticStage" class="special-static-stage" aria-hidden="true">
-      <div class="special-static-stage__visual">
-        <img
-          data-special-src="assets/bot/special-bot-logo-3d.png"
-          alt=""
-          class="special-static-stage__img"
-        >
-      </div>
-    </div>
-
     <audio id="specialButtonAudio" preload="none" src="assets/bot/special-button.mp3"></audio>
-    <audio id="specialImpactAudio" preload="none" src="assets/bot/special-impact.mp3"></audio>
-
-    <div id="specialImpactBlack" class="special-impact-black" aria-hidden="true"></div>
+    <!-- Metadata only: retain the previous full-screen hold duration without playing the impact sound. -->
+    <audio id="specialTimingAudio" preload="none" data-special-src="assets/bot/special-impact.mp3"></audio>
   </div>
 
 
@@ -1270,23 +1120,22 @@
       const card = document.getElementById("bottomBotInvite");
       const overlay = document.getElementById("specialOverlay");
       const specialVideo = document.getElementById("specialOverlayVideo");
-      const botWrap = overlay?.querySelector(".special-overlay__bot-wrap");
-      const impactBlack = document.getElementById("specialImpactBlack");
-      const staticStage = document.getElementById("specialStaticStage");
       const buttonAudio = document.getElementById("specialButtonAudio");
-      const impactAudio = document.getElementById("specialImpactAudio");
+      const timingAudio = document.getElementById("specialTimingAudio");
       const normalVideo = document.getElementById("botBackgroundVideo");
       const page = document.querySelector("main.lux-page");
       const firstChapter = document.getElementById("unionMatchBot");
       const inviteUrl =
         "https://discord.com/oauth2/authorize?client_id=1548613088557793370&scope=bot%20applications.commands";
 
-      if (!card || !overlay || !specialVideo || !botWrap || !page) return;
+      if (!card || !overlay || !specialVideo || !page) return;
 
       let running = false;
       let specialStarted = false;
       let rafId = 0;
       let inviteDone = false;
+      let finishTimer = 0;
+      let safetyTimer = 0;
       let originalScrollBehavior = "";
       let originalPageScrollBehavior = "";
 
@@ -1300,38 +1149,16 @@
         } catch (_) {}
       };
 
-      const unlockDelayedAudio = (audio) => {
-        if (!audio) return;
-        try {
-          audio.muted = true;
-          audio.currentTime = 0;
-          const p = audio.play();
-          if (p && typeof p.then === "function") {
-            p.then(() => {
-              audio.pause();
-              audio.currentTime = 0;
-              audio.muted = false;
-            }).catch(() => {
-              audio.muted = false;
-            });
-          } else {
-            audio.pause();
-            audio.currentTime = 0;
-            audio.muted = false;
-          }
-        } catch (_) {
-          audio.muted = false;
-        }
-      };
-
       const isDesktop = () =>
         !document.documentElement.classList.contains("um-bot-handheld") &&
         !window.matchMedia("(max-width: 1024px), (pointer: coarse)").matches;
 
       const prepareDesktopSpecial = () => {
         if (!isDesktop()) return;
-        for (const img of overlay.querySelectorAll('img[data-special-src]')) {
-          if (!img.hasAttribute('src')) img.src = img.dataset.specialSrc;
+        if (timingAudio && !timingAudio.hasAttribute("src")) {
+          timingAudio.preload = "metadata";
+          timingAudio.src = timingAudio.dataset.specialSrc;
+          timingAudio.load();
         }
         if (!specialVideo.hasAttribute('src')) {
           specialVideo.src = specialVideo.dataset.specialSrc;
@@ -1406,31 +1233,42 @@
         } catch (_) {}
       };
 
-      const goInvite = () => {
-        if (inviteDone) return;
-        inviteDone = true;
+      const resetSpecial = () => {
         running = false;
+        inviteDone = false;
+        specialStarted = false;
         cancelAnimationFrame(rafId);
-        overlay.classList.remove("is-rising","is-front","is-bot-drop","is-video-fade");
+        clearTimeout(finishTimer);
+        clearTimeout(safetyTimer);
+        overlay.classList.remove("is-rising","is-front");
         overlay.setAttribute("aria-hidden","true");
-        staticStage?.classList.remove("is-visible","is-show-ping");
+        overlay.style.removeProperty("--special-opacity");
         document.body.classList.remove("special-running");
         document.body.style.removeProperty("--site-fade");
         document.documentElement.style.scrollBehavior = originalScrollBehavior;
         page.style.scrollBehavior = originalPageScrollBehavior;
         try { specialVideo.pause(); } catch (_) {}
         if (normalVideo) { try { normalVideo.play()?.catch(() => {}); } catch (_) {} }
-        // Open Discord only after SPECIAL has finished; never reserve a blank tab.
-        try {
-          const inviteTab = window.open(inviteUrl, "_blank");
-          if (inviteTab) {
-            try { inviteTab.opener = null; } catch (_) {}
-            return;
-          }
-        } catch (_) {}
-        // If the browser blocks the delayed new tab, navigate this tab instead.
+      };
+
+      const goInvite = () => {
+        if (inviteDone) return;
+        inviteDone = true;
+        cancelAnimationFrame(rafId);
+        clearTimeout(finishTimer);
+        clearTimeout(safetyTimer);
+        // Keep SPECIAL in front until the browser replaces this document.
+        // A same-tab navigation cannot be blocked as a delayed popup.
+        overlay.classList.remove("is-rising");
+        overlay.classList.add("is-front");
+        document.body.style.setProperty("--site-fade","0");
         window.location.assign(inviteUrl);
       };
+
+      // Restore the normal page only when the visitor actually comes back.
+      window.addEventListener("pageshow", () => {
+        if (inviteDone) resetSpecial();
+      });
 
       const startSequence = () => {
         if (running) return;
@@ -1477,7 +1315,7 @@
         document.body.style.setProperty("--site-fade","1");
 
         overlay.style.setProperty("--special-opacity","0");
-        overlay.classList.remove("is-front","is-bot-drop");
+        overlay.classList.remove("is-front");
         overlay.classList.add("is-rising");
         overlay.setAttribute("aria-hidden","false");
 
@@ -1552,85 +1390,22 @@
             return;
           }
 
-          /*
-            TOP:
-            SPECIAL = 100%, then BOT PNG drops over it.
-          */
+          // TOP: present SPECIAL at full opacity, with no normal TOP interstitial.
           rafId = 0;
           setScrollTop(0);
-
           startSpecialVideo();
-
           document.body.style.setProperty("--site-fade","0");
           overlay.style.setProperty("--special-opacity","1");
           overlay.classList.remove("is-rising");
           overlay.classList.add("is-front");
 
-          /*
-            TOP reached:
-            SPECIAL video is already at 100%.
-            Play impact audio fully, wait a short beat,
-            then fade to black and briefly reveal PING before Discord.
-          */
-          window.setTimeout(() => {
-            if (!impactAudio) {
-              overlay.classList.add("is-video-fade");
-
-              window.setTimeout(() => {
-                staticStage?.classList.add("is-visible");
-                staticStage?.classList.add("is-show-ping");
-                window.setTimeout(goInvite,220);
-              },90);
-
-              return;
-            }
-
-            try {
-              impactAudio.currentTime = 0;
-              impactAudio.muted = false;
-
-              const afterImpact = () => {
-                impactAudio.removeEventListener("ended", afterImpact);
-
-                /* tiny beat after the sound finishes */
-                window.setTimeout(() => {
-                  /* video itself rapidly falls from 100% to 0% */
-                  overlay.classList.add("is-video-fade");
-
-                  /* bring in the black stage just as the video is disappearing */
-                  window.setTimeout(() => {
-                    staticStage?.classList.add("is-visible");
-                    staticStage?.classList.add("is-show-ping");
-
-                    /* brief face close-up, then direct Discord */
-                    window.setTimeout(goInvite,220);
-
-                  },90);
-
-                },80);
-              };
-
-              impactAudio.addEventListener("ended", afterImpact, { once:true });
-
-              const p = impactAudio.play();
-              if (p && typeof p.catch === "function") {
-                p.catch(() => {
-                  impactAudio.removeEventListener("ended", afterImpact);
-                  afterImpact();
-                });
-              }
-
-            } catch (_) {
-              overlay.classList.add("is-video-fade");
-
-              window.setTimeout(() => {
-                staticStage?.classList.add("is-visible");
-                staticStage?.classList.add("is-show-ping");
-                window.setTimeout(goInvite,220);
-              },90);
-            }
-
-          },1000);
+          // The original full-screen video stayed visible for 1000ms,
+          // the impact sound duration, and a further 80ms beat.
+          // Use the same duration, without playing the sound or showing a logo.
+          const impactSeconds = timingAudio?.duration;
+          const holdMs = 1000 + (Number.isFinite(impactSeconds) && impactSeconds > 0
+            ? impactSeconds * 1000 + 80 : 0);
+          finishTimer = window.setTimeout(goInvite,holdMs);
         };
 
         /*
@@ -1650,10 +1425,8 @@
           even if an animation frame or media event fails,
           the SPECIAL click can never get stuck permanently.
         */
-        window.setTimeout(() => {
-          if (running) {
-            goInvite();
-          }
+        safetyTimer = window.setTimeout(() => {
+          if (running && !inviteDone) goInvite();
         },15000);
       };
 
@@ -1662,9 +1435,8 @@
         event.preventDefault();
         if (running) return;
 
-        /* Click sound + unlock the delayed impact sound under the same user gesture. */
+        /* Only the click sound is played. */
         playSpecialAudio(buttonAudio);
-        unlockDelayedAudio(impactAudio);
         event.stopPropagation();
         startSequence();
       });
