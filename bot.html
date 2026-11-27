@@ -1428,11 +1428,8 @@
             return;
           }
         } catch (_) {}
-        // Popup blocked: native target=_blank on next explicit click.
-        card.dataset.specialDirect = "true";
-        const note = document.querySelector(".special-install-note");
-        if (note) note.textContent = "導入画面を開けなかった場合は、もう一度「BOTを導入する」を押してください。";
-        card.scrollIntoView({block:"center",behavior:"auto"});
+        // If the browser blocks the delayed new tab, navigate this tab instead.
+        window.location.assign(inviteUrl);
       };
 
       const startSequence = () => {
@@ -1661,7 +1658,7 @@
       };
 
       card.addEventListener("click",(event) => {
-        if (!isDesktop() || card.dataset.specialDirect === "true" || event.ctrlKey || event.metaKey || event.shiftKey || event.altKey) return;
+        if (!isDesktop() || event.ctrlKey || event.metaKey || event.shiftKey || event.altKey) return;
         event.preventDefault();
         if (running) return;
 
